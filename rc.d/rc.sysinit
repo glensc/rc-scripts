@@ -113,7 +113,7 @@ fi
 
 # Configure Linux kernel (initial configuration, some required modules still
 # may be missing).
-/sbin/sysctl -p /etc/sysctl.conf > /dev/null 2>&1
+/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 
 # Set the system clock.
 ARC=0
