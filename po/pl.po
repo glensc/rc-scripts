@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.44 2002/03/24 03:59:24 blues Exp $
+# $Id: pl.po,v 1.45 2002/04/09 11:08:09 jajcus Exp $
 #
 
 msgid ""
@@ -432,10 +432,6 @@ msgstr "Ustawianie parametrów sieci"
 msgid "Bringing up interface"
 msgstr "Podnoszenie interfejsu"
 
-#: ./rc.d/init.d/network:143
-msgid "Bringing up interface from LDAP"
-msgstr "Podnoszenie interfejsu z LDAP"
-
 #: ./rc.d/init.d/network:147
 msgid "Setting tunnel"
 msgstr "Podnoszenie tunelu"
@@ -463,10 +459,6 @@ msgstr "Wylaczanie tunelu"
 #: ./rc.d/init.d/network:177
 msgid "Removing tunnel"
 msgstr "Usuwanie tunelu"
-
-#: ./rc.d/init.d/network:181
-msgid "Shutting down interface from LDAP"
-msgstr "Wylaczanie interfejsu z LDAP"
 
 #: ./rc.d/init.d/network:185
 msgid "Shutting down interface"
