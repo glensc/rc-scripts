@@ -14,6 +14,7 @@ BuildPrereq:	popt-devel
 Requires:	mingetty
 Requires:	mktemp
 Requires:	modutils >= 2.1.121
+Requires:	textutils >= 1.22l
 Prereq:		/sbin/chkconfig
 Obsoletes:	initscripts
 Provides:	initscripts
@@ -162,9 +163,12 @@ fi
 %attr(755,root,root) %{_bindir}/doexec
 %attr(755,root,root) %{_bindir}/usleep
 %attr(755,root,root) %{_sbindir}/setsysfont
+%attr(755,root,root) %{_sbindir}/initlog
+%attr(755,root,root) %{_sbindir}/loglevel
 
 %{_mandir}/man1/usleep.1.gz
 %{_mandir}/man1/doexec.1.gz
+%{_mandir}/man1/initlog.1.gz
 
 %files -n net-scripts
 %defattr(644,root,root,754)
