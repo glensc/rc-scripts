@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.61 2001/06/25 20:44:49 marcus Exp $
+#	$Id: ifup,v 1.62 2001/06/26 14:53:27 marcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -59,6 +59,7 @@ if is_yes $ETH_VLANS && echo "$DEVICE" | grep -q '\.' ; then
     VLANNUMBER=$(echo $DEVICE | awk " { gsub(/$VLANDEVICE\./,NUL); print \$0 } ") 
     /sbin/ip link set $VLANDEVICE up
     /sbin/vconfig add $VLANDEVICE $VLANNUMBER 2>&1 > /dev/null
+    /sbin/vconfig set_flag $DEVICE 1 2>&1 > /dev/null
 fi
 
 # Old BOOTP variable
