@@ -4,7 +4,7 @@
 #
 # description: Allow users to login.
 #
-# $Id: allowlogin,v 1.8 2000/06/12 08:38:15 waszi Exp $
+# $Id: allowlogin,v 1.9 2000/11/16 16:01:18 baggins Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -37,3 +37,6 @@ case "$1" in
 esac
 
 exit 0
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# single	Script for sedding up administrative/rescue shell.
+# single	Script for setting up administrative/rescue shell.
 #
 # chkconfig:	1 00 00
 # description:	This file is executed by init when it goes into runlevel \
@@ -12,7 +12,7 @@
 #		Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 # 
-# $Id: single,v 1.9 2000/02/03 11:50:20 misiek Exp $
+# $Id: single,v 1.10 2000/11/16 16:01:18 baggins Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
@@ -62,3 +62,6 @@ done
 	exec init -t1 S
 	;;
 esac
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4

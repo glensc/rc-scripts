@@ -7,7 +7,7 @@
 # description:	Saves and restores system entropy pool for higher quality \
 #		random number generation.
 #
-# $Id: random,v 1.5 1999/12/02 10:38:55 kloczek Exp $
+# $Id: random,v 1.6 2000/11/16 16:01:18 baggins Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -68,3 +68,6 @@ case "$1" in
 esac
 
 exit 0
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
