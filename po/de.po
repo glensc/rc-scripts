@@ -1,6 +1,6 @@
 # German translation of rc-scripts.
 # Pawel Sakowski <pawel@sakowski.eu.org>, 2000.
-# $Id: de.po,v 1.2 2000/09/19 12:46:44 saq Exp $
+# $Id: de.po,v 1.3 2000/09/19 13:36:40 saq Exp $
 #
 
 msgid ""
@@ -223,7 +223,7 @@ msgstr "existiert für %s nicht"
 
 #: ../sysconfig/network-scripts/ifup-sl:63
 msgid "dip started for %s on %s at %s"
-msgstr "dir gestartet für %s auf %s mit %s"
+msgstr "dip gestartet für %s auf %s mit %s"
 
 #: ../sysconfig/network-scripts/ifup-sl:93
 msgid "slattach started for %s on %s at %s"
