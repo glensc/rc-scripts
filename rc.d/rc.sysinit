@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.69.2.11 2001/09/30 10:19:36 misiek Exp $
+# $Id: rc.sysinit,v 1.69.2.12 2001/10/13 08:29:19 misiek Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -86,7 +86,7 @@ if is_yes "$MOUNT_DEVFS"; then
 fi
 
 # set up devfsd
-if [ -c /dev/.devfsd -a -x /sbin/devfsd ]; then
+if [ -e /dev/.devfsd -a -x /sbin/devfsd ]; then
 	run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
 fi
 
@@ -276,6 +276,7 @@ run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
 
 # Find and activate volume groups
 if [ -e /proc/lvm -a -x /sbin/vgscan -a -x /sbin/vgchange -a -e /etc/lvmtab ]; then
+	modprobe -s lvm-mod >/dev/null 2>&1
 	run_cmd "Scanning for LVM volume groups" /sbin/vgscan && \
 	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y
 fi
