@@ -400,7 +400,7 @@ daemon()
 #	elif [ -n "`$SH -c 'echo ${.sh.version}' 2>/dev/null`" ]; then
 	fi
 	
-	echo $limits|awk 'BEGIN {RS="-";} !/^$/ {system ("ulimit -" $0);}'
+	echo $limits|awk 'BEGIN {RS="[-\n]";} !/^$/ {system ("ulimit -" $0);}'
 
 	# And start it up.
 	busy
