@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.23 2000/03/22 21:21:14 kloczek Exp $
+# $Id: pl.po,v 1.24 2000/03/22 21:30:31 wiget Exp $
 #
 msgid ""
 msgstr ""
@@ -34,7 +34,6 @@ msgstr "Uzycie: %s"
 msgid "Enabling Delay Login"
 msgstr "Wlaczenie opozniania logowania"
 
-# ../rc.d/init.d/functions.network:160
 #: ../rc.d/init.d/functions.network:298
 msgid "Setting up IP spoofing protection"
 msgstr "Ustawienie zabezpieczenia przed IP spoofingiem"
@@ -59,14 +58,13 @@ msgstr "%sZarzadca zasobow: %sZostal osiagniety poziom%s"
 msgid "Starting Device Filesystem Daemon"
 msgstr "Startuje Zarzadce Systemu Plikow Urzadzen (DevFsd)"
 
-# ../rc.d/init.d/functions:281
 #: ../rc.d/init.d/functions:363
 msgid "%s dead but subsys locked\n"
 msgstr "%s zabity ale podsystem zablokowany\n"
 
 #: ../rc.d/init.d/functions:195
 msgid "$STRING"
-msgstr ""
+msgstr "$STRING"
 
 #: ../rc.d/rc.sysinit:289
 msgid "Automatic reboot in progress"
@@ -80,7 +78,6 @@ msgstr "*** po opuszczeniu powloki."
 msgid "Sending all processes the KILL signal"
 msgstr "Wysylanie do wszystkich procesow sygnalu KILL"
 
-# ../rc.d/init.d/random:56
 #: ../rc.d/init.d/random:55
 msgid "The random data source is missing"
 msgstr "Oczekiwane zrodlo losowych danych"
@@ -127,8 +124,6 @@ msgstr ""
 msgid "Sending val. %s to /proc/sys/kernel/panic"
 msgstr "Przesylanie wartosci %s do /proc/sys/kernel/panic"
 
-# ../rc.d/init.d/functions:258
-# ../rc.d/init.d/functions:266
 #: ../rc.d/init.d/functions:340 ../rc.d/init.d/functions:348
 msgid "%s (pid %s) is running...\n"
 msgstr "%s (pid %s) jest uruchomiony...\n"
@@ -145,7 +140,6 @@ msgstr "Startowanie serwisu %s"
 msgid "Remounting root filesystem in rw mode"
 msgstr "Przelaczenie glownego systemu plikow w tryb zapis/odczyt"
 
-# ../rc.d/rc.sysinit:224
 #: ../rc.d/rc.sysinit:280
 msgid "(RAID Repair)# "
 msgstr "(Naprawa RAID)# "
@@ -154,7 +148,6 @@ msgstr "(Naprawa RAID)# "
 msgid "Please stand by while rebooting the system"
 msgstr "Prosze czekac - restart system"
 
-# ../rc.d/rc.sysinit:61
 #: ../rc.d/rc.sysinit:91
 msgid "Host:"
 msgstr "Host:"
@@ -171,12 +164,10 @@ msgstr "PROBLEMY"
 msgid "Setting time zone information ($ZONE_INFO_AREA, $TIME_ZONE)"
 msgstr "Ustawianie informacji o sterfie czasowej ($ZONE_INFO_AREA, $TIME_ZONE)"
 
-# ../rc.d/init.d/functions.network:148
 #: ../rc.d/init.d/functions.network:281
 msgid "Setting default local port range"
 msgstr "Ustawienie domyslnego zakresu portow lokalnych"
 
-# ../rc.d/init.d/shutdwn:53
 #: ../rc.d/rc.shutdown:69
 msgid "Turning off RAID for %s"
 msgstr "Wylaczenie obslugi RAID dla %s"
@@ -197,8 +188,6 @@ msgstr "Ustawianie urzadzen RAID"
 msgid "Checking root filesystem quotas"
 msgstr "Sprawdzanie quota na glownym systemie plikow"
 
-# ../rc.d/rc.sysinit:95
-# ../rc.d/rc.sysinit:238
 #: ../rc.d/rc.sysinit:121 ../rc.d/rc.sysinit:304
 msgid "*** An error occurred during the file system check."
 msgstr ""
@@ -206,9 +195,8 @@ msgstr ""
 
 #: ../rc.d/init.d/functions:178 ../rc.d/rc.shutdown:70
 msgid "$MESSAGE"
-msgstr ""
+msgstr "$MESSAGE"
 
-# ../rc.d/rc.sysinit:214
 #: ../rc.d/rc.sysinit:275
 msgid "*** An error occurred during the RAID startup"
 msgstr ""
@@ -251,7 +239,6 @@ msgstr "Zamykanie systemu w toku \n"
 msgid "%sResource Manager: %sEntering runlevel number%s"
 msgstr "%sZarzadca zasobow: %sWejscie na poziom%s"
 
-# ../rc.d/init.d/functions:275
 #: ../rc.d/init.d/functions:357
 msgid "%s dead but pid file exists\n"
 msgstr "%s zabity ale plik z numerem procesu istnieje\n"
@@ -260,7 +247,6 @@ msgstr "%s zabity ale plik z numerem procesu istnieje\n"
 msgid "Turning off Stop-A/Break-A"
 msgstr "Wylaczam klawisz Stop-A/Break-A"
 
-# ../rc.d/init.d/functions.network:145
 #: ../rc.d/init.d/functions.network:272
 msgid "Setting local port range"
 msgstr "Ustawienie zakresu portow lokalnych"
@@ -269,7 +255,6 @@ msgstr "Ustawienie zakresu portow lokalnych"
 msgid "(Repair filesystem)# "
 msgstr "(Naprawa systemu plikow)# "
 
-# ../rc.d/init.d/functions:284
 #: ../rc.d/init.d/functions:366
 msgid "%s is stopped\n"
 msgstr "%s jest zatrzymany\n"
@@ -302,6 +287,10 @@ msgstr ""
 msgid "WORK"
 msgstr "AKTYWUJE"
 
+#: ../rc.d/init.d/functions:132
+msgid "$@"
+msgstr "$@"
+
 #: ../rc.d/rc.sysinit:170
 msgid "System bootup in progress  - please wait"
 msgstr "Start systemu w toku - prosze czekac"
@@ -322,7 +311,6 @@ msgstr "Wlaczam quote na lokalnych systemach plikow"
 msgid "Entering interactive startup"
 msgstr "Wchodze w tryb interaktywny"
 
-# ../rc.d/init.d/random:54
 #: ../rc.d/init.d/random:53
 msgid "The random data source exists"
 msgstr "Zrodlo losowych danych istnieje"
@@ -335,8 +323,6 @@ msgstr "Prosze wcisnac"
 msgid "Turning off Magic SysRq key"
 msgstr "Wylaczam klawisz Magic SysRq"
 
-# ../rc.d/init.d/functions:258
-# ../rc.d/init.d/functions:266
 #: ../rc.d/init.d/functions:115
 msgid "%s service is not running.\n"
 msgstr "Serwis %s nie jest uruchomiony.\n"
@@ -362,12 +348,10 @@ msgstr "Przy nastepnym starcie systemu program fsck bedzie pominiety."
 msgid "DIED"
 msgstr " ZGINAL "
 
-# ../rc.d/init.d/functions.network:133
 #: ../rc.d/init.d/functions.network:254
 msgid "Disabling dynamic IP patch"
 msgstr ""
 
-# ../rc.d/init.d/functions.network:163
 #: ../rc.d/init.d/functions.network:307
 msgid "Setting down IP spoofing protection"
 msgstr ""
@@ -384,7 +368,6 @@ msgstr "Domena NIS:"
 msgid "Stopping %s service"
 msgstr "Zatrzymywanie serwisu %s"
 
-# ../rc.d/init.d/network:132
 #: ../rc.d/init.d/network:179
 msgid "Currently active devices and tunnels:"
 msgstr "Aktywne urzadzenia sieciowe i tunele:"
@@ -400,91 +383,3 @@ msgstr "Ladowanie podstawowy font systemowy"
 #: ../rc.d/rc:170
 msgid "Setting up /etc/ld.so.cache"
 msgstr "Ustawienie /etc/ld.so.cache"
-
-# ../rc.d/rc.sysinit:384
-#~ msgid "Rebuilding /etc/psdevtab database"
-#~ msgstr "Przebudowa bazy /etc/psdevtab"
-
-# ../rc.d/init.d/functions:251
-#~ msgid "Usage: status {program}\n"
-#~ msgstr "Uzycie: status {program}\n"
-
-# ../rc.d/init.d/functions:220
-#~ msgid "Usage: pidofproc {program}\n"
-#~ msgstr "Uzycie: pidofproc {program}\n"
-
-# ../rc.d/init.d/functions:157
-#~ msgid "Usage: killproc {program} [signal]"
-#~ msgstr "Uzycie: killproc {program} [signal]"
-
-# ../rc.d/init.d/functions:70
-#~ msgid "$*"
-#~ msgstr "$*"
-
-#~ msgid "to enter interactive startup."
-#~ msgstr "by wejsc w tryb interaktywny."
-
-#~ msgid "(Y)es/(N)o/(C)ontinue? [Y] "
-#~ msgstr "(T)ak/(N)ie/(K)ontynuj? [T] "
-
-# Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
-# must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
-# (4 + "\b" * count of letters) in one of five previous words
-# msgid "\b\b\b\b\b\b\b\b"
-# ../rc.d/init.d/functions.network:14
-#~ msgid "Missing config file %s.\n"
-#~ msgstr "Brak pliku konfiguracyjnego %s.\n"
-
-#~ msgid "Active SMB mountpoints:"
-#~ msgstr "Aktywne punkty przylaczenia SMB:"
-
-#~ msgid "Mounting NCP filesystems"
-#~ msgstr "Podlaczenia systemow plikow typu NCP"
-
-#~ msgid "Mounting SMB filesystems"
-#~ msgstr "Podlaczenie systemow plikow typu SMB"
-
-#~ msgid "/proc filesystem unavailable"
-#~ msgstr "System plikow /proc niedostepny"
-
-#~ msgid "Active NFS mountpoints:"
-#~ msgstr "Aktywne punkty przylaczenia NFS"
-
-#~ msgid "Unmounting NCP filesystems"
-#~ msgstr "Odlaczenie systemow plikow typu NCP"
-
-#~ msgid "Unmounting SMB filesystems"
-#~ msgstr "Odlaczenie systemow plikow typu SMB"
-
-#~ msgid "Configured SMB mountpoints:"
-#~ msgstr "Skonfigurowane punkty przylaczenia SMB"
-
-#~ msgid "Mounting remote filesystems"
-#~ msgstr "Podlaczam zdalne systemy plikow"
-
-#~ msgid "Configured NFS mountpoints:"
-#~ msgstr "Skonfigurowane punkty przylaczenia NFS"
-
-#~ msgid "Unmounting remote filesystems"
-#~ msgstr "Odlaczanie zdalnych systemow plikow"
-
-#~ msgid "Mounting remote filesystems, start nfsd"
-#~ msgstr "Podlaczenie zdalnych systemow plikow, uruchomienie nfsd"
-
-#~ msgid "Mounting other filesystems"
-#~ msgstr "Podlaczenie innych systemow plikow"
-
-#~ msgid "Stopping NFS clients"
-#~ msgstr "Zatrzymanie klientow NFS"
-
-#~ msgid "Active NCP mountpoints:"
-#~ msgstr "Aktywne punkty przylaczenia NCP"
-
-#~ msgid "Mounting NFS filesystems"
-#~ msgstr "Podlaczenie systemow plikow typu NFS"
-
-#~ msgid "Configured NCP mountpoints:"
-#~ msgstr "Skonfigurowane punkty przylaczenia NCP"
-
-#~ msgid "Unmounting NFS filesystems"
-#~ msgstr "Odlaczenie systemow plikow typu NFS"
