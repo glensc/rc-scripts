@@ -451,18 +451,18 @@ daemon()
 			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
 			shift
 			;;
-        	  --fork)
-         		prog="/usr/bin/setsid sh -c \""
-         		end='&'
-         		shift
-         		;;
+		  --fork)
+			prog="/usr/bin/setsid sh -c \""
+			end='&'
+			shift
+			;;
 		  --waitforname)
-		  	shift
+			shift
 			waitname="$1"
 			shift
 			;;
 		  --waitfortime)
-		  	shift
+			shift
 			waittime="$1"
 			shift
 			;;
