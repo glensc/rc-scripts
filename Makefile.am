@@ -1,8 +1,8 @@
 #
-#	$Id: Makefile.am,v 1.7 2001/05/15 16:03:33 baggins Exp $
+#	$Id: Makefile.am,v 1.8 2002/03/19 18:17:58 misiek Exp $
 #
 
-SUBDIRS = src ppp sysconfig rc.d doc po
+SUBDIRS = src ppp isapnp sysconfig rc.d doc po
 
 sysconf_DATA = \
 	adjtime \
@@ -15,9 +15,12 @@ profiledir = @sysconfdir@/profile.d
 profile_DATA = \
 	lang.sh	\
 	lang.csh
-	
+
 bin_SCRIPTS = run-parts
-sbin_SCRIPTS = setsysfont
+sbin_SCRIPTS = \
+	setsysfont \
+	hwprofile \
+	service
 
 EXTRA_DIST = \
 	$(sysconf_DATA) \

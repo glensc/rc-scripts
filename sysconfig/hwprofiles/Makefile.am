@@ -1,0 +1,3 @@
+@SET_MAKE@
+
+EXTRA_DIST = data

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: ip-up,v 1.6 2002/03/19 18:18:06 misiek Exp $
+# $Id: ipx-down,v 1.2 2002/03/19 18:18:06 misiek Exp $
 # This file should not be modified
 #
 # This script is run by the pppd after the link is established.
@@ -10,9 +10,15 @@
 #    $1   Interface name                ppp0
 #    $2   The tty                       ttyS1
 #    $3   The link speed                38400
-#    $4   Local IP number               12.34.56.78
-#    $5   Peer  IP number               12.34.56.99
-#    $6   Optional ``ipparam'' value    foo
+#    $4   The network number            ???
+#    $5   Local IPX node address        ???
+#    $6   Remote IPX node address       ???
+#    $7   Local IPX routing protocol    ???
+#    $8   Remote IPX routing protocol   ???
+#    $9   Local IPX router name         ???
+#    $10  Remote IPX router name        ???
+#    $11  Optional ``ipparam'' value    foo
+#    $12  PPPD pid                      1276
 
 set +e
 
@@ -24,12 +30,21 @@ export PATH
 PPP_IFACE="$1"
 PPP_TTY="$2"
 PPP_SPEED="$3"
-PPP_LOCAL="$4"
-PPP_REMOTE="$5"
-PPP_IPPARAM="$6"
-export PPP_IFACE PPP_TTY PPP_SPEED PPP_LOCAL PPP_REMOTE PPP_IPPARAM
+PPP_NETWORK="$4"
+PPP_LOCAL="$5"
+PPP_REMOTE="$6"
+PPP_LOCAL_RPROTO="$7"
+PPP_REMOTE_RPROTO="$8"
+PPP_LOCAL_RNAME="$9"
+PPP_REMOTE_RNAME="$10"
+PPP_IPPARAM="$11"
+PPP_PID="$12"
 
-. /etc/rc.d/init.d/functions 
+export PPP_IFACE PPP_TTY PPP_SPEED PPP_NETWORK PPP_LOCAL PPP_REMOTE
+export PPP_LOCAL_RPROTO PPP_REMOTE_RPROTO PPP_LOCAL_RNAME PPP_REMOTE_RNAME
+export PPP_IPPARAM PPP_PID
+
+. /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/functions.network 
 CONFIG="$PPP_IPPARAM"
 source_config
@@ -40,10 +55,8 @@ PPP_TTYNAME=$(basename "$PPP_TTY")
 export PPP_TTYNAME
 
 # Main Script starts here
-[ -x /etc/ppp/ip-up.local ] && /etc/ppp/ip-up.local
+[ -x /etc/ppp/ipx-down.local ] && /etc/ppp/ipx-down.local 
 
-run-parts /etc/sysconfig/interfaces/up.d/ppp
-
-/etc/sysconfig/network-scripts/ifup-post "$CONFIG"
+run-parts /etc/sysconfig/interfaces/down.d/ipx
 
 exit 0

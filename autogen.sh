@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: autogen.sh,v 1.6 2001/05/15 16:03:33 baggins Exp $
+# $Id: autogen.sh,v 1.7 2002/03/19 18:17:58 misiek Exp $
 # Run this to generate all the initial makefiles, etc.
 
 srcdir=`dirname $0`
@@ -29,7 +29,7 @@ DIE=0
   (libtoolize --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`libtool' installed to compile $PKG_NAME."
-    echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.2d.tar.gz"
+    echo "Get ftp://alpha.gnu.org/gnu/libtool/libtool-1.4b.tar.gz"
     echo "(or a newer version if it is available)"
     DIE=1
   }
@@ -40,7 +40,7 @@ grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
   (gettextize --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`gettext' installed to compile $PKG_NAME."
-    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz"
+    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.38.tar.gz"
     echo "(or a newer version if it is available)"
     DIE=1
   }
@@ -49,7 +49,7 @@ grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
 (automake --version) < /dev/null > /dev/null 2>&1 || {
   echo
   echo "**Error**: You must have \`automake' installed to compile $PKG_NAME."
-  echo "Get ftp://ftp.gnu.org/pub/gnu/automake-1.3.tar.gz"
+  echo "Get ftp://sourceware.cygnus.com/pub/automake/automake-1.4-p4.tar.gz"
   echo "(or a newer version if it is available)"
   DIE=1
   NO_AUTOMAKE=yes
@@ -61,7 +61,7 @@ test -n "$NO_AUTOMAKE" || (aclocal --version) < /dev/null > /dev/null 2>&1 || {
   echo
   echo "**Error**: Missing \`aclocal'.  The version of \`automake'"
   echo "installed doesn't appear recent enough."
-  echo "Get ftp://ftp.gnu.org/pub/gnu/automake-1.3.tar.gz"
+  echo "Get ftp://sourceware.cygnus.com/pub/automake/automake-1.4-p4.tar.gz"
   echo "(or a newer version if it is available)"
   DIE=1
 }
@@ -121,10 +121,10 @@ do
 	echo "Running autoheader..."
 	autoheader
       fi
-      echo "Running automake --gnu $am_opt ..."
-      automake --add-missing --gnu $am_opt
       echo "Running autoconf ..."
       autoconf
+      echo "Running automake --gnu $am_opt ..."
+      automake --add-missing --gnu $am_opt
     )
   fi
 done

@@ -1,45 +1,23 @@
-dnl $Id: configure.in,v 1.40 2002/01/08 16:48:44 baggins Exp $
-AC_INIT()
-
+dnl $Id: configure.in,v 1.41 2002/03/19 18:17:58 misiek Exp $
 PACKAGE=rc-scripts
-VERSION=0.3.1
+VERSION=0.4.0
+
+AC_INIT($PACKAGE, $VERSION, [pld-rc-scripts@pld.org.pl])
+
 ALL_LINGUAS="pl"
 
-SHSCRIPTS="rc.d/rc 			\
-	rc.d/init.d/allowlogin 		\
-	rc.d/init.d/functions 		\
-	rc.d/init.d/functions.network 	\
-	rc.d/init.d/killall 		\
-	rc.d/init.d/network 		\
-	rc.d/init.d/random 		\
-	rc.d/init.d/single 		\
-	rc.d/init.d/timezone 		\
-	rc.d/rc 			\
-	rc.d/rc.init 			\
-	rc.d/rc.local 			\
-	rc.d/rc.shutdown		\
-	rc.d/rc.sysinit			\
-	sysconfig/network-scripts/ifdown	\
-	sysconfig/network-scripts/ifdown-br	\
-	sysconfig/network-scripts/ifdown-post	\
-	sysconfig/network-scripts/ifdown-ppp	\
-	sysconfig/network-scripts/ifdown-sl	\
-	sysconfig/network-scripts/ifup		\
-	sysconfig/network-scripts/ifup-aliases	\
-	sysconfig/network-scripts/ifup-br	\
-	sysconfig/network-scripts/ifup-ipx	\
-	sysconfig/network-scripts/ifup-plip	\
-	sysconfig/network-scripts/ifup-post	\
-	sysconfig/network-scripts/ifup-ppp	\
-	sysconfig/network-scripts/ifup-routes	\
-	sysconfig/network-scripts/ifup-sl	\
-	sysconfig/network-scripts/tnldown	\
-	sysconfig/network-scripts/tnlup		\
-	"
-
-AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+echo -n "Finding shell scripts"
+SHSCRIPTS=""
+for shfile in $(find rc.d sysconfig -type f); do
+    echo -n "."
+    if (file ${shfile} | grep -q 'shell script'); then
+	SHSCRIPTS="${SHSCRIPTS} ${shfile}"
+    fi
+done
+echo "done"
 
 dnl Checks for programs.
+AC_ARG_PROGRAM
 AC_PROG_CC
 AC_ISC_POSIX
 AC_PROG_INSTALL
@@ -107,9 +85,11 @@ AC_SUBST(rcdir)
 AC_SUBST(docdir)
 AC_SUBST(libdir)
 
-AC_OUTPUT(Makefile src/Makefile doc/Makefile \
+AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile \
 	ppp/Makefile \
+	isapnp/Makefile \
 	sysconfig/Makefile \
+	sysconfig/hwprofiles/Makefile \
 	sysconfig/network-scripts/Makefile \
 	sysconfig/interfaces/Makefile \
 	sysconfig/interfaces/data/Makefile \
@@ -127,4 +107,5 @@ AC_OUTPUT(Makefile src/Makefile doc/Makefile \
 	sysconfig/interfaces/down.d/tnl/Makefile \
 	rc.d/Makefile rc.d/init.d/Makefile \
 	po/Makefile \
-	rc-scripts.spec)
+	rc-scripts.spec])
+AC_OUTPUT
