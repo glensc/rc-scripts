@@ -1,9 +1,10 @@
 
-	$Id: README,v 1.5 2000/03/08 16:30:13 misiek Exp $
+	$Id: README,v 1.6 2000/03/15 15:07:46 misiek Exp $
 
 CRITICAL THINGS
 If you want use this rc-scripts remember to compile:
 - Kernel/User netlink socket
+- Routing messages
 support into your kernel. This is very important ! Without
 this network scripts will fail.
 
