@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.54.2.4 2001/05/13 17:47:45 misiek Exp $
+# $Id: functions,v 1.54.2.5 2001/05/13 17:54:14 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -28,16 +28,16 @@ termput()
 	     [ ! -x /usr/bin/tput -a ! -x /bin/tput ]; then
 		case "$1" in
 		  hpa)
-		  	echo -ne "\033[$(($2+1))G"
+		  	/bin/echo -ne "\033[$(($2+1))G"
 			;;
 		  cuu*)
-		  	echo -ne "\033[${2}A"
+		  	/bin/echo -ne "\033[${2}A"
 			;;
 		  el)
-		  	echo -ne "\033[0K"
+		  	/bin/echo -ne "\033[0K"
 			;;
 		  setaf)
-		  	is_yes "$COLOR_INIT" && echo -ne "\033[0;3${2}m"
+		  	is_yes "$COLOR_INIT" && /bin/echo -ne "\033[0;3${2}m"
 		  	;;
 		  op)
 		  	termput setaf 9
@@ -91,7 +91,7 @@ nls()
 	# empty message, so we return --misiek
 	if [ -z "$message" ]; then
 		NLS_DOMAIN="$old_nls_domain"
-		echo -en "$msg_echo"
+		/bin/echo -en "$msg_echo"
 		return
 	fi
 			
@@ -102,7 +102,7 @@ nls()
 		printf_ "$message" "$@"
 	fi
 	
-	echo -en "$msg_echo"
+	/bin/echo -en "$msg_echo"
 	NLS_DOMAIN="$old_nls_domain"
 }
 
