@@ -3,7 +3,7 @@
 docdir = @docdir@
 
 man_MANS = \
-	consoletype.1
+	consoletype.1 \
 	doexec.1 \
 	genhostid.1 \
 	initlog.1 \
