@@ -27,6 +27,9 @@ if [ -z "$RETRYTIMEOUT" ]; then
   RETRYTIMEOUT=30
 fi
 
+# we can use dip or direct slip connection via slattach
+if [ "$DIRECT_CONNECT" != "yes" ]; then
+
 [ -x /usr/sbin/dip ] || {
   echo "/usr/sbin/dip does not exist or is not executable"
   echo "ifup-sl for $DEVICE exiting"
@@ -63,4 +66,39 @@ while : ; do
     exit 0
   }
 done
+
+else
+# direct connection via slattach
+[ -z "$MTU" ] && MTU=1500
+[ -z "$PROTOCOL" ] && PROTOCOL=slip
+
+[ -x /sbin/slattach ] || {
+	echo "/sbin/slattach does not exist or is not executable"
+        echo "ifup-sl for $DEVICE exiting"
+        logger -p daemon.info -t ifup-sl \
+        "/sbin/slattach does not exist or is not executable for $DEVICE"
+        exit 1
+}
+
+        echo > /var/run/sl-$DEVICE.dev
+        (logger -p daemon.info -t ifup-sl \
+        "slattach started for $DEVICE on $MODEMPORT at $LINESPEED" &)&
+
+	# Check if slattach (or other process) is using $MODEMPORT
+	# if not - execute slattach
+        if fuser -s $MODEMPORT; then
+        logger -p daemon.info -t ifup-sl "some process is currently using $MODEMPORT"
+        else
+        slattach -p $PROTOCOL -s $LINESPEED $MODEMPORT &
+        usleep 500
+	ip link set $DEVICE mtu $MTU up
+	ip addr add $IPADDR peer $REMIP dev $DEVICE
+# routing chyba jest ustawiany przez g³ówny skrypt ifup ...
+#                if [ "$DEFROUTE" = yes ] ; then
+#                        route del $REMIP > /dev/null 2>&1
+#			ip route add 0.0.0.0/0 dev $DEVICE
+#                fi
+        fi
+
+fi
 

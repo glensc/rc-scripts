@@ -9,6 +9,7 @@ need_hostname
 
 CONFIG=$1
 
+# wywo³anie np. ifup eth0 lub ifup ifcfg-eth0
 [ -z "$CONFIG" ] && {
     echo "usage: ifup <device name>" >&2
     exit 1
@@ -28,6 +29,7 @@ if [ `id -u` != 0 ]; then
     exit 1
 fi
 
+# wczytuje konfiguracjê dla DEVICE
 source_config
 
 if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
@@ -37,8 +39,11 @@ fi
 
 IPSETUP=no
 
+# przyjmuje warto¶æ np: "dummy" czy "eth" itd.
 DEVICETYPE=`echo $DEVICE | sed "s/[0-9]*$//"`
+# przyjmuje eth0 przy eth0 lub eth0:1 lub eth0:alias
 REALDEVICE=`echo $DEVICE | sed 's/:.*//g'`
+
 if echo $DEVICE | grep -q ':' ; then
     ISALIAS=yes
 else
@@ -75,12 +80,16 @@ if [ "$SLAVE" = yes -a "$ISALIAS" = no -a "$MASTER" != "" -a \
 fi
 
 if [ "$BOOTPROTO" = bootp -a "$ISALIAS" = no ]; then
-    ifconfig ${DEVICE} down
-    ifconfig ${DEVICE} 0.0.0.0 broadcast 255.255.255.255 netmask 0.0.0.0
-    route add default ${DEVICE}
+#   ifconfig ${DEVICE} down
+    ip link set ${DEVICE} down
+#   ifconfig ${DEVICE} 0.0.0.0 broadcast 255.255.255.255 netmask 0.0.0.0
+    ip addr add 0.0.0.0/0 broadcast 255.255.255.255 dev ${DEVICE}
+#   route add default ${DEVICE}
+    ip route add 0.0.0.0/0 dev ${DEVICE}
     echo "Sending bootp request"
     TMPFILE=`/bin/mktemp /tmp/bootp-${DEVICE}.XXXXXX` || {
-	ifconfig ${DEVICE} down
+#	ifconfig ${DEVICE} down
+	ip link set ${DEVICE} down
 	echo 'mktemp failed'
 	exit 1
     }
@@ -90,7 +99,8 @@ if [ "$BOOTPROTO" = bootp -a "$ISALIAS" = no ]; then
 	BOOTPHOSTNAME="$HOSTNAME"
 	echo "bootp response received -- using IP ${IPADDR}"
     elif [ -z "$IPADDR" ]; then
-	ifconfig ${DEVICE} down
+#	ifconfig ${DEVICE} down
+	ip link set ${DEVICE} down
 	echo "No bootp response recieved -- not configuring device ${DEVICE}."
 	rm -f ${TMPFILE}
 	exit 1
@@ -133,19 +143,16 @@ if [ "$IPSETUP" != yes ]; then
 
     if [ "${IP6VNETWORKING}" = "yes" ] ; then 
       for ADDR in ${IP6VADDRS} ; do
-        ip addr add add ${ADDR} dev ${DEVICE}
+        ip addr add ${ADDR} dev ${DEVICE}
       done  
     fi
     
     if [ "$ISALIAS" = no ] ; then
+# potrzebna zamiana netmaski z postaci np. 255.255.255.255 -> 32
 	route add -net ${NETWORK} netmask ${NETMASK} ${DEVICE}
     else
-	route add -host ${IPADDR} ${DEVICE}
-    fi
-
-    # this is broken! it's only here for compatibility with old RH systems
-    if [ "${GATEWAY}" != "" -a "${GATEWAY}" != "none" ]; then
-	route add default gw ${GATEWAY} metric 1 ${DEVICE}
+#	route add -host ${IPADDR} ${DEVICE}
+	ip route add ${IPADDR}/32 dev ${DEVICE}
     fi
 
     . /etc/sysconfig/network
@@ -153,7 +160,8 @@ if [ "$IPSETUP" != yes ]; then
     if [ "${GATEWAY}" != "" ]; then
 	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 	    # set up default gateway
-	    route add default gw ${GATEWAY} ${DEVICE}
+#	    route add default gw ${GATEWAY} ${DEVICE}
+	    ip route add 0.0.0.0/0 via ${GATEWAY} dev ${DEVICE}
 	    DEFGW=${GATEWAY}
 	fi
     fi
@@ -162,7 +170,8 @@ if [ "$IPSETUP" != yes ]; then
 	if [ -n "$GATEWAYS" ]; then
 	    for gw in $GATEWAYS; do
 		if [ $gw != "${DEFGW}" ]; then
-		    route add default gw $gw ${DEVICE}
+#		    route add default gw $gw ${DEVICE}
+		    ip route add 0.0.0.0/0 via $gw dev ${DEVICE}
 		fi
 	    done
 	fi

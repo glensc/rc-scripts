@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 # This should be called whenever an interface goes down, not just when
 # it is brought down explicitly.
 
 cd /etc/sysconfig/network-scripts
-. ./network-functions
 
 CONFIG=$1
+. /etc/rc.d/init.d/functions.network
 source_config
 
 # Notify programs that have requested notification

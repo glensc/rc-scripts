@@ -10,7 +10,19 @@ source_config
 # signals ifup-sl not to persist
 rm -f /var/run/sl-$DEVICE.dev
 
+# we can use dip or direct slip connection via slattach
+if [ "$DIRECT_CONNECT" != "yes" ]; then
 PID=`pidof dip-$DEVICE`
+else
+PID=`pidof slattach`
+for x in $PID; do
+	if grep -q "$MODEMPORT" /proc/$x/cmdline; then
+	logger -p daemon.info -t ifdown-sl "signal TERM send to \"`ps -o cmd= $x`\" - this should be slattach"
+	kill -TERM $x
+	PID=$x
+	fi
+done
+fi
 #
 # The proctitle for connected dip daemons is actually "-dip (ipaddr)"
 #	with ipaddr == local on dial-out,  remote on dial-in

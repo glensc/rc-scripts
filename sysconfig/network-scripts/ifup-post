@@ -22,6 +22,7 @@ if [ "$ISALIAS" = no ] ; then
 fi
 
 if [ -n "$NEEDHOSTNAME" -a ${DEVICE} != lo ]; then
+# przy zastêpowaniu ifconfiga iproutem trzeba uwa¿aæ na aliasy eth0:1
     IPADDR=`ifconfig ${DEVICE} | grep 'inet addr' | 
 	    awk -F: '{ print $2 } ' | awk '{ print $1 }'`
     eval `/bin/ipcalc --silent --hostname ${IPADDR}` && set_hostname $HOSTNAME

@@ -50,7 +50,8 @@ if [ "$BOOTPROTO" = dhcp -a "$ISALIAS" = no ]; then
 	exit 1
 fi
 
-ifconfig ${DEVICE} down
+#ifconfig ${DEVICE} down
+ip link set ${DEVICE} down
 
 exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
 
