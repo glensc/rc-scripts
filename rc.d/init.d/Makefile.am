@@ -3,6 +3,7 @@
 initdir = @rcdir@/init.d
 
 init_SCRIPTS = \
+	allowlogin \
 	halt \
 	ipchains \
 	killall \
