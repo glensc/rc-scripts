@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-ppp,v 1.8 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: ifdown-ppp,v 1.9 2000/04/21 17:44:22 jajcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -11,25 +11,18 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 CONFIG=$1
 source_config
 
-if [ ! -f /var/run/ppp-$DEVICE.dev ]; then
+if [ ! -f /var/run/ppp-$DEVICE.pid ]; then
     # ppp isn't running, or we didn't start it
     exit 0
 fi
 
-file=/var/run/`cat /var/run/ppp-$DEVICE.dev`.pid
+get_ppp_device_and_pid
 
-# signals ifup-ppp not to persist -- must do this before exiting if PPP
-# has not yet started ($file does not exist).
-rm -f /var/run/ppp-$DEVICE.dev
-
-if [ ! -f $file ]; then
-    exit 0
-fi
-
-PID=`cat $file`
 if [ -z "$PID" ]; then
   exit 1
 fi
+
+rm -f /var/run/ppp-$DEVICE.pid
 
 # pppd might have chat as a child; remember chat's pid to kill after pppd.
 # (After, not before, so that pppd doesn't just restart it).
