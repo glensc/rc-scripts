@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.37 2000/03/08 16:30:14 misiek Exp $
+# $Id: functions.network,v 1.38 2000/03/22 01:08:00 kloczek Exp $
 # vi:syntax=sh
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -180,7 +180,7 @@ if [ "$IPV6_NETWORKING" = "yes" ]; then
 			/usr/sbin/rdisc $RDISC_OPTS
 		;;
 	off|stop)
-		show "Shutting down network router discovery daemon"
+		msg_stopping "network router discovery daemon"
 		killproc rdisc -HUP
 		;;
 	esac
