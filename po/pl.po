@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.41 2002/02/20 23:43:15 gotar Exp $
+# $Id: pl.po,v 1.42 2002/02/21 00:08:36 gotar Exp $
 #
 
 msgid ""
@@ -148,14 +148,13 @@ msgid "Checking root filesystem"
 msgstr "Sprawdzanie glównego systemu plików"
 
 #: ./rc.d/rc.sysinit:182
-#: ./rc.d/rc.sysinit:409
 #: ./rc.d/rc.sysinit:443
 #: ./rc.d/rc.sysinit:502
 msgid "*** An error occurred during the file system check."
 msgstr "*** Podczas sprawdzania systemów plików wykryto blad niemozliwy do usuniecia."
 
 #: ./rc.d/rc.sysinit:183
-#: ./rc.d/rc.sysinit:410
+#: ./rc.d/rc.sysinit:412
 #: ./rc.d/rc.sysinit:444
 #: ./rc.d/rc.sysinit:503
 msgid "*** Dropping you to a shell; the system will reboot"
@@ -247,7 +246,7 @@ msgid "Starting up RAID devices"
 msgstr "Ustawianie urzadzen RAID"
 
 #: ./rc.d/rc.sysinit:411
-msgid "*** An error occurred during the RAID startup"
+msgid "*** An error occurred during the RAID startup."
 msgstr "*** Podczas inicjacji urzadzen RAID wykryto blad niemozliwy do usuniecia."
 
 #: ./rc.d/rc.sysinit:416
