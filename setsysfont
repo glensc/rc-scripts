@@ -3,6 +3,7 @@
 #	$Id$
 #
 
+set -x
 [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
 [ -f /etc/sysconfig/console ] && . /etc/sysconfig/console
 
@@ -14,22 +15,35 @@ case "$LANG" in
     ;;
 esac
 
+# console-tools, obsolete part
 if [ -x /usr/bin/consolechars -o -x /bin/consolechars ]; then
 	if [ -n "$SYSFONT" ]; then
-		consolechars -f $SYSFONT
+		consolechars --font $SYSFONT
 	elif [ -n "$CONSOLEFONT" ]; then
-		consolechars -m ${CONSOLEMAP:-trivial.trans} -f $CONSOLEFONT
+		consolechars --acm ${CONSOLEMAP:-trivial.trans} --font $CONSOLEFONT
 	fi
 	if [ -n "$KEYTABLE" ]; then
 		loadkeys $KEYTABLE < /dev/tty0 > /dev/tty0
 	fi
 
 
+# kbd, currently used
 elif [ -x /usr/bin/setfont -o -x /bin/setfont ]; then
+    	if [ -n "$CONSOLESCREENFONTMAP" ]; then
+		ARGS="-u $CONSOLESCREENFONTMAP"
+	fi
+	if [ -n "$CONSOLEMAP" ]; then
+	    	if [ ! -f /lib/kbd/consoletrans/$CONSOLEMAP_to_uni.trans ]; then
+			CONSOLEMAP=$(echo "$CONSOLEMAP" | sed "s|iso0|8859-|g;s|iso|8859-|g")
+		fi
+		ARGS="$ARGS -m $CONSOLEMAP"
+	fi
 	if [ -n "$SYSFONT" ]; then
-		setfont $SYSFONT
+		setfont $SYSFONT $ARGS
 	elif [ -n "$CONSOLEFONT" ]; then
-		setfont $CONSOLEFONT
+		setfont $CONSOLEFONT $ARGS
+	else
+	    	echo -ne "\033(K" 2>/dev/null > /proc/$$/fd/0
 	fi
 else
 	echo "can't set font"
