@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.49 2001/05/15 16:03:38 baggins Exp $
+# $Id: functions.network,v 1.50 2001/05/15 16:36:47 baggins Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -201,7 +201,7 @@ if is_yes "$STATIC_RARP"; then
 		_modprobe single -k rarp
 	fi
 	if [ -r /etc/ethers -a -x /sbin/rarp ]; then
-		/sbin/rarp -f /etc/ethers
+		run_cmd "Setting static RARP entries" /sbin/rarp -f /etc/ethers
 	fi
 fi
 }
