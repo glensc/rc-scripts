@@ -35,21 +35,28 @@ case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/<service> ]; then
-		#show "Starting <service> service"
+		# show "Starting %s service." <service>
 		msg_starting <service>
 		daemon <service>
 		touch /var/lock/subsys/<service>
 	else
-		# echo "% service is already running." <service>
+		# show "%s service is already running." <service>
 		msg_Already_Running <service>
+		exit 1
 	fi
         ;;
   stop)
         # Stop daemons.
-        #show "Stopping %s service" <service>
-	msg_stopping <service>
-	killproc <service>
-	rm -f /var/lock/subsys/<service> >/dev/null 2>&1
+        # show "Stopping %s service" <service>
+	if [ -f /var/lock/subsys/syslogd ]; then
+		msg_stopping <service>
+		killproc <service>
+		rm -f /var/lock/subsys/<service> >/dev/null 2>&1
+	else
+		# show "%s service is not running." <service>
+		msg_Not_Running <service>
+		exit 1
+	fi	
         ;;
   restart)
         $0 stop
@@ -57,7 +64,7 @@ case "$1" in
         ;;
   reload)
 	if [ -f /var/lock/subsys/<service> ]; then
-		#show "Reload %s service" <service>
+		# show "Reload %s service" <service>
 		msg_show <service>
 		msg_reload
 		busy
@@ -65,19 +72,29 @@ case "$1" in
 		deltext
 		ok		
 	else
-		#echo "%s service is not running." <service>
+		# show "%s service is not running." <service>
 		msg_Not_Running <service>
+		exit 1
 	fi
+	;;
+  force-reload)
+  	# if program allows reloading without stopping
+	$0 reload
+	# or if it doesn't
+	$0 stop && $0 start
 	;;
   status)
 	status <service>
 	exit $?
         ;;
   *)
-        #echo "Usage: %s {start|stop|status|restart|reload}" $0
+  	# for programs that support reloading
+        # show "Usage: %s {start|stop|status|restart|reload|force-reload}" $0
 	msg_Usage_reload $0
+	# for these that do not
+	# show "Usage: %s {start|stop|status|restart|force-reload}" $0
+	msg_Usage_noreload $0
         exit 1
 esac
-
 exit 0
 
