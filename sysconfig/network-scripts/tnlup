@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: tnlup,v 1.19.2.1 2000/10/18 20:10:55 misiek Exp $
+#    $Id: tnlup,v 1.19.2.2 2000/10/22 08:48:37 misiek Exp $
 #
 
 . /etc/sysconfig/network
@@ -57,7 +57,7 @@ case "${MODE}" in
 	sit|four)
 		is_no "${IPV6_NETWORKING}" && exit 0
 		is_no "${IPV6_TUNNELCONFIG}" && exit 0
-		[ "${MODE}" = "four" -a is_module "fourtun" ] && modprobe -s -k fourtun
+		[ "${MODE}" = "four" ] && is_module "fourtun" && modprobe -s -k fourtun
 		;;
 	ipip)
 		is_no "${IPV4_NETWORKING}" && exit 0
