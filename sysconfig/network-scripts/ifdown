@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.24.2.4 2001/06/04 15:47:25 misiek Exp $
+#	$Id: ifdown,v 1.24.2.5 2001/06/09 08:42:57 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -59,8 +59,16 @@ fi
 
 if [ "$BOOTMETHOD" = "dhcp" ]; then
     if [ -x /sbin/dhcpcd ];then
-        /sbin/dhcpcd -k ${DEVICE}
-	RESULT=$?
+	if [ "foo$2" = "fooboot" -a -e /var/run/dhcpcd-${DEVICE}.pid ]; then
+	    PID=$(cat /var/run/dhcpcd-${DEVICE}.pid)
+	    if ps ax --no-header | grep -q $PID;then
+		kill -TERM $PID
+		RESULT=$?
+	    fi
+	else
+	    /sbin/dhcpcd -k ${DEVICE}
+	    RESULT=$?
+	fi
     elif [ -x /sbin/dhclient ];then
         if [ -f /var/run/dhclient.pid ];then
             PID=$(cat /var/run/dhclient.pid)
