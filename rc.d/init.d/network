@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.17 1999/08/12 09:54:27 misiek Exp $
+# $Id: network,v 1.18 1999/08/14 13:16:08 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -85,7 +85,7 @@ case "$1" in
   start)
 	network_init
 	for i in $tunnels; do
-		[ -f /etc/sysconfig/interfaces/$i ] && /sbin/tnlup $i boot
+		/sbin/tnlup $i boot
 	done
 
 	for i in $interfaces_boot; do
@@ -100,7 +100,7 @@ case "$1" in
 	done
 
 	for i in $tunnels; do
-                [ -f /etc/sysconfig/interfaces/$i ] && /sbin/tnldown $i boot
+                /sbin/tnldown $i boot
         done
 
 	network_deinit
