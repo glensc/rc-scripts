@@ -1,5 +1,5 @@
 
-	$Id: AUTHORS,v 1.6 2001/05/15 16:03:33 baggins Exp $
+	$Id: AUTHORS,v 1.7 2002/04/09 11:10:35 jajcus Exp $
 
 MAINTAINERS
 
@@ -23,9 +23,6 @@ Grzegorz Stanislawski <stangrze@open.net.pl>
 	ppp scripts, prefix/netmask converting
 	functions, bug fixes
 
-Jacek Konieczny <jajcus@zeus.polsl.gliwice.pl>
-	LDAP support
-	
 Jan Rêkorajski <baggins@pld.org.pl>
 	general, ipv6 and dhcp fixes
 	

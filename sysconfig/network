@@ -1,4 +1,4 @@
-# $Id: network,v 1.15 2001/11/05 16:58:50 kloczek Exp $
+# $Id: network,v 1.16 2002/04/09 11:10:38 jajcus Exp $
 ######################################################################
 # MAIN PART
 
@@ -44,14 +44,6 @@ GATEWAY6DEV=
 # Global route for IPv6 host with IPv6 forwarding
 IPV6_GLOBALROUTEGW=
 IPV6_GLOBALROUTEDEV=
-
-# Reading configuration from LDAP
-
-# Do you want to use LDAP?
-USE_LDAP=no
-
-# What base DN use for searching for interface configuration
-LDAP_BASE_DN=
 
 # Other
 

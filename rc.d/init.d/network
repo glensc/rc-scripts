@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.54 2002/04/09 11:05:59 jajcus Exp $
+# $Id: network,v 1.55 2002/04/09 11:10:37 jajcus Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -173,10 +173,6 @@ case "$1" in
 	for i in $tunnels; do
 		run_cmd -a "$(nls 'Shutting down tunnel interface') $i" /sbin/ifdown tnlcfg-$i boot
 		run_cmd -a "$(nls 'Removing tunnel') $i" /sbin/tnldown $i boot
-	done
-
-	for i in $(find_ldap_interfaces) ; do
-		run_cmd -a "$(nls 'Shutting down interface from LDAP') $i" /sbin/ifdown $i boot
 	done
 
 	for i in $interfaces_sit_boot $interfaces_boot ; do
