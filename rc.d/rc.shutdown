@@ -6,7 +6,7 @@
 #               Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.7 2000/05/29 19:03:51 baggins Exp $
+# $Id: rc.shutdown,v 1.8 2000/05/30 05:51:34 waszi Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -27,7 +27,7 @@ sleep 5
 run_cmd "Sending all processes the KILL signal" killall5 -9
 
 # Write to wtmp file before unmounting /var
-halt -p
+halt -w
 
 # Turn off swap, then unmount file systems.
 run_cmd "Turning off swap and accounting" swapoff -a
