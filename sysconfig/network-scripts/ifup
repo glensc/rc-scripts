@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.20 1999/08/14 10:51:10 misiek Exp $
+#	$Id: ifup,v 1.21 1999/08/25 14:15:36 mikrobi Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -83,7 +83,11 @@ fi
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
 if [ -x "$OTHERSCRIPT" -a -z "$IPv6_ONLY" ]; then
-    exec $OTHERSCRIPT $CONFIG $2
+    if [ "$DEFAULTHANDLING" == "yes" ]; then
+        $OTHERSCRIPT $CONFIG $2
+    else
+        exec $OTHERSCRIPT $CONFIG $2
+    fi
 fi
 
 # is this device available? (this catches PCMCIA devices for us)

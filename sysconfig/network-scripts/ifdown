@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.9 1999/07/31 11:24:20 misiek Exp $
+#	$Id: ifdown,v 1.10 1999/08/25 14:15:36 mikrobi Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -49,8 +49,12 @@ DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
 
 if [ -x $OTHERSCRIPT -a -z "$IPv6_ONLY" ]; then
+    if [ "$DEFAULTHANDLING" == "yes" ]; then
+        $OTHERSCRIPT $CONFIG $2
+    else
 	$OTHERSCRIPT $CONFIG $2
 	exit $?
+    fi
 fi
 
 if echo "$FULLDEVNAME" | grep -q ':' ; then
