@@ -95,11 +95,31 @@ if [ "$previous" = "N" ]; then
 fi
 
 # calculate bootsplash variables
-sscripts=$(ls -1 /etc/rc.d/rc${runlevel}.d/ 2> /dev/null | grep -c "^S")
+sscripts=0
+for i in /etc/rc.d/rc$runlevel.d/S*; do
+	[ ! -f $i ] && continue
+	[ "${1%.rpmsave}" != "${1}" ] && continue
+        [ "${1%.rpmorig}" != "${1}" ] && continue
+        [ "${1%.rpmnew}" != "${1}" ] && continue
+	subsys=${i#/etc/rc.d/rc$runlevel.d/S??}
+	[ -f /var/lock/subsys/$subsys ] && \
+		[ ! -f /var/lock/subsys/${subsys}.init ] && continue
+	sscripts=$(( sscripts + 1 ))
+done
 export sscripts
 
 if test "$previous" != "N" ; then
-    	kscripts=$(ls -1 /etc/rc.d/rc${previous}.d/ 2> /dev/null | grep -c "^K")
+	kscripts=0
+    	for i in /etc/rc.d/rc$runlevel.d/K*; do
+	        [ ! -f $i ] && continue
+        	[ "${1%.rpmsave}" != "${1}" ] && continue
+        	[ "${1%.rpmorig}" != "${1}" ] && continue
+        	[ "${1%.rpmnew}" != "${1}" ] && continue
+		subsys=${i#/etc/rc.d/rc$runlevel.d/K??}
+                [ ! -f /var/lock/subsys/$subsys ] && \
+                    [ ! -f /var/lock/subsys/${subsys}.init ] && continue
+		kscripts=$(( kscripts + 1 ))
+	done
 	export kscripts
 fi
 
