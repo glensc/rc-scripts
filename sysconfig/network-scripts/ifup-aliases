@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-aliases,v 1.6 1999/08/12 09:54:27 misiek Exp $
+#	$Id: ifup-aliases,v 1.7 1999/08/14 11:25:50 misiek Exp $
 #
 # adds aliases of device $1
 
@@ -17,7 +17,7 @@ else
 fi
 cd /etc/sysconfig/interfaces/
 for alias in ifcfg-$1:* ; do
-        [ -f $alias ] && /etc/sysconfig/network-scripts/ifup $alias
+        [ -f $alias ] && /sbin/ifup $alias
         done
 if [ "$BASH_VERSINFO" ]; then
         shopt -u nullglob
