@@ -106,7 +106,7 @@ fi
 
 if [ "$IPSETUP" != yes ]; then
     if [ -z "$PREFIX" ]; then
-	eval `/bin/ipcalc --short-netmask ${IPADDR}`
+	eval `/bin/ipcalc --prefix ${IPADDR}`
     fi
 
     if [ -z "$BROADCAST" ]; then

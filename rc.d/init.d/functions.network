@@ -324,6 +324,7 @@ local OISF len olen bad prefix
 #
 calcnetmask() {
 local prefix a
+MASK=""
 prefix=$[ $1 ]
 for i in 1 2 3 4
  do

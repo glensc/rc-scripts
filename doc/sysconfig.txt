@@ -62,15 +62,40 @@ Files in /etc/sysconfig
 
   All the IPX stuff is optional, and should default to off.
 
+/etc/sysconfig/static-nat
+
+  Configuration file for static Network Address Translation (NAT).
+  Contains lines of the form:
+
+    <address> via <addressreal>
+
+  NAT will translate address <address> to <addressreal>.
+
 /etc/sysconfig/static-routes:
 
   Contains lines of the form:
 
-    <device> net <network> netmask <netmask> gw <gateway>
+    <device> to [type] <network>/<prefix> via <gateway>
 
   <device> may be a device name to have the route brought up and
   down with the device, or "any" to have the correct devices calculated
-  at run time.
+  at run time. [type] is optional. RH style isn't supported !
+
+  Also you can set few options after "<gateway>":
+    tos <tos>
+    metric <number>
+    table <table>
+    src <address>
+    realm <realmid>
+    mtu <mtu> or mtu lock <mtu>
+    window <number>
+    rtt <number>
+    nexthop <nexthop>
+    scope <scope>
+    protocol <rtproto>
+    onlink
+    equalize
+  For more informations see iproute2 documentation .
 
 /etc/sysconfig/routed:
 

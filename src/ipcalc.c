@@ -8,7 +8,7 @@
 typedef unsigned int int32;
 
 int main(int argc, char ** argv) {
-    int showBroadcast = 0, showNetwork = 0, showHostname = 0, showNetmask = 0, showShortNetmask = 0;
+    int showBroadcast = 0, showNetwork = 0, showHostname = 0, showNetmask = 0, showPrefix = 0;
     int beSilent = 0;
     int rc;
     poptContext optCon;
