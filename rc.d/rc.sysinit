@@ -32,6 +32,14 @@ if grep -q selinuxfs /proc/filesystems && ! grep -q selinuxfs /proc/mounts; then
     mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
 fi
 
+if [ $(kernelverser) = "002006" ]; then
+	MODULES_CONF=/etc/modprobe.conf
+elif [ -r /etc/modules.conf ]; then
+	MODULES_CONF=/etc/modules.conf
+else
+	MODULES_CONF=/etc/conf.modules
+fi
+
 # PLD LiveCD support
 if [ -x /etc/rc.d/rc.live ]; then
 	/etc/rc.d/rc.live
@@ -459,7 +467,7 @@ if ! grep -iq "nofirewire" /proc/cmdline 2>/dev/null ; then
 fi    
     
 # Load sound modules if they need persistent DMA buffers
-if grep -q "options sound dmabuf=1" /etc/modules.conf 2>/dev/null ; then
+if grep -q "^options sound dmabuf=1" "$MODULES_CONF" 2>/dev/null ; then
 	RETURN=0
 	alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound[[:space:]]+" | awk '{ print $3 }')
 	if [ -n "$alias" -a "$alias" != "off" ] ; then
