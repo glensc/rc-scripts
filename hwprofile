@@ -169,7 +169,7 @@ while getopts adflsqr: opt "$@"; do
 	done
 	if [ -z "${PROFILE}" ]; then
 	  if is_yes "${ASKFORPROFILE}"; then
-	    echo "Avialable profiles:";
+	    echo "Available profiles:";
 	    PS3='Enter number profile: ';
 	    LISTA=$(ls ${PROFDIR}/*.desc 2> /dev/null);
 	    for i in ${LISTA};
