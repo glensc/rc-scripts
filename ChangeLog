@@ -1,3 +1,42 @@
+2004-09-25 22:22 [r4656]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Move .ICE-unix creation a bit lower in case of
+	  CLEAN_TMP usage.
+
+2004-09-25 13:22 [r4649]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Added udev support.
+
+2004-09-25 12:30 [r4647]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: Fix typo (numer->number).
+
+2004-09-24 21:04 [r4639]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Version 0.4.0.16.
+
+2004-09-22 16:32 [r4636]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/network, sysconfig/interfaces/ifcfg-description:
+	  BOOTPRIO for changing interfaces starting order.
+
+2004-09-22 15:38 [r4635]  Witek Krêcicki <adasi/at/pld-linux.org>
+
+	* rc.d/init.d/network: - Start VLAN's after all physical interfaces
+
+2004-09-19 13:32 [r4615]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Create /tmp/.ICE-unix directory for X11.
+
+2004-08-25 20:58 [r4436]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/ip-rules (removed), sysconfig/Makefile.am: Drop
+	  sysconfig/ip-rules, it's not used.
+
+2004-08-25 20:36 [r4434]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Release 0.4.0.15.
+
 2004-08-25 20:33 [r4433]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am: Add sys-chroots.
@@ -1914,7 +1953,7 @@
 
 	* po/pl.po: - charset=iso-8859-2.
 
-2001-08-15 20:32 [r942]  roman <roman/at/pld-linux.org>
+2001-08-15 20:32 [r942]  Roman Werpachowski <roman/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.tpsa: - added AUTH=no ("noauth"
 	  is not a default option of pppd)
@@ -2210,12 +2249,12 @@
 
 	* po/pl.po: - uncommented "to enter interactive startup" transl.
 
-2001-02-02 21:18 [r855]  roman <roman/at/pld-linux.org>
+2001-02-02 21:18 [r855]  Roman Werpachowski <roman/at/pld-linux.org>
 
 	* sysconfig/interfaces/data/chat-ppp0.tpsa: another small fix: atdt
 	  $PHONE -> atdt$PHONE
 
-2001-02-02 18:22 [r854]  roman <roman/at/pld-linux.org>
+2001-02-02 18:22 [r854]  Roman Werpachowski <roman/at/pld-linux.org>
 
 	* sysconfig/interfaces/data/chat-ppp0.tpsa: - small fix
 
@@ -2259,7 +2298,7 @@
 
 	* rc.d/rc.sysinit: - Fixed problem with $RUN_DEPMOD="ifmissing".
 
-2000-12-04 12:06 [r841]  roman <roman/at/pld-linux.org>
+2000-12-04 12:06 [r841]  Roman Werpachowski <roman/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.tpsa: Added PHONE to DATAFORCHAT
 
