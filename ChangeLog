@@ -1,3 +1,49 @@
+2003-07-05  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: - mount devpts, too
+
+2003-06-30  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: - keep old dmesg, too
+
+2003-06-24  Jakub Bogusz  <qboosh@pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm:
+	- added note about bluez
+
+	* sysconfig/interfaces/Makefile.am, sysconfig/interfaces/data/Makefile.am:
+	- added *-ppp0.gprs-plusgsm
+
+	* sysconfig/interfaces/data/chat-ppp0.gprs-plusgsm, sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm:
+	- ppp examples for GPRS/PlusGSM taken from BTS#694
+
+2003-06-20  Pawe³ Go³aszewski  <blues@pld-linux.org>
+
+	* rc.d/rc.sysinit: - stupid  missing thing
+
+2003-06-19  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* sysconfig/network, sysconfig/network-scripts/functions.network, sysconfig/static-routes:
+	- use static-routes for ip rule configuration; drop GATRWAY from network configuration
+
+2003-06-17  Jakub Bogusz  <qboosh@pld-linux.org>
+
+	* rc.d/init.d/timezone:
+	- posix zoneinfo files are in top level, not "posix" subdir now
+
+2003-06-16  Witek Krêcicki  <adasi@pld-linux.org>
+
+	* rc.d/rc.sysinit:  - future is now...
+
+2003-06-16  Pawe³ Go³aszewski  <blues@pld-linux.org>
+
+	* rc.d/rc.sysinit, rc-scripts.spec.in:
+	- early mounting of sysfs under kernel 2.5
+
+2003-06-16  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: - usbdevfs is usbfs in 2.5
+
 2003-06-06  Pawe³ Go³aszewski  <blues@pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: - fixed typo in description
@@ -6,23 +52,23 @@
 
 	* inittab: - calling update is obsolete starting from 2.2.9 kernel
 
-2003-05-22  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-22  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* dumb.sh: - updated
 
-2003-05-16  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-16  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* rc.d/init.d/functions: - formatting
 	- fixed second argument of "status"
 
 	* dumb.sh: - updated
 
-2003-05-15  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-15  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* rc.d/init.d/functions, rc.d/init.d/template.init:
 	- LSB conformance changes
 
-2003-05-11  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-11  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* dumb.sh: - updated
 
@@ -30,35 +76,35 @@
 
 	* dumb.sh: updated
 
-2003-05-09  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-09  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* dumb.sh: - updated
 
-2003-05-08  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-08  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* rc.d/init.d/template.init: - reversed bogus change
 
 	* dumb.sh: - updated
 
-2003-05-06  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-06  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* dumb.sh: updated
 
-2003-05-05  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-05  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* rc.d/init.d/template.init, dumb.sh: updated
 
-2003-05-04  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-04  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* dumb.sh: updated
 
-2003-05-03  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-05-03  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* dumb.sh: - dump script with various messages
 
 	* rc-scripts.spec.in: - fix improper use of %%{_sysconfigdir}
 
-2003-05-02  Tomasz K³oczko  <kloczek@pld-linux.org>
+2003-05-02  kloczek  <kloczek@pld-linux.org>
 
 	* po/de.po: - corrected charset s/iso8850-1/iso-8850-1/.
 
@@ -66,12 +112,12 @@
 
 	* rc.d/rc.sysinit: - added support for device-mapper
 
-2003-04-10  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2003-04-10  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit:
 	- use new evms_activate utility; drop support for evms < 2.0.0
 
-2003-04-07  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2003-04-07  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit: - split sysctl call into two pieces
 
@@ -81,11 +127,11 @@
 
 	* sysctl.conf: - corecting URL of grsecurity.
 
-2003-01-25  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2003-01-25  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.shutdown: - more generic ups support via /sbin/poweroff-ups
 
-2003-01-15  Andrzej Krzysztofowicz  <ankry@pld-linux.org>
+2003-01-15  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, sysconfig/interfaces/ifcfg-description, TODO:
 	- support for proxy ARP per interface
@@ -93,7 +139,7 @@
 	- typos, formatting
 	- MTU for ethernet already supported [ remove from TODO ]
 
-2003-01-07  Tomasz K³oczko  <kloczek@pld-linux.org>
+2003-01-07  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/functions:
 	s/broke/break/ (fixed http://bugs.pld.org.pl/?bug=520).
@@ -115,25 +161,25 @@
 	* sysconfig/network:
 	- removed IPV*_FORWARDING - use /etc/sysctl.conf to set this
 
-2002-12-02  Micha³ Margula  <alchemyx@pld-linux.org>
+2002-12-02  alchemyx  <alchemyx@pld-linux.org>
 
 	* rc.d/rc.sysinit: - typo
 
-2002-12-01  Micha³ Margula  <alchemyx@pld-linux.org>
+2002-12-01  alchemyx  <alchemyx@pld-linux.org>
 
 	* rc.d/rc.sysinit:
 	- system will reboot if is instructed by fsck to do so
 
-2002-11-28  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-11-28  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.shutdown: - support for UPS powerdown before halt
 
-2002-11-12  Tomasz K³oczko  <kloczek@pld-linux.org>
+2002-11-12  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description:
 	typo in comment (s/dhlc/dhcp/).
 
-2002-11-09  Micha³ Margula  <alchemyx@pld-linux.org>
+2002-11-09  alchemyx  <alchemyx@pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network, sysconfig/static-nat:
 	- updated static-nat (reversed parameters) so it works now as intended (as
@@ -151,7 +197,7 @@
 
 	* rc.d/rc, rc.d/rc.sysinit, sysconfig/system: - LOAD_SOUND is obsolete
 
-2002-08-24  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-08-24  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp:
 	- fix wvdial support; chat support still broken
@@ -166,13 +212,13 @@
 	* rc.d/init.d/network:
 	- check ONBOOT by evaluating ifcfg-* file, not by egrep
 
-2002-08-22  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-08-22  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-post, sysconfig/network-scripts/ifup-post, sysconfig/interfaces/ifcfg-description:
 	- support for limiting downstream and upstream traffic on whole interface
 	  (cbq, htb, tbf)
 
-2002-08-21  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-08-21  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network:
 	- fix support for src addresses option
@@ -184,7 +230,7 @@
 	  device "usbdevfs" causes mount -a to fail when fstab contains something
 	  like "none /proc/bus/usb usbdevfs ..."
 
-2002-08-11  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-08-11  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-post, sysconfig/network-scripts/ifup-routes, sysconfig/network-scripts/Makefile.am, sysconfig/network-scripts/ifup-neigh, sysconfig/Makefile.am, sysconfig/static-arp:
 	- static arp per interface support
@@ -196,14 +242,14 @@
 	- fix for checking encrypted filesystems - if all have "noauto" in options,
 	  don't try to mount or fsck anything
 
-2002-07-14  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-07-14  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/functions, service:
 	- some code from RH (nicer than old code)
 
 	* sysconfig/network-scripts/ifup: - fix WLAN encryption setting
 
-2002-07-13  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-07-13  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-irda, sysconfig/network-scripts/ifup-iucv, sysconfig/network-scripts/ifup-plusb, sysconfig/network-scripts/ifup-ppp, sysconfig/network-scripts/ifup-vlan, sysconfig/network-scripts/functions.network, sysconfig/network-scripts/ifdown-irda, sysconfig/network-scripts/ifdown-ppp, sysconfig/network-scripts/ifdown-vlan, sysconfig/network-scripts/ifup, sysconfig/interfaces/ifcfg-description, sysconfig/interfaces/ifcfg-irda0, sysconfig/interfaces/ifcfg-irlan0, rc.d/rc.modules, rc.d/rc.sysinit, service:
 	- more TOTALNEW merge (ppp, irda, other vlan, wireless). ALPHA
@@ -222,7 +268,7 @@
 	* sysconfig/network, doc/sysconfig.txt:
 	- more clear explanation of HOSTNAME and NISDOMAIN
 
-2002-06-13  Robert Grabowski  <grabba@pld-linux.org>
+2002-06-13  grabba  <grabba@pld-linux.org>
 
 	* rc.d/init.d/functions:
 	daemon function: dont't use su when user is root
@@ -231,7 +277,7 @@
 
 	* sysconfig/ip-rules: - typo
 
-2002-05-11  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-05-11  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit: - process functions a bit earlier
 	- don't mount proc twice
@@ -257,12 +303,12 @@
 	- use onlink option when adding default routing (in case when gw isn't in our subnetwork)
 	- TNLOPTS removed
 
-2002-04-21  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2002-04-21  mkochano  <mkochano@pld-linux.org>
 
 	* sysconfig/interfaces/data/chat-ppp0.tpsa:
 	- Update for current TPSA login screen.
 
-2002-04-20  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-04-20  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit:
 	- don't mount usbdevfs again if it's already mounted (for example by modules.conf
@@ -305,7 +351,7 @@
 
 	* rc.d/rc.sysinit, po/pl.po, README, autogen.sh: - GNU/Linux is gone.
 
-2002-03-19  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-03-19  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/system, rc.d/rc.sysinit: - user and kernelspace PNP
 
@@ -322,7 +368,7 @@
 	* sysconfig/network-scripts/ifup-ipx, rc.d/init.d/network:
 	- ipx paths fixed (ipx is usable now...)
 
-2002-03-07  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2002-03-07  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit: - protect dmesg
 
@@ -403,7 +449,7 @@
 
 	* rc.d/rc.sysinit: - fixed depmod problem (s/$mver/`uname -r`/)
 
-2001-12-14  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2001-12-14  mkochano  <mkochano@pld-linux.org>
 
 	* rc.d/init.d/functions:
 	- Previous change caused "snow ball effect" --- some code relied upon
@@ -411,7 +457,7 @@
 	- Added code which conditionaly encloses arguments in double quotes.
 	  This is required if more than one argument is passed to /bin/su -c.
 
-2001-12-13  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2001-12-13  mkochano  <mkochano@pld-linux.org>
 
 	* rc.d/init.d/functions:
 	- Properly escape quotation marks inside quotation marks.
@@ -444,7 +490,7 @@
 
 	* rc.d/init.d/network: - run modprobe at the start of network_init()
 
-2001-11-05  Tomasz K³oczko  <kloczek@pld-linux.org>
+2001-11-05  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/network:
 	- chenged comment s/Set domainname here/Set NIS domain name here/
@@ -457,7 +503,7 @@
 	- changed /var/run/utmp(x) and /var/log/wtmp(x) permissions to 660 in
 	  order to assure compatibility with SysVinit and utempter packages.
 
-2001-10-25  Tomasz K³oczko  <kloczek@pld-linux.org>
+2001-10-25  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-routes: back .. s/DEVICE/REALDEVICE/
 
@@ -465,15 +511,15 @@
 
 	* rc.d/rc.sysinit: - small fixes
 
-2001-10-25  Tomasz K³oczko  <kloczek@pld-linux.org>
+2001-10-25  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-routes: s/REALDEVICE/DEVICE/
 
-2001-10-22  Tomasz K³oczko  <kloczek@pld-linux.org>
+2001-10-22  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/static-routes: added commented example.
 
-2001-10-14  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2001-10-14  mkochano  <mkochano@pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-br:
 	- Do not try to delete bridge from itself.
@@ -515,7 +561,7 @@
 	* sysctl.conf: - added grsec stuff
 	- really, really disable ipv6 autoconf if one wants it
 
-2001-09-30  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2001-09-30  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* ppp/auth-down, ppp/auth-up, ppp/ipx-down, ppp/ipx-up, sysconfig/network-scripts/functions.network, sysconfig/network-scripts/ifdown-irda, sysconfig/network-scripts/ifdown-vlan, sysconfig/network-scripts/ifup-irda, sysconfig/network-scripts/ifup-iucv, sysconfig/network-scripts/ifup-plusb, sysconfig/network-scripts/ifup-vlan, sysconfig/interfaces/Attic/ifcfg-eth0.1, sysconfig/interfaces/ifcfg-irda0, sysconfig/interfaces/ifcfg-irlan0, sysconfig/hwprof, sysconfig/hwprofiles/Makefile.am, isapnp/Makefile.am, isapnp/isapnp-kernel.conf, service, hwprofile:
 	New file.
@@ -525,11 +571,11 @@
 	* rc.d/init.d/functions:
 	- fixed misleading message after killproc with specified signal type
 
-2001-08-17  Tomasz K³oczko  <kloczek@pld-linux.org>
+2001-08-17  kloczek  <kloczek@pld-linux.org>
 
 	* po/pl.po: - charset=iso-8859-2.
 
-2001-08-15  Roman Werpachowski  <roman@pld-linux.org>
+2001-08-15  roman  <roman@pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.tpsa:
 	- added AUTH=no ("noauth" is not a default option of pppd)
@@ -538,7 +584,7 @@
 
 	* sysconfig/interfaces/ifcfg-eth0: - ONBOOT=no by default
 
-2001-07-23  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2001-07-23  mkochano  <mkochano@pld-linux.org>
 
 	* rc.d/init.d/functions:
 	- Added ulimit -p unlimited before executing daemon. This will make sure
@@ -690,7 +736,7 @@
 	* sysconfig/network-scripts/ifdown-br, sysconfig/network-scripts/ifup-br, sysconfig/interfaces/ifcfg-br0, rc.d/rc.modules, DEVELOPMENT, modules, sysctl.conf, sysconfig/network-scripts/Makefile.am, sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifdown-post, sysconfig/network-scripts/ifdown-ppp, sysconfig/network-scripts/ifdown-sl, sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifup-aliases, sysconfig/network-scripts/ifup-ipx, sysconfig/network-scripts/ifup-plip, sysconfig/network-scripts/ifup-post, sysconfig/network-scripts/ifup-ppp, sysconfig/network-scripts/ifup-routes, sysconfig/network-scripts/ifup-sl, sysconfig/network-scripts/tnldown, sysconfig/network-scripts/tnlup, sysconfig/interfaces/Makefile.am, sysconfig/interfaces/ifcfg-description, sysconfig/interfaces/ifcfg-ppp0.leased1, sysconfig/interfaces/ifcfg-ppp0.leased2, sysconfig/interfaces/ifcfg-sl0, sysconfig/interfaces/tnlcfg-description, sysconfig/interfaces/tnlcfg-icm, sysconfig/Makefile.am, sysconfig/clock, sysconfig/network, sysconfig/system, sysconfig/timezone, src/getkey.c, src/initlog.c, src/minilogd.c, src/netreport.c, src/ppp-watch.c, src/process.c, src/shvar.c, src/shvar.h, src/usernetctl.c, src/Makefile.am, rc.d/init.d/Attic/functions.network, rc.d/init.d/functions, rc.d/init.d/network, rc.d/init.d/single, rc.d/init.d/template.init, doc/initlog.1, doc/net-scripts.txt, doc/sysconfig.txt, rc.d/Makefile.am, rc.d/rc, rc.d/rc.shutdown, rc.d/rc.sysinit, AUTHORS, Attic/configure.in, COPYING, Makefile.am, NEWS, README, TODO, autogen.sh, inittab, lang.csh, makepot.pl, rc-scripts.spec.in, setsysfont:
 	- merge from TOTALNEW branch (see NEWS for more info)
 
-2001-05-13  Tomasz K³oczko  <kloczek@pld-linux.org>
+2001-05-13  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/network, rc.d/init.d/Attic/functions.network, rc.d/init.d/network:
 	added abilities for setup static RARP table by
@@ -715,7 +761,7 @@
 
 	* rc.d/rc.sysinit: - patch to allow fsck'ing crypted filesystems
 
-2001-04-20  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2001-04-20  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: don't use quotation in DHCPOPTIONS
 
@@ -724,13 +770,13 @@
 	* sysconfig/network-scripts/ifup-ppp:
 	- check if DATAFORCHAT is not null before exporting it
 
-2001-03-05  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2001-03-05  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* TODO: removed IPX tunnels; these don't need rc-scripts support
 
 	* rc-scripts.spec.in: sysconfig/clock was missing
 
-2001-03-03  Robert Krycza³o  <laro@pld-linux.org>
+2001-03-03  laro  <laro@pld-linux.org>
 
 	* rc.d/init.d/timezone: typing error fixed
 
@@ -748,7 +794,7 @@
 
 	* po/pl.po: - uncommented "to enter interactive startup" transl.
 
-2001-02-02  Roman Werpachowski  <roman@pld-linux.org>
+2001-02-02  roman  <roman@pld-linux.org>
 
 	* sysconfig/interfaces/data/chat-ppp0.tpsa:
 	another small fix: atdt $PHONE -> atdt$PHONE
@@ -760,14 +806,14 @@
 	* rc.d/init.d/network:
 	- exclude nas* interfaces on boot, they need to be started by ATM utils
 
-2000-12-27  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2000-12-27  mkochano  <mkochano@pld-linux.org>
 
 	* sysconfig/system:
 	- CONSOLE_LOGLEVEL is back. It is duplicated in klogd.sysconfig, but it has to
 	  be here. It is required by rc.sysinit in order to set logging level before
 	  processing init.d/* scripts.
 
-2000-12-19  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2000-12-19  mkochano  <mkochano@pld-linux.org>
 
 	* sysconfig/system:
 	- Removed CONSOLELOG_LEVEL - has been moved to /etc/sysconfig/klogd.
@@ -783,18 +829,18 @@
 	* sysconfig/Makefile.am, sysconfig/clock:
 	- /etc/sysconfig/clock added (for hardware clock options)
 
-2000-12-12  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-12-12  kloczek  <kloczek@pld-linux.org>
 
 	* Attic/configure.in: - version 0.2.10.
 
-2000-12-09  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2000-12-09  mkochano  <mkochano@pld-linux.org>
 
 	* rc.d/init.d/functions:
 	- Added note about some not obvious behavior of is_not().
 
 	* rc.d/rc.sysinit: - Fixed problem with $RUN_DEPMOD="ifmissing".
 
-2000-12-04  Roman Werpachowski  <roman@pld-linux.org>
+2000-12-04  roman  <roman@pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.tpsa:
 	Added PHONE to DATAFORCHAT
@@ -803,12 +849,12 @@
 
 	* Attic/configure.in: - version 0.2.9
 
-2000-11-17  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-11-17  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description:
 	information about specifing prefix for so called ,,aliases''
 
-2000-11-17  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-11-17  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/network:
 	- replace "$((" by "$( (" to w use bash as /bin/sh.
@@ -866,46 +912,46 @@
 
 	* rc.d/init.d/network: - global setting for autoconf in proc_net()
 
-2000-10-22  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-10-22  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/functions (run_cmd, daemon):
 	set HOME and TMPDIR in nicer way (backport from totalnew)
 
-2000-10-22  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2000-10-22  mkochano  <mkochano@pld-linux.org>
 
 	* rc.d/init.d/functions: - Remove "HOME" from environment.
 	- Set TMPDIR and TEMP to "/tmp". Some programs (Samba, cvs) will fail beacuse
 	  of lack of access permissions to "/root/tmp" or lack of this directory if
 	  these variables are inherited from root's environment.
 
-2000-10-18  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-10-18  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/Attic/ifdown-lec, sysconfig/network-scripts/Attic/ifup-atm, sysconfig/network-scripts/Attic/ifup-lec, sysconfig/network-scripts/ifdown-br, sysconfig/network-scripts/ifup-br, sysconfig/interfaces/Attic/ifcfg-lec0, sysconfig/interfaces/ifcfg-br0, sysconfig/interfaces/Attic/ifcfg-atm0, rc.d/rc.modules, DEVELOPMENT, modules, sysctl.conf:
 	New file.
 
-2000-10-17  Pawe³ Sakowski  <saq@pld-linux.org>
+2000-10-17  saq  <saq@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup:
 	- bugfix: avoid loops when a user calls ifup and usernetctl isn't suid
 
-2000-09-25  Pawe³ Sakowski  <saq@pld-linux.org>
+2000-09-25  saq  <saq@pld-linux.org>
 
 	* Attic/configure.in: - version 0.2.7
 
-2000-09-23  Pawe³ Sakowski  <saq@pld-linux.org>
+2000-09-23  saq  <saq@pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifup:
 	- fixed DEVICETYPE determination for aliased devices
 
-2000-09-21  Pawe³ Sakowski  <saq@pld-linux.org>
+2000-09-21  saq  <saq@pld-linux.org>
 
 	* po/de.po: - minor fixes
 
-2000-09-21  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-09-21  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/static-routes: - commented entry description.
 
-2000-09-19  Pawe³ Sakowski  <saq@pld-linux.org>
+2000-09-19  saq  <saq@pld-linux.org>
 
 	* po/pl.po: - translations for ifup and ifup-sl
 
@@ -966,7 +1012,7 @@
 	* rc.d/rc.sysinit:
 	- added -o gid=17 while mounting /proc
 
-2000-07-31  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-07-31  kloczek  <kloczek@pld-linux.org>
 
 	* Attic/configure.in: - new version 0.2.5.
 
@@ -985,7 +1031,7 @@
 	- ls 2>/dev/null (avoid "ls: no such file or directory" when directory
 	  does not exist)
 
-2000-07-20  Pawe³ Gajda  <mis@pld-linux.org>
+2000-07-20  mis  <mis@pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description:
 	- one more fix to IPXFRAMETYPE
@@ -1039,7 +1085,7 @@
 
 	* sysconfig/interfaces/ifcfg-description: - IPADDR, not ADDR :)
 
-2000-06-18  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-06-18  kloczek  <kloczek@pld-linux.org>
 
 	* Attic/configure.in: - release 2.3.
 
@@ -1052,7 +1098,7 @@
 	- is_yes and is_no cleanups
 	- typos
 
-2000-06-02  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2000-06-02  mkochano  <mkochano@pld-linux.org>
 
 	* rc.d/init.d/functions:
 	- Moves cursor to a new line also after "WORK" and "FAIL".
@@ -1096,7 +1142,7 @@
 
 	* sysconfig/interfaces/ifcfg-description: - added DHCPOPTIONS variable
 
-2000-05-29  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-05-29  kloczek  <kloczek@pld-linux.org>
 
 	* Attic/configure.in: - start prepare 0.2.2.
 
@@ -1129,7 +1175,7 @@
 	- use dhcpcd for DHCP ;)
 	- and fixed typo
 
-2000-05-09  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-05-09  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/rc.shutdown: - "halt -p" instead "halt -w".
 
@@ -1249,7 +1295,7 @@
 
 	* rc.d/init.d/Attic/functions.network: - "set_hostname" function fixed
 
-2000-04-14  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2000-04-14  mkochano  <mkochano@pld-linux.org>
 
 	* rc.d/init.d/template.init: - s/syslogd/<service>/.
 
@@ -1259,7 +1305,7 @@
 
 	* rc.d/init.d/template.init: - some changes in reload)
 
-2000-04-13  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-04-13  kloczek  <kloczek@pld-linux.org>
 
 	* po/pl.po: - typo.
 
@@ -1273,7 +1319,7 @@
 	* rc.d/init.d/functions:
 	- added single-letter-values to is_yes and is_no
 
-2000-04-08  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2000-04-08  mkochano  <mkochano@pld-linux.org>
 
 	* rc.d/rc.sysinit:
 	- Changed 'modprobe -s midi' to 'modprobe -s synth0'. There is no module
@@ -1286,13 +1332,13 @@
 	* sysconfig/network-scripts/ifup-ipx:
 	- don't try start IPX on unconfigured devices
 
-2000-04-06  Micha³ Kochanowicz  <mkochano@pld-linux.org>
+2000-04-06  mkochano  <mkochano@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-routes:
 	- s/\$DEVICE/\$DEVNAME/. "$DEVNAME" is set by source_config() from .functions
 	  to the name of interface for which static routes should be set up.
 
-2000-04-05  bszx  <bszx@pld-linux.org>
+2000-04-05  Bartek Szady  <bszx@pld-linux.org>
 
 	* rc.d/init.d/timezone:  - now it works under bash
 
@@ -1313,13 +1359,13 @@
 
 	* rc.d/init.d/functions: - small termput() fixes
 
-2000-03-31  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-03-31  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp, sysconfig/network-scripts/tnldown, sysconfig/network-scripts/tnlup:
 	- support for maxfail option in pppd
 	- cleanups in tunnel scripts
 
-2000-03-27  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-03-27  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-post, sysconfig/network-scripts/ifup-post, src/Makefile.am, sysconfig/interfaces/ifcfg-description, rc.d/init.d/Attic/functions.network, rc.d/rc, rc.d/rc.sysinit, po/pl.po, rc-scripts.spec.in, INSTALL, NEWS:
 	- removed "scripts" method of executing external programs after uping
@@ -1332,11 +1378,11 @@
 	- set ld.so.cache if doesn't exist, too
 	- use new (rh) style for date variables
 
-2000-03-26  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-03-26  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/system: - changed RUN_LDCONFIG to no.
 
-2000-03-24  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-03-24  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc, po/pl.po:
 	- fixed problem with Runlevel messages and INIT_COL variable
@@ -1358,7 +1404,7 @@
 
 	* po/pl.po: cleanup
 
-2000-03-22  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-03-22  kloczek  <kloczek@pld-linux.org>
 
 	* po/pl.po: - removed all fuzzy translations.
 
@@ -1379,7 +1425,7 @@
 
 	* rc-scripts.spec.in: Added BuildRequires: gettext-devel
 
-2000-03-22  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-03-22  kloczek  <kloczek@pld-linux.org>
 
 	* po/pl.po: - more pl translations.
 
@@ -1396,18 +1442,18 @@
 
 	* rc.d/rc.sysinit: - hacks for nfsroot, romfs
 
-2000-03-17  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-03-17  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/functions: - more using msg_Usage().
 
 	* Attic/configure.in:
 	- VERSION=0.2.0 (prepare to release this version).
 
-2000-03-15  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-03-15  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* README: - added info aboout Routing messages
 
-2000-03-10  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-03-10  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/Attic/<template>.init, rc.d/init.d/functions:
 	- msg_Usage_noreload() and msg_Usage_reload() replace by msg_Usage().
@@ -1430,7 +1476,7 @@
 	* rc.d/init.d/functions: - slightly modified show() function
 	- changed all "67" to "$INIT_COL"
 
-2000-03-08  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-03-08  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network, sysconfig/network-scripts/ifdown-post, sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifup-post, README:
 	- start some scripts after interface is upped or downed
@@ -1476,7 +1522,7 @@
 	1. -r is not needed
 	2. silent
 
-2000-03-06  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-03-06  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/Attic/<template>.init:
 	- added "rm -rf /var/lock/subsys/<service>" in stop.
@@ -1507,12 +1553,12 @@
 
 	* Attic/configure.in: 0.1.5
 
-2000-02-28  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-02-28  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit:
 	- run depmod if modules.dep is older that modules.conf, too
 
-2000-02-18  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-02-18  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/network: - set ipv6 forwarding only if ipv6 is enabled
 
@@ -1537,11 +1583,11 @@
 
 	* sysconfig/system, rc.d/rc.sysinit: - added devfsd support
 
-2000-02-17  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-02-17  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* po/pl.po, rc.d/rc.sysinit: - print space as last char in prompt
 
-2000-02-10  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-02-10  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit, sysconfig/system:
 	- running depmod is now configurable
@@ -1550,7 +1596,7 @@
 
 	* rc-scripts.spec.in: - removed bogus defattr
 
-2000-02-03  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-02-03  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/single: - cleanups
 
@@ -1564,7 +1610,7 @@
 	- new (better) unmounting procedure from initscripts
 	- cleanups
 
-2000-01-31  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+2000-01-31  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* autogen.sh, rc-scripts.spec.in, rc.d/init.d/functions:
 	- fixes and updates
@@ -1577,7 +1623,7 @@
 	* rc.d/init.d/Attic/functions.network:
 	- avoid errors when lo interface is down
 
-2000-01-05  Tomasz K³oczko  <kloczek@pld-linux.org>
+2000-01-05  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/rc.sysinit: - mout procsf before all.
 
@@ -1608,7 +1654,7 @@
 	* sysconfig/network-scripts/ifdown:
 	- ifdown should now work for user-controled interfaces
 
-1999-12-20  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-12-20  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/rc.sysinit: - reformated.
 
@@ -1628,7 +1674,7 @@
 	- search for ifcfg-* files in /etc/sysconfig/interfaces
 	- ifup and ifdown are now only in /sbin
 
-1999-12-18  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-12-18  kloczek  <kloczek@pld-linux.org>
 
 	* Attic/configure.in: - release 0.1.3.
 
@@ -1649,7 +1695,7 @@
 	  on finding static routes entries for specified interface. This allow place
 	  also tab character after interface name.
 
-1999-12-15  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-12-15  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* src/consoletype.c: - one more source file
 
@@ -1661,21 +1707,21 @@
 	- write nice logo at startup
 	- fixed problem with translated deltext() function
 
-1999-12-11  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-12-11  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* AUTHORS: - added Jacek Konieczny
 
-1999-12-09  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-12-09  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/rc.sysinit:
 	- added including /etc/rc.d/rc.modules for loading modules before starting
 	  all services and initializing raid deveces.
 
-1999-12-02  Marek Obuchowicz  <elephant@pld-linux.org>
+1999-12-02  elephant  <elephant@pld-linux.org>
 
 	* rc.d/init.d/functions: - corrected e-mail of mine
 
-1999-12-02  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-12-02  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/random, rc.d/init.d/single, rc.d/init.d/network:
 	- chkconfig field is back (without this upgrade from initscripts to
@@ -1690,7 +1736,7 @@
 	* sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifup:
 	- fixes
 
-1999-11-16  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-11-16  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-post: - reformated.
 
@@ -1704,22 +1750,22 @@
 
 	* po/pl.po: - updated
 
-1999-11-15  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-11-15  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/i18n: - s/pl/pl_PL/.
 
-1999-11-14  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-11-14  kloczek  <kloczek@pld-linux.org>
 
 	* Attic/configure.in: - new version 1.1.2.
 
 	* sysconfig/network-scripts/ifup: - s/DEVICEFULLNAME/
 
-1999-11-09  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-11-09  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/rc.sysinit:
 	- removed "chmod 0664 /var/log/wtmpx" (this is task for SysVinit %post).
 
-1999-11-07  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-11-07  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network: - fixed BR#103 (s#==#=).
 
@@ -1735,7 +1781,7 @@
 
 	* rc.d/init.d/functions: - fix nls() function
 
-1999-10-27  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-10-27  kloczek  <kloczek@pld-linux.org>
 
 	* Attic/configure.in: - new bersion 0.1.1.
 
@@ -1758,7 +1804,7 @@
 	* rc.d/init.d/network:
 	/etc/rc.d/init.d/functions.network -> /etc/sysconfig/network-scripts/.functions
 
-1999-10-22  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-10-22  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network:
 	- fix: check and get /etc/sysconfig/interfaces/ifcfg-$CONFIG instead
@@ -1778,7 +1824,7 @@
 
 	* rc.d/init.d/Makefile.am: - small fixes
 
-1999-10-13  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-10-13  kloczek  <kloczek@pld-linux.org>
 
 	* rc-scripts.spec.in, rc.d/init.d/Makefile.am, sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifdown-post, sysconfig/network-scripts/ifdown-ppp, sysconfig/network-scripts/ifdown-sl, sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifup-aliases, sysconfig/network-scripts/ifup-ipx, sysconfig/network-scripts/ifup-plip, sysconfig/network-scripts/ifup-post, sysconfig/network-scripts/ifup-ppp, sysconfig/network-scripts/ifup-sl, sysconfig/network-scripts/tnldown, sysconfig/network-scripts/tnlup:
 	- /etc/rc.d/init.d//network.functions moved to
@@ -1821,11 +1867,11 @@
 	- halt, reboot and shutwdn merged into rc.shutdown
 	- moved ldconfig at the end of rc system
 
-1999-10-07  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-10-07  kloczek  <kloczek@pld-linux.org>
 
 	* doc/net-scripts.txt: - updated partialy documentation.
 
-1999-10-06  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-10-06  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network, rc.d/init.d/allowlogin, rc.d/init.d/functions, rc.d/init.d/network, sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifdown-sl, sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifup-post, sysconfig/network-scripts/ifup-sl, sysconfig/network-scripts/tnldown, sysconfig/network-scripts/tnlup, rc.d/rc, rc.d/rc.sysinit:
 	- remove bashizm in using test ("=" instead "==").
@@ -1842,7 +1888,7 @@
 	- functions for getting interfaces and aliases lists from LDAP added
 	- fixed getting interface info from LDAP
 
-1999-09-28  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-09-28  kloczek  <kloczek@pld-linux.org>
 
 	* Attic/configure.in: - release version 0.0.11
 
@@ -1881,7 +1927,7 @@
 
 	* po/pl.po: - fixes
 
-1999-09-27  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-09-27  kloczek  <kloczek@pld-linux.org>
 
 	* po/pl.po: - typo.
 
@@ -1895,7 +1941,7 @@
 
 	* po/pl.po: - small correction
 
-1999-09-27  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-09-27  kloczek  <kloczek@pld-linux.org>
 
 	* po/pl.po: - fixed some typos, more translations.
 
@@ -1906,7 +1952,7 @@
 
 	* rc.d/rc.sysinit: - nls fixes
 
-1999-09-27  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-09-27  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network: - cleanups
 
@@ -1956,7 +2002,7 @@
 	* po/Makefile.am, po/pl.po: - fixed `make rc-scripts.pot`
 	- updated polish translation
 
-1999-09-15  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-09-15  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/network:
 	- errors from interfaces and tunnel checking > /dev/null
@@ -1971,7 +2017,7 @@
 
 	* po/pl.po: - fixed typo
 
-1999-09-13  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-09-13  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc:
 	- added test if /var/run is writable to avoid errors if it is read-only
@@ -2006,7 +2052,7 @@
 	* rc.d/init.d/functions:
 	termput() check for /usr/share/terminfo and tput everytime
 
-1999-09-02  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-09-02  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.init: - added proper rc.init version
 
@@ -2017,7 +2063,7 @@
 
 	* rc.d/rc.init: removed
 
-1999-09-02  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-09-02  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifup:
 	- another way do check if IPv4/6 is specified on interface
@@ -2063,21 +2109,21 @@
 	- changed all show bla bla; to show "bla bla";
 	- added symlinks to /etc/rc.d/rc.local
 
-1999-08-31  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-31  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit: - fixed quotacheck calls
 
-1999-08-26  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-26  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* TODO:
 	- interfejs sit0 musi byæ podnoszony na samym koñcu
 
-1999-08-25  Robert ¦laski  <mikrobi@pld-linux.org>
+1999-08-25  mikrobi  <mikrobi@pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifup:
 	- added DEFAULTHANDLING variable (mainly for ATM startup scripts)
 
-1999-08-20  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-20  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network:
 	added two nls calls
@@ -2086,18 +2132,18 @@
 	- ipv6 addresses arn't deleted when lo device is downing (some people doesn't
 	use IPv6, yet)
 
-1999-08-18  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-18  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit:
 	fixed raid starting
 
-1999-08-16  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-16  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* TODO, rc-scripts.spec.in, rc.d/init.d/killall:
 	killall is now chkconfig ready.
 	updated TODO list.
 
-1999-08-14  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-14  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-sl:
 	removed unnecesary check (via fuser)
@@ -2142,7 +2188,7 @@
 	* sysconfig/network-scripts/ifup:
 	we are adding IPv4 based link-local addresses, too.
 
-1999-08-12  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-12  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifup-aliases:
 	- aliasing are upped via ifup-aliases after main device is up
@@ -2155,7 +2201,7 @@
 
 	* rc.d/init.d/Attic/shutdwn: - fix remount to ro
 
-1999-08-09  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-08-09  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/Makefile.am:
 	- removed ipchans and addes i18n to syscinfig files.
@@ -2168,7 +2214,7 @@
 	* Attic/configure.in, rc.d/init.d/functions: - more locale strings
 	- fix locale support in configure.in
 
-1999-08-09  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-08-09  kloczek  <kloczek@pld-linux.org>
 
 	* rc-scripts.spec.in: - added /etc/sysconfig/i18n as a %config file.
 
@@ -2180,7 +2226,7 @@
 	- expr -> $(( ))
 	- wstêp automake/autoconf do locale
 
-1999-08-06  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-06  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network: fixed bug with math
 
@@ -2194,24 +2240,24 @@
 	* rc.d/init.d/network: A BUG has been fixed!
 	jak u¿ywacie zmiennych shella misiowie to tam _musi_ byæ $ na pocz±tku!
 
-1999-08-02  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-02  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/Attic/initscript: moved here from SysVinit package
 
-1999-08-02  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-08-02  kloczek  <kloczek@pld-linux.org>
 
 	* setsysfont: - reformated.
 
 	* rc.d/rc.sysinit:
 	- changed group to utmp on utmpx (to be compliant with RH).
 
-1999-08-02  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-08-02  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network, sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifup-post, rc.d/rc.sysinit, README:
 	- poprawiony b³±d "Delaying xxxx initialization." mimo poprawnej konfiguracji
 	- tworzone s± poprawne linki do /boot/System.map-version
 
-1999-07-31  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-07-31  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* po/Attic/rc-scripts.pot, po/pl.po:
 	- pot + pl t³umaczenie
@@ -2231,23 +2277,23 @@
 	- dodane COPYING (GPL) oraz standardowy plik INSTALL
 	- dodana mo¿liwo¶æ obs³ugi t³umaczeñ DONE, BUSY itp o dlugo¶ci ró¿nej od 4 liter
 
-1999-07-29  Grzegorz Stanis³awski  <stangrze@pld-linux.org>
+1999-07-29  Grzegorz Stanislawski  <stangrze@pld-linux.org>
 
 	* TODO:
 	Zrobione. (to z ipv6)
 
-1999-07-29  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-07-29  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* TODO, sysconfig/network-scripts/tnldown, sysconfig/network-scripts/tnlup:
 	now running tnlup/tnldown tunel is possible
 
-1999-07-28  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-07-28  kloczek  <kloczek@pld-linux.org>
 
 	* rc-scripts.spec.in:
 	- added pasiing LDFLAGS="-s" to ./configure enviroment (cause stripping
 	binaries).
 
-1999-07-27  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-07-27  kloczek  <kloczek@pld-linux.org>
 
 	* TODO:
 	- dodaæ mo¿liwo¶æ ustawiania statycznej tablicy arp (patrz: man ethers arp
@@ -2265,7 +2311,7 @@
 	* TODO:
 	- rc.sysvinit dzia³a z e2fsprogs 1.15 (testowane z LABEL=, do przetestowania UUID=)
 
-1999-07-27  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-07-27  kloczek  <kloczek@pld-linux.org>
 
 	* TODO:
 	- o ile to mo¿liwe usun±æ u¿ywanie awk i sed zastêpowaæ u¿yewaniem sh lub
@@ -2287,14 +2333,14 @@
 
 	* TODO: e2progs 1.15
 
-1999-07-22  Grzegorz Stanis³awski  <stangrze@pld-linux.org>
+1999-07-22  Grzegorz Stanislawski  <stangrze@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup:
 
 	Maly hack zeby dzialaly iface tylko na ipv6.
 	Pomijane jest wyliczanie natmaski/prefixu jak adres ipv4 nie jest zdefiniowany.
 
-1999-07-22  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-07-22  kloczek  <kloczek@pld-linux.org>
 
 	* Attic/configure.in: - version to 0.0.6.
 
@@ -2317,14 +2363,14 @@
 
 	* rc.d/init.d/Attic/shutdwn: typo
 
-1999-07-21  Grzegorz Stanis³awski  <stangrze@pld-linux.org>
+1999-07-21  Grzegorz Stanislawski  <stangrze@pld-linux.org>
 
 	* rc.d/init.d/network:
 
 	 Expresion with /usr/bin/cut replaced by one with sed ;-)
 	 now rc-scripts only need /bin to work properly.
 
-1999-07-21  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-07-21  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions-ip6: obsoletes
 
@@ -2332,7 +2378,7 @@
 
 	* rc-scripts.spec.in: rc.serial moved to setserial
 
-1999-07-15  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-07-15  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/functions:
 	- added >/dev/null 2>&1 to kill
@@ -2345,7 +2391,7 @@
 
 	* rc-scripts.spec.in: requires: /bin/awk
 
-1999-07-14  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-07-14  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/Attic/rc.serial:
 	- moved to setserial.
@@ -2353,7 +2399,7 @@
 	* rc.d/Makefile.am:
 	- removed rc.derial.
 
-1999-07-13  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-07-13  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* AUTHORS: authors - based on ChangeLog
 
@@ -2368,7 +2414,7 @@
 
 	* rc-scripts.spec.in: Requires: procps
 
-1999-07-05  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-07-05  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/functions:
 	we are using printf from sh-utils package instead of cut
@@ -2387,13 +2433,13 @@
 	- ipchains poniechane (jak kto¶ chce to niech wsadzi w oddzielny modu³)
 	- net-scripts i rc-scripts po³±czone w rc-scripts
 
-1999-07-05  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-07-05  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/functions, sysconfig/network-scripts/ifup, rc.d/rc:
 	- przesuniête inormacje `ok`, `busy` itp w nieco w prawo (wiêcej miejsca na komunikaty)
 	- dodajemy takze routing IPv6 na okreslone interfejsy
 
-1999-07-03  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-07-03  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/Attic/ChangeLog: i po tescie
 
@@ -2414,7 +2460,7 @@
 	* src/Attic/doexec.1, src/Attic/initlog.1, src/Attic/ipcalc.1, src/Attic/netreport.1, src/Attic/usernetctl.1, src/Attic/usleep.1, src/Makefile.am:
 	manuals in doc
 
-1999-07-02  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-07-02  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/Makefile.am, sysconfig/network-scripts/ifup:
 	- ARPable by default
@@ -2431,7 +2477,7 @@
 	* Attic/configure.in, rc-scripts.spec.in, sysconfig/interfaces/Makefile.am, sysconfig/interfaces/data/Makefile.am:
 	now rc-scripts compile, install and make rpm correct
 
-1999-06-29  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-06-29  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network, rc.d/init.d/network, sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifup, sysconfig/network-scripts/tnlup, rc.d/init.d/functions:
 	- poprawki w calcnetmask
@@ -2439,7 +2485,7 @@
 	- poprawki w obs³udze aliasów (nie testowa³em ale powinno byæ mo¿liwe u¿ywanie
 	  aliasów typu eth0:PLD_JEST_SUPER)
 
-1999-06-28  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-06-28  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/interfaces/Makefile.am, sysconfig/interfaces/data/Makefile.am:
 	- template Makefile.am.
@@ -2454,7 +2500,7 @@
 	* sysconfig/Makefile.am, sysconfig/network-scripts/Makefile.am, Attic/configure.in, Makefile.am, rc-scripts.spec.in, rc.d/init.d/Makefile.am, src/Attic/Makefile:
 	first try to sync Makefile.am
 
-1999-06-28  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-06-28  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/interfaces/data/chat-ppp0.callback, sysconfig/interfaces/data/chat-ppp0.leased1, sysconfig/interfaces/data/chat-ppp0.tpsa, sysconfig/network-scripts/Attic/chat-ppp0.callback, sysconfig/network-scripts/Attic/chat-ppp0.leased1, sysconfig/network-scripts/Attic/chat-ppp0.tpsa:
 	moved chat*
@@ -2467,12 +2513,12 @@
 	- poprawki dotycz±ce PREFIX
 	- tunnels-ip6.init, ifdhcpc-done - zbêdne (zast±pione przez inne narzêdzia)
 
-1999-06-27  Grzegorz Stanis³awski  <stangrze@pld-linux.org>
+1999-06-27  Grzegorz Stanislawski  <stangrze@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network:
 	Added function to calculate netmask from prefix
 
-1999-06-27  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-06-27  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* doc-devel/Attic/ogolnie: removed 2 config files
 
@@ -2488,12 +2534,12 @@
 
 	* rc.d/init.d/Attic/functions.network: typo
 
-1999-06-27  Grzegorz Stanis³awski  <stangrze@pld-linux.org>
+1999-06-27  Grzegorz Stanislawski  <stangrze@pld-linux.org>
 
 	* rc.d/init.d/Attic/functions.network:
 	Added function for calulating network prefix.
 
-1999-06-27  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-06-27  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/ifup:
 	small poprawken
@@ -2509,7 +2555,7 @@
 	- tunnels-ip6.conf - zbêdne (tunele s± konfigurowane w stylu SySV)
 	- drobne poprawki
 
-1999-06-23  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-06-23  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/network-scripts/Attic/ifcfg-lo: removed
 
@@ -2517,14 +2563,14 @@
 
 	* rc.d/rc.sysinit: usuwanie lockow po pam_console
 
-1999-06-19  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-06-19  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/init.d/Attic/shutdwn, rc.d/init.d/functions, rc.d/init.d/killall, rc.d/init.d/single, rc.d/rc.sysinit, Attic/inputrc, Makefile.am, autogen.sh:
 	- removed inputrc (it must be in readline),
 	- reformatings,
 	- removed processing doc in Makefile.am and autogen.sh.
 
-1999-06-18  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-06-18  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-sl0, sysconfig/interfaces/tnlcfg-icm, sysconfig/network-scripts/Attic/tnlcfg-icm, sysconfig/system, rc.d/Attic/rc.serial, rc.d/init.d/Attic/netfs, rc.d/init.d/Attic/shutdwn, rc.d/init.d/functions, rc.d/init.d/network, rc.d/init.d/single, rc.d/rc.sysinit, src/Attic/Makefile, src/Attic/initlog.1, src/initlog.c, src/initlog.h, src/loglevel.c, src/minilogd.c, src/process.c, src/process.h, doc-devel/Attic/ogolnie, doc/initlog.1:
 	pare zmian
@@ -2532,11 +2578,11 @@
 	* sysconfig/network-scripts/Attic/ifcfg-eth0, sysconfig/network-scripts/Attic/ifcfg-eth0.wiget, sysconfig/network-scripts/Attic/ifcfg-ppp0.callback, sysconfig/network-scripts/Attic/ifcfg-ppp0.leased1, sysconfig/network-scripts/Attic/ifcfg-ppp0.leased2, sysconfig/network-scripts/Attic/ifcfg-ppp0.tpsa, sysconfig/network-scripts/Attic/network-functions, sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifdown-post, sysconfig/network-scripts/ifdown-sl, sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifup-post, sysconfig/network-scripts/ifup-sl:
 	*** empty log message ***
 
-1999-06-16  Arkadiusz Mi¶kiewicz  <misiek@pld-linux.org>
+1999-06-16  Arkadiusz Mi¶kiewicz (alias)  <misiek@pld-linux.org>
 
 	* rc.d/rc.sysinit: fixed colors
 
-1999-06-15  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-06-15  kloczek  <kloczek@pld-linux.org>
 
 	* rc.d/Attic/rc.media:
 	- removed. This was (my) silly idea.
@@ -2544,7 +2590,7 @@
 	* src/Attic/Makefile:
 	- autogenerated.
 
-1999-06-14  Grzegorz Stanis³awski  <stangrze@pld-linux.org>
+1999-06-14  Grzegorz Stanislawski  <stangrze@pld-linux.org>
 
 	* sysconfig/network-scripts/Makefile.am, sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifdown-ppp, sysconfig/network-scripts/ifdown-sl, sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifup-aliases, sysconfig/network-scripts/ifup-plip, sysconfig/network-scripts/ifup-post, sysconfig/network-scripts/ifup-ppp, sysconfig/network-scripts/ifup-sl, rc.d/init.d/Attic/functions.network, rc.d/init.d/Attic/halt, rc.d/init.d/Attic/reboot, rc.d/init.d/Attic/shutdwn, rc.d/init.d/Makefile.am, rc.d/init.d/functions, rc.d/init.d/network, rc.d/init.d/single, src/Makefile.am, sysconfig/Makefile.am, sysconfig/interfaces/Attic/ifcfg-lo, sysconfig/interfaces/ifcfg-ppp0.callback, sysconfig/interfaces/ifcfg-ppp0.leased1, sysconfig/interfaces/ifcfg-ppp0.leased2, sysconfig/interfaces/ifcfg-ppp0.tpsa, sysconfig/network, sysconfig/system, ppp/ip-down.d/Makefile.am, ppp/ip-up.d/Makefile.am, rc.d/Attic/rc.serial, rc.d/Makefile.am, rc.d/rc, rc.d/rc.sysinit, AUTHORS, Attic/Makefile, Attic/configure.in, Attic/ipchains-setup.txt, Attic/net-scripts.txt, Attic/rc-scripts.spec, Attic/sysconfig.txt, Attic/sysvinitfiles, COPYING, INSTALL, Makefile.am, NEWS, README, autogen.sh, doc/Attic/ipchains-setup.txt, doc/Attic/usernetctl.1, doc/Makefile.am, doc/doexec.1, doc/ipcalc.1, doc/net-scripts.txt, doc/netreport.1, doc/sysconfig.txt, doc/sysvinitfiles, doc/usleep.1, lang.csh, lang.sh, ppp/Makefile.am, rc-scripts.spec.in:
 	Synced with latest from old repo
@@ -2570,7 +2616,7 @@
 	* sysconfig/Attic/network-ip6, sysconfig/Attic/network-ip6.conf, sysconfig/Attic/tunnels-ip6.conf, sysconfig/network-scripts/Attic/chat-ppp0.callback, sysconfig/network-scripts/Attic/chat-ppp0.leased1, sysconfig/network-scripts/Attic/chat-ppp0.tpsa, sysconfig/network-scripts/Attic/ifcfg-ppp0.callback, sysconfig/network-scripts/Attic/ifcfg-ppp0.leased1, sysconfig/network-scripts/Attic/ifcfg-ppp0.leased2, sysconfig/network-scripts/Attic/ifcfg-ppp0.tpsa, sysconfig/network-scripts/Attic/tnlcfg-icm, sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifdown-post, sysconfig/network-scripts/ifdown-ppp, sysconfig/network-scripts/ifdown-sl, sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifup-aliases, sysconfig/network-scripts/ifup-ipx, sysconfig/network-scripts/ifup-plip, sysconfig/network-scripts/ifup-post, sysconfig/network-scripts/ifup-ppp, sysconfig/network-scripts/ifup-routes, sysconfig/network-scripts/ifup-sl, Attic/Makefile, Attic/inputrc, Attic/rc-scripts.spec, Attic/sysconfig.txt, Attic/sysvinitfiles, inittab, lang.sh, rc.d/Attic/rc.serial, rc.d/init.d/Attic/functions-ip6, rc.d/init.d/Attic/halt, rc.d/init.d/Attic/network-ip6.init, rc.d/init.d/Attic/nfsfs, rc.d/init.d/Attic/reboot, rc.d/init.d/Attic/shutdwn, rc.d/init.d/Attic/tunnels-ip6.init, rc.d/init.d/functions, rc.d/init.d/killall, rc.d/init.d/network, rc.d/init.d/random, rc.d/init.d/single, rc.d/rc, rc.d/rc.local, rc.d/rc.sysinit, src/Attic/Makefile, src/usernetctl.c:
 	Synced with rc-scripts-0.0.1 from old repo.
 
-1999-06-14  Tomasz K³oczko  <kloczek@pld-linux.org>
+1999-06-14  kloczek  <kloczek@pld-linux.org>
 
 	* sysconfig/system:
 	- added initial main system configuration file with:
