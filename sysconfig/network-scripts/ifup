@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.40 2000/05/09 18:58:35 baggins Exp $
+#	$Id: ifup,v 1.41 2000/05/29 19:37:06 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -141,7 +141,7 @@ if [ -n "$DYNIP" -a "$ISALIAS" = "no" ]; then
           exit 1
        fi
     else
-       if /sbin/dhcpcd $FULLDEVNAME ; then
+       if /sbin/dhcpcd $FULLDEVNAME "$DHCPOPTIONS" ; then
           nls " done."
        else
           nls " failed."
