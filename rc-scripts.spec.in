@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.29 1999/09/15 21:43:48 wiget Exp $
+# $Id: rc-scripts.spec.in,v 1.30 1999/10/13 16:18:43 baggins Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -26,7 +26,6 @@ Requires:	SysVinit
 Requires:	sed
 Requires:	iproute2
 Requires:	/bin/gettext
-Prereq:		/sbin/chkconfig
 Obsoletes:	initscripts
 Provides:	initscripts
 Buildroot:	/tmp/%{name}-%{version}-root
@@ -82,28 +81,41 @@ done
 
 for i in 2 3 4 5; do
 	ln -s ../rc.local $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/S99local
+	ln -s ../init.d/network $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/S10network
+	ln -s ../init.d/allowlogin $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/S99allowlogin
+done
+
+for i in 1 2 3 4 5; do
+	ln -s ../init.d/killall $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/S00killall
+	ln -s ../init.d/random $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/S20random
+done
+
+for i in 1 2 3 4 5 6; do
+	ln -s ../init.d/single $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/K00single
+done
+
+ln -s ../init.d/single $RPM_BUILD_ROOT/etc/rc.d/rc1.d/S00single
+
+for i in 0 6; do
+	ln -s ../init.d/killall $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/K90killall
+	ln -s ../init.d/random $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/K80random
+done
+
+for i in 0 1 6; do
+	ln -s ../init.d/network $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/K90network
+	ln -s ../init.d/allowlogin $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/K01allowlogin
 done
 
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/*.txt 
 
 %post
-for i in  halt random reboot single network nfsfs allowlogin killall
-	do /sbin/chkconfig --add $i
-done 
 if [ -f /etc/inittab.rpmsave ]; then
 	echo "**** Found old /etc/inittab.rpmsave ****"
 	echo "/etc/inittab renamed to /etc/inittab.rpmnew"
 	mv /etc/inittab /etc/inittab.rpmnew
 	echo "/etc/inittab.rpmsave renamed to /etc/inittab."
 	mv /etc/inittab.rpmsave /etc/inittab
-fi
-
-%preun
-if [ "$1" = "0" ]; then
-	/sbin/chkconfig --del random
-	/sbin/chkconfig --del nfsfs
-	/sbin/chkconfig --del network
 fi
 
 %files
@@ -119,19 +131,26 @@ fi
 %{_sysconfdir}/rc.d/init.d/functions
 %{_sysconfdir}/rc.d/init.d/functions.network
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/allowlogin
-%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/halt
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/killall
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/random
-%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/reboot
-%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/shutdwn
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/single
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/network
-%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/nfsfs
 
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc.sysinit
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc.local
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc.shutdown
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/S??local
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/S??allowlogin
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/S??killall
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/S??network
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/S??random
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/S??single
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/K??allowlogin
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/K??killall
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/K??network
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/K??random
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc?.d/K??single
 
 %attr(755,root,root) %{_sysconfdir}/profile.d/lang.sh
 
