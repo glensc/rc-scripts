@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.25 1999/08/16 09:38:39 misiek Exp $
+# $Id: rc-scripts.spec.in,v 1.26 1999/08/31 23:12:44 wiget Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -76,7 +76,11 @@ install -d $RPM_BUILD_ROOT/var/run/netreport
 make install  \
 	DESTDIR=$RPM_BUILD_ROOT 
 	
-	
+ln -s ../rc.local $RPM_BUILD_ROOT/etc/rc.d/rc.2/S99local
+ln -s ../rc.local $RPM_BUILD_ROOT/etc/rc.d/rc.3/S99local
+ln -s ../rc.local $RPM_BUILD_ROOT/etc/rc.d/rc.4/S99local
+ln -s ../rc.local $RPM_BUILD_ROOT/etc/rc.d/rc.5/S99local
+
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/*.txt 
 
@@ -119,6 +123,7 @@ fi
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc.sysinit
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc.local
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc.?/S??local
 
 %attr(755,root,root) %{_sysconfdir}/profile.d/lang.sh
 

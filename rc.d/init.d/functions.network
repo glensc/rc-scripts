@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.19 1999/08/20 13:39:55 misiek Exp $
+# $Id: functions.network,v 1.20 1999/08/31 23:12:45 wiget Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -12,7 +12,7 @@ source_config ()
 	PARENTCONFIG=`echo $CONFIG | sed 's/-[^-]*$//g'`
 	PARENTDEVNAME=`echo $PARENTCONFIG | sed 's/^ifcfg-//g'`
 	[ -f $PARENTCONFIG ] || {
-	    echo "Missing config file $PARENTCONFIG." >&2
+	    nls "Missing config file %s.\n" "$PARENTCONFIG" >&2
 	    exit 1
 	}
 	. ./$PARENTCONFIG
@@ -78,7 +78,7 @@ if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
 	        [ "$VARD" == "no" -a "$SET" == "1" ] && SET="$(($SET - 1))"
 		[ "$VARD" == "yes" -a "$SET" == "0" ] && SET="$(($SET + 1))"
 		if [ -n "$MESSAGE" ]; then
-			show "`nls Setting` $MESSAGE `nls to` $SET"; busy
+			show "`nls "Setting %s to %s" "$MESSAGE" "$SET"`"; busy
 			if (echo "$SET" > /proc/sys/net/$WHAT) 2> /dev/null; then
 				deltext; ok
 			else
@@ -89,7 +89,7 @@ if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
 		fi
 	elif [ "$TODO" == "stop" ]; then
 		if [ -n "$MESSAGE" ]; then
-			show "`nls Setting` $MESSAGE `nls to` $DEF"; busy
+			show "`nls "Setting %s to %s" "$MESSAGE" "$DEF"`"; busy
 			if (echo "$DEF" > /proc/sys/net/$WHAT) 2> /dev/null; then
 				deltext; ok
 			else
@@ -111,10 +111,10 @@ case "$IPV4_DYNAMIC_IP_PATCH_VALUE" in
 esac
 
 if [ "$IPV4_DYNAMIC_IP_PATCH" == "yes" ] && [ "$1" == "on" ]; then
-show Enabling dynamic IP patch; busy
+show "Enabling dynamic IP patch"; busy
 if echo $IPV4_DYNAMIC_IP_PATCH_VALUE > /proc/sys/net/ipv4/ip_dynaddr; then deltext; ok; else deltext; fail; fi
 else
-show Diabling dynamic IP patch; busy
+show "Diabling dynamic IP patch"; busy
 if echo 0 > /proc/sys/net/ipv4/ip_dynaddr; then deltext; ok; else deltext; fail; fi
 fi
 
@@ -126,10 +126,10 @@ ipv4_local_port_range()
 if [ "$IPV4_LOCAL_PORT_RANGE" != "default" -a -n "$IPV4_LOCAL_PORT_RANGE" ] || [ ! -e /proc/sys/net/ipv4/ip_local_port_range ]; then
 
 if [ "$IPV4_LOCAL_PORT_RANGE" == "yes" ] && [ "$1" == "on" ]; then
-show Setting local port range; busy
+show "Setting local port range"; busy
 if echo "$IPV4_LOCAL_PORT_RANGE" > /proc/sys/net/ipv4/ip_local_port_range; then deltext; ok; else deltext; fail; fi
 else
-show Setting default local port range; busy
+show "Setting default local port range"; busy
 if echo "1024 4999" > /proc/sys/net/ipv4/ip_local_port_range; then deltext; ok; else deltext; fail; fi
 fi
 
@@ -141,10 +141,10 @@ ipv4_anti_spoofing()
 if [ "$IPV4_ANTI_SPOOFING" != "default" -a -n "$IPV4_ANTI_SPOOFING" ] || [ ! -e /proc/sys/net/ipv4/conf/all/rp_filter ]; then
 
 if [ "$IPV4_ANTI_SPOOFING" == "yes" ] && [ "$1" == "on" ]; then
-show Setting up IP spoofing protection; busy
+show "Setting up IP spoofing protection"; busy
 if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 1 > $f; done); then deltext; ok; else deltext; fail; fi
 else
-show Setting down IP spoofing protection; busy
+show "Setting down IP spoofing protection"; busy
 if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 0 > $f; done); then deltext; ok; else deltext; fail; fi
 fi
 

@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.21 1999/08/14 11:01:57 misiek Exp $
+# $Id: functions,v 1.22 1999/08/31 23:12:45 wiget Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -15,14 +15,14 @@ export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 [ -z "$COLUMNS" ] && COLUMNS=80
 
 # Colors workaround
-unset tput || :
+unset termput || :
 if [ "$COLOR_INIT" == "no" ]; then
-        tput()
+        termput()
         {
         :
         }
 elif [ ! -d /usr/share/terminfo ]; then
-        tput()
+        termput()
         {
                 if [ "$2" == "1" ]; then echo -ne "\033[0;31m"
                 elif [ "$2" == "2" ]; then echo -ne "\033[0;32m"
@@ -32,9 +32,28 @@ elif [ ! -d /usr/share/terminfo ]; then
                 fi
         }
 else
-unset tput || :
+  termput ()
+  {
+   tput $@
+  }
 fi
 
+# printf equivalent
+printf_()
+{
+	text="$1" ;
+	shift ;
+	if [ -n "$1" ]; then
+		m="$1";
+        	shift;
+		while [ -n "$1" ]; do
+			m="$m\",\"$1" ;
+			shift ;
+		done
+	fi
+	awk "BEGIN {printf \"$text\", \"$m\"; }"
+}
+			    
 # National language support function
 nls()
 {
@@ -42,7 +61,9 @@ if [ -x /bin/gettext ] || [ -x /usr/bin/gettext ]; then
 	if [ -z "$NLS_DOMAIN" ]; then
 		NLS_DOMAIN="rc-scripts"
 	fi
-	TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="$NLS_DOMAIN" "$@"
+	text="`TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="$NLS_DOMAIN" "$1"`"
+	shift
+	printf_ "$text" $@
 	echo
 else
 	echo "$@"
@@ -53,33 +74,33 @@ fi
 show() 
 {	
 	what="`nls "DONE"`"; typeset -i offset=${#what}
-	text="`nls "$*"`"..................................................................................
+	text="`nls "$*"`.................................................................................."
 	awk "BEGIN {printf \"%.$((69 - $offset))s\", \"$text\";}"
 }
 
 busy() 
 {
-	echo -n "`tput setaf 6`[`tput setaf 5` `nls "BUSY"` `tput setaf 6`]`tput setaf 7`"
+	echo -n "`termput setaf 6`[`termput setaf 5` `nls "BUSY"` `termput setaf 6`]`termput setaf 7`"
 }
 
 ok() 
 {
-	echo  "`tput setaf 6`[`tput setaf 2` `nls "DONE"` `tput setaf 6`]`tput setaf 7`"
+	echo  "`termput setaf 6`[`termput setaf 2` `nls "DONE"` `termput setaf 6`]`termput setaf 7`"
 }
 
 started()
 {
-	echo  "`tput setaf 6`[`tput setaf 2` `nls "WORK"` `tput setaf 6`]`tput setaf 7`"
+	echo  "`termput setaf 6`[`termput setaf 2` `nls "WORK"` `termput setaf 6`]`termput setaf 7`"
 }
 
 fail() 
 {
-	echo  "`tput setaf 6`[`tput setaf 1` `nls "FAIL"` `tput setaf 6`]`tput setaf 7`"
+	echo  "`termput setaf 6`[`termput setaf 1` `nls "FAIL"` `termput setaf 6`]`termput setaf 7`"
 }
 
 died() 
 {
-	echo  "`tput setaf 6`[`tput setaf 1` `nls "DIED"` `tput setaf 6`]`tput setaf 7`"
+	echo  "`termput setaf 6`[`termput setaf 1` `nls "DIED"` `termput setaf 6`]`termput setaf 7`"
 }
 
 deltext() 
@@ -241,7 +262,7 @@ status()
 	# First try "pidof"
 	pid=`pidof $1`
 	if [ "$pid" != "" ] ; then
-	        nls "$1 (pid $pid) is running..."
+	        nls "%s (pid %s) is running..." "$1" "$pid"
 	        return 0
         else
                 pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
@@ -249,7 +270,7 @@ status()
                              (("[" prog "]") == $5) ||
                            ((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
                 if [ "$pid" != "" ] ; then
-                        nls "$1 (pid $pid) is running..."
+                        nls "%s (pid %s) is running..." "$1" "$pid"
                         return 0
                 fi
 	fi
@@ -258,15 +279,15 @@ status()
 	if [ -f /var/run/$1.pid ] ; then
 	        pid=`head -1 /var/run/$1.pid`
 	        if [ "$pid" != "" ] ; then
-	                nls "$1 dead but pid file exists"
+	                nls "%s dead but pid file exists" "$1"
 	                return 1
 	        fi
 	fi
 	# See if /var/lock/subsys/$1 exists
 	if [ -f /var/lock/subsys/$1 ]; then
-		nls "$1 dead but subsys locked"
+		nls "%s dead but subsys locked" "$1"
 		return 2
 	fi
-	nls "$1 is stopped"
+	nls "%s is stopped" "$1"
 	return 3
 }
