@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.53 2002/03/29 08:45:10 wojrus Exp $
+# $Id: rc-scripts.spec.in,v 1.54 2002/03/29 08:52:00 wojrus Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -208,6 +208,7 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/network
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/static-routes
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/static-nat
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/timezone
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/ip-rules
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/adjtime
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inittab
