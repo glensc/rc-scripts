@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.13 1999/08/02 10:08:05 misiek Exp $
+# $Id: functions.network,v 1.14 1999/08/06 13:02:54 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -98,6 +98,7 @@ if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
 		fi
 	fi
 fi
+return 0
 }
 
 ipv4_dynamic_ip_patch()
