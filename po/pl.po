@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.10 1999/09/27 15:40:16 wiget Exp $
+# $Id: pl.po,v 1.11 1999/09/28 14:42:00 kloczek Exp $
 #
 msgid ""
 msgstr ""
@@ -22,8 +22,8 @@ msgstr ""
 msgid "Missing config file %s.\n"
 msgstr "Brak pliku konfiguracyjnego %s.\n"
 
-msgid "%sResource Manager: %sLeaving runlevel number%s"
-msgstr "%sZarzadca zasobow: %sOpuszczam poziom%s"
+msgid "%sResource Manager: %sEntering runlevel number%s"
+msgstr "%sZarzadca zasobow: %sWejscie na poziom%s"
 
 msgid "Configured devices:"
 msgstr "Skonfigurowane urzadzenia sieciowe:"
