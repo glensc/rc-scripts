@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.13 1999/10/06 16:52:36 kloczek Exp $
+# $Id: rc,v 1.14 1999/10/13 16:37:23 baggins Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -105,6 +105,24 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		# Bring the subsystem up.
 		$i start
 	done
+fi
+
+# if runlevel is 0 (halt) or 6 (reboot) run rc.shutdown
+if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
+	/etc/rc.d/rc.shutdown
+	if [ "$runlevel" = "0" ] ; then
+        	show "The system is halted"; ok
+		[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+		eval halt -d
+	else
+		show "Please stand by while rebooting the system"; ok
+		[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+		eval reboot -d
+	fi
+else
+	if [ -x /sbin/ldconfig ]; then
+		run_cmd "Setting up /etc/ld.so.cache" /sbin/ldconfig -X
+	fi
 fi
 
 # Say something ;)
