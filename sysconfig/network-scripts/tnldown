@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnldown,v 1.3 1999/07/13 12:49:37 misiek Exp $
+#	$Id: tnldown,v 1.4 1999/07/29 13:59:37 misiek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -14,6 +14,18 @@ cd /etc/sysconfig/network-scripts
 . /etc/sysconfig/network
 
 CONFIG=$1
+
+[ -z "$CONFIG" ] && {
+    echo "usage: tnldown <device name>" >&2
+    exit 1
+}
+
+[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=tnlcfg-$CONFIG
+[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
+    echo "usage: tnldown <device name>" >&2
+    exit 1
+}
+
 source_config
 
 if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
