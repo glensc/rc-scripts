@@ -73,6 +73,9 @@ if is_yes "$FASTRC"; then
 					$1
 					return
 					;;
+				 *)
+					shift
+					;;
 			esac
 		done
 	}
