@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-sl,v 1.8 1999/07/31 11:24:20 misiek Exp $
+#	$Id: ifup-sl,v 1.9 1999/08/14 11:41:08 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -38,26 +38,26 @@ if [ "$DIRECT_CONNECT" != "yes" ]; then
   nls "/usr/sbin/dip does not exist or is not executable"
   nls "ifup-sl for $DEVICE exiting"
   logger -p daemon.info -t ifup-sl \
-    "`nls "/usr/sbin/dip does not exist or is not executable for"` $DEVICE"
+    "`nls '/usr/sbin/dip does not exist or is not executable for'` $DEVICE"
   exit 1
 }
 
-DIPSCRIPT=/etc/sysconfig/network-scripts/dip-$DEVNAME
+DIPSCRIPT=/etc/sysconfig/interfaces/data/dip-$DEVNAME
 [ -f $DIPSCRIPT ] || {
-  DIPSCRIPT=/etc/sysconfig/network-scripts/dip-$PARENTDEVNAME
+  DIPSCRIPT=/etc/sysconfig/interfaces/data/dip-$PARENTDEVNAME
 }
 [ -f $DIPSCRIPT ] || {
-  echo "/etc/sysconfig/network-scripts/dip-$DEVICE `nls "does not exist"`"
+  echo "/etc/sysconfig/interfaces/data/dip-$DEVICE `nls 'does not exist'`"
   echo "ifup-sl for $DEVICE exiting"
   logger -p daemon.info -t ifup-sl \
-    "/etc/sysconfig/network-scripts/dip-$DEVICE `nls "does not exist for"` $DEVICE"
+    "/etc/sysconfig/interfaces/data/dip-$DEVICE `nls 'does not exist for'` $DEVICE"
   exit 1
 }
 
 while : ; do
   echo > /var/run/sl-$DEVICE.dev
   (logger -p daemon.info -t ifup-sl \
-    "`nls "dip started for"` $DEVICE `nls "on"` $MODEMPORT `nls "at"` $LINESPEED" &)&
+    "`nls 'dip started for'` $DEVICE `nls 'on'` $MODEMPORT `nls 'at'` $LINESPEED" &)&
   doexec /usr/sbin/dip dip-$DEVICE $DIPSCRIPT
   if [ "$PERSIST" != "yes" -o ! -f /var/run/sl-$DEVICE.dev ] ; then
     exit 0
@@ -72,6 +72,7 @@ while : ; do
 done
 
 else
+
 # direct connection via slattach
 [ -z "$MTU" ] && MTU=1500
 [ -z "$PROTOCOL" ] && PROTOCOL=slip
@@ -80,25 +81,29 @@ else
 	nls "/sbin/slattach does not exist or is not executable"
         echo "ifup-sl - $DEVICE `nls exiting`"
         logger -p daemon.info -t ifup-sl \
-        "`nls "/sbin/slattach does not exist or is not executable for`" $DEVICE"
+        "`nls '/sbin/slattach does not exist or is not executable for'` $DEVICE"
         exit 1
 }
 
         echo > /var/run/sl-$DEVICE.dev
         (logger -p daemon.info -t ifup-sl \
-        "`nls "slattach started for`" $DEVICE `nls on` $MODEMPORT `nls at` $LINESPEED" &)&
+        "`nls 'slattach started for'` $DEVICE `nls on` $MODEMPORT `nls at` $LINESPEED" &)&
 
 	# Check if slattach (or other process) is using $MODEMPORT
 	# if not - execute slattach
         if [ -x /usr/sbin/fuser ] && fuser -s $MODEMPORT; then
-        logger -p daemon.info -t ifup-sl "`nls "some process is currently using"` $MODEMPORT"
-	echo "`nls "some process is currently using"` $MODEMPORT - `nls aborting`..."
+         logger -p daemon.info -t ifup-sl "`nls "some process is currently using"` $MODEMPORT"
+	 echo "`nls 'some process is currently using'` $MODEMPORT - `nls aborting`..."
         else
-        slattach -p $PROTOCOL -s $LINESPEED $MODEMPORT &
-        usleep 500
-	ip link set $DEVICE mtu $MTU up
-	ip addr add $IPADDR peer $REMIP dev $DEVICE
-        fi
+         slattach -p $PROTOCOL -s $LINESPEED $MODEMPORT &
+         usleep 500
+	 ip link set $DEVICE mtu $MTU up
+	 ip -family inet addr add $IPADDR peer $REMIP dev $DEVICE
+	 # Set defaultroute
+	 if [ "$DEFROUTE" == "yes" ]; then
+		ip -family inet route add default dev $DEVICE
+         fi
+	fi
 
 fi
 
