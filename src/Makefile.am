@@ -1,5 +1,7 @@
 @SET_MAKE@
 
+DEFS = @DEFS@ -D_GNU_SOURCE=1
+
 sysconf_DATA = \
 	initlog.conf
 

@@ -1,5 +1,5 @@
-/* $Id: initlog.c,v 1.3 1999/12/15 18:41:08 misiek Exp $ */
 
+#include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <libintl.h>
@@ -12,7 +12,9 @@
 #define SYSLOG_NAMES
 #include <syslog.h>
 
+#include <sys/socket.h>
 #include <sys/stat.h>
+#include <sys/un.h>
 #include <sys/wait.h>
 
 #define _(String) gettext((String))
@@ -178,11 +180,46 @@ int startDaemon() {
 	dup2(fd,0);
 	dup2(fd,1);
 	dup2(fd,2);
+        close(fd);
 	/* kid */
 	execlp("minilogd","minilogd",NULL);
 	perror("exec");
 	exit(-1);
     }
+}
+
+int trySocket() {
+	int s;
+	struct sockaddr_un addr;
+ 	
+	s = socket(AF_LOCAL, SOCK_DGRAM, 0);
+	if (s<0)
+	  return 1;
+   
+	bzero(&addr,sizeof(addr));
+	addr.sun_family = AF_LOCAL;
+	strncpy(addr.sun_path,_PATH_LOG,sizeof(addr.sun_path)-1);
+
+	if (connect(s,(struct sockaddr *) &addr,sizeof(addr))<0) {
+		if (errno == EPROTOTYPE) {
+			DDEBUG("connect failed (EPROTOTYPE), trying stream\n");
+			close(s);
+			s = socket(AF_LOCAL, SOCK_STREAM, 0);
+			if (connect(s,(struct sockaddr *) &addr, sizeof(addr)) < 0) {
+				DDEBUG("connect failed: %s\n",strerror(errno));
+				close(s);
+				return 1;
+			} 
+			close(s);
+			return 0;
+		}
+		close(s);
+		DDEBUG("connect failed: %s\n",strerror(errno));
+		return 1;
+	} else {
+		close(s);
+		return 0;
+	}
 }
 
 int logLine(struct logInfo *logEnt) {
@@ -193,7 +230,8 @@ int logLine(struct logInfo *logEnt) {
     /* Don't log empty or null lines */
     if (!logEnt->line || !strcmp(logEnt->line,"\n")) return 0;
     
-    if  ( ((stat(_PATH_LOG,&statbuf)==-1) ||(access("/",W_OK)==-1))
+	
+    if  ( ((stat(_PATH_LOG,&statbuf)==-1) || trySocket())
 	  && startDaemon()
 	) {
 	DDEBUG("starting daemon failed, pooling entry %d\n",logEntries);
@@ -233,7 +271,7 @@ int logEvent(char *cmd, int eventtype,char *string) {
     struct logInfo logentry;
     
     if (cmd) {
-	logentry.cmd = strdup((char *)basename(cmd));
+	logentry.cmd = strdup(basename(cmd));
 	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') && ( 30 <= logentry.cmd[1] <= 39 )
 	    && ( 30 <= logentry.cmd[2] <= 39 ) )
 	  logentry.cmd+=3;
@@ -259,7 +297,7 @@ int logString(char *cmd, char *string) {
     struct logInfo logentry;
     
     if (cmd) {
-	logentry.cmd = strdup((char *)basename(cmd));
+	logentry.cmd = strdup(basename(cmd));
 	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') && ( 30 <= logentry.cmd[1] <= 39 )
 	    && ( 30 <= logentry.cmd[2] <= 39 ) )
 	  logentry.cmd+=3;
@@ -380,13 +418,16 @@ int processArgs(int argc, char **argv, int silent) {
     } else {
 	readConfiguration("/etc/initlog.conf");
     }
+    if (cmd) {
+	    while (isspace(*cmd)) cmd++;
+    }
     if (lpri!=-1) logpriority=lpri;
     if (lfac!=-1) logfacility=lfac;
     if (cmdevent) {
 	logEvent(cmdname,cmdevent,logstring);
     } else if (logstring) {
 	logString(cmdname,logstring);
-    } else if ( cmd ) {
+    } else if ( cmd && *cmd) {
 	return(runCommand(cmd,reexec,quiet,debug));
     } else {
         if (!silent)
