@@ -1,4 +1,4 @@
-# $Id: network,v 1.11 2000/08/04 15:20:38 baggins Exp $
+# $Id: network,v 1.12 2000/11/05 01:28:05 baggins Exp $
 ######################################################################
 # MAIN PART
 
@@ -155,3 +155,11 @@ IPV6_RDISC=no
 
 # rdisc mode: "host" or "router". Default: "host".
 IPV6_RDISC_MODE=host
+
+# Do you want IPv6 address autoconfiguration? Kernel default is yes.
+IPV6_AUTOCONF=
+
+# Do you want kernel to add default route for IPv6 interfaces if
+# there is no router on the link? Kernel default is yes.
+# Kernel 2.4.0-test? or later (after ANK accepts my patch - baggins).
+#IPV6_AUTOCONF_ROUTE=
