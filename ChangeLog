@@ -1,3 +1,9 @@
+2003-08-10  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: - simplified mdadm support
+
+	* rc.d/init.d/functions: - functions for kernel version checking
+
 2003-08-07  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
 
 	* rc.d/rc.sysinit:
