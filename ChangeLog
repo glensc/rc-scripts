@@ -1,3 +1,7 @@
+2003-07-12  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/init.d/network: - added nameif support
+
 2003-07-10  Jan Rêkorajski  <baggins@pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description:
