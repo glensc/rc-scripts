@@ -1,0 +1,94 @@
+#!/bin/sh
+#
+# nfsfs         Mount NFS filesystems.
+#
+# Version:      @(#) /etc/init.d/skeleton 1.01 26-Oct-1993
+#
+# Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+#
+# chkconfig: 345 15 95
+# description: Mounts and unmounts all Network File System (NFS) \
+#              mount points.
+
+# Source networking configuration.
+if [ ! -f /etc/sysconfig/network ]; then
+    exit 0
+fi
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+case `uname -r` in
+0.*|1.*|2.0.*)
+  RPCSTATD=
+  ;;
+*)
+  if [ -f /usr/sbin/rpc.kstatd ]; then
+    RPCSTATD=rpc.kstatd
+    NFSD=nfsd
+  fi
+  ;;
+esac
+
+# See how we were called.
+case "$1" in
+  start)
+	if [ -n "$RPCSTATD" ]; then
+		show Mounting remote filesystems, start nfsd
+		busy
+		$RPCSTATD
+	else
+		show Mounting remote filesystems
+		busy
+	fi
+	mount -a -t nfs
+	touch /var/lock/subsys/nfsfs
+	deltext
+	ok
+	;;
+  stop)
+	show Unmounting remote filesystems
+	daemon umount -a -t nfs
+	if [ -n "$NFSD" ]; then
+		pidof $NFSD > /dev/null 2>&1
+		if [ $? != 0 ]; then
+			show Stopping NFS clients
+			killproc $RPCSTATD
+			echo
+		fi
+	fi
+	rm -f /var/lock/subsys/nfsfs
+	;;
+  status)
+	if [ -f /proc/mounts ] ; then
+		echo "Configured NFS mountpoints:"
+		grep -v '^#' /etc/fstab | \
+		  awk '{ if ($3 ~ /^nfs$/ && $4 !~ /noauto/)
+				print $2}'
+		echo "Active NFS mountpoints:"
+		grep -v '^#' /proc/mounts | \
+		  awk '{ if ($3 ~ /^nfs$/ && $4 !~ /noauto/)
+				print $2}'
+	else
+		echo "/proc filesystem unavailable"
+	fi
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  reload)
+	mount -a -t nfs
+	;;
+  *)
+	echo "Usage: nfsfs {start|stop|restart|reload|status}"
+	exit 1
+esac
+
+exit 0
+

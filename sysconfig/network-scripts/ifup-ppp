@@ -1,0 +1,98 @@
+#!/bin/bash
+
+# ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
+# Grzegorz Stanislawski <stangrze@open.net.pl>
+# Features:
+#  - since persist option is included to pppd it''s no need to do werid loops
+#    ifup-ppp script. This also makes your logfile grow slower when Your link
+#    is down.
+#  - chat-ppp? file with script for chat is now parsed by shell, so You can
+#    include in it shell variables (for example $PHONE, $USERNAME)
+#    You can define any variable in ifcfg-ppp? file and use it in chat-ppp?
+#    You only have to add it's name into DATAFORCHAT variable
+#    Note, that chat-ppp file is now parsed by shell, so you have to escape
+#    with "\" all shell special characters like \$;:)(& etc.
+ 
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+# ifup-post for PPP is handled through /etc/ppp/ip-up
+if [ "$1" != daemon ] ; then
+  # disconnect stdin, out, err to disassociate from controlling tty
+  # so that no HUPs will get through.
+  $0 daemon $*& </dev/null >/dev/null 2>/dev/null
+  exit 0
+fi
+shift
+
+CONFIG=$1
+cd /etc/sysconfig/network-scripts
+. network-functions
+source_config
+if [ -z "$HOLDOFF" ]; then
+  HOLDOFF=30
+fi
+if [ "$2" = "boot" -a "${ONBOOT}" = "no" ]; then
+  exit
+fi
+[ -x /usr/sbin/pppd ] || {
+  echo "/usr/sbin/pppd does not exist or is not executable"
+  echo "ifup-ppp for $DEVICE exiting"
+    logger -p daemon.info -t ifup-ppp \
+    "/usr/sbin/pppd does not exist or is not executable for $DEVICE"
+  exit 1
+}
+opts="lock"
+if [ "${PERSIST}" = "yes" ]; then
+  opts="$opts persist holdoff $HOLDOFF"
+fi
+if [ "${DEMAND}" = "yes" ]; then
+#opts="$opts demand active-filter $ACTIVEFILTER idle $IDLE"
+opts="$opts demand "
+fi
+if [ "${HARDFLOWCTL}" = yes ] ; then
+  opts="$opts modem crtscts"
+fi
+if [ "${ESCAPECHARS}" = yes ] ; then
+  opts="$opts asyncmap 00000000"
+fi
+if [ "${DEFROUTE}" = yes ] ; then
+  opts="$opts defaultroute"
+fi
+if [ -n "${MRU}" ] ; then
+  opts="$opts mru ${MRU}"
+fi
+if [ -n "${MTU}" ] ; then
+  opts="$opts mtu ${MTU}"
+fi
+if [ -n "${IPADDR}${REMIP}" ] ; then
+  # if either IP address is set, the following will work.
+  opts="$opts ${IPADDR}:${REMIP}"
+fi
+if [ -n "${PAPNAME}" ] ; then
+  opts="$opts name ${PAPNAME}"
+fi
+if [ "${DEBUG}" = yes ] ; then
+  opts="$opts debug"
+  chatdbg="-v"
+fi
+if [ -n "${REPORTFILE}"  ] ; then
+  chatrpt="-r ${REPORTFILE}"
+fi
+(logger -p daemon.info -t ifup-ppp \
+    "pppd started for $DEVICE on $MODEMPORT at $LINESPEED" &)&
+> /var/run/ppp-$DEVICE.dev
+
+if [ -n "${CHATSCRIPT}"  ] ; then
+  export chatdbg chatrpt CHATSCRIPT
+  export $DATAFORCHAT
+  /usr/sbin/pppd -detach $opts $MODEMPORT $LINESPEED \
+    connect 'eval /usr/sbin/chat $chatdbg $chatrpt `cat ${CHATSCRIPT}`' \
+    remotename $DEVICE ipparam $DEVICE \
+    ${PPPOPTIONS} &
+else
+  /usr/sbin/pppd -detach $opts $MODEMPORT $LINESPEED \
+    remotename $DEVICE ipparam $DEVICE \
+    ${PPPOPTIONS} &
+fi
+ echo "$!" > /var/run/ppp-$DEVICE.pid
+

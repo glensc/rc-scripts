@@ -1,0 +1,198 @@
+#!/bin/bash
+#
+# functions	This file contains functions to be used by most or all
+#		shell scripts in the /etc/init.d directory.
+#
+# Version:	@(#) /etc/init.d/functions 1.01 26-Oct-1993
+#
+# Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+# Hacked by:    Greg Galloway and Marc Ewing
+# Modified for PLD by Marek Obuchowicz <elephant@shadow.eu.org>
+#
+
+# First set up a default search path.
+export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
+
+# Some functions to handle PLD-style messages
+function show() {
+  text="$*".............................................
+  echo -ne `echo $text | cut -c1-45`
+}
+
+function busy() {
+  echo -ne '\e[0;36m[\e[0;35m BUSY \e[0;36m]\e[0;37m'
+}
+
+function ok() {
+  echo -e '\e[0;36m[\e[0;32m DONE \e[0;36m]\e[0;37m'
+}
+
+function fail() {
+  echo -e '\e[0;36m[\e[0;31m FAIL \e[0;36m]\e[0;37m'
+}
+
+function died() {
+  echo -e '\e[0;36m[\e[0;31m DIED \e[0;36m]\e[0;37m'
+}
+
+function deltext() {
+  echo -ne '\b\b\b\b\b\b\b\b'
+}
+
+# A function to start a program.
+daemon() {
+	TMPFILE=`mktemp /tmp/init-XXXXXX`
+	
+	nicelevel=0
+	# Test syntax.
+	case $1 in
+	    '')    echo '$0: Usage: daemon [+/-nicelevel] {program}'
+	           return 1;;
+	    -*|+*) nicelevel=$1
+	           shift;;
+	esac
+
+	# make sure it doesn't core dump anywhere; while this could mask
+	# problems with the daemon, it also closes some security problems
+	ulimit -c 0
+
+	# And start it up.
+	busy
+	if nice -n $nicelevel "$@" &> $TMPFILE; then
+	  deltext
+	  ok
+	else
+	  deltext
+	  fail
+	  cat $TMPFILE
+	fi
+	rm -f $TMPFILE
+}
+
+# A function to stop a program.
+killproc() {
+	# Test syntax.
+	if [ $# = 0 ]; then
+		echo "Usage: killproc {program} [signal]"
+		return 1
+	fi
+
+	busy
+	
+	TMPFILE=`mktemp /tmp/init-XXXXXX`
+	
+	notset=0
+	# check for second arg to be kill level
+	if [ "$2" != "" ] ; then
+		killlevel=$2
+	else
+		notset=1
+		killlevel="-9"
+	fi
+
+        # Save basename.
+        base=`basename $1`
+
+        # Find pid.
+        pid=`pidofproc $base`
+
+        # Kill it.
+        if [ "$pid" != "" ] ; then
+		if [ "$notset" = 1 ] ; then
+			# TERM first, then KILL if not dead
+			kill -TERM $pid &> $TMPFILE
+			usleep 100000
+			dead=`ps aux | awk '{print $2}' | grep $pid`
+			if [ "$dead" != "" ]; then
+				sleep 3
+				kill -KILL $pid &> $TMPFILE
+			fi
+		# use specified level only
+		else
+	                kill $killlevel $pid &> $TMPFILE
+		fi
+	else
+	  rm -f /var/run/$base.pid
+	  deltext
+	  fail
+	  return
+	fi
+
+        # Remove pid file if any.
+        rm -f /var/run/$base.pid
+	
+	if [ -z "`cat $TMPFILE`" ]; then
+		deltext
+		ok
+	else
+		deltext
+		died	
+	fi
+	rm -f $TMPFILE
+}
+
+# A function to find the pid of a program.
+pidofproc() {
+	# Test syntax.
+	if [ $# = 0 ] ; then
+		echo "Usage: pidofproc {program}"
+		return 1
+	fi
+
+	# First try "/var/run/*.pid" files
+	if [ -f /var/run/$1.pid ] ; then
+	        pid=`head -1 /var/run/$1.pid`
+	        if [ "$pid" != "" ] ; then
+	                echo $pid
+	                return 0
+	        fi
+	fi
+
+	# Next try "pidof"
+	pid=`pidof $1`
+	if [ "$pid" != "" ] ; then
+	        echo $pid
+	        return 0
+	fi
+
+	# Finally try to extract it from ps
+	ps auxw | awk 'BEGIN { prog=ARGV[1]; ARGC=1 } 
+			   { if ((prog == $11) || (("(" prog ")") == $11) ||
+			   ((prog ":") == $11)) { print $2 } }' $1
+}
+status() {
+	# Test syntax.
+	if [ $# = 0 ] ; then
+		echo "Usage: status {program}"
+		return 1
+	fi
+
+	# First try "pidof"
+	pid=`pidof $1`
+	if [ "$pid" != "" ] ; then
+	        echo "$1 (pid $pid) is running..."
+	        return 0
+        else
+                pid=`ps auxww | grep $1 | egrep -v grep\|$0 | awk '{print $2}'`
+                if [ "$pid" != "" ] ; then
+                        echo "$1 (pid $pid) is running..."
+                        return 0
+                fi
+	fi
+
+	# Next try "/var/run/*.pid" files
+	if [ -f /var/run/$1.pid ] ; then
+	        pid=`head -1 /var/run/$1.pid`
+	        if [ "$pid" != "" ] ; then
+	                echo "$1 dead but pid file exists"
+	                return 1
+	        fi
+	fi
+	# See if /var/lock/subsys/$1 exists
+	if [ -f /var/lock/subsys/$1 ]; then
+		echo "$1 dead but subsys locked"
+		return 2
+	fi
+	echo "$1 is stopped"
+	return 3
+}

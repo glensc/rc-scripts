@@ -1,0 +1,300 @@
+#!/bin/bash
+#
+# /etc/rc.d/rc.sysinit - run once at boot time
+#
+# Taken in part from Miquel van Smoorenburg's bcheckrc.
+#
+
+# Set the path
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export PATH
+
+# Read in config data.
+if [ -f /etc/sysconfig/network ]; then
+    . /etc/sysconfig/network
+else
+    NETWORKING=no
+    HOSTNAME=localhost
+fi
+
+# Start up swapping.
+echo "Activating swap partitions"
+swapon -a
+
+# Set the hostname.
+hostname ${HOSTNAME}
+echo hostname: `hostname`
+
+# Set the NIS domain name
+if [ -n "$NISDOMAIN" ]; then
+    domainname $NISDOMAIN
+else
+    domainname ""
+fi
+
+if [ -f /fsckoptions ]; then
+	fsckoptions=`cat /fsckoptions`
+    else
+	fsckoptions=''
+fi
+
+if [ ! -f /fastboot ]; then
+	echo "Checking root filesystems."
+	fsck -V -a $fsckoptions /
+
+	rc=$?
+
+	# A return of 2 or higher means there were serious problems.
+	if [ $rc -gt 1 ]; then
+		echo
+		echo
+		echo "*** An error occurred during the file system check."
+		echo "*** Dropping you to a shell; the system will reboot"
+		echo "*** when you leave the shell."
+
+		PS1="(Repair filesystem) #"; export PS1
+		sulogin
+
+		echo "Unmounting file systems"
+		umount -a
+		mount -n -o remount,ro /
+		echo "Automatic reboot in progress."
+		reboot
+	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
+		echo "Checking root filesystem quotas"
+		/sbin/quotacheck -v /
+	fi
+fi
+
+if [ -x /sbin/quotaon ]; then
+    echo "Turning on user and group quotas for root filesystem"
+    /sbin/quotaon /
+fi
+
+# check for arguments 
+
+mount -t proc /proc /proc
+if grep -i nopnp /proc/cmdline >/dev/null ; then
+    PNP=
+else
+    PNP=yes
+fi
+
+# set up pnp 
+if [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
+    if [ -n "$PNP" ]; then
+	echo "Setting up ISA PNP devices"
+	/sbin/isapnp /etc/isapnp/isapnp.conf
+    else
+	echo "Skipping ISA PNP configuration at users request"
+    fi
+fi
+
+# Remount the root filesystem read-write.
+echo "Remounting root filesystem in read-write mode."
+mount -n -o remount,rw /
+
+if [ ! -f /etc/HOSTNAME ]; then
+    echo ${HOSTNAME} > /etc/HOSTNAME
+fi
+
+# Clear mtab
+>/etc/mtab
+
+# Enter root and /proc into mtab.
+mount -f /
+mount -f /proc
+
+if [ -f /proc/ksyms ]; then
+    USEMODULES=y
+else
+    USEMODULES=
+fi
+
+# Get the modules ready to go -- we use awk here as cut is in /usr/bin
+rm -f /lib/modules/preferred
+if [ -n $USEMODULES ]; then
+    set `cat /proc/cmdline`
+    while [ $# -gt 0 ]; do
+	if echo $1 | grep '^BOOT_IMAGE=' > /dev/null ; then
+	    image=`echo $1 | awk -F= '{ print $2 }'`
+	    kernelfile=`/sbin/lilo -I $image`
+	    if [ -n "$kernelfile" ]; then
+		kernelname=`echo $kernelfile | awk -F- '{ print $1 }'`
+		versioninfo=`echo $kernelfile | sed "s|${kernelname}-||"`
+		if [ "$kernelname" = "/boot/vmlinuz" -a \
+		     -d /lib/modules/$versioninfo -a \
+		     $versioninfo != `uname -r` ]; then
+		     ln -sf $versioninfo /lib/modules/preferred
+		fi
+	    fi
+	fi
+	shift
+    done
+fi
+
+if [ -x /sbin/depmod -a -n "$USEMODULES" ]; then
+    # Get ready for kerneld if module support in the kernel
+    echo -n "Finding module dependencies... "
+    if [ -e /lib/modules/preferred ]; then
+	depmod -a preferred
+    else
+	depmod -a
+    fi
+    echo "done"
+fi
+
+# load sound modules
+if ! grep -i nomodules /proc/cmdline >/dev/null ; then
+    if [ -n "$USEMODULES" ]; then
+	if grep -s "alias sound" /etc/conf.modules > /dev/null ; then
+	    modprobe sound
+	    if grep -s "alias midi" /etc/conf.modules > /dev/null ; then
+		modprobe midi
+	    fi
+	fi
+    fi
+fi
+
+if [ -x /sbin/kerneld -a -n "$USEMODULES" ]; then
+    if [ -f /proc/sys/kernel/modprobe ]; then
+	# /proc/sys/kernel/modprobe indicates built-in kmod instead
+	echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
+    else
+	/sbin/kerneld
+	KERNELD=yes
+    fi
+fi
+
+# Check filesystems
+if [ ! -f /fastboot ]; then
+	echo "Checking filesystems."
+	fsck -R -A -V -a $fsckoptions
+
+	# A return of 2 or higher means there were serious problems.
+	if [ $? -gt 1 ]; then
+		echo
+		echo
+		echo "*** An error occurred during the file system check."
+		echo "*** Dropping you to a shell; the system will reboot"
+		echo "*** when you leave the shell."
+
+		PS1="(Repair filesystem) #"; export PS1
+		sulogin
+
+		echo "Unmounting file systems"
+		umount -a
+		mount -n -o remount,ro /
+		echo "Automatic reboot in progress."
+		reboot
+	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
+		echo "Checking filesystem quotas"
+		/sbin/quotacheck -v -R -a
+	fi
+fi
+
+# Mount all other filesystems (except for NFS and /proc, which is already
+# mounted). Contrary to standard usage,
+# filesystems are NOT unmounted in single user mode.
+echo "Mounting local filesystems."
+mount -a -t nonfs,proc
+
+# set the console font
+if [ -x /sbin/setsysfont ]; then
+    /sbin/setsysfont
+fi
+
+if [ -x /sbin/quotaon ]; then
+    echo "Turning on user and group quotas for local filesystems"
+    /sbin/quotaon -a
+fi
+
+# Clean out /etc.
+rm -f /etc/mtab~ /fastboot /fsckoptions
+>/var/run/utmp
+
+# Delete UUCP lock files.
+rm -f /var/lock/LCK*
+
+# Delete stale subsystem files.
+rm -f /var/lock/subsys/*
+
+if [ -n "$KERNELD" ]; then
+    touch /var/lock/subsys/kerneld
+fi
+
+# Delete stale pid files
+rm -f /var/run/*.pid
+rm -f /var/spool/postoffice/.pid.*
+
+# Delete X locks
+rm -f /tmp/.X*-lock
+
+# Set the system clock.
+echo -n "Setting clock"
+
+ARC=0
+UTC=0
+if [ -f /etc/sysconfig/clock ]; then
+    . /etc/sysconfig/clock
+
+    # convert old style clock config to new values
+    if [ "${CLOCKMODE}" = "GMT" ]; then
+	    UTC=true
+    elif [ "${CLOCKMODE}" = "ARC" ]; then
+	    ARC=true
+    fi
+fi
+
+if [ -x /sbin/hwclock ]; then
+    CLOCKFLAGS="--hctosys"
+    CLOCK=/sbin/hwclock
+else
+    CLOCKFLAGS="-a"
+    CLOCK=/sbin/clock
+fi
+
+if [ $UTC = "true" ]; then
+    CLOCKFLAGS="$CLOCKFLAGS -u";
+    echo -n " (utc)"
+fi
+if [ $ARC = "true" ]; then
+    CLOCKFLAGS="$CLOCKFLAGS -A";
+    echo -n " (arc)"
+fi
+echo -n ": "
+$CLOCK $CLOCKFLAGS
+
+date
+
+# Right, now turn on swap in case we swap to files.
+echo "Enabling swap space."
+swapon -a 2>&1 | grep -v "busy"
+
+# Initialize the serial ports.
+if [ -f /etc/rc.d/rc.serial ]; then
+	. /etc/rc.d/rc.serial
+fi
+
+# Load modules (for backward compatibility with VARs)
+if [ -f /etc/rc.d/rc.modules ]; then
+	/etc/rc.d/rc.modules
+fi
+
+# If a SCSI tape has been detected, load the st module unconditionally
+# since many SCSI tapes don't deal well with st being loaded and unloaded
+if [ -f /proc/scsi/scsi ] && cat /proc/scsi/scsi | grep -q 'Type:   Sequential-Access' 2>/dev/null ; then
+	if cat /proc/devices | grep -qv ' 9 st' ; then
+		if [ -n "$USEMODULES" ] ; then
+			# Try to load the module.  If it fails, ignore it...
+			modprobe st 2>/dev/null
+		fi
+	fi
+fi
+
+# Now that we have all of our basic modules loaded and the kernel going,
+# let's dump the syslog ring somewhere so we can find it later
+dmesg > /var/log/dmesg
+
+# Feed entropy into the entropy pool
+/etc/rc.d/init.d/random start

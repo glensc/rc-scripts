@@ -1,0 +1,180 @@
+#!/bin/bash
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+cd /etc/sysconfig/network-scripts
+
+. network-functions
+
+need_hostname
+
+CONFIG=$1
+
+[ -z "$CONFIG" ] && {
+    exit 1
+}
+
+[ -f "$CONFIG" ] || CONFIG=ifcfg-$CONFIG
+[ -f "$CONFIG" ] || {
+    exit 1
+}
+
+if [ $UID != 0 ]; then
+    if [ -x /usr/sbin/usernetctl ]; then
+	exec /usr/sbin/usernetctl $CONFIG up
+    fi
+    echo "Users cannot control this device." >&2
+    exit 1
+fi
+
+source_config
+
+if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
+then
+    exit
+fi
+
+IPSETUP=no
+
+DEVICETYPE=`echo $DEVICE | sed "s/[0-9]*$//"`
+REALDEVICE=`echo $DEVICE | sed 's/:.*//g'`
+if echo $DEVICE | grep -q ':' ; then
+    ISALIAS=yes
+else
+    ISALIAS=no
+fi
+
+# Old BOOTP variable
+if [ "$BOOTP" = "yes" ]; then
+    BOOTPROTO=bootp
+fi
+
+OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
+
+if [ -x $OTHERSCRIPT ]; then
+    exec $OTHERSCRIPT $CONFIG $2
+fi
+
+# is this device available? (this catches PCMCIA devices for us)
+/sbin/ifconfig ${REALDEVICE} 2>&1 | grep -s "unknown interface" > /dev/null
+if [ "$?" = "0" ]; then
+    echo "Delaying ${DEVICE} initialization."
+    exit 0
+fi
+
+if [ "$SLAVE" = yes -a "$ISALIAS" = no -a "$MASTER" != "" -a \
+     -x /sbin/ifenslave ]; then
+    RFLAG="" ; [ "$RECIEVE-ONLY" = yes ] && RFLAG="-r"
+
+    ifconfig ${DEVICE} down
+    echo "Enslaving $DEVICE to $MASTER"
+    ifenslave $RFLAG "$DEVICE" "$MASTER"
+
+    exit 0
+fi
+
+if [ "$BOOTPROTO" = bootp -a "$ISALIAS" = no ]; then
+    ifconfig ${DEVICE} down
+    ifconfig ${DEVICE} 0.0.0.0 broadcast 255.255.255.255 netmask 0.0.0.0
+    route add default ${DEVICE}
+    echo "Sending bootp request"
+    TMPFILE=`/bin/mktemp /tmp/bootp-${DEVICE}.XXXXXX` || {
+	ifconfig ${DEVICE} down
+	echo 'mktemp failed'
+	exit 1
+    }
+    bootpc --returniffail --timeoutwait 6 --dev ${DEVICE} 2>/dev/null > ${TMPFILE}
+    if [ "$?" = "0" ]; then
+	. ${TMPFILE}
+	BOOTPHOSTNAME="$HOSTNAME"
+	echo "bootp response received -- using IP ${IPADDR}"
+    elif [ -z "$IPADDR" ]; then
+	ifconfig ${DEVICE} down
+	echo "No bootp response recieved -- not configuring device ${DEVICE}."
+	rm -f ${TMPFILE}
+	exit 1
+    else 
+	echo "No bootp response recieved -- using default configuration for device ${DEVICE}."
+    fi
+
+    rm -f ${TMPFILE}
+elif [ "$BOOTPROTO" = dhcp -a "$ISALIAS" = no ]; then
+    echo -n "Using DHCP for ${DEVICE}... "
+    IFNAME=${DEVICE} \
+	/sbin/dhcpcd -c /etc/sysconfig/network-scripts/ifdhcpc-done ${DEVICE} 
+    echo "echo \$$ > /var/run/dhcp-wait-${DEVICE}.pid; exec sleep 30" | sh
+
+    if [ -f /var/run/dhcp-wait-${DEVICE}.pid ]; then
+	echo "failed."
+	exit 1
+    else
+	rm -f /var/run/dhcp-wait-${DEVICE}.pid
+	echo "done."
+	IPSETUP=yes
+    fi
+fi
+
+if [ "$IPSETUP" != yes ]; then
+    if [ -z "$NETMASK" ]; then
+	eval `/bin/ipcalc --netmask ${IPADDR}`
+    fi
+
+    if [ -z "$BROADCAST" ]; then
+	eval `/bin/ipcalc --broadcast ${IPADDR} ${NETMASK}`
+    fi
+
+    if [ -z "$NETWORK" ]; then
+	eval `/bin/ipcalc --network ${IPADDR} ${NETMASK}`
+    fi
+
+    ifconfig ${DEVICE} ${MACADDR:+hw ether $MACADDR} ${IPADDR} \
+      netmask ${NETMASK} broadcast ${BROADCAST}
+    if [ "$ISALIAS" != no ] ; then
+	route add -host ${IPADDR} ${DEVICE}
+    fi
+
+    . /etc/sysconfig/network
+
+    if [ "${GATEWAY}" != "" ]; then
+	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
+	    # set up default gateway
+	    route add default gw ${GATEWAY} dev ${DEVICE} 
+	    DEFGW=${GATEWAY}
+	fi
+    fi
+
+    if [ "$BOOTPROTO" = bootp -a "$ISALIAS" = no ]; then
+	if [ -n "$GATEWAYS" ]; then
+	    for gw in $GATEWAYS; do
+		if [ $gw != "${DEFGW}" ]; then
+		    route add default gw $gw dev ${DEVICE}
+		fi
+	    done
+	fi
+
+	if [ -n "$DNSSRVS" -a -n "$SEARCH" ]; then
+	    echo "search $SEARCH" > /etc/resolv.conf
+	    for dns in $DNSSRVS; do
+		    echo "nameserver $dns" >> /etc/resolv.conf
+	    done
+	fi
+
+	if [ -n "$BOOTPHOSTNAME" -a -n "$NEEDHOSTNAME" ]; then
+	    set_hostname $BOOTPHOSTNAME
+	fi
+    fi
+fi
+# IPv6 section
+if [ -f /etc/rc.d/init.d/functions-ip6 ]; then
+	. /etc/rc.d/init.d/functions-ip6
+	ifup-ip6 ${DEVICE}
+	ifup-routes-ip6 ${DEVICE}
+fi
+
+case $CONFIG in
+  eth*)
+	/etc/sysconfig/network-scripts/ifup-ipx $CONFIG
+	;;
+esac
+
+exec /etc/sysconfig/network-scripts/ifup-post $CONFIG
+echo $0 $1 executing...

@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# adds static routes which go through device $1
+
+if [ "$1" = "" ]; then
+	echo "usage: $0 <net-device>"
+	exit 1
+fi
+
+if [ -x /bin/linuxconf ] ; then
+	linuxconf --hint routing "$1" | while read args; do
+	    /sbin/route $args
+	done
+else
+	if [ ! -f /etc/sysconfig/static-routes ]; then
+		exit 0
+	fi
+
+	#note the trailing space in the grep gets rid of aliases
+	grep "^$1 " /etc/sysconfig/static-routes | while read device args; do
+	    /sbin/route add -$args $device
+	done
+fi
+#!C:Changes for forwarding switch copyright 1997-1998 Peter Bieringer <pb@bieringer.de>
+#!V:Version: 1.10 18.04.1998
+#
+# Changes from:
+# 1.09: add forwarding switch for kernel versions >= 2.1.90 (idea by Dan Anderson anderson@computer.org)
+
+
+
+## Switch on forwarding in the kernel
+
+PROC_IPFORWARD="`ls /proc/sys/net/ipv4/ip_forward* 2>/dev/null`"
+
+if ! [ "$PROC_IPFORWARD" = "" ]; then
+    # Forwarding exists in kernel
+    if ! [ "`cat $PROC_IPFORWARD`" = "1" ]; then
+	# switched off
+        echo " Switch on IPv4 forwarding in the kernel"
+	echo "1" >$PROC_IPFORWARD
+    fi
+fi
+
+if [ -f /proc/sys/net/ipv4/conf/all/forwarding ]; then
+    # for kernel >= 2.1.90
+    for i in /proc/sys/net/ipv4/conf/*/forwarding; do
+        if ! [ "`cat $i`" = "1" ]; then
+	    device=`echo $i | cut -d / -f 7` 
+	    echo "  Switch on IPv4 forwarding for device '$device' in the kernel"
+            echo "1" > $i
+	fi
+    done
+fi
+
+## End of switch on forwarding in the kernel
+
+

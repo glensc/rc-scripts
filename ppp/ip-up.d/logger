@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# You can put here anything :)
+#
+echo "+---------------------------------------------------------------+" >> /var/log/ppp.log
+echo " Po³±czenie  o `date` z $PPP_REMOTE                    " >> /var/log/ppp.log
