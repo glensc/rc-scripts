@@ -1,4 +1,4 @@
-# $Id: network,v 1.21 2003/06/19 15:57:07 arekm Exp $
+# $Id: network,v 1.22 2003/07/28 11:33:48 blues Exp $
 ######################################################################
 # MAIN PART
 
@@ -17,6 +17,11 @@ HOSTNAME=pldmachine
 # Set NIS domain name here if you use NIS
 # Note: DNS domain name should be set in /etc/resolv.conf, not here
 NISDOMAIN=
+
+# Traditional setup of gateway. This is obsolete, consider using static-routes
+# instead. However this is really enought for most users.
+GATEWAY=
+GATEWAYDEV=
 
 # Do you want to use IPX networking ?
 IPX=no
