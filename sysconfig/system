@@ -88,7 +88,7 @@ EVMS_OS2=no
 # Set to anything other than 'no' to allow hotkey interactive startup...
 PROMPT=yes
 
-# List of chroots separated by space (to handle processes inside/outsite
+# List of chroots separated by space (to handle processes inside/outside
 # chroot properly)
 #SYSTEM_CHROOTS=
 
