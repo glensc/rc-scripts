@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.65 2001/07/17 18:21:28 baggins Exp $
+# $Id: functions,v 1.66 2001/07/23 11:01:25 mkochano Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -48,13 +48,7 @@ termput()
 		tput longname > /dev/null 2>&1 /dev/null || return
 
 	        case "$1" in
-		  hpa)
-		  	tput "$@"
-			;;
-		  cuu*)
-		  	tput "$@"
-			;;
-		  el)
+		  hpa | cuu* | el)
 		  	tput "$@"
 			;;
 		  setaf)
@@ -276,6 +270,10 @@ daemon()
 	# make sure it doesn't core dump anywhere; while this could mask
 	# problems with the daemon, it also closes some security problems
 	ulimit -c 0
+
+	# Make sure daemons will be able to fork. Limits are set via
+	# pam_limits. NOTE: this is ksh syntax - bash uses -u.
+	ulimit -p unlimited
 
 	# And start it up.
 	busy
