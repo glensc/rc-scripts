@@ -1,4 +1,4 @@
-$Id: TODO,v 1.12.2.2 2000/10/26 19:13:03 misiek Exp $
+$Id: TODO,v 1.12.2.3 2000/11/03 00:38:08 misiek Exp $
 
 Features missing:
 - IPSec (freeswan) support
@@ -7,5 +7,9 @@ Features missing:
 Important:
 - don't set any flags automaticly; always follow user
   suggestion (multicast, arp)
-  
+
+Other:
+- make ONBOOT=yes default (user should be allowed to specify
+ ,,no'' of course)
+
 We are waiting for suggestions.
