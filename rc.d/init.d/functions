@@ -504,6 +504,7 @@ daemon()
 			[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
 			i=0
 			while [ "$i" -lt "$waittime" ]; do
+				i=$(( i + 1 ))
 				checkpid $pid && sleep 1 || break
 			done
 		fi
@@ -618,6 +619,7 @@ killproc()
 	if [ -n "$waitname" -a -n "$waittime" ]; then
 		i=0
 		while [ "$i" -lt "$waittime" ]; do
+			i=$(( i + 1 ))
 			checkpid $pid && sleep 1 || break
 		done
 	fi
