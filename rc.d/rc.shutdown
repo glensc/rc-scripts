@@ -106,6 +106,7 @@ if [ "$runlevel" = "0" ] ; then
 else
 	show "Please stand by while rebooting the system"; ok
 	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+	[ -x /sbin/kexec ] && /sbin/kexec -e
 	eval reboot -d
 fi
 
