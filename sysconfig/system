@@ -1,3 +1,10 @@
+# Do you want colorized starting scripts ?
+COLOR_INIT=yes
+
+# Messages with a higher priority than this will be printed
+# to the console (default 1)
+CONSOLE_LOGLEVEL=1
+
 # On errors (when system is starting) run sulogin instead of shell ?
 RUN_SULOGIN_ON_ERR=yes
 
@@ -19,3 +26,5 @@ DELAY_LOGIN=yes
 # Clean /tmp at startup ?
 CLEAN_TMP=yes
 
+# Load kernel sound modules at startup ? (say no if you are using ALSA drivers)
+LOAD_SOUND=no

@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# Version:	@(#) /etc/init.d/functions $Revision: 1.7 $ $Date: 1999/06/14 21:17:10 $
+# Version:	@(#) /etc/init.d/functions $Revision: 1.8 $ $Date: 1999/06/18 19:23:51 $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -10,9 +10,30 @@
 #		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl> 
 
 # First set up a default search path.
-PATH="/sbin:/usr/sbin:/bin:/usr/bin"; export PATH
+export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 
 [ -z "$COLUMNS" ] && COLUMNS=80
+
+# Colors workaround
+unset tput || :
+if [ "$COLOR_INIT" == "no" ]; then
+        tput()
+        {
+        :
+        }
+elif [ ! -d /usr/share/terminfo ]; then
+        tput()
+        {
+                if [ "$2" == "1" ]; then echo -ne "\033[0;31m"
+                elif [ "$2" == "2" ]; then echo -ne "\033[0;32m"
+                elif [ "$2" == "5" ]; then echo -ne "\033[0;35m"
+                elif [ "$2" == "6" ]; then echo -ne "\033[0;36m"
+                elif [ "$2" == "7" ]; then echo -ne "\033[0;37m"
+                fi
+        }
+else
+unset tput || :
+fi
 
 # Some functions to handle PLD-style messages
 show() 
@@ -51,6 +72,23 @@ deltext()
   echo -ne '\b\b\b\b\b\b\b\b'
 }
 
+# Usage run_cmd Message command_to_run
+run_cmd()
+{
+_ERRORS=""
+MESSAGE=$1
+show "$MESSAGE"; busy
+shift
+if _ERRORS="`initlog -c \"$*\"`"; then
+deltext; ok
+else
+deltext; fail; echo $_ERRORS
+fi
+exit_code=$?
+unset _ERRORS
+return $exit_code
+}
+
 # A function to start a program (now it's usefull on read-only filesystem too)
 daemon() 
 {
@@ -71,7 +109,7 @@ daemon()
 
 	# And start it up.
 	busy
-	if _ERRORS="`nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c \"$@\" 2>&1`"; then
+	if _ERRORS="`nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$*" 2>&1`"; then
 	  deltext
 	  ok
 	else

@@ -25,19 +25,24 @@ daemon killall5 -9
 halt -w
 
 # Turn off swap, then unmount file systems.
-show "Turning off swap and accounting"
-daemon swapoff -a
+run_cmd "Turning off swap and accounting" swapoff -a
 [ -x /sbin/accton ] && /sbin/accton
-show "Unmounting file systems"; busy
-if ( umount -a; mount -n -o remount,ro / ); then
-deltext; ok
-else
-deltext; fail
-fi
+run_cmd "Unmounting file systems" umount -a
+run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
 
 # turn off raid
 if [ -x /sbin/raidstop -a -f /etc/raidtab ]; then
-    /sbin/raidstop -a
+    # we can not use raidstop -a here because this will only stop
+    # devices listed in the default config file which is not always
+    # the case. So we look only for the active raid devices
+    if [ -f /proc/mdstat ] ; then
+        mddevs=$(grep ^md /proc/mdstat | awk '{ print $1 }')
+        for mddev in $mddevs ; do
+            run_cmd "Turning off RAID for $mddev" raidstop /dev/$mddev
+        done
+        unset mddev mddevs
+    fi
+    #runcmd "Turning off RAID" /sbin/raidstop -a
 fi
 
 show "Remounting remaining filesystems ro mode"; busy

@@ -30,19 +30,22 @@ else
     PANIC_REBOOT_TIME=0
     DELAY_LOGIN=yes
     CLEAN_TMP=no
+    CONSOLE_LOGLEVEL=1
+    LOAD_SOUND=yes
 fi
 
+# Set console loglevel
+/sbin/loglevel $CONSOLE_LOGLEVEL
+
 # Start up swapping.
-show "Activating swap partitions"; ok
-swapon -a
+run_cmd "Activating swap partitions" swapon -a
 
 # Set the hostname.
-hostname ${HOSTNAME}
-echo "Setting hostname: `hostname`"
+run_cmd "Host: ${HOSTNAME}" hostname ${HOSTNAME}
 
 # Set the NIS domain name
 if [ -n "$NISDOMAIN" ]; then
-    domainname $NISDOMAIN
+run_cmd "NIS Domain: ${NISDOMAIN}" domainname $NISDOMAIN
 else
     domainname ""
 fi
@@ -53,9 +56,14 @@ if [ -f /fsckoptions ]; then
 	fsckoptions=''
 fi
 
+if [ -f /forcefsck ]; then
+        fsckoptions="-f $fsckoptions"
+fi
+
+_RUN_QUOTACHECK=0
 if [ ! -f /fastboot ]; then
 	show "Checking root filesystems."; started
-	fsck -V -a $fsckoptions /
+	initlog -c "fsck -T -a $fsckoptions /"
 
 	rc=$?
 
@@ -74,20 +82,16 @@ if [ ! -f /fastboot ]; then
 			/bin/sh
 		fi
 
-		echo "Unmounting file systems"
-		umount -a
+		run_cmd "Unmounting file systems" umount -a
 		mount -n -o remount,ro /
-		show "Automatic reboot in progress."; busy
-		if reboot; then deltext; ok; else deltext; fail; fi
+		run_cmd "Automatic reboot in progress." reboot
 	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
-		show "Checking root filesystem quotas"; busy
-		if (/sbin/quotacheck -v /); then deltext; ok; else deltext; fail; fi
+		_RUN_QUOTACHECK=1
 	fi
 fi
 
 if [ -x /sbin/quotaon ]; then
-    show "Turning on quotas on root filesystem"; busy
-    if (/sbin/quotaon /); then deltext; ok; else deltext; fail; fi
+    run_cmd "Turning on quotas on root filesystem" /sbin/quotaon /
 fi
 
 # check for arguments 
@@ -102,22 +106,19 @@ fi
 # set up pnp 
 if [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
     if [ -n "$PNP" ] && [ "$RUN_ISAPNP" == "yes" ]; then
-	show "Setting up ISA PNP devices"; busy
-	if _OUTPUT="`/sbin/isapnp /etc/isapnp/isapnp.conf 2>&1`"; then
-	deltext; ok
-	echo $_OUTPUT
-	else
-	deltext; fail
-	echo $_OUTPUT
-	fi
+	run_cmd "Setting up ISA PNP devices"/sbin/isapnp /etc/isapnp/isapnp.conf
     else
-	show "Skipping ISA PNP configuration at users request"; ok
+	show "Skipping ISA PNP configuration"; ok
     fi
 fi
 
 # Remount the root filesystem read-write.
-show "Remounting root filesystem in rw mode"; busy
-if (mount -n -o remount,rw /); then deltext; ok; else deltext; fail; fi
+run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
+
+# Update quotas if fsck was run on /.
+if [ X"$_RUN_QUOTACHECK" = X1 -a -x /sbin/quotacheck ]; then
+        run_cmd "Checking root filesystem quotas"  /sbin/quotacheck -v /
+fi
 
 # /etc/nologin when starting system
 if [ "$DELAY_LOGIN" == "yes" ] && [ ! -f /etc/nologin ]; then
@@ -139,7 +140,7 @@ fi
 mount -f /
 mount -f /proc
 
-if [ -f /proc/ksyms ]; then
+if ! grep -i nomodules /proc/cmdline >/dev/null && [ -f /proc/ksyms ]; then
     USEMODULES=y
 else
     USEMODULES=
@@ -160,21 +161,20 @@ fi
 
 if [ -x /sbin/depmod -a -n "$USEMODULES" ]; then
     # Get ready for kerneld if module support in the kernel
-    show "Finding module dependencies... "; busy
     if [ -e /lib/modules/preferred ]; then
-	if depmod -a preferred; then deltext; ok; else deltext; fail; fi
+	run_cmd "Finding module dependencies" depmod -a preferred
     else
-	if depmod -a; then deltext; ok; else deltext; fail; fi
+	run_cmd "Finding module dependencies" depmod -a
     fi
 fi
 
 # load sound modules
-if ! grep -i nomodules /proc/cmdline >/dev/null ; then
+if  (! grep -i nomodules /proc/cmdline >/dev/null) && [ "$LOAD_SOUND" == "yes" ]; then
     if [ -n "$USEMODULES" ]; then
-	if grep -s "alias sound" /etc/conf.modules > /dev/null ; then
-	    modprobe sound
+	if grep -s "alias sound" /etc/modules.conf > /dev/null ; then
+	    run_cmd "Loading sound module" modprobe sound
 	    if grep -s "alias midi" /etc/conf.modules > /dev/null ; then
-		modprobe midi
+		run_cmd "Loading midi module" modprobe midi
 	    fi
 	fi
     fi
@@ -186,16 +186,11 @@ if [ -f /proc/sys/kernel/modprobe ]; then
 fi
 
 # Add raid devices
-if [ -f /proc/mdstat -a -f /etc/raidtab -a -x /sbin/raidadd ]; then
+if [ -f /proc/mdstat -a -f /etc/raidtab -a -x /sbin/raidstart ]; then
 	show "Starting up RAID devices."; started
-	raidadd -a
+	initlog -c "raidstart -a"
 
 	rc=$?
-
-	if [ $rc = 0 ]; then
-		raidrun -a
-		rc=$?
-	fi
 
 	# A non-zero return means there were problems.
 	if [ $rc -gt 0 ]; then
@@ -206,24 +201,22 @@ if [ -f /proc/mdstat -a -f /etc/raidtab -a -x /sbin/raidadd ]; then
 		echo "*** when you leave the shell."
 
 		PS1="(RAID Repair) \#"; export PS1
-		if [ "$RUN_SULOGIN_ON_ERR" = "yes"]; then
+		if [ "$RUN_SULOGIN_ON_ERR" == "yes"]; then
 			sulogin
 		else
 			/bin/sh
 		fi
 
-		show "Unmounting file systems"; busy
-		if (umount -a; 	mount -n -o remount,ro /); then
-		deltext; ok; else deltext; fail; fi
-		show "Automatic reboot in progress."; busy
-		if reboot; then deltext; ok; else deltext; fail; fi
+		run_cmd "Unmounting file systems" umount -a
+		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
+		run_cmd "Automatic reboot in progress" reboot
 	fi
 fi
 
 # Check filesystems
 if [ ! -f /fastboot ]; then
 	show "Checking filesystems."; started
-	fsck -R -A -V -a $fsckoptions
+	initlog -c "fsck -T -R -A -a $fsckoptions"
 
 	rc=$?
 
@@ -242,21 +235,18 @@ if [ ! -f /fastboot ]; then
 			/bin/sh
 		fi
 
-		show "Unmounting file systems"; busy
-		if (umount -a; 	mount -n -o remount,ro /); then deltext; ok; else deltext; fail; fi
-		show "Automatic reboot in progress."; busy
-		if reboot; then deltext; ok; else deltext; fail; fi
+		run_cmd "Unmounting file systems" umount -a
+		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
+		run_cmd "Automatic reboot in progress." reboot
 	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
-		show "Checking filesystem quotas"; busy
-		if (/sbin/quotacheck -v -R -a); then deltext; ok; else deltext; fail; fi
+		run_cmd "Checking filesystem quotas"/sbin/quotacheck -v -R -a
 	fi
 fi
 
 # Mount all other filesystems (except for NFS and /proc, which is already
 # mounted). Contrary to standard usage,
 # filesystems are NOT unmounted in single user mode.
-show "Mounting local filesystems."; busy
-if (mount -a -t nonfs,proc); then deltext; ok; else deltext; fail; fi
+run_cmd "Mounting local filesystems." mount -a -t nonfs,smbfs,ncpfs,proc
 
 # set the console font
 if [ -x /sbin/setsysfont ]; then
@@ -265,16 +255,15 @@ if [ -x /sbin/setsysfont ]; then
 fi
 
 if [ -x /sbin/quotaon ]; then
-    show "Turning on quotas for local filesystems"; busy
-    if (/sbin/quotaon -a); then deltext; ok; else deltext; fail; fi
+    run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -a
 fi
 
 # Clean out /etc & /var/{run/*,log/{b,w}tmpx}}.
-rm -f /etc/mtab~ /fastboot /fsckoptions
+rm -f /etc/mtab~ /fastboot /fsckoptions /forcefsck
 rm -f /var/run/utmp  
 :>/var/run/utmpx
 chown root.utmpx /var/run/utmpx
-chmod 664 /var/run/utmpx
+chmod 0664 /var/run/utmpx /var/log/wtmpx
 
 # Uncomment if you planing to run `utmpd'
 #:>/var/log/wtmp
@@ -345,7 +334,7 @@ if ($CLOCK $CLOCKFLAGS); then deltext; ok; else deltext; fail; fi
 show "Date set to `date`"; ok
 
 # Right, now turn on swap in case we swap to files.
-show "Enabling swap space."; busy
+show "Enabling swap space"; busy
 if [ "`LANG=C swapon -a 2>&1 | grep -v "busy"`" == "" ]; then
 deltext; ok; else deltext; fail; fi
 
@@ -354,18 +343,13 @@ if [ -f /etc/rc.d/rc.serial ]; then
 	. /etc/rc.d/rc.serial
 fi
 
-# Load modules (for backward compatibility with VARs)
-if [ -f /etc/rc.d/rc.modules ]; then
-	/etc/rc.d/rc.modules
-fi
-
 # If a SCSI tape has been detected, load the st module unconditionally
 # since many SCSI tapes don't deal well with st being loaded and unloaded
 if [ -f /proc/scsi/scsi ] && cat /proc/scsi/scsi | grep -q 'Type:   Sequential-Access' 2>/dev/null ; then
 	if cat /proc/devices | grep -qv ' 9 st' ; then
 		if [ -n "$USEMODULES" ] ; then
-			# Try to load the module.  If it fails, ignore it...
-			modprobe st 2>/dev/null
+                   # Try to load the module.  If it fails, ignore it...
+                   insmod -p st >/dev/null 2>&1 && modprobe st >/dev/null 2>&1
 		fi
 	fi
 fi
@@ -378,8 +362,7 @@ rm -f /etc/psdevtab
 #fi
 
 if [ -x /sbin/ldconfig ]; then
-show "Setting up /etc/ld.so.cache"; busy
-if (/sbin/ldconfig -X); then deltext; ok; else deltext; fail; fi
+run_cmd "Setting up /etc/ld.so.cache" /sbin/ldconfig -X
 fi
 
 if ([ -f /proc/sys/kernel/panic ] && [ "$PANIC_REBOOT_TIME" -gt "0" ] 2>/dev/null); then

@@ -56,7 +56,7 @@ for i in /etc/rc.d/rc1.d/S[0-9][0-9]*; do
 done
 
 	# Now go to the single user level.
-	show "Telling INIT to go to single user mode."; ok
+	show "Telling INIT to go to single user mode"; ok
 	exec init -t1 S
 	;;
 esac

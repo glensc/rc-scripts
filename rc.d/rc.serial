@@ -14,6 +14,7 @@ SETSERIAL=/bin/setserial
 
 [ -f $SETSERIAL ] || exit 0
 
+. /etc/rc.d/init.d/functions
 
 ALLDEVS="/dev/ttyS*"
 
@@ -28,11 +29,7 @@ fi
 for a in ${ALLDEVS}; do
 	WHAT="`${SETSERIAL} -bg $a`"
 	if (echo $WHAT | grep -q " at "); then
-		if [ -x /usr/bin/cut ]; then
-			show "`echo $WHAT | cut -d"/" -f3`"; ok
-		else
-			show "$WHAT"; ok
-		fi
+			show "`basename \"$WHAT\"`"; ok
 	fi
 done
 
