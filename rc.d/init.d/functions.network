@@ -1,8 +1,45 @@
 #
-# $Id: functions.network,v 1.21 1999/09/02 12:29:17 misiek Exp $
+# $Id: functions.network,v 1.22 1999/09/26 14:56:04 jajcus Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
+
+get_ldap_config ()
+{
+	[ -x /usr/bin/ldapsearch ] || exit 1
+ 	# Initialise fields which  can have multiple values:
+	IPV6_ADDR=""
+	IPADDR_ALIASES=""
+	
+ 	QUERY="(&(objectclass=pldinterface)(if_device=$1))"
+	if [ -n "$LDAP_BASE_DN" ] ; then
+	  BSWITCH='-b"$LDAP_BASE_DN"' 
+	else
+	  BSWITH=''
+	fi
+	ldapsearch "$BSWITCH" "$QUERY" | grep "=" | sed -e "s/=/ /" | {
+		while read FIELD VALUE ; do
+			# Field, which have name compatible with other 
+			# LDAP object
+			if [ "$FIELD" = "iphostnumber" ] ; then
+				VAR="ADDR";
+			else # Other fields
+				VAR=`echo "$FIELD" | grep "^if_" \
+				     | tr [:lower:] [:upper:] \
+				     | sed -e "s/IF_//"`
+			fi
+			# Fields which can have multiple values:
+			if   [ "$VAR" = "IPV6_ADDR" \
+			    -o "$VAR" = "IPADDR_ALIASES" ]  && \
+			     [ -n "`eval echo \$$VAR`" ] ; then
+				echo "$VAR=\"\$$VAR $VALUE\"" ;
+			# single value fields, or the first value
+			elif [ -n "$VAR" ] ; then  				eval "$VAR=\"$VALUE\"" ;
+				echo "$VAR=\"$VALUE\"" ;
+			fi
+		done
+	}
+}
 
 source_config ()
 {
@@ -11,13 +48,20 @@ source_config ()
     if basename $CONFIG | grep -q '[^g]-' ; then
 	PARENTCONFIG=`echo $CONFIG | sed 's/-[^-]*$//g'`
 	PARENTDEVNAME=`echo $PARENTCONFIG | sed 's/^ifcfg-//g'`
-	[ -f $PARENTCONFIG ] || {
+	if [ -f $PARENTCONFIG ] ; then
+		. ./$PARENTCONFIG
+    	elif [ "$USE_LDAP" = "yes" ] ; then
+		`get_ldap_config $PARENTDEVNAME`
+	else 
 	    nls "Missing config file %s.\n" "$PARENTCONFIG" >&2
 	    exit 1
-	}
-	. ./$PARENTCONFIG
+	fi
     fi
-    . /etc/sysconfig/interfaces/$CONFIG
+    if [ -f $CONFIG ] ; then
+    	. /etc/sysconfig/interfaces/$CONFIG
+    elif [ "$USE_LDAP" = "yes" ] ; then
+        eval `get_ldap_config $DEVNAME`
+    fi
 }
 
 do_netreport ()
@@ -270,4 +314,4 @@ for i in 1 2 3 4
 echo $MASK
 return
 }
-						 
+

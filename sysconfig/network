@@ -1,4 +1,4 @@
-# $Id: network,v 1.5 1999/07/31 11:24:19 misiek Exp $
+# $Id: network,v 1.6 1999/09/26 14:56:09 jajcus Exp $
 ######################################################################
 # MAIN PART
 
@@ -23,6 +23,14 @@ IPXAUTOPRIMARY=
 IPXAUTOFRAME=
 IPXINTERNALNETNUM=
 IPXINTERNALNODENUM=
+
+# Reading configuration from LDAP
+
+# Do you want to use LDAP?
+USE_LDAP=no
+
+# What base DN use for searching for interface configuration
+LDAP_BASE_DN=
 
 # Other
 
