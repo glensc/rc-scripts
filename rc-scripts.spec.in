@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.22 1999/08/09 20:44:03 wiget Exp $
+# $Id: rc-scripts.spec.in,v 1.23 1999/08/14 10:53:35 misiek Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -34,7 +34,7 @@ Buildroot:	/tmp/%{name}-%{version}-root
 %define		_prefix		/usr
 %define		_exec_prefix	/
 %define		_sysconfdir	/etc
-%define		localedir	/etc/syconfig/locale
+%define		localedir	/etc/sysconfig/locale
 
 %description
 This package contains the scripts use to boot a system, change run
