@@ -276,6 +276,10 @@ rm -f /var/lock/LCK*
 # Delete stale subsystem files.
 rm -f /var/lock/subsys/*
 
+# Delete stale pam_console locks.
+rm -f /var/lock/console/*
+rm -f /var/lock/console.lock
+
 # Delete stale pid files
 rm -f /var/run/*.pid
 rm -f /var/spool/postoffice/.pid.*
