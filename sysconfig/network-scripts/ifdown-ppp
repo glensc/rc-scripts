@@ -11,7 +11,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 CONFIG=$1
 source_config
 
-if [ ! -f /var/run/ppp-$DEVICE.pid ]; then
+if [ ! -f /var/run/ppp-$DEVNAME.pid ]; then
     # ppp isn't running, or we didn't start it
     exit 0
 fi
@@ -24,7 +24,7 @@ if [ -z "$PID" ]; then
     exit 1
 fi
 
-rm -f /var/run/ppp-$DEVICE.pid
+rm -f /var/run/ppp-$DEVNAME.pid
 
 [ ! -d /proc/${PID} ] && exit 0
 
@@ -45,7 +45,7 @@ if [ ! -d /proc/${PID} ]; then
 fi
 
 kill -KILL ${PID} > /dev/null 2>&1
-logger -p daemon.info -t ifdown-ppp "ifdown-ppp unable to nicely kill pppd-$DEVICE" &
+logger -p daemon.info -t ifdown-ppp "ifdown-ppp unable to nicely kill pppd-$DEVICE (pppd-$DEVNAME)" &
 
 exit 1
 
