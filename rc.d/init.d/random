@@ -2,12 +2,12 @@
 #
 # random	Script to snapshot random state and reload it at boot time.
 #
-# Author:       Theodore Ts'o <tytso@mit.edu>
+# chkconfig:	12345 20 80
 #
-# description: Saves and restores system entropy pool for higher quality \
-#              random number generation.
+# description:	Saves and restores system entropy pool for higher quality \
+#		random number generation.
 #
-# $Id: random,v 1.4 1999/10/13 16:11:27 baggins Exp $
+# $Id: random,v 1.5 1999/12/02 10:38:55 kloczek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"

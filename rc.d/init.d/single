@@ -1,17 +1,18 @@
 #!/bin/sh
 #
-# single        Script for sedding up administrative/rescue shell.
+# single	Script for sedding up administrative/rescue shell.
 #
+# chkconfig:	1 00 00
 # description:	This file is executed by init when it goes into runlevel \
-#               1, which is the administrative state. It kills all \
-#               deamons and then puts the system into single user mode. \
-#               Note that the file systems are kept mounted. \
+#		1, which is the administrative state. It kills all \
+#		deamons and then puts the system into single user mode. \
+#		Note that the file systems are kept mounted. \
 #
-# Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
-#               Modified for PLD Linux by Grzegorz Stanislawski
-# Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+# Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+#		Modified for PLD Linux by Grzegorz Stanislawski
+# Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 # 
-# $Id: single,v 1.7 1999/10/13 16:11:27 baggins Exp $
+# $Id: single,v 1.8 1999/12/02 10:38:55 kloczek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
