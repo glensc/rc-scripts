@@ -120,9 +120,9 @@ if is_wireless_device "${DEVICE}"; then
     if is_no "${WLAN_ENCRYPTION}"; then
 	iwconfig ${DEVICE} key off
     fi
-    [ -n "${WLAN_POWER}" ] && iwconfig ${DEVICE} ${WLAN_POWER}
-    [ -n "${WLAN_TXPOWER}" ] && iwconfig ${DEVICE} ${WLAN_TXPOWER}
-    [ -n "${WLAN_RETRY}" ] && iwconfig ${DEVICE} ${WLAN_RETRY}
+    [ -n "${WLAN_POWER}" ] && iwconfig ${DEVICE} power ${WLAN_POWER}
+    [ -n "${WLAN_TXPOWER}" ] && iwconfig ${DEVICE} txpower ${WLAN_TXPOWER}
+    [ -n "${WLAN_RETRY}" ] && iwconfig ${DEVICE} retry ${WLAN_RETRY}
     if is_yes "${WLAN_COMMIT}"; then
 	iwconfig ${DEVICE} commit
     fi
