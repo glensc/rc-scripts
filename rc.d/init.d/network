@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.23 1999/09/27 09:58:00 misiek Exp $
+# $Id: network,v 1.24 1999/09/28 16:16:42 jajcus Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -125,7 +125,11 @@ case "$1" in
   start)
 	network_init
 
-	for i in $interfaces_boot $interfaces_sit_boot; do
+	for i in $interfaces_boot $interfaces_sit_boot ; do
+		/sbin/ifup $i boot
+	done
+
+	for i in `find_ldap_interfaces` ; do
 		/sbin/ifup $i boot
 	done
 
@@ -144,7 +148,11 @@ case "$1" in
 		/sbin/tnldown $i boot
 	done
 
-	for i in $interfaces_sit_boot $interfaces_boot; do
+	for i in `find_ldap_interfaces` ; do
+		/sbin/ifdown $i boot
+	done
+
+	for i in $interfaces_sit_boot $interfaces_boot ; do
 		/sbin/ifdown $i boot
 	done
 
