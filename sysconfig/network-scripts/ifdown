@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.20 1999/12/20 19:36:27 jajcus Exp $
+#	$Id: ifdown,v 1.21 2000/04/03 14:50:47 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -15,16 +15,10 @@ DEV=$1
 . /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/.functions
 
-IFCONFIGS="`ls /etc/sysconfig/interfaces/ifcfg-*|egrep -v '~$'`"
-if [ "$IFCONFIGS" ]; then
-    IFCONFIGS="`egrep -L '^#!' $IFCONFIGS`"
-fi
-if [ "$IFCONFIGS" ]; then
-    CONFIG="`egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $IFCONFIGS`"
-fi
-
-if [ -z "$CONFIG" ]; then
-    CONFIG="$DEV"
+if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
+	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
+else
+	CONFIG="$DEV"
 fi
 
 if [ `id -u` != 0 ]; then
@@ -80,7 +74,6 @@ else
     ip link set ${DEVICE} down
     ip addr flush dev ${DEVICE} 2> /dev/null
 fi
-
 
 exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.9 2000/03/31 13:10:22 misiek Exp $
+#	$Id: ifup-ppp,v 1.10 2000/04/03 14:50:47 baggins Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -88,6 +88,14 @@ if [ "${DEBUG}" = yes ] ; then
   opts="$opts debug"
   chatdbg="-v"
 fi
+case "${AUTH}" in
+  yes) opts="$opts auth"
+  ;;
+  no) opts="$opts noauth"
+  ;;
+  *)
+  ;;
+esac
 if [ -n "${REPORTFILE}"  ] ; then
   chatrpt="-r ${REPORTFILE}"
 fi

@@ -1,33 +1,23 @@
-#	$Id: ifcfg-description,v 1.3 2000/03/27 16:07:51 misiek Exp $
-PROTOCOL={ip|ipx} (default ip)
-
-if 	PROTOCOL=ip; then
-
-		DEVICE=<real device name>:<aliasnumber>
-	or
-		DEVICE=<name>
-		[ BOOTPROTO={none|bootp|dhcp} ]
-	ADDR=<IPv4 addres>
-	[ IPADDR_ALIASES="<IPv4 addres1> <IPv4 addres2> <...>" ]
-	IPV6_ADDR="<IPv6 addres1>/<prefix len> <IPv6 addres2>/<prefix len> <...>"
-	[ PREFIX= ]
-	[ NETWORK= ]
-	[ BROADCAST= ]
-	[ ONBOOT={no|yes} ]
-	[ MULTICAST={|no|yes} ]
-	[ ARP={no|yes} ]
-	[ SRC_ADDR=<IPv4 addres> ]
-	
-elif 	PROTOCOL=ipx
-
+#	$Id: ifcfg-description,v 1.4 2000/04/03 14:50:46 baggins Exp $
+	DEVICE=<real device name>:<aliasnumber>
+or
 	DEVICE=<name>
-	FRAMETYPE={802_2|802_3|ETHERII|SNAP}
-	NETNUM=
-	[ ONBOOT={no|yes} ]
-	[ PRIMARY={no|yes} ]
+	[ BOOTPROTO={none|bootp|dhcp} ]
+ADDR=<IPv4 addres>
+[ IPADDR_ALIASES="<IPv4 addres1> <IPv4 addres2> <...>" ]
+IPV6_ADDR="<IPv6 addres1>/<prefix len> <IPv6 addres2>/<prefix len> <...>"
+[ PREFIX= ]
+[ NETWORK= ]
+[ BROADCAST= ]
+[ ONBOOT={no|yes} ]
+[ MULTICAST={|no|yes} ]
+[ ARP={no|yes} ]
+[ SRC_ADDR=<IPv4 addres> ]
 	
-fi
-
+[ IPXFRAMETYPE={802_2|802_3|ETHERII|SNAP} ]
+[ IPXNETWORK= ]
+[ IPXPRIMARY={no|yes} ]
+	
 [ MTU= ]
 [ METRIC= ]
 
@@ -45,6 +35,7 @@ elif	DEVICE=ppp* || DEVICE=slip* ; then
 	
 	if	DEVICE=ppp* ; then
 	
+		AUTH=yes|no
 		DEFROUTE=yes|no
 		ESCAPECHARS=yes|no
 	  	HARDFLOWCTL=yes|no (yes imples "modem crtscts" options)
