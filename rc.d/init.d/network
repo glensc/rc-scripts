@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.16 1999/08/06 10:25:28 misiek Exp $
+# $Id: network,v 1.17 1999/08/12 09:54:27 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -74,13 +74,10 @@ ipv4_anti_spoofing off
 set_down_loopback
 }
 
-# Normal sort order
-interfaces_up="`(cd /etc/sysconfig/interfaces && ls -1 ifcfg-* | \
-grep -v ifcfg-lo | xargs ) 2> /dev/null`"
-# Reverse sort order
-interfaces_down="`(cd /etc/sysconfig/interfaces && ls -r -1 ifcfg-* | \
-grep -v ifcfg-lo | xargs ) 2> /dev/null`"
-# Normal sort order
+# find all the interfaces besides loopback.
+# ignore aliases, alternative configurations, and editor backup files
+interfaces="`(cd /etc/sysconfig/interfaces && ls ifcfg* | egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | sed 's/^ifcfg-//g')`"
+interfaces_boot="`(cd /etc/sysconfig/interfaces && ls ifcfg* | egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g')`"
 tunnels="`(cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | xargs ) 2> /dev/null`"
 
 # See how we were called.
@@ -91,15 +88,15 @@ case "$1" in
 		[ -f /etc/sysconfig/interfaces/$i ] && /sbin/tnlup $i boot
 	done
 
-	for i in $interfaces_up; do
-		[ -f /etc/sysconfig/interfaces/$i ] && /sbin/ifup $i boot
+	for i in $interfaces_boot; do
+		/sbin/ifup $i boot
 	done
 
         touch /var/lock/subsys/network
         ;;
   stop)
-	for i in $interfaces_down; do
-		[ -f /etc/sysconfig/interfaces/$i ] && /sbin/ifdown $i boot
+	for i in $interfaces_boot; do
+		/sbin/ifdown $i boot
 	done
 
 	for i in $tunnels; do

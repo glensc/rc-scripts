@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-aliases,v 1.5 1999/07/13 12:49:37 misiek Exp $
+#	$Id: ifup-aliases,v 1.6 1999/08/12 09:54:27 misiek Exp $
 #
 # adds aliases of device $1
 
@@ -9,11 +9,19 @@ if [ "$1" = "" ]; then
 	exit 1
 fi
 
-aliases="`echo /etc/sysconfig/interfaces/ifcfg-$1:*`"
-if [ "$aliases" = '/etc/sysconfig/interfaces/ifcfg-$1:*' ]; then
-	allow_null_glob_expansion=foo
-	for alias in /etc/sysconfig/interfaces/ifcfg-$1:* ; do
-	    /etc/sysconfig/network-scripts/ifup $alias
-	done
-	unset allow_null_glob_expansion
+# bash 2 is so much fun.
+if [ "$BASH_VERSINFO" ]; then
+        shopt -s nullglob
+else
+        allow_null_glob_expansion=foo
 fi
+cd /etc/sysconfig/interfaces/
+for alias in ifcfg-$1:* ; do
+        [ -f $alias ] && /etc/sysconfig/network-scripts/ifup $alias
+        done
+if [ "$BASH_VERSINFO" ]; then
+        shopt -u nullglob
+else
+        unset allow_null_glob_expansion
+fi
+
