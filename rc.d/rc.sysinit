@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.47 2000/02/18 09:13:26 wiget Exp $
+# $Id: rc.sysinit,v 1.48 2000/02/28 12:50:45 misiek Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -202,8 +202,12 @@ if [ -x /sbin/depmod -a -n "$USEMODULES" ]; then
 	[ -n "$mver" -a -f "/boot/System.map-$mver" ] && \
 		ln -sf /boot/System.map-$mver /boot/System.map
 
-	if [ "$RUN_DEPMOD" = "yes" ] || [ "$RUN_DEPMOD" = "ifmissing" -a ! -r /lib/modules/$mver/modules.dep ]; then
-		run_cmd "Finding module dependencies" depmod -a
+	# Run depmod if: a) user requested; b) modules.dep is missing
+	# c) modules.dep is older than /etc/modules.conf
+	if [ "$RUN_DEPMOD" != "no" ]; then
+		if [ "$RUN_DEPMOD" = "ifmissing" -a ! -r /lib/modules/$mver/modules.dep ] || (find /lib/modules/$mver/ -name modules.dep ! -newer /etc/modules.conf -print 2>&1 | grep -q "modules.dep"); then
+			run_cmd "Finding module dependencies" depmod -a
+		fi
 	fi
 fi
 
