@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.51 2000/11/06 15:40:46 baggins Exp $
+#	$Id: ifup,v 1.52 2000/11/06 19:28:05 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -165,8 +165,6 @@ else
         fi
     fi
 
-    ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
-
     # IPv4 rules
     if [ "$IPv4" = "yes" ]; then
 	if [ -n "$REMIP" ]; then
@@ -179,6 +177,8 @@ else
 	    ip -family inet addr add ${ADDR4} dev ${DEVICE} label ${FULLDEVNAME} broadcast \+
         done
     fi
+
+    ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
 
     # IPv6 rules
     if is_yes "${IPV6_NETWORKING}"; then
