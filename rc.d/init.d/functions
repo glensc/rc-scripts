@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.15 1999/07/15 13:29:44 misiek Exp $
+# $Id: functions,v 1.16 1999/07/15 13:43:20 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -151,14 +151,14 @@ killproc()
 		if [ "$notset" == "1" ] ; then
 			if ps h $pid>/dev/null 2>&1; then
 				# TERM first, then KILL if not dead
-				kill -TERM $pid
+				kill -TERM $pid >/dev/null 2>&1
 				usleep 100000
 				if ps h $pid >/dev/null 2>&1 ; then
 					sleep 1
 					if ps h $pid >/dev/null 2>&1 ; then
 						sleep 3
 						if ps h $pid >/dev/null 2>&1 ; then
-							kill -KILL $pid
+							kill -KILL $pid >/dev/null 2>&1
 						fi
 					fi
 				fi
