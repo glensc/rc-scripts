@@ -40,7 +40,7 @@ case "$1" in
 		else
 		    MESSAGE="`nls 'Setting time zone information (%s)' "$TIME_ZONE"`"
 		fi
-		run_cmd "$MESSAGE" ln -s $ZONE_FILE /etc/localtime
+		run_cmd "$MESSAGE" cp -af $ZONE_FILE /etc/localtime
 		RETVAL=$?
 	fi
         ;;
