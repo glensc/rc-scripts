@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.14 1999/11/06 00:23:54 wiget Exp $
+#	$Id: tnlup,v 1.15 1999/11/06 00:25:31 wiget Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -17,7 +17,7 @@ DEV=$1
 
 TNLCONFIGS="`ls /etc/sysconfig/interfaces/tnlcfg-*|egrep -v '~$'`"
 TNLCONFIGS="`egrep -L '^#!' $TNLCONFIGS`"
-CONFIG="`egrep -l "DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS`"
+CONFIG="`egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS`"
 
 if [ -z "$CONFIG" ]; then
     CONFIG="$DEV"
