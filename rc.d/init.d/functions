@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.73 2002/07/14 21:11:17 misiek Exp $
+# $Id: functions,v 1.74 2003/01/07 14:45:46 kloczek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -85,7 +85,7 @@ nls()
 	msg_echo='\n'
 	old_nls_domain="$NLS_DOMAIN"
 	# parse command line
-	# don't use -o instead || here - this will broke ksh --misiek
+	# don't use -o instead || here - this will break ksh --misiek
 	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
 		case "$1" in
 			--nls-domain)
