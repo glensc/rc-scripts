@@ -89,7 +89,6 @@ programcýklar içerir.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/var/{run/netreport,log}
-install -d $RPM_BUILD_ROOT/etc/sysconfig/hwprofiles
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -216,6 +215,7 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %attr(754,root,root) %{_sysconfdir}/ppp/*
 %attr(755,root,root) %dir /etc/sysconfig
 %attr(755,root,root) %dir /etc/sysconfig/hwprofiles
+%config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/hwprofiles/files
 %attr(755,root,root) %dir /etc/sysconfig/interfaces
 %attr(755,root,root) %dir /etc/sysconfig/interfaces/data
 %attr(755,root,root) %dir /etc/sysconfig/isapnp
