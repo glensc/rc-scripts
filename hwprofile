@@ -16,10 +16,14 @@ if [ "$(id -u)" != "0" ]; then
 	exit 1
 fi
 
-if [ ! -d ${PROFDIR} -o ! -d ${PROFDIR}/data ]; then
-	echo "${PROFDIR} or ${PROFDIR}/data not found. Can't continue!"
-	exit 1
-fi
+checkprofdir()
+{
+  if [ ! -d ${PROFDIR} -o ! -d ${PROFDIR}/data ]; then
+	  echo "${PROFDIR} or ${PROFDIR}/data not found. Can't continue!"
+		echo "Check /etc/sysconfig/hwprof and hwprofile -h."
+	  exit 1
+  fi
+}
 
 myecho()
 {
@@ -31,14 +35,14 @@ myecho()
 showhelp()
 {
 echo '
-no opts		- show help
-a 		- add profile
-d		- delete profile
-r foo		- run specified profile or "default" if such exist
-s		- save/update running profile
-f		- find proper profile and run it
-l		- list configured profiles
-q		- be quiet (used only in few modes)
+no opts      - show help
+-a           - add profile
+-d           - delete profile
+-r foo       - run specified profile or "default" if such exist
+-s           - save/update running profile
+-f           - find proper profile and run it
+-l           - list configured profiles
+-q           - be quiet (used only in few modes)
 
 Please send all bug reports to:
 pld-rc-scripts@pld-linux.org.
@@ -54,235 +58,273 @@ md5sumgen()
   ) | md5sum | awk ' { gsub(/ .*$/,NIL); print $0 } '
 }
 
-while getopts adflsqr: opt "$@"; do
-  case "$opt" in
-    a)
-	echo "Adding new profile..."
-	if [ -f /var/run/hwprofile ]; then
-	  echo -n "Current profile is: "
-	  cat /var/run/hwprofile
-	fi
-	PROFILE=
-	while [ -z "${PROFILE}" ]; do
-	  echo -n "Enter profile name: "
-	  read PROFILE
-	  if [ -f ${PROFDIR}/${PROFILE}.md5 ]; then
-	    echo "Profile ${PROFILE} exist. Try other name."
-	    PROFILE=
-	  fi
-	done
-	rm -rf ${PROFDIR}/${PROFILE}.* ${PROFDIR}/data/${PROFILE}/
-	md5sumgen > ${PROFDIR}/${PROFILE}.md5
-	LANG=C LC_ALL=C date > ${PROFDIR}/${PROFILE}.date
-	mkdir -p ${PROFDIR}/data/${PROFILE}/
-	chmod 700 ${PROFDIR}/data/${PROFILE}/
-	echo -n "Enter profile description (PROFDIR/${PROFILE}.desc): "
-	read DESCRIPTION
-	[ -z "${DESCRIPTION}" ] && DESCRIPTION="${PROFILE}"
-	echo "${DESCRIPTION}" > ${PROFDIR}/${PROFILE}.desc
-	echo "Now, editor will be started and you need to enter list of files"
-	echo "for this profile (later as ${EDITOR} ${PROFDIR}/${PROFILE}.files)."
-	echo "Press Enter."
-	read
-	if [ -f ${PROFDIR}/files -o ! -f ${PROFDIR}/${PROFILE}.files ]; then
-	  cat ${PROFDIR}/files > ${PROFDIR}/${PROFILE}.files;
-	fi
-	${EDITOR} ${PROFDIR}/${PROFILE}.files
-	FILES=
-	echo "Validating and copying valid files for this profile:"
-	for file in $(grep -v "^#" ${PROFDIR}/${PROFILE}.files); do
-	  if [ ! -f ${file} -o "${file}" = "/etc/sysconfig/hwprof" ]; then
-	    echo "${file}: invalid, skipping"
-	    continue
-	  fi
-	  bfile=$(basename ${file})
-	  echo "Copying ${file} to ${PROFDIR}/data/${PROFILE}/${file}..."
-	  cp -dp --parents ${file} ${PROFDIR}/data/${PROFILE}/
-	  FILES="${file}\n${FILES}"
-	done
-	echo -e "${FILES}" > ${PROFDIR}/${PROFILE}.files
-	rm -f ${PROFDIR}/${PROFILE}.*~
-	echo "New profile ready."
-	break
-	;;
+while getopts adfhlsqr: opt "$@"; do
+	case "$opt" in
+		a)
+		  checkprofdir
+			
+		  echo "Adding new profile..."
+			
+			if [ -f /var/run/hwprofile ]; then
+			 	echo -n "Current profile is: "
+				cat /var/run/hwprofile
+			fi
+			
+			PROFILE=
+			while [ -z "${PROFILE}" ]; do
+				echo -n "Enter profile name: "
+				read PROFILE
+				
+				if [ -f ${PROFDIR}/${PROFILE}.md5 ]; then
+					echo "Profile ${PROFILE} exist. Try other name."
+					PROFILE=
+				fi
+			done
+			
+			rm -rf ${PROFDIR}/${PROFILE}.* ${PROFDIR}/data/${PROFILE}/
+			md5sumgen > ${PROFDIR}/${PROFILE}.md5
+			LANG=C LC_ALL=C date > ${PROFDIR}/${PROFILE}.date
+			mkdir -p ${PROFDIR}/data/${PROFILE}/
+			chmod 700 ${PROFDIR}/data/${PROFILE}/
+		
+			echo -n "Enter profile description (PROFDIR/${PROFILE}.desc): "
+			read DESCRIPTION
+			[ -z "${DESCRIPTION}" ] && DESCRIPTION="${PROFILE}"
+			echo "${DESCRIPTION}" > ${PROFDIR}/${PROFILE}.desc
+			echo "Now, editor will be started and you need to enter list of files"
+			echo "for this profile (later as ${EDITOR} ${PROFDIR}/${PROFILE}.files)."
+			echo "Press Enter."
+			read
+		
+			if [ -f ${PROFDIR}/files -o ! -f ${PROFDIR}/${PROFILE}.files ]; then
+				cat ${PROFDIR}/files > ${PROFDIR}/${PROFILE}.files;
+			fi
+			${EDITOR} ${PROFDIR}/${PROFILE}.files
+			
+			FILES=
+			echo "Validating and copying valid files for this profile:"
+			for file in $(grep -v "^#" ${PROFDIR}/${PROFILE}.files); do
+				if [ ! -f ${file} -o "${file}" = "/etc/sysconfig/hwprof" ]; then
+					echo "${file}: invalid, skipping"
+					continue
+				fi
+		
+				bfile=$(basename ${file})
+				echo "Copying ${file} to ${PROFDIR}/data/${PROFILE}/${file}..."
+				cp -dp --parents ${file} ${PROFDIR}/data/${PROFILE}/
+				FILES="${file}\n${FILES}"
+			done
+		
+			echo -e "${FILES}" > ${PROFDIR}/${PROFILE}.files
+			rm -f ${PROFDIR}/${PROFILE}.*~
+		
+			echo "New profile ready."
+			break
+			;;
     d)
-	echo "Deleting existing profile..."
-	PROFILE=
-	while [ -z ${PROFILE} ]; do
-	  echo -n "Enter profile name: "
-	  read PROFILE
-	  if [ ! -f ${PROFDIR}/${PROFILE}.md5 ]; then
-	    echo "Profile ${PROFILE} doesn't exist. Try other name."
-	    PROFILE=
-	  fi
-	done
-	echo -n "Are you sure? [t/N]: "
-	read YN
-	case "${YN}" in
-	  y | t )
-	  	# ok
-	  ;;
-	  *)
-	  	echo "Exiting then."
-		exit 1
-	  ;;
-	esac
-	rm -rf ${PROFDIR}/${PROFILE}.* ${PROFDIR}/data/${PROFILE}/
-	echo "Done."
-	break
-	;;
+		  checkprofdir
+			
+	  	echo "Deleting existing profile..."
+		
+			PROFILE=
+			while [ -z ${PROFILE} ]; do
+				echo -n "Enter profile name: "
+				read PROFILE
+		
+				if [ ! -f ${PROFDIR}/${PROFILE}.md5 ]; then
+					echo "Profile ${PROFILE} doesn't exist. Try other name."
+					PROFILE=
+				fi
+			done
+		
+			echo -n "Are you sure? [y/N]: "
+			read YN
+			case "${YN}" in
+				y | Y | t | T )
+												# ok
+												;;
+				*)
+												echo "Exiting then."
+												exit 1
+												;;
+			esac
+		
+			rm -rf ${PROFDIR}/${PROFILE}.* ${PROFDIR}/data/${PROFILE}/
+			echo "Done."
+			break
+			;;
     r)
+
+		  checkprofdir
+			
     	PROFILE="${OPTARG}"
-	if [ -z "${PROFILE}" -o ! -f ${PROFDIR}/${PROFILE}.files ]; then
-	  echo "Can't setup ${PROFILE}. No required data."
-	  exit 1
-	fi
-	echo -n "Setting up profile \"${PROFILE}\" "
-	myecho "";
-	for file in $(grep -v "^#" ${PROFDIR}/${PROFILE}.files); do
-	  if [ ! -f ${file} -o "${file}" = "/etc/sysconfig/hwprof" ]; then
-	    myecho "${file}: invalid, skipping"
-	    continue
-	  fi
-	  echo -n ".";
-	  myecho "Copying ${PROFDIR}/data/${PROFILE}/${file} to ${file}..."
-	  cp -dp ${PROFDIR}/data/${PROFILE}/${file} ${file} 2>/dev/null
-	done
-	echo ${PROFILE} > /var/run/hwprofile
-	echo " Done.";
-	myecho "Profile \"${PROFILE}\" running."
-	break
-	;;
+		
+			if [ -z "${PROFILE}" -o ! -f ${PROFDIR}/${PROFILE}.files ]; then
+				echo "Can't setup ${PROFILE}. No required data."
+				exit 1
+			fi
+			
+			echo -n "Setting up profile \"${PROFILE}\" "
+			myecho "";
+		
+			for file in $(grep -v "^#" ${PROFDIR}/${PROFILE}.files); do
+				if [ ! -f ${file} -o "${file}" = "/etc/sysconfig/hwprof" ]; then
+					myecho "${file}: invalid, skipping"
+					continue
+				fi
+				echo -n ".";
+		
+				myecho "Copying ${PROFDIR}/data/${PROFILE}/${file} to ${file}..."
+				cp -dp ${PROFDIR}/data/${PROFILE}/${file} ${file} 2>/dev/null
+			done
+		
+			echo ${PROFILE} > /var/run/hwprofile
+			echo " Done.";
+			myecho "Profile \"${PROFILE}\" running."
+			break
+			;;
     f)
+		  checkprofdir
+			
     	PROFILE=
     	PROFILEMD5=$(md5sumgen)
-	myecho "Trying to find proper profile..."
-	for prof in $(ls -1 ${PROFDIR}/*.md5 2> /dev/null); do
-	  prof=$(basename ${prof})
-	  CURRENTMD5="$(cat ${PROFDIR}/${prof} 2> /dev/null)"
-		# echo "$prof ${CURRENTMD5} ${PROFILEMD5}";
-	  [ -z "${CURRENTMD5}" ] && continue
-	  if [ "${CURRENTMD5}" = "${PROFILEMD5}" ]; then
-	    PROFILE=$(echo ${prof} | awk ' { gsub(/\.md5/,NIL); print $0 } ')
-	    break;
-	  fi
-	done
-	if [ -z "${PROFILE}" ]; then
-	  if is_yes "${ASKFORPROFILE}"; then
-	    echo "Available profiles:";
-	    PS3='Enter number profile: ';
-	    LISTA=$(ls ${PROFDIR}/*.desc 2> /dev/null);
-	    for i in ${LISTA};
-	      do
-	        a=$(basename $i .desc);
-    	        LISTA1="${a} ${LISTA1}";
-  	      done
- 	    LISTA1="${LISTA1} Default";
-	
-	    select PROFILE in $LISTA1;
-	    do
-		if [ "${PROFILE}" ];
-		then
-			break
-		fi
-	    done
-	    if [ "${PROFILE}" == "Default" ]; then
-	      PROFILE=
-	    fi
-	  fi
-        fi
-        if [ -z "${PROFILE}" ]; then
-	  if [ ! -f ${PROFDIR}/default.md5 ]; then
-		echo "Valid profile not found. Starting with current files."
-		exit 0
-	    else
-		echo "Valid profile not found. Starting with \"default\" profile."
-		PROFILE=default
-    	  fi
-  	fi
+		
+			myecho "Trying to find proper profile..."
+			for prof in $(ls -1 ${PROFDIR}/*.md5 2> /dev/null); do
+				prof=$(basename ${prof})
+				CURRENTMD5="$(cat ${PROFDIR}/${prof} 2> /dev/null)"
+				# echo "$prof ${CURRENTMD5} ${PROFILEMD5}";
+				[ -z "${CURRENTMD5}" ] && continue
+		
+				if [ "${CURRENTMD5}" = "${PROFILEMD5}" ]; then
+					PROFILE=$(echo ${prof} | awk ' { gsub(/\.md5/,NIL); print $0 } ')
+					break;
+				fi
+			done
+		
+			if [ -z "${PROFILE}" ]; then
+				if is_yes "${ASKFORPROFILE}"; then
+					echo "Available profiles:";
+					PS3='Enter number profile: ';
+					LISTA=$(ls ${PROFDIR}/*.desc 2> /dev/null);
+					for i in ${LISTA}; do
+						a=$(basename $i .desc);
+						LISTA1="${a} ${LISTA1}";
+					done
+					LISTA1="${LISTA1} Default";
+		
+					select PROFILE in $LISTA1; do
+			  		if [ "${PROFILE}" ]; then
+							break
+						fi
+					done
+		
+					if [ "${PROFILE}" == "Default" ]; then
+						PROFILE=
+					fi
+				fi
+			fi
 
-	if [ ! -z "${PROFILE}" ]; then
-		myecho "Found profile \"${PROFILE}\" with md5sum \"${PROFILEMD5}\"."
- 	  	if [ $QUIET -eq 0 ]; then
-			$0 -r ${PROFILE};
-		else
-			$0 -qr ${PROFILE};
-		fi
-	fi
-	break
-	;;
+			if [ -z "${PROFILE}" ]; then
+				if [ ! -f ${PROFDIR}/default.md5 ]; then
+					echo "Valid profile not found. Starting with current files."
+					exit 0
+				else
+					echo "Valid profile not found. Starting with \"default\" profile."
+					PROFILE=default
+				fi
+			fi
+		
+			if [ ! -z "${PROFILE}" ]; then
+				myecho "Found profile \"${PROFILE}\" with md5sum \"${PROFILEMD5}\"."
+				if [ $QUIET -eq 0 ]; then
+					$0 -r ${PROFILE};
+				else
+					$0 -qr ${PROFILE};
+				fi
+			fi
+			break
+			;;
     s)
-        PROFILE=$(cat /var/run/hwprofile 2> /dev/null)
-	if [ -z "${PROFILE}" ]; then
-	  echo "No profile currenty running."
-	  exit 1
-	fi
-	if [ ! -f ${PROFDIR}/${PROFILE}.files ]; then
-	  echo "${PROFILE}.files is missing. Can't continue."
-	  exit 1
-	fi
-	echo  -n "Saving/updating current [${PROFILE}] profile "
-	md5sumgen > ${PROFDIR}/${PROFILE}.md5
-	myecho "";
-	for file in $(grep -v "^#" ${PROFDIR}/${PROFILE}.files); do
-	  echo -n ".";
-	  if [ ! -f ${file} -o "${file}" = "/etc/sysconfig/hwprof" ]; then
-	    myecho "${file}: invalid, skipping"
-	    continue
-	  fi
-	  myecho "Copying ${file} to ${PROFDIR}/data/${PROFILE}/${file}"
-	  cp -dp --parents ${file} ${PROFDIR}/data/${PROFILE}/ 
-	done
-	echo " Done."
-	break
-	;;
+		  checkprofdir
+			
+  		PROFILE=$(cat /var/run/hwprofile 2> /dev/null)
+		
+			if [ -z "${PROFILE}" ]; then
+				echo "No profile currenty running."
+				exit 1
+			fi
+		
+			if [ ! -f ${PROFDIR}/${PROFILE}.files ]; then
+				echo "${PROFILE}.files is missing. Can't continue."
+				exit 1
+			fi
+		
+			echo  -n "Saving/updating current [${PROFILE}] profile "
+			md5sumgen > ${PROFDIR}/${PROFILE}.md5
+			myecho "";
+			for file in $(grep -v "^#" ${PROFDIR}/${PROFILE}.files); do
+				echo -n ".";
+		
+				if [ ! -f ${file} -o "${file}" = "/etc/sysconfig/hwprof" ]; then
+					myecho "${file}: invalid, skipping"
+					continue
+				fi
+		
+				myecho "Copying ${file} to ${PROFDIR}/data/${PROFILE}/${file}"
+				cp -dp --parents ${file} ${PROFDIR}/data/${PROFILE}/ 
+			done
+			echo " Done."
+			break
+			;;
     l)
-	echo "List of configured profiles:"
-	for prof in $(ls -1 ${PROFDIR}/*.md5 2> /dev/null); do
-	  prof=$(basename ${prof})
-	  profname=$(echo ${prof} | awk ' { gsub(/\.md5/,NIL); print $0 } ')
-	  echo    "Name    : ${profname}"
-	  echo -n "Desc    : "
-	  if [ -f ${PROFDIR}/${profname}.md5 ]; then
-	    cat ${PROFDIR}/${profname}.desc
-	  else
-	    echo "MISSING"
-	  fi
-	  echo -n "Created : "
-	  if [ -f ${PROFDIR}/${profname}.date ]; then
-	    cat ${PROFDIR}/${profname}.date
-	  else
-	    echo "MISSING"
-	  fi
-	  echo -n "md5sum  : "
-	  if [ -f ${PROFDIR}/${profname}.md5 ]; then
-	    cat ${PROFDIR}/${profname}.md5
-	  else
-	    echo "MISSING"
-	  fi
-	  echo -n "Files   : "
-	  if [ -f ${PROFDIR}/${profname}.files ]; then
-	    cat ${PROFDIR}/${profname}.files | xargs
-	  else
-	    echo "MISSING"
-	  fi
-	  echo
-	done
-	echo "End."
-	break
-	;;
+			echo "List of configured profiles:"
+		
+			for prof in $(ls -1 ${PROFDIR}/*.md5 2> /dev/null); do
+				prof=$(basename ${prof})
+				profname=$(echo ${prof} | awk ' { gsub(/\.md5/,NIL); print $0 } ')
+				echo    "Name    : ${profname}"
+				echo -n "Desc    : "
+				if [ -f ${PROFDIR}/${profname}.md5 ]; then
+					cat ${PROFDIR}/${profname}.desc
+				else
+					echo "MISSING"
+				fi
+				echo -n "Created : "
+				if [ -f ${PROFDIR}/${profname}.date ]; then
+					cat ${PROFDIR}/${profname}.date
+				else
+					echo "MISSING"
+				fi
+				echo -n "md5sum  : "
+				if [ -f ${PROFDIR}/${profname}.md5 ]; then
+					cat ${PROFDIR}/${profname}.md5
+				else
+					echo "MISSING"
+				fi
+				echo -n "Files   : "
+				if [ -f ${PROFDIR}/${profname}.files ]; then
+					cat ${PROFDIR}/${profname}.files | xargs
+				else
+					echo "MISSING"
+				fi
+				echo
+			done
+			echo "End."
+			break
+			;;
     q)
     	QUIET=1; export QUIET;
-	;;
+			;;
     *)
-	showhelp
-	exit 1
-	break
-	;;
+			showhelp
+			exit 1
+			break
+			;;
   esac
 done
 
-if [ "$#" -le "0" ]; then
+if [ "$#" -le "0" -o "$OPTIND" -eq 1 ]; then
   showhelp
   exit 1
 fi
