@@ -1,4 +1,4 @@
-#	$Id: ifcfg-sl0,v 1.3 2001/05/15 16:03:43 baggins Exp $
+#	$Id$
 #
 DEVICE=sl0
 IPADDR=195.164.211.2

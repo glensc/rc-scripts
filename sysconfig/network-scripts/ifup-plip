@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-plip,v 1.13 2002/05/11 09:50:53 misiek Exp $
+#	$Id$
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 

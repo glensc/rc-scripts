@@ -4,7 +4,7 @@
 #
 # description:   kill em all
 #
-# $Id: killall,v 1.7 2000/11/16 16:01:18 baggins Exp $
+# $Id$
 # Bring down all unneeded services that are still running (there shouldn't 
 # be any, so this is just a sanity check)
 

@@ -5,11 +5,11 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.31 2002/09/14 19:54:16 orzech Exp $
+# $Id$
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
-# Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+# Changes:      Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 
 # avoid being interrupted by child or keyboard

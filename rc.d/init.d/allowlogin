@@ -4,7 +4,7 @@
 #
 # description: Allow users to login.
 #
-# $Id: allowlogin,v 1.9 2000/11/16 16:01:18 baggins Exp $
+# $Id$
 
 # NLS
 NLS_DOMAIN="rc-scripts"

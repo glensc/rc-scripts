@@ -3,9 +3,9 @@
 # timezone	Set time zone information.
 # chkconfig:	2345 10 70
 # description:	This script is setting time zone information for your machine.
-# Author:	Pawel Wilk <siefca@pld.org.pl>
+# Author:	Pawel Wilk <siefca@pld-linux.org>
 #
-# $Id: timezone,v 1.9 2003/06/17 14:02:35 qboosh Exp $
+# $Id$
 
 # NLS
 NLS_DOMAIN="rc-scripts"

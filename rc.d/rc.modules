@@ -1,10 +1,10 @@
 #!/bin/sh
 # (c) MandrakeSoft, Chmouel Boudjnah <chmouel@mandrakesoft.com>
 # Modified:
-#	Arkadiusz Miskiewicz <misiek@pld.org.pl>
+#	Arkadiusz Miskiewicz <misiek@pld-linux.org>
 #
 # rc.modules: launch modules specified in /etc/modules
-# $Id: rc.modules,v 1.4 2002/07/13 16:25:04 misiek Exp $
+# $Id$
 
 [ -f /etc/modules ] || exit 0
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-aliases,v 1.14 2002/05/11 09:50:53 misiek Exp $
+#	$Id$
 #
 # adds all addresses of device $1
 

@@ -1,3 +1,3 @@
 @SET_MAKE@
 
-EXTRA_DIST = data
+#EXTRA_DIST = data

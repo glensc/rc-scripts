@@ -1,5 +1,5 @@
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
-# $Id: chat-ppp0.leased1,v 1.2 1999/07/13 12:49:37 misiek Exp $
+# $Id$
 # chat script for setting up hardwired (leased) serial line.
 # refer to ifcfg-ppp0.leased1 for more info 
 REPORT  CONNECT

@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
-# Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.47 2002/12/17 14:01:09 baggins Exp $
+# Arkadiusz Miskiewicz <misiek@pld-linux.org>, 1999, 2000.
+# $Id$
 #
 
 msgid ""

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: ip-down,v 1.7 2002/03/19 18:18:06 misiek Exp $
+# $Id$
 # This file should not be modified
 #
 # This script is run by the pppd _after_ the link is brought down.

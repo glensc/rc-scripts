@@ -4,9 +4,9 @@
 #
 # Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
-#		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#		Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
-# $Id: rc.shutdown,v 1.21 2003/01/25 00:37:38 misiek Exp $
+# $Id$
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin

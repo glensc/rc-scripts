@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: ipx-down,v 1.2 2002/03/19 18:18:06 misiek Exp $
+# $Id$
 # This file should not be modified
 #
 # This script is run by the pppd after the link is established.

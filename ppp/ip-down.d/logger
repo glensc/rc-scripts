@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: logger,v 1.4 1999/07/31 11:24:18 misiek Exp $
+# $Id$
 # You can put here anything :)
 #
 echo " Disconnect time: `date` from $PPP_REMOTE                    " >> /var/log/ppp.log

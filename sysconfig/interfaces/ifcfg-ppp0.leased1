@@ -1,5 +1,5 @@
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
-# $Id: ifcfg-ppp0.leased1,v 1.5 2001/05/15 16:03:43 baggins Exp $
+# $Id$
 # config file for setting up hardwired (leased) serial line.
 #  This configuration uses chats with modem, so You have to have an inteligent
 # modem (AT commands compatible).

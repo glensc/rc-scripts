@@ -1,6 +1,6 @@
 # German translation of rc-scripts.
 # Pawel Sakowski <pawel@sakowski.eu.org>, 2000.
-# $Id: de.po,v 1.5 2003/05/02 20:27:04 kloczek Exp $
+# $Id$
 #
 
 msgid ""

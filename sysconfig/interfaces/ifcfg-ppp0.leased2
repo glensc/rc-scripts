@@ -1,5 +1,5 @@
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
-# $Id: ifcfg-ppp0.leased2,v 1.4 2001/05/15 16:03:43 baggins Exp $
+# $Id$
 # config file for setting up hardwired (leased) serial line.
 #  This config assumes "transparent" modem (in ex. goramo), null modem
 # cable or current loop. 

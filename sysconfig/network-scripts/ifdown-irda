@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #    ifdown-irda - IrDA configuration script
-#    Copyright (C) 2001  Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#    Copyright (C) 2001  Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: ifdown-irda,v 1.2 2002/07/13 16:25:07 misiek Exp $
+#    $Id$
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 

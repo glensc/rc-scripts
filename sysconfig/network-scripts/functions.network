@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.8 2003/06/19 15:57:07 arekm Exp $
+# $Id$
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -65,7 +65,7 @@ fi
 }
 
 # PLD GNU/Linux network functions
-# Copyright (C) 1999, 2000 Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+# Copyright (C) 1999, 2000 Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 
 # Setup Network Address Translation (NAT)
 setup_nat()
@@ -266,7 +266,7 @@ fi
 #
 # following function sets up routes not associated to any device
 # eg. unreachable or blackhole routes
-# (c) 1999 Jacek Konieczny <jajcus@pld.org.pl>
+# (c) 1999 Jacek Konieczny <jajcus@pld-linux.org>
 #
 setup_routes()
 {
@@ -408,7 +408,7 @@ fi
 }
 
 # following function setups advanced routing rules
-# Olgierd Pieczul <wojrus@pld.org.pl>
+# Olgierd Pieczul <wojrus@pld-linux.org>
 setup_ip_rules () {
 typeset args
 if [ -f /etc/sysconfig/static-routes ] ; then

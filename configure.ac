@@ -1,6 +1,6 @@
 dnl $Id$
 
-AC_INIT(["rc-scripts"], ["0.4.0"], [pld-rc-scripts@pld.org.pl], [rc-scripts])
+AC_INIT(["rc-scripts"], [0.4.0.1], [pld-rc-scripts@pld-linux.org], [rc-scripts])
 AM_INIT_AUTOMAKE
 
 ALL_LINGUAS="pl de"

@@ -6,7 +6,7 @@
 #
 # description:	<service> long service description
 #
-# $Id: template.init,v 1.9 2003/05/15 21:37:46 ankry Exp $
+# $Id$
 
 
 # Source function library

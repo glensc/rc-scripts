@@ -1,4 +1,4 @@
-#	$Id: ifcfg-ppp0.callback,v 1.3 2000/04/21 17:39:40 jajcus Exp $
+#	$Id$
 DEVICE=ppp0
 CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.callback
 ONBOOT=no

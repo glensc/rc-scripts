@@ -1,5 +1,5 @@
 Writing System V init scripts for PLD Linux
-$Id: sysvinitfiles,v 1.2 1999/07/13 12:49:35 misiek Exp $
+$Id$
 ===============================================
 
 All System V init scripts are named /etc/rc.d/init.d/<servicename>

@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: logger,v 1.1 2000/05/07 19:00:06 siefca Exp $
+# $Id$
 # You can put here anything :)
 #
 echo "+---------------------------------------------------------------+" >> /var/log/ppp.log

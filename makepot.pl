@@ -4,10 +4,10 @@
 # Extract messages from scripts and make pot
 #
 # Copyright (c) 1999 Free Software Fundation, Inc.
-# Artur Frysiak <wiget@pld.org.pl>
+# Artur Frysiak <wiget@pld-linux.org>
 # $Id$
 # Changes:
-# 2000-08-25 Arkadiusz Miskiewicz <misiek@pld.org.pl>
+# 2000-08-25 Arkadiusz Miskiewicz <misiek@pld-linux.org>
 # - support for $(nls "xyz"), progress "xyz" and '' instead of "".
 # 
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-post,v 1.14 2002/08/22 13:21:25 misiek Exp $
+#	$Id$
 #
 # This should be called whenever an interface goes down, not just when
 # it is brought down explicitly.

@@ -1,4 +1,4 @@
-# $Id: system,v 1.24 2002/10/10 15:07:48 baggins Exp $
+# $Id$
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes

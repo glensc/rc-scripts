@@ -1,4 +1,4 @@
-#	$Id: ifcfg-irda0,v 1.2 2002/07/13 16:25:06 misiek Exp $
+#	$Id$
 #	Read /usr/share/doc/irda-utils-*/README.irattach.gz for more
 #	informations about options below.
 DEVICE=irda0

@@ -3,30 +3,30 @@
 
 MAINTAINERS
 
-Maintainer of development version (so called ,,totalnew'')
-is Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+Maintainer of development version
+is Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 
 AUTHORS/CREDITS
 
-Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 	networking functions, iproute2 support,
 	national language support, scripts for
 	controling tunnels and bridges
 
-Artur Frysiak <wiget@pld.org.pl>
+Artur Frysiak <wiget@pld-linux.org>
 	automake/autoconf support, bug fixes
 
-Bartosz Waszak <waszi@pld.org.pl>
+Bartosz Waszak <waszi@pld-linux.org>
 	fixes, devfsd support
 
 Grzegorz Stanislawski <stangrze@open.net.pl>
 	ppp scripts, prefix/netmask converting
 	functions, bug fixes
 
-Jan Rêkorajski <baggins@pld.org.pl>
+Jan Rêkorajski <baggins@pld-linux.org>
 	general, ipv6 and dhcp fixes
 	
-Micha³ Kochanowicz <mkochano@pld.org.pl>
+Micha³ Kochanowicz <mkochano@pld-linux.org>
 	fixes, progress()
 	
 Pawe³ Wilk <siefca@pl.qmail.org>

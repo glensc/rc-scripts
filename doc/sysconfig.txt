@@ -1,4 +1,4 @@
-$Id: sysconfig.txt,v 1.10 2002/12/17 14:01:07 baggins Exp $
+$Id$
 
 Files in /etc/sysconfig
 =======================

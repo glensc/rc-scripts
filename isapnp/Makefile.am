@@ -1,5 +1,5 @@
 #
-#	$Id: Makefile.am,v 1.2 2002/03/19 18:18:03 misiek Exp $
+#	$Id$
 #
 
 isapnpdir = @sysconfigdir@/isapnp

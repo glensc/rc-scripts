@@ -1,10 +1,10 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.125 2003/09/09 16:14:32 arekm Exp $
+# $Id$
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
-# Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+# Changes:	Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 
 # Set the path

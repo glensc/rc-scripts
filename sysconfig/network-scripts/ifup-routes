@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-routes,v 1.14 2002/08/11 17:05:09 misiek Exp $
+#	$Id$
 #
 # adds static routes which go through device $DEVICE
 

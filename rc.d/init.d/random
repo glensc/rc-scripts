@@ -7,7 +7,7 @@
 # description:	Saves and restores system entropy pool for higher quality \
 #		random number generation.
 #
-# $Id: random,v 1.6 2000/11/16 16:01:18 baggins Exp $
+# $Id$
 
 # NLS
 NLS_DOMAIN="rc-scripts"

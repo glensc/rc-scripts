@@ -1,4 +1,4 @@
-/* $Id: ipcalc.c,v 1.5 1999/09/02 12:11:06 misiek Exp $ */
+/* $Id$ */
 
 #include <popt.h>
 #include <stdio.h>

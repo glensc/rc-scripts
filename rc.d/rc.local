@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: rc.local,v 1.4 2000/11/16 16:01:17 baggins Exp $
+# $Id$
 #
 # This script will be executed *after* all the other init scripts.
 # You can put your own initialization stuff in here if you don't

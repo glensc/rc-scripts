@@ -1,14 +1,14 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.80 2003/09/09 22:45:49 arekm Exp $
+# $Id$
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:	Greg Galloway and Marc Ewing
 # Modified for PLD by:
-#		Marek Obuchowicz <elephant@pld.org.pl>
-#		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
-#		Micha³ Kochanowicz <mkochano@pld.org.pl>
+#		Marek Obuchowicz <elephant@pld-linux.org>
+#		Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+#		Micha³ Kochanowicz <mkochano@pld-linux.org>
 
 # First set up a default search path.
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"

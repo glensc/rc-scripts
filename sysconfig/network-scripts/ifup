@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.71 2003/04/07 19:54:39 misiek Exp $
+#	$Id$
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
