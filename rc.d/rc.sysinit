@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.51 2000/03/22 17:24:28 wiget Exp $
+# $Id: rc.sysinit,v 1.52 2000/03/24 08:39:33 waszi Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -109,34 +109,38 @@ if [ -f /forcefsck ]; then
 fi
 
 _RUN_QUOTACHECK=0
-if [ ! -f /fastboot -o awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 0 ; else exit 1}' /etc/fstab ]; then
-	show "Checking root filesystems."; started
-	initlog -c "fsck -C -T -a $fsckoptions /"
+if awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 1 ; else exit 0}' /etc/fstab; then
 
-	rc=$?
+    if [ ! -f /fastboot  ]; then
+    	    show "Checking root filesystems."; started
+	    initlog -c "fsck -C -T -a $fsckoptions /"
 
-	# A return of 2 or higher means there were serious problems.
-	if [ $rc -gt 1 ]; then
-		# don't use '\n' in nls macro !
-		echo "\n\n"
-		nls "*** An error occurred during the file system check."
-		nls "*** Dropping you to a shell; the system will reboot"
-		nls "*** when you leave the shell."
-		echo
+	    rc=$?
 
-		PS1="`nls "(Repair filesystem)# "`"; export PS1
-		if [ "$RUN_SULOGIN_ON_ERR" = "yes" ]; then
-			sulogin
-		else
-			/bin/sh
-		fi
+	    # A return of 2 or higher means there were serious problems.
+	    if [ $rc -gt 1 ]; then
+		    # don't use '\n' in nls macro !
+		    echo "\n\n"
+		    nls "*** An error occurred during the file system check."
+		    nls "*** Dropping you to a shell; the system will reboot"
+		    nls "*** when you leave the shell."
+		    echo
 
-		run_cmd "Unmounting file systems" umount -a
-		mount -n -o remount,ro /
-		run_cmd "Automatic reboot in progress." reboot
-	elif [ "$rc" = "1" ]; then
-		_RUN_QUOTACHECK=1
-	fi
+		    PS1="`nls "(Repair filesystem)# "`"; export PS1
+		    if [ "$RUN_SULOGIN_ON_ERR" = "yes" ]; then
+			    sulogin
+		    else
+			    /bin/sh
+		    fi
+
+		    run_cmd "Unmounting file systems" umount -a
+		    mount -n -o remount,ro /
+		    run_cmd "Automatic reboot in progress." reboot
+	    elif [ "$rc" = "1" ]; then
+		    _RUN_QUOTACHECK=1
+	    fi
+    fi
+
 fi
 
 # check for arguments 
