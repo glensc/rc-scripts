@@ -1,4 +1,4 @@
-# $Id: system,v 1.9 2000/02/10 10:31:36 misiek Exp $
+# $Id: system,v 1.10 2000/02/18 08:35:18 waszi Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -43,3 +43,5 @@ RUN_DEPMOD=ifmissing
 # Run /sbin/ldconfig at startup ?
 RUN_LDCONFIG=yes
 
+# Start DevFS daemon to preserve compatibility with old "style" device names
+RUN_DEVFSD=no
