@@ -3,11 +3,13 @@
 bin_PROGRAMS = \
 	doexec \
 	ipcalc \
-	usleep
-
+	usleep 	
+	
 sbin_PROGRAMS =	\
 	netreport \
-	usernetctl 
+	usernetctl \
+	initlog \
+	loglevel
 	
 EXTRA_PROGRAMS = \
 	testd 
@@ -19,3 +21,5 @@ netreport_SOURCES = netreport.c
 testd_SOURCES = testd.c
 usernetctl_SOURCES = usernetctl.c
 usleep_SOURCES = usleep.c
+loglevel_SOURCES = loglevel.c
+initlog_SOURCES = initlog.c initlog.h
