@@ -1,17 +1,64 @@
-# Time zone information.
+#!/bin/sh
 #
+# timezone	Set time zone information.
+# chkconfig:	2345 10 70
+# description:	This script is setting time zone information for your machine.
+# Author:	Pawel Wilk <siefca@pld.org.pl>
+#
+# $Id: timezone,v 1.2 2000/03/04 13:39:51 siefca Exp $
 
-# Directory containing 
-# zone information files.
-ZONE_INFO_DIR="/usr/share/zoneinfo"
+# NLS
+NLS_DOMAIN="rc-scripts"
 
-# Scheme you would like 
-# to use in your system.
-ZONE_INFO_SCHEME="posix"
+# Source function library.
+. /etc/rc.d/init.d/functions
 
-# Area (sometimes may be empty)
-ZONE_INFO_AREA="Europe"
+[ ! -f /etc/sysconfig/timezone ] && exit 0
 
-# Name of the time zone 
-# for your system.
-TIME_ZONE="Warsaw"
+. /etc/sysconfig/timezone
+
+# See how we were called.
+case "$1" in
+  start)
+        if [ -f /etc/localtime ]; then
+	    rm -f /etc/localtime
+	fi
+	
+	ZONE_FILE="$ZONE_INFO_DIR"
+
+	if [[ "$ZONE_INFO_SCHEME" != "" ]]; then
+	    ZONE_FILE="$ZONE_FILE/$ZONE_INFO_SCHEME"
+	fi
+
+	if [[ "$ZONE_INFO_AREA" != "" ]]; then
+	    ZONE_FILE="$ZONE_FILE/$ZONE_INFO_AREA"
+	fi
+
+	ZONE_FILE="$ZONE_FILE/$TIME_ZONE"
+
+	if [ -f "$ZONE_FILE" ]; then
+		if [[ "$ZONE_INFO_AREA" != "" ]]; then
+		    run_cmd "Setting time zone information ($ZONE_INFO_AREA, $TIME_ZONE)" ln -s $ZONE_FILE /etc/localtime
+		else
+		    run_cmd "Setting time zone information ($TIME_ZONE)" ln -s $ZONE_FILE /etc/localtime
+		fi
+	fi
+        ;;
+  stop)
+	    run_cmd "Unsetting time zone information" rm -f /etc/localtime
+        ;;
+  restart)
+          $0 stop
+	  $0 start
+        ;;
+  reload)
+          $0 restart
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|reload}"
+        exit 1
+esac
+
+unset ZONE_FILE ZONE_INFO_DIR ZONE_INFO_SCHEME ZONE_INFO_AREA TIME_ZONE
+
+exit 0
