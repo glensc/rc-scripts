@@ -1,11 +1,11 @@
+######################################################################
+# MAIN PART
+
 # Do you need networking ?
 NETWORKING=yes
 
 # Do you need IPv6 networking, too ?
 IPV6_NETWORKING=no
-
-# Do you want enable IPv4 forwarding ?
-IPV4_FORWARDING=no
 
 # Set hostname here (only hostname)
 HOSTNAME=pldmachine
@@ -16,7 +16,6 @@ NISDOMAIN=
 GATEWAY=
 GATEWAYDEV=
 
-
 # Do you want to use IPX networking ?
 IPX=no
 IPXAUTOPRIMARY=
@@ -26,6 +25,9 @@ IPXINTERNALNODENUM=
 
 ######################################################################
 # IPv4 goodies
+
+# Do you want enable IPv4 forwarding ?
+IPV4_FORWARDING=no
 
 # Do you want to enable IPv4 anti spoofing ?
 IPV4_ANTI_SPOOFING=
@@ -117,3 +119,11 @@ IPV4_DYNAMIC_IP_PATCH_VALUE=
 # Should be changed to "32768 61000" for high-usage systems.
 IPV4_LOCAL_PORT_RANGE="1024 4999"
 
+######################################################################
+# IPv6 goodies
+
+# Do you want enable IPv6 forwarding ?
+IPV6_FORWARDING=no
+
+# Enable tunnel interfaces configuration ?
+IPV6_TUNNELCONFIG=no

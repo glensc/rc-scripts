@@ -1,30 +1,20 @@
-PROTOCOL={ipv4|ipv6|ipx}
+PROTOCOL={ip|ipx} (default ip)
 
-if 	PROTOCOL=ipv4; then
+if 	PROTOCOL=ip; then
 
-	[ ALIAS={no|yes} ]
-	if ALIAS=yes then
 		DEVICE=<real device name>:<aliasnumber>
-	else
+	or
 		DEVICE=<name>
 		[ BOOTPROTO={none|bootp|dhcp} ]
-	fi
 	ADDR=<IPv4 addres>
+	IPV6_ADDR="<IPv6 addres1>/<prefix len> <IPv6 addres2>/<prefix len> <...>"
 	[ PREFIX= ]
 	[ NETWORK= ]
 	[ BROADCAST= ]
 	[ ONBOOT={no|yes} ]
 	[ MULTICAST={|no|yes} ]
-	
-elif 	PROTOCOL=ipv6; then
-
-	DEVICE=<name>
-	ADDR=<IPv6 addres>/<prefix len>
-	[ ADDR=<IPv6 addres>/<prefix len>
-	  ...
-	  ADDR=STOP ]
-	[ ONBOOT={no|yes} ]
-	[ MULTICAST={|no|yes} ]
+	[ ARP={no|yes} ]
+	[ SRC_ADDR=<IPv4 addres> ]
 	
 elif 	PROTOCOL=ipx
 

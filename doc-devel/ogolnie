@@ -7,9 +7,7 @@ rc-scripts
 - wszystkie chat-* nadal w /etc/sysconfig/network-scripts
 - pliki z funkcjami w /etc/rc.d/init.d/ czyli
 	functions		- podstawowe
-	functions.network.ipv4	- do ipv4
-	functions.network.ipv6	- do ipv6
+	functions.network 	- sieciowe
 - network-ip6.init wylatuje. startowanie ipv4 _i_ ipv6 musi zawieraæ siê w network
 - to samo dotyczy tunnels-ip6.init
-- NETMASK nieu¿ywaæ ! PREFIX owszem
-
+- NETMASK nieu¿ywaæ ! - PREFIX owszem

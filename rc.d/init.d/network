@@ -31,6 +31,7 @@
 network_init()
 {
 [ -f /etc/sysconfig/interfaces/ifcfg-lo ] && /sbin/ifup lo boot
+modprobe ipv6 ipip ip_gre 2> /dev/null
 
 }
 
@@ -40,7 +41,6 @@ network_init()
 network_deinit()
 {
 [ -f /etc/sysconfig/interfaces/ifcfg-lo ] && /sbin/ifdown lo boot
-modprobe ipv6 ipip ip_gre 2> /dev/null
 
 }
 

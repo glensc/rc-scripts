@@ -9,11 +9,18 @@
 
 cd /etc/sysconfig/network-scripts
 . /etc/rc.d/init.d/functions.network
+. /etc/sysconfig/network
 
 CONFIG=$1
 source_config
 
 if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
+then
+        exit
+fi
+
+if [ "$IPV6_TUNNELCONFIG" != "yes" ] && [ "$MODE" == "sit" ] ||
+   [ "$IPX" != "yes" ] && [ "$MODE" == "ipxip" ] || [ "$IPX" != "yes" ] && [ "$MODE" == "ipipx" ]
 then
         exit
 fi

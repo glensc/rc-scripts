@@ -27,7 +27,7 @@ fi
 if [ "${GATEWAY}" != "" ]; then
 	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 		# set up default gateway
-		route add default gw ${GATEWAY}
+		ip route add default via ${GATEWAY}
 	fi
 fi
 

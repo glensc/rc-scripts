@@ -66,6 +66,11 @@ if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
     NETMASK="`calcnetmask $PREFIX`"
 fi
 
+[ "$MULTICAST" == "yes" ] && MULTICAST=on               || MULTICAST=off
+[ "$ARP" == "yes" ]       && ARP=on                     || ARP=off
+[ -n "$SRC_ADDR" ]        && SRC_ADDR="src ${SRC_ADDR}" || SRC_ADDR=""
+[ -z "$PROTOCOL" ]        && PROTOCOL=ip
+
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
 if [ -x "$OTHERSCRIPT" ]; then
@@ -89,14 +94,14 @@ if [ "$SLAVE" == "yes" -a "$ISALIAS" == "no" -a "$MASTER" != "" -a -x /sbin/ifen
     exit 0
 fi
 
-if [ -n "$MACADDR" ]; then
+if [ -n "$MACADDR" ] && [ -x /sbin/ifconfig ]; then
    ifconfig ${FULLDEVNAME} hw ether ${MACADDR}
 fi
 
-if [ -n "$PUMP" ]; then
+if [ -n "$PUMP" ] && [ "$ISALIAS" == "no" ]; then
 
-    echo -n "Determining IP information for $DEVICE..."
-    if /sbin/pump -i $DEVICE ; then
+    echo -n "Determining IP information for $DEVICEFULLNAME..."
+    if /sbin/pump -i $DEVICEFULLNAME ; then
        echo " done."
     else
        echo " failed."
@@ -117,20 +122,23 @@ else
 	eval `/bin/ipcalc --network ${IPADDR} ${NETMASK}`
     fi
 
-    ip link set ${DEVICE} up
+    ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
     ip addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME}
 
-    if [ "${IPV6NETWORKING}" == "yes" ] ; then 
-      for ADDR in ${IPV6ADDRS} ; do
+
+# IPv6 rules
+    if [ "${IPV6_NETWORKING}" == "yes" ] ; then 
+      for ADDR in ${IPV6_ADDR} ; do
 	   ip addr add ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
       done  
     fi
 
 # hack for 2.2 kernels
+# uiprouciæ
     if [ "$ISALIAS" == "no" ] && [ -z "`route -n | sed "s/ .*//" | grep ${NETWORK}`" ]; then
-	ip route add ${NETWORK}/${PREFIX} dev ${DEVICE}
+	ip route add ${NETWORK}/${PREFIX} dev ${DEVICE} ${SRC_ADDR}
     else
-	ip route add ${IPADDR}/32 dev ${DEVICE}
+	ip route add ${IPADDR}/32 dev ${DEVICE} ${SRC_ADDR}
     fi
 
     . /etc/sysconfig/network
@@ -138,7 +146,7 @@ else
     if [ "${GATEWAY}" != "" ]; then
 	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 	    # set up default gateway
-	    ip route add default via ${GATEWAY} dev ${DEVICE}
+	    ip route add default via ${GATEWAY} dev ${DEVICE} ${SRC_ADDR}
 	    DEFGW=${GATEWAY}
 	fi
     fi
@@ -147,7 +155,7 @@ else
 	if [ -n "$GATEWAYS" ]; then
 	    for gw in $GATEWAYS; do
 		if [ "$gw" != "${DEFGW}" ]; then
-		    ip route add default via $gw dev ${DEVICE}
+		    ip route add default via $gw dev ${DEVICE} ${SRC_ADDR}
 		fi
 	    done
 	fi
