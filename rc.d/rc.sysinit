@@ -1,16 +1,11 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.81 2001/07/04 22:48:07 gotar Exp $
+# $Id: rc.sysinit,v 1.82 2001/07/05 15:46:06 baggins Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-
-# Rerun ourselves through initlog
-if [ -z "$IN_INITLOG" ]; then
-	[ -f /sbin/initlog ] && exec /sbin/initlog -r /etc/rc.d/rc.sysinit
-fi
 
 # Set the path
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
@@ -73,18 +68,11 @@ if is_yes "$MOUNT_DEVFS"; then
 	run_cmd "Mounting Device Filesystem" mount -n -t devfs /dev /dev
 fi
 
-# Set up devfsd
-if [ -c /dev/.devfsd -a -x /sbin/devfsd ]; then
-	run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
-	if [ -e /dev/cdroms/cdrom0 ]; then
-		ln -sf /dev/cdroms/cdrom0 /dev/cdrom
-	fi
-	if [ -f /etc/sysconfig/mouse ]; then
-		. /etc/sysconfig/mouse
-		if [ -n "$DEVICE" -a "$DEVICE" != "/dev/mouse" ]; then
-			ln -s $DEVICE /dev/mouse
-		fi
-	fi
+# set up devfsd
+if is_yes "$RUN_DEVFSD"; then
+    if [ -x /sbin/devfsd -a -f /etc/devfsd.conf ]; then
+	    run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
+    fi
 fi
 
 # Set console loglevel
@@ -174,59 +162,53 @@ else
 fi
 
 if [ -f /forcefsck ]; then
-	fsckoptions="-f $fsckoptions"
-fi
-
-if is_yes "$COLOR_INIT"; then
-	fsckoptions="-C $fsckoptions"
-else
-	fsckoptions="-V $fsckoptions"
+        fsckoptions="-f $fsckoptions"
 fi
 
 _RUN_QUOTACHECK=0
 if awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 1 ; else exit 0}' /etc/fstab; then
 
-	if [ ! -f /fastboot ]; then
-		show "Checking root filesystems."; started
-		initlog -c "fsck -T -a $fsckoptions /"
+    if [ ! -f /fastboot  ]; then
+    	    show "Checking root filesystem"; started
+	    initlog -c "fsck -C -T -a $fsckoptions /"
 
-		rc=$?
+	    rc=$?
 
-		# A return of 2 or higher means there were serious problems.
-		if [ $rc -gt 1 ]; then
-			# don't use '\n' in nls macro !
-			echo
-			echo
-			nls "*** An error occurred during the file system check."
-			nls "*** Dropping you to a shell; the system will reboot"
-			nls "*** when you leave the shell."
-			echo
+	    # A return of 2 or higher means there were serious problems.
+	    if [ $rc -gt 1 ]; then
+		    # don't use '\n' in nls macro !
+		    echo
+		    echo
+		    nls "*** An error occurred during the file system check."
+		    nls "*** Dropping you to a shell; the system will reboot"
+		    nls "*** when you leave the shell."
+		    echo
 
-			PS1="$(nls '(Repair filesystem)# ')"; export PS1
-			if is_yes "$RUN_SULOGIN_ON_ERR"; then
-				sulogin
-			else
-				/bin/sh
-			fi
+		    PS1="$(nls '(Repair filesystem)# ')"; export PS1
+		    if is_yes "$RUN_SULOGIN_ON_ERR"; then
+			    sulogin
+		    else
+			    /bin/sh
+		    fi
 
-			run_cmd "Unmounting file systems" umount -a
-			mount -n -o remount,ro /
-			run_cmd "Automatic reboot in progress." reboot
-		elif [ "$rc" = "1" ]; then
-			_RUN_QUOTACHECK=1
-		fi
-	fi
+		    run_cmd "Unmounting file systems" umount -a
+		    mount -n -o remount,ro /
+		    run_cmd "Automatic reboot in progress" reboot
+	    elif [ "$rc" = "1" ]; then
+		    _RUN_QUOTACHECK=1
+	    fi
+    fi
 
 fi
 
-# Check for arguments
+# Check for arguments 
 if grep -iq nopnp /proc/cmdline; then
 	PNP=
 else
 	PNP=yes
 fi
 
-# Set up pnp
+# Set up pnp 
 if [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
 	if [ -n "$PNP" ] && is_yes "$RUN_ISAPNP"; then
 		run_cmd "Setting up ISA PNP devices" /sbin/isapnp /etc/isapnp/isapnp.conf
@@ -414,8 +396,8 @@ fi
 
 # Check filesystems
 if ! grep -q nofsck /proc/cmdline && [ ! -f /fastboot ]; then
-	show "Checking filesystems."; started
-	initlog -c "fsck -T -R -A -a $fsckoptions"
+	show "Checking filesystems"; started
+	initlog -c "fsck -C -T -R -A -a $fsckoptions"
 
 	rc=$?
 
@@ -437,24 +419,79 @@ if ! grep -q nofsck /proc/cmdline && [ ! -f /fastboot ]; then
 
 		run_cmd "Unmounting file systems" umount -a
 		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
-		run_cmd "Automatic reboot in progress." reboot
+		run_cmd "Automatic reboot in progress" reboot
 	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
 		if [ -x /sbin/convertquota ]; then
 			if [ -f /quota.user ]; then
-				/sbin/convertquota -u / && rm -f /quota.user
+			    /sbin/convertquota -u / && rm -f /quota.user
 			fi
 			if [ -f /quota.group ]; then
-				/sbin/convertquota -g / && rm -f /quota.group
+			    /sbin/convertquota -g / && rm -f /quota.group
 			fi
 		fi
 		run_cmd "Checking filesystem quotas" /sbin/quotacheck -v -u -g -R -a
 	fi
 fi
 
-# Mount all other filesystems (except for NFS and /proc, which are already
+# Mount all other filesystems (except for NFS and /proc, which is already
 # mounted). Contrary to standard usage,
 # filesystems are NOT unmounted in single user mode.
-run_cmd "Mounting local filesystems." mount -a -t nonfs,smbfs,ncpfs,proc
+run_cmd "Mounting local filesystems" mount -a -t nonfs,smbfs,ncpfs,proc
+
+# Now do some workaround - encrypted filesystems couldn't have been fsck-ed
+# before mount - that's where the password is entered.
+# mount is buggy - when remounting loopback filesystem, loop=XXX
+# option is removed from /etc/mtab
+if grep -q "encryption=" /etc/fstab; then
+	show "Checking encrypted filesystems"; started
+	LOOPLIST="$(
+	grep "encryption=" /etc/fstab | grep -v 'noauto' | grep -w 'ro' |\
+	while read FILE DIR TYPE OPTS TMP1; do
+		LOOP="`cat /proc/mounts | awk '$2 == "'"$DIR"'" { print $1 }'`"
+		echo "$LOOP"
+	done
+	grep "encryption=" /etc/fstab | grep -vw 'ro\|noauto' |\
+	while read FILE DIR TYPE OPTS TMP1; do
+	    	LOOP="`cat /proc/mounts | awk '$2 == "'"$DIR"'" { print $1 }'`"
+		LOOPLIST="$LOOPLIST $LOOP"
+	    	NEWOPTS="remount,`echo "$OPTS" | sed 's#loop\(=[^,]*\)\?#loop='"$LOOP"'#'`,ro"
+		echo "$LOOP"
+		mount "$DIR" -o "$NEWOPTS"
+	done
+	)"
+	
+	initlog -c "fsck -T -C -a $fsckoptions $LOOPLIST"
+	rc=$?
+
+	# A return of 2 or higher means there were serious problems.
+	if [ $rc -gt 1 ]; then
+		echo "\n\n"
+		nls "*** An error occurred during the file system check."
+		nls "*** Dropping you to a shell; the system will reboot"
+		nls "*** when you leave the shell."
+		echo
+
+		PS1="`nls '(Repair filesystem)# '`"; export PS1
+		if is_yes "$RUN_SULOGIN_ON_ERR"; then
+			sulogin
+		else
+			/bin/sh
+		fi
+
+		run_cmd "Unmounting file systems" umount -a
+		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
+		run_cmd "Automatic reboot in progress." reboot
+	fi
+	
+	show "Remounting encrypted filesystems back in rw mode"; busy
+	grep "encryption=" /etc/fstab | grep -vw 'ro\|noauto' |\
+	while read FILE DIR TYPE OPTS TMP1; do
+	    	LOOP="`cat /proc/mounts | awk '$2 == "'"$DIR"'" { print $1 }'`"
+	    	NEWOPTS="remount,`echo "$OPTS" | sed 's#loop\(=[^,]*\)\?#loop='"$LOOP"'#'`,rw"
+		mount "$DIR" -o "$NEWOPTS"
+	done
+	ok
+fi
 
 # Set the clock if timezone definition wasn't available (eg. /usr not mounted)
 if is_yes "$TIME_SETUP_DELAYED"; then
