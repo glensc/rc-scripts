@@ -1,4 +1,4 @@
-#	$Id: ifcfg-description,v 1.1 1999/07/22 10:23:20 wiget Exp $
+#	$Id: ifcfg-description,v 1.2 1999/09/13 13:26:43 misiek Exp $
 PROTOCOL={ip|ipx} (default ip)
 
 if 	PROTOCOL=ip; then
@@ -8,6 +8,7 @@ if 	PROTOCOL=ip; then
 		DEVICE=<name>
 		[ BOOTPROTO={none|bootp|dhcp} ]
 	ADDR=<IPv4 addres>
+	[ IPADDR_ALIASES="<IPv4 addres1> <IPv4 addres2> <...>" ]
 	IPV6_ADDR="<IPv6 addres1>/<prefix len> <IPv6 addres2>/<prefix len> <...>"
 	[ PREFIX= ]
 	[ NETWORK= ]
