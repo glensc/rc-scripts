@@ -490,10 +490,12 @@ daemon()
 
 	[ -n "$limits" ] && eval `echo "$limits" | awk 'BEGIN {RS="[\n-]";} !/^ *$/ { printf("ulimit -%s ;", $0); }'`
 
+	[ -z "$DEFAULT_SERVICE_UMASK" ] && DEFAULT_SERVICE_UMASK=022
+
 	# And start it up.
 	busy
 	cd /
-	if errors=$(USER=root HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
+	if errors=$(umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK}; USER=root HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
 		if [ -n "$waitname" -a -n "$waittime" ]; then
 			# Save basename.
 			base=$(basename "$waitname")
