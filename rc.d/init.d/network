@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.34.2.4 2000/10/28 09:33:56 misiek Exp $
+# $Id: network,v 1.34.2.5 2000/11/06 16:26:04 baggins Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -112,7 +112,7 @@ interfaces=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
 	egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
 	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
 interfaces_boot=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
-	egrep -v '(ifcfg-lo|ifcfg-sit|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
+	egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
 	xargs egrep -l "ONBOOT=[^n][^o]" | \
 	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
 interfaces_sit_boot=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
