@@ -1,3 +1,7 @@
+2003-09-08  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: - mount sysfs in the same way as proc is
+
 2003-09-05  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
 
 	* rc.d/init.d/functions: - if there is no process then it already died
