@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.18 1999/08/20 13:37:48 misiek Exp $
+# $Id: functions.network,v 1.19 1999/08/20 13:39:55 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -89,7 +89,7 @@ if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
 		fi
 	elif [ "$TODO" == "stop" ]; then
 		if [ -n "$MESSAGE" ]; then
-			show "Setting $MESSAGE to $DEF"; busy
+			show "`nls Setting` $MESSAGE `nls to` $DEF"; busy
 			if (echo "$DEF" > /proc/sys/net/$WHAT) 2> /dev/null; then
 				deltext; ok
 			else
