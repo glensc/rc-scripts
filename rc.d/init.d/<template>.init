@@ -13,12 +13,17 @@
 # Get network config
 . /etc/sysconfig/network
 
-# Get service config
+# Set defaults
+OPTION1=""
+OPTION2="-q"
+OPTION3="5"
+
+# Get service config - may override defaults
 [ -f /etc/sysconfig/<service> ] && . /etc/sysconfig/<service>
 
 # Check that networking is up.
 if [ "${NETWORKING}" = "no" ]; then
-	# nls "ERROR: Networking is down. %s can't be runed." <service>
+	# nls "ERROR: Networking is down. %s can't be run." <service>
 	msg_Network_Down <service>
 	exit 1
 fi
