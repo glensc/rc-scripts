@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.27 2001/05/15 16:03:44 baggins Exp $
+#	$Id: ifdown,v 1.28 2001/05/16 13:12:07 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -21,7 +21,7 @@ fi
 DEV=$1
 
 [ -z "$DEV" ] && {
-    nls "usage: %s <device name>" "ifdown" >&2
+    nls "Usage: %s <device name>" "ifdown" >&2
     exit 1
 }
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-sl,v 1.18 2001/05/15 16:03:44 baggins Exp $
+#	$Id: ifup-sl,v 1.19 2001/05/16 13:12:07 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -42,10 +42,10 @@ fi
 if is_no "$DIRECT_CONNECT"; then
 
 [ -x /usr/sbin/dip ] || {
-  nls "/usr/sbin/dip does not exist or is not executable"
-  nls "ifup-sl for %s exiting" "$DEVICE"
+  nls "%s does not exist or is not executable" "/usr/sbin/dip"
+  nls "%s for %s exiting" "ifup-sl" "$DEVICE"
   logger -p daemon.info -t ifup-sl \
-    "`nls '/usr/sbin/dip does not exist or is not executable for'` $DEVICE"
+    "$(nls '%s does not exist or is not executable for %s' "/usr/sbin/dip" "$DEVICE")"
   exit 1
 }
 
@@ -88,7 +88,7 @@ else
 	nls "%s is missing. Can't continue." "/sbin/slattach"
         echo "ifup-sl - $DEVICE $(nls exiting)"
         logger -p daemon.info -t ifup-sl \
-        "$(nls '/sbin/slattach does not exist or is not executable for %s' "$DEVICE")"
+        "$(nls '%s does not exist or is not executable for %s' "/sbin/slattach" "$DEVICE")"
         exit 1
 }
 

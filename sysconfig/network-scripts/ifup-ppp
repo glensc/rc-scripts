@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.15 2001/05/15 16:03:44 baggins Exp $
+#	$Id: ifup-ppp,v 1.16 2001/05/16 13:12:07 baggins Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -35,10 +35,10 @@ if [ "$2" = "boot" ] && is_no "${ONBOOT}"; then
   exit
 fi
 [ -x /usr/sbin/pppd ] || {
-  nls "/usr/sbin/pppd does not exist or is not executable"
-  nls "ifup-ppp for %s exiting" "$DEVICE"
+  nls "%s does not exist or is not executable" "/usr/sbin/pppd"
+  nls "%s for %s exiting" "ifup-ppp" "$DEVICE"
     logger -p daemon.info -t ifup-ppp \
-    "$(nls '/usr/sbin/pppd does not exist or is not executable for %s' "$DEVICE")"
+    "$(nls '%s does not exist or is not executable for %s' "/usr/sbin/pppd" "$DEVICE")"
   exit 1
 }
 

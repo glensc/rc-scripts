@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ipx,v 1.10 2001/05/15 16:03:44 baggins Exp $
+#	$Id: ifup-ipx,v 1.11 2001/05/16 13:12:07 baggins Exp $
 #
 # configures IPX on $1 if appropriate
 
@@ -11,7 +11,7 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 if [ "$1" = "" ]; then
-	nls "usage: %s <device name>" "ifup-ipx" >&2
+	nls "Usage: %s <device name>" "ifup-ipx" >&2
 	exit 1
 fi
 
