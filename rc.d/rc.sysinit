@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.104 2002/05/11 21:51:32 misiek Exp $
+# $Id: rc.sysinit,v 1.105 2002/07/06 12:22:56 wojrus Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -596,7 +596,7 @@ rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
 for afile in /var/lock/* /var/run/*; do
 	if [ -d "$afile" ]; then
 		bafile=$(basename $afile)
-		[ "$bafile" != "news" -a "$bafile" != "sudo" -a "$bafile" != "mon" ] && rm -f $afile/*
+		[ "$bafile" != "news" -a "$bafile" != "sudo" -a "$bafile" != "mon" ] && rm -rf $afile/*
 	else
 		rm -f $afile 2> /dev/null
 	fi
@@ -605,14 +605,8 @@ done
 # Delete stale pid files
 rm -f /var/spool/postoffice/.pid.*
 
-# Delete subsys locks ad (possible) dhcpcd lock in case the machine crashed last time
-rm -f /var/lock/subsys/*
-rm -f /var/run/dhcpcd-*.pid file
-
-
 {
 # Clean up utmp/wtmp
-rm -f /var/run/utmp?
 if ! is_no "$NEED_XFILES" ; then
 	:>/var/run/utmpx
 	touch /var/log/wtmpx
