@@ -341,7 +341,7 @@ if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "usb" /proc/devices
 	aliases=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+usb-controller" | awk '{ print $3 }')
 	if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 		/sbin/modprobe -k usbcore
-		if ! grep -qE "(usbdevfs|usbfs)" /etc/mtab; then
+		if ! grep -qE "(usbdevfs|usbfs)" /etc/mtab && [ ! -f /proc/bus/usb/devices ]; then
 			run_cmd "Mounting USB filesystem" mount /proc/bus/usb
 		fi
 		for alias in $aliases ; do 
@@ -357,7 +357,6 @@ fi
 
 needusbstorage=
 if [ $usb = "1" ]; then
-	sleep 5
 	mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02")
 	kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01")
 	needusbstorage=$(cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08")
