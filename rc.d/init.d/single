@@ -12,7 +12,7 @@
 #		Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 # 
-# $Id: single,v 1.8 1999/12/02 10:38:55 kloczek Exp $
+# $Id: single,v 1.9 2000/02/03 11:50:20 misiek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
@@ -30,11 +30,9 @@ case "$1" in
 # Kill all processes.
 	[ "${BASH+bash}" = bash ] && enable kill
 
-	show "Sending all processes the TERM signal"
-	daemon killall5 -15
+	run_cmd "Sending all processes the TERM signal" killall5 -15
 	sleep 5
-	show "Sending all processes the KILL signal"
-	daemon killall5 -9
+	run_cmd "Sending all processes the KILL signal" killall5 -9
 
 	rm -f /var/lock/subsys/*
 
