@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ipx,v 1.8 2000/04/03 14:50:47 baggins Exp $
+#	$Id: ifup-ipx,v 1.9 2000/04/07 19:16:11 baggins Exp $
 #
 # configures IPX on $1 if appropriate
 
@@ -27,6 +27,8 @@ cd /etc/sysconfig/network-scripts
 CONFIG=$1
 [ -f "$CONFIG" ] || CONFIG=ifcfg-$CONFIG
 source_config
+
+[ -z $IPXFRAMETYPE ] && exit 0
 
 case $IPXPRIMARY in
     yes|true) primary=-p ;;
