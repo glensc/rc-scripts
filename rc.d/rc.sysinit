@@ -207,7 +207,7 @@ if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "usb" /proc/devices
 fi
 
 if [ "$usb" = "1" -a ! -f /proc/bus/usb/devices ]; then
-	run_cmd "Mounting USB filesystem" mount -t usbdevfs usbdevfs /proc/bus/usb
+	run_cmd "Mounting USB filesystem" mount -t usbfs usbfs /proc/bus/usb
 fi
 
 needusbstorage=
@@ -343,7 +343,7 @@ rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
 # Enter root, /proc, /sys, devfs and other into mtab.
 mount -f /
 mount -f /proc
-[ -f /proc/bus/usb/devices ] && mount -f -t usbdevfs usbdevfs /proc/bus/usb
+[ -f /proc/bus/usb/devices ] && mount -f -t usbfs usbfs /proc/bus/usb
 [ -e /dev/.devfsd ] && mount -f -t devfs devfs /dev
 
 if grep -q sysfs /proc/filesystems ; then
