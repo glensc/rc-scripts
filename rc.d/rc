@@ -73,7 +73,7 @@ fi
 # virtual console, and send messages to /dev/console 
 # (it can be serial console too) 
 if [ "$COLUMNS" -gt 0 ]; then
-	if [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
+	if [ "$argv2" != "chroot" ] && [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
 		CONSOLE=/dev/tty1
 		[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > $CONSOLE
 		exec 0<> /dev/console 1>&0 2>&0

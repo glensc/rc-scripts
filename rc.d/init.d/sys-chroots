@@ -32,7 +32,8 @@ case "$CMD" in
 	# Start daemons.
 	if [ "$previous" = "N" ]; then
 	   runlevel=5
-	   export runlevel
+	   previous=0
+	   export runlevel previous
         fi
 	
 	if [ ! -f /var/lock/subsys/sys-chroots ]; then
@@ -102,7 +103,6 @@ case "$CMD" in
 		    if grep -q selinuxfs /proc/filesystems ; then
 			chroot $dir mount -o gid=17 -t selinuxfs selinuxfs /selinux
 		    fi
-		    set -x
 		    chroot $dir mount -a
 		    # network
 		    chroot $dir /sbin/chkconfig network off
@@ -124,7 +124,8 @@ case "$CMD" in
 	# Stop daemons.
 	if [ "$previous" = "N" ]; then
 	    runlevel=0
-	    export runlevel
+	    previous=5
+	    export runlevel previous
 	fi
 	
 	if [ -f /var/lock/subsys/sys-chroots ]; then
