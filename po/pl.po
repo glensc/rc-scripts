@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.26 2000/03/27 16:07:49 misiek Exp $
+# $Id: pl.po,v 1.27 2000/04/11 14:27:03 zagrodzki Exp $
 #
 msgid ""
 msgstr ""
@@ -92,7 +92,7 @@ msgstr "Przekazywanie procesowi INIT by przeszedl do trybu single"
 
 #: ../rc.d/rc:74
 msgid "Entering non-interactive startup"
-msgstr "Wchodze w tryb nie interaktywny"
+msgstr "Wchodze w tryb nieinteraktywny"
 
 # Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
 # must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
@@ -319,6 +319,9 @@ msgstr "Zrodlo losowych danych istnieje"
 msgid "Press"
 msgstr "Prosze wcisnac"
 
+#: ../rc.d/rc.sysinit:57
+msgid "to enter interactive startup."
+msgstr "zeby wejsc w tryb nieinteraktywny"
 #: ../rc.d/rc.sysinit:75
 msgid "Turning off Magic SysRq key"
 msgstr "Wylaczam klawisz Magic SysRq"
