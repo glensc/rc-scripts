@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.22 2000/03/22 21:04:59 kloczek Exp $
+# $Id: pl.po,v 1.23 2000/03/22 21:21:14 kloczek Exp $
 #
 msgid ""
 msgstr ""
@@ -26,6 +26,10 @@ msgstr "Sprawdzanie glownego systemu plikow."
 msgid "Enabling swap space"
 msgstr "Wlaczenie swapa"
 
+#: ../rc.d/init.d/functions:125
+msgid "Usage: %s"
+msgstr "Uzycie: %s"
+
 #: ../rc.d/rc.sysinit:168
 msgid "Enabling Delay Login"
 msgstr "Wlaczenie opozniania logowania"
@@ -47,10 +51,6 @@ msgstr "Automatyczny restart w toku."
 msgid "Setting time zone information ($TIME_ZONE)"
 msgstr "Ustawianie informacji o strefi czasowej ($TIME_ZONE)"
 
-#: ../rc.d/init.d/functions:125
-msgid "Usage:"
-msgstr "Uzycie:"
-
 #: ../rc.d/rc:179
 msgid "%sResource Manager: %sRunlevel has been reached%s"
 msgstr "%sZarzadca zasobow: %sZostal osiagniety poziom%s"
@@ -61,9 +61,12 @@ msgstr "Startuje Zarzadce Systemu Plikow Urzadzen (DevFsd)"
 
 # ../rc.d/init.d/functions:281
 #: ../rc.d/init.d/functions:363
-#, fuzzy
 msgid "%s dead but subsys locked\n"
-msgstr "%s zabity ale podsystem zablokowany"
+msgstr "%s zabity ale podsystem zablokowany\n"
+
+#: ../rc.d/init.d/functions:195
+msgid "$STRING"
+msgstr ""
 
 #: ../rc.d/rc.sysinit:289
 msgid "Automatic reboot in progress"
@@ -127,16 +130,14 @@ msgstr "Przesylanie wartosci %s do /proc/sys/kernel/panic"
 # ../rc.d/init.d/functions:258
 # ../rc.d/init.d/functions:266
 #: ../rc.d/init.d/functions:340 ../rc.d/init.d/functions:348
-#, fuzzy
 msgid "%s (pid %s) is running...\n"
-msgstr "%s (pid %s) jest uruchomiony..."
+msgstr "%s (pid %s) jest uruchomiony...\n"
 
 #: ../rc.d/rc:159
 msgid "The system is halted"
 msgstr "Dzialanie systemu zatrzymane"
 
 #: ../rc.d/init.d/functions:100
-#, fuzzy
 msgid "Starting %s service"
 msgstr "Startowanie serwisu %s"
 
@@ -203,6 +204,10 @@ msgid "*** An error occurred during the file system check."
 msgstr ""
 "*** Podczas sprawdzania systemow plikow wykryto blad niemozliwy do usuniecia."
 
+#: ../rc.d/init.d/functions:178 ../rc.d/rc.shutdown:70
+msgid "$MESSAGE"
+msgstr ""
+
 # ../rc.d/rc.sysinit:214
 #: ../rc.d/rc.sysinit:275
 msgid "*** An error occurred during the RAID startup"
@@ -248,9 +253,8 @@ msgstr "%sZarzadca zasobow: %sWejscie na poziom%s"
 
 # ../rc.d/init.d/functions:275
 #: ../rc.d/init.d/functions:357
-#, fuzzy
 msgid "%s dead but pid file exists\n"
-msgstr "%s zabity ale plik z numerem procesu istnieje"
+msgstr "%s zabity ale plik z numerem procesu istnieje\n"
 
 #: ../rc.d/rc.sysinit:81
 msgid "Turning off Stop-A/Break-A"
@@ -267,9 +271,8 @@ msgstr "(Naprawa systemu plikow)# "
 
 # ../rc.d/init.d/functions:284
 #: ../rc.d/init.d/functions:366
-#, fuzzy
 msgid "%s is stopped\n"
-msgstr "%s jest zatrzymany"
+msgstr "%s jest zatrzymany\n"
 
 #: ../rc.d/rc.sysinit:122 ../rc.d/rc.sysinit:276 ../rc.d/rc.sysinit:305
 msgid "*** Dropping you to a shell; the system will reboot"
@@ -285,7 +288,7 @@ msgstr "Wystartowaæ serwis"
 
 #: ../rc.d/init.d/functions:105
 msgid "%s service is already running.\n"
-msgstr "%s serwis juz jest uruchomiony.\n"
+msgstr "Serwis % juz jest uruchomiony.\n"
 
 #: ../rc.d/rc.shutdown:77
 msgid "Remounting remaining filesystems ro mode"
@@ -335,9 +338,8 @@ msgstr "Wylaczam klawisz Magic SysRq"
 # ../rc.d/init.d/functions:258
 # ../rc.d/init.d/functions:266
 #: ../rc.d/init.d/functions:115
-#, fuzzy
 msgid "%s service is not running.\n"
-msgstr "%s (pid %s) jest uruchomiony..."
+msgstr "Serwis %s nie jest uruchomiony.\n"
 
 # (4 + "\b" * count of letters) in one of five previous words
 #: ../rc.d/init.d/functions:169
@@ -379,9 +381,8 @@ msgid "NIS Domain:"
 msgstr "Domena NIS:"
 
 #: ../rc.d/init.d/functions:110
-#, fuzzy
 msgid "Stopping %s service"
-msgstr "Zatrzymywanie serwisu %f"
+msgstr "Zatrzymywanie serwisu %s"
 
 # ../rc.d/init.d/network:132
 #: ../rc.d/init.d/network:179
