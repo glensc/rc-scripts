@@ -3,7 +3,7 @@
 ipcalc \- perform simple manipulation of IP addresses
 .SH SYNOPSIS
 .B ipcalc
-\fI[--hostname] [--broadcast] [--network] [--netmask] \fBip \fI[netmask]\fR
+\fI[--hostname] [--broadcast] [--network] [--netmask] [--prefix] \fBip \fI[netmask]\fR
 
 .SH DESCRIPTION
 \fBipcalc\fR provides a simple way to calculate IP information for a host.
@@ -25,7 +25,7 @@ not use the default netmasks, in which case an inappropriate value will
 be returned.
 
 .IP \fI--prefix\fR
-That same as \fB--netmask\fR but returns prefix (see CIDR specyfication)
+That same as \fB--netmask\fR but return prefix (see CIDR specification)
 
 .IP \fI--network\fR 
 Display the network address for the given IP address and netmask.
