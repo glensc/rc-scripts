@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.68 2001/10/05 18:17:13 baggins Exp $
+# $Id: functions,v 1.69 2001/12/13 20:35:26 mkochano Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -265,7 +265,7 @@ daemon()
 			shift;;
 		esac
 	done
-	prog="$prog "$*""
+	prog="$prog \"$*\""
 
 	# make sure it doesn't core dump anywhere; while this could mask
 	# problems with the daemon, it also closes some security problems
