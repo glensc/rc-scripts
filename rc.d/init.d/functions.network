@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.44 2000/06/27 20:22:34 baggins Exp $
+# $Id: functions.network,v 1.45 2000/07/21 18:51:45 zagrodzki Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -352,9 +352,9 @@ fi
 
 modprobe_net()
 {
-if is_yes "$IPV6_NETWORKING" && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ]; then
+if is_yes "$IPV6_NETWORKING" && [ "`ls -R /lib/modules/\`uname -r\`/ 2>/dev/null | grep ipv6.o`" != "" ]; then
 	modprobe -s -k net-pf-10
-	if is_yes "$IPV6_TUNNELCONFIG" && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipip.o`" != "" ]; then
+	if is_yes "$IPV6_TUNNELCONFIG" && [ "`ls -R /lib/modules/\`uname -r\`/ 2>/dev/null | grep ipip.o`" != "" ]; then
 		modprobe -s -k ipip
 	fi
 fi
