@@ -1,0 +1,26 @@
+#	$Id: tnlcfg-description,v 1.1 1999/07/22 10:23:20 wiget Exp $
+#
+MODE={ipip|gre|sit|ipxip}
+DEVICE=<device name>
+if 	MODE=ipxip ; then
+	?
+else	MODE=ipip || MODE=gre || MODE=sit ; then
+
+	REMOTEADDR=<IPv4 addres>
+	[ LOCALADDR=<IPv4 addres> ]
+        [ BIND_DEV= ] do jakiego device przybindowaæ (ma zwi±zek z routingiem itp)
+
+	[ TTL= ]
+	[ TOS= ]
+	[ SEQ={no|yes} ]
+	[ ISEQ={no|yes} ]
+	[ OSEQ={no|yes} ]
+	[ KEY= ]
+	[ IKEY= ]
+	[ OKEY= ]
+	[ CSUM={no|yes} ]
+	[ ICSUM={no|yes} ]
+	[ OCSUM={no|yes} ]
+	[ PMTUDISC={no|yes} ]
+fi
+	

@@ -1,26 +1,18 @@
-#	$Id: tnlcfg-icm,v 1.3 1999/07/13 12:49:36 misiek Exp $
-#
-MODE={ipip|gre|sit|ipxip}
-DEVICE=<device name>
-if 	MODE=ipxip ; then
-	?
-else	MODE=ipip || MODE=gre || MODE=sit ; then
-
-	REMOTEADDR=<IPv4 addres>
-	[ LOCALADDR=<IPv4 addres> ]
-        [ BIND_DEV= ] do jakiego device przybindowaæ (ma zwi±zek z routingiem itp)
-
-	[ TTL= ]
-	[ TOS= ]
-	[ SEQ={no|yes} ]
-	[ ISEQ={no|yes} ]
-	[ OSEQ={no|yes} ]
-	[ KEY= ]
-	[ IKEY= ]
-	[ OKEY= ]
-	[ CSUM={no|yes} ]
-	[ ICSUM={no|yes} ]
-	[ OCSUM={no|yes} ]
-	[ PMTUDISC={no|yes} ]
-fi
+MODE=sit
+DEVICE=icm
+REMOTEADDR=193.219.28.246
+LOCALADDR=156.17.210.110
+BIND_DEV=eth0
+TTL=64 
+#TOS=
+#SEQ={no|yes} ]
+#ISEQ={no|yes} ]
+#OSEQ={no|yes} ]
+#KEY= ]
+#IKEY= ]
+#OKEY= ]
+#CSUM={no|yes} ]
+#ICSUM={no|yes} ]
+#OCSUM={no|yes} ]
+#PMTUDISC={no|yes} ]
 	
