@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.19 1999/08/02 10:08:05 misiek Exp $
+#	$Id: ifup,v 1.20 1999/08/14 10:51:10 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -145,6 +145,9 @@ fi
 	   ip -family inet6 addr add ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
 	   ip -family inet6 route add ${ADDR} dev ${DEVICE}
       done  
+      if [ -z "$IPv6_ONLY" ]; then
+	ip -family inet6 addr add fe80::${IPADDR} dev ${DEVICE} label ${FULLDEVNAME} scope link
+      fi
     fi
 
 # hack for 2.2 kernels
