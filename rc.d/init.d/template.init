@@ -2,7 +2,7 @@
 #
 # <service>	<service> short service description
 #
-# chkconfig:	345 <startr_level> <stop_level>
+# chkconfig:	345 <start_level> <stop_level>
 #
 # description:	<service> long service description
 #
