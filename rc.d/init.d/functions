@@ -401,7 +401,7 @@ daemon()
 			;;
 		  --user)
 			shift
-			[ "$1" != "root" ] && prog="/bin/su $1 -c \""
+			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
 			shift
 			;;
 		  -*|+*) SERVICE_RUN_NICE_LEVEL=$1
