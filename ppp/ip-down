@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: ip-down,v 1.3 1999/07/27 02:51:44 kloczek Exp $
+# $Id: ip-down,v 1.4 2000/04/21 17:35:30 jajcus Exp $
 # This file should not be modified
 #
 # This script is run by the pppd _after_ the link is brought down.
@@ -32,19 +32,19 @@ PPP_REMOTE="$5"
 PPP_IPPARAM="$6"
 export PPP_IFACE PPP_TTY PPP_SPEED PPP_LOCAL PPP_REMOTE PPP_IPPARAM
 
+. /etc/sysconfig/network-scripts/.functions 
+CONFIG="$PPP_IPPARAM"
+source_config
+
 # as an additional convienince, $PPP_TTYNAME is set to the tty name,
 # stripped of /dev/ (if present) for easier matching.
-PPP_TTYNAME=`/usr/bin/basename "$2"`
+PPP_TTYNAME=`/usr/bin/basename "$PPP_TTY"`
 export PPP_TTYNAME
-
-# Other things
-LOGDEVICE=$6
-REALDEVICE=$1
 
 # Main Script starts here
 
 run-parts /etc/ppp/ip-down.d
 
-/etc/sysconfig/network-scripts/ifdown-post ifcfg-${LOGDEVICE}
+/etc/sysconfig/network-scripts/ifdown-post "${CONFIG}"
 
 exit 0
