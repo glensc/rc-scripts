@@ -580,7 +580,7 @@ fi
 # mounted). Contrary to standard usage,
 # filesystems are NOT unmounted in single user mode.
 
-run_cmd "Mounting local filesystems" mount -a -t nonfs,smbfs,ncpfs,proc -O no_netdev
+run_cmd "Mounting local filesystems" mount -a -t nonfs,smbfs,ncpfs,proc,cifs -O no_netdev
 
 # Now do some workaround - encrypted filesystems couldn't have been fsck-ed
 # before mount - that's where the password is entered.
