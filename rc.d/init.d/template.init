@@ -66,12 +66,8 @@ case "$1" in
   reload)
 	if [ -f /var/lock/subsys/<service> ]; then
 		# show "Reload %s service" <service>
-		msg_show <service>
-		msg_reload
-		busy
+		msg_reloading <service>
 		killproc <service> -HUP
-		deltext
-		ok		
 	else
 		# show "%s service is not running." <service>
 		msg_Not_Running <service>
