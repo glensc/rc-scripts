@@ -1,2 +1,5 @@
 # Entry format:
-# <device>	<network_ip>/<network_mask_length>
+# <device>	<network_ip>/<network_mask_length>	<other arguments>
+#
+# example:
+#eth0	192.168.1.0/24	via	192.168.100.1
