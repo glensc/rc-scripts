@@ -6,6 +6,7 @@ sysconfigdir = @sysconfigdir@
 
 sysconfig_DATA = \
 	system \
+	clock \
 	network \
 	static-routes \
 	static-nat \
