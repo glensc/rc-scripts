@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.39 2002/01/17 20:56:02 gotar Exp $
+# $Id: pl.po,v 1.40 2002/01/22 23:46:27 gotar Exp $
 #
 msgid ""
 msgstr ""
@@ -117,7 +117,7 @@ msgstr "Usluga %s nie jest uruchomiona."
 
 #: ./rc.d/init.d/functions.network:224
 msgid "Disabling IPv6 packet forwarding"
-msgstr "Wylaczanie forwardowania pakietow IPv6"
+msgstr "Wylaczanie forwardowania pakietów IPv6"
 
 #: ./rc.d/init.d/functions:533
 msgid "Loading %s kernel module(s)"
@@ -146,7 +146,7 @@ msgstr "Podlaczanie lokalnych systemów plików."
 
 #: ./rc.d/rc.sysinit:232
 msgid "System bootup in progress  - please wait"
-msgstr "Start systemu w toku - prosze czekac"
+msgstr "Uruchamianie systemu w toku - prosze czekac"
 
 #: ./rc.d/rc.shutdown:46
 #: ./rc.d/rc.sysinit:193
@@ -163,7 +163,7 @@ msgstr "%s (pid %s) jest uruchomiony..."
 
 #: ./rc.d/init.d/functions.network:215
 msgid "Disabling IPv4 packet forwarding"
-msgstr "Wylaczanie forwardowania pakietow IPv4"
+msgstr "Wylaczanie forwardowania pakietów IPv4"
 
 #: ./sysconfig/network-scripts/ifup:76
 msgid "Enslaving %s to %s"
@@ -209,7 +209,7 @@ msgstr "*** Podczas inicjacji urzadzen RAID wykryto blad niemozliwy do usuniecia
 
 #: ./rc.d/rc.sysinit:81
 msgid "Configuring kernel parameters"
-msgstr "Ustawianie parametrow jadra"
+msgstr "Ustawianie parametrów jadra"
 
 #: ./sysconfig/network-scripts/ifup:113
 msgid "Can't find a dhcp client."
@@ -217,7 +217,7 @@ msgstr "Nie moge znalezc klienta dhcp."
 
 #: ./rc.d/rc.sysinit:505
 msgid "Turning on quotas for local filesystems"
-msgstr "Wlaczanie quoty na lokalnych systemach plików"
+msgstr "Wlaczanie quot na lokalnych systemach plików"
 
 #: ./sysconfig/network-scripts/ifup:35
 msgid "Users cannot control this device."
@@ -225,11 +225,11 @@ msgstr "Uzytkownicy nie moga kontrolowac tego urzadzenia."
 
 #: ./rc.d/rc.shutdown:36
 msgid "Turning off quotas for local filesystems"
-msgstr "Wylaczanie quoty na lokalnych systemach plików"
+msgstr "Wylaczanie quot na lokalnych systemach plików"
 
 #: ./rc.d/init.d/functions.network:222
 msgid "Enabling IPv6 packet forwarding"
-msgstr "Wlaczanie forwardowania pakietow IPv6"
+msgstr "Wlaczanie forwardowania pakietów IPv6"
 
 #: ./rc.d/rc.sysinit:487
 msgid "Remounting encrypted filesystems back in rw mode"
@@ -254,7 +254,7 @@ msgstr "%sZarzadca zasobów: %sWejscie na poziom"
 
 #: ./rc.d/rc.shutdown:32
 msgid "Turning off swap and accounting"
-msgstr "Wylaczanie swap i zliczania"
+msgstr "Wylaczanie swapa i zliczania"
 
 #: ./rc.d/init.d/network:190
 msgid "Shutting down unconfigured interface %s"
@@ -270,11 +270,11 @@ msgstr "Przelaczanie pozostalych systemów plików w tryb tylko do odczytu"
 
 #: ./rc.d/init.d/network:171
 msgid "Unmounting NCP filesystems"
-msgstr "Odlaczanie systemów plikow NCP"
+msgstr "Odlaczanie systemów plików NCP"
 
 #: ./rc.d/init.d/functions.network:213
 msgid "Enabling IPv4 packet forwarding"
-msgstr "Wlaczanie forwardowania pakietow IPv4"
+msgstr "Wlaczanie forwardowania pakietów IPv4"
 
 #: ./rc.d/init.d/network:168
 msgid "Unmounting SMB filesystems"
@@ -311,7 +311,7 @@ msgstr "\t      Prosze wcisnac %sI%s zeby wejsc w tryb interaktywny."
 #: ./rc.d/init.d/single:32
 #: ./rc.d/rc.shutdown:24
 msgid "Sending all processes the TERM signal"
-msgstr "Wysylanie do wszystkich procesow sygnalu TERM"
+msgstr "Wysylanie do wszystkich procesów sygnalu TERM"
 
 #: ./rc.d/rc.sysinit:337
 msgid "Starting up RAID device %s"
@@ -323,7 +323,7 @@ msgstr "Wlaczanie swapa"
 
 #: ./rc.d/rc.sysinit:73
 msgid "Starting Device Filesystem Daemon"
-msgstr "Startuje Zarzadce Systemu Plików Urzadzen (devfsd)"
+msgstr "Uruchamianie Zarzadcy Systemu Plików Urzadzen (devfsd)"
 
 #: ./rc.d/rc:180
 msgid "The system is halted"
@@ -450,7 +450,7 @@ msgstr "Uruchomic usluge %s (T)ak/(N)ie/(K)ontynuuj? [T] "
 
 #: ./rc.d/rc.sysinit:223
 msgid "Checking root filesystem quotas"
-msgstr "Sprawdzanie quoty na glównym systemie plików"
+msgstr "Sprawdzanie quot na glównym systemie plików"
 
 #: ./rc.d/init.d/network:178
 msgid "Removing tunnel"
@@ -546,11 +546,11 @@ msgstr "dip wystartowal dla %s na %s przy %s"
 #: ./rc.d/init.d/functions.network:165
 #: ./rc.d/init.d/functions.network:167
 msgid "Setting static ARP entries"
-msgstr "Ustawianie statycznych wpisow ARP"
+msgstr "Ustawianie statycznych wpisów ARP"
 
 #: ./rc.d/init.d/functions.network:204
 msgid "Setting static RARP entries"
-msgstr "Ustawianie statycznych wpisow RARP"
+msgstr "Ustawianie statycznych wpisów RARP"
 
 #: ./rc.d/rc.sysinit:55
 msgid "\t\t\t%sPowered by %sPLD GNU/Linux%s"
