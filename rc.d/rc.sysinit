@@ -198,15 +198,17 @@ fi
 needusbstorage=
 if [ "$usb" = "1" ]; then
 	needusbstorage=$(LC_ALL=C cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08")
-	LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2> /dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
-        mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02")
-        kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01")
-        if [ -n "$kbdoutput" ]; then
-                run_cmd "Initializing USB keyboard" modprobe keybdev
-        fi
-        if [ -n "$mouseoutput" ]; then
-                run_cmd "Initializing USB mouse" modprobe mousedev
-        fi
+	if [ "$(kernelverser)" -lt "002006" ]; then
+    	    LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2> /dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
+    	    mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02")
+    	    kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01")
+    	    if [ -n "$kbdoutput" ]; then
+		run_cmd "Initializing USB keyboard" modprobe keybdev
+    	    fi
+    	    if [ -n "$mouseoutput" ]; then
+		run_cmd "Initializing USB mouse" modprobe mousedev
+    	    fi
+	fi
 fi
 
 # Setup hdparm thing (if exists and is needed)
