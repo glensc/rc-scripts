@@ -196,6 +196,7 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %attr(755,root,root) %{_bindir}/run-parts
 %attr(755,root,root) %{_bindir}/usleep
 
+%attr(755,root,root) %{_sbindir}/genhostid
 %attr(755,root,root) %{_sbindir}/hwprofile
 %attr(755,root,root) %{_sbindir}/service
 %attr(755,root,root) %{_sbindir}/consoletype
