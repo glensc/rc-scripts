@@ -6,7 +6,7 @@
 #
 # description:	<service> long service description
 #
-# $Id: template.init,v 1.8 2003/05/08 17:18:33 ankry Exp $
+# $Id: template.init,v 1.9 2003/05/15 21:37:46 ankry Exp $
 
 
 # Source function library
@@ -49,7 +49,6 @@ case "$1" in
 	else
 		# show "%s service is already running." <service>
 		msg_already_running <service>
-		exit 1
 	fi
 	;;
   stop)
@@ -58,17 +57,16 @@ case "$1" in
 		# show "Stopping %s service" <service>
 		msg_stopping <service>
 		killproc <service>
-		RETVAL=$?
 		rm -f /var/lock/subsys/<service>
 	else
 		# show "%s service is not running." <service>
 		msg_not_running <service>
-		exit 1
 	fi
 	;;
   restart)
 	$0 stop
 	$0 start
+	exit $?
 	;;
   reload)
 	if [ -f /var/lock/subsys/<service> ]; then
@@ -78,8 +76,8 @@ case "$1" in
 		RETVAL=$?
 	else
 		# show "%s service is not running." <service>
-		msg_not_running <service>
-		RETVAL=1
+		msg_not_running <service> >&2
+		RETVAL=7
 	fi
 	;;
   force-reload)
@@ -87,7 +85,9 @@ case "$1" in
 	$0 reload
 
 	# or if it doesn't
-	$0 stop && $0 start
+	$0 restart
+
+	exit $?
 	;;
   status)
 	status <service>
@@ -96,7 +96,7 @@ case "$1" in
   *)
 	# show "Usage: %s {start|stop|restart|reload|force-reload|status}"
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
-	exit 1
+	exit 3
 esac
 
 exit $RETVAL
