@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.22 1999/09/26 14:56:04 jajcus Exp $
+# $Id: functions.network,v 1.23 1999/09/27 09:53:23 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -104,10 +104,8 @@ set_hostname()
 # Setup Network Address Translation (NAT)
 setup_nat()
 {
-if [ ! -r /etc/sysconfig/static-nat ]; then
-	exit
-fi
-grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
+if [ -r /etc/sysconfig/static-nat ]; then
+  grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
 	if [ "$1" == "on" ]; then
 		/sbin/ip route add nat $src via $dst
 		/sbin/ip rule add from $dst nat $src
@@ -115,7 +113,8 @@ grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
 		/sbin/ip rule del from $dst nat $src
 		/sbin/ip route del nat $src via $dst
 	fi
-done
+  done
+fi
 }
 
 # proc_net <zmien> <start/stop> <co ustaw> <co default> <nazwa_zmiennej> [komunikat]
@@ -222,8 +221,8 @@ ip route add 127.0.0.0/8 dev lo scope link
 
 set_down_loopback()
 {
-ip route del 127.0.0.0/8 dev lo  scope link
-ip addr del 127.0.0.1/8 dev lo
+ip route flush dev lo
+ip addr flush dev lo
 ip link set dev lo down
 }
 
