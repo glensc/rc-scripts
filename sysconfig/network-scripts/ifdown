@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.21 2000/04/03 14:50:47 baggins Exp $
+#	$Id: ifdown,v 1.22 2000/05/09 18:58:35 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -32,8 +32,8 @@ fi
 source_config
 
 # IPv4, IPv6 or both ?
-[ -n "$IPV6_ADDR" ]                  && IPv6=yes || IPv6=no
-[ -n "$IPADDR" -o "$PUMP" = "true" ] && IPv4=yes || IPv4=no
+[ -n "$IPV6_ADDR" ]             && IPv6=yes || IPv6=no
+[ -n "$IPADDR" -o -n "$DYNIP" ] && IPv4=yes || IPv4=no
 
 if [ -z "$PREFIX" -a -n "$NETMASK" ]; then
 	PREFIX="`calcprefix $NETMASK`"

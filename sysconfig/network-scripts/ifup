@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.39 2000/04/27 06:20:28 jajcus Exp $
+#	$Id: ifup,v 1.40 2000/05/09 18:58:35 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -57,13 +57,17 @@ if [ "$BOOTP" = "yes" ]; then
     BOOTPROTO=bootp
 fi
 
-if [ "$BOOTPROTO" = bootp -o "$BOOTPROTO" = "dhcp" ]; then
-    PUMP=true
+if [ "$BOOTPROTO" = bootp ]; then
+    DYNIP=pump
+fi
+
+if [ "$BOOTPROTO" = "dhcp" ]; then
+    DYNIP=dhcpcd
 fi
 
 # IPv4, IPv6 or both ?
-[ -n "$IPV6_ADDR" ]                  && IPv6=yes || IPv6=no
-[ -n "$IPADDR" -o "$PUMP" = "true" ] && IPv4=yes || IPv6=no
+[ -n "$IPV6_ADDR" ]             && IPv6=yes || IPv6=no
+[ -n "$IPADDR" -o -n "$DYNIP" ] && IPv4=yes || IPv4=no
 
 # Tunnel device ?
 [ -f /etc/sysconfig/interfaces/tnlcfg-${FULLDEVNAME} ] && TNL=yes || TNL=no
@@ -126,14 +130,23 @@ if [ -n "$MACADDR" ]; then
    ip link set ${DEVICE} address ${MACADDR}
 fi
 
-if [ -n "$PUMP" -a "$ISALIAS" = "no" ]; then
+if [ -n "$DYNIP" -a "$ISALIAS" = "no" ]; then
 
     echo -n "`nls "Determining IP information for"` $FULLDEVNAME..."
-    if /sbin/pump -i $FULLDEVNAME ; then
-       nls " done."
+    if [ "$DYNIP" = "pump" ]; then
+       if /sbin/pump -i $FULLDEVNAME ; then
+          nls " done."
+       else
+          nls " failed."
+          exit 1
+       fi
     else
-       nls " failed."
-       exit 1
+       if /sbin/dhcpcd $FULLDEVNAME ; then
+          nls " done."
+       else
+          nls " failed."
+          exit 1
+       fi
     fi
 
 else
