@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.37 2000/04/03 14:50:47 baggins Exp $
+#	$Id: ifup,v 1.38 2000/04/23 11:46:04 marcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -155,8 +155,11 @@ else
     ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
 
     if [ "$IPv4" = "yes" ]; then
-        ip -family inet addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME} ${SCOPE}
-
+	if [ -n "$REMIP"]; then
+	    ip -family inet addr add ${IPADDR} peer ${REMIP} dev ${DEVICE} label ${FULLDEVNAME} ${SCOPE}
+	else    
+    	    ip -family inet addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME} ${SCOPE}
+	fi
         # Another IPv4 aliases support
         for ADDR4 in ${IPADDR_ALIASES} ; do
 	    ip -family inet addr add ${ADDR4} dev ${DEVICE} label ${FULLDEVNAME} broadcast \+

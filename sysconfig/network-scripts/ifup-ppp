@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.11 2000/04/21 17:47:24 jajcus Exp $
+#	$Id: ifup-ppp,v 1.12 2000/04/23 11:46:04 marcus Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -37,21 +37,19 @@ fi
     "/usr/sbin/pppd does not exist or is not executable for $DEVICE"
   exit 1
 }
-#[ -f /etc/sysconfig/network-scripts/chat-$DEVICE ] || {
-#  echo "/etc/sysconfig/network-scripts/chat-$DEVICE does not exist"
-#  echo "ifup-ppp for $DEVICE exiting"
-#  logger -p daemon.info -t ifup-ppp \
-#    "/etc/sysconfig/network-scripts/chat-$DEVICE does not exist for $DEVICE"
-#  exit 1
-#}
+
 opts="lock"
 if [ "${PERSIST}" = "yes" ]; then
-  [ -z "${MAXFAIL}" ] && MAXFAIL=0
+  if [ -z "${MAXFAIL}" ]; then 
+  MAXFAIL="0"
+  fi
   opts="$opts persist holdoff $HOLDOFF maxfail $MAXFAIL"
 fi
 if [ "${DEMAND}" = "yes" ]; then
-#opts="$opts demand active-filter $ACTIVEFILTER idle $IDLE"
-opts="$opts demand "
+  if [ -z "${IDLE}" ]; then
+  IDLE="0"
+  fi
+  opts="$opts demand idle ${IDLE}"
 fi
 if [ "${HARDFLOWCTL}" = yes ] ; then
   opts="$opts modem crtscts"
@@ -95,10 +93,7 @@ esac
 if [ -n "${REPORTFILE}"  ] ; then
   chatrpt="-r ${REPORTFILE}"
 fi
-#CHATSCRIPT=/etc/sysconfig/network-scripts/chat-$DEVNAMR
-#[ -f $CHATSCRIPT ] || {
-#  CHATSCRIPT=/etc/sysconfig/network-scripts/chat-$PARENTDEVNAME
-#}
+
 (logger -p daemon.info -t ifup-ppp \
     "pppd started for $DEVICE on $MODEMPORT at $LINESPEED" &)&
 if [ -n "${CHATSCRIPT}"  ] ; then
