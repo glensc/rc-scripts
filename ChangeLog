@@ -1,3 +1,97 @@
+2004-07-04 16:23 [r4312]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* po/pl.po, po/de.po: Make update-po + few manual fixes to pl.po.
+
+2004-07-04 16:14 [r4311]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network,
+	  rc.d/init.d/functions: Add #!/bin/sh to fool file(1).
+
+2004-07-04 15:57 [r4310]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Don't search for shell scripts in directories with
+	  names starting with dot.
+
+2004-07-04 15:45 [r4309]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: Turn off RAID devices using mdadm first,
+	  fallback to raidutils. Make raidutils stopping gettext friendly.
+
+2004-07-04 15:35 [r4308]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* makepot.pl: Put empty CHARSET instead of iso8859-2 in .pot file.
+
+2004-07-04 15:26 [r4307]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: - 0.4.0.14
+
+2004-07-04 14:41 [r4306]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Last one sysctl called with -e option to avoid
+	  errors on unknown keys.
+
+2004-07-04 14:34 [r4305]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Run LVM tools for RAID case only if some RAID
+	  volume was there.
+
+2004-07-04 14:11 [r4304]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* TODO: Some are done.
+
+2004-07-04 09:40 [r4303]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: Quote whole message passed to
+	  logger.
+
+2004-07-03 12:03 [r4302]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: s/speedtouch/speedtch/. Drop
+	  quoting from nls call.
+
+2004-07-03 11:27 [r4301]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/Makefile.am,
+	  sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada (added),
+	  sysconfig/network-scripts/ifup-ppp: Speedtouch modem support
+	  (arekm && qboosh).
+
+2004-07-02 21:56 [r4299]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-ppp: Set interface used by EAGLE
+	  driver to down when downing ppp interface.
+
+2004-07-02 21:51 [r4298]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-ppp: Always call ifdwon-post
+	  even if pppd was killed using -KILL.
+
+2004-07-02 21:42 [r4297]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada: Use PAPNAME
+	  for neo example. Fix ifcfg-password.so plugin usage.
+
+2004-07-02 20:45 [r4296]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* hwprofile: Nicer profile number choose message.
+
+2004-07-02 15:30 [r4290-4291]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/Makefile.am,
+	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada (added): Add
+	  TPSA Neostrada example (Sagem Fast 700 using eagle-usb driver).
+
+	* sysconfig/interfaces/data/chat-ppp0.tpsa,
+	  sysconfig/network-scripts/ifup-ppp: Fix chat-ppp0.tepsa (they no
+	  longer send ppp string). ifcfg-password.so is choosen only if
+	  PLUGIN_IFCFG_PASSWORD is set to yes.
+
+2004-06-29 22:06 [r4273]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/i18n: UTF-8 pl_PL is pl_PL.UTF-8/UTF-8 in
+	  SUPPORTED_LOCALES (qboosh).
+
 2004-06-29 19:43 [r4269]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Relase 0.4.0.13.
