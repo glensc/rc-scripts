@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.97 2002/03/07 09:48:32 misiek Exp $
+# $Id: rc.sysinit,v 1.98 2002/03/19 17:42:27 misiek Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -74,10 +74,8 @@ if is_yes "$MOUNT_DEVFS"; then
 fi
 
 # set up devfsd
-if is_yes "$RUN_DEVFSD"; then
-	if [ -x /sbin/devfsd -a -f /etc/devfsd.conf ]; then
-		run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
-	fi
+if [ -e /dev/.devfsd -a -x /sbin/devfsd ]; then
+        run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
 fi
 
 # Configure Linux kernel

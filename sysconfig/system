@@ -1,4 +1,4 @@
-# $Id: system,v 1.20 2001/05/15 16:03:42 baggins Exp $
+# $Id: system,v 1.21 2002/03/19 17:42:33 misiek Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -55,9 +55,6 @@ RUN_LDCONFIG=no
 # Mount /dev (Device Filesystem)
 MOUNT_DEVFS=no
 
-# Start DevFS daemon to preserve compatibility with old "style" device names
-RUN_DEVFSD=no
- 
 # Set to anything other than 'no' to allow hotkey interactive startup...
 PROMPT=yes
 
