@@ -205,7 +205,7 @@ while getopts adfhlsqr: opt "$@"; do
 			if [ -z "${PROFILE}" ]; then
 				if is_yes "${ASKFORPROFILE}"; then
 					echo "Available profiles:";
-					PS3='Enter number profile: ';
+					PS3='Enter profile number: ';
 					LISTA=$(ls ${PROFDIR}/*.desc 2> /dev/null);
 					for i in ${LISTA}; do
 						a=$(basename $i .desc);
@@ -214,12 +214,12 @@ while getopts adfhlsqr: opt "$@"; do
 					LISTA1="${LISTA1} Default";
 		
 					select PROFILE in $LISTA1; do
-			  		if [ "${PROFILE}" ]; then
+			  		if [ -n "${PROFILE}" ]; then
 							break
 						fi
 					done
 		
-					if [ "${PROFILE}" == "Default" ]; then
+					if [ "${PROFILE}" = "Default" ]; then
 						PROFILE=
 					fi
 				fi
