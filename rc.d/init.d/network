@@ -150,6 +150,8 @@ tunnels=$((cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
 # See how we were called.
 case "$1" in
   start)
+  	rc_splash "bootnetwork start"
+
 	network_init
 
 	for i in $interfaces_boot $interfaces_sit_boot ; do
