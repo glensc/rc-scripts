@@ -611,7 +611,7 @@ fi
 
 # Turn on process accounting
 if [ -x /etc/rc.d/rc.acct ]; then
-	/etc.rc.d/rc.acct start
+	/etc/rc.d/rc.acct start
 fi
 
 # Set the clock if timezone definition wasn't available (eg. /usr not mounted)
