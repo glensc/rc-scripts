@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.112 2002/12/01 23:59:41 alchemyx Exp $
+# $Id: rc.sysinit,v 1.113 2003/04/07 19:59:48 misiek Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -89,8 +89,9 @@ if [ -e /dev/.devfsd -a -x /sbin/devfsd ]; then
         run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
 fi
 
-# Configure Linux kernel
-run_cmd "Configuring kernel parameters" /sbin/sysctl -p /etc/sysctl.conf
+# Configure Linux kernel (initial configuration, some required modules still
+# may be missing).
+/sbin/sysctl -p /etc/sysctl.conf > /dev/null 2>&1
 
 # Set the system clock.
 ARC=0
@@ -611,6 +612,9 @@ if [ -f /proc/sys/kernel/panic -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
 	show 'Setting %s seconds for kernel reboot after panic' "$PANIC_REBOOT_TIME"; busy
 	if (sysctl -w kernel.panic=$PANIC_REBOOT_TIME >/dev/null 2>&1); then ok; else fail; fi
 fi
+
+# ... and here finish configuring parameters
+run_cmd "Configuring kernel parameters" /sbin/sysctl -p /etc/sysctl.conf
 
 # Clean up /etc.
 rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
