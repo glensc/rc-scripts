@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.19 2000/04/19 18:20:28 zagrodzki Exp $
+#	$Id: ifup-post,v 1.20 2000/04/21 17:45:24 jajcus Exp $
 #
 
 run_up() { :; }
@@ -19,10 +19,18 @@ DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
 # name of real device ie. eth0 when eth0,eth0:1,eth0:alias
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 
+get_ppp_device_and_pid
+
 if echo "$FULLDEVNAME" | grep -q ':' ; then
 	ISALIAS=yes
 else
 	ISALIAS=no
+fi
+
+# Set the queuing discipline
+#    eg: sfq for better link sharing or teql0 for link equalizer
+if [ -n "$QDISC" ] ; then
+	tc qdisc add dev "$REALDEVICE" root $QDISC
 fi
 
 /etc/sysconfig/network-scripts/ifup-routes ${CONFIG}
