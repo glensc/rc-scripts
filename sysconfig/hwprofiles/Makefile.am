@@ -1,3 +1,8 @@
 @SET_MAKE@
 
-#EXTRA_DIST = data
+hwprofilesdir = @sysconfigdir@/hwprofiles
+
+hwprofiles_DATA = \
+		  files
+			  
+EXTRA_DIST = $(hwprofiles_DATA)

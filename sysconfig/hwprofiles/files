@@ -1,0 +1,14 @@
+/etc/cups/ppd/*
+/etc/cups/printers.conf
+/etc/sysconfig/interfaces/ifcfg-eth0
+/etc/X11/XF86Config
+/etc/sysconfig/system
+/etc/sysconfig/network
+/etc/sysconfig/mouse
+/etc/hosts
+/etc/resolv.conf
+/etc/modules.conf
+/etc/modules
+/etc/printcap
+/etc/fstab
+/etc/sysconfig/fbset

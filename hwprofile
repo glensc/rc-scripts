@@ -6,7 +6,10 @@
 PROFDIR="/etc/sysconfig/hwprofiles"
 QUIET=0
 
-[ -z "${EDITOR} " ] && EDITOR=vi
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/hwprof
+
+[ -z "${EDITOR}" ] && EDITOR=vi
 
 if [ "$(id -u)" != "0" ]; then
   	echo "Need superuser privileges. Can't continue!"
@@ -20,7 +23,7 @@ fi
 
 myecho()
 {
-  if [ "${QUIET}" != "1" ]; then
+  if [ $QUIET -eq 0 ]; then
     echo $@
   fi
 }
@@ -47,7 +50,7 @@ md5sumgen()
 {
   ( \
   grep -v "MHz" /proc/cpuinfo 2> /dev/null \
-  cat /proc/pci 2> /dev/null \
+  grep -v "Latency" /proc/pci 2> /dev/null \
   ) | md5sum | awk ' { gsub(/ .*$/,NIL); print $0 } '
 }
 
@@ -78,9 +81,12 @@ while getopts adflsqr: opt "$@"; do
 	[ -z "${DESCRIPTION}" ] && DESCRIPTION="${PROFILE}"
 	echo "${DESCRIPTION}" > ${PROFDIR}/${PROFILE}.desc
 	echo "Now, editor will be started and you need to enter list of files"
-	echo "for this profile (later as ${PROFDIR}/${PROFILE}.files)."
+	echo "for this profile (later as ${EDITOR} ${PROFDIR}/${PROFILE}.files)."
 	echo "Press Enter."
 	read
+	if [ -f ${PROFDIR}/files -o ! -f ${PROFDIR}/${PROFILE}.files ]; then
+	  cat ${PROFDIR}/files > ${PROFDIR}/${PROFILE}.files;
+	fi
 	${EDITOR} ${PROFDIR}/${PROFILE}.files
 	FILES=
 	echo "Validating and copying valid files for this profile:"
@@ -131,15 +137,19 @@ while getopts adflsqr: opt "$@"; do
 	  echo "Can't setup ${PROFILE}. No required data."
 	  exit 1
 	fi
-	echo "Setting up profile \"${PROFILE}\"..."
+	echo -n "Setting up profile \"${PROFILE}\" "
+	myecho "";
 	for file in $(grep -v "^#" ${PROFDIR}/${PROFILE}.files); do
 	  if [ ! -f ${file} -o "${file}" = "/etc/sysconfig/hwprof" ]; then
-	    echo "${file}: invalid, skipping"
+	    myecho "${file}: invalid, skipping"
 	    continue
 	  fi
-	  echo "Copying ${PROFDIR}/data/${PROFILE}/${file} to ${file}..."
-	  cp -dp ${PROFDIR}/data/${PROFILE}/${file} ${file}
+	  echo -n ".";
+	  myecho "Copying ${PROFDIR}/data/${PROFILE}/${file} to ${file}..."
+	  cp -dp ${PROFDIR}/data/${PROFILE}/${file} ${file} 2>/dev/null
 	done
+	echo ${PROFILE} > /var/run/hwprofile
+	echo " Done.";
 	myecho "Profile \"${PROFILE}\" running."
 	break
 	;;
@@ -150,6 +160,7 @@ while getopts adflsqr: opt "$@"; do
 	for prof in $(ls -1 ${PROFDIR}/*.md5 2> /dev/null); do
 	  prof=$(basename ${prof})
 	  CURRENTMD5="$(cat ${PROFDIR}/${prof} 2> /dev/null)"
+		# echo "$prof ${CURRENTMD5} ${PROFILEMD5}";
 	  [ -z "${CURRENTMD5}" ] && continue
 	  if [ "${CURRENTMD5}" = "${PROFILEMD5}" ]; then
 	    PROFILE=$(echo ${prof} | awk ' { gsub(/\.md5/,NIL); print $0 } ')
@@ -157,16 +168,47 @@ while getopts adflsqr: opt "$@"; do
 	  fi
 	done
 	if [ -z "${PROFILE}" ]; then
-	    if [ ! -f ${PROFDIR}/default.md5 ]; then
+	  if is_yes "${ASKFORPROFILE}"; then
+	    echo "Avialable profiles:";
+	    PS3='Enter number profile: ';
+	    LISTA=$(ls ${PROFDIR}/*.desc 2> /dev/null);
+	    for i in ${LISTA};
+	      do
+	        a=$(basename $i .desc);
+    	        LISTA1="${a} ${LISTA1}";
+  	      done
+ 	    LISTA1="${LISTA1} Default";
+	
+	    select PROFILE in $LISTA1;
+	    do
+		if [ "${PROFILE}" ];
+		then
+			break
+		fi
+	    done
+	    if [ "${PROFILE}" == "Default" ]; then
+	      PROFILE=
+	    fi
+	  fi
+        fi
+        if [ -z "${PROFILE}" ]; then
+	  if [ ! -f ${PROFDIR}/default.md5 ]; then
 		echo "Valid profile not found. Starting with current files."
 		exit 0
 	    else
 		echo "Valid profile not found. Starting with \"default\" profile."
 		PROFILE=default
-	    fi
+    	  fi
+  	fi
+
+	if [ ! -z "${PROFILE}" ]; then
+		myecho "Found profile \"${PROFILE}\" with md5sum \"${PROFILEMD5}\"."
+ 	  	if [ $QUIET -eq 0 ]; then
+			$0 -r ${PROFILE};
+		else
+			$0 -qr ${PROFILE};
+		fi
 	fi
-	myecho "Found profile \"${PROFILE}\" with md5sum \"${PROFILEMD5}\"."
-	$0 -r ${PROFILE}
 	break
 	;;
     s)
@@ -179,16 +221,19 @@ while getopts adflsqr: opt "$@"; do
 	  echo "${PROFILE}.files is missing. Can't continue."
 	  exit 1
 	fi
-	echo "Saving/updating current profile..."
+	echo  -n "Saving/updating current [${PROFILE}] profile "
+	md5sumgen > ${PROFDIR}/${PROFILE}.md5
+	myecho "";
 	for file in $(grep -v "^#" ${PROFDIR}/${PROFILE}.files); do
+	  echo -n ".";
 	  if [ ! -f ${file} -o "${file}" = "/etc/sysconfig/hwprof" ]; then
-	    echo "${file}: invalid, skipping"
+	    myecho "${file}: invalid, skipping"
 	    continue
 	  fi
-	  echo "Copying ${file} to ${PROFDIR}/data/${PROFILE}/${file}"
-	  cp -dp --parents ${file} ${PROFDIR}/data/${PROFILE}/
+	  myecho "Copying ${file} to ${PROFDIR}/data/${PROFILE}/${file}"
+	  cp -dp --parents ${file} ${PROFDIR}/data/${PROFILE}/ 
 	done
-	echo "Done."
+	echo " Done."
 	break
 	;;
     l)
@@ -227,7 +272,7 @@ while getopts adflsqr: opt "$@"; do
 	break
 	;;
     q)
-    	QUIET=1
+    	QUIET=1; export QUIET;
 	;;
     *)
 	showhelp
@@ -245,4 +290,4 @@ fi
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:tw=78:ts=8:sw=2
+# vi:syntax=sh:tw=78:ts=2:sw=2
