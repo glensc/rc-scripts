@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.41 2000/03/04 22:40:06 siefca Exp $
+# $Id: rc-scripts.spec.in,v 1.42 2000/03/22 17:20:51 wiget Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -16,6 +16,7 @@ Vendor:		PLD rc-scripts Team <pld-rc-scripts@pld.org.pl>
 BuildRequires:	popt-devel
 BuildRequires:	glib-devel
 BuildRequires:	glib-static
+BuildRequires:	gettext-devel
 Requires:	mingetty
 Requires:	mktemp
 Requires:	modutils >= 2.1.121
