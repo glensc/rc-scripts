@@ -1,4 +1,4 @@
-$Id: sysconfig.txt,v 1.7 2002/02/18 13:24:26 gotar Exp $
+$Id: sysconfig.txt,v 1.8 2002/06/18 22:06:19 klakier Exp $
 
 Files in /etc/sysconfig
 =======================
@@ -39,10 +39,11 @@ Files in /etc/sysconfig
   NETWORKING=yes|no
   IPV4_NETWORKING=yes|no
   IPV6_NETWORKING=yes|no
-  HOSTNAME=<whatever hostname you want>
+  HOSTNAME=<whatever hostname you want, e.g. "pldmachine">
     Note: for compatibility with some old software people might
     install (like trn), the /etc/HOSTNAME file should contain the
     same value as here.
+  NISDOMAIN=<domain name / nis domain name, e.g. "mydomain.org">
   FORWARD_IPV4=yes|no (The current Red Hat Linux installation
     sets this to no by default for RFC compliance, but if
     FORWARD_IPV4 is not set at all, forwarding is *enabled*
@@ -55,7 +56,6 @@ Files in /etc/sysconfig
   SPOOFING_IPV4=yes|no (anti spoofing protection)
   GATEWAY=<gateway IP>
   GATEWAYDEV=<gateway device> (e.g. eth0)
-  NISDOMAIN=<nis domain name>
   IPX=yes|no
   IPXAUTOPRIMARY=on|off (note, that MUST be on|off, not yes|no)
   IPXAUTOFRAME=on|off (again, not yes|no)
