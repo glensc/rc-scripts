@@ -76,7 +76,7 @@
 	<listitem><para>IPV6NETWORKING=yes|no</para>
 	</listitem>
       </varlistentry>
-      <varlistentry><term>HOSTNAME=$&lt;fqdn by default, but whatever hostname you want></term>
+      <varlistentry><term>HOSTNAME=$&lt;whatever hostname you want></term>
 	<listitem><note><para> for compatibility with some old software people might
 	      install (like trn), the /etc/HOSTNAME file should contain the
 	      same value as here.</para></note>
