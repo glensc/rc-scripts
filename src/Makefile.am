@@ -16,15 +16,16 @@ bin_PROGRAMS = \
 	resolvesymlink
 	
 sbin_PROGRAMS =	\
+	consoletype \
 	genhostid \
-	netreport \
-	usernetctl \
+	getkey \
 	initlog \
 	loglevel \
-	getkey \
+	minilogd \
+	netreport \
 	ppp-watch \
-	consoletype \
-	start-stop-daemon
+	start-stop-daemon \
+	usernetctl
 	
 EXTRA_PROGRAMS = \
 	testd 
