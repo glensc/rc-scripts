@@ -1,8 +1,9 @@
-dnl $Id: configure.in,v 1.9 1999/07/31 11:24:17 misiek Exp $
+dnl $Id: configure.in,v 1.10 1999/08/07 10:16:13 wiget Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
 VERSION=0.0.7
+ALL_LINGUAS="pl"
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
@@ -19,7 +20,46 @@ networkscriptsdir='${sysconfigdir}/network-scripts'
 rcdir='${sysconfdir}/rc.d'
 docdir="${prefix}/doc/$PACKAGE-$VERSION"
 libdir="${exec_prefix}/lib"
+dnl i18n support
+CATALOGS=
+POTFILES=
+for lang in $ALL_LINGUAS; do
+        CATALOGS="$CATALOGS $lang.gmo"
+        POTFILES="$POTFILES $lang.po"
+done
 
+POTSRC=
+for src in $BASHSCRIPTS; do
+        POTSRC="$POTSRC \$(top_srcdir)/$src"
+done
+AC_ARG_WITH(localedir,
+        [  --with-localedir=PATH      specify where the locale stuff should go ])
+
+if test "x$LOCALEDIR" = "x"; then
+        if test "x$with_localedir" != "x"; then
+                LOCALEDIR=$with_localedir
+        else
+                LOCALEDIR='$(prefix)/share/locale'
+        fi
+fi
+
+localedir=$LOCALEDIR
+gnulocaledir=$LOCALEDIR
+
+if test "`eval echo $sysconfdir`" = "NONE/etc"; then
+        defaultdir="/usr/local/etc"
+else
+        defaultdir="`eval echo $sysconfdir`"
+fi
+
+dnl Output
+AC_SUBST(BASHSCRIPTS)
+AC_SUBST(CATALOGS)
+AC_SUBST(POTFILES)
+AC_SUBST(POTSRC)
+AC_SUBST(localedir)
+AC_SUBST(gnulocaledir)
+			
 AC_SUBST(pppdir)
 AC_SUBST(networkscriptsdir)
 AC_SUBST(sysconfigdir)
@@ -34,4 +74,5 @@ AC_OUTPUT(Makefile src/Makefile doc/Makefile \
 	sysconfig/interfaces/Makefile \
 	sysconfig/interfaces/data/Makefile \
 	rc.d/Makefile rc.d/init.d/Makefile \
+	po/Makefile \
 	rc-scripts.spec)

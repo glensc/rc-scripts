@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.15 1999/08/06 13:06:59 misiek Exp $
+# $Id: functions.network,v 1.16 1999/08/07 10:16:14 wiget Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -209,7 +209,7 @@ local OISF len olen bad prefix
   *)	 len=300 ;;
  esac
  if [ "$len" -gt "$olen" ] ; then bad=1; fi
- prefix=`expr $prefix + $len`
+ prefix=$(($prefix + $len))
  olen=$len
  done
  IFS=$OIFS
@@ -247,7 +247,7 @@ for i in 1 2 3 4
       if [ $prefix -le 0 ]; then a=0; fi
       ;;
   esac
-  prefix="`expr $prefix - 8`"
+  prefix="$(( $prefix - 8))"
   if [ -z "$MASK" ]
    then MASK=$a
    else MASK=$MASK.$a

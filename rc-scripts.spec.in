@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.19 1999/07/31 11:24:17 misiek Exp $
+# $Id: rc-scripts.spec.in,v 1.20 1999/08/07 10:16:13 wiget Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -33,6 +33,7 @@ Buildroot:	/tmp/%{name}-%{version}-root
 %define		_prefix		/usr
 %define		_exec_prefix	/
 %define		_sysconfdir	/etc
+%define		localedir	/etc/syconfig/locale
 
 %description
 This package contains the scripts use to boot a system, change run
@@ -64,7 +65,7 @@ arayüzlerini etkinleþtiren ya da edilginleþtiren programcýklar içerir.
 
 %build
 LDFLAGS="-s"; export LDFLAGS
-%configure 
+%configure --with-localedir=%{localedir}
 make
 
 %install
@@ -152,12 +153,13 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/network
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/static-routes
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/static-nat
-%config            %verify(not size mtime md5) %{_sysconfdir}/sysconfig/interfaces/ifcfg-lo
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/adjtime
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inittab
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/system
 
 %{_mandir}/man1/*
+
+%lang(pl) %{localedir}/pl/LC_MESSAGES/*.mo
 
 %changelog
 * Thu Apr 29 1999 PLD Team <bugs@pld.org.pl>

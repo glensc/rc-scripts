@@ -1,8 +1,8 @@
 #
-#	$Id: Makefile.am,v 1.4 1999/07/13 12:49:34 misiek Exp $
+#	$Id: Makefile.am,v 1.5 1999/08/07 10:16:13 wiget Exp $
 #
 
-SUBDIRS = src ppp sysconfig rc.d doc
+SUBDIRS = src ppp sysconfig rc.d doc po
 
 sysconf_DATA = \
 	adjtime \

@@ -11,7 +11,6 @@ interfaces_DATA = \
 	ifcfg-ppp0.leased2 \
 	ifcfg-ppp0.tpsa \
 	ifcfg-sl0 \
-	ifcfg-lo \
 	tnlcfg-description \
 	tnlcfg-icm 
 
