@@ -58,8 +58,8 @@ msgid "Sending all processes the KILL signal"
 msgstr "Wysylanie do wszystkich procesów sygnalu KILL"
 
 #: ./rc.d/rc.shutdown:32
-msgid "Turning off swap and accounting"
-msgstr "Wylaczanie swapa i zliczania"
+msgid "Turning off swap"
+msgstr "Wylaczanie swapa"
 
 #: ./rc.d/rc.shutdown:36
 msgid "Turning off quotas for local filesystems"
@@ -282,10 +282,6 @@ msgstr "Sprawdzanie quot w systemach plików"
 #: ./rc.d/rc.sysinit:537
 msgid "Turning on quotas for local filesystems"
 msgstr "Wlaczanie quot na lokalnych systemach plików"
-
-#: ./rc.d/rc.sysinit:542
-msgid "Turning on process accounting"
-msgstr "Wlaczanie zliczania procesów"
 
 #: ./rc.d/rc.sysinit:558
 msgid "Setting %s seconds for kernel reboot after panic"

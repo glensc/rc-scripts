@@ -125,7 +125,7 @@ msgstr "INIT wird befehlt, in den Single-Modus zu gehen"
 
 #: ../rc.d/rc.shutdown:32
 msgid "Turning off swap and accounting"
-msgstr "Die Auslagerung und das Protokollieren werden ausgeschaltet"
+msgstr "Die Auslagerung wird ausgeschaltet"
 
 #: ../rc.d/rc.shutdown:42 ../rc.d/rc.sysinit:190 ../rc.d/rc.sysinit:346
 #: ../rc.d/rc.sysinit:375

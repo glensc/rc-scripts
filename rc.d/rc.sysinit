@@ -610,8 +610,8 @@ if [ -x /sbin/quotaon ]; then
 fi
 
 # Turn on process accounting
-if [ -x /sbin/accton ] ; then
-        run_cmd "Turning on process accounting" /sbin/accton /var/log/pacct
+if [ -x /etc/rc.d/rc.acct ]; then
+	/etc.rc.d/rc.acct start
 fi
 
 # Set the clock if timezone definition wasn't available (eg. /usr not mounted)

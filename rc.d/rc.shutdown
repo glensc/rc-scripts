@@ -29,8 +29,9 @@ run_cmd "Sending all processes the KILL signal" killall5 -9
 halt -w
 
 # Turn off swap, then unmount file systems.
-run_cmd "Turning off swap and accounting" swapoff -a
-[ -x /sbin/accton ] && LC_ALL=C /sbin/accton 2>&1 | grep -v "not implemented"
+run_cmd "Turning off swap" swapoff -a
+
+[ -x /etc/rc.d/rc.acct ] && /etc/rc.d/rc.acct stop
 
 if [ -x /sbin/quotaoff ]; then
 	run_cmd "Turning off quotas for local filesystems" /sbin/quotaoff -a
