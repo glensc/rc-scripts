@@ -188,6 +188,9 @@ case "$1" in
 			if (echo "$netmtab" | grep -q ncpfs); then
 			   run_cmd "Unmounting NCP filesystems" umount -at ncpfs
 			fi
+			if (echo "$netmtab" | grep -q cifs); then
+			   run_cmd "Unmounting CIFS filesystems" umount -at cifs
+			fi
 		fi
 	fi
 
