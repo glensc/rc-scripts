@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.20 2000/03/22 20:51:46 kloczek Exp $
+# $Id: pl.po,v 1.21 2000/03/22 21:03:57 kloczek Exp $
 #
 msgid ""
 msgstr ""
@@ -138,7 +138,7 @@ msgstr "Dzialanie systemu zatrzymane"
 #: ../rc.d/init.d/functions:100
 #, fuzzy
 msgid "Starting %s service"
-msgstr "Wystartowac %s usluge"
+msgstr "Startowanie serwisu %s"
 
 #: ../rc.d/rc.sysinit:157
 msgid "Remounting root filesystem in rw mode"
@@ -281,7 +281,7 @@ msgstr ""
 
 #: ../rc.d/init.d/functions:372
 msgid "Start service"
-msgstr "Wystartowac usluge"
+msgstr "Wystartowaæ serwis"
 
 #: ../rc.d/init.d/functions:105
 msgid "%s service is already running.\n"
@@ -381,7 +381,7 @@ msgstr "Domena NIS:"
 #: ../rc.d/init.d/functions:110
 #, fuzzy
 msgid "Stopping %s service"
-msgstr "Wystartowac %s usluge"
+msgstr "Stopowanie serwisu %f"
 
 # ../rc.d/init.d/network:132
 #: ../rc.d/init.d/network:179
