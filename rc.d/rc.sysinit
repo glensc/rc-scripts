@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.69.2.9 2001/06/01 21:56:18 misiek Exp $
+# $Id: rc.sysinit,v 1.69.2.10 2001/07/05 21:07:14 misiek Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -162,9 +162,45 @@ else
 	domainname ""
 fi
 
-# Setup hdparm thing (if exists and is needed)
-if ! grep -iq nohdparm /proc/cmdline; then
-	[ -x /etc/rc.d/rc.hdparm ] && /etc/rc.d/rc.hdparm
+# Initialize USB controller and HID devices
+usb=0
+if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "usb" /proc/devices 2>/dev/null ; then
+    aliases=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+usb-controller" | awk '{ print $3 }')
+    if [ -n "$aliases" -a "$aliases" != "off" ] ; then
+      /sbin/modprobe -k usbcore
+      run_cmd "Mounting USB filesystem" mount -t usbdevfs usbdevfs /proc/bus/usb
+      for alias in $aliases ; do 
+        run_cmd "$(nls 'Initializing USB controller') ($alias)" /sbin/modprobe $alias
+      done
+      [ $? -eq 0 -a -n "$aliases" ] && usb=1
+    fi
+fi
+
+if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && grep -q "usb" /proc/devices 2>/dev/null ; then
+  usb=1
+fi
+
+needusbstorage=
+if [ $usb = "1" ]; then
+    sleep 5
+    mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02")
+    kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01")
+    needusbstorage=$(cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08")
+    if [ -n "$kbdoutput" ] || [ -n "$mouseoutput" ]; then
+        run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
+    fi
+    if [ -n "$kbdoutput" ]; then
+        run_cmd "Initializing USB keyboard" modprobe keybdev
+    fi
+    if [ -n "$mouseoutput" ]; then
+        run_cmd "Initializing USB mouse" modprobe mousedev
+    fi
+fi
+
+if [ -f /fastboot ] || grep -iq "fastboot" /proc/cmdline 2> /dev/null ; then
+	fastboot=yes
+else
+	fastboot=
 fi
 
 if [ -f /fsckoptions ]; then
@@ -184,9 +220,9 @@ else
 fi
 
 _RUN_QUOTACHECK=0
-if awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 1 ; else exit 0}' /etc/fstab; then
+_ROOTFS_TYPE=$(grep " / " /proc/mounts | awk '{ print $3 }')
 
-    if [ ! -f /fastboot  ]; then
+if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ]; then 
     	    show "Checking root filesystems."; started
 	    initlog -c "fsck -T -a $fsckoptions /"
 
@@ -215,8 +251,6 @@ if awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 1 ; e
 	    elif [ "$rc" = "1" ]; then
 		    _RUN_QUOTACHECK=1
 	    fi
-    fi
-
 fi
 
 # check for arguments 
@@ -226,20 +260,55 @@ else
 	PNP=yes
 fi
 
-# set up pnp 
-if [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
-	if [ -n "$PNP" ] && is_yes "$RUN_ISAPNP"; then
-		run_cmd "Setting up ISA PNP devices" /sbin/isapnp /etc/isapnp/isapnp.conf
-	fi
+# set up pnp and kernel pnp
+if [ -n "$PNP" ]; then
+    if [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ] && is_yes "$RUN_ISAPNP"; then
+	run_cmd "Setting up ISA PNP devices (userspace pnp)" /sbin/isapnp /etc/isapnp/isapnp.conf
+    fi
+    if [ -e /proc/isapnp -a -f /etc/isapnp/isapnp-kernel.conf ]; then
+	show "Setting up ISA PNP devices (kernelspace pnp)"; busy
+	cat /etc/isapnp/isapnp-kernel.conf > /proc/isapnp && (deltext; ok) || (deltext; fail)
+    fi
 fi
-
 
 # Remount the root filesystem read-write.
 run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
 
+# Find and activate volume groups
+if [ -e /proc/lvm -a -x /sbin/vgscan -a -x /sbin/vgchange -a -e /etc/lvmtab ]; then
+	run_cmd "Scanning for LVM volume groups" /sbin/vgscan && \
+	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y
+fi
+
+# Clear mtab
+>/etc/mtab
+
+# Remove stale backups
+rm -f /etc/mtab~ /etc/mtab~~
+
+# Enter root, /proc and (potentially) /proc/bus/usb and devfs into mtab.
+mount -f /
+mount -f /proc
+[ -f /proc/bus/usb/devices ] && mount -f -t usbdevfs usbdevfs /proc/bus/usb
+[ -e /dev/.devfsd ] && mount -f -t devfs devfs /dev 
+
+
+# Setup hdparm thing (if exists and is needed)
+if ! grep -iq nohdparm /proc/cmdline; then
+	[ -x /etc/rc.d/rc.hdparm ] && /etc/rc.d/rc.hdparm
+fi
+
 # Update quotas if fsck was run on /.
-if [ X"$_RUN_QUOTACHECK" = "X1" -a -x /sbin/quotacheck ]; then
-        run_cmd "Checking root filesystem quotas" /sbin/quotacheck -vug /
+if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
+        if [ -x /sbin/convertquota ]; then
+            if [ -f /quota.user ]; then
+                /sbin/convertquota -u / && rm -f /quota.user
+            fi
+            if [ -f /quota.group ]; then
+                /sbin/convertquota -g / && rm -f /quota.group
+            fi
+        fi
+        run_cmd "Checking root filesystem quotas"  /sbin/quotacheck -v /
 fi
 
 # /etc/nologin when starting system
@@ -258,18 +327,10 @@ fi
 # The root filesystem is now read-write, so we can now log via
 # syslog() directly..
 if [ -n "$IN_INITLOG" ]; then
-    IN_INITLOG=""
+    IN_INITLOG=
 fi
     
 echo ${HOSTNAME} > /etc/HOSTNAME
-
-# Clear mtab
->/etc/mtab
-
-# Enter root and /proc into mtab.
-mount -f /
-mount -f /proc
-[ -f /proc/bus/usb/devices ] && mount -f -t usbdevfs usbdevfs /proc/bus/usb
 
 if [ ! -f /proc/modules ]; then
 	USEMODULES=
@@ -307,25 +368,45 @@ if [ -x /sbin/depmod -a -n "$USEMODULES" ]; then
 fi
 
 # Run depmod if RUN_DEPMOD != "no" and:
-# a) user requested or RUN_DEPMOD="";
-# b) modules.dep is missing
-# c) modules.dep is older than /etc/modules.conf or /lib/modules/$mver
+#  a) user requested or RUN_DEPMOD="";
+#  b) modules.dep is missing
+#  c) modules.dep is older than /etc/modules.conf or /lib/modules/$mver
+_RUN_DEPMOD=0
 if ! is_no "$RUN_DEPMOD" && [ -n "$USEMODULES" ]; then
-  if is_yes "$RUN_DEPMOD" || [ -z "$RUN_DEPMOD" ] || \
-     [ "$RUN_DEPMOD" = "ifmissing" -a ! -r /lib/modules/$mver/modules.dep ] ||\
-     [ /lib/modules/$mver/modules.dep -ot /etc/modules.conf ] ||\
-     [ /lib/modules/$mver/modules.dep -ot /lib/modules/$mver ]; then
-	run_cmd "Finding module dependencies" depmod -a
+  is_yes "$RUN_DEPMOD" && _RUN_DEPMOD=1
+  [ "$RUN_DEPMOD" = "ifmissing" -a ! -r /lib/modules/$mver/modules.dep ] && _RUN_DEPMOD=1
+  [ /lib/modules/$mver/modules.dep -ot /etc/modules.conf ] && _RUN_DEPMOD=1
+  [ /lib/modules/$mver/modules.dep -ot /lib/modules/$mver ] && _RUN_DEPMOD=1
+fi
+
+if [ "$_RUN_DEPMOD" = "1" ]; then
+    run_cmd "Finding module dependencies" depmod -a
+fi
+
+# Load sound modules iff they need persistent DMA buffers
+if grep -q "options sound dmabuf=1" /etc/modules.conf 2>/dev/null ; then
+  RETURN=0
+  alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound[[:space:]]+" | awk '{ print $3 }')
+  if [ -n "$alias" -a "$alias" != "off" ] ; then
+      run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -k $alias
+      RETURN=$?
+  fi
+  alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound-slot-0[[:space:]]+" | awk '{ print $3 }')
+  if [ -n "$alias" -a "$alias" != "off" ] ; then
+      run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -k $alias
+      RETURN=$?
   fi
 fi
 
 if [ -f /proc/sys/kernel/modprobe ]; then
 	if [ -n "$USEMODULES" ]; then
 		sysctl -w kernel.modprobe="/sbin/modprobe" >/dev/null 2>&1
+		sysctl -w kernel.hotplug="/sbin/hotplug" >/dev/null 2>&1
 	else
 		# We used to set this to NULL, but that causes
 		# 'failed to exec' messages"
 		sysctl -w kernel.modprobe="/bin/true" >/dev/null 2>&1
+		sysctl -w kernel.hotplug="/bin/true" >/dev/null 2>&1
 	fi
 fi
 
@@ -333,17 +414,12 @@ fi
 if [ -x /etc/rc.d/rc.modules ]; then
         /etc/rc.d/rc.modules
 fi
-	
-# load sound modules
-if [ -n "$USEMODULES" ] && is_yes "$LOAD_SOUND"; then
-	if grep -s -q "^alias sound-slot-0" /etc/modules.conf ; then
-		run_cmd "Loading sound module" modprobe -s sound-slot-0
-	fi
-	if grep -s -q "^alias synth0" /etc/modules.conf ; then
-		run_cmd "Loading synthesiser module" modprobe -s synth0
-	fi
-fi
 
+# Add raid devices
+if [ ! -f /proc/mdstat ]; then
+        modprobe -k md >/dev/null 2>&1
+fi      
+	
 # Add raid devices
 if [ -f /proc/mdstat -a -f /etc/raidtab ]; then
 
@@ -408,15 +484,10 @@ if [ -f /proc/mdstat -a -f /etc/raidtab ]; then
 	show "Starting up RAID devices."; ok
 fi
 
-# Find and activate volume groups
-if [ -e /proc/lvm -a -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-	run_cmd "Scanning for LVM volume groups" /sbin/vgscan && \
-	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y
-fi
-
+_RUN_QUOTACHECK=0
 # Check filesystems
-if ! grep -q nofsck /proc/cmdline && [ ! -f /fastboot ]; then
-	show "Checking filesystems."; started
+if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline; then
+	show "Checking filesystems"; started
 	initlog -c "fsck -T -R -A -a $fsckoptions"
 
 	rc=$?
@@ -441,22 +512,41 @@ if ! grep -q nofsck /proc/cmdline && [ ! -f /fastboot ]; then
 		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
 		run_cmd "Automatic reboot in progress." reboot
 	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
-		if [ -x /sbin/convertquota ]; then
-			if [ -f /quota.user ]; then
-			    /sbin/convertquota -u / && rm -f /quota.user
-			fi
-			if [ -f /quota.group ]; then
-			    /sbin/convertquota -g / && rm -f /quota.group
-			fi
-		fi
-		run_cmd "Checking filesystem quotas" /sbin/quotacheck -v -u -g -R -a
+		_RUN_QUOTACHECK=1
 	fi
 fi
 
 # Mount all other filesystems (except for NFS and /proc, which is already
 # mounted). Contrary to standard usage,
 # filesystems are NOT unmounted in single user mode.
-run_cmd "Mounting local filesystems." mount -a -t nonfs,smbfs,ncpfs,proc
+run_cmd "Mounting local filesystems." mount -a -t nonfs,smbfs,ncpfs
+
+if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
+        if [ -x /sbin/convertquota ]; then
+            # try to convert old quotas
+            for mountpt in $(cat /etc/mtab | awk '$4 ~ /quota/{print $2}'); do
+                if [ -f "$mountpt/quota.user" ]; then
+                    /sbin/convertquota -u $mountpt && \
+                        rm -f $mountpt/quota.user
+                fi
+                if [ -f "$mountpt/quota.group" ]; then
+                    /sbin/convertquota -g $mountpt && \
+                        rm -f $mountpt/quota.group
+                fi
+            done
+        fi
+        run_cmd "Checking filesystem quotas"  /sbin/quotacheck -v -R -a
+fi
+
+# Turn on quota
+if [ -x /sbin/quotaon ]; then
+    run_cmd "Turning on user and group quotas for local filesystems" /sbin/quotaon -a
+fi
+
+# Turn on process accounting
+if [ -x /sbin/accton ] ; then
+        run_cmd "Turning on process accounting" /sbin/accton /var/log/pacct
+fi
 
 # Set the clock if timezone definition wasn't available (eg. /usr not mounted)
 if is_yes "$TIME_SETUP_DELAYED"; then
@@ -465,22 +555,29 @@ if is_yes "$TIME_SETUP_DELAYED"; then
 	fi
 fi
 
-if [ -x /sbin/quotaon ]; then
-	run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -a
-fi
-
 # Initialize the serial ports.
 if [ -f /etc/rc.d/rc.serial ]; then
 	. /etc/rc.d/rc.serial
 fi
 
 if [ -f /proc/sys/kernel/panic -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
-	show 'Setting %s seconds for kernel reboot after panic.' "$PANIC_REBOOT_TIME"; busy
+	show 'Setting %s seconds for kernel reboot after panic' "$PANIC_REBOOT_TIME"; busy
 	if (sysctl -w kernel.panic=$PANIC_REBOOT_TIME 2> /dev/null); then ok; else fail; fi
 fi
 
-# Clean out /etc & /var/{run/*,log/{b,w}tmpx}}.
-rm -f /etc/mtab~ /fastboot /fsckoptions /forcefsck
+# Clean out /etc.
+rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
+
+# Clean up /var
+# I'd use find, but /usr may not be mounted.
+for afile in /var/lock/* /var/run/*; do
+   if [ -d "$afile" ]; then
+	bafile=$(basename $afile)
+	[ "$bafile" != "news" -a "$bafile" != "sudo" -a "$bafile" != "mon" ] && rm -f $afile/*
+   else
+	rm -f $afile
+   fi
+done
 
 {
 # Clean up utmp/wtmp
@@ -502,20 +599,6 @@ if is_yes "$CLEAN_TMP"; then
 	rm -rf /tmp/*
 fi
 
-# Delete UUCP lock files.
-rm -f /var/lock/LCK*
-
-# Delete stale subsystem files.
-rm -f /var/lock/subsys/*
-
-# Delete stale pam_console locks.
-rm -f /var/lock/console/*
-rm -f /var/lock/console.lock
-
-# Delete stale pid files
-rm -f /var/run/*.pid
-rm -f /var/spool/postoffice/.pid.*
-
 # Delete X locks
 rm -f /tmp/.X*-lock
 
@@ -528,13 +611,33 @@ run_cmd "Enabling swap space" /bin/true
 
 # If a SCSI tape has been detected, load the st module unconditionally
 # since many SCSI tapes don't deal well with st being loaded and unloaded
-if [ -f /proc/scsi/scsi ] && cat /proc/scsi/scsi | grep -q 'Type:   Sequential-Access' 2>/dev/null ; then
-	if cat /proc/devices | grep -qv ' 9 st' ; then
-		if [ -n "$USEMODULES" ] ; then
-			# Try to load the module.  If it fails, ignore it...
-			insmod -p st >/dev/null 2>&1 && modprobe -s st >/dev/null 2>&1
-		fi
-	fi
+if [ -f /proc/scsi/scsi ] && grep -q 'Type:   Sequential-Access' /proc/scsi/scsi 2>/dev/null ; then
+        if grep -qv ' 9 st' /proc/devices ; then
+                if [ -n "$USEMODULES" ] ; then
+                        # Try to load the module.  If it fails, ignore it...
+                        insmod -p st >/dev/null 2>&1 && modprobe st >/dev/null 2>&1
+                fi
+        fi
+fi
+
+# Load usb storage here, to match most other things
+if [ -n "$needusbstorage" ]; then
+        modprobe usb-storage >/dev/null 2>&1
+fi
+
+# If they asked for ide-scsi, load it
+if grep -q "ide-scsi" /proc/cmdline ; then
+        modprobe -k ide-cd >/dev/null 2>&1
+        modprobe -k ide-scsi >/dev/null 2>&1
+fi
+
+# Adjust symlinks as necessary in /boot to keep system services from
+# spewing messages about mismatched System maps and so on.
+if [ -L /boot/System.map -a -r /boot/System.map-`uname -r` ] ; then
+        ln -s -f System.map-`uname -r` /boot/System.map
+fi
+if [ ! -e /boot/System.map -a -r /boot/System.map-`uname -r` ] ; then
+        ln -s -f System.map-`uname -r` /boot/System.map
 fi
 
 # there could be a new kernel version.  remove old psdevtab database
@@ -544,6 +647,7 @@ rm -f /etc/psdevtab
 # let's dump the syslog ring somewhere so we can find it later
 dmesg > /var/log/dmesg
 chmod 640 /var/log/dmesg
+sleep 1
 
 # Now that we have all of our basic modules loaded and the kernel going,
 # let's dump the syslog ring somewhere so we can find it later
