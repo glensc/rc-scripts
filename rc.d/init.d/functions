@@ -1,13 +1,14 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.51 2000/05/30 05:55:00 waszi Exp $
+# $Id: functions,v 1.52 2000/06/02 14:36:39 mkochano Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
 # Modified for PLD by:
 #		Marek Obuchowicz <elephant@pld.org.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl> 
+#		Micha³ Kochanowicz <mkochano@pld.org.pl>
 
 # First set up a default search path.
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
@@ -133,34 +134,41 @@ show()
 	awk "BEGIN { for (j=length(\"$text\"); j<$INIT_COL; j++) printf \".\" }"
 }
 
+# Displays message in square brackests ("[ DONE ]"). Takes two arguments.
+# First is the text to display, second is color number to use (argument to
+# tput setaf). If second argument is not given, default (2, green) will be
+# used).
+progress()
+{
+	if [ -n "$2" ]; then COLOR="$2"; else COLOR="2"; fi
+	deltext
+	echo -n "`termput setaf 6`[`termput setaf "$COLOR"` `nls --nls-domain rc-scripts "$1"` `termput setaf 6`]`termput op`"
+}
+
 busy() 
 {
-	deltext
-	echo -n "`termput setaf 6`[`termput setaf 5` `nls --nls-domain rc-scripts "BUSY"` `termput setaf 6`]`termput setaf 7`"
+	progress "BUSY" 5
 }
 
 ok() 
 {
-	deltext
-	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "DONE"` `termput setaf 6`]`termput setaf 7`"
+	progress "DONE"
+	echo
 }
 
 started()
 {
-	deltext
-	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "WORK"` `termput setaf 6`]`termput setaf 7`"
+	progress "WORK"
 }
 
 fail() 
 {
-	deltext
-	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "FAIL"` `termput setaf 6`]`termput setaf 7`"
+	progress "FAIL" 1
 }
 
 died() 
 {
-	deltext
-	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "DIED"` `termput setaf 6`]`termput setaf 7`"
+	progress "DIED" 1
 }
 
 deltext() 
