@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.5 1999/09/27 14:53:27 kloczek Exp $
+# $Id: pl.po,v 1.6 1999/09/27 15:00:30 wiget Exp $
 #
 msgid ""
 msgstr ""
@@ -89,7 +89,7 @@ msgid "Configured NFS mountpoints:"
 msgstr "Skonfigurowane punkty przylaczenia NFS"
 
 msgid "Automatic reboot in progress"
-msgstr "Automatyczny reboot w toku"
+msgstr "Automatyczny restart w toku"
 
 msgid "*** when you leave the shell."
 msgstr "*** gdy ja opuscisz."
@@ -99,7 +99,7 @@ msgstr "Wysylanie do wszystkich procesow sygnalu KILL"
 
 # ../rc.d/init.d/random:56
 msgid "The random data source is missing"
-msgstr "Oczekiwane ¬ród³o losowych danych"
+msgstr "Oczekiwane zrodlo losowych danych"
 
 msgid "BUSY"
 msgstr " ZAJETY "
@@ -110,7 +110,7 @@ msgstr "Przekazywanie procesowi INIT by przeszedl do trybu single"
 # ../rc.d/init.d/functions:258
 # ../rc.d/init.d/functions:266
 msgid "%s (pid %s) is running..."
-msgstr "%s (pid %s) jest uruchominoy..."
+msgstr "%s (pid %s) jest uruchomiony..."
 
 # Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
 # must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
