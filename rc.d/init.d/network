@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.15 1999/08/04 16:59:01 baggins Exp $
+# $Id: network,v 1.16 1999/08/06 10:25:28 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -48,10 +48,10 @@ static_arp
 ipv4_anti_spoofing on
 
 # IPv4 forwarding
-proc_net ipv4/ip_forward start 1 0 $IPV4_FORWARDING "IPv4 forwarding"
+proc_net ipv4/ip_forward start 1 0 IPV4_FORWARDING "IPv4 forwarding"
 
 # IPv6 forwarding
-proc_net ipv6/conf/all/forwarding start 1 0 $IPV6_FORWARDING "IPv6 forwarding"
+proc_net ipv6/conf/all/forwarding start 1 0 IPV6_FORWARDING "IPv6 forwarding"
 
 }
 
@@ -62,10 +62,10 @@ network_deinit()
 {
 
 # IPv6 forwarding
-proc_net ipv6/conf/all/forwarding stop 1 0 $IPV6_FORWARDING "IPv6 forwarding"
+proc_net ipv6/conf/all/forwarding stop 1 0 IPV6_FORWARDING "IPv6 forwarding"
 
 # IPv4 forwarding
-proc_net ipv4/ip_forward stop 1 0 $IPV4_FORWARDING "IPv4 forwarding"
+proc_net ipv4/ip_forward stop 1 0 IPV4_FORWARDING "IPv4 forwarding"
 
 # Spoofing protection
 ipv4_anti_spoofing off
