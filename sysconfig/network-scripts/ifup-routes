@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-routes,v 1.6 2000/04/03 14:50:47 baggins Exp $
+#	$Id: ifup-routes,v 1.7 2000/04/06 12:39:45 mkochano Exp $
 #
 # adds static routes which go through device $DEVICE
 
@@ -20,6 +20,6 @@ CONFIG=$1
 source_config
 
 # note the trailing white space character in the grep gets rid of aliases
-grep "^$DEVICE[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+grep "^$DEVNAME[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
 	/sbin/ip route add $args dev $device
 done
