@@ -1,0 +1,35 @@
+<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!--ArborText, Inc., 1988-1995, v.4001-->
+<!--NOTATION drw SYSTEM "DRW"-->
+<!ENTITY sysconfig SYSTEM "sysconfig.docb">
+<!ENTITY netscripts SYSTEM "netscripts.docb">
+]>
+
+<!-- To jest przyk³adowy dokument g³ówny w³±czaj±cy sysconfig.docb -->
+
+<book lang="pl">
+   <bookinfo>
+      <date>1998.10.19</date>
+      <title>tytu³</title>
+      <subtitle>podtytu³</subtitle>
+   </bookinfo>
+
+   <reference id=pld-pakiety>
+      <title>Opisy pakietów</title>
+      <partintro>
+	 <para>Opisy pakietów specyficznych dla PLD</para>
+      </partintro>
+      
+
+      &sysconfig;
+     <!-- &netscripts;-->
+</reference>     
+</book>
+
+<!--To dla emacsa: -->
+<!--
+Local Variables:
+mode: sgml
+End:
+-->
+		      
