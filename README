@@ -1,7 +1,9 @@
 
-	$Id: README,v 1.3 1999/08/02 10:08:02 misiek Exp $
+	$Id: README,v 1.4 1999/09/02 12:38:52 misiek Exp $
 
 If you want use this rc-scripts remember to compile 'netlink'
 support into your kernel. This is very important !
 ([*] Kernel/User netlink socket)
 
+If you want use IPv6 networking remember to compile 'IPv6 support'
+into you kernel !

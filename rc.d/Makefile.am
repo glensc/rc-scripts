@@ -7,6 +7,7 @@ rcdir = @rcdir@
 rc_SCRIPTS = \
 	rc \
 	rc.local \
-	rc.sysinit
+	rc.sysinit \
+	rc.initscript
 
 EXTRA_DIST = $(rc_SCRIPTS)	

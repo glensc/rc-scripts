@@ -1,6 +1,5 @@
-- BIND_DEV przy obs³udze tuneli trudno jest obs³u¿yæ z tego
-  wzglêdu, ¿e interfejsy s± podnoszone _po_ starcie tuneli.
-  Trzeba bêdzie przenie¶æ konfiguracjê interfejsów tuneli
-  z np. ifcfg-icm do tnlcfg-icm. Nie ma innego wyj¶cia :-(
-- interfejs sit0 _musi_ byæ podnoszony na samym koñcu tak
-  by wszystkie IPv4 zosta³y dodane
+$Id: TODO,v 1.12 1999/09/02 12:38:52 misiek Exp $
+
+TODO List:
+- obs³uga tuneli IPX
+
