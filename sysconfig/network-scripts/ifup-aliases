@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifup-aliases,v 1.13 2001/07/21 19:19:22 baggins Exp $
+#	$Id: ifup-aliases,v 1.14 2002/05/11 09:50:53 misiek Exp $
 #
 # adds all addresses of device $1
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 # device name must be ifcfg-somename
 DEV=$1

@@ -24,6 +24,9 @@ networkscripts_SCRIPTS = \
 	ifup-routes \
 	ifup-sl 
 
+networkscripts_DATA = \
+        functions.network
+	
 #SUBDIRS = data
 
 interfacesdir = @sysconfigdir@/interfaces
@@ -33,4 +36,6 @@ interfaces_DATA =
 EXTRA_DIST = \
 	$(interfaces_DATA) \
 	$(sbin_SCRIPTS) \
-	$(networkscripts_SCRIPTS)
+	$(networkscripts_SCRIPTS) \
+	$(networkscripts_DATA)
+

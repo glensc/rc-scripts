@@ -17,12 +17,12 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: tnldown,v 1.18 2001/05/16 13:12:07 baggins Exp $
+#    $Id: tnldown,v 1.19 2002/05/11 09:50:53 misiek Exp $
 #
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 DEV=$1
 

@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.73 2002/05/11 08:48:45 misiek Exp $
+# $Id: functions.network,v 1.2 2002/05/11 09:50:53 misiek Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.

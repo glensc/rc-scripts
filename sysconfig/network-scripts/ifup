@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.66 2001/10/11 18:49:00 baggins Exp $
+#	$Id: ifup,v 1.67 2002/05/11 09:50:53 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 # Will be removed in the future
 if is_yes "$NETWORKING" ; then

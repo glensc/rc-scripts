@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.55 2002/04/09 11:10:37 jajcus Exp $
+# $Id: network,v 1.56 2002/05/11 09:50:50 misiek Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -17,7 +17,7 @@ NLS_DOMAIN="rc-scripts"
 
 # Source function library.
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 if [ ! -f /etc/sysconfig/network ]; then
 	nls "%s is missing. Can't continue." "/etc/sysconfig/network"
