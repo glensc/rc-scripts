@@ -135,7 +135,10 @@ case "$CMD" in
 		    msg_stopping "System chroots services for $dir"; started
 		    chroot $dir /etc/rc.d/rc $runlevel chroot
 		    rm -f $dir/var/lock/subsys/network
+		    chroot $dir /bin/sh -c "grep -q selinuxfs /proc/filesystems && umount /selinux"
+		    chroot $dir /bin/sh -c "grep -q sysfs /proc/filesystems && umount /sys"
 		    chroot $dir umount -a
+		    chroot $dir umount /proc
 		done
 		rm -f /var/lock/subsys/sys-chroots >/dev/null 2>&1
 	else
