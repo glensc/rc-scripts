@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.78 2001/05/15 16:03:36 baggins Exp $
+# $Id: rc.sysinit,v 1.79 2001/05/15 16:53:22 baggins Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -169,7 +169,7 @@ _RUN_QUOTACHECK=0
 if awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 1 ; else exit 0}' /etc/fstab; then
 
     if [ ! -f /fastboot  ]; then
-    	    show "Checking root filesystems."; started
+    	    show "Checking root filesystem"; started
 	    initlog -c "fsck -C -T -a $fsckoptions /"
 
 	    rc=$?
@@ -193,7 +193,7 @@ if awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 1 ; e
 
 		    run_cmd "Unmounting file systems" umount -a
 		    mount -n -o remount,ro /
-		    run_cmd "Automatic reboot in progress." reboot
+		    run_cmd "Automatic reboot in progress" reboot
 	    elif [ "$rc" = "1" ]; then
 		    _RUN_QUOTACHECK=1
 	    fi
@@ -387,7 +387,7 @@ if [ -f /proc/mdstat -a -f /etc/raidtab ]; then
 		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
 		run_cmd "Automatic reboot in progress" reboot
 	fi
-	show "Starting up RAID devices."; ok
+	show "Starting up RAID devices"; ok
 fi
 
 # Find and activate volume groups
@@ -398,7 +398,7 @@ fi
 
 # Check filesystems
 if ! grep -q nofsck /proc/cmdline && [ ! -f /fastboot ]; then
-	show "Checking filesystems."; started
+	show "Checking filesystems"; started
 	initlog -c "fsck -C -T -R -A -a $fsckoptions"
 
 	rc=$?
@@ -421,7 +421,7 @@ if ! grep -q nofsck /proc/cmdline && [ ! -f /fastboot ]; then
 
 		run_cmd "Unmounting file systems" umount -a
 		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
-		run_cmd "Automatic reboot in progress." reboot
+		run_cmd "Automatic reboot in progress" reboot
 	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
 		if [ -x /sbin/convertquota ]; then
 			if [ -f /quota.user ]; then
@@ -438,7 +438,7 @@ fi
 # Mount all other filesystems (except for NFS and /proc, which is already
 # mounted). Contrary to standard usage,
 # filesystems are NOT unmounted in single user mode.
-run_cmd "Mounting local filesystems." mount -a -t nonfs,smbfs,ncpfs,proc
+run_cmd "Mounting local filesystems" mount -a -t nonfs,smbfs,ncpfs,proc
 
 # Now do some workaround - encrypted filesystems couldn't have been fsck-ed
 # before mount - that's where the password is entered.
@@ -512,7 +512,7 @@ if [ -f /etc/rc.d/rc.serial ]; then
 fi
 
 if [ -f /proc/sys/kernel/panic -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
-	show "Setting %s seconds for kernel reboot after panic." "$PANIC_REBOOT_TIME"; busy
+	show "Setting %s seconds for kernel reboot after panic" "$PANIC_REBOOT_TIME"; busy
 	if (sysctl -w kernel.panic=$PANIC_REBOOT_TIME 2> /dev/null); then ok; else fail; fi
 fi
 
