@@ -92,12 +92,8 @@ case "$1" in
 	exit $?
         ;;
   *)
-  	# for programs that support reloading
         # show "Usage: %s {start|stop|status|restart|reload|force-reload}" $0
-	msg_Usage_reload $0
-	# for these that do not
-	# show "Usage: %s {start|stop|status|restart|force-reload}" $0
-	msg_Usage_noreload $0
+	msg_Usage "$0 {start|stop|status|restart|reload|force-reload}"
         exit 1
 esac
 

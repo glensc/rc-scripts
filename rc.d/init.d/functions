@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.43 2000/03/09 11:50:24 zagrodzki Exp $
+# $Id: functions,v 1.44 2000/03/10 01:31:25 kloczek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -425,12 +425,7 @@ msg_reloading()
 	show "Reloading %s service" "$1"
 }
 
-msg_Usage_reload()
+msg_Usage()
 {
-	nls "Usage: %s {start|stop|status|restart|reload|force-reload}\n" "$1"
-}
-
-msg_Usage_noreload()
-{
-	nls "Usage: %s {start|stop|status|restart|force-reload}\n" "$1"
+	nls "Usage:" "$1\n"
 }
