@@ -451,7 +451,7 @@ if [ -x /sbin/evms_activate ]; then
 fi
 # LVM
 if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-	lvmversion=$(/sbin/vgchange --version 2>/dev/null|head -n 1|awk '{gsub("vgchange: Logical Volume Manager ",""); gsub("LVM version:     ",""); gsub(/\..*/,"");print $1}')
+	lvmversion=$(/sbin/vgchange --version 2>/dev/null | awk '{gsub("vgchange: Logical Volume Manager ",""); gsub("LVM version:     ",""); gsub(/\..*/,"");print $1; exit}')
    	if [ "$lvmversion" = "1" ] ; then
 		modprobe -s -k lvm-mod >/dev/null 2>&1
 		lvmignorelock=""
