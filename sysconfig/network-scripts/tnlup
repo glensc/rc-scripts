@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.9 1999/09/02 12:26:31 misiek Exp $
+#	$Id: tnlup,v 1.10 1999/09/13 13:25:54 misiek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -32,36 +32,37 @@ then
         exit
 fi
 
-if [ "$IPV6_TUNNELCONFIG" != "yes" ] && [ "$MODE" == "sit" ] ||
-   [ "$IPX" != "yes" ] && [ "$MODE" == "ipxip" ] || [ "$IPX" != "yes" ] && [ "$MODE" == "ipipx" ]
+if [ "${IPV6_TUNNELCONFIG}" != "yes" ] && [ "${MODE}" == "sit" ] || \
+   [ "${IPX}" != "yes" ] && [ "${MODE}" == "ipxip" ] || \
+   [ "${IPX}" != "yes" ] && [ "${MODE}" == "ipipx" ]
 then
 	exit
 fi
 
-if [ "$MODE" == "gre" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ip_gre.o`" != "" ]; then
+if [ "${MODE}" == "gre" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ip_gre.o`" != "" ]; then
 	modprobe -s -k ip_gre
-elif [ "$MODE" == "ipip" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipip.o`" != "" ]; then
+elif [ "${MODE}" == "ipip" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipip.o`" != "" ]; then
 	modprobe -s -k ipip
 fi
 
-[ -z "${TTL}" ] && TTL=64
-[ -z "${TOS}" ] && TOS=inherit
 [ -z "${LOCALADDR}" ] && LOCALADDR=any
 [ -z "${REMOTEADDR}" ] && REMOTEADDR=any
-[ -n "${BIND_DEV}" ] && BIND_DEV="dev $BIND_DEV"
+[ -n "${TTL}" ] && TTL="ttl ${TTL}"
+[ -n "${TOS}" ] && TOS="tos ${TOS}"
+[ -n "${BIND_DEV}" ] && BIND_DEV="dev ${BIND_DEV}"
 
 if [ "${SEQ}" == "yes" ]; then
 	SEQ=seq
 else
 	[ "${ISEQ}" == "yes" ] && SEQ=iseq
-	[ "${OSEQ}" == "yes" ] && SEQ="$SEQ oseq"
+	[ "${OSEQ}" == "yes" ] && SEQ="${SEQ} oseq"
 fi
 
 if [ "${CSUM}" == "yes" ]; then
 	CSUM=csum
 else
         [ "${ICSUM}" == "yes" ] && CSUM=icsum
-        [ "${ICSUM}" == "yes" ] && CSUM="$SEQ ocsum"
+        [ "${ICSUM}" == "yes" ] && CSUM="${SEQ} ocsum"
 fi
 
 [ "${ISEQ}" == "yes" ] && ISEQ=iseq
@@ -84,12 +85,11 @@ fi
 
 if [ "${MODE}" == "ipip" ] || [ "${MODE}" == "sit" ]; then
 	
-	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos ${TOS} ${PMTUDISC} ${BIND_DEV}
+	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV}
 
 elif [ "${MODE}" == "gre" ]; then
 
-	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos
-${TOS} ${PMTUDISC} ${BIND_DEV} $CSUM $ISEQ ${KEY} ${IKEY} ${OKEY}
+	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV} ${CSUM} ${ISEQ} ${KEY} ${IKEY} ${OKEY}
 
 elif [ "${MODE}" == "ipxip" ] || [ "${MODE}" == "ipipx" ]; then
 
