@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.10 1999/08/25 14:15:36 mikrobi Exp $
+#	$Id: ifdown,v 1.11 1999/09/02 12:30:19 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -30,17 +30,16 @@ fi
 
 source_config
 
-# Is interface IPv6 only ?
-[ -z "$IPADDR" -a "$PUMP" != "true" ] && IPv6_ONLY=yes || IPv6_ONLY=""
+# IPv4, IPv6 or both ?
+[ -n "$IPV6_ADDR" ]                   && IPv6=yes || IPv6=no
+[ -n "$IPADDR" -o "$PUMP" == "true" ] && IPv4=yes || IPv4=no
 
-if [ -z "$IPv6_ONLY" ]; then
-  if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
-    PREFIX="`calcprefix $NETMASK`"
-  fi
+if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
+	PREFIX="`calcprefix $NETMASK`"
+fi
 
-  if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
-    NETMASK="`calcnetmask $PREFIX`"
-  fi
+if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
+	NETMASK="`calcnetmask $PREFIX`"
 fi
 
 FULLDEVNAME="$DEVICE"
@@ -48,7 +47,7 @@ DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
 
-if [ -x $OTHERSCRIPT -a -z "$IPv6_ONLY" ]; then
+if [ -x $OTHERSCRIPT -a "$IPv4" == "yes" ]; then
     if [ "$DEFAULTHANDLING" == "yes" ]; then
         $OTHERSCRIPT $CONFIG $2
     else
@@ -64,7 +63,7 @@ else
 fi
 
 if [ "$ISALIAS" == "yes" ]; then
-	if [ -z "$IPv6_ONLY" ]; then
+	if [ "$IPv4" == "yes" ]; then
 		ip -family inet addr del ${IPADDR}/${PREFIX} dev ${DEVICE} label ${FULLDEVNAME}
 	fi
 		for ADDR in ${IPV6_ADDR} ; do
