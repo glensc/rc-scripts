@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.60 2003/07/10 12:30:34 baggins Exp $
+# $Id: network,v 1.61 2003/07/11 23:08:47 arekm Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -55,6 +55,9 @@ network_init()
 {
 # Modprobe needed devices
 modprobe_net
+
+# Setup interfaces names
+[ -x /sbin/nameif -a -f /etc/mactab ] && run_cmd "Setting interfaces names (nameif)" /sbin/nameif
 
 # Kernel network parameters
 run_cmd "Setting network parameters" sysctl -p /etc/sysctl.conf
