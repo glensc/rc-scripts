@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.24 2000/05/31 18:00:34 zagrodzki Exp $
+# $Id: rc,v 1.25 2000/05/31 18:01:39 zagrodzki Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -181,5 +181,5 @@ text_size="`nls "%sResource Manager: %sRunlevel has been reached" "" ""`"
 echo -n "$text"
 awk "BEGIN { for (j=length(\"$text_size\"); j<$INIT_COL+${#resp_size}-${#runlevel}; j++) printf \".\" }"
 echo "${af6}[${af2} $runlevel ${af6}]${af7}"
-unset af2 af7
+unset af2 af6 af7
 
