@@ -1,9 +1,13 @@
+/* $Id: ipcalc.c,v 1.5 1999/09/02 12:11:06 misiek Exp $ */
+
 #include <popt.h>
 #include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <libintl.h>
+#include <locale.h>
 
 typedef unsigned int int32;
 

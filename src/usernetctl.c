@@ -7,6 +7,8 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <libintl.h>
+#include <locale.h>
 
 /* this will be running setuid root, so be careful! */
 

@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <libintl.h>
+#include <locale.h>
 
 /* this will be running setgid root, so be careful! */
 

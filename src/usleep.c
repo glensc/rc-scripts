@@ -2,16 +2,17 @@
  * usleep
  * 
  * Written by Donald Barnes <djb@redhat.com> for Red Hat Software.
- *
+ * $Id: usleep.c,v 1.2 1999/09/02 12:11:06 misiek Exp $
  */
-
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <libintl.h>
+#include <locale.h>
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 
   double count;

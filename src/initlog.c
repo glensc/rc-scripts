@@ -1,3 +1,4 @@
+/* $Id: initlog.c,v 1.2 1999/09/02 12:11:06 misiek Exp $ */
 
 #include <errno.h>
 #include <fcntl.h>
@@ -156,7 +157,7 @@ int logEvent(char *cmd, int eventtype,char *string) {
     struct logInfo logentry;
     
     if (cmd) {
-	logentry.cmd = strdup(basename(cmd));
+	logentry.cmd = strdup((char *)basename(cmd));
 	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') && ( 30 <= logentry.cmd[1] <= 39 )
 	    && ( 30 <= logentry.cmd[2] <= 39 ) )
 	  logentry.cmd+=3;
@@ -182,7 +183,7 @@ int logString(char *cmd, char *string) {
     struct logInfo logentry;
     
     if (cmd) {
-	logentry.cmd = strdup(basename(cmd));
+	logentry.cmd = strdup((char *)basename(cmd));
 	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') && ( 30 <= logentry.cmd[1] <= 39 )
 	    && ( 30 <= logentry.cmd[2] <= 39 ) )
 	  logentry.cmd+=3;
