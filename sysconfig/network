@@ -1,4 +1,4 @@
-# $Id: network,v 1.9 2000/08/04 14:02:20 baggins Exp $
+# $Id: network,v 1.10 2000/08/04 15:19:00 baggins Exp $
 ######################################################################
 # MAIN PART
 
@@ -19,7 +19,6 @@ GATEWAYDEV=
 
 GATEWAY6=
 GATEWAY6DEV=
-GATEWAY6DEFAULT=
 
 # Do you want to use IPX networking ?
 IPX=no
@@ -142,6 +141,9 @@ IPV4_LOCAL_PORT_RANGE="1024 4999"
 
 # Do you want enable IPv6 forwarding ?
 IPV6_FORWARDING=no
+
+# Global route for IPv6 host with IPv6 forwarding
+IPV6_GLOBALROUTE=
 
 # Enable tunnel interfaces configuration ?
 IPV6_TUNNELCONFIG=no
