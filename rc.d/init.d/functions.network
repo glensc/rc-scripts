@@ -1,41 +1,43 @@
 #
-# $Id: functions.network,v 1.24 1999/09/28 12:48:16 kloczek Exp $
+# $Id: functions.network,v 1.25 1999/09/28 12:48:41 kloczek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
 
 get_ldap_config ()
 {
-	[ -x /usr/bin/ldapsearch ] || exit 1
- 	# Initialise fields which  can have multiple values:
-	IPV6_ADDR=""
-	IPADDR_ALIASES=""
+[ -x /usr/bin/ldapsearch ] || exit 1
+
+# Initialise fields which  can have multiple values:
+IPV6_ADDR=""
+IPADDR_ALIASES=""
 	
- 	QUERY="(&(objectclass=pldinterface)(if_device=$1))"
-	if [ -n "$LDAP_BASE_DN" ] ; then
-	  BSWITCH='-b"$LDAP_BASE_DN"' 
-	else
-	  BSWITH=''
-	fi
-	ldapsearch "$BSWITCH" "$QUERY" | grep "=" | sed -e "s/=/ /" | {
-		while read FIELD VALUE ; do
-			# Field, which have name compatible with other 
-			# LDAP object
-			if [ "$FIELD" = "iphostnumber" ] ; then
-				VAR="ADDR";
-			else # Other fields
-				VAR=`echo "$FIELD" | grep "^if_" \
-				     | tr [:lower:] [:upper:] \
-				     | sed -e "s/IF_//"`
-			fi
-			# Fields which can have multiple values:
-			if   [ "$VAR" = "IPV6_ADDR" \
-			    -o "$VAR" = "IPADDR_ALIASES" ]  && \
-			     [ -n "`eval echo \$$VAR`" ] ; then
-				echo "$VAR=\"\$$VAR $VALUE\"" ;
+QUERY="(&(objectclass=pldinterface)(if_device=$1))"
+if [ -n "$LDAP_BASE_DN" ] ; then
+	BSWITCH='-b"$LDAP_BASE_DN"' 
+else
+	BSWITH=''
+fi
+
+ldapsearch "$BSWITCH" "$QUERY" | grep "=" | sed -e "s/=/ /" | {
+	while read FIELD VALUE ; do
+		# Field, which have name compatible with other 
+		# LDAP object
+		if [ "$FIELD" = "iphostnumber" ] ; then
+			VAR="ADDR";
+		else # Other fields
+			VAR=`echo "$FIELD" | grep "^if_" \
+			     | tr [:lower:] [:upper:] | sed -e "s/IF_//"`
+		fi
+
+		# Fields which can have multiple values:
+		if [ "$VAR" = "IPV6_ADDR" -o "$VAR" = "IPADDR_ALIASES" ]  && \
+		   [ -n "`eval echo \$$VAR`" ] ; then
+			echo "$VAR=\"\$$VAR $VALUE\"" ;
 			# single value fields, or the first value
-			elif [ -n "$VAR" ] ; then  				eval "$VAR=\"$VALUE\"" ;
-				echo "$VAR=\"$VALUE\"" ;
+			elif [ -n "$VAR" ] ; then
+				eval "$VAR=\"$VALUE\""
+				echo "$VAR=\"$VALUE\""
 			fi
 		done
 	}
@@ -54,34 +56,34 @@ source_config ()
 
 do_netreport ()
 {
-  # Notify programs that have requested notification
-  ( cd /var/run/netreport || exit
-    for i in * ; do
-      [ -f $i ] && \
-        kill -SIGIO $i >/dev/null 2>&1 || \
-          rm -f $i >/dev/null 2>&1
-    done
-  )
+	# Notify programs that have requested notification
+	( cd /var/run/netreport || exit
+	for i in * ; do
+		[ -f $i ] && \
+			kill -SIGIO $i >/dev/null 2>&1 || \
+			rm -f $i >/dev/null 2>&1
+	done
+	)
 }
 
 need_hostname()
 {
-    if [ "`hostname`" = "(none)" -o "`hostname`" = "localhost" -o \
-	 "`hostname`" = "localhost.localdomain" ]; then
-	NEEDHOSTNAME=yes
-    else
-	unset NEEDHOSTNAME
-    fi
+	if [ "`hostname`" = "(none)" -o "`hostname`" = "localhost" -o \
+		"`hostname`" = "localhost.localdomain" ]; then
+		NEEDHOSTNAME=yes
+	else
+		unset NEEDHOSTNAME
+	fi
 }
 
 set_hostname()
 {
-    echo "$1" > /etc/HOSTNAME
-    hostname $1
-    if ! grep search /etc/resolv.conf; then
-	domain=`echo $1 | sed 's/^[^\.]*\.//'`
-	echo "search $domain" >> /etc/resolv.conf
-    fi
+	echo "$1" > /etc/HOSTNAME
+	hostname $1
+	if ! grep search /etc/resolv.conf; then
+		domain=`echo $1 | sed 's/^[^\.]*\.//'`
+		echo "search $domain" >> /etc/resolv.conf
+	fi
 }
 
 # PLD/Linux network functions
@@ -92,17 +94,17 @@ set_hostname()
 # Setup Network Address Translation (NAT)
 setup_nat()
 {
-if [ -r /etc/sysconfig/static-nat ]; then
-  grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
-	if [ "$1" == "on" ]; then
-		/sbin/ip route add nat $src via $dst
-		/sbin/ip rule add from $dst nat $src
-	elif [ "$1" == "off" ]; then
-		/sbin/ip rule del from $dst nat $src
-		/sbin/ip route del nat $src via $dst
+	if [ -r /etc/sysconfig/static-nat ]; then
+		grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
+			if [ "$1" == "on" ]; then
+				/sbin/ip route add nat $src via $dst
+				/sbin/ip rule add from $dst nat $src
+			elif [ "$1" == "off" ]; then
+				/sbin/ip rule del from $dst nat $src
+				/sbin/ip route del nat $src via $dst
+		fi
+		done
 	fi
-  done
-fi
 }
 
 # proc_net <zmien> <start/stop> <co ustaw> <co default> <nazwa_zmiennej> [komunikat]
@@ -171,31 +173,53 @@ fi
 
 ipv4_local_port_range()
 {
-if [ "$IPV4_LOCAL_PORT_RANGE" != "default" -a -n "$IPV4_LOCAL_PORT_RANGE" ] || [ ! -e /proc/sys/net/ipv4/ip_local_port_range ]; then
-
-if [ "$IPV4_LOCAL_PORT_RANGE" == "yes" ] && [ "$1" == "on" ]; then
-show "Setting local port range"; busy
-if echo "$IPV4_LOCAL_PORT_RANGE" > /proc/sys/net/ipv4/ip_local_port_range; then deltext; ok; else deltext; fail; fi
-else
-show "Setting default local port range"; busy
-if echo "1024 4999" > /proc/sys/net/ipv4/ip_local_port_range; then deltext; ok; else deltext; fail; fi
-fi
-
+if [ "$IPV4_LOCAL_PORT_RANGE" != "default" -a -n "$IPV4_LOCAL_PORT_RANGE" ] || \
+   [ ! -e /proc/sys/net/ipv4/ip_local_port_range ]; then
+	if [ "$IPV4_LOCAL_PORT_RANGE" == "yes" ] && [ "$1" == "on" ]; then
+		show "Setting local port range"; busy
+		if echo "$IPV4_LOCAL_PORT_RANGE" > /proc/sys/net/ipv4/ip_local_port_range; then
+			deltext
+			ok
+		else
+			deltext
+			fail
+		fi
+	else
+		show "Setting default local port range"; busy
+		if echo "1024 4999" > /proc/sys/net/ipv4/ip_local_port_range; then
+			deltext
+			ok
+		else
+			deltext
+			fail
+		fi
+	fi
 fi
 }
 
 ipv4_anti_spoofing()
 {
-if [ "$IPV4_ANTI_SPOOFING" != "default" -a -n "$IPV4_ANTI_SPOOFING" ] || [ ! -e /proc/sys/net/ipv4/conf/all/rp_filter ]; then
-
-if [ "$IPV4_ANTI_SPOOFING" == "yes" ] && [ "$1" == "on" ]; then
-show "Setting up IP spoofing protection"; busy
-if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 1 > $f; done); then deltext; ok; else deltext; fail; fi
-else
-show "Setting down IP spoofing protection"; busy
-if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 0 > $f; done); then deltext; ok; else deltext; fail; fi
-fi
-
+if [ "$IPV4_ANTI_SPOOFING" != "default" -a -n "$IPV4_ANTI_SPOOFING" ] || \
+   [ ! -e /proc/sys/net/ipv4/conf/all/rp_filter ]; then
+	if [ "$IPV4_ANTI_SPOOFING" == "yes" ] && [ "$1" == "on" ]; then
+		show "Setting up IP spoofing protection"; busy
+		if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 1 > $f; done); then
+			deltext
+			ok
+		else
+			deltext
+			fail
+		fi
+	else
+		show "Setting down IP spoofing protection"; busy
+		if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 0 > $f; done); then
+			deltext
+			ok
+		else
+			deltext
+			fail
+		fi
+	fi
 fi
 }
 
@@ -234,37 +258,39 @@ modprobe_net()
 #
 calcprefix() {
 local OISF len olen bad prefix
- OISF=$IFS
- IFS="."
- prefix=0
- olen=8
- bad=0
- for i in $1
- do len=0
- case $i in
-  255)   len=8 ;;
-  254)   len=7 ;;
-  252)   len=6 ;;
-  248)   len=5 ;;
-  240)   len=4 ;;
-  224)   len=3 ;;
-  192)   len=2 ;;
-  128)   len=1 ;;
-  0)     len=0 ;;
-  *)	 len=300 ;;
- esac
- if [ "$len" -gt "$olen" ] ; then bad=1; fi
- prefix=$(($prefix + $len))
- olen=$len
- done
- IFS=$OIFS
- if [ "$bad" == "0" ]; then
- echo "$prefix"
- else
- echo "32"
- fi
- return
+OISF=$IFS
+IFS="."
+prefix=0
+olen=8
+bad=0
+for i in $1 do len=0
+	case $i in
+	255)	len=8 ;;
+	254)	len=7 ;;
+	252)	len=6 ;;
+	248)	len=5 ;;
+	240)	len=4 ;;
+	224)	len=3 ;;
+	192)	len=2 ;;
+	128)	len=1 ;;
+	0)	len=0 ;;
+	*)	len=300 ;;
+	esac
+
+	if [ "$len" -gt "$olen" ] ; then bad=1; fi
+	prefix=$(($prefix + $len))
+	olen=$len
+done
+
+IFS=$OIFS
+if [ "$bad" == "0" ]; then
+	echo "$prefix"
+else
+	echo "32"
+fi
+return
 }
+
 #
 # folowing function calculates network mask from given prefix
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -277,28 +303,29 @@ if [ "`echo "${1}" | grep "^[0-9]"`" == "" ]; then
 else
 	typeset -i prefix=$1
 fi
-for i in 1 2 3 4
- do
-  case $prefix in
-   7) a=254 ;;
-   6) a=252 ;;
-   5) a=248 ;;
-   4) a=240 ;;
-   3) a=224 ;;
-   2) a=192 ;;
-   1) a=128 ;;
-   *)
-      if [ $prefix -ge 8 ]; then a=255; fi 
-      if [ $prefix -le 0 ]; then a=0; fi
-      ;;
-  esac
-  prefix="$(( $prefix - 8))"
-  if [ -z "$MASK" ]
-   then MASK=$a
-   else MASK=$MASK.$a
-  fi
- done
+for i in 1 2 3 4 do
+	case $prefix in
+	7) a=254 ;;
+	6) a=252 ;;
+	5) a=248 ;;
+	4) a=240 ;;
+	3) a=224 ;;
+	2) a=192 ;;
+	1) a=128 ;;
+	*)
+		if [ $prefix -ge 8 ]; then a=255; fi 
+		if [ $prefix -le 0 ]; then a=0; fi
+		;;
+	esac
+
+	prefix="$(( $prefix - 8))"
+	if [ -z "$MASK" ] then
+		MASK=$a
+	else
+		MASK=$MASK.$a
+	fi
+done
+
 echo $MASK
 return
 }
-
