@@ -305,7 +305,7 @@ local OISF len olen
   128)   len=1 ;;
   0)     len=0 ;;
  esac
- if [ $len -gt $olen ] ; then echo "Inwalid netmask"; fi
+ if [ $len -gt $olen ] ; then echo "Invalid netmask"; fi
  prefix=`expr $prefix + $len`
  olen=$len
  done
