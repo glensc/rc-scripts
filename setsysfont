@@ -3,7 +3,6 @@
 #	$Id$
 #
 
-set -x
 [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
 [ -f /etc/sysconfig/console ] && . /etc/sysconfig/console
 
