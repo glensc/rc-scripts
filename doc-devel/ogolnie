@@ -2,11 +2,8 @@ rc-scripts
 
 - pliki interfejsów l±duj± w /etc/sysconfig/interfaces
 (zarówno interfejsów sieciowych - ifcfg-* jak i tuneli tnlcfg-*)
-- konfiguracja dotycz±ca wy³±cznie IPv4 siedzi sobie w /etc/sysconfig/network-ipv4
-natomias konfiguracja dla IPv6 siedzi w /etc/sysconfig/network-ipv6
 - tunnels-ipv6 wypada z obiegu. Ka¿dy tunel bêdzie mia³ swój w³asny plik.
 - network-ip6.conf te¿ wypada...
-- IPV6_NETWORKING wypada z network a l±duje w network-ipv6
 - wszystkie chat-* nadal w /etc/sysconfig/network-scripts
 - pliki z funkcjami w /etc/rc.d/init.d/ czyli
 	functions		- podstawowe
@@ -14,4 +11,5 @@ natomias konfiguracja dla IPv6 siedzi w /etc/sysconfig/network-ipv6
 	functions.network.ipv6	- do ipv6
 - network-ip6.init wylatuje. startowanie ipv4 _i_ ipv6 musi zawieraæ siê w network
 - to samo dotyczy tunnels-ip6.init
+- NETMASK nieu¿ywaæ ! PREFIX owszem
 
