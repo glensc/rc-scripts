@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.24 1999/09/03 07:24:27 wiget Exp $
+# $Id: functions,v 1.25 1999/09/03 07:42:29 wiget Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -20,7 +20,7 @@ termput()
 	if [ "$COLOR_INIT" == "no" ]; then
         	:
 	elif [ ! -d /usr/share/terminfo ] || \
-	     [ ! [ -x /usr/bin/tput -o -x /bin/tput ]; then
+	     ! ( [ -x /usr/bin/tput ] || [ -x /bin/tput ] ) ; then
                 if [ "$2" == "1" ]; then echo -ne "\033[0;31m"
                 elif [ "$2" == "2" ]; then echo -ne "\033[0;32m"
                 elif [ "$2" == "5" ]; then echo -ne "\033[0;35m"
