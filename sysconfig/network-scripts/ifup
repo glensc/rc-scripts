@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.59 2001/05/25 17:48:03 baggins Exp $
+#	$Id: ifup,v 1.60 2001/05/25 20:14:48 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -152,16 +152,16 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" ]; then
 else
 
     # IPv4 in use ?
-    if is_yes "$IPV4_NETWORKING" ; then
-    	# If broadcast is missing then autocalculate it
+    if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}" ] ; then
+	# If broadcast is missing then autocalculate it
 	if ! (echo $IP4ADDROPT | egrep -q "brd|broadcast"); then
-		IP4ADDROPT="brd + ${IP4ADDROPT}"
+	    IP4ADDROPT="brd + ${IP4ADDROPT}"
 	fi
 
-    	if [ -n "$REMIP" ]; then
-		ip addr add ${IP4ADDR} peer ${REMIP} dev ${DEVICE} ${IP4ADDROPT}
+	if [ -n "$REMIP" ]; then
+	    ip addr add ${IP4ADDR} peer ${REMIP} dev ${DEVICE} ${IP4ADDROPT}
 	else
-		ip addr add ${IP4ADDR} dev ${DEVICE} ${IP4ADDROPT}
+	    ip addr add ${IP4ADDR} dev ${DEVICE} ${IP4ADDROPT}
 	fi
     fi
 
