@@ -2,10 +2,9 @@
 # 
 # killall        Script for system downing
 #
-# chkconfig:     12345 00 90
 # description:   kill em all
 #
-# $Id: killall,v 1.5 1999/08/16 09:38:39 misiek Exp $
+# $Id: killall,v 1.6 1999/10/13 16:11:27 baggins Exp $
 # Bring down all unneeded services that are still running (there shouldn't 
 # be any, so this is just a sanity check)
 

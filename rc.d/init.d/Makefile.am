@@ -4,14 +4,11 @@ initdir = @rcdir@/init.d
 
 init_SCRIPTS = \
 	allowlogin \
-	halt \
 	killall \
 	network \
 	nfsfs \
 	netfs \
 	random \
-	reboot \
-	shutdwn \
 	single \
 	allowlogin
 

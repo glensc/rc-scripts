@@ -2,10 +2,9 @@
 #
 # allowlogin	Allow users to login
 #
-# chkconfig: 2345 99 1
 # description: Allow users to login.
 #
-# $Id: allowlogin,v 1.5 1999/10/06 16:52:37 kloczek Exp $
+# $Id: allowlogin,v 1.6 1999/10/13 16:11:27 baggins Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"

@@ -4,11 +4,10 @@
 #
 # Author:       Theodore Ts'o <tytso@mit.edu>
 #
-# chkconfig: 12345 20 80
 # description: Saves and restores system entropy pool for higher quality \
 #              random number generation.
 #
-# $Id: random,v 1.3 1999/07/31 11:24:19 misiek Exp $
+# $Id: random,v 1.4 1999/10/13 16:11:27 baggins Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
