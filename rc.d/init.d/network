@@ -2,12 +2,13 @@
 #
 # network	Bring up/down networking
 #
-# chkconfig:	2345 10 90
-# description:	Activates/Deactivates all network interfaces configured to \
+# chkconfig:    2345 10 90
+# description:  Activates/Deactivates all network interfaces configured to \
 #		start at boot time.
+#
 # probe:	true
 
-# $Id: network,v 1.28 1999/12/02 10:38:54 kloczek Exp $
+# $Id: network,v 1.29 1999/12/15 18:41:07 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"

@@ -1,38 +1,50 @@
 #!/bin/csh
 #
-#	$Id: lang.csh,v 1.2 1999/07/13 12:49:34 misiek Exp $
+#	$Id: lang.csh,v 1.3 1999/12/15 18:41:05 misiek Exp $
 #
 
-if [ -f /etc/sysconfig/i18n ]; then
-    . /etc/sysconfig/i18n
+test -f /etc/sysconfig/i18n
+if ($status == 0) then
 
-    if [ -n "$LANG" ]; then
+    if ($?LANG) then
 	setenv LANG
-    fi
+    endif
 
-    if [ -n "$LC_ALL" ]; then
+    if ($?LC_ALL) then
 	setenv LC_ALL
-    fi
+    endif
   
-    if [ -n "$LINGUAS" ]; then
+    if ($?LINGUAS) then
 	setenv LINGUAS
-    fi
+    endif
   
-    if [ -n "$SYSTERM" ]; then
+    if ($?SYSTERM) then
 	setenv TERM=$SYSTERM
-    fi
+    endif
 
-    # Set console font map.
-    if [ -n "$UNIMAP" ]; then
-	loadunimap $UNIMAP
-    fi
+#    # Set console font map.
+#    if ($?UNIMAP) then
+#	loadunimap $UNIMAP
+#    endif
 
-    if [ -n "$SYSTERM" ] ; then
-	case $SYSTERM in
-	    linux-lat)
+    if ($?SYSFONTACM) then
+        switch ($SYSFONTACM)
+            case iso01*|iso02*|iso15*|koi*|latin2-ucw*:
+                if ( "$TERM" == "linux" ) then
+                    if ( ls -l /proc/$$/fd/0 2>/dev/null | grep -- '-> /dev/tty[0-9]*$' >/dev/null 2>&1)  then
+                        echo -n -e '\033(K' > /proc/$$/fd/0
+                    endif
+                endif
+                breaksw
+        endsw
+    endif
+
+    if ($?SYSTERM) then
+    	switch ($SYSTERM)
+	case linux-lat:
 		setenv LESSCHARSET=latin1
 		setenv INPUTRC=/etc/inputrc
-		;;
-	esac
-    fi
-fi
+		breaksw
+	endsw
+    endif
+endif

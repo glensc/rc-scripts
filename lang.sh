@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: lang.sh,v 1.5 1999/07/13 12:49:34 misiek Exp $
+#	$Id: lang.sh,v 1.6 1999/12/15 18:41:05 misiek Exp $
 #
 
 if [ -f /etc/sysconfig/i18n ]; then
@@ -17,6 +17,8 @@ if [ -f /etc/sysconfig/i18n ]; then
    [ -n "$LANGUAGE" ] && export LANGUAGE || unset LANGUAGE
    [ -n "$LINGUAS" ] && export LINGUAS || unset LINGUAS
 
+   [ -n "$_XKB_CHARSET" ] && export _XKB_CHARSET || unset _XKB_CHARSET
+
    # deprecated
    if [ -n "$SYSTERM" ]; then
       export TERM=$SYSTERM
@@ -24,7 +26,7 @@ if [ -f /etc/sysconfig/i18n ]; then
 
    if [ -n "$SYSFONTACM" ]; then
        case $SYSFONTACM in
-         iso01*|iso02*|iso15*|koi*)
+         iso01*|iso02*|iso15*|koi*|latin2-ucw*)
               LESSCHARSET=latin1
 	      INPUTRC=/etc/inputrc
               export LESSCHARSET INPUTRC

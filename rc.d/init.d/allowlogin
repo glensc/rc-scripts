@@ -4,7 +4,7 @@
 #
 # description: Allow users to login.
 #
-# $Id: allowlogin,v 1.6 1999/10/13 16:11:27 baggins Exp $
+# $Id: allowlogin,v 1.7 1999/12/15 18:41:07 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -19,13 +19,13 @@ NLS_DOMAIN="rc-scripts"
 # See how we were called.
 case "$1" in
   start)
-	if [ "$DELAY_LOGIN" = "yes" ] && [ -f /etc/nologin.boot ]; then
+	if [ "$DELAY_LOGIN" = "yes" -a -f /etc/nologin.boot ]; then
 		run_cmd "Allowing users to login" rm -f /etc/nologin /etc/nologin.boot
 	fi
         ;;
   stop)
 	# /etc/nologin when shutting down system
-	if [ "$DELAY_LOGIN" = "yes" ] && [ ! -f /etc/nologin ]; then
+	if [ "$DELAY_LOGIN" = "yes" -a ! -f /etc/nologin ]; then
 	        nls "System shutdown in progress \n" > /etc/nologin
 	        chmod 644 /etc/nologin
 	        cp -fp /etc/nologin /etc/nologin.boot

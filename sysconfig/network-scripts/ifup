@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.33 1999/11/16 14:54:01 wiget Exp $
+#	$Id: ifup,v 1.34 1999/12/15 18:41:09 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -25,7 +25,7 @@ if [ `id -u` != 0 ]; then
     exit 1
 fi
 
-IFCONFIGS="`ls /etc/sysconfig/interfaces/ifcfg-*|egrep -v '~$'`"
+IFCONFIGS="`ls /etc/sysconfig/interfaces/ifcfg-*|egrep -v '~$' 2> /dev/null`"
 if [ "$IFCONFIGS" ]; then
     IFCONFIGS="`egrep -L '^#!' $IFCONFIGS`"
 fi
@@ -68,7 +68,7 @@ if [ "$BOOTPROTO" = bootp -o "$BOOTPROTO" = "dhcp" ]; then
 fi
 
 # IPv4, IPv6 or both ?
-[ -n "$IPV6_ADDR" ]                   && IPv6=yes || IPv6=no
+[ -n "$IPV6_ADDR" ]                  && IPv6=yes || IPv6=no
 [ -n "$IPADDR" -o "$PUMP" = "true" ] && IPv4=yes || IPv4=no
 
 # Tunnel device ?
@@ -78,11 +78,15 @@ if [ "$TNL" = "yes" ]; then
 	TNLOPTS="onlink"
 fi
 
-if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
+if [ -z "$PREFIX" -a -z "$NETMASK" ]; then
+	PREFIX="32"
+fi
+
+if [ -z "$PREFIX" -a -n "$NETMASK" ]; then
 	PREFIX="`calcprefix $NETMASK`"
 fi
 
-if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
+if [ -z "$NETMASK" -a -n "$PREFIX" ]; then
 	NETMASK="`calcnetmask $PREFIX`"
 fi
 
@@ -128,7 +132,7 @@ if [ -n "$MACADDR" ]; then
    ip link set ${DEVICE} address ${MACADDR}
 fi
 
-if [ -n "$PUMP" ] && [ "$ISALIAS" = "no" ]; then
+if [ -n "$PUMP" -a "$ISALIAS" = "no" ]; then
 
     echo -n "Determining IP information for $FULLDEVNAME..."
     if /sbin/pump -i $FULLDEVNAME ; then
@@ -189,7 +193,7 @@ fi
 
 # hack for 2.2 kernels
 if [ "$IPv4" = "yes" ]; then
-    if [ "$ISALIAS" = "no" ] && [ -z "`ip -f inet route | sed "s/ .*//" | grep ${NETWORK}`" ]; then
+    if [ "$ISALIAS" = "no" -a -z "`ip -f inet route | sed "s/ .*//" | grep ${NETWORK}`" ]; then
 	ip -family inet route add ${NETWORK}/${PREFIX} dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}
     else
 	ip -family inet route add ${IPADDR}/32 dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}

@@ -1,4 +1,4 @@
-/* $Id: process.c,v 1.2 1999/09/02 12:11:06 misiek Exp $ */
+/* $Id: process.c,v 1.3 1999/12/15 18:41:08 misiek Exp $ */
 
 #include <errno.h>
 #include <fcntl.h>
@@ -6,26 +6,32 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <sys/signal.h>
 #include <sys/poll.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 
 #include <popt.h>
 
+#include <regex.h>
+
 #include "initlog.h"
 #include "process.h"
+
+extern regex_t **regList;
 
 int forkCommand(char **args, int *outfd, int *errfd, int *cmdfd, int quiet) {
    /* Fork command 'cmd', returning pid, and optionally pointer
     * to open file descriptor fd */
     int fdin, fdout, fderr, fdcmd, pid;
     int outpipe[2], errpipe[2], fdpipe[2];
+    int ourpid;
     
     if ( (pipe(outpipe)==-1) || (pipe(errpipe)==-1) || (pipe(fdpipe)==-1) ) {
 	perror("pipe");
 	return -1;
     }
     
-    fdin=dup(0);
     if (outfd) {
        fdout = outpipe[1];
       *outfd = outpipe[0];
@@ -43,17 +49,24 @@ int forkCommand(char **args, int *outfd, int *errfd, int *cmdfd, int quiet) {
     fdcmd = fdpipe[1];
     if (cmdfd)
       *cmdfd = fdpipe[0];
+    ourpid = getpid();
     if ((pid = fork())==-1) {
 	perror("fork");
 	return -1;
     }
-    if (pid) {
+    /* We exec the command normally as the child. However, if we're getting passed
+     * back arguments via an fd, we'll exec it as the parent. Therefore, if Bill
+     * fucks up and we segfault or something, we don't kill rc.sysinit. */
+    if ( (cmdfd&&!pid) || (pid &&!cmdfd)) {
 	/* parent */
 	close(fdin);
 	close(fdout);
 	close(fderr);
 	close(fdcmd);
-	return pid;
+	if (!pid)
+	  return ourpid;
+	else
+	  return pid;
     } else {
 	/* kid */
        if (outfd) { 
@@ -100,15 +113,22 @@ int forkCommand(char **args, int *outfd, int *errfd, int *cmdfd, int quiet) {
 
 int monitor(char *cmdname, int pid, int numfds, int *fds, int reexec, int quiet, int debug) {
     struct pollfd *pfds;
-    char *buf=malloc(2048*sizeof(char));
-    int outpipe[2];
+    char *buf=malloc(8192*sizeof(char));
+    char *outbuf=NULL;
     char *tmpstr=NULL;
     int x,y,rc=-1;
     int done=0;
     int output=0;
+    char **cmdargs=NULL;
+    char **tmpargs=NULL;
+    int cmdargc;
+    char *procpath;
     
-    pipe(outpipe);
-   
+    if (reexec) {
+	procpath=malloc(20*sizeof(char));
+	snprintf(procpath,20,"/proc/%d",pid);
+    }
+    
     pfds = malloc(numfds*sizeof(struct pollfd));
     for (x=0;x<numfds;x++) {
 	pfds[x].fd = fds[x];
@@ -116,20 +136,28 @@ int monitor(char *cmdname, int pid, int numfds, int *fds, int reexec, int quiet,
     }
 	
     while (!done) {
+       usleep(500);
        if (((x=poll(pfds,numfds,500))==-1)&&errno!=EINTR) {
 	  perror("poll");
 	  return -1;
        }
-       if (waitpid(pid,&rc,WNOHANG))
-	 done=1;
+       if (!reexec) {
+	  if (waitpid(pid,&rc,WNOHANG))
+	    done=1;
+       } else {
+	   struct stat sbuf;
+	   /* if /proc/pid ain't there and /proc is, it's dead... */
+	   if (stat(procpath,&sbuf)&&!stat("/proc/cpuinfo",&sbuf))
+	     done=1;
+       }
        y=0;
        while (y<numfds) {
 	  if ( x && ((pfds[y].revents & (POLLIN | POLLPRI)) )) {
 	     int bytesread = 0;
 	     
 	     do {
-		buf=calloc(2048,sizeof(char));
-		bytesread = read(pfds[y].fd,buf,2048);
+		buf=calloc(8192,sizeof(char));
+		bytesread = read(pfds[y].fd,buf,8192);
 		if (bytesread==-1) {
 		   perror("read");
 		   return -1;
@@ -138,54 +166,69 @@ int monitor(char *cmdname, int pid, int numfds, int *fds, int reexec, int quiet,
 		  if (!quiet && !reexec)
 		    write(1,buf,bytesread);
 		  if (quiet) {
-		     output = 1;
-		     write(outpipe[1],buf,bytesread);
+			  outbuf=realloc(outbuf,(outbuf ? strlen(outbuf)+bytesread+1 : bytesread+1));
+			  if (!output) outbuf[0]='\0';
+			  strcat(outbuf,buf);
+			  output = 1;
 		  }
 		  while ((tmpstr=getLine(&buf))) {
-		     if (!reexec) {
-			 if (getenv("IN_INITLOG")) {
-			     char *buffer=calloc(2048,sizeof(char));
-			     DDEBUG("sending =%s= to initlog parent\n",tmpstr);
-			     snprintf(buffer,2048,"-n %s -s \"%s\"\n",
-				      cmdname,tmpstr);
-			     write(CMD_FD,buffer,strlen(buffer));
-			     free(buffer);
-			 } else {
-			     logString(cmdname,tmpstr);
-			 }
-		     } else {
-			char **cmdargs=NULL;
-			char **tmpargs=NULL;
-			int cmdargc,x;
+		      int ignore=0;
+		      
+		      if (regList) {
+			  int count=0;
+			 
+			  while (regList[count]) {
+			      if (!regexec(regList[count],tmpstr,0,NULL,0)) {
+				  ignore=1;
+				  break;
+			      }
+			      count++;
+			  }
+		      }
+		      if (!ignore) {
+			  if (!reexec) {
+			      if (getenv("IN_INITLOG")) {
+				  char *buffer=calloc(8192,sizeof(char));
+				  DDEBUG("sending =%s= to initlog parent\n",tmpstr);
+				  snprintf(buffer,8192,"-n %s -s \"%s\"\n",
+					   cmdname,tmpstr);
+				  /* don't blow up if parent isn't there */
+				  signal(SIGPIPE,SIG_IGN);
+				  write(CMD_FD,buffer,strlen(buffer));
+				  signal(SIGPIPE,SIG_DFL);
+				  free(buffer);
+			      } else {
+				  logString(cmdname,tmpstr);
+			      }
+			  } else {
+			      int z; 
 			
-			poptParseArgvString(tmpstr,&cmdargc,&tmpargs);
-			cmdargs=malloc( (cmdargc++) * sizeof(char *) );
-			cmdargs[0]=strdup("initlog");
-			for (x=0;x<(cmdargc-1);x++) {
-			   cmdargs[x+1]=tmpargs[x];
-			}
-			processArgs(cmdargc,cmdargs,1);
-		     }
+			      cmdargs=NULL;
+			      tmpargs=NULL;
+			      cmdargc=0;
+			      
+			      poptParseArgvString(tmpstr,&cmdargc,&tmpargs);
+			      cmdargs=malloc( (cmdargc+2) * sizeof(char *) );
+			      cmdargs[0]=strdup("initlog");
+			      for (z=0;z<(cmdargc);z++) {
+				  cmdargs[z+1]=tmpargs[z];
+			      }
+			      cmdargs[cmdargc+1]=NULL;
+			      processArgs(cmdargc+1,cmdargs,1);
+			  }
+		      }
 		  }
 		}
-	        
-	     } while ( bytesread==2048 );
+	     } while ( bytesread==8192 );
 	  }
 	  y++;
        }
     }
     if ((!WIFEXITED(rc)) || (rc=WEXITSTATUS(rc))) {
       /* If there was an error and we're quiet, be loud */
-      int x;
       
       if (quiet && output) {
-	 buf=calloc(2048,sizeof(char));
-	 do {
-	    x=read(outpipe[0],buf,2048);
-	    write(1,"\n",1);
-	    write(1,buf,x);
-	    buf=calloc(2048,sizeof(char));
-	 } while (x==2048);
+	    write(1,outbuf,strlen(outbuf));
       }
       return (rc);
    }
@@ -208,8 +251,8 @@ int runCommand(char *cmd, int reexec, int quiet, int debug) {
       cmdname = (char *)basename(args[0]);
     else
       cmdname = (char *)basename(args[1]);
-    if ((cmdname[0] =='K' || cmdname[0] == 'S') && ( 30 <= cmdname[1] <= 39 )
-       && ( 30 <= cmdname[2] <= 39 ) )
+    if ((cmdname[0] =='K' || cmdname[0] == 'S') && ( '0' <= cmdname[1] <= '9' )
+       && ( '0' <= cmdname[2] <= '9' ) )
       cmdname+=3;
     if (!reexec) {
        pid=forkCommand(args,&fds[0],&fds[1],NULL,quiet);

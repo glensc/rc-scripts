@@ -1,4 +1,4 @@
-/* $Id: initlog.c,v 1.2 1999/09/02 12:11:06 misiek Exp $ */
+/* $Id: initlog.c,v 1.3 1999/12/15 18:41:08 misiek Exp $ */
 
 #include <errno.h>
 #include <fcntl.h>
@@ -19,25 +19,101 @@
 
 #include <popt.h>
 
+#include <regex.h>
+
 #include "initlog.h"
 #include "process.h"
 
-static int logfacility=LOG_LOCAL7;
+static int logfacility=LOG_DAEMON;
 static int logpriority=LOG_NOTICE;
 static int reexec=0;
 static int quiet=0;
 int debug=0;
 
+regex_t  **regList = NULL;
+
 static int logEntries = 0;
 struct logInfo *logData = NULL;
 
+void readConfiguration(char *fname) {
+    int fd,num=0;
+    struct stat sbuf;
+    char *data,*line;
+    regex_t *regexp;
+    int lfac=-1,lpri=-1;
+    
+    if ((fd=open(fname,O_RDONLY))==-1) return;
+    if (fstat(fd,&sbuf)) {
+	    close(fd);
+	    return;
+    }
+    data=malloc(sbuf.st_size+1);
+    if (read(fd,data,sbuf.st_size)!=sbuf.st_size) {
+	    close(fd);
+	    return;
+    }
+    close(fd);
+    data[sbuf.st_size] = '\0';
+    while ((line=getLine(&data))) {
+	if (line[0]=='#') continue;
+	if (!strncmp(line,"ignore ",7)) {
+	    regexp = malloc(sizeof(regex_t));
+	    if (!regcomp(regexp,line+7,REG_EXTENDED|REG_NOSUB|REG_NEWLINE)) {
+		regList = realloc(regList,(num+2) * sizeof(regex_t *));
+		regList[num] = regexp;
+		regList[num+1] = NULL;
+		num++;
+	    }
+	}
+	if (!strncmp(line,"facility ",9)) {
+	    lfac=atoi(line+9);
+	    if ((lfac == 0) && strcmp(line+9,"0")) {
+		int x =0;
+		
+		lfac = LOG_DAEMON;
+		for (x=0;facilitynames[x].c_name;x++) {
+		    if (!strcmp(line+9,facilitynames[x].c_name)) {
+			lfac = facilitynames[x].c_val;
+			break;
+		    }
+		}
+	    }
+	}
+	if (!strncmp(line,"priority ",9)) {
+	    lpri = atoi(line+9);
+	    if ((lpri == 0) && strcmp(line+9,"0")) {
+		int x=0;
+		
+		lpri = LOG_NOTICE;
+		for (x=0;prioritynames[x].c_name;x++) {
+		    if (!strcmp(line+9,prioritynames[x].c_name)) {
+			lpri = prioritynames[x].c_val;
+			break;
+		    }
+		}
+	    }
+	}
+    }
+    if (lfac!=-1) logfacility=lfac;
+    if (lpri!=-1) logpriority=lpri;
+}
+    
 char *getLine(char **data) {
     /* Get one line from data */
+    /* Anything up to a carraige return (\r) or a backspace (\b) is discarded. */
+    /* If this really bothers you, mail me and I might make it configurable. */
+    /* It's here to avoid confilcts with fsck's progress bar. */
     char *x, *y;
     
     if (!*data) return NULL;
-    
-    for (x = *data; *x && (*x != '\n'); x++);
+    x=*data;
+    while (*x && (*x != '\n')) {
+	while (*x && (*x != '\n') && (*x != '\r') && (*x != '\b')) x++;
+	if (*x && (*x=='\r' || *x =='\b')) {
+		*data = x+1;
+		x++;
+	}
+    }
     if (*x) {
 	x++;
     } else {
@@ -111,7 +187,7 @@ int startDaemon() {
 
 int logLine(struct logInfo *logEnt) {
     /* Logs a line... somewhere. */
-    int x=0,y=0,z=0;
+    int x;
     struct stat statbuf;
     
     /* Don't log empty or null lines */
@@ -198,14 +274,19 @@ int logString(char *cmd, char *string) {
 
 int processArgs(int argc, char **argv, int silent) {
     char *cmdname=NULL;
+    char *conffile=NULL;
     int cmdevent=0;
     char *cmd=NULL;
     char *logstring=NULL;
     char *fac=NULL,*pri=NULL;
+    int lfac=-1, lpri=-1;
     poptContext context;
     int rc;
     struct poptOption optTable[] = {
 	POPT_AUTOHELP
+	{ "conf", 0, POPT_ARG_STRING, &conffile, 0,
+	  "configuration file (default: /etc/initlog.conf)", NULL
+	},
 	{ "name", 'n', POPT_ARG_STRING, &cmdname, 0,
 	  "name of service being logged", NULL 
 	},
@@ -225,7 +306,7 @@ int processArgs(int argc, char **argv, int silent) {
 	  "string to log", NULL
 	},
 	{ "facility", 'f', POPT_ARG_STRING, &fac, 1,
-	  "facility to log at (default: 'daemon')", NULL
+	  "facility to log at (default: 'local7')", NULL
 	},
 	{ "priority", 'p', POPT_ARG_STRING, &pri, 2,
 	  "priority to log at (default: 'notice')", NULL
@@ -241,28 +322,28 @@ int processArgs(int argc, char **argv, int silent) {
     while ((rc = poptGetNextOpt(context)) > 0) {
 	switch (rc) {
 	 case 1:
-	    logfacility=atoi(fac);
-	    if ((logfacility == 0) && strcmp(fac,"0")) {
+	    lfac=atoi(fac);
+	    if ((lfac == 0) && strcmp(fac,"0")) {
 		int x =0;
 		
-		logfacility = LOG_DAEMON;
+		lfac = LOG_DAEMON;
 		for (x=0;facilitynames[x].c_name;x++) {
 		    if (!strcmp(fac,facilitynames[x].c_name)) {
-			logfacility = facilitynames[x].c_val;
+			lfac = facilitynames[x].c_val;
 			break;
 		    }
 		}
 	    }
 	    break;
 	 case 2:
-	    logpriority = atoi(pri);
-	    if ((logpriority == 0) && strcmp(pri,"0")) {
+	    lpri = atoi(pri);
+	    if ((lpri == 0) && strcmp(pri,"0")) {
 		int x=0;
 		
-		logpriority = LOG_NOTICE;
+		lpri = LOG_NOTICE;
 		for (x=0;prioritynames[x].c_name;x++) {
 		    if (!strcmp(pri,prioritynames[x].c_name)) {
-			logpriority = prioritynames[x].c_val;
+			lpri = prioritynames[x].c_val;
 			break;
 		    }
 		}
@@ -294,6 +375,13 @@ int processArgs(int argc, char **argv, int silent) {
 	 fprintf(stderr, _("--name requires one of --event or --string\n"));
 	return -1;
     }
+    if (conffile) {
+	readConfiguration(conffile);
+    } else {
+	readConfiguration("/etc/initlog.conf");
+    }
+    if (lpri!=-1) logpriority=lpri;
+    if (lfac!=-1) logfacility=lfac;
     if (cmdevent) {
 	logEvent(cmdname,cmdevent,logstring);
     } else if (logstring) {

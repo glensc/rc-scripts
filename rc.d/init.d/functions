@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.32 1999/12/02 21:44:17 elephant Exp $
+# $Id: functions,v 1.33 1999/12/15 18:41:07 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -56,7 +56,7 @@ if [ -x /bin/gettext ] || [ -x /usr/bin/gettext ]; then
 	if [ -z "$NLS_DOMAIN" ]; then
 		NLS_DOMAIN="rc-scripts"
 	fi
-	text="`TEXTDOMAINDIR="/etc/sysconfig/locale" gettext --domain="$NLS_DOMAIN" "$1"`"
+	text="`TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="$NLS_DOMAIN" "$1"`"
 	shift
 	printf_ "$text" "$@"
 	echo

@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.32 1999/11/16 01:34:40 kloczek Exp $
+# $Id: functions.network,v 1.33 1999/12/15 18:41:07 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -7,7 +7,7 @@
 # This will work only after starting interface to which LDAP server is connected
 find_ldap_interfaces()
 {
-[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+[ "$USE_LDAP" = "yes" -a -x /usr/bin/ldapsearch ] || exit 1
 if [ -n "$LDAP_BASE_DN" ] ; then
 	BSWITCH="-b$LDAP_BASE_DN" 
 else
@@ -22,7 +22,7 @@ ldapsearch "$BSWITCH" "$QUERY" if_device | \
 # find aliases for device
 find_ldap_aliases()
 {
-[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+[ "$USE_LDAP" = "yes" -a -x /usr/bin/ldapsearch ] || exit 1
 if [ -n "$LDAP_BASE_DN" ] ; then
 	BSWITCH="-b$LDAP_BASE_DN" 
 else
@@ -36,7 +36,7 @@ ldapsearch "$BSWITCH" "$QUERY" if_device | \
 
 get_ldap_config ()
 {
-if [ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ]; then
+if [ "$USE_LDAP" = "yes" -a -x /usr/bin/ldapsearch ]; then
 	exit 1
 fi
 
@@ -161,7 +161,7 @@ VAR="$5"
 MESSAGE="$6"
 eval VARD=\$${VAR}
 
-if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
+if [ -n "$VARD" -a -e /proc/sys/net/$WHAT ]; then
 	if [ "$TODO" = "start" ]; then
 	        [ "$VARD" = "no" -a "$SET" = "1" ] && SET="$(($SET - 1))"
 		[ "$VARD" = "yes" -a "$SET" = "0" ] && SET="$(($SET + 1))"
@@ -198,7 +198,7 @@ if [ "$IPV4_DYNAMIC_IP_PATCH" != "default" -a -n "$IPV4_DYNAMIC_IP_PATCH" ] ||
 		*)	IPV4_DYNAMIC_IP_PATCH_VALUE=7 ;;
 	esac
 
-	if [ "$IPV4_DYNAMIC_IP_PATCH" = "yes" ] && [ "$1" = "on" ]; then
+	if [ "$IPV4_DYNAMIC_IP_PATCH" = "yes" -a "$1" = "on" ]; then
 		show "Enabling dynamic IP patch"
 		busy
 		if echo $IPV4_DYNAMIC_IP_PATCH_VALUE > /proc/sys/net/ipv4/ip_dynaddr; then
@@ -226,7 +226,7 @@ ipv4_local_port_range()
 {
 if [ "$IPV4_LOCAL_PORT_RANGE" != "default" -a -n "$IPV4_LOCAL_PORT_RANGE" ] || \
    [ ! -e /proc/sys/net/ipv4/ip_local_port_range ]; then
-	if [ "$IPV4_LOCAL_PORT_RANGE" = "yes" ] && [ "$1" = "on" ]; then
+	if [ "$IPV4_LOCAL_PORT_RANGE" = "yes" -a "$1" = "on" ]; then
 		show "Setting local port range"; busy
 		if echo "$IPV4_LOCAL_PORT_RANGE" > /proc/sys/net/ipv4/ip_local_port_range; then
 			deltext
@@ -252,7 +252,7 @@ ipv4_anti_spoofing()
 {
 if [ "$IPV4_ANTI_SPOOFING" != "default" -a -n "$IPV4_ANTI_SPOOFING" ] || \
    [ ! -e /proc/sys/net/ipv4/conf/all/rp_filter ]; then
-	if [ "$IPV4_ANTI_SPOOFING" = "yes" ] && [ "$1" = "on" ]; then
+	if [ "$IPV4_ANTI_SPOOFING" = "yes" -a "$1" = "on" ]; then
 		show "Setting up IP spoofing protection"; busy
 		if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 1 > $f; done); then
 			deltext
@@ -300,8 +300,8 @@ fi
 
 modprobe_net()
 {
-if [ "$IPV6_NETWORKING" = "yes" ] && \
-   [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ]; then
+if [ "$IPV6_NETWORKING" = "yes" -a  \
+     "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ]; then
 	modprobe -s -k net-pf-10
 fi
 }

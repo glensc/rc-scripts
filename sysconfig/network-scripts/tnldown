@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnldown,v 1.11 1999/11/06 00:25:31 wiget Exp $
+#	$Id: tnldown,v 1.12 1999/12/15 18:41:09 misiek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -33,9 +33,9 @@ fi
 
 source_config
 
-if [ "${IPV6_TUNNELCONFIG}" != "yes" ] && [ "${MODE}" = "sit" ] || \
-   [ "${IPX}" != "yes" ] && [ "${MODE}" = "ipxip" ] || \
-   [ "${IPX}" != "yes" ] && [ "${MODE}" = "ipipx" ]
+if [ "${IPV6_TUNNELCONFIG}" != "yes" -a "${MODE}" = "sit" ] || \
+   [ "${IPX}" != "yes" -a [ "${MODE}" = "ipxip" ] || \
+   [ "${IPX}" != "yes" -a [ "${MODE}" = "ipipx" ]
 then
         exit
 fi

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.15 1999/11/06 00:25:31 wiget Exp $
+#	$Id: tnlup,v 1.16 1999/12/15 18:41:09 misiek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -38,16 +38,16 @@ then
         exit
 fi
 
-if [ "${IPV6_TUNNELCONFIG}" != "yes" ] && [ "${MODE}" = "sit" ] || \
-   [ "${IPX}" != "yes" ] && [ "${MODE}" = "ipxip" ] || \
-   [ "${IPX}" != "yes" ] && [ "${MODE}" = "ipipx" ]
+if [ "${IPV6_TUNNELCONFIG}" != "yes" -a "${MODE}" = "sit" ] || \
+   [ "${IPX}" != "yes" -a "${MODE}" = "ipxip" ] || \
+   [ "${IPX}" != "yes" -a "${MODE}" = "ipipx" ]
 then
 	exit
 fi
 
-if [ "${MODE}" = "gre" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ip_gre.o`" != "" ]; then
+if [ "${MODE}" = "gre" -a "`ls -R /lib/modules/\`uname -r\`/ | grep ip_gre.o`" != "" ]; then
 	modprobe -s -k ip_gre
-elif [ "${MODE}" = "ipip" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipip.o`" != "" ]; then
+elif [ "${MODE}" = "ipip" -a "`ls -R /lib/modules/\`uname -r\`/ | grep ipip.o`" != "" ]; then
 	modprobe -s -k ipip
 fi
 
@@ -89,7 +89,7 @@ IKEY=""
 OKEY=""
 fi
 
-if [ "${MODE}" = "ipip" ] || [ "${MODE}" = "sit" ]; then
+if [ "${MODE}" = "ipip" -o "${MODE}" = "sit" ]; then
 	
 	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV}
 
@@ -97,7 +97,7 @@ elif [ "${MODE}" = "gre" ]; then
 
 	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV} ${CSUM} ${ISEQ} ${KEY} ${IKEY} ${OKEY}
 
-elif [ "${MODE}" = "ipxip" ] || [ "${MODE}" = "ipipx" ]; then
+elif [ "${MODE}" = "ipxip" -o "${MODE}" = "ipipx" ]; then
 
 echo "obs³uga ipxip jeszcze nie zrobiona"
 
