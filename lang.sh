@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: lang.sh,v 1.6 1999/12/15 18:41:05 misiek Exp $
+#	$Id: lang.sh,v 1.7 2000/06/27 09:50:07 waszi Exp $
 #
 
 if [ -f /etc/sysconfig/i18n ]; then
@@ -24,21 +24,6 @@ if [ -f /etc/sysconfig/i18n ]; then
       export TERM=$SYSTERM
    fi
 
-   if [ -n "$SYSFONTACM" ]; then
-       case $SYSFONTACM in
-         iso01*|iso02*|iso15*|koi*|latin2-ucw*)
-              LESSCHARSET=latin1
-	      INPUTRC=/etc/inputrc
-              export LESSCHARSET INPUTRC
-              if [ "$TERM" = "linux" ]; then
-                  if ls -l /proc/$$/fd/0 2>/dev/null | grep -- '-> /dev/tty[0-9]*$' >/dev/null 2>&1; then
-                      echo -n -e '\033(K' > /proc/$$/fd/0
-                  fi
-              fi
-              ;;
-      esac
-   fi
-
    if [ -n "$INPUTRC" ]; then
       export INPUTRC
    fi
@@ -49,6 +34,4 @@ if [ -f /etc/sysconfig/i18n ]; then
        LESSCHARSET=latin1
       export LESSCHARSET
    fi
-
-
 fi
