@@ -135,6 +135,7 @@ case "$CMD" in
 		    msg_stopping "System chroots services for $dir"; started
 		    chroot $dir /etc/rc.d/rc $runlevel chroot
 		    rm -f $dir/var/lock/subsys/network
+		    chroot $dir umount -a
 		done
 		rm -f /var/lock/subsys/sys-chroots >/dev/null 2>&1
 	else
