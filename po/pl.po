@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.36 2001/08/16 22:52:47 kloczek Exp $
+# $Id: pl.po,v 1.37 2001/10/04 07:41:48 qboosh Exp $
 #
 msgid ""
 msgstr ""
@@ -533,7 +533,7 @@ msgstr "Automatyczny restart w toku"
 
 #: ./rc.d/rc:184
 msgid "Please stand by while rebooting the system"
-msgstr "Prosze czekac - restart system"
+msgstr "Prosze czekac - restart systemu"
 
 #: ./rc.d/rc.sysinit:514
 msgid "Setting %s seconds for kernel reboot after panic"
