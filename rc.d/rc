@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.30 2001/05/16 01:54:36 baggins Exp $
+# $Id: rc,v 1.31 2002/09/14 19:54:16 orzech Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -53,7 +53,6 @@ else
 	DELAY_LOGIN=yes
 	CLEAN_TMP=no
 	CONSOLE_LOGLEVEL=1
-	LOAD_SOUND=yes
 	SET_SLINKS=yes
 	RUN_LDCONFIG=yes
 fi
