@@ -808,12 +808,6 @@ action () { STRING=$1; shift; run_cmd "$STRING" "$*"; }
 success () { return 0; }
 failure () { return 1; }
 
-# TO BE REMOVED IN AC. --ankry
-msg_Network_Down () { msg_network_down "$*"; }
-msg_Already_Running () { msg_already_running "$*"; }
-msg_Not_Running () { msg_not_running "$*"; }
-msg_Usage () { msg_usage "$*"; }
-
 disable_selinux() {
 	selinuxfs=`awk '/ selinuxfs / { print $2 }' /proc/mounts`
 	echo "*** Warning -- SELinux is active"
