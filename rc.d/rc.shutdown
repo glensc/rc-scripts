@@ -6,13 +6,10 @@
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.15 2001/05/15 16:03:36 baggins Exp $
+# $Id: rc.shutdown,v 1.16 2001/05/16 01:33:33 baggins Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
-
-# NLS
-NLS_DOMAIN="rc-scripts"
 
 # move to root dir
 cd /
@@ -21,6 +18,8 @@ cd /
 
 # Kill all processes.
 [ "${BASH+bash}" = bash ] && enable kill
+
+runlevel=$1
 
 run_cmd "Sending all processes the TERM signal" killall5 -15
 sleep 5
@@ -72,8 +71,7 @@ if [ -x /sbin/raidstop -a -f /etc/raidtab ]; then
 	if [ -f /proc/mdstat ] ; then
 		mddevs=$(awk '/^md.* active/ {print $1}' /proc/mdstat)
 		for mddev in $mddevs ; do
-			MESSAGE="$(nls 'Turning off RAID for %s' "$mddev")"
-			run_cmd "$MESSAGE" raidstop /dev/$mddev
+			run_cmd "Turning off RAID for $mddev" raidstop /dev/$mddev
 		done
 		unset mddev mddevs
 	fi
@@ -87,6 +85,16 @@ if ( mount | awk '/ext2|ext3|reiserfs|xfs|jfs/ { print $3 }' | \
 	ok
 else
 	fail
+fi
+
+if [ "$runlevel" = "0" ] ; then
+       	show "The system is halted"; ok
+	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+	eval halt -d -p
+else
+	show "Please stand by while rebooting the system"; ok
+	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+	eval reboot -d
 fi
 
 # This must be last line !
