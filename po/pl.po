@@ -18,6 +18,10 @@ msgstr ""
 msgid "Setting time zone information (%s, %s)"
 msgstr "Ustawianie informacji o strefie czasowej (%s, %s)"
 
+#: .././rc.d/rc.shutdown:79
+msgid "Stopping LVM volume groups"
+msgstr "Zatrzymywanie grup woluminów LVM"
+
 #: .././sysconfig/network-scripts/ifup-aliases:14
 #: .././sysconfig/network-scripts/ifup-routes:13
 #: .././sysconfig/network-scripts/tnldown:29
@@ -29,19 +33,16 @@ msgstr "Ustawianie informacji o strefie czasowej (%s, %s)"
 msgid "Usage: %s <device name>"
 msgstr "U¿ycie: %s <nazwa urz±dzenia>"
 
-#: .././rc.d/rc.shutdown:52 .././rc.d/rc.sysinit~:270
-#: .././rc.d/rc.sysinit~:283 .././rc.d/rc.sysinit~:572
-#: .././rc.d/rc.sysinit~:614 .././rc.d/rc.sysinit~:669
-#: .././rc.d/rc.sysinit:270 .././rc.d/rc.sysinit:283 .././rc.d/rc.sysinit:572
-#: .././rc.d/rc.sysinit:614 .././rc.d/rc.sysinit:669
+#: .././rc.d/init.d/timezone:42
+msgid "$MESSAGE"
+msgstr ""
+
+#: .././rc.d/rc.sysinit:294 .././rc.d/rc.sysinit:307 .././rc.d/rc.sysinit:604
+#: .././rc.d/rc.sysinit:647 .././rc.d/rc.sysinit:703 .././rc.d/rc.shutdown:52
 msgid "Unmounting file systems"
 msgstr "Od³±czanie systemów plików"
 
-#: .././rc.d/init.d/network:197
-msgid "Shutting down bridge interface"
-msgstr "Wy³±czanie interfejsu mostu"
-
-#: .././rc.d/init.d/functions:667
+#: .././rc.d/init.d/functions:708
 msgid "%s is stopped"
 msgstr "%s jest zatrzymany"
 
@@ -49,21 +50,16 @@ msgstr "%s jest zatrzymany"
 msgid "WORK"
 msgstr "AKTYWUJÊ"
 
-#: .././sysconfig/network-scripts/ifup:193
-msgid "Enabling proxy ARP on ${DEVICE}"
-msgstr ""
-
-#: .././rc.d/rc.shutdown:70 .././rc.d/rc.sysinit~:573
-#: .././rc.d/rc.sysinit~:615 .././rc.d/rc.sysinit~:670
-#: .././rc.d/rc.sysinit:573 .././rc.d/rc.sysinit:615 .././rc.d/rc.sysinit:670
+#: .././rc.d/rc.sysinit:605 .././rc.d/rc.sysinit:648 .././rc.d/rc.sysinit:704
+#: .././rc.d/rc.shutdown:70
 msgid "Remounting root filesystem in ro mode"
 msgstr "Prze³±czanie g³ównego systemu plików w tryb tylko do odczytu"
 
-#: .././sysconfig/network-scripts/ifup-ppp:102
+#: .././sysconfig/network-scripts/ifup-ppp:101
 msgid "ifup-ppp for %s exiting"
 msgstr "ifup-ppp dla %s koñczy"
 
-#: .././rc.d/rc.sysinit~:176 .././rc.d/rc.sysinit:176
+#: .././rc.d/rc.sysinit:199
 msgid "Host:"
 msgstr "Host:"
 
@@ -71,15 +67,7 @@ msgstr "Host:"
 msgid "dip started for %s on %s at %s"
 msgstr "dip wystartowa³ dla %s na %s przy %s"
 
-#: .././rc.d/init.d/network:201
-msgid "Shutting down tunnel interface"
-msgstr "Wy³±czanie tunelu"
-
-#: .././sysconfig/network-scripts/ifup-sl:56
-msgid "does not exist"
-msgstr "nie istnieje"
-
-#: .././rc.d/init.d/functions:657
+#: .././rc.d/init.d/functions:698
 msgid "%s dead but pid file exists"
 msgstr "%s zabity ale plik z numerem procesu istnieje"
 
@@ -87,32 +75,40 @@ msgstr "%s zabity ale plik z numerem procesu istnieje"
 msgid "Saving random seed"
 msgstr "Zapisanie podstawy generatora losowego"
 
-#: .././rc.d/rc.sysinit~:115 .././rc.d/rc.sysinit:115
+#: .././rc.d/rc.sysinit:138
 msgid "Starting Device Filesystem Daemon"
 msgstr "Uruchamianie Zarz±dcy Systemu Plików Urz±dzeñ (devfsd)"
 
-#: .././rc.d/rc.sysinit~:214 .././rc.d/rc.sysinit:214
+#: .././rc.d/rc.sysinit:237
 msgid "Initializing USB keyboard"
 msgstr "Inicjalizacja klawiatury USB"
+
+#: .././rc.d/init.d/network:178
+msgid "Bringing up interface %s"
+msgstr "Podnoszenie interfejsu %s"
 
 #: .././rc.d/init.d/template.init:61 .././rc.d/init.d/template.init:77
 #: .././rc.d/init.d/functions:273
 msgid "%s service is not running."
 msgstr "Us³uga %s nie jest uruchomiona."
 
-#: .././rc.d/rc.sysinit~:322 .././rc.d/rc.sysinit:322
+#: .././rc.d/rc.sysinit:346
 msgid "Remounting root filesystem in rw mode"
 msgstr "Prze³±czanie g³ównego systemu plików w tryb zapis/odczyt"
 
-#: .././rc.d/init.d/functions:639 .././rc.d/init.d/functions:647
+#: .././rc.d/init.d/functions:680 .././rc.d/init.d/functions:688
 msgid "%s (pid %s) is running..."
 msgstr "%s (pid %s) jest uruchomiony..."
+
+#: .././rc.d/rc.sysinit:129
+msgid "Starting udev"
+msgstr ""
 
 #: .././sysconfig/network-scripts/ifup-br:87
 msgid "problems with setting bridge %s"
 msgstr "wyst±pi³y problemy przy ustawianiu bridge'a %s"
 
-#: .././rc.d/rc.sysinit~:278 .././rc.d/rc.sysinit:278
+#: .././rc.d/rc.sysinit:302
 msgid "*** Filesystem was repaired but system needs to be"
 msgstr "*** System plików zosta³ naprawiony ale konieczny jest"
 
@@ -120,16 +116,27 @@ msgstr "*** System plików zosta³ naprawiony ale konieczny jest"
 msgid "Setting time zone information (%s)"
 msgstr "Ustawianie informacji o strefie czasowej (%s)"
 
+#: .././rc.d/init.d/functions:808
+msgid "$STRING"
+msgstr ""
+
 #: .././rc.d/rc.shutdown:42
 msgid "Turning off quotas for local filesystems"
 msgstr "Wy³±czanie quot na lokalnych systemach plików"
 
-#: .././rc.d/rc:92
+#: .././rc.d/rc:95
 msgid "Entering non-interactive startup"
 msgstr "Wchodzê w tryb nieinteraktywny"
 
-#: .././rc.d/rc.sysinit~:434 .././rc.d/rc.sysinit~:439
-#: .././rc.d/rc.sysinit:434 .././rc.d/rc.sysinit:439
+#: .././rc.d/init.d/functions:409
+msgid "$message"
+msgstr ""
+
+#: .././sysconfig/network-scripts/ifup:199
+msgid "Enabling proxy ARP on %s"
+msgstr ""
+
+#: .././rc.d/rc.sysinit:465 .././rc.d/rc.sysinit:470
 msgid "Loading sound module"
 msgstr "£adowanie modu³u obs³ugi d¼wiêku"
 
@@ -138,18 +145,22 @@ msgid "The random data source is missing"
 msgstr "Brak ¼ród³a losowych danych"
 
 #: .././rc.d/init.d/network:22 .././rc.d/init.d/network:42
-#: .././sysconfig/network-scripts/ifup-sl:87
 #: .././sysconfig/network-scripts/ifup-irda:36
+#: .././sysconfig/network-scripts/ifup-sl:87
 #: .././sysconfig/network-scripts/ifdown-vlan:36
 #: .././sysconfig/network-scripts/ifdown-br:35
+#: .././sysconfig/network-scripts/ifup-ipx:22
 #: .././sysconfig/network-scripts/ifup-vlan:43
 #: .././sysconfig/network-scripts/ifup-vlan:54
-#: .././sysconfig/network-scripts/ifup-ipx:22
 #: .././sysconfig/network-scripts/ifup-br:35
 msgid "%s is missing. Can't continue."
 msgstr "%s nie jest obecny. Nie mogê kontynuowaæ."
 
-#: .././rc.d/init.d/functions:732
+#: .././rc.d/init.d/network:235
+msgid "Configured devices:"
+msgstr "Skonfigurowane urz±dzenia sieciowe:"
+
+#: .././rc.d/init.d/functions:773
 msgid "Loading %s kernel module(s)"
 msgstr "£adowanie modu³u(ów) %s"
 
@@ -157,26 +168,17 @@ msgstr "£adowanie modu³u(ów) %s"
 msgid "Sending all processes the KILL signal"
 msgstr "Wysy³anie do wszystkich procesów sygna³u KILL"
 
-#: .././rc.d/init.d/network:214
-msgid "Configured devices:"
-msgstr "Skonfigurowane urz±dzenia sieciowe:"
-
 #: .././sysconfig/network-scripts/ifup-vlan:59
 msgid "VLAN kernel support is missing. Can't continue."
 msgstr "Brak wsparcia dla VLAN w j±drze. Nie mo¿na kontynuowaæ."
 
-#: .././rc.d/rc.sysinit~:165 .././rc.d/rc.sysinit~:706
-#: .././rc.d/rc.sysinit:165 .././rc.d/rc.sysinit:706
+#: .././rc.d/init.d/network:187
+msgid "Bringing up bridge interface %s"
+msgstr "Podnoszenie interfejsu mostu %s"
+
+#: .././rc.d/rc.sysinit:188 .././rc.d/rc.sysinit:742
 msgid "Setting clock"
 msgstr "Ustawianie zegara systemowego"
-
-#: .././rc.d/init.d/network:162
-msgid "Bringing up tunnel interface"
-msgstr "Podnoszenie tunelu"
-
-#: .././rc.d/init.d/network:166
-msgid "Bringing up bridge interface"
-msgstr "Podnoszenie interfejsu mostu"
 
 #: .././rc.d/init.d/template.init:96
 msgid "Usage: %s {start|stop|restart|reload|force-reload|status}"
@@ -184,21 +186,25 @@ msgstr ""
 
 #: .././sysconfig/network-scripts/ifup-sl:45
 #: .././sysconfig/network-scripts/ifup-ppp:35
-#: .././sysconfig/network-scripts/ifup-ppp:67
+#: .././sysconfig/network-scripts/ifup-ppp:66
 msgid "%s for %s exiting"
 msgstr "%s dla %s koñczy"
 
-#: .././rc.d/rc.sysinit~:579 .././rc.d/rc.sysinit:579
+#: .././rc.d/rc.sysinit:611
 msgid "Scanning for LVM volume groups (on RAID)"
 msgstr "Poszukiwanie woluminów grup LVM (na RAID)"
 
-#: .././rc.d/rc.sysinit~:280 .././rc.d/rc.sysinit:280
+#: .././rc.d/rc.sysinit:304
 msgid "*** REBOOTING ***"
 msgstr "*** RESTARTUJÊ ***"
 
-#: .././rc.d/rc.sysinit~:279 .././rc.d/rc.sysinit:279
+#: .././rc.d/rc.sysinit:303
 msgid "*** rebooted before mounting it."
 msgstr "*** restart przez zamontowaniem go."
+
+#: .././rc.d/init.d/network:218
+msgid "Shutting down bridge interface %s"
+msgstr "Wy³±czanie interfejsu mostu %s"
 
 #: .././rc.d/init.d/random:53
 msgid "The random data source exists"
@@ -208,11 +214,11 @@ msgstr "¬ród³o losowych danych istnieje"
 msgid "Reload %s service"
 msgstr "Prze³adowanie us³ugi %s"
 
-#: .././rc.d/rc.sysinit~:717 .././rc.d/rc.sysinit:717
+#: .././rc.d/rc.sysinit:753
 msgid "Setting %s seconds for kernel reboot after panic"
 msgstr "Restart systemu po %s sekundach od zawieszenia sie j±dra"
 
-#: .././rc.d/rc.sysinit~:217 .././rc.d/rc.sysinit:217
+#: .././rc.d/rc.sysinit:240
 msgid "Initializing USB mouse"
 msgstr "Inicjalizacja myszy USB"
 
@@ -220,17 +226,15 @@ msgstr "Inicjalizacja myszy USB"
 msgid "problems with setting %s %s"
 msgstr "wyst±pi³y problemy przy ustawianiu %s %s"
 
-#: .././rc.d/rc.sysinit~:263 .././rc.d/rc.sysinit~:607
-#: .././rc.d/rc.sysinit~:662 .././rc.d/rc.sysinit:263 .././rc.d/rc.sysinit:607
-#: .././rc.d/rc.sysinit:662
+#: .././rc.d/rc.sysinit:286 .././rc.d/rc.sysinit:639 .././rc.d/rc.sysinit:695
 msgid "(Repair filesystem)# "
 msgstr "(Naprawa systemu plików)# "
 
-#: .././rc.d/rc.sysinit~:92 .././rc.d/rc.sysinit:92
+#: .././rc.d/rc.sysinit:109
 msgid "Setting default font"
 msgstr "Ustawianie standardowego fontu"
 
-#: .././rc.d/rc.sysinit~:560 .././rc.d/rc.sysinit:560
+#: .././rc.d/rc.sysinit:591
 msgid "*** An error occurred during the RAID startup."
 msgstr ""
 "*** Podczas inicjacji urz±dzeñ RAID wykryto b³±d niemo¿liwy do usuniêcia."
@@ -239,15 +243,15 @@ msgstr ""
 msgid "System shutdown in progress \n"
 msgstr "Zamykanie systemu w toku \n"
 
-#: .././rc.d/init.d/network:206
-msgid "Shutting down interface"
-msgstr "Wy³±czanie interfejsu"
+#: .././rc.d/init.d/network:227
+msgid "Shutting down interface %s"
+msgstr "Wy³±czanie interfejsu %s"
 
 #: .././rc.d/rc.shutdown:37
 msgid "Turning off swap"
 msgstr "Wy³±czanie swapa"
 
-#: .././rc.d/init.d/network:221
+#: .././rc.d/init.d/network:242
 msgid "Currently active devices and tunnels:"
 msgstr "Aktywne urz±dzenia sieciowe i tunele:"
 
@@ -255,11 +259,11 @@ msgstr "Aktywne urz±dzenia sieciowe i tunele:"
 msgid "Disabling IPv6 autoconfiguration"
 msgstr "Wy³±czanie autokonfiguracji IPv6"
 
-#: .././rc.d/rc.sysinit~:494 .././rc.d/rc.sysinit:494
+#: .././rc.d/rc.sysinit:525
 msgid "Activating LVM volume groups"
 msgstr "Aktywacja grup woluminów LVM"
 
-#: .././rc.d/rc:245 .././rc.d/rc:246
+#: .././rc.d/rc:252 .././rc.d/rc:253
 msgid "%sResource Manager: %sRunlevel has been reached"
 msgstr "%sZarz±dca zasobów: %sOsi±gniêto poziom"
 
@@ -267,11 +271,15 @@ msgstr "%sZarz±dca zasobów: %sOsi±gniêto poziom"
 msgid "Starting %s service"
 msgstr "Uruchamianie us³ugi %s"
 
-#: .././rc.d/rc.shutdown:75
+#: .././sysconfig/network-scripts/ifup:156
+msgid "%s: Check cable?"
+msgstr ""
+
+#: .././rc.d/rc.shutdown:85
 msgid "Turning off RAID devices"
 msgstr "Wy³±czanie obs³ugi urz±dzeñ RAID"
 
-#: .././rc.d/rc.sysinit~:493 .././rc.d/rc.sysinit:493
+#: .././rc.d/rc.sysinit:524
 msgid "Scanning for LVM volume groups"
 msgstr "Poszukiwanie woluminów grup LVM"
 
@@ -279,17 +287,17 @@ msgstr "Poszukiwanie woluminów grup LVM"
 msgid "Setting static RARP entries"
 msgstr "Ustawianie statycznych wpisów RARP"
 
-#: .././rc.d/init.d/network:216
-msgid "Configured tunnels:"
-msgstr "Skonfigurowane tunele:"
-
-#: .././rc.d/init.d/functions:674
+#: .././rc.d/init.d/functions:715
 msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
 msgstr "Uruchomiæ us³ugê %s (T)ak/(N)ie/(K)ontynuuj? [T] "
 
-#: .././sysconfig/network-scripts/ifup-sl:59
-msgid "does not exist for"
-msgstr "nie istnieje dla"
+#: .././rc.d/init.d/network:223
+msgid "Removing tunnel %s"
+msgstr "Usuwanie tunelu %s"
+
+#: .././rc.d/init.d/network:237
+msgid "Configured tunnels:"
+msgstr "Skonfigurowane tunele:"
 
 #: .././sysconfig/network-scripts/ifup:126
 msgid "Can't find a dhcp client."
@@ -299,137 +307,123 @@ msgstr "Nie mogê znale¼æ klienta dhcp."
 msgid "%s service is already running."
 msgstr "Us³uga %s jest ju¿ uruchomiona."
 
+#: .././rc.d/init.d/network:183
+msgid "Bringing up tunnel interface %s"
+msgstr "Podnoszenie tunelu %s"
+
 #: .././sysconfig/network-scripts/ifup:35
 msgid "Users cannot control this device."
 msgstr "U¿ytkownicy nie mog± kontrolowaæ tego urz±dzenia."
-
-#: .././rc.d/init.d/network:191
-msgid "Unmounting CIFS filesystems"
-msgstr "Od³±czanie systemów plików CIFS"
 
 #: .././rc.d/init.d/template.init:29 .././rc.d/init.d/functions:253
 msgid "ERROR: Networking is down. %s can't be run."
 msgstr "B£¡D: Sieæ nie jest uruchomiona. %s nie mo¿e zostaæ uruchomiony."
 
-#: .././sysconfig/network-scripts/ifup-ppp:101
+#: .././rc.d/init.d/network:212
+msgid "Unmounting CIFS filesystems"
+msgstr "Od³±czanie systemów plików CIFS"
+
+#: .././sysconfig/network-scripts/ifup-sl:56
+#: .././sysconfig/network-scripts/ifup-ppp:100
 msgid "%s does not exist"
 msgstr "%s nie istnieje"
 
-#: .././rc.d/rc.sysinit~:203 .././rc.d/rc.sysinit:203
+#: .././rc.d/rc.sysinit:226
 msgid "Mounting USB filesystem"
 msgstr "Montowanie systemu plików USB"
 
-#: .././rc.d/rc.sysinit~:210 .././rc.d/rc.sysinit:210
+#: .././rc.d/rc.sysinit:233
 msgid "Initializing USB HID interface"
 msgstr "Inicjalizacja interfejsu USB HID"
 
-#: .././rc.d/rc.sysinit~:260 .././rc.d/rc.sysinit~:562
-#: .././rc.d/rc.sysinit~:604 .././rc.d/rc.sysinit~:659
-#: .././rc.d/rc.sysinit:260 .././rc.d/rc.sysinit:562 .././rc.d/rc.sysinit:604
-#: .././rc.d/rc.sysinit:659
+#: .././rc.d/rc.sysinit:283 .././rc.d/rc.sysinit:593 .././rc.d/rc.sysinit:636
+#: .././rc.d/rc.sysinit:692
 msgid "*** when you leave the shell."
 msgstr "*** po opuszczeniu pow³oki."
 
-#: .././rc.d/rc.sysinit~:565 .././rc.d/rc.sysinit:565
+#: .././rc.d/rc.sysinit:596
 msgid "(RAID Repair)# "
 msgstr "(Naprawa RAID)# "
 
-#: .././rc.d/init.d/network:157
-msgid "Bringing up interface"
-msgstr "Podnoszenie interfejsu"
-
-#: .././rc.d/rc.sysinit~:98 .././rc.d/rc.sysinit:98
+#: .././rc.d/rc.sysinit:115
 msgid "\t\t  Press %sI%s to enter interactive startup"
 msgstr "\t      Proszê wcisn±æ %sI%s ¿eby wej¶æ w tryb interaktywny"
 
-#: .././rc.d/rc.sysinit~:96 .././rc.d/rc.sysinit:96
+#: .././rc.d/rc.sysinit:113
 msgid "\t\t\t%sPowered by %sPLD Linux Distribution%s"
 msgstr "\t\t\t%sNapêdzane przez %sPLD Linux Distribution%s"
 
-#: .././rc.d/rc:149 .././rc.d/init.d/functions:332
+#: .././rc.d/init.d/functions:332 .././rc.d/rc:152
 msgid "DONE"
 msgstr "ZROBIONE"
 
-#: .././rc.d/rc.sysinit~:634 .././rc.d/rc.sysinit:634
+#: .././rc.d/rc.sysinit:667
 msgid "Checking encrypted filesystems"
 msgstr "Sprawdzanie zaszyfrowanych systemów plików"
 
-#: .././rc.d/rc.sysinit~:394 .././rc.d/rc.sysinit~:396
-#: .././rc.d/rc.sysinit:394 .././rc.d/rc.sysinit:396
+#: .././rc.d/rc.sysinit:425 .././rc.d/rc.sysinit:427
 msgid "Finding module dependencies"
 msgstr "Wyszukiwanie powi±zañ pomiêdzy modu³ami"
 
-#: .././rc.d/rc:89
+#: .././rc.d/rc:92
 msgid "Entering interactive startup"
 msgstr "Wchodzê w tryb interaktywny"
 
-#: .././rc.d/rc:237
+#: .././rc.d/rc:244
 msgid "Setting up /etc/ld.so.cache"
 msgstr "Ustawianie /etc/ld.so.cache"
 
-#: .././rc.d/rc.shutdown:89
+#: .././rc.d/rc.shutdown:99
 msgid "Turning off RAID for %s"
 msgstr "Wy³±czanie obs³ugi RAID dla %s"
 
-#: .././rc.d/rc.sysinit~:259 .././rc.d/rc.sysinit~:561
-#: .././rc.d/rc.sysinit~:603 .././rc.d/rc.sysinit~:658
-#: .././rc.d/rc.sysinit:259 .././rc.d/rc.sysinit:561 .././rc.d/rc.sysinit:603
-#: .././rc.d/rc.sysinit:658
+#: .././rc.d/rc.sysinit:282 .././rc.d/rc.sysinit:592 .././rc.d/rc.sysinit:635
+#: .././rc.d/rc.sysinit:691
 msgid "*** Dropping you to a shell; the system will reboot"
 msgstr "*** Uruchamianie pow³oki; system zostanie zrestartowany"
 
-#: .././rc.d/init.d/network:185
+#: .././rc.d/init.d/network:206
 msgid "Unmounting SMB filesystems"
 msgstr "Od³±czanie systemów plików SMB"
 
-#: .././rc.d/rc.shutdown:107
-msgid "The system is halted"
-msgstr "System zatrzymany"
-
-#: .././rc.d/rc.sysinit~:272 .././rc.d/rc.sysinit~:285
-#: .././rc.d/rc.sysinit~:574 .././rc.d/rc.sysinit~:616
-#: .././rc.d/rc.sysinit~:671 .././rc.d/rc.sysinit:272 .././rc.d/rc.sysinit:285
-#: .././rc.d/rc.sysinit:574 .././rc.d/rc.sysinit:616 .././rc.d/rc.sysinit:671
+#: .././rc.d/rc.sysinit:296 .././rc.d/rc.sysinit:309 .././rc.d/rc.sysinit:606
+#: .././rc.d/rc.sysinit:649 .././rc.d/rc.sysinit:705
 msgid "Automatic reboot in progress"
 msgstr "Automatyczny restart w toku"
 
-#: .././rc.d/rc.sysinit~:627 .././rc.d/rc.sysinit:627
+#: .././rc.d/rc.sysinit:660
 msgid "Mounting local filesystems"
 msgstr "Pod³±czanie lokalnych systemów plików"
 
-#: .././rc.d/rc.shutdown:108 .././rc.d/rc.shutdown:117
-msgid "On the next boot fsck will be skipped."
-msgstr "Przy nastêpnym starcie systemu program fsck bêdzie pominiêty."
+#: .././rc.d/rc.shutdown:117
+msgid "The system is halted"
+msgstr "System zatrzymany"
 
-#: .././rc.d/rc.sysinit~:691 .././rc.d/rc.sysinit:691
+#: .././rc.d/rc.sysinit:725
 msgid "Checking filesystem quotas"
 msgstr "Sprawdzanie quot w systemach plików"
 
-#: .././rc.d/rc.sysinit~:193 .././rc.d/rc.sysinit:193
+#: .././rc.d/rc.shutdown:118 .././rc.d/rc.shutdown:127
+msgid "On the next boot fsck will be skipped."
+msgstr "Przy nastêpnym starcie systemu program fsck bêdzie pominiêty."
+
+#: .././rc.d/rc.sysinit:216
 msgid "Initializing USB controller"
 msgstr "Inicjalizacja kontrolera USB"
 
-#: .././rc.d/rc.sysinit~:110 .././rc.d/rc.sysinit:110
+#: .././rc.d/rc.sysinit:133
 msgid "Mounting Device Filesystem"
 msgstr "Pod³±czanie systemów plików urz±dzeñ (DEVfs)"
 
-#: .././rc.d/rc.sysinit~:522 .././rc.d/rc.sysinit:522
+#: .././rc.d/rc.sysinit:553
 msgid "Starting up RAID device %s"
 msgstr "W³±czanie urz±dzenia RAID %s"
 
-#: .././sysconfig/network-scripts/ifup:154
-msgid "Determining IP information for"
-msgstr "Ustalanie informacji IP dla"
-
-#: .././sysconfig/network-scripts/ifup-ppp:237
+#: .././sysconfig/network-scripts/ifup-ppp:236
 msgid "pppd started for %s on device %s at speed %s"
 msgstr "pppd wystartowa³ dla %s na %s przy prêdko¶ci %s"
 
-#: .././rc.d/init.d/network:62
-msgid "Setting network parameters"
-msgstr "Ustawianie parametrów sieci"
-
-#: .././rc.d/init.d/network:182
+#: .././rc.d/init.d/network:203
 msgid "Unmounting NFS filesystems"
 msgstr "Od³±czanie systemów plików NFS"
 
@@ -443,38 +437,36 @@ msgstr "%s nie istnieje lub nie jest wykonywalny dla %s"
 msgid "Stopping %s service"
 msgstr "Zatrzymywanie us³ugi %s"
 
-#: .././rc.d/rc.sysinit~:310 .././rc.d/rc.sysinit:310
+#: .././rc.d/rc.sysinit:334
 msgid "Setting up ISA PNP devices (userspace pnp)"
 msgstr "Ustawianie urz±dzeñ ISA PNP (userspace pnp)"
 
-#: .././rc.d/rc.sysinit~:468 .././rc.d/rc.sysinit:468
+#: .././rc.d/rc.sysinit:499
 msgid "Discovering EVMS volumes"
 msgstr "Wykrywanie woluminów EVMS"
 
-#: .././rc.d/rc.shutdown:97
+#: .././rc.d/rc.shutdown:107
 msgid "Remounting remaining filesystems ro mode"
 msgstr "Prze³±czanie pozosta³ych systemów plików w tryb tylko do odczytu"
 
-#: .././rc.d/rc.sysinit~:258 .././rc.d/rc.sysinit~:602
-#: .././rc.d/rc.sysinit~:657 .././rc.d/rc.sysinit:258 .././rc.d/rc.sysinit:602
-#: .././rc.d/rc.sysinit:657
+#: .././rc.d/rc.sysinit:281 .././rc.d/rc.sysinit:634 .././rc.d/rc.sysinit:690
 msgid "*** An error occurred during the file system check."
 msgstr ""
 "*** Podczas sprawdzania systemów plików wykryto b³±d niemo¿liwy do usuniêcia."
 
-#: .././rc.d/rc.sysinit~:676 .././rc.d/rc.sysinit:676
+#: .././rc.d/rc.sysinit:710
 msgid "Remounting encrypted filesystems back in rw mode"
 msgstr "Prze³±czanie zaszyfrowanych systemów plików w tryb zapis/odczyt"
-
-#: .././rc.d/rc.sysinit~:722 .././rc.d/rc.sysinit:722
-msgid "Configuring kernel parameters"
-msgstr "Ustawianie parametrów j±dra"
 
 #: .././sysconfig/network-scripts/ifup-sl:96
 msgid "slattach started for %s on %s at %s"
 msgstr "slattach wystartowa³ dla %s na %s przy %s"
 
-#: .././rc.d/rc.sysinit~:173 .././rc.d/rc.sysinit:173
+#: .././rc.d/init.d/network:222
+msgid "Shutting down tunnel interface %s"
+msgstr "Wy³±czanie tunelu %s"
+
+#: .././rc.d/rc.sysinit:196
 msgid "Activating swap partitions"
 msgstr "Aktywacja partycji swap"
 
@@ -482,31 +474,27 @@ msgstr "Aktywacja partycji swap"
 msgid "Enslaving %s to %s"
 msgstr "Ustawianie %s na %s"
 
-#: .././rc.d/init.d/functions:664
+#: .././rc.d/init.d/functions:705
 msgid "%s dead but subsys locked"
 msgstr "%s zabity ale podsystem zablokowany"
 
-#: .././rc.d/rc.sysinit~:696 .././rc.d/rc.sysinit:696
+#: .././rc.d/rc.sysinit:730
 msgid "Turning on quotas for local filesystems"
 msgstr "W³±czanie quot na lokalnych systemach plików"
 
-#: .././rc.d/init.d/network:202
-msgid "Removing tunnel"
-msgstr "Usuwanie tunelu"
-
-#: .././rc.d/rc.sysinit~:423 .././rc.d/rc.sysinit:423
+#: .././rc.d/rc.sysinit:454
 msgid "Initializing firewire controller"
 msgstr "Inicjalizacja kontrolera firewire"
 
-#: .././rc.d/init.d/network:161
-msgid "Setting tunnel"
-msgstr "Podnoszenie tunelu"
+#: .././rc.d/init.d/functions:322
+msgid "$1"
+msgstr ""
 
-#: .././sysconfig/network-scripts/ifup-ppp:108
+#: .././sysconfig/network-scripts/ifup-ppp:107
 msgid "Setting up a new %s config file"
 msgstr "Ustawianie nowego pliku konfiguracyjnego %s"
 
-#: .././rc.d/rc.sysinit~:592 .././rc.d/rc.sysinit:592
+#: .././rc.d/rc.sysinit:624
 msgid "Checking filesystems"
 msgstr "Sprawdzanie systemów plików"
 
@@ -526,29 +514,31 @@ msgstr "Inicjalizacja generatora liczb losowych"
 msgid "Allowing users to login"
 msgstr "Zezwolenie u¿ytkownikom na logowanie"
 
-#: .././rc.d/rc.sysinit~:247 .././rc.d/rc.sysinit:247
+#: .././rc.d/rc.sysinit:270
 msgid "Checking root filesystem"
 msgstr "Sprawdzanie g³ównego systemu plików"
 
-#: .././rc.d/rc.sysinit~:356 .././rc.d/rc.sysinit:356
+#: .././rc.d/rc.sysinit:387
 msgid "System bootup in progress - please wait"
 msgstr "Uruchamianie systemu w toku - proszê czekaæ"
 
-#: .././rc.d/rc.sysinit~:510 .././rc.d/rc.sysinit~:557
-#: .././rc.d/rc.sysinit~:584 .././rc.d/rc.sysinit:510 .././rc.d/rc.sysinit:557
-#: .././rc.d/rc.sysinit:584
+#: .././rc.d/rc.sysinit:541 .././rc.d/rc.sysinit:588 .././rc.d/rc.sysinit:616
 msgid "Starting up RAID devices"
 msgstr "Ustawianie urz±dzeñ RAID"
 
-#: .././rc.d/rc.sysinit~:765 .././rc.d/rc.sysinit:765
+#: .././rc.d/init.d/functions:302
+msgid "$@"
+msgstr ""
+
+#: .././rc.d/rc.sysinit:806
 msgid "Enabling swap space"
 msgstr "W³±czanie swapa"
 
-#: .././rc.d/rc.sysinit~:315 .././rc.d/rc.sysinit:315
+#: .././rc.d/rc.sysinit:339
 msgid "Setting up ISA PNP devices (kernelspace pnp)"
 msgstr "Ustawianie urz±dzeñ ISA PNP (kernelspace pnp)"
 
-#: .././rc.d/init.d/functions:749
+#: .././rc.d/init.d/functions:790
 msgid "Could not load %s kernel module(s)"
 msgstr "Nie mo¿na za³adowaæ modu³u(ów) %s"
 
@@ -564,19 +554,19 @@ msgstr "Wysy³anie do wszystkich procesów sygna³u TERM"
 msgid "Telling INIT to go to single user mode"
 msgstr "Nakazywanie procesowi INIT przej¶cie do trybu pojedynczego u¿ytkownika"
 
+#: .././rc.d/init.d/network:209
+msgid "Unmounting NCP filesystems"
+msgstr "Od³±czanie systemów plików NCP"
+
 #: .././rc.d/init.d/functions:278
 msgid "Reloading %s service"
 msgstr "Prze³adowanie us³ugi %s"
 
-#: .././rc.d/init.d/network:188
-msgid "Unmounting NCP filesystems"
-msgstr "Od³±czanie systemów plików NCP"
-
-#: .././rc.d/rc.shutdown:116
+#: .././rc.d/rc.shutdown:126
 msgid "Please stand by while rebooting the system"
 msgstr "Proszê czekaæ - restart systemu"
 
-#: .././rc.d/rc.sysinit~:354 .././rc.d/rc.sysinit:354
+#: .././rc.d/rc.sysinit:385
 msgid "Enabling Delay Login"
 msgstr "W³±czanie opó¼niania logowania"
 
@@ -588,26 +578,30 @@ msgstr "ifdown-%s nie móg³ zabiæ %s dla %s"
 msgid "BUSY"
 msgstr " ZAJÊTY "
 
-#: .././sysconfig/network-scripts/ifup-ppp:104
+#: .././sysconfig/network-scripts/ifup-sl:59
+#: .././sysconfig/network-scripts/ifup-ppp:103
 msgid "%s does not exist for %s"
 msgstr "%s nie istnieje dla %s"
 
-#: .././rc.d/rc.sysinit~:166 .././rc.d/rc.sysinit~:707
-#: .././rc.d/rc.sysinit:166 .././rc.d/rc.sysinit:707
+#: .././rc.d/rc.sysinit:189 .././rc.d/rc.sysinit:743
 msgid "Today`s date:"
 msgstr "Dzisiejsza data:"
 
-#: .././rc.d/init.d/network:219
+#: .././rc.d/init.d/network:182
+msgid "Setting tunnel %s"
+msgstr "Podnoszenie tunelu %s"
+
+#: .././rc.d/init.d/network:240
 msgid "Currently inactive devices and tunnels:"
 msgstr "Nieaktywne urz±dzenia sieciowe i tunele:"
 
-#: .././rc.d/rc:147 .././rc.d/rc:148
+#: .././rc.d/rc:150 .././rc.d/rc:151
 msgid "%sResource Manager: %sEntering runlevel number"
 msgstr "%sZarz±dca zasobów: %sWej¶cie na poziom"
 
 #: .././sysconfig/network-scripts/ifup-sl:44
 #: .././sysconfig/network-scripts/ifup-ppp:34
-#: .././sysconfig/network-scripts/ifup-ppp:66
+#: .././sysconfig/network-scripts/ifup-ppp:65
 msgid "%s does not exist or is not executable"
 msgstr "%s nie istnieje lub nie jest wykonywalny"
 
@@ -624,24 +618,38 @@ msgstr "Ustawianie statycznych wpisów ARP"
 msgid "FAIL"
 msgstr "PROBLEMY"
 
-#: .././rc.d/rc.sysinit~:180 .././rc.d/rc.sysinit:180
+#: .././rc.d/rc.sysinit:203
 msgid "NIS Domain:"
 msgstr "Domena NIS:"
 
-#: .././rc.d/rc.sysinit~:580 .././rc.d/rc.sysinit:580
+#: .././rc.d/rc.sysinit:612
 msgid "Activating LVM volume groups (on RAID)"
 msgstr "Aktywacja grup woluminów LVM (na RAID)"
+
+#: .././sysconfig/network-scripts/ifup-sl:57
+#: .././sysconfig/network-scripts/ifup-sl:88
+msgid "ifup-sl - %s exiting"
+msgstr "ifup-sl - %s koñczy"
 
 #: .././rc.d/init.d/network:59
 msgid "Setting interfaces names (nameif)"
 msgstr "Ustawianie nazw interfejsów (nameif)"
 
-#: .././rc.d/rc.sysinit~:326 .././rc.d/rc.sysinit:326
+#: .././rc.d/rc.sysinit:350
 msgid "Checking root filesystem quotas"
 msgstr "Sprawdzanie quot na g³ównym systemie plików"
+
+#: .././sysconfig/network-scripts/ifup:155
+#: .././sysconfig/network-scripts/ifup:160
+msgid "Determining IP information for %s (%s)"
+msgstr "Ustalanie informacji IP dla %s (%s)"
 
 #: .././rc.d/init.d/timezone:47
 msgid "Unsetting time zone information"
 msgstr "Usuwanie informacji o strefie czasowej"
 
+#~ msgid "Setting network parameters"
+#~ msgstr "Ustawianie parametrów sieci"
 
+#~ msgid "Configuring kernel parameters"
+#~ msgstr "Ustawianie parametrów j±dra"
