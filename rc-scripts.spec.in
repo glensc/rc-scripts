@@ -24,7 +24,6 @@ Requires:	/bin/nice
 Requires:	/bin/ps
 Requires:	FHS >= 2.2-6
 Requires:	SysVinit
-Requires:	bdflush
 Requires:	e2fsprogs >= 1.15
 Requires:	fileutils
 Requires:	findutils
