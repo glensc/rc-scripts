@@ -2,6 +2,7 @@ DEVICE=ppp0
 CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0
 ONBOOT=no
 HARDFLOWCTL=yes
+# ircomm0 for IRDA, rfcomm0 for BlueTooth
 MODEMPORT=/dev/ircomm0
 LINESPEED=115200
 AUTH=no
