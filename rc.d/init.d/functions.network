@@ -281,3 +281,35 @@ fi
 #ipv4_accept_icmp_redir_gate()
 #ipv4_send_icmp_redir()
 
+#
+# folowing function calculates network prefix from given network mask
+# valuse is returned by $prefix variable.
+# (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
+#
+
+calcprefix() {
+local OISF len olen
+ OISF=$IFS
+ IFS="."
+ prefix=0
+ olen=8
+ for i in $1
+ do case $i in
+  255)   len=8 ;;
+  254)   len=7 ;;
+  252)   len=6 ;;
+  248)   len=5 ;;
+  240)   len=4 ;;
+  224)   len=3 ;;
+  192)   len=2 ;;
+  128)   len=1 ;;
+  0)     len=0 ;;
+ esac
+ if [ $len -gt $olen ] ; then echo "Inwalid netmask"; fi
+ prefix=`expr $prefix + $len`
+ olen=$len
+ done
+ IFS=$OIFS
+ return
+}
+	       
