@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.49 2000/05/01 18:43:55 zagrodzki Exp $
+# $Id: functions,v 1.50 2000/05/01 18:53:37 zagrodzki Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -91,7 +91,7 @@ fi
 
 msg_Network_Down()
 {
-	nls "ERROR: Networking is down. %s can't be run.\n" "$1"
+	nls "ERROR: Networking is down. %s can't be run." "$1"
 }
 
 msg_starting()
@@ -101,7 +101,7 @@ msg_starting()
 
 msg_Already_Running()
 {
-	nls "%s service is already running.\n" "$1"
+	nls "%s service is already running." "$1"
 }
 
 msg_stopping()
@@ -111,7 +111,7 @@ msg_stopping()
 
 msg_Not_Running()
 {
-	nls "%s service is not running.\n" "$1"
+	nls "%s service is not running." "$1"
 }
 
 msg_reloading()
@@ -121,7 +121,7 @@ msg_reloading()
 
 msg_Usage()
 {
-	nls "Usage: %s" "$*\n"
+	nls "Usage: %s" "$*"
 }
 
 # Some functions to handle PLD-style messages
@@ -203,7 +203,7 @@ daemon()
 	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 	# Test syntax.
 	case $1 in
-	'')	msg_Usage " daemon [+/-nicelevel] {program}\n"
+	'')	msg_Usage " daemon [+/-nicelevel] {program}"
 		return 1;;
 	-*|+*) SERVICE_RUN_NICE_LEVEL=$1
 		shift;;
@@ -231,7 +231,7 @@ killproc()
 {
 	# Test syntax.
 	if [ $# = 0 ]; then
-		msg_Usage " killproc {program} [signal]\n"
+		msg_Usage " killproc {program} [signal]"
 		return 1
 	fi
 
@@ -295,7 +295,7 @@ pidofproc()
 {
 	# Test syntax.
 	if [ $# = 0 ] ; then
-		msg_Usage " pidofproc {program}\n"
+		msg_Usage " pidofproc {program}"
 		return 1
 	fi
 
@@ -326,14 +326,14 @@ status()
 {
 	# Test syntax.
 	if [ $# = 0 ] ; then
-		msg_Usage " status {program}\n"
+		msg_Usage " status {program}"
 		return 1
 	fi
 
 	# First try "pidof"
 	pid=`pidof $1`
 	if [ "$pid" != "" ] ; then
-	        nls "%s (pid %s) is running...\n" "$1" "$pid"
+	        nls "%s (pid %s) is running..." "$1" "$pid"
 	        return 0
         else
                 pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
@@ -341,7 +341,7 @@ status()
                              (("[" prog "]") == $5) ||
                            ((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
                 if [ "$pid" != "" ] ; then
-                        nls "%s (pid %s) is running...\n" "$1" "$pid"
+                        nls "%s (pid %s) is running..." "$1" "$pid"
                         return 0
                 fi
 	fi
@@ -350,16 +350,16 @@ status()
 	if [ -f /var/run/$1.pid ] ; then
 	        pid=`head -1 /var/run/$1.pid`
 	        if [ "$pid" != "" ] ; then
-	                nls "%s dead but pid file exists\n" "$1"
+	                nls "%s dead but pid file exists" "$1"
 	                return 1
 	        fi
 	fi
 	# See if /var/lock/subsys/$1 exists
 	if [ -f /var/lock/subsys/$1 ]; then
-		nls "%s dead but subsys locked\n" "$1"
+		nls "%s dead but subsys locked" "$1"
 		return 2
 	fi
-	nls "%s is stopped\n" "$1"
+	nls "%s is stopped" "$1"
 	return 3
 }
 
@@ -388,7 +388,7 @@ is_yes()
 {
 	# Test syntax	
 	if [ $# = 0 ] ; then
-		msg_Usage " is_yes {value}\n"
+		msg_Usage " is_yes {value}"
 		return 2
 	fi
 
@@ -410,7 +410,7 @@ is_no()
 {
 	# Test syntax
 	if [ $# = 0 ] ; then
-		msg_Usage " is_no {value}\n"
+		msg_Usage " is_no {value}"
 		return 2
 	fi
 	
