@@ -32,6 +32,11 @@ if grep -q selinuxfs /proc/filesystems && ! grep -q selinuxfs /proc/mounts; then
     mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
 fi
 
+# PLD LiveCD support
+if [ -x /etc/rc.d/rc.live ]; then
+	/etc/rc.d/rc.live
+fi
+
 # Choose Hardware profile
 rm -f /var/run/hwprofile 2> /dev/null
 if [ -f /etc/sysconfig/hwprof ]; then
