@@ -621,7 +621,7 @@ fi
 
 # Turn on quota
 if [ -x /sbin/quotaon ]; then
-	run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -a
+	run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -aug
 fi
 
 # Turn on process accounting
