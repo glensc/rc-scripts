@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.26 1999/09/15 21:20:36 wiget Exp $
+# $Id: rc.sysinit,v 1.27 1999/09/27 14:23:04 wiget Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -93,11 +93,9 @@ if [ ! -f /fastboot ] && [ ! -n "$NFSROOT" ]; then
 
 	# A return of 2 or higher means there were serious problems.
 	if [ $rc -gt 1 ]; then
-		echo
-		echo
-		nls "*** An error occurred during the file system check."
-		nls "*** Dropping you to a shell; the system will reboot"
-		nls "*** when you leave the shell."
+		nls "\n\n*** An error occurred during the file system check.\n"
+		nls "*** Dropping you to a shell; the system will reboot\n"
+		nls "*** when you leave the shell.\n"
 
 		PS1="`nls "(Repair filesystem) #"`"; export PS1
 		if [ "$RUN_SULOGIN_ON_ERR" == "yes" ]; then
