@@ -1,4 +1,4 @@
-# $Id: network,v 1.6 1999/09/26 14:56:09 jajcus Exp $
+# $Id: network,v 1.7 1999/09/27 10:02:43 misiek Exp $
 ######################################################################
 # MAIN PART
 
@@ -91,7 +91,7 @@ IPV4_MASQ_DEBUGGING=
 
 # Bug-to-bug compatibility with some broken printers. On retransmit
 # try to send bigger packets to work around bugs in certain TCP
-# stacks. Can be turned off by setting it to zero. 
+# stacks. Can be turned off by setting IPV4_RETRANS_COLLAPSE to ,,yes''. 
 IPV4_RETRANS_COLLAPSE=
 	 
 # Disable select acknowledgments after RFC2018 ?
