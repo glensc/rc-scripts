@@ -288,13 +288,15 @@ fi
 #
 
 calcprefix() {
-local OISF len olen
+local OISF len olen bad
  OISF=$IFS
  IFS="."
  prefix=0
  olen=8
+ bad=0
  for i in $1
- do case $i in
+ do len=0
+ case $i in
   255)   len=8 ;;
   254)   len=7 ;;
   252)   len=6 ;;
@@ -304,12 +306,18 @@ local OISF len olen
   192)   len=2 ;;
   128)   len=1 ;;
   0)     len=0 ;;
+  *)	 len=300 ;;
  esac
- if [ $len -gt $olen ] ; then echo "Invalid netmask"; fi
+ if [ "$len" -gt "$olen" ] ; then bad=1; fi
  prefix=`expr $prefix + $len`
  olen=$len
  done
  IFS=$OIFS
+ if [ "$bad" == "0" ]; then
+ echo "$prefix"
+ else
+ echo "32"
+ fi
  return
 }
 	       
