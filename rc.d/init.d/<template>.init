@@ -80,8 +80,11 @@ case "$1" in
   force-reload)
   	# if program allows reloading without stopping
 	$0 reload
+	exit $?
+
 	# or if it doesn't
 	$0 stop && $0 start
+	exit $?
 	;;
   status)
 	status <service>
