@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.57 2001/05/16 13:12:07 baggins Exp $
+#	$Id: ifup,v 1.58 2001/05/25 14:32:08 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -168,7 +168,7 @@ else
     ip link set ${DEVICE} up
 
     # IPv6 in use ?
-    if is_yes "$IPV6_NETWORKING" ; then
+    if is_yes "$IPV6_NETWORKING" && [ -n "${IP6ADDR}" ] ; then
     	ip addr add ${IP6ADDR} dev ${DEVICE} ${IP6ADDROPT}
     fi
 
