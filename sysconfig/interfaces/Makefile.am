@@ -8,6 +8,7 @@ interfaces_DATA = \
 	ifcfg-br0 \
 	ifcfg-description \
 	ifcfg-eth0 \
+	ifcfg-eth0.1 \
 	ifcfg-irda0 \
 	ifcfg-irlan0 \
 	ifcfg-ppp0.callback \
