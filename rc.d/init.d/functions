@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.78 2003/09/05 14:53:55 arekm Exp $
+# $Id: functions,v 1.79 2003/09/09 22:05:49 baggins Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:	Greg Galloway and Marc Ewing
@@ -559,7 +559,7 @@ is_module()
 {
 	# module name without .o at end
 	if ! (lsmod | grep -q "$1"); then
-		if (ls -R /lib/modules/$(uname -r)/ 2> /dev/null | grep -q "${1}.o"); then
+		if (ls -R /lib/modules/$(uname -r)/ 2> /dev/null | grep -q "${1}.o\(\|.gz\)"); then
 			# true
 			return 0
 		fi
