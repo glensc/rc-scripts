@@ -1,17 +1,17 @@
 	   READ THIS BEFORE CHANGEING SOMETHING IN RC-SCRIPTS PACKAGE
 		    Arkadiusz Miskiewicz <misiek@pld.org.pl>
-	    $Id: DEVELOPMENT,v 1.1.2.1 2000/10/18 20:10:45 misiek Exp $
+	    $Id: DEVELOPMENT,v 1.1.2.2 2001/06/09 08:46:32 misiek Exp $
 
 1)
 	consult all major changes with people on pld-rc-scripts@pld.org.pl
 mailing list. This is very important.
 
 2)
-	use 'local' for local variables in functions for example:
+	use 'typeset' for local variables in functions for example:
 
 function_ble ()
 {
-local qw er
+typeset qw er
 qw=$(tty)
 er=/dev/console
 echo "$qw $er"
