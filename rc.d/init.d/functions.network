@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.31 1999/11/07 14:00:05 kloczek Exp $
+# $Id: functions.network,v 1.32 1999/11/16 01:34:40 kloczek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -7,115 +7,121 @@
 # This will work only after starting interface to which LDAP server is connected
 find_ldap_interfaces()
 {
-	[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
-	if [ -n "$LDAP_BASE_DN" ] ; then
-		BSWITCH="-b$LDAP_BASE_DN" 
-	else
-		BSWITH=""
-	fi
- 	QUERY="(&(objectclass=pldinterface)(if_onboot=yes))"
-	ldapsearch "$BSWITCH" "$QUERY" if_device | \
-		grep "^if_device=" | sed -e "s/^if_device=//"
+[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+if [ -n "$LDAP_BASE_DN" ] ; then
+	BSWITCH="-b$LDAP_BASE_DN" 
+else
+	BSWITH=""
+fi
+
+QUERY="(&(objectclass=pldinterface)(if_onboot=yes))"
+ldapsearch "$BSWITCH" "$QUERY" if_device | \
+	grep "^if_device=" | sed -e "s/^if_device=//"
 }
 
 # find aliases for device
 find_ldap_aliases()
 {
-	[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
-	if [ -n "$LDAP_BASE_DN" ] ; then
-		BSWITCH="-b$LDAP_BASE_DN" 
-	else
-		BSWITH=""
-	fi
- 	QUERY="(&(objectclass=pldinterface)(if_onboot=yes)(if_device~=$1:*))"
-	ldapsearch "$BSWITCH" "$QUERY" if_device | \
-		grep "^if_device=" | sed -e "s/^if_device=//"
+[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+if [ -n "$LDAP_BASE_DN" ] ; then
+	BSWITCH="-b$LDAP_BASE_DN" 
+else
+	BSWITH=""
+fi
+
+QUERY="(&(objectclass=pldinterface)(if_onboot=yes)(if_device~=$1:*))"
+ldapsearch "$BSWITCH" "$QUERY" if_device | \
+	grep "^if_device=" | sed -e "s/^if_device=//"
 }
 
 get_ldap_config ()
 {
-	[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
- 	# Initialise fields which  can have multiple values:
-	IPV6_ADDR=""
-	IPADDR_ALIASES=""
-	
- 	QUERY="(&(objectclass=pldinterface)(if_device=$1))"
-	if [ -n "$LDAP_BASE_DN" ] ; then
-	  BSWITCH="-b$LDAP_BASE_DN" 
-	else
-	  BSWITH=""
-	fi
-	ldapsearch "$BSWITCH" "$QUERY" | grep "=" | sed -e "s/=/ /" | {
-		while read FIELD VALUE ; do
-			# Field, which have name compatible with other 
-			# LDAP object
-			if [ "$FIELD" = "iphostnumber" ] ; then
-				VAR="IPADDR";
-			else # Other fields
-				VAR=`echo "$FIELD" | grep "^if_" \
-				     | tr [:lower:] [:upper:] \
-				     | sed -e "s/IF_//"`
-			fi
-			# Fields which can have multiple values:
-			if   [ "$VAR" = "IPV6_ADDR" \
-			    -o "$VAR" = "IPADDR_ALIASES" ]  && \
-			     [ -n "`eval echo \$$VAR`" ] ; then
-				echo "$VAR=\"\$$VAR $VALUE\"" ;
+if [ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ]; then
+	exit 1
+fi
 
-			# single value fields, or the first value
-			elif [ -n "$VAR" ] ; then
-				eval "$VAR=\"$VALUE\""
-				echo "$VAR=\"$VALUE\""
-			fi
-		done
-	}
+# Initialise fields which  can have multiple values:
+IPV6_ADDR=""
+IPADDR_ALIASES=""
+
+QUERY="(&(objectclass=pldinterface)(if_device=$1))"
+if [ -n "$LDAP_BASE_DN" ] ; then
+	BSWITCH="-b$LDAP_BASE_DN" 
+else
+	BSWITH=""
+fi
+
+ldapsearch "$BSWITCH" "$QUERY" | grep "=" | sed -e "s/=/ /" | {
+	while read FIELD VALUE ; do
+		# Field, which have name compatible with other 
+		# LDAP object
+		if [ "$FIELD" = "iphostnumber" ] ; then
+			VAR="IPADDR";
+		else # Other fields
+			VAR=`echo "$FIELD" | grep "^if_" \
+			     | tr [:lower:] [:upper:] \
+			     | sed -e "s/IF_//"`
+		fi
+		# Fields which can have multiple values:
+		if   [ "$VAR" = "IPV6_ADDR" \
+		    -o "$VAR" = "IPADDR_ALIASES" ]  && \
+		     [ -n "`eval echo \$$VAR`" ] ; then
+			echo "$VAR=\"\$$VAR $VALUE\"" ;
+
+		# single value fields, or the first value
+		elif [ -n "$VAR" ] ; then
+			eval "$VAR=\"$VALUE\""
+			echo "$VAR=\"$VALUE\""
+		fi
+	done
+}
 }
 
 source_config ()
 {
-	DEVNAME="`basename "$CONFIG" | sed 's/^ifcfg-//g'`"
+DEVNAME="`basename "$CONFIG" | sed 's/^ifcfg-//g'`"
         
-	if echo "$CONFIG"|egrep "^/" >/dev/null 2>&1 ; then
-	  if [ -f "$CONFIG" ] ; then
-	    . "$CONFIG"
-	  fi
-	elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
-		. "/etc/sysconfig/interfaces/$CONFIG"
-	elif [ "$USE_LDAP" = "yes" ] ; then
-		eval `get_ldap_config $DEVNAME`
+if echo "$CONFIG"|egrep "^/" >/dev/null 2>&1 ; then
+	if [ -f "$CONFIG" ] ; then
+		. "$CONFIG"
 	fi
+elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
+	. "/etc/sysconfig/interfaces/$CONFIG"
+elif [ "$USE_LDAP" = "yes" ] ; then
+	eval `get_ldap_config $DEVNAME`
+fi
 }
 
 do_netreport ()
 {
-	# Notify programs that have requested notification
-	( cd /var/run/netreport || exit
-	for i in * ; do
-		[ -f $i ] && \
-			kill -SIGIO $i >/dev/null 2>&1 || \
-			rm -f $i >/dev/null 2>&1
-	done
-	)
+# Notify programs that have requested notification
+( cd /var/run/netreport || exit
+for i in * ; do
+	[ -f $i ] && \
+		kill -SIGIO $i >/dev/null 2>&1 || \
+		rm -f $i >/dev/null 2>&1
+done
+)
 }
 
 need_hostname()
 {
-	if [ "`hostname`" = "(none)" -o "`hostname`" = "localhost" -o \
-		"`hostname`" = "localhost.localdomain" ]; then
-		NEEDHOSTNAME=yes
-	else
-		unset NEEDHOSTNAME
-	fi
+if [ "`hostname`" = "(none)" -o "`hostname`" = "localhost" -o \
+	"`hostname`" = "localhost.localdomain" ]; then
+	NEEDHOSTNAME=yes
+else
+	unset NEEDHOSTNAME
+fi
 }
 
 set_hostname()
 {
-	echo "$1" > /etc/HOSTNAME
-	hostname $1
-	if ! grep search /etc/resolv.conf; then
-		domain=`echo $1 | sed 's/^[^\.]*\.//'`
-		echo "search $domain" >> /etc/resolv.conf
-	fi
+echo "$1" > /etc/HOSTNAME
+hostname $1
+if [ ! grep search /etc/resolv.conf ]; then
+	domain=`echo $1 | sed 's/^[^\.]*\.//'`
+	echo "search $domain" >> /etc/resolv.conf
+fi
 }
 
 # PLD/Linux network functions
@@ -126,17 +132,17 @@ set_hostname()
 # Setup Network Address Translation (NAT)
 setup_nat()
 {
-	if [ -r /etc/sysconfig/static-nat ]; then
-		grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
-			if [ "$1" = "on" ]; then
-				/sbin/ip route add nat $src via $dst
-				/sbin/ip rule add from $dst nat $src
-			elif [ "$1" = "off" ]; then
-				/sbin/ip rule del from $dst nat $src
-				/sbin/ip route del nat $src via $dst
-		fi
-		done
+if [ -r /etc/sysconfig/static-nat ]; then
+	grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
+		if [ "$1" = "on" ]; then
+			/sbin/ip route add nat $src via $dst
+			/sbin/ip rule add from $dst nat $src
+		elif [ "$1" = "off" ]; then
+			/sbin/ip rule del from $dst nat $src
+			/sbin/ip route del nat $src via $dst
 	fi
+	done
+fi
 }
 
 # proc_net <zmien> <start/stop> <co ustaw> <co default> <nazwa_zmiennej> [komunikat]
@@ -185,21 +191,34 @@ return 0
 
 ipv4_dynamic_ip_patch()
 {
-if [ "$IPV4_DYNAMIC_IP_PATCH" != "default" -a -n "$IPV4_DYNAMIC_IP_PATCH" ] || [ ! -e /proc/sys/net/ipv4/ip_dynaddr ]; then
+if [ "$IPV4_DYNAMIC_IP_PATCH" != "default" -a -n "$IPV4_DYNAMIC_IP_PATCH" ] ||
+   [ ! -e /proc/sys/net/ipv4/ip_dynaddr ]; then
+	case "$IPV4_DYNAMIC_IP_PATCH_VALUE" in
+		[1-9])	;;
+		*)	IPV4_DYNAMIC_IP_PATCH_VALUE=7 ;;
+	esac
 
-case "$IPV4_DYNAMIC_IP_PATCH_VALUE" in
-	[1-9])	;;
-	*)	IPV4_DYNAMIC_IP_PATCH_VALUE=7 ;;
-esac
-
-if [ "$IPV4_DYNAMIC_IP_PATCH" = "yes" ] && [ "$1" = "on" ]; then
-show "Enabling dynamic IP patch"; busy
-if echo $IPV4_DYNAMIC_IP_PATCH_VALUE > /proc/sys/net/ipv4/ip_dynaddr; then deltext; ok; else deltext; fail; fi
-else
-show "Disabling dynamic IP patch"; busy
-if echo 0 > /proc/sys/net/ipv4/ip_dynaddr; then deltext; ok; else deltext; fail; fi
-fi
-
+	if [ "$IPV4_DYNAMIC_IP_PATCH" = "yes" ] && [ "$1" = "on" ]; then
+		show "Enabling dynamic IP patch"
+		busy
+		if echo $IPV4_DYNAMIC_IP_PATCH_VALUE > /proc/sys/net/ipv4/ip_dynaddr; then
+			deltext
+			ok
+		else
+			deltext
+			fail
+		fi
+	else
+		show "Disabling dynamic IP patch"
+		busy
+		if echo 0 > /proc/sys/net/ipv4/ip_dynaddr; then
+			deltext
+			ok
+		else
+			deltext
+			fail
+		fi
+	fi
 fi
 }
 
@@ -281,7 +300,10 @@ fi
 
 modprobe_net()
 {
-[ "$IPV6_NETWORKING" = "yes" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ] && modprobe -s -k net-pf-10
+if [ "$IPV6_NETWORKING" = "yes" ] && \
+   [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ]; then
+	modprobe -s -k net-pf-10
+fi
 }
 
 #
