@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.18 1999/08/14 13:16:08 misiek Exp $
+# $Id: network,v 1.19 1999/08/31 23:51:42 wiget Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -41,9 +41,6 @@ set_up_loopback
 # Modprobe needed devices
 modprobe_net
 
-# Set static ARP table
-static_arp
-
 # Spoofing protection
 ipv4_anti_spoofing on
 
@@ -52,6 +49,13 @@ proc_net ipv4/ip_forward start 1 0 IPV4_FORWARDING "IPv4 forwarding"
 
 # IPv6 forwarding
 proc_net ipv6/conf/all/forwarding start 1 0 IPV6_FORWARDING "IPv6 forwarding"
+
+}
+
+network_postinit()
+{
+# Set static ARP table
+static_arp
 
 }
 
@@ -91,6 +95,8 @@ case "$1" in
 	for i in $interfaces_boot; do
 		/sbin/ifup $i boot
 	done
+	
+	network_postinit
 
         touch /var/lock/subsys/network
         ;;
