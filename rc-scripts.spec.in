@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.17 1999/07/27 03:35:42 kloczek Exp $
+# $Id: rc-scripts.spec.in,v 1.18 1999/07/27 23:47:20 kloczek Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -64,6 +64,7 @@ arayüzlerini etkinleþtiren ya da edilginleþtiren programcýklar içerir.
 %setup -q
 
 %build
+LDFLAGS="-s"; export LDFLAGS
 %configure 
 make
 
