@@ -2,7 +2,7 @@
 #
 # <service>	<service> short service description
 #
-# chkconfig:	
+# chkconfig:    345  85 15
 #
 # description:	<service> long service description
 
@@ -18,7 +18,8 @@
 
 # Check that networking is up.
 if [ "${NETWORKING}" = "no" ]; then
-	echo "WARNING: Networking is down. <service> can't be runed."
+	# nls "ERROR: Networking is down. %s can't be runed." <service>
+	msg_Network_Down <service>
 	exit 1
 fi
 
@@ -28,16 +29,19 @@ case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/<service> ]; then
-		show "Starting <service> service"
+		#show "Starting <service> service"
+		msg_starting <service>
 		daemon <service>
 		touch /var/lock/subsys/<service>
 	else
-		echo "<service> service is already running."
+		# echo "% service is already running." <service>
+		msg_Already_Running <service>
 	fi
         ;;
   stop)
         # Stop daemons.
-        show "Stopping <service> service"
+        #show "Stopping %s service" <service>
+	msg_stopping <service>
 	killproc <service>
 	rm -f /var/lock/subsys/<service> >/dev/null 2&>1
         ;;
@@ -47,20 +51,24 @@ case "$1" in
         ;;
   reload)
 	if [ -f /var/lock/subsys/<service> ]; then
-		show "Reload <service> service"
+		#show "Reload %s service" <service>
+		msg_show <service>
+		msg_reload
 		busy
 		killproc <service> -HUP
 		deltext
 		ok		
 	else
-		echo "<service> service is not running."
+		#echo "%s service is not running." <service>
+		msg_Not_Running <service>
 	fi
 	;;
   status)
 	status <service>
         ;;
   *)
-        echo "Usage: $0 {start|stop|status|restart|reload}"
+        #echo "Usage: %s {start|stop|status|restart|reload}" $0
+	msg_Usage_reload $0
         exit 1
 esac
 
