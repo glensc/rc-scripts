@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.10 2000/04/03 14:50:47 baggins Exp $
+#	$Id: ifup-ppp,v 1.11 2000/04/21 17:47:24 jajcus Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -18,13 +18,6 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 # ifup-post for PPP is handled through /etc/ppp/ip-up
-if [ "$1" != daemon ] ; then
-  # disconnect stdin, out, err to disassociate from controlling tty
-  # so that no HUPs will get through.
-  $0 daemon $* </dev/null >/dev/null 2>/dev/null &
-  exit 0
-fi
-shift
 
 CONFIG=$1
 . /etc/sysconfig/network
@@ -84,6 +77,9 @@ fi
 if [ -n "${PAPNAME}" ] ; then
   opts="$opts name ${PAPNAME}"
 fi
+if [ -n "${REMOTENAME}" ] ; then
+  opts="$opts remotename ${REMOTENAME}"
+fi
 if [ "${DEBUG}" = yes ] ; then
   opts="$opts debug"
   chatdbg="-v"
@@ -103,21 +99,19 @@ fi
 #[ -f $CHATSCRIPT ] || {
 #  CHATSCRIPT=/etc/sysconfig/network-scripts/chat-$PARENTDEVNAME
 #}
-> /var/run/ppp-$DEVICE.dev
 (logger -p daemon.info -t ifup-ppp \
     "pppd started for $DEVICE on $MODEMPORT at $LINESPEED" &)&
 if [ -n "${CHATSCRIPT}"  ] ; then
   export chatdbg chatrpt CHATSCRIPT
   export $DATAFORCHAT
-  /usr/sbin/pppd -detach $opts $MODEMPORT $LINESPEED \
+  /usr/sbin/pppd $opts $MODEMPORT $LINESPEED \
     connect 'eval /usr/sbin/chat $chatdbg $chatrpt \
     `grep -v ^# ${CHATSCRIPT}`' \
-    remotename $DEVICE ipparam $DEVICE \
-    ${PPPOPTIONS} &
+    linkname "${DEVICE}" ipparam "${CONFIG}" \
+    ${PPPOPTIONS}
 else
-  /usr/sbin/pppd -detach $opts $MODEMPORT $LINESPEED \
-    remotename $DEVICE ipparam $DEVICE \
-    ${PPPOPTIONS} &
+  /usr/sbin/pppd $opts $MODEMPORT $LINESPEED \
+    linkname "${DEVICE}" ipparam "${CONFIG}" \
+    ${PPPOPTIONS}
 fi
- echo "$!" > /var/run/ppp-$DEVICE.pid
 
