@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.8 1999/09/27 15:29:02 kloczek Exp $
+# $Id: pl.po,v 1.9 1999/09/27 15:31:00 kloczek Exp $
 #
 msgid ""
 msgstr ""
@@ -189,7 +189,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"*** Wykryto blad w trakcie inicjacji urz±dzen RAID niemo¿liwy do usuniecia\n"
+"*** Wykryto blad w trakcie inicjacji urz±dzen RAID niemozliwy do usuniecia\n"
 "*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
 "*** naprawic uszkodzenie. Po wyjsciu z powloki system zostanie automatycznie\n"
 "*** zrestartowany.\n"
