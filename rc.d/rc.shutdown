@@ -16,6 +16,12 @@ cd /
 
 . /etc/rc.d/init.d/functions
 
+# avoid keyboard interruption
+trap "echo" INT SEGV QUIT TERM
+set +e
+
+rc_splash "reboot"
+
 # Kill all processes.
 [ "${BASH+bash}" = bash ] && enable kill
 

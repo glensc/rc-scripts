@@ -93,7 +93,24 @@ if [ "$previous" = "N" ]; then
 		nls "Entering non-interactive startup"
 	fi
 fi
-					  
+
+# calculate bootsplash variables
+sscripts=$(ls -1 /etc/rc.d/rc${runlevel}.d/ 2> /dev/null | grep -c "^S")
+export sscripts
+
+if test "$previous" != "N" ; then
+    	kscripts=$(ls -1 /etc/rc.d/rc${previous}.d/ 2> /dev/null | grep -c "^K")
+	export kscripts
+fi
+
+if test "$revious" == "N" -a "$runlevel" == "5" ; then
+	export progress=16
+	sscripts=$(( $sscripts + 15 ))
+else
+	export progress=0
+fi
+
+
 # set onlcr to avoid staircase effect and do not lock scrolling
 stty onlcr -ixon 0>&1
 

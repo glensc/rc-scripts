@@ -11,6 +11,11 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
 
+# reasonable start values for bootsplash progress.
+export progress=0
+export sscripts=45
+export kscripts=45
+
 # Read functions
 . /etc/rc.d/init.d/functions
 
@@ -76,6 +81,9 @@ else
 	RUN_LDCONFIG=yes
 fi
 
+# Disable splash when requested
+[ -e /proc/splash ] && is_no "$BOOT_SPLASH" && echo "0" > /proc/splash
+				    
 # Print welcome message
 nls "\t\t\t%sPowered by %sPLD Linux Distribution%s" "$(termput setaf 6)" "$(termput setaf 2)" "$(termput setaf 7)"
 if is_yes "$PROMPT"; then
@@ -233,6 +241,7 @@ if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ];
 
 	# A return of 4 or higher means there were serious problems.
 	if [ $rc -gt 3 ]; then
+	    	[ -e /proc/splash ] && echo "verbose" > /proc/splash
 		# don't use '\n' in nls macro !
 		echo
 		echo
@@ -254,6 +263,7 @@ if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ];
 	# A return of 2 or 3 means that filesystem was repaired but we need
 	# to reboot.
 	elif [ "$rc" = "2" -o "$rc" = "3" ]; then
+	    	[ -e /proc/splash ] && echo "verbose" > /proc/splash
 		echo
 		nls "*** Filesystem was repaired but system needs to be"
 		nls "*** rebooted before mounting it."
@@ -502,6 +512,7 @@ if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
 
 	    # A non-zero return means there were problems
 	    if [ $rc -gt 0 ]; then
+		[ -e /proc/splash ] && echo "verbose" > /proc/splash
 		show "Starting up RAID devices"; fail
 		echo
 		echo
@@ -540,6 +551,7 @@ if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline; then
 
 	# A return of 2 or higher means there were serious problems
 	if [ $rc -gt 1 ]; then
+	    	[ -e /proc/splash ] && echo "verbose" > /proc/splash
 		echo
 		echo
 		nls "*** An error occurred during the file system check."
@@ -596,7 +608,9 @@ if grep "^[^#].*encryption=" /etc/fstab | grep -v -q "noauto"; then
 
 	# A return of 2 or higher means there were serious problems.
 	if [ $rc -gt 1 ]; then
-		echo "\n\n"
+	    	[ -e /proc/splash ] && echo "verbose" > /proc/splash
+		echo
+		echo
 		nls "*** An error occurred during the file system check."
 		nls "*** Dropping you to a shell; the system will reboot"
 		nls "*** when you leave the shell."

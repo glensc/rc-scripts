@@ -208,6 +208,8 @@ rc_splash()
 	if ! is_no "$BOOT_SPLASH"; then
 		[ -x /bin/splash ] && /bin/splash "$action"
 	fi
+
+	: $((progress++))
 }
 
 msg_network_down()
