@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.32 1999/11/14 07:54:53 kloczek Exp $
+#	$Id: ifup,v 1.33 1999/11/16 14:54:01 wiget Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -26,8 +26,12 @@ if [ `id -u` != 0 ]; then
 fi
 
 IFCONFIGS="`ls /etc/sysconfig/interfaces/ifcfg-*|egrep -v '~$'`"
-IFCONFIGS="`egrep -L '^#!' $IFCONFIGS`"
-CONFIG="`egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $IFCONFIGS`"
+if [ "$IFCONFIGS" ]; then
+    IFCONFIGS="`egrep -L '^#!' $IFCONFIGS`"
+fi
+if [ "$IFCONFIGS" ]; then
+    CONFIG="`egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $IFCONFIGS`"
+fi
 
 if [ -z "$CONFIG" ]; then
     CONFIG="$DEV"

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.16 1999/11/06 00:25:31 wiget Exp $
+#	$Id: ifdown,v 1.17 1999/11/16 14:54:01 wiget Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -24,8 +24,12 @@ if [ `id -u` != 0 ]; then
 fi
 
 IFCONFIGS="`ls /etc/sysconfig/interfaces/ifcfg-*|egrep -v '~$'`"
-IFCONFIGS="`egrep -L '^#!' $IFCONFIGS`"
-CONFIG="`egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $IFCONFIGS`"
+if [ "$IFCONFIGS" ]; then
+    IFCONFIGS="`egrep -L '^#!' $IFCONFIGS`"
+fi
+if [ "$IFCONFIGS" ]; then
+    CONFIG="`egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $IFCONFIGS`"
+fi
 
 if [ -z "$CONFIG" ]; then
     CONFIG="$DEV"
