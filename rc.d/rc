@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.11 1999/09/15 21:20:36 wiget Exp $
+# $Id: rc,v 1.12 1999/09/28 14:24:23 kloczek Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -61,7 +61,7 @@ stty onlcr -ixon 0>&1
 af2="`termput setaf 2`"
 af7="`termput setaf 7`"
 line="............................................................................"
-text="`nls "%sResource Manager: %sLeaving runlevel number%s" $af2 $af7 $line`"
+text="`nls "%sResource Manager: %sEntering runlevel number%s" $af2 $af7 $line`"
 unset af2 af7 line
 awk "BEGIN {printf \"%.78s\", \"$text\";}"
 echo "`termput setaf 6`[`termput setaf 2` $runlevel `termput setaf 6`]`termput setaf 7`"
