@@ -131,6 +131,7 @@ else
     if [ "${IPV6_NETWORKING}" == "yes" ] ; then 
       for ADDR in ${IPV6_ADDR} ; do
 	   ip addr add ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
+	   ip route add ${ADDR} dev ${DEVICE}
       done  
     fi
 

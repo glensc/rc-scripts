@@ -42,9 +42,9 @@ stty onlcr -ixon 0>&1
 
 # Say something ;)
 echo "`tput setaf 2`Resource Manager:`tput setaf 7` Leaving  runlevel number \
-.....`tput setaf 6`[`tput setaf 2` $previous `tput setaf 6`]`tput setaf 7`"
+.........................`tput setaf 6`[`tput setaf 2` $previous `tput setaf 6`]`tput setaf 7`"
 echo "`tput setaf 2`Resource Manager:`tput setaf 7` Entering runlevel number \
-.....`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
+.........................`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
 
 # Is there an rc directory for this new runlevel?
 if [ -d /etc/rc.d/rc$runlevel.d ]; then
@@ -89,5 +89,5 @@ fi
 
 # Say something ;)
 echo "`tput setaf 2`Resource Manager:`tput setaf 7` Runlevel has been \
-reached.....`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
+reached.........................`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
 

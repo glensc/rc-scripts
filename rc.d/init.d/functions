@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# Version:	@(#) /etc/init.d/functions $Revision: 1.10 $ $Date: 1999/06/29 16:38:03 $
+# Version:	@(#) /etc/init.d/functions $Revision: 1.11 $ $Date: 1999/07/05 08:08:36 $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -38,8 +38,8 @@ fi
 # Some functions to handle PLD-style messages
 show() 
 {
-	text="$*".............................................
-	echo -ne `echo $text | cut -c1-45`
+	text="$*"..................................................................................
+	echo -ne `echo $text | cut -c1-65`
 }
 
 busy() 
