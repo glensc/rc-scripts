@@ -1,10 +1,10 @@
-#	$Id: ifcfg-description,v 1.7 2000/06/21 15:23:38 zagrodzki Exp $
+#	$Id: ifcfg-description,v 1.8 2000/06/25 14:40:36 waszi Exp $
 	DEVICE=<real device name>:<aliasnumber>
 or
 	DEVICE=<name>
 	[ BOOTPROTO={none|bootp|dhcp} ]
 if BOOTPROTO = dhcp ; then
-	[ DHCPOTIONS={-D|-H|-R}
+	[ DHCPOPTIONS={-D|-H|-R}
 fi
 IPADDR=<IPv4 addres>
 [ IPADDR_ALIASES="<IPv4 addres1> <IPv4 addres2> <...>" ]

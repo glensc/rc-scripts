@@ -6,7 +6,7 @@
 #               Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.11 2000/06/23 09:11:10 wiget Exp $
+# $Id: rc.shutdown,v 1.12 2000/06/25 14:40:36 waszi Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -46,9 +46,9 @@ while [ -n "$remaining" -a "$retry" -gt 0 ]
 do	
 	show "Unmounting file systems" ; busy
 	if ERRORS=`LC_ALL=C exec umount -a $FORCE -t noproc 2>&1` ; then
-		deltext ; ok
+		ok
 	else
-		deltext ; fail
+		fail
 		[ -n "$ERRORS" ] && echo "$ERRORS"
 	fi
 	
@@ -84,7 +84,7 @@ show "Remounting remaining filesystems ro mode"; busy
 if ( mount | awk '/ext2/ { print $3 }' | \
 	while read line; do 
 	mount -n -o ro,remount $line; done ); then
-	deltext; ok
+	ok
 else
-	deltext; fail
+	fail
 fi

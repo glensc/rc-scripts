@@ -5,7 +5,7 @@
 #
 # Copyright (c) 1999 Free Software Fundation, Inc.
 # Artur Frysiak <wiget@pld.org.pl>
-# $Id: makepot.pl,v 1.3 2000/03/21 23:59:22 wiget Exp $
+# $Id: makepot.pl,v 1.4 2000/06/25 14:40:35 waszi Exp $
 # 
 
 my %pot;
@@ -36,7 +36,7 @@ msgstr \"\"
 \"Last-Translator: FULL NAME <EMAIL\@ADDRESS>\\n\"
 \"Language-Team: LANGUAGE <LL\@li.org>\\n\"
 \"MIME-Version: 1.0\\n\"
-\"Content-Type: text/plain; charset=iso8850-2\\n\"
+\"Content-Type: text/plain; charset=iso8859-2\\n\"
 \"Content-Transfer-Encoding: 8bit\\n\"
 
 # Translation of words: \"DONE\", \"WORK\", \"BUSY\", \"FAIL\", \"DIED\"

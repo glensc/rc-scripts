@@ -1,5 +1,5 @@
 DEVICE=ppp0
-CHATSCRIPT=/etc/sysconfig/network-scripts/chat-ppp0.tpsa
+CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.tpsa
 ONBOOT=no
 HARDFLOWCTL=yes
 MODEMPORT=/dev/ttyS1
