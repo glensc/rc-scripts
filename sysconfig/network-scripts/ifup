@@ -154,7 +154,7 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" ]; then
 
 	if check_link_down ${DEVICE}; then
 		if ! run_cmd "$(nls 'Determining IP information for') $DEVICE ($(basename $DHCP_CLIENT))" /bin/false
-		    	echo "${DEVIVE}: Check cable?"
+		    	echo "${DEVICE}: Check cable?"
 			exit 1
 		fi
 	fi
