@@ -62,6 +62,7 @@ for i in $RUNPARTS_DIR/*[!~,] ; do
 	    	runprog="$i $@"
 	    	if [ "$workasuser" = "yes" ]; then
 		    runuser="$(/bin/ls -l "$i"  | awk ' { print $3 } ' 2> /dev/null)"
+		    [ -z "$runuser" ] && echo "Warning: Can't find owner for [$i] file. Not running." && continue
       		    runprog="/bin/su $runuser -s /bin/sh -c $runprog"
 	   	fi
                 $runprog 2>&1 | awk -v "progname=$i" \
