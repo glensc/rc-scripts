@@ -1,4 +1,13 @@
 ------------------------------------------------------------------------
+rev 1364:  arekm | 2003-09-22 03:28:35 +0200 (Mon, 22 Sep 2003) | 6 lines
+
+- preparation for upcoming 0.4.0.1 release
+- updated all email addresses to current domain (pld-linux.org)
+- added missing files (networking scripts mainly)
+- updated spec file
+- updated changelog
+
+------------------------------------------------------------------------
 rev 1363:  arekm | 2003-09-22 02:55:30 +0200 (Mon, 22 Sep 2003) | 1 line
 
 - added missing files
