@@ -182,6 +182,6 @@ nls "Login name [admin]: "
 nls "Login password: "
 nls "Password again: "
 nls "ERROR: Passwords don't match"
-nls ""
+nls "Loading zebra configuration"
 
 fi
