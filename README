@@ -1,4 +1,4 @@
-	$Id: README,v 1.8 2002/03/19 18:17:58 misiek Exp $
+	$Id: README,v 1.9 2002/03/24 03:59:16 blues Exp $
 
 rc-scripts is a derivative of the initscripts 3.78 release by
 RedHat Software, but with bugs removed and newer features added.
@@ -46,5 +46,5 @@ to rc-scripts maintainers at <pld-rc-scripts@pld.org.pl> or
 use our Bug Tracking System ( http://bugs.pld.org.pl/ ).
 
 -- 
-PLD GNU/Linux rc-scripts Team
+PLD Linux Distribution rc-scripts Team
 

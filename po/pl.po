@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.43 2002/02/21 00:31:34 gotar Exp $
+# $Id: pl.po,v 1.44 2002/03/24 03:59:24 blues Exp $
 #
 
 msgid ""
@@ -102,8 +102,8 @@ msgid "Please stand by while rebooting the system"
 msgstr "Prosze czekac - restart systemu"
 
 #: ./rc.d/rc.sysinit:56
-msgid "\t\t\t%sPowered by %sPLD GNU/Linux%s"
-msgstr "\t\t\t%sNapedzane przez %sPLD GNU/Linux%s"
+msgid "\t\t\t%sPowered by %sPLD Linux Distribution%s"
+msgstr "\t\t\t%sNapedzane przez %sPLD Linux Distribution%s"
 
 #: ./rc.d/rc.sysinit:58
 msgid "\t\t     Press %sI%s to enter interactive startup"
