@@ -399,8 +399,8 @@ daemon()
 #	elif [ -n "`$SH -c 'echo ${.sh.version}' 2>/dev/null`" ]; then
 	fi
 	while echo "$limits" | grep -q '[^ ]'; do
-		ulimit `echo ${limits} | awk '/^ *-[^-]*-.*$/ {sub(/^[^-]*-/,"");sub(/-.*$/,"");sub(/^.*$/,"-&");}{print;}'
-		limits="`echo ${limits} | awk '/^ *-[^-]*-.*$/ {sub(/^[^-]*-[^-]*/,"");}{print;}'
+		ulimit `echo ${limits} | awk '/^ *-[^-]*-.*$/ { sub(/^[^-]*-/,""); sub(/-.*$/,""); sub(/^.*$/,"-&"); } { print; }'`
+		limits="`echo ${limits} | awk '/^ *-[^-]*-.*$/ { sub(/^[^-]*-[^-]*/,""); } { print; }'`"
 	done
 
 	# And start it up.
