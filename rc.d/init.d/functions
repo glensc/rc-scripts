@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.54.2.5 2001/05/13 17:54:14 misiek Exp $
+# $Id: functions,v 1.54.2.6 2001/05/31 14:27:09 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -24,8 +24,17 @@ INIT_COL=67
 # Colors workaround
 termput() 
 {
-	if [ ! -d /usr/share/terminfo ] || \
-	     [ ! -x /usr/bin/tput -a ! -x /bin/tput ]; then
+	typeset i
+	
+	# check if we are on proper terminal
+	tput longname > /dev/null 2>&1 /dev/null
+	i=$?
+	
+	if [ "$i" -ne "0" ]; then
+		return
+	fi
+
+	if [ ! -d /usr/share/terminfo -o ! -x /usr/bin/tput ]; then
 		case "$1" in
 		  hpa)
 		  	/bin/echo -ne "\033[$(($2+1))G"
@@ -44,7 +53,26 @@ termput()
 			;;
 		  esac
 	else
-		tput "$@"
+		# check if we are on proper terminal
+		tput longname > /dev/null 2>&1 /dev/null || return
+
+	        case "$1" in
+		  hpa)
+		  	tput "$@"
+			;;
+		  cuu*)
+		  	tput "$@"
+			;;
+		  el)
+		  	tput "$@"
+			;;
+		  setaf)
+		  	is_yes "$COLOR_INIT" && tput "$@"
+			;;
+		  op)
+		  	tput setaf 9
+			;;
+		 esac
 	fi
 }
 
