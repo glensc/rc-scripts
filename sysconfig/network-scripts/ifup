@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.45 2000/08/04 15:25:45 baggins Exp $
+#	$Id: ifup,v 1.46 2000/09/03 02:29:02 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -88,9 +88,9 @@ if [ -z "$NETMASK" -a -n "$PREFIX" ]; then
 	NETMASK="`calcnetmask $PREFIX`"
 fi
 
-is_yes "$MULTICAST"      && MULTICAST=on               || MULTICAST=off
-[ -n "$SRC_ADDR" ]       && SRC_ADDR="src ${SRC_ADDR}" || SRC_ADDR=""
-[ -n "$SCOPE" ]          && SCOPE="scope ${SCOPE}"     || SCOPE=""
+is_yes "$MULTICAST"	&& MULTICAST=on			|| MULTICAST=off
+[ -n "$SRC_ADDR" ]	&& SRC_ADDR="src ${SRC_ADDR}"	|| SRC_ADDR=""
+[ -n "$SCOPE" ]		&& SCOPE="scope ${SCOPE}"	|| SCOPE=""
 
 if [ "$ARP" ]; then
 	is_yes "$ARP"    && ARP=on	|| ARP=off
@@ -167,6 +167,7 @@ else
 
     ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
 
+    # IPv4 rules
     if [ "$IPv4" = "yes" ]; then
 	if [ -n "$REMIP" ]; then
 	    ip -family inet addr add ${IPADDR} peer ${REMIP} dev ${DEVICE} label ${FULLDEVNAME} ${SCOPE}
@@ -179,9 +180,9 @@ else
         done
     fi
 
-
     # IPv6 rules
     if is_yes "${IPV6_NETWORKING}"; then
+      proc_net ipv6/conf/${DEVICE}/autoconf start 0 1 IPV6_AUTOCONF "IPv6 address autoconfiguration on ${DEVICE}"
 
       for ADDR6 in ${IPV6_ADDR} ; do
 	ip -family inet6 addr add ${ADDR6} dev ${DEVICE} label ${FULLDEVNAME}
@@ -201,7 +202,6 @@ else
 	  fi
 	fi
       fi
-
     fi
 
     if [ "${GATEWAY}" != "" ]; then
