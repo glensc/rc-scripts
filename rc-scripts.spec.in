@@ -19,6 +19,7 @@ Requires:	sh-utils
 Requires:	/bin/cut
 Requires:	/bin/nice
 Requires:	/bin/basename
+Requires:	SysVinit
 Prereq:		/sbin/chkconfig
 Obsoletes:	initscripts
 Provides:	initscripts
