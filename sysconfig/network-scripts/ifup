@@ -49,7 +49,7 @@ if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
     exit
 fi
 
-if [ "foo$2" = "foohotplug" ] && is_yes "${ONBOOT}"; then
+if [ "foo$2" = "foohotplug" ] && ! is_yes "${HOTPLUG}"; then
     exit
 fi
 
