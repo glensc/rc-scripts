@@ -9,7 +9,6 @@ need_hostname
 
 CONFIG=$1
 
-# wywo³anie np. ifup eth0 lub ifup ifcfg-eth0
 [ -z "$CONFIG" ] && {
     echo "usage: ifup <device name>" >&2
     exit 1
@@ -29,7 +28,6 @@ if [ `id -u` != 0 ]; then
     exit 1
 fi
 
-# wczytuje konfiguracjê dla DEVICE
 source_config
 
 if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
@@ -100,7 +98,7 @@ else
 
 if [ "$IPSETUP" != yes ]; then
     if [ -z "$NETMASK" ]; then
-	eval `/bin/ipcalc --netmask ${IPADDR}`
+	eval `/bin/ipcalc --short-netmask ${IPADDR}`
     fi
 
     if [ -z "$BROADCAST" ]; then
@@ -122,7 +120,8 @@ if [ "$IPSETUP" != yes ]; then
 # hack for 2.2 kernels
     if [ "$ISALIAS" = no ] && [ -z "`route -n | sed "s/ .*//" | grep ${NETWORK}`" ]; then
 # potrzebna zamiana netmaski z postaci np. 255.255.255.255 -> 32
-	route add -net ${NETWORK} netmask ${NETMASK} ${DEVICE}
+#	route add -net ${NETWORK} netmask ${NETMASK} ${DEVICE}
+	ip route add ${NETWORK}/${NETMASK} ${DEVICE}
     else
 #	route add -host ${IPADDR} ${DEVICE}
 	ip route add ${IPADDR}/32 dev ${DEVICE}
