@@ -445,13 +445,18 @@ fi
 # Find and activate volume groups:
 # EVMS
 if [ -x /sbin/evms_activate ]; then
-	# Linux 2.5 core module
-        modprobe -s -k evmscore > /dev/null 2>&1
-	# Linux 2.4 core modules
-        modprobe -s -k evms > /dev/null 2>&1
-        modprobe -s -k evms_passthru > /dev/null 2>&1
-        modprobe -s -k ldev_mgr > /dev/null 2>&1
-        modprobe -s -k dos_part > /dev/null 2>&1
+    
+    	if [ "$(kernelverser)" -lt "002006" ]; then
+    	    # Linux 2.4 core modules
+    	    modprobe -s -k evms > /dev/null 2>&1
+    	    modprobe -s -k evms_passthru > /dev/null 2>&1
+    	    modprobe -s -k ldev_mgr > /dev/null 2>&1
+    	    modprobe -s -k dos_part > /dev/null 2>&1
+    	else
+    	    # Linux 2.6 core module
+    	    modprobe -s -k evmscore > /dev/null 2>&1
+	fi
+	
 	is_yes "$EVMS_GUID_PTABLE" && modprobe -s -k gpt_part >/dev/null 2>&1
 	is_yes "$EVMS_LVM" && modprobe -s -k lvm_vge >/dev/null 2>&1
 	is_yes "$EVMS_AIX" && modprobe -s -k AIXlvm_vge >/dev/null 2>&1
