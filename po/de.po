@@ -1,13 +1,13 @@
 # German translation of rc-scripts.
-# Pawel Sakowski <pawel@sakowski.eu.org>, 2000.
+# Pawel Sakowski <saq@pld-linux.org>, 2000.
 # $Id$
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: rc-scripts 0.2.6\n"
 "POT-Creation-Date: 1999-07-30 18:45+0200\n"
-"PO-Revision-Date: 2004-06-28 00:00+0200\n"
-"Last-Translator: Pawel Sakowski <pawel@sakowski.eu.org>\n"
+"PO-Revision-Date: 2004-12-13 21:15+0100\n"
+"Last-Translator: Pawel Sakowski <saq@pld-linux.org>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -26,9 +26,8 @@ msgstr "Information über die Zeitzone (%s, %s) wird eingestellt"
 #: .././sysconfig/network-scripts/ifup-ipx:13
 #: .././sysconfig/network-scripts/tnlup:29
 #: .././sysconfig/network-scripts/ifup:27
-#, fuzzy
 msgid "Usage: %s <device name>"
-msgstr "Verwendung: ifup <Gerätname>"
+msgstr "Verwendung: %s <Gerätname>"
 
 #: .././rc.d/init.d/timezone:42
 msgid "$MESSAGE"
@@ -65,9 +64,8 @@ msgid "Remounting root filesystem in ro mode"
 msgstr "Das Root-Dateisystem wird mit Schreibschütz erneut gemountet"
 
 #: .././sysconfig/network-scripts/ifup-ppp:102
-#, fuzzy
 msgid "ifup-ppp for %s exiting"
-msgstr "ifup-sl für $DEVICE wird beendet"
+msgstr "ifup-ppp für $DEVICE wird beendet"
 
 #: .././rc.d/rc.sysinit~:176 .././rc.d/rc.sysinit:176
 msgid "Host:"
@@ -99,7 +97,7 @@ msgstr "Der Device-Dateisystem-Server wird gestartet"
 
 #: .././rc.d/rc.sysinit~:214 .././rc.d/rc.sysinit:214
 msgid "Initializing USB keyboard"
-msgstr ""
+msgstr "Die USB-Tastatur wird initialisiert"
 
 #: .././rc.d/init.d/template.init:61 .././rc.d/init.d/template.init:77
 #: .././rc.d/init.d/functions:273
@@ -132,9 +130,8 @@ msgid "$STRING"
 msgstr ""
 
 #: .././rc.d/rc.shutdown:42
-#, fuzzy
 msgid "Turning off quotas for local filesystems"
-msgstr "Die Quotas für die lokalen Dateisysteme werden eingeschaltet"
+msgstr "Die Quotas für die lokalen Dateisysteme werden ausgeschaltet"
 
 #: .././rc.d/init.d/functions:409
 msgid "$message"
@@ -183,9 +180,8 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit~:165 .././rc.d/rc.sysinit~:706
 #: .././rc.d/rc.sysinit:165 .././rc.d/rc.sysinit:706
-#, fuzzy
 msgid "Setting clock"
-msgstr "Die Systemuhr$CLOCKDEF wird eingestellt"
+msgstr "Die Systemuhr wird eingestellt"
 
 #: .././rc.d/init.d/network:162
 msgid "Bringing up tunnel interface"
@@ -197,14 +193,13 @@ msgstr ""
 
 #: .././rc.d/init.d/template.init:96
 msgid "Usage: %s {start|stop|restart|reload|force-reload|status}"
-msgstr ""
+msgstr "Verwendung: %s {start|stop|restart|reload|force-reload|status}"
 
 #: .././sysconfig/network-scripts/ifup-sl:45
 #: .././sysconfig/network-scripts/ifup-ppp:35
 #: .././sysconfig/network-scripts/ifup-ppp:67
-#, fuzzy
 msgid "%s for %s exiting"
-msgstr "ifup-sl für $DEVICE wird beendet"
+msgstr "%s für %s wird beendet"
 
 #: .././rc.d/rc.sysinit~:579 .././rc.d/rc.sysinit:579
 msgid "Scanning for LVM volume groups (on RAID)"
@@ -223,18 +218,16 @@ msgid "The random data source exists"
 msgstr "Die Zufallsdatenquelle existiert"
 
 #: .././rc.d/init.d/template.init:72
-#, fuzzy
 msgid "Reload %s service"
 msgstr "Der %s-Dienst wird umgeladen"
 
 #: .././rc.d/rc.sysinit~:717 .././rc.d/rc.sysinit:717
-#, fuzzy
 msgid "Setting %s seconds for kernel reboot after panic"
-msgstr "%s Sekunden werden für den Kern-Neustart nach der Panik eingestellt."
+msgstr "%s Sekunden werden für den Kern-Neustart nach der Panik eingestellt"
 
 #: .././rc.d/rc.sysinit~:217 .././rc.d/rc.sysinit:217
 msgid "Initializing USB mouse"
-msgstr ""
+msgstr "Die USB-Maus wird initialisiert"
 
 #: .././sysconfig/network-scripts/ifup-irda:59
 msgid "problems with setting %s %s"
@@ -265,7 +258,6 @@ msgid "Shutting down interface"
 msgstr ""
 
 #: .././rc.d/rc.shutdown:37
-#, fuzzy
 msgid "Turning off swap"
 msgstr "Die Auslagerung wird ausgeschaltet"
 
@@ -292,7 +284,7 @@ msgstr "Der %s-Dienst wird gestartet"
 #: .././rc.d/rc.shutdown:75
 #, fuzzy
 msgid "Turning off RAID devices"
-msgstr "RAID wird für %s ausgeschaltet"
+msgstr "RAID-Geräte werden ausgeschaltet"
 
 #: .././rc.d/rc.sysinit~:493 .././rc.d/rc.sysinit:493
 msgid "Scanning for LVM volume groups"
@@ -318,7 +310,7 @@ msgstr "existiert für %s nicht"
 
 #: .././sysconfig/network-scripts/ifup:126
 msgid "Can't find a dhcp client."
-msgstr ""
+msgstr "Kein DHCP-Klient kann gefunden werden"
 
 #: .././rc.d/init.d/template.init:49 .././rc.d/init.d/functions:263
 msgid "%s service is already running."
@@ -329,9 +321,8 @@ msgid "Users cannot control this device."
 msgstr "Die Benutzer dürfen dieses Gerät nicht kontrollieren."
 
 #: .././rc.d/init.d/network:191
-#, fuzzy
 msgid "Unmounting CIFS filesystems"
-msgstr "Die Dateisysteme werden unmountet"
+msgstr "Die CIFS-Dateisysteme werden unmountet"
 
 # #### FUNCTIONS #####
 #: .././rc.d/init.d/template.init:29 .././rc.d/init.d/functions:253
@@ -339,18 +330,16 @@ msgid "ERROR: Networking is down. %s can't be run."
 msgstr "FEHLER: Das Netzwerkwesen läuft nicht. %s kann nicht gestartet werden."
 
 #: .././sysconfig/network-scripts/ifup-ppp:101
-#, fuzzy
 msgid "%s does not exist"
-msgstr "existiert nicht"
+msgstr "%s existiert nicht"
 
 #: .././rc.d/rc.sysinit~:203 .././rc.d/rc.sysinit:203
-#, fuzzy
 msgid "Mounting USB filesystem"
-msgstr "Die lokalen Dateisysteme werden gemountet."
+msgstr "Die USB-Dateisysteme werden gemountet"
 
 #: .././rc.d/rc.sysinit~:210 .././rc.d/rc.sysinit:210
 msgid "Initializing USB HID interface"
-msgstr ""
+msgstr "Die USB-HID-Schnittstelle wird initialisiert"
 
 #: .././rc.d/rc.sysinit~:260 .././rc.d/rc.sysinit~:562
 #: .././rc.d/rc.sysinit~:604 .././rc.d/rc.sysinit~:659
@@ -412,9 +401,8 @@ msgid "*** Dropping you to a shell; the system will reboot"
 msgstr "*** Lasse Sie in der Shell; das System wird neustarten,"
 
 #: .././rc.d/init.d/network:185
-#, fuzzy
 msgid "Unmounting SMB filesystems"
-msgstr "Die Dateisysteme werden unmountet"
+msgstr "Die SMB-Dateisysteme werden unmountet"
 
 #: .././rc.d/rc.shutdown:107
 msgid "The system is halted"
@@ -428,9 +416,8 @@ msgid "Automatic reboot in progress"
 msgstr "Automatischer Neustart wird ausgeführt"
 
 #: .././rc.d/rc.sysinit~:627 .././rc.d/rc.sysinit:627
-#, fuzzy
 msgid "Mounting local filesystems"
-msgstr "Die lokalen Dateisysteme werden gemountet."
+msgstr "Die lokalen Dateisysteme werden gemountet"
 
 #: .././rc.d/rc.shutdown:108 .././rc.d/rc.shutdown:117
 msgid "On the next boot fsck will be skipped."
@@ -470,9 +457,8 @@ msgid "Setting network parameters"
 msgstr "Der Netzwerkrouter-Erforschung-Server wird gestartet"
 
 #: .././rc.d/init.d/network:182
-#, fuzzy
 msgid "Unmounting NFS filesystems"
-msgstr "Die Dateisysteme werden unmountet"
+msgstr "Die NFS-Dateisysteme werden unmountet"
 
 #: .././sysconfig/network-scripts/ifup-sl:47
 #: .././sysconfig/network-scripts/ifup-sl:90
@@ -558,9 +544,8 @@ msgid "Setting up a new %s config file"
 msgstr ""
 
 #: .././rc.d/rc.sysinit~:592 .././rc.d/rc.sysinit:592
-#, fuzzy
 msgid "Checking filesystems"
-msgstr "Die Dateisysteme werden nachgesehen."
+msgstr "Die Dateisysteme werden nachgesehen"
 
 #: .././rc.d/init.d/functions:283
 msgid "Usage: %s"
@@ -593,9 +578,8 @@ msgstr "Das System wird bereits gestartet  - bitte warten"
 #: .././rc.d/rc.sysinit~:510 .././rc.d/rc.sysinit~:557
 #: .././rc.d/rc.sysinit~:584 .././rc.d/rc.sysinit:510 .././rc.d/rc.sysinit:557
 #: .././rc.d/rc.sysinit:584
-#, fuzzy
 msgid "Starting up RAID devices"
-msgstr "Die RAID-Geräte werden gestartet."
+msgstr "Die RAID-Geräte werden gestartet"
 
 #: .././rc.d/init.d/functions:302
 msgid "$@"
@@ -632,9 +616,8 @@ msgid "Reloading %s service"
 msgstr "Der %s-Dienst wird umgeladen"
 
 #: .././rc.d/init.d/network:188
-#, fuzzy
 msgid "Unmounting NCP filesystems"
-msgstr "Die Dateisysteme werden unmountet"
+msgstr "Die NCP-Dateisysteme werden unmountet"
 
 #: .././rc.d/rc.shutdown:116
 msgid "Please stand by while rebooting the system"
@@ -653,9 +636,8 @@ msgid "BUSY"
 msgstr "WIRKE"
 
 #: .././sysconfig/network-scripts/ifup-ppp:104
-#, fuzzy
 msgid "%s does not exist for %s"
-msgstr "existiert für %s nicht"
+msgstr "%s existiert für %s nicht"
 
 #: .././rc.d/rc.sysinit~:166 .././rc.d/rc.sysinit~:707
 #: .././rc.d/rc.sysinit:166 .././rc.d/rc.sysinit:707
@@ -674,13 +656,12 @@ msgstr "%sRessourcenmanager: %sWechsel in die Betriebsebene Nummer"
 #: .././sysconfig/network-scripts/ifup-sl:44
 #: .././sysconfig/network-scripts/ifup-ppp:34
 #: .././sysconfig/network-scripts/ifup-ppp:66
-#, fuzzy
 msgid "%s does not exist or is not executable"
-msgstr "/usr/sbin/dip existiert nicht oder ist nicht ausführbar"
+msgstr "%s existiert nicht oder ist nicht ausführbar"
 
 #: .././rc.d/init.d/functions:444
 msgid "warning: --check option is ignored!"
-msgstr ""
+msgstr "Warnung: die Option --check wird ignoriert!"
 
 #: .././sysconfig/network-scripts/functions.network:92
 #: .././sysconfig/network-scripts/functions.network:94
