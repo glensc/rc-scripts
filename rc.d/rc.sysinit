@@ -687,7 +687,7 @@ for afile in /var/lock/* /var/run/*; do
 		bafile=$(basename $afile)
 		[ "$bafile" != "news" -a "$bafile" != "sudo" -a "$bafile" != "mon" ] && rm -rf $afile/*
 	else
-		rm -f $afile 2> /dev/null
+	    	[ "$bafile" != "hwprofile" ] && rm -f $afile 2> /dev/null
 	fi
 done
 # Delete stale files
