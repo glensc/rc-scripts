@@ -620,7 +620,7 @@ run_cmd "Mounting local filesystems" mount -a -t nonfs,smbfs,ncpfs,proc,cifs -O 
 # before mount - that's where the password is entered.
 # mount is buggy - when remounting loopback filesystem, loop=XXX
 # option is removed from /etc/mtab
-if grep "^[^#].*encryption=" /etc/fstab | grep -v -q "noauto"; then
+if [ -z "$fastboot" ] && grep "^[^#].*encryption=" /etc/fstab | grep -v -q "noauto"; then
 	show "Checking encrypted filesystems"; started
 	LOOPLIST="$(awk '
 	FILENAME=="/proc/mounts" {
