@@ -1,3 +1,109 @@
+2003-12-21 21:25 [r3056]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc-scripts.spec.in: Add pkgconfig to BuildRequires.
+
+2003-12-21 21:11 [r3055]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* src/Makefile.am, configure.ac: Find libglib.a location using
+	  pkg-config and use it (Artur Frysiak <wiget@pld-linux.org>).
+
+2003-12-21 17:30 [r3054]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* sysconfig/network-scripts/Makefile.am, configure.ac: Don't set
+	  libdir - use value from configure script.
+
+2003-12-21 17:05 [r3053]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* configure.ac: - release 0.4.0.6 is comming
+
+2003-12-21 16:43 [r3052]  £ukasz Jerna¶ <deejay1@pld-linux.org>
+
+	* po/pl.po: - typo
+
+2003-12-21 14:33 [r3051]  Adam Gorzkiewicz <adgor@pld-linux.org>
+
+	* rc.d/rc.modules: - Typo
+
+2003-12-21 13:43 [r3050]  Marcin Krzy¿anowski <krzak@pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: - fix ${PPPOA_EAGLE} check if
+	  there isn't executable adictrl try use eaglectrl
+
+2003-12-21 13:28 [r3049]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+
+	* rc.d/init.d/functions: - small revert: we do not use sed in
+	  rc-scripts - other sed -> awk changes
+
+2003-12-21 13:08 [r3048]  Marcin Krzy¿anowski <krzak@pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: - corrected nls message when
+	  pppd does not exist - support for PPPOA_EAGLE start with kernel
+	  2.6 and 2.4
+
+2003-12-21 12:14 [r3047]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+
+	* rc.d/rc.sysinit, rc.d/rc.modules, rc.d/init.d/functions: -
+	  simplified (use less tools, one-time file reading)
+
+2003-12-21 10:46 [r3046]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+
+	* rc.d/rc.modules: - simplified (double awk->single one)
+
+2003-12-21 10:18 [r3045]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/rc.modules: Added support for /etc/modules file exactly for
+	  one kernel (like /etc/modules.2.6.0).
+
+2003-12-21 10:14 [r3044]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/rc.modules: Do not require existence of /etc/modules (Marcin
+	  Krzyzanowski <krzak@linux.net.pl>).
+
+2003-12-21 00:58 [r3043]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc, rc.d/rc.sysinit,
+	  rc.d/init.d/functions: More progress bar support (bootsplash): it
+	  moves now!
+
+2003-12-20 21:21 [r3042]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* hwprofile: Reindented whole script. checkprofdir(): New. Use it
+	  when required (now help is shown when needed). When executed
+	  without arguments show help.
+
+2003-12-19 14:40 [r3039]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc-scripts.spec.in: bdflush is not required.
+
+2003-12-19 13:59 [r3038]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* src/Makefile.am: Use @libdir@ instead of hardcoded /usr/lib path
+	  when linking ppp-watch with glib.
+
+2003-12-15 13:29 [r1739]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: Set action variable to proper value in
+	  rc_splash(). Found by Michal Moskal <malekith@pld-linux.org>.
+
+2003-12-14 21:20 [r1733]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: Fix mounting sysfs - be consistent with mounting
+	  proc + do not require entry in fstab (qboosh). Add support for
+	  mounting selinuxfs (me).
+
+2003-12-14 18:23 [r1732]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* src/usernetctl.c: - fix path to ifcfg- files (wrobell)
+
+2003-12-12 16:43 [r1731]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/rc, rc.d/rc.sysinit, rc.d/init.d/functions: - initial
+	  support for bootsplash.org
+
+2003-12-07 15:54 [r1723]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* configure.ac: - release 0.4.0.5
+
 2003-12-05 20:41 [r1722]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
 
 	* rc.d/init.d/network: Fix interfaces_boot for bridge devices.
