@@ -283,7 +283,6 @@ fi
 
 #
 # folowing function calculates network prefix from given network mask
-# valuse is returned by $prefix variable.
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 #
 
