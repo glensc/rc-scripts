@@ -5,6 +5,8 @@ EXTRA_DIST = @POTFILES@ @PACKAGE@.pot
 
 POTSRC = @POTSRC@
 
+makepot = $(top_srcdir)/makepot.pl
+
 CATOBJEXT = .gmo
 INSTOBJEXT = .mo
 
@@ -18,17 +20,10 @@ SUFFIXES = .po .mo .gmo
 	  && rm -f $$file && $(GMSGFMT) -o $$file $<
 
 $(PACKAGE).pot: Makefile $(POTSRC)
-	: >$(PACKAGE).po.old; \
-	: >$(PACKAGE).po; \
-	for script in "$(POTSRC)"; do \
-	  $(BASH) --dump-po-strings $$script \
-	    >$(PACKAGE).po.part; \
-	    $(MSGMERGE) $(PACKAGE).po.old $(PACKAGE).po.part -o $(PACKAGE).po; \
-	    cp $(PACKAGE).po $(PACKAGE).po.old; \
-	done ; \
+	$(makepot) $(POTSRC) >$(PACKAGE).po; \
 	cmp $(PACKAGE).po $(PACKAGE).pot || \
 		mv $(PACKAGE).po $(PACKAGE).pot; \
-	rm -f $(PACKAGE).po.old $(PACKAGE).po $(PACKAGE).po.part
+	rm -f $(PACKAGE).po
 
 update-po: Makefile
 	$(MAKE) $(PACKAGE).pot

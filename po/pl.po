@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.2 1999/09/15 10:14:39 misiek Exp $
+# $Id: pl.po,v 1.3 1999/09/15 21:12:20 wiget Exp $
 #
 msgid ""
 msgstr ""
@@ -16,247 +16,319 @@ msgstr ""
 
 # Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
 # must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
-msgid "DONE"
-msgstr "ZROBIONE"
-
-msgid "WORK"
-msgstr "AKTYWUJE"
-
-msgid "BUSY"
-msgstr " ZAJETY "
-
-msgid "FAIL"
-msgstr "PROBLEMY"
-
-msgid "DIED"
-msgstr " ZDECHL "
-
 # (4 + "\b" * count of letters) in one of five previous words
-msgid "\b\b\b\b\b\b\b\b"
-msgstr"\b\b\b\b\b\b\b\b\b\b\b\b"
-
-msgid "Activating swap partitions"
-msgstr "Aktywuje partycje swap"
-
-msgid "Host:"
+# msgid "\b\b\b\b\b\b\b\b"
+# ../rc.d/init.d/functions.network:14
+msgid "Missing config file %s.\n"
 msgstr ""
 
-msgid "NIS Domain:"
-msgstr "Domena NIS:"
+
+msgid "%sResource Manager: %sLeaving runlevel number%s"
+msgstr "%sZarzadca zasobow: %sOpuszczam poziom%s"
+
+msgid "Configured devices:"
+msgstr ""
 
 msgid "Checking root filesystems."
 msgstr "Sprawdzam glowny system plikow."
 
-msgid "*** An error occurred during the file system check."
-msgstr "*** Wystapil blad podczas kontroli systemu plikow."
-
-msgid "*** Dropping you to a shell; the system will reboot"
-msgstr "*** Przenosze Cie do powloki; system zostanie zrestartowany"
-
-msgid "*** when you leave the shell."
-msgstr "*** gdy ja opuscisz."
-
-msgid "(Repair filesystem) #"
-msgstr "(Reperacja systemu plikow) #"
-
-msgid "Unmounting file systems"
-msgstr "Odlaczam systemy plikow"
-
-msgid "Automatic reboot in progress."
-msgstr "Automatyczny reboot w toku."
-
-msgid "Turning on quotas on root filesystem"
-msgstr "Wlaczam quote na glownym systemie plikow"
-
-msgid "Setting up ISA PNP devices"
-msgstr "Ustawiam urzadzenia ISA PNP"
-
-msgid "Remounting root filesystem in rw mode"
-msgstr "Przemountowuje glowny system plikow w tryb rw"
-
-msgid "Checking root filesystem quotas"
-msgstr "Sprawdzam quote na glownym systemie plikow"
+msgid "Enabling swap space"
+msgstr "Aktywuje swapa"
 
 msgid "Enabling Delay Login"
 msgstr "Aktywuje Opoznianie Logowania"
 
-msgid "System bootup in progress  - please wait"
-msgstr "Start systemu w toku - prosze czekac"
+msgid "Active SMB mountpoints:"
+msgstr ""
 
-msgid "Finding module dependencies"
-msgstr "Wyszukuje powiazania pomiedzy modulami"
-
-msgid "Loading sound module"
-msgstr "Laduje modul obslugi dzwieku"
-
-msgid "Starting up RAID devices."
-msgstr "Ustawiam urzadzenia RAID"
-
-msgid "*** An error occurred during the RAID startup"
-msgstr "*** Wystapil blad podczas startu systemu RAID"
-
-msgid "Remounting root filesystem in ro mode"
-msgstr "Przemountowuje glowny system plikow w tryb ro"
-
-msgid "Checking filesystems."
-msgstr "Sprawdzam systemy plikow."
-
-msgid "Mounting local filesystems."
-msgstr "Podlaczam lokalne systemy plikow."
-
-msgid "Loading default system font"
-msgstr "Laduje podstawowy font systemowy"
-
-msgid "Turning on quotas for local filesystems"
-msgstr "Wlaczam quote na lokalnych systemach plikow"
+# ../rc.d/init.d/functions.network:160
+msgid "Setting up IP spoofing protection"
+msgstr ""
 
 msgid "Setting clock"
 msgstr "Ustawiam zegar"
 
-msgid "Enabling swap space"
-msgstr "Aktywuje swapa"
-
-msgid "Setting up /etc/ld.so.cache"
-msgstr "Ustawiam /etc/ld.so.cache"
-
-msgid "Sending val. $PANIC_REBOOT_TIME to /proc/sys/kernel/panic"
-msgstr "Przesylam wartosc $PANIC_REBOOT_TIME do /proc/sys/kernel/panic"
-
-msgid "Allowing users to login"
-msgstr "Pozwalam uzytkownikom na logowanie sie"
-
-msgid "The system is halted"
-msgstr "System jest zatrzymany"
-
-msgid "On the next boot fsck will be skipped."
-msgstr "Przy nastepnym starcie systemu pomijam program fsck."
-
-msgid "Mounting NFS filesystems"
+msgid "Mounting NCP filesystems"
 msgstr ""
 
 msgid "Mounting SMB filesystems"
 msgstr ""
 
-msgid "Mounting NCP filesystems"
+msgid "Automatic reboot in progress."
+msgstr "Automatyczny reboot w toku."
+
+msgid "/proc filesystem unavailable"
 msgstr ""
 
-msgid "Mounting other filesystems"
+# ../rc.d/rc.sysinit:384
+msgid "Rebuilding /etc/psdevtab database"
 msgstr ""
 
-msgid "Unmounting NFS filesystems"
-msgstr ""
-
-msgid "Unmounting SMB filesystems"
+msgid "Active NFS mountpoints:"
 msgstr ""
 
 msgid "Unmounting NCP filesystems"
 msgstr ""
 
-msgid "Configured NFS mountpoints:"
+msgid "Unmounting SMB filesystems"
+msgstr ""
+
+# ../rc.d/init.d/functions:275
+msgid "%s dead but pid file exists"
 msgstr ""
 
 msgid "Configured SMB mountpoints:"
 msgstr ""
 
-msgid "Configured NCP mountpoints:"
-msgstr ""
 
-msgid "Active NFS mountpoints:"
-msgstr ""
-
-msgid "Active SMB mountpoints:"
-msgstr ""
-
-msgid "Active NCP mountpoints:"
-msgstr ""
-
-msgid "/proc filesystem unavailable"
-msgstr ""
-
-msgid "IPv4 forwarding"
-msgstr ""
-
-msgid "IPv6 forwarding"
-msgstr ""
-
-msgid "Configured devices:"
-msgstr ""
-
-msgid "Configured tunnels:"
-msgstr ""
-
-msgid "Currently active devices:"
-msgstr ""
-
-msgid "Mounting remote filesystems, start nfsd"
-msgstr ""
+msgid "%sResource Manager: %sRunlevel has been reached%s"
+msgstr "%sZarzadca zasobow: %sZostal osiagniety poziom%s"
 
 msgid "Mounting remote filesystems"
 msgstr "Podlaczam zdalne systemy plikow"
 
-msgid "Unmounting remote filesystems"
-msgstr "Odlaczam zdalne systemy plikow"
-
-msgid "Stopping NFS clients"
-msgstr ""
-
 msgid "Configured NFS mountpoints:"
 msgstr ""
 
-msgid "Active NFS mountpoints:"
+
+msgid "Automatic reboot in progress"
+msgstr "Automatyczny reboot w toku"
+
+msgid "*** when you leave the shell."
+msgstr "*** gdy ja opuscisz."
+
+msgid "Sending all processes the KILL signal"
+msgstr "Wysylam do wszystkich procesow sygnal KILL"
+
+msgid "The random data source is missing"
+msgstr ""
+
+msgid "BUSY"
+msgstr " ZAJETY "
+
+msgid "Telling INIT to go to single user mode"
+msgstr "Przekazuje INITowi by przeszedl do trybu single"
+
+# ../rc.d/init.d/functions:258
+# ../rc.d/init.d/functions:266
+msgid "%s (pid %s) is running..."
+msgstr "%s (pid $s) jest uruchominoy..."
+
+# Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
+# must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
+msgid "DONE"
+msgstr "ZROBIONE"
+
+
+msgid "Loading midi module"
+msgstr "Laduje modul obslugi midi"
+
+msgid "Configured tunnels:"
+msgstr ""
+
+msgid "Loading sound module"
+msgstr "Laduje modul obslugi dzwieku"
+
+# ../rc.d/init.d/functions:251
+msgid "Usage: status {program}\n"
+msgstr ""
+
+msgid "Remounting root filesystem in ro mode"
+msgstr "Przemountowuje glowny system plikow w tryb ro"
+
+
+msgid "Enabling dynamic IP patch"
+msgstr ""
+
+
+msgid "Sending val. %s to /proc/sys/kernel/panic"
+msgstr "Przesylam wartosc %s do /proc/sys/kernel/panic"
+
+# ../rc.d/init.d/functions:220
+msgid "Usage: pidofproc {program}\n"
+msgstr ""
+
+msgid "The system is halted"
+msgstr "System jest zatrzymany"
+
+# ../rc.d/init.d/functions:157
+msgid "Usage: killproc {program} [signal]"
+msgstr ""
+
+msgid "Remounting root filesystem in rw mode"
+msgstr "Przemountowuje glowny system plikow w tryb rw"
+
+msgid "Please stand by while rebooting the system"
+msgstr "Prosze czekac - rebootuje system"
+
+msgid "Host:"
+msgstr ""
+
+msgid "Unmounting remote filesystems"
+msgstr "Odlaczam zdalne systemy plikow"
+
+msgid "Mounting remote filesystems, start nfsd"
 msgstr ""
 
 msgid "Initializing random number generator"
 msgstr "Inicjuje generator liczb losowych"
 
-msgid "Saving random seed"
+msgid "FAIL"
+msgstr "PROBLEMY"
+
+# ../rc.d/init.d/functions.network:148
+msgid "Setting default local port range"
 msgstr ""
 
-msgid "The random data source exists"
+msgid "Mounting local filesystems."
+msgstr "Podlaczam lokalne systemy plikow."
+
+msgid "Checking filesystems."
+msgstr "Sprawdzam systemy plikow."
+
+msgid "Starting up RAID devices."
+msgstr "Ustawiam urzadzenia RAID"
+
+msgid "Checking root filesystem quotas"
+msgstr "Sprawdzam quote na glownym systemie plikow"
+
+msgid "*** An error occurred during the file system check."
+msgstr "*** Wystapil blad podczas kontroli systemu plikow."
+
+# ../rc.d/init.d/functions:109
+msgid "$MESSAGE"
 msgstr ""
 
-msgid "The random data source is missing"
+msgid "*** An error occurred during the RAID startup"
+msgstr "*** Wystapil blad podczas startu systemu RAID"
+
+msgid "Allowing users to login"
+msgstr "Pozwalam uzytkownikom na logowanie sie"
+
+msgid "Mounting other filesystems"
 msgstr ""
 
-msgid "Please stand by while rebooting the system"
-msgstr "Prosze czekac - rebootuje system"
+msgid "Finding module dependencies"
+msgstr "Wyszukuje powiazania pomiedzy modulami"
 
-msgid "On the next boot fsck will be skipped."
+# ../rc.d/init.d/functions:281
+msgid "%s dead but subsys locked"
+msgstr ""
+
+msgid "Unmounting file systems"
+msgstr "Odlaczam systemy plikow"
+
+msgid "Date set to"
+msgstr "Data ustawiona na"
+
+msgid "Stopping NFS clients"
+msgstr ""
+
+# ../rc.d/init.d/functions:70
+msgid "$*"
 msgstr ""
 
 msgid "Sending all processes the TERM signal"
 msgstr "Wysylam do wszystkich procesow sygnal TERM"
 
-msgid "Sending all processes the KILL signal"
-msgstr "Wysylam do wszystkich procesow sygnal KILL"
+msgid "Setting %s to %s"
+msgstr "Ustawiam %s na %s"
 
-msgid "Turning off swap and accounting"
-msgstr "Wylaczam swap i zliczanie"
+msgid "Activating swap partitions"
+msgstr "Aktywuje partycje swap"
+
+# ../rc.d/init.d/functions:284
+msgid "%s is stopped"
+msgstr ""
+
+# ../rc.d/rc.sysinit:224
+msgid "(RAID Repair) #"
+msgstr ""
+
+#, fuzzy
+msgid "System shutdown in progress \n"
+msgstr "Zamykanie systemu w toku \n"
+
+# ../rc.d/init.d/functions.network:145
+msgid "Setting local port range"
+msgstr ""
 
 msgid "Turning off RAID for $mddev"
 msgstr ""
 
+msgid "*** Dropping you to a shell; the system will reboot"
+msgstr "*** Przenosze Cie do powloki; system zostanie zrestartowany"
+
 msgid "Remounting remaining filesystems ro mode"
 msgstr "Remountuje pozostale systemy plikow w trym ro"
 
-msgid "Telling INIT to go to single user mode"
-msgstr "Przekazuje INITowi by przeszedl do trybu single"
+msgid "WORK"
+msgstr "AKTYWUJE"
 
-msgid "Resource Manager:"
-msgstr "Zarzadca Zasobow:"
+msgid "System bootup in progress  - please wait"
+msgstr "Start systemu w toku - prosze czekac"
 
-msgid "Runlevel has been reached"
-msgstr "Zostal osiagniety poziom"
+msgid "Active NCP mountpoints:"
+msgstr ""
 
-msgid "Leaving runlevel number"
-msgstr "Opuszczam poziom"
+msgid "Saving random seed"
+msgstr ""
 
-msgid "Date set to"
-msgstr "Data ustawiona na"
+msgid "Turning on quotas for local filesystems"
+msgstr "Wlaczam quote na lokalnych systemach plikow"
 
-msgid "Setting"
-msgstr "Ustawiam"
+msgid "The random data source exists"
+msgstr ""
 
-msgid "to"
-msgstr "na"
+msgid "Mounting NFS filesystems"
+msgstr ""
+
+# (4 + "\b" * count of letters) in one of five previous words
+msgid "\b\b\b\b\b\b\b\b"
+msgstr "\b\b\b\b\b\b\b\b\b\b\b\b"
+
+msgid "Setting up ISA PNP devices"
+msgstr "Ustawiam urzadzenia ISA PNP"
+
+msgid "Configured NCP mountpoints:"
+msgstr ""
+
+msgid "Unmounting NFS filesystems"
+msgstr ""
+
+msgid "On the next boot fsck will be skipped."
+msgstr "Przy nastepnym starcie systemu pomijam program fsck."
+
+msgid "DIED"
+msgstr " ZDECHL "
+
+# ../rc.d/init.d/functions.network:163
+msgid "Setting down IP spoofing protection"
+msgstr ""
+
+# ../rc.d/init.d/functions.network:133
+msgid "Disabling dynamic IP patch"
+msgstr ""
+
+msgid "Turning off swap and accounting"
+msgstr "Wylaczam swap i zliczanie"
+
+msgid "(Repair filesystem) #"
+msgstr "(Reperacja systemu plikow) #"
+
+msgid "NIS Domain:"
+msgstr "Domena NIS:"
+
+# ../rc.d/init.d/network:132
+msgid "Currently active devices and tunnels:"
+msgstr ""
+
+msgid "Checking filesystem quotas"
+msgstr "Sprawdzam quote w systemach plikow"
+
+msgid "Setting up /etc/ld.so.cache"
+msgstr "Ustawiam /etc/ld.so.cache"
+
+msgid "Loading default system font"
+msgstr "Laduje podstawowy font systemowy"
 
