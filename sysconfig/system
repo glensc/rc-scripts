@@ -1,21 +1,3 @@
-# On errors (when system is starting) run sulogin instead of shell ?
+# $RUN_SULOGIN_ON_ERR -	if "yes" this cause run on any errors sulogin instead
+#			shell
 RUN_SULOGIN_ON_ERR=yes
-
-# Default run nice level for all services if
-# $SERVICE_RUN_NICE_LEVEL is not defined in /etc/sysconfig/<service>
-DEFAULT_SERVICE_RUN_NICE_LEVEL=0
-
-# Run isapnp at system startup ?
-RUN_ISAPNP=yes
-
-# After how many seconds reboot system after kernel panic ?
-# 0 - never reboot system (suggested 60)
-PANIC_REBOOT_TIME=0
-
-# Do not allow users to login when system is starting
-# (but allow when it end "starting" process) ?
-DELAY_LOGIN=yes
-
-# Clean /tmp at startup ?
-CLEAN_TMP=yes
-

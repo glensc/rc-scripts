@@ -9,12 +9,19 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
 
-# Read in config data.
+# Read network config data.
 if [ -f /etc/sysconfig/network ]; then
     . /etc/sysconfig/network
 else
     NETWORKING=no
     HOSTNAME=localhost
+fi
+
+# Read system config data.
+if [ -f /etc/sysconfig/system ]; then
+    . /etc/sysconfig/system
+else
+    RUN_SULOGIN_ON_ERR=yes
 fi
 
 # Start up swapping.
@@ -53,7 +60,11 @@ if [ ! -f /fastboot ]; then
 		echo "*** when you leave the shell."
 
 		PS1="(Repair filesystem) \#"; export PS1
-		sulogin
+		if [ "$RUN_SULOGIN_ON_ERR" = "yes"]; then
+			sulogin
+		else
+			/bin/sh
+		fi
 
 		echo "Unmounting file systems"
 		umount -a
@@ -169,7 +180,11 @@ if [ -f /proc/mdstat -a -f /etc/raidtab -a -x /sbin/raidadd ]; then
 		echo "*** when you leave the shell."
 
 		PS1="(RAID Repair) \#"; export PS1
-		sulogin
+		if [ "$RUN_SULOGIN_ON_ERR" = "yes"]; then
+			sulogin
+		else
+			/bin/sh
+		fi
 
 		echo "Unmounting file systems"
 		umount -a
@@ -195,7 +210,11 @@ if [ ! -f /fastboot ]; then
 		echo "*** when you leave the shell."
 
 		PS1="(Repair filesystem) \#"; export PS1
-		sulogin
+		if [ "$RUN_SULOGIN_ON_ERR" = "yes"]; then
+			sulogin
+		else
+			/bin/sh
+		fi
 
 		echo "Unmounting file systems"
 		umount -a

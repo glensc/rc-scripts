@@ -1,6 +1,6 @@
 ROOT=/
 
-VERSION=$(shell awk '/define version/ { print $$3 }' initscripts.spec)
+VERSION=$(shell awk '/define version/ { print $$3 }' rc-scripts.spec)
 CVSTAG = r$(subst .,-,$(VERSION))
 
 all:
@@ -21,21 +21,21 @@ install:
 	  ln -sf ../../../sbin/ifup . ; \
 	  ln -sf ../../../sbin/ifdown . )
 	(cd src; make install ROOT=$(ROOT))
-	mkdir -p /var/run/netreport
-	chmod og=rwx,o=rx /var/run/netreport
+	mkdir -p $(ROOT)/var/run/netreport
+	chmod og=rwx,o=rx $(ROOT)/var/run/netreport
 
 tag-archive:
 	@cvs -Q tag -F $(CVSTAG)
 
 create-archive: tag-archive
-	@rm -rf /tmp/initscripts
-	@cd /tmp; cvs -Q -d $(CVSROOT) export -r$(CVSTAG) initscripts || echo GRRRrrrrr -- ignore [export aborted]
-	@mv /tmp/initscripts /tmp/initscripts-$(VERSION)
-	@cd /tmp; tar czSpf initscripts-$(VERSION).tar.gz initscripts-$(VERSION)
-	@rm -rf /tmp/initscripts-$(VERSION)
-	@cp /tmp/initscripts-$(VERSION).tar.gz .
-	@rm -f /tmp/initscripts-$(VERSION).tar.gz 
+	@rm -rf /tmp/rc-scripts
+	@cd /tmp; cvs -Q -d $(CVSROOT) export -r$(CVSTAG) rc-scripts || echo GRRRrrrrr -- ignore [export aborted]
+	@mv /tmp/rc-scripts /tmp/rc-scripts-$(VERSION)
+	@cd /tmp; tar czSpf rc-scripts-$(VERSION).tar.gz rc-scripts-$(VERSION)
+	@rm -rf /tmp/rc-scripts-$(VERSION)
+	@cp /tmp/rc-scripts-$(VERSION).tar.gz .
+	@rm -f /tmp/rc-scripts-$(VERSION).tar.gz 
 	@echo " "
-	@echo "The final archive is ./initscripts-$(VERSION).tar.gz."
+	@echo "The final archive is ./rc-scripts-$(VERSION).tar.gz."
 
 archive: tag-archive create-archive

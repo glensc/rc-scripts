@@ -11,10 +11,15 @@
 . /etc/rc.d/init.d/functions
 
 if [ ! -f /etc/sysconfig/network ]; then
-    exit 0
+	NETWORKING="no"
+	exit 0
 fi
 
 . /etc/sysconfig/network
+
+if [ "${NETWORKING}" = "" ]; then
+	NETWORKING="no"
+fi
 
 if [ -f /etc/sysconfig/pcmcia ]; then
 	. /etc/sysconfig/pcmcia
