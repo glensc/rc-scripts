@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.16 1999/07/13 12:49:37 misiek Exp $
+#	$Id: ifup,v 1.17 1999/07/22 21:51:39 stangrze Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -61,12 +61,14 @@ if [ "$BOOTPROTO" = bootp -o "$BOOTPROTO" == "dhcp" ]; then
     PUMP=true
 fi
 
-if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
-    PREFIX="`calcprefix $NETMASK`"
-fi
+if [ -z "$IPADDR" ]; then
+    if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
+	PREFIX="`calcprefix $NETMASK`"
+    fi
 
-if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
-    NETMASK="`calcnetmask $PREFIX`"
+    if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
+	NETMASK="`calcnetmask $PREFIX`"
+    fi
 fi
 
 [ "$MULTICAST" == "yes" ] && MULTICAST=on               || MULTICAST=off
