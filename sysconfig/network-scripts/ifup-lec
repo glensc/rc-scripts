@@ -3,6 +3,7 @@
 #    ifup-lec - ATM LANE interfaces configuration script
 #    Copyright (C) 1999, 2000 Robert ¦laski <robin@atm.com.pl>
 #    Copyright (C) 2000 Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#    Copyright (C) 2000 Jan Rêkorajski <baggins@pld.org.pl>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: ifup-lec,v 1.1.2.1 2000/10/18 20:10:55 misiek Exp $
+#    $Id: ifup-lec,v 1.1.2.2 2000/11/04 01:15:08 baggins Exp $
 #
 
 . /etc/sysconfig/network
@@ -68,16 +69,38 @@ atm_daemons_start
 
 INTERFACE=$(echo "$DEVICE" | awk ' { gsub(/^lec/,NIL); print $0 } ')
 
-zeppelin \
-	-n $VLAN_NAME \
-	-i $INTERFACE \
-	-l $INTERFACE \
-	-f $VLAN_FORESWITCH_NAME \
-	-2 -F syslog 2>/dev/null &
-	
+ZOPTS=""
+[ -n "$INTERFACE" ] 		&& ZOPTS="$ZOPTS -i $INTERFACE"
+[ -n "$LECS_ADDR" ]		&& ZOPTS="$ZOPTS -c $LECS_ADDR"
+[ -n "$LES_ADDR" ]		&& ZOPTS="$ZOPTS -s $LES_ADDR"
+[ -n "$LEC_MAC" ]		&& ZOPTS="$ZOPTS -e $LEC_MAC"
+[ -n "$VLAN_NAME" ]		&& ZOPTS="$ZOPTS -n $VLAN_NAME"
+[ -n "$LEC_PHYS" ]		&& ZOPTS="$ZOPTS -I $LEC_PHYS"
+[ -n "$LEC_LISTEN_ADDR" ]	&& ZOPTS="$ZOPTS -l $LEC_LISTEN_ADDR"
+[ -n "$VLAN_FORESWITCH_NAME" ]	&& ZOPTS="$ZOPTS -f $VLAN_FORESWITCH_NAME"
+[ -n "$MTU" ]			&& ZOPTS="$ZOPTS -t $MTU"
+[ -n "$ZEPPELIN_DEBUG_MASK" ]	&& ZOPTS="$ZOPTS -m $ZEPPELIN_DEBUG_MASK"
+[ -n "$LANE_PROXY" ] && is_yes "$LANE_PROXY" && ZOPTS="$ZOPTS -p"
+
+[ -z "$LANE_VERSION" ] LANE_VERSION="2"
+[ "$LANE_VERSION" = "1" ] && ZOPTS="$ZOPTS -1"
+[ "$LANE_VERSION" = "2" ] && ZOPTS="$ZOPTS -2"
+
+zeppelin $ZOPTS -F syslog 2>/dev/null &
+
 sleep 1
 
 echo "$!" > /var/run/zeppelin-$DEVICE.pid
+
+if [ -n "$MPOA_CONTROL" -a -n "$MPOA_DATA" -a "$LANE_VERSION" = "2" ] ; then
+	mpcd -s $MPOA_CONTROL -l $MPOA_DATA \
+	`[ -n "$INTERFACE" ] && echo " -i $INTERFACE"` \
+	`[ -n "$VLAN_NAME" ] && echo " -n $VLAN_NAME"` \
+	`[ -n "$LEC_ADDR" ] && echo " -L $LEC_ADDR"` \
+	`[ -n "$LECS_ADDR" ] && echo " -C $LECS_ADDR"` \
+	`[ -n "$MPOA_MPS" ] && echo " -c $MPOA_MPS"` \
+	`[ -n "$MPOA_MPS_MAC" ] && echo " -m $MPOA_MPS_MAC"` &
+fi
 
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4

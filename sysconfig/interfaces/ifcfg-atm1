@@ -1,0 +1,11 @@
+#
+# /etc/sysconfig/interfaces/ifcfg-atm*	- CLIP interfaces
+#
+#	PVC example
+#
+DEVICE=atm1			# device name
+IP_1_ADDR=192.168.0.1/24	# hosts's IP address on the ATM LIS
+IP4_PRIM_NR=1
+ATMARP_REMIP=192.168.0.2	# IP addres of the other point of PVC
+ATMARP_PVC=0.0.80
+ONBOOT=yes

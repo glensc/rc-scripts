@@ -1,4 +1,4 @@
-#	$Id: ifcfg-description,v 1.10.2.3 2000/10/23 15:56:25 misiek Exp $
+#	$Id: ifcfg-description,v 1.10.2.4 2000/11/04 01:15:08 baggins Exp $
 DEVICE=<name>
 [ BOOTMETHOD={none|bootp|dhcp|pump} ]
   You can specify which dhcp client to use with the DHCP_CLIENT, if
@@ -127,15 +127,48 @@ elif	DEVICE=br* ; then	/* Bridge */
 	
 elif	DEVICE=lec* ; then	/* ATM LAME  */
 
-	VLAN_NAME=
+# LANE settings:
+
+	VLAN_NAME=<vlan name to connect to>
 	VLAN_FORESWITCH_NAME="$HOSTNAME-$VLAN_NAME"
-	
+	LEC_LISTEN_ADDR=<local listen address or selector byte>
+	LEC_PHYS=<physical interface number (use to choose card)>
+	LANE_VERSION=<LANE version, 1 or 2, LANEv2 is required for MPOA>
+	LANE_PROXY=yes|no (enable proxy, used for bridging ATM and ethernet)
+	LECS_ADDR=<address of LECS>
+	LES_ADDR=<address of LES>
+	LEC_MAC=<MAC address to use when communicating in Emulated LAN>
+	MTU=1516|1580|4544|9234|18190
+	ZEPPELIN_DEBUG_MASK=<0 = No messages, ffff = All messages>
+
+# MPOA settings:
+
+	MPOA_CONTROL=<local ATM address this MPC uses for MPOA
+				control connections>
+	MPOA_DATA=<local ATM address from and to which MPOA shortcuts
+				are established>
+	MPOA_MPS=<ATM address of MPS>
+	MPOA_MPS_MAC=<MAC address of default router where MPS recides>
+
 elif	DEVICE=atm* ; then	/* ATM CLIP */
 
-	ARPSRV_ATMADDR=switch-qaa0        # ATM address of ATMARP server; omit if local
-	ARPSRV_IPADDR=192.168.0.10        # IP address of ATMARP server
-	# ARPSRVQOS="ubr:max_pcr=100kbps" # QOS of the ATMARP server VC
-	# ARPDEFQOS="ubr:max_pcr=700kbps" # default QOS for IP over ATM VCs
-	
-fi
+# SVC specific options
 
+	ARPSRV_ATMADDR=<ATM address of ATMARP server; omit if local>
+	ATMARP_SERVER=yes|no	(is this host an ATM ARP server?)
+
+# PVC specific options
+
+	ATMARP_REMIP=<remote ip4 address, must be specified>
+	ATMARP_PVC=<[itf.]vpi.vci>
+	ATMARP_NULL=yes|no	(use NULL encapsulation, PVC only)
+
+# General options
+
+	ATMARP_DEFAULT_QOS=<see qos(7)>		# "ubr:max_pcr=700kbps"
+	ATMARP_DEFAULT_SNDBUF=<default send buffer size in bytes>
+	ATMARP_QOS=<see qos(7)>			# "ubr:max_pcr=100kbps"
+	ATMARP_SNDBUF=<send buffer size in bytes>
+	ATMARP_TEMP=yes|no	(do not mark the entry as permanent)
+	ATMARP_PUB=yes|no	(publishes the entry, for ATMARP server only)
+fi

@@ -19,7 +19,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: ifup-atm,v 1.1.2.2 2000/11/04 01:15:08 baggins Exp $
+#    $Id: ifdown-atm,v 1.1.2.1 2000/11/04 01:15:08 baggins Exp $
 #
 
 . /etc/sysconfig/network
@@ -61,35 +61,12 @@ if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
         exit
 fi
 
-# set all major variables
-setup_ip_param
-
-# check again in case of manuall interface starting
-atm_daemons_start
-
-atmarp -c $DEVICE
-
-# This just will not work, IP setup must be done before atmarp -s :(
-AAOPTS=""
-DQOPTS=""
-[ -n "$ATMARP_DEFAULT_QOS" ]	&& DQOPTS="$DQOPTS qos $ATMARP_DEFAULT_QOS"
-[ -n "$ATMARP_DEFAULT_SNDBUF" ]	&& DQOPTS="$DQOPTS sndbuf $ATMARP_DEFAULT_SNDBUF"
-[ -n "$ATMARP_QOS" ]		&& AAOPTS="$AAOPTS qos $ATMARP_QOS"
-[ -n "$ATMARP_SNDBUF" ]		&& AAOPTS="$AAOPTS sndbuf $ATMARP_SNDBUF"
-[ -n "$ATMARP_TEMP" ] && is_yes "$ATMARP_TEMP"	&& AAOPTS="$AAOPTS temp"
-[ -n "$ATMARP_PUB" ]  && is_yes "$ATMARP_PUB"	&& AAOPTS="$AAOPTS pub"
-
 if [ -n "$ARPSRV_ATMADDR" ] ; then
 	if is_no "$ATMARP_SERVER" ; then
-		atmarp -s $NETWORK $ARPSRV_ATMADDR $AAOPTS arpsrv
+		atmarp -d $NETWORK arpsrv
 	fi
 else
-	atmarp -s $ATMARP_REMIP $ATMARP_PVC $AAOPTS \
-		`[ -n "$ATMARP_NULL" ] && is_yes "$ATMARP_NULL" && echo null`
-fi
-
-if [ -n "$DQOPTS" ] ; then
-	atmarp -q $DQOPTS
+	atmarp -d $ATMARP_REMIP
 fi
 
 # This must be last line !
