@@ -1,3 +1,12 @@
+2003-07-10  Jan Rêkorajski  <baggins@pld-linux.org>
+
+	* rc.d/init.d/network:
+	- we should stop bridges first if we are staring them last
+
+	* rc.d/init.d/network:
+	- special case bridge interfaces (br*), they *must* be handled last
+	  as we are not able to know what will be bridged
+
 2003-07-05  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
 
 	* rc.d/rc.sysinit: - mount devpts, too
