@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.22 1999/08/31 23:12:45 wiget Exp $
+# $Id: functions,v 1.23 1999/09/02 12:29:17 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -115,7 +115,7 @@ run_cmd()
 	MESSAGE=$1
 	show "$MESSAGE"; busy
 	shift
-	if _ERRORS="`initlog -c \"$*\"`"; then
+	if _ERRORS="`initlog -c \"$*\" 2>&1`"; then
 		deltext; ok
 	else
 		deltext; fail; echo $_ERRORS

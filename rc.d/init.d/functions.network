@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.20 1999/08/31 23:12:45 wiget Exp $
+# $Id: functions.network,v 1.21 1999/09/02 12:29:17 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -52,10 +52,27 @@ set_hostname()
     fi
 }
 
-# PLD network functions
+# PLD/Linux network functions
 # (C) 1999 Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 # All functions must be called "name_of_function on" or "name_of_function off"
+
+# Setup Network Address Translation (NAT)
+setup_nat()
+{
+if [ ! -r /etc/sysconfig/static-nat ]; then
+	exit
+fi
+grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
+	if [ "$1" == "on" ]; then
+		/sbin/ip route add nat $src via $dst
+		/sbin/ip rule add from $dst nat $src
+	elif [ "$1" == "off" ]; then
+		/sbin/ip rule del from $dst nat $src
+		/sbin/ip route del nat $src via $dst
+	fi
+done
+}
 
 # proc_net <zmien> <start/stop> <co ustaw> <co default> <nazwa_zmiennej> [komunikat]
 # proc_net ipv4/ip_forward start 1         0            IPV4_FORWARDING  "IPv4 forwarding"
@@ -114,7 +131,7 @@ if [ "$IPV4_DYNAMIC_IP_PATCH" == "yes" ] && [ "$1" == "on" ]; then
 show "Enabling dynamic IP patch"; busy
 if echo $IPV4_DYNAMIC_IP_PATCH_VALUE > /proc/sys/net/ipv4/ip_dynaddr; then deltext; ok; else deltext; fail; fi
 else
-show "Diabling dynamic IP patch"; busy
+show "Disabling dynamic IP patch"; busy
 if echo 0 > /proc/sys/net/ipv4/ip_dynaddr; then deltext; ok; else deltext; fail; fi
 fi
 
@@ -169,17 +186,15 @@ ip link set dev lo down
 static_arp()
 {
 if [ "$STATIC_ARP" == "yes" ]; then
-	if [ -f /etc/ethers -a -x /sbin/arp ]; then
+	if [ -r /etc/ethers -a -x /sbin/arp ]; then
 		/sbin/arp -f /etc/ethers
 	fi
 fi
 }
 
-# Koniecznie trzeba to usprawnic
 modprobe_net()
 {
-[ "$IPV6_NETWORKING" == "yes" ] && modprobe net-pf-10 2> /dev/null
-#modprobe ipip ip_gre 2> /dev/null
+[ "$IPV6_NETWORKING" == "yes" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ] && modprobe -s -k net-pf-10
 }
 
 #
