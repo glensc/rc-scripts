@@ -1,6 +1,6 @@
-#	$Id: ifcfg-ppp0.callback,v 1.2 1999/07/13 12:49:36 misiek Exp $
+#	$Id: ifcfg-ppp0.callback,v 1.3 2000/04/21 17:39:40 jajcus Exp $
 DEVICE=ppp0
-CHATSCRIPT=/etc/sysconfig/network-scripts/chat-ppp0.callback
+CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.callback
 ONBOOT=no
 HARDFLOWCTL=yes
 MODEMPORT=/dev/ttyS1
