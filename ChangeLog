@@ -1,3 +1,7 @@
+2003-09-05  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: - if there is no process then it already died
+
 2003-08-19  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* dumb.sh: - for nessusd.init
