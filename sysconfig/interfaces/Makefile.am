@@ -6,13 +6,15 @@ interfacesdir = @sysconfigdir@/interfaces
 
 interfaces_DATA = \
 	ifcfg-br0 \
-	ifcfg-eth0 \
 	ifcfg-description \
+	ifcfg-eth0 \
+	ifcfg-irda0 \
+	ifcfg-irlan0 \
 	ifcfg-ppp0.callback \
+	ifcfg-ppp0.gprs-plusgsm \
 	ifcfg-ppp0.leased1 \
 	ifcfg-ppp0.leased2 \
 	ifcfg-ppp0.tpsa \
-	ifcfg-ppp0.gprs-plusgsm \
 	ifcfg-sl0 \
 	tnlcfg-description \
 	tnlcfg-icm 

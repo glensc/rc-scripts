@@ -12,18 +12,24 @@ networkscriptsdir = @networkscriptsdir@
 
 networkscripts_SCRIPTS = \
 	ifdown-br \
+	ifdown-irda \
 	ifdown-ppp \
 	ifdown-post \
 	ifdown-sl \
+	ifdown-vlan \
 	ifup-aliases \
 	ifup-br \
 	ifup-ipx \
+	ifup-irda \
+	ifup-iucv \
 	ifup-neigh \
 	ifup-plip \
+	ifup-plusb \
 	ifup-post \
 	ifup-ppp \
 	ifup-routes \
-	ifup-sl 
+	ifup-sl \
+	ifup-vlan
 
 networkscripts_DATA = \
         functions.network
