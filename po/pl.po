@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.9 1999/09/27 15:31:00 kloczek Exp $
+# $Id: pl.po,v 1.10 1999/09/27 15:40:16 wiget Exp $
 #
 msgid ""
 msgstr ""
@@ -48,10 +48,10 @@ msgid "Setting clock"
 msgstr "Ustawienie zegara systemowego"
 
 msgid "Mounting NCP filesystems"
-msgstr "Podlaczam systemy plikow typu NCP"
+msgstr "Podlaczenia systemow plikow typu NCP"
 
 msgid "Mounting SMB filesystems"
-msgstr "Podlaczam systemy plikow typu SMB"
+msgstr "Podlaczenie systemow plikow typu SMB"
 
 msgid "Automatic reboot in progress."
 msgstr "Automatyczny restart w toku."
@@ -171,7 +171,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"*** Wykryto blad na jednym z systemow plikowych nie mozliwy do usuniecia\n"
+"*** Podczas sprawdzania systemow plikow wykryto blad niemozliwy do usuniecia\n"
 "*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
 "*** naprawic uszkodzenie. Po wyjsciu z popwloki system zostanie automatycznie\n"
 "*** zrestartowany.\n"
@@ -189,7 +189,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"*** Wykryto blad w trakcie inicjacji urz±dzen RAID niemozliwy do usuniecia\n"
+"*** Podczas inicjacji urzadzen RAID wykryto blad niemozliwy do usuniecia\n"
 "*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
 "*** naprawic uszkodzenie. Po wyjsciu z powloki system zostanie automatycznie\n"
 "*** zrestartowany.\n"
