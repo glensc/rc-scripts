@@ -59,10 +59,9 @@ if [ -n "${PPPOE_DEV}" ]; then
 	MODEMPORT="pppoe -I ${PPPOE_DEV} ${PPPOE_OPT}"
     fi
 elif is_yes "${PPPOA_EAGLE}"; then
-    if [ $(kernelverser) == 002006 ]; then
+    EAGLECTRL="/usr/sbin/adictrl"
+    if [ ! -x $EAGLECTRL ]; then
     	EAGLECTRL="/usr/sbin/eaglectrl"
-    else
-    	EAGLECTRL="/usr/sbin/adictrl"
     fi
     if [ ! -x $EAGLECTRL ]; then
   	nls "%s does not exist or is not executable" "$EAGLECTRL"
