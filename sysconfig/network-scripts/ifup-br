@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: ifup-br,v 1.2 2001/05/15 16:05:08 baggins Exp $
+#    $Id: ifup-br,v 1.3 2001/10/11 18:49:00 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -54,7 +54,7 @@ brctl addbr ${DEVICE}
 # add interfaces to bridge
 for device in $BRIDGE_DEVS; do
 	brctl addif ${DEVICE} ${device}
-	ip link set dev ${DEVICE} multicast ${MULTICAST} arp ${ARP}
+	ip link set dev ${DEVICE} multicast ${MULTICAST} ${ARP}
 	ip link set ${device} up
 done
 
@@ -76,7 +76,7 @@ else
 	brctl stp ${DEVICE} no
 fi
 	
-ip link set dev ${DEVICE} multicast ${MULTICAST} arp ${ARP}
+ip link set dev ${DEVICE} multicast ${MULTICAST} ${ARP}
 if ! (ip link set dev ${DEVICE} up); then
 	nls "problems with setting bridge %s" "${DEVICE}"
 	exit 1

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.65 2001/07/17 18:21:29 baggins Exp $
+#	$Id: ifup,v 1.66 2001/10/11 18:49:00 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -95,7 +95,7 @@ if [ -n "$MACADDR" ]; then
    ip link set ${DEVICE} address ${MACADDR}
 fi
 
-ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} down
+ip link set ${DEVICE} multicast ${MULTICAST} ${ARP} down
 
 if [ -n "$MTU" ]; then
     ip link set ${DEVICE} mtu ${MTU}

@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.64 2001/10/10 02:03:51 baggins Exp $
+# $Id: functions.network,v 1.65 2001/10/11 18:49:00 baggins Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -299,17 +299,12 @@ else
 fi
 
 # ARP ready devices
-if is_yes "$ARP"; then
-	ARP="on"
-else
-	case "$DEVICETYPE" in
-		eth|br|lec|atm)
-			ARP="on"
-			;;
-		*)
-			ARP="off"
-			;;
-	esac
+if [ -n "$ARP" ] ; then
+	if is_yes "$ARP"; then
+		ARP="arp on"
+	else
+		ARP="arp off"
+	fi
 fi
 				
 }
@@ -390,7 +385,7 @@ set_up_loopback()
 if is_yes "$IPV4_NETWORKING"; then
 	ip addr add 127.0.0.1/8 dev lo
 fi
-ip link set dev lo arp on up
+ip link set dev lo up
 }
 
 set_down_loopback()
