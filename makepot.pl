@@ -5,7 +5,7 @@
 #
 # Copyright (c) 1999 Free Software Fundation, Inc.
 # Artur Frysiak <wiget@pld.org.pl>
-# $Id: makepot.pl,v 1.2 2000/03/21 23:57:17 wiget Exp $
+# $Id: makepot.pl,v 1.3 2000/03/21 23:59:22 wiget Exp $
 # 
 
 my %pot;
@@ -14,10 +14,10 @@ sub potentry {
 	my( $msg, $lnr, $filename ) = @_;
 #print STDERR "msg = $msg\nlnr = $lnr\nfilename = $filename\n";	
 	if (defined $pot{"$msg"}) {
-		$pot{"$msg"} = $pot{"$msg"} . "\n#. $filename:$lnr";
+		$pot{"$msg"} = $pot{"$msg"} . "\n#: $filename:$lnr";
 #print STDERR "append $msg\n";		
 	} else {
-		$pot{"$msg"} = "\n#. $filename:$lnr";
+		$pot{"$msg"} = "\n#: $filename:$lnr";
 #print STDERR "new $msg\n";		
 	};
 };
