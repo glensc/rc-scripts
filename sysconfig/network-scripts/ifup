@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.25 1999/09/27 09:59:57 misiek Exp $
+#	$Id: ifup,v 1.26 1999/09/27 20:02:52 wiget Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -81,9 +81,16 @@ if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
 fi
 
 [ "$MULTICAST" == "yes" ] && MULTICAST=on               || MULTICAST=off
-[ "$ARP" == "yes" ]       && ARP=on                     || ARP=off
 [ -n "$SRC_ADDR" ]        && SRC_ADDR="src ${SRC_ADDR}" || SRC_ADDR=""
 [ -z "$PROTOCOL" ]        && PROTOCOL=ip
+
+if [ "$ARP" ]; then
+	[ "$ARP" == "yes" ]	&& ARP=on	|| ARP=off
+elif [ "$DEVICETYPE" = "eth" ]; then
+	ARP=on
+else
+	ARP=off
+fi
 
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
