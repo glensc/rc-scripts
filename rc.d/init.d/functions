@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.33 1999/12/15 18:41:07 misiek Exp $
+# $Id: functions,v 1.34 2000/01/31 14:30:11 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -27,7 +27,20 @@ termput()
         	:
 	elif [ ! -d /usr/share/terminfo ] || \
 	     ! ( [ -x /usr/bin/tput ] || [ -x /bin/tput ] ) ; then
-		echo -ne "\033[0;3${2}m"
+		case "$1" in
+		  hpa)
+		  	echo -ne "\033[${2}G"
+			;;
+		  cuu*)
+		  	echo -ne "\033[${2}A"
+			;;
+		  el)
+		  	echo -ne "\033[0K"
+			;;
+		  setaf)
+		  	echo -ne "\033[0;3${2}m"
+		  	;;
+		  esac
 	else
 		tput "$@"
 	fi
@@ -56,7 +69,13 @@ if [ -x /bin/gettext ] || [ -x /usr/bin/gettext ]; then
 	if [ -z "$NLS_DOMAIN" ]; then
 		NLS_DOMAIN="rc-scripts"
 	fi
-	text="`TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="$NLS_DOMAIN" "$1"`"
+	MESSAGE="$1"
+	# avoid translating empty text. --misiek
+	if [ -n "$MESSAGE" ]; then
+		text="`TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="$NLS_DOMAIN" "$MESSAGE"`"
+	else
+		text="$MESSAGE"
+	fi
 	shift
 	printf_ "$text" "$@"
 	echo
@@ -70,7 +89,9 @@ show()
 {	
 	what="`nls "DONE"`"; typeset -i offset=${#what}
 	text="`nls "$*"`.................................................................................."
-	awk "BEGIN {printf \"%.$((69 - $offset))s\", \"$text\";}"
+	awk "BEGIN {printf \"%.$((75 - $offset))s\", \"$text\";}"
+	# move to column number 67
+	termput hpa 67
 }
 
 busy() 
@@ -113,13 +134,21 @@ run_cmd()
 	if _ERRORS="`initlog -c \"$*\" 2>&1`"; then
 		deltext; ok
 	else
-		deltext; fail; echo $_ERRORS
+		deltext; fail;  [ -n "$_ERRORS" ] && echo $_ERRORS
 	fi
 	exit_code=$?
 	unset _ERRORS
 	return $exit_code
 }
 
+# compatibility functions
+action()
+{
+        STRING=$1
+	shift
+	run_cmd "$STRING" "$*"
+}
+			
 # A function to start a program (now it's usefull on read-only filesystem too)
 daemon() 
 {
@@ -146,7 +175,7 @@ daemon()
 	else
 		deltext
 		fail
-		echo $_ERRORS
+		[ -n "$_ERRORS" ] && echo $_ERRORS
 	fi
 	unset _ERRORS
 }
