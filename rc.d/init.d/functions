@@ -333,10 +333,10 @@ filter_chroot()
 	for root_pid in $@; do
 		root_dir=$(resolvesymlink /proc/${root_pid}/root)
 		if [ -n "$root_dir" ]; then
+			[ "$root_dir" = "/" -o "$root_dir" = "/usr/share/empty" ] && good_pids="$good_pids $root_pid" && continue
 			for r_dir in ${SYSTEM_CHROOTS}; do
-				[ "$rewt" = "$CHROOT_TO_DIR" ] && good_pids="$good_pids $root_pid"
+				[ "$rewt" = "$CHROOT_TO_DIR" ] && good_pids="$good_pids $root_pid" && break
 			done
-			[ "$root_dir" = "/" -o "$root_dir" = "/usr/share/empty" ] && good_pids="$good_pids $root_pid"
 		fi
        done
        echo $good_pids
