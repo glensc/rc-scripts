@@ -1,0 +1,262 @@
+# Polish translation of rc-scripts.
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
+# $Id: pl.po,v 1.1 1999/07/31 11:26:25 misiek Exp $
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-07-30 18:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso8850-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
+# must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
+msgid "DONE"
+msgstr "ZROBIONE"
+
+msgid "WORK"
+msgstr "AKTYWUJE"
+
+msgid "BUSY"
+msgstr " ZAJETY "
+
+msgid "FAIL"
+msgstr "PROBLEMY"
+
+msgid "DIED"
+msgstr " ZDECHL "
+
+# (4 + "\b" * count of letters) in one of five previous words
+msgid "\b\b\b\b\b\b\b\b"
+msgstr"\b\b\b\b\b\b\b\b\b\b\b\b"
+
+msgid "Activating swap partitions"
+msgstr "Aktywuje partycje swap"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NIS Domain:"
+msgstr "Domena NIS:"
+
+msgid "Checking root filesystems."
+msgstr "Sprawdzam glowny system plikow."
+
+msgid "*** An error occurred during the file system check."
+msgstr "*** Wystapil blad podczas kontroli systemu plikow."
+
+msgid "*** Dropping you to a shell; the system will reboot"
+msgstr "*** Przenosze Cie do powloki; system zostanie zrestartowany"
+
+msgid "*** when you leave the shell."
+msgstr "*** gdy ja opuscisz."
+
+msgid "(Repair filesystem) #"
+msgstr "(Reperacja systemu plikow) #"
+
+msgid "Unmounting file systems"
+msgstr "Odlaczam systemy plikow"
+
+msgid "Automatic reboot in progress."
+msgstr "Automatyczny reboot w toku."
+
+msgid "Turning on quotas on root filesystem"
+msgstr "Wlaczam quote na glownym systemie plikow"
+
+msgid "Setting up ISA PNP devices"
+msgstr "Ustawiam urzadzenia ISA PNP"
+
+msgid "Remounting root filesystem in rw mode"
+msgstr "Przemountowuje glowny system plikow w tryb rw"
+
+msgid "Checking root filesystem quotas"
+msgstr "Sprawdzam quote na glownym systemie plikow"
+
+msgid "Enabling Delay Login"
+msgstr "Aktywuje Opoznianie Logowania"
+
+msgid "System bootup in progress  - please wait"
+msgstr "Start systemu w toku - prosze czekac"
+
+msgid "Finding module dependencies"
+msgstr "Wyszukuja powiazania pomiedzy modulami"
+
+msgid "Loading sound module"
+msgstr "Laduje modul obslugi dzwieku"
+
+msgid "Starting up RAID devices."
+msgstr "Ustawiam urzadzenia RAID"
+
+msgid "*** An error occurred during the RAID startup"
+msgstr "*** Wystapil blad podczas startu systemu RAID"
+
+msgid "Remounting root filesystem in ro mode"
+msgstr "Przemountowuje glowny system plikow w tryb ro"
+
+msgid "Checking filesystems."
+msgstr "Sprawdzam systemy plikow."
+
+msgid "Mounting local filesystems."
+msgstr "Podlaczam lokalne systemy plikow."
+
+msgid "Loading default system font"
+msgstr "Laduje podstawowy font systemowy"
+
+msgid "Turning on quotas for local filesystems"
+msgstr "Wlaczam quote na lokalnych systemach plikow"
+
+msgid "Setting clock"
+msgstr "Ustawiam zegar"
+
+msgid "Enabling swap space"
+msgstr "Aktywuje swapa"
+
+msgid "Setting up /etc/ld.so.cache"
+msgstr "Ustawiam /etc/ld.so.cache"
+
+msgid "Sending val. $PANIC_REBOOT_TIME to /proc/sys/kernel/panic"
+msgstr "Przesylam wartosc $PANIC_REBOOT_TIME do /proc/sys/kernel/panic"
+
+msgid "Allowing users to login"
+msgstr "Pozwalam uzytkownikom na logowanie sie"
+
+msgid "The system is halted"
+msgstr "System jest zatrzymany"
+
+msgid "On the next boot fsck will be skipped."
+msgstr "Przy nastepnym starcie systemu pomijam program fsck."
+
+msgid "Mounting NFS filesystems"
+msgstr ""
+
+msgid "Mounting SMB filesystems"
+msgstr ""
+
+msgid "Mounting NCP filesystems"
+msgstr ""
+
+msgid "Mounting other filesystems"
+msgstr ""
+
+msgid "Unmounting NFS filesystems"
+msgstr ""
+
+msgid "Unmounting SMB filesystems"
+msgstr ""
+
+msgid "Unmounting NCP filesystems"
+msgstr ""
+
+msgid "Configured NFS mountpoints:"
+msgstr ""
+
+msgid "Configured SMB mountpoints:"
+msgstr ""
+
+msgid "Configured NCP mountpoints:"
+msgstr ""
+
+msgid "Active NFS mountpoints:"
+msgstr ""
+
+msgid "Active SMB mountpoints:"
+msgstr ""
+
+msgid "Active NCP mountpoints:"
+msgstr ""
+
+msgid "/proc filesystem unavailable"
+msgstr ""
+
+msgid "IPv4 forwarding"
+msgstr ""
+
+msgid "IPv6 forwarding"
+msgstr ""
+
+msgid "Configured devices:"
+msgstr ""
+
+msgid "Configured tunnels:"
+msgstr ""
+
+msgid "Currently active devices:"
+msgstr ""
+
+msgid "Mounting remote filesystems, start nfsd"
+msgstr ""
+
+msgid "Mounting remote filesystems"
+msgstr "Podlaczam zdalne systemy plikow"
+
+msgid "Unmounting remote filesystems"
+msgstr "Odlaczam zdalne systemy plikow"
+
+msgid "Stopping NFS clients"
+msgstr ""
+
+msgid "Configured NFS mountpoints:"
+msgstr ""
+
+msgid "Active NFS mountpoints:"
+msgstr ""
+
+msgid "Initializing random number generator"
+msgstr "Inicjuje generator liczb losowych"
+
+msgid "Saving random seed"
+msgstr ""
+
+msgid "The random data source exists"
+msgstr ""
+
+msgid "The random data source is missing"
+msgstr ""
+
+msgid "Please stand by while rebooting the system"
+msgstr "Prosze czekac - rebootuje system"
+
+msgid "On the next boot fsck will be skipped."
+msgstr ""
+
+msgid "Sending all processes the TERM signal"
+msgstr "Wysylam do wszystkich procesow sygnal TERM"
+
+msgid "Sending all processes the KILL signal"
+msgstr "Wysylam do wszystkich procesow sygnal KILL"
+
+msgid "Turning off swap and accounting"
+msgstr "Wylaczam swap i zliczanie"
+
+msgid "Turning off RAID for $mddev"
+msgstr ""
+
+msgid "Remounting remaining filesystems ro mode"
+msgstr "Remountuje pozostale systemy plikow w trym ro"
+
+msgid "Telling INIT to go to single user mode"
+msgstr "Przekazuje INITowi by przeszedl do trybu single"
+
+msgid "Resource Manager:"
+msgstr "Zarzadca Zasobow:"
+
+msgid "Runlevel has been reached"
+msgstr "Zostal osiagniety poziom"
+
+msgid "Leaving runlevel number"
+msgstr "Opuszczam poziom"
+
+msgid "Date set to"
+msgstr "Data ustawiona na"
+
+msgid "Setting"
+msgstr "Ustawiam"
+
+msgid "to"
+msgstr "na"
+
