@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.20 1999/09/02 12:24:35 misiek Exp $
+# $Id: network,v 1.21 1999/09/13 13:25:02 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -85,7 +85,7 @@ set_down_loopback
 # find all the interfaces besides loopback.
 # ignore aliases, alternative configurations, and editor backup files
 interfaces="`(cd /etc/sysconfig/interfaces && ls ifcfg* | \
-egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | sed 's/^ifcfg-//g')`"
+egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | sed 's/^ifcfg-//g' | xargs)`"
 interfaces_boot="`(cd /etc/sysconfig/interfaces && ls ifcfg* | \
 egrep -v '(ifcfg-lo|ifcfg-sit|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
 xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g')`"
@@ -130,7 +130,7 @@ case "$1" in
 	nls "Configured tunnels:"
 	echo "$tunnels"
 
-	nls "Currently active devices:"
+	nls "Currently active devices and tunnels:"
 	/sbin/ip link show | egrep '^[^ ].*' |sed 's/[0-9]*: \(.*\):.*/\1/'|xargs
 	;;
   restart)
