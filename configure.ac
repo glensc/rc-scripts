@@ -65,6 +65,12 @@ else
         defaultdir="`eval echo $sysconfdir`"
 fi
 
+AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+GLIBDIR=none
+AC_MSG_CHECKING([glib dir])
+GLIBDIR="`$PKG_CONFIG --variable=libdir glib`"
+AC_MSG_RESULT([$GLIBDIR])
+
 dnl Output
 AC_SUBST(BASHSCRIPTS)
 AC_SUBST(CATALOGS)
@@ -80,6 +86,7 @@ AC_SUBST(updir)
 AC_SUBST(downdir)
 AC_SUBST(rcdir)
 AC_SUBST(docdir)
+AC_SUBST(GLIBDIR)
 
 AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile \
 	ppp/Makefile \
