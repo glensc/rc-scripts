@@ -5,7 +5,7 @@
 # description:	This script is setting time zone information for your machine.
 # Author:	Pawel Wilk <siefca@pld.org.pl>
 #
-# $Id: timezone,v 1.6 2000/11/16 16:04:17 baggins Exp $
+# $Id: timezone,v 1.7 2001/03/03 11:28:11 laro Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -36,7 +36,7 @@ case "$1" in
         rm -f /etc/localtime
 	if [ -f "$ZONE_FILE" ]; then
 		if [ -n "$ZONE_INFO_AREA" ]; then
-		    MESSAGS="`nls "Setting time zone information (%s, %s)" "$ZONE_INFO_AREA" "$TIME_ZONE"`"
+		    MESSAGE="`nls "Setting time zone information (%s, %s)" "$ZONE_INFO_AREA" "$TIME_ZONE"`"
 		else
 		    MESSAGE="`nls "Setting time zone information (%s)" "$TIME_ZONE"`"
 		fi
