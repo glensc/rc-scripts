@@ -206,7 +206,7 @@ if is_yes "${AUTH}"; then
 elif is_no "${AUTH}"; then
   opts="$opts noauth"
 fi
-if [ -n "$PASSWORD" ]; then
+if is_yes "$PLUGIN_IFCFG_PASSWORD" && [ -n "$PASSWORD" ]; then
   opts="$opts plugin ifcfg-password.so ifcfg /etc/sysconfig/interfaces/$CONFIG"
 fi
 

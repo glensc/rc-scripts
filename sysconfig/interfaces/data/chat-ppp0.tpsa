@@ -10,6 +10,5 @@ TIMEOUT 	60
 OK		$INITSTRING
 OK		atdt$PHONE
 CONNECT		\\c
-ppp\\r		\\c
 ame:		$USER
 ord:		$PASSWORD	
