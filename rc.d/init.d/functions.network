@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.30 1999/11/06 00:23:53 wiget Exp $
+# $Id: functions.network,v 1.31 1999/11/07 14:00:05 kloczek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -7,7 +7,7 @@
 # This will work only after starting interface to which LDAP server is connected
 find_ldap_interfaces()
 {
-	[ "$USE_LDAP" == "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+	[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
 	if [ -n "$LDAP_BASE_DN" ] ; then
 		BSWITCH="-b$LDAP_BASE_DN" 
 	else
@@ -21,7 +21,7 @@ find_ldap_interfaces()
 # find aliases for device
 find_ldap_aliases()
 {
-	[ "$USE_LDAP" == "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+	[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
 	if [ -n "$LDAP_BASE_DN" ] ; then
 		BSWITCH="-b$LDAP_BASE_DN" 
 	else
@@ -34,7 +34,7 @@ find_ldap_aliases()
 
 get_ldap_config ()
 {
-	[ "$USE_LDAP" == "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+	[ "$USE_LDAP" = "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
  	# Initialise fields which  can have multiple values:
 	IPV6_ADDR=""
 	IPADDR_ALIASES=""
