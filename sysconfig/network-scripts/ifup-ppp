@@ -143,10 +143,12 @@ if is_yes "${ESCAPECHARS}"; then
 else
   opts="$opts asyncmap 00000000"
 fi
-if ! is_no "${DEFROUTE}"; then
+if is_yes "${DEFROUTE}"; then
   # pppd will no longer delete an existing default route
   # so we have to help it out a little here.
   ip route del 0/0 > /dev/null 2>&1
+  opts="$opts defaultroute"
+elif ! is_no "${DEFROUTE}"; then
   opts="$opts defaultroute"
 fi
 if ! is_no "${PEERDNS}"; then
