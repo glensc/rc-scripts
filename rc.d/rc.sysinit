@@ -758,7 +758,7 @@ fi
 # ... and here finish configuring parameters
 /sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 
-# Clean up /etc.
+# Clean up /.
 rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
 
 # Clean up /var
