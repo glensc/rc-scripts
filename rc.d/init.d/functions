@@ -398,10 +398,8 @@ daemon()
 		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
 #	elif [ -n "`$SH -c 'echo ${.sh.version}' 2>/dev/null`" ]; then
 	fi
-	while echo "$limits" | grep -q '[^ ]'; do
-		ulimit `echo ${limits} | sed -e 's/^ *\(-[^-]*\)\(-.*\)\?$/\1/'`
-		limits="`echo ${limits} | sed -e 's/^ *\(-[^-]*\)\(-.*\)\?$/\2/'`"
-	done
+	
+	echo $limits|awk 'BEGIN {RS="-";} !/^$/ {system ("ulimit -" $0);}'
 
 	# And start it up.
 	busy
