@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.103 2002/04/20 13:57:57 misiek Exp $
+# $Id: rc.sysinit,v 1.104 2002/05/11 21:51:32 misiek Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -10,6 +10,9 @@
 # Set the path
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
+
+# Read functions
+. /etc/rc.d/init.d/functions
 
 # we need /proc mounted before everything
 mount -n -o gid=17 -t proc /proc /proc
@@ -39,9 +42,6 @@ if [ -r /etc/sysconfig/i18n ]; then
 	[ -n "$LANGUAGE" ] && export LANGUAGE || unset LANGUAGE
 	[ -n "$LINGUAS" ] && export LINGUAS || unset LINGUAS
 fi
-
-# Read functions
-. /etc/rc.d/init.d/functions
 
 # Read network config data
 if [ -r /etc/sysconfig/network ]; then
@@ -74,9 +74,6 @@ if is_yes "$PROMPT"; then
 	echo
 	sleep 1
 fi
-
-# We need /proc mounted before everything
-mount -n -o gid=17 -t proc /proc /proc
 
 # Set console loglevel
 if [ -n "$CONSOLE_LOGLEVEL" ]; then
@@ -601,7 +598,7 @@ for afile in /var/lock/* /var/run/*; do
 		bafile=$(basename $afile)
 		[ "$bafile" != "news" -a "$bafile" != "sudo" -a "$bafile" != "mon" ] && rm -f $afile/*
 	else
-		rm -f $afile
+		rm -f $afile 2> /dev/null
 	fi
 done
 
