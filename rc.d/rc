@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.15 1999/12/30 12:11:37 jajcus Exp $
+# $Id: rc,v 1.16 2000/01/04 17:23:39 baggins Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -29,6 +29,21 @@ fi
 
 # Source function library.
 . /etc/rc.d/init.d/functions
+
+# Read system config data.
+if [ -f /etc/sysconfig/system ]; then
+	. /etc/sysconfig/system
+else
+	RUN_SULOGIN_ON_ERR=yes
+	RUN_ISAPNP=yes
+	PANIC_REBOOT_TIME=0
+	DELAY_LOGIN=yes
+	CLEAN_TMP=no
+	CONSOLE_LOGLEVEL=1
+	LOAD_SOUND=yes
+	SET_SLINKS=yes
+	RUN_LDCONFIG=yes
+fi
 
 # Now find out what the current and what the previous runlevel are.
 argv1="$1"
@@ -121,8 +136,10 @@ if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
 		eval reboot -d
 	fi
 else
-	if [ -x /sbin/ldconfig ]; then
-		run_cmd "Setting up /etc/ld.so.cache" /sbin/ldconfig -X
+	if [ "$RUN_LDCONFIG" = "yes" ] ; then
+		if [ -x /sbin/ldconfig ]; then
+			run_cmd "Setting up /etc/ld.so.cache" /sbin/ldconfig -X
+		fi
 	fi
 fi
 

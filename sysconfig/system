@@ -1,4 +1,4 @@
-# $Id: system,v 1.7 1999/08/14 10:56:51 misiek Exp $
+# $Id: system,v 1.8 2000/01/04 17:23:40 baggins Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -33,4 +33,7 @@ LOAD_SOUND=no
 
 # Try to setup proper symlinks in /boot (based on kernel version) ?
 SET_SLINKS=yes
+
+# Run /sbin/ldconfig at startup ?
+RUN_LDCONFIG=yes
 
