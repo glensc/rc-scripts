@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.42 2001/01/12 13:46:26 baggins Exp $
+# $Id: network,v 1.43 2001/05/13 18:39:36 kloczek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -70,6 +70,9 @@ fi
 
 network_postinit()
 {
+# Set static RARP table
+static_rarp
+
 # Set static ARP table
 static_arp
 

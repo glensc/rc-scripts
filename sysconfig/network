@@ -1,4 +1,4 @@
-# $Id: network,v 1.12 2000/11/05 01:28:05 baggins Exp $
+# $Id: network,v 1.13 2001/05/13 18:39:37 kloczek Exp $
 ######################################################################
 # MAIN PART
 
@@ -37,8 +37,11 @@ LDAP_BASE_DN=
 
 # Other
 
-# Do you want set static arp table (based on /etc/ethers config file) ?
+# Do you want set static ARP table (based on /etc/ethers config file) ?
 STATIC_ARP=no
+
+# Do you want set static RARP table (based on /etc/ethers config file) ?
+STATIC_RARP=no
 
 ######################################################################
 # IPv4 goodies
