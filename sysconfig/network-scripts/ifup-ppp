@@ -68,10 +68,10 @@ else
 	    # XXX: REPORTFILE support is problematic here --misiek
 		[ -f "${CHATSCRIPT}" ] || CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-${PARENTDEVNAME}
 		if [ ! -f "${CHATSCRIPT}" ]; then
-		    nls '/etc/sysconfig/network-scripts/chat-%s does not exist' "${DEVNAME}"
+		    nls '%s does not exist' "${CHATSCRIPT}"
 		    nls 'ifup-ppp for %s exiting' "${DEVNAME}"
 		    logger -p daemon.info -t ifup-ppp \
-			"$(nls '/etc/sysconfig/network-scripts/chat-%s does not exist for %s' "${DEVNAME}" "${DEVICE}")"
+			"$(nls '%s does not exist for %s' "${CHATSCRIPT}" "${DEVICE}")"
 		    exit 1
 		fi
 	    fi
