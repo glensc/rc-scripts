@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.38 2000/04/23 11:46:04 marcus Exp $
+#	$Id: ifup,v 1.39 2000/04/27 06:20:28 jajcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -155,7 +155,7 @@ else
     ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
 
     if [ "$IPv4" = "yes" ]; then
-	if [ -n "$REMIP"]; then
+	if [ -n "$REMIP" ]; then
 	    ip -family inet addr add ${IPADDR} peer ${REMIP} dev ${DEVICE} label ${FULLDEVNAME} ${SCOPE}
 	else    
     	    ip -family inet addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME} ${SCOPE}
