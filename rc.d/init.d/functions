@@ -408,6 +408,7 @@ run_cmd()
 	message=$1
 	show "$message"; busy
 	shift
+	cd /
 	if errors=$(HOME=/tmp TMPDIR=/tmp initlog -c "$*" 2>&1); then
 		ok
 		log_success "$1 $message"
@@ -479,6 +480,7 @@ daemon()
 
 	# And start it up.
 	busy
+	cd /
 	if errors=$(USER=root HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
 		log_success "$1 startup"
 		ok
