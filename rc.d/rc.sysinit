@@ -289,7 +289,7 @@ run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
 
 # Update quotas if fsck was run on /
 if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
-	run_cmd "Checking root filesystem quotas" /sbin/quotacheck -vug /
+	run_cmd "Checking root filesystem quotas" /sbin/quotacheck -vnug /
 fi
 
 # Clear mtab
@@ -612,7 +612,7 @@ if grep "^[^#].*encryption=" /etc/fstab | grep -v -q "noauto"; then
 fi
 
 if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
-	run_cmd "Checking filesystem quotas"  /sbin/quotacheck -v -u -g -R -a
+	run_cmd "Checking filesystem quotas"  /sbin/quotacheck -vnugRa
 fi
 
 # Turn on quota
