@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.12 1999/11/15 23:17:20 wiget Exp $
+# $Id: pl.po,v 1.13 1999/11/16 01:33:28 kloczek Exp $
 #
 msgid ""
 msgstr ""
@@ -130,9 +130,8 @@ msgstr ""
 "*** Podczas sprawdzania systemow plikow wykryto blad niemozliwy do "
 "usuniecia\n"
 "*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
-"*** naprawic uszkodzenie. Po wyjsciu z popwloki system zostanie "
-"automatycznie\n"
-"*** zrestartowany.\n"
+"*** naprawic uszkodzenie. Po wyjsciu z popwloki system zostanie\n"
+"*** automatycznie zrestartowany.\n"
 
 # ../rc.d/rc.sysinit:214
 msgid ""
@@ -146,9 +145,8 @@ msgstr ""
 "\n"
 "*** Podczas inicjacji urzadzen RAID wykryto blad niemozliwy do usuniecia\n"
 "*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
-"*** naprawic uszkodzenie. Po wyjsciu z powloki system zostanie "
-"automatycznie\n"
-"*** zrestartowany.\n"
+"*** naprawic uszkodzenie. Po wyjsciu z powloki system zostanie\n"
+"*** automatycznie zrestartowany.\n"
 
 msgid "Initializing random number generator"
 msgstr "Inicjalizacja generatora liczb losowych"
@@ -237,7 +235,7 @@ msgid "System bootup in progress  - please wait"
 msgstr "Start systemu w toku - prosze czekac"
 
 msgid "Saving random seed"
-msgstr "Zapis ziarna losowego"
+msgstr "Zapisanie podstawy generatora losowego"
 
 msgid "Turning on quotas for local filesystems"
 msgstr "Wlaczam quote na lokalnych systemach plikow"
