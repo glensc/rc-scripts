@@ -6,7 +6,7 @@
 #               Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: shutdwn,v 1.10 1999/09/27 15:12:26 wiget Exp $
+# $Id: shutdwn,v 1.11 1999/09/28 13:17:27 kloczek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -49,7 +49,7 @@ if [ -x /sbin/raidstop -a -f /etc/raidtab ]; then
 	# devices listed in the default config file which is not always
 	# the case. So we look only for the active raid devices
 	if [ -f /proc/mdstat ] ; then
-		mddevs=$(grep ^md /proc/mdstat | awk '{ print $1 }')
+		mddevs=$(awk '/^md.* active/ {print $1}' /proc/mdstat)
 		for mddev in $mddevs ; do
 			MESSAGE="`nls "Turning off RAID for %s" "$mddev"`"
 			run_cmd "$MESSAGE" raidstop /dev/$mddev
