@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.29 2001/05/16 01:33:33 baggins Exp $
+# $Id: rc,v 1.30 2001/05/16 01:54:36 baggins Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -190,6 +190,8 @@ if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
 	unset LC_MEASUREMENT
 	unset LC_IDENTIFICATION
 	unset LC_ALL
+	TMPDIR=/dev/null
+	export TMPDIR
 	exec /etc/rc.d/rc.shutdown $runlevel
 else
 	if is_yes "$RUN_LDCONFIG" || [ ! -f /etc/ld.so.cache ] ; then
