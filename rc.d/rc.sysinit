@@ -379,7 +379,7 @@ if [ -n "$needusbstorage" ]; then
 fi
 
 # Load firewire devices
-if ! grep -iq "nofirewire" ; then
+if ! grep -iq "nofirewire" /proc/cmdline 2>/dev/null ; then
 	aliases=$(/sbin/modprobe -c | awk '/^alias ieee1394-controller/ { print	$3 }')
 	if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 	    for alias in $aliases ; do
