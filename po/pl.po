@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.46 2002/05/11 09:34:58 misiek Exp $
+# $Id: pl.po,v 1.47 2002/12/17 14:01:09 baggins Exp $
 #
 
 msgid ""
@@ -380,22 +380,6 @@ msgstr "Ustawianie statycznych wpisów ARP"
 #: ./rc.d/init.d/functions.network:208
 msgid "Setting static RARP entries"
 msgstr "Ustawianie statycznych wpisów RARP"
-
-#: ./rc.d/init.d/functions.network:228
-msgid "Enabling IPv4 packet forwarding"
-msgstr "Wlaczanie forwardowania pakietów IPv4"
-
-#: ./rc.d/init.d/functions.network:230
-msgid "Disabling IPv4 packet forwarding"
-msgstr "Wylaczanie forwardowania pakietów IPv4"
-
-#: ./rc.d/init.d/functions.network:237
-msgid "Enabling IPv6 packet forwarding"
-msgstr "Wlaczanie forwardowania pakietów IPv6"
-
-#: ./rc.d/init.d/functions.network:239
-msgid "Disabling IPv6 packet forwarding"
-msgstr "Wylaczanie forwardowania pakietów IPv6"
 
 #: ./rc.d/init.d/network:23
 #: ./rc.d/init.d/network:43

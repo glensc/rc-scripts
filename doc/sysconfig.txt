@@ -1,4 +1,4 @@
-$Id: sysconfig.txt,v 1.9 2002/06/19 18:13:07 klakier Exp $
+$Id: sysconfig.txt,v 1.10 2002/12/17 14:01:07 baggins Exp $
 
 Files in /etc/sysconfig
 =======================
@@ -46,11 +46,6 @@ Files in /etc/sysconfig
   NISDOMAIN=<nis domain name, e.g. "mydomain.org">
     Note: set this only if you use NIS system. DNS domainname 
     should be set in /etc/resolv.conf
-  FORWARD_IPV4=yes|no (The current Red Hat Linux installation
-    sets this to no by default for RFC compliance, but if
-    FORWARD_IPV4 is not set at all, forwarding is *enabled*
-    for compatibility with the configuration files used on
-    Red Hat Linux versions 4.2 and earlier.)
   IGNORE_ICMP_BCAST_IPV4=yes|no (Please note that if you accept ICMP echo
     requests with a broadcast/multicast destination address your network
     may be used as an exploder for denial of service packet flooding attacks

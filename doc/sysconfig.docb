@@ -82,14 +82,6 @@
 	      same value as here.</para></note>
 	</listitem>
       </varlistentry>
-      <varlistentry><term>FORWARD_IPV4=yes|no</term>
-	<listitem><para>(The current Red Hat Linux installation
-	  sets this to no by default for RFC compliance, but if
-	  FORWARD_IPV4 is not set at all, forwarding is *enabled*
-	  for compatibility with the configuration files used on
-	  Red Hat Linux versions 4.2 and earlier.)</para>
-	</listitem>
-      </varlistentry>
       <varlistentry><term>IGNORE_ICMP_BCAST_IPV4=yes|no</term>
 	<listitem><para>(Please note that if you accept ICMP echo
 	    requests with a broadcast/multicast destination address your network

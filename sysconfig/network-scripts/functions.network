@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.6 2002/11/08 23:45:05 alchemyx Exp $
+# $Id: functions.network,v 1.7 2002/12/17 14:01:11 baggins Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -143,27 +143,6 @@ else
 fi
 }
 
-setup_forwarding ()
-{
-if is_yes "$IPV4_NETWORKING" && is_yes "$IPV4_FORWARDING" && [ -f /proc/sys/net/ipv4/ip_forward ];
-then
-	if [ "$1" = "on" ]; then
-		run_cmd "Enabling IPv4 packet forwarding" sysctl -w net.ipv4.ip_forward=1
-	else
-		run_cmd "Disabling IPv4 packet forwarding" sysctl -w net.ipv4.ip_forward=0
-	fi
-fi
-
-if is_yes "$IPV6_NETWORKING" && is_yes "$IPV6_FORWARDING" && [ -f /proc/sys/net/ipv6/conf/all/forwarding ];
-then
-	if [ "$1" = "on" ]; then
-		run_cmd "Enabling IPv6 packet forwarding" sysctl -w net.ipv6.conf.all.forwarding=1
-	else
-		run_cmd "Disabling IPv6 packet forwarding" sysctl -w net.ipv6.conf.all.forwarding=0
-	fi
-fi
-}
-
 # Set up all IP && IP parameter variables
 setup_ip_param ()
 {
@@ -264,24 +243,21 @@ fi
 
 # IPv6 gateway && IPv6 globalroute
 if is_yes "$IPV6_NETWORKING"; then
-	if is_no "${IPV6_FORWARDING}" ; then
-    	    if [ -z "${GATEWAY6DEV}" -o "${GATEWAY6DEV}" = "${DEVICE}" ]; then
-	    	# set up default gateway
-	    	if [ -n "${GATEWAY6}" ]; then
-	    		ip -6 route add default via ${GATEWAY6} dev ${DEVICE} ${IP6SRCADDR} onlink
-			DEFGW6=${GATEWAY6}
-	    	elif [ "${GATEWAY6DEV}" = "${DEVICE}" ]; then
-	    		ip -6 route add default dev ${DEVICE} ${IP6SRCADDR}
-	    	fi
+    	if [ -z "${GATEWAY6DEV}" -o "${GATEWAY6DEV}" = "${DEVICE}" ]; then
+	    # set up default gateway
+	    if [ -n "${GATEWAY6}" ]; then
+	    	ip -6 route add default via ${GATEWAY6} dev ${DEVICE} ${IP6SRCADDR} onlink
+		DEFGW6=${GATEWAY6}
+	    elif [ "${GATEWAY6DEV}" = "${DEVICE}" ]; then
+	    	ip -6 route add default dev ${DEVICE} ${IP6SRCADDR}
 	    fi
-        else
-            if [ -z "${IPV6_GLOBALROUTEDEV}" -o "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
-	    	# set up default route
-	    	if [ -n "${IPV6_GLOBALROUTEGW}" ]; then
-	    	    ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR} onlink
-	    	elif [ "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
-	            ip -6 route add 2000::/3 dev ${DEVICE} ${IP6SRCADDR}
-		fi
+	fi
+        if [ -z "${IPV6_GLOBALROUTEDEV}" -o "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
+	    # set up default route
+	    if [ -n "${IPV6_GLOBALROUTEGW}" ]; then
+	        ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR} onlink
+	    elif [ "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
+	        ip -6 route add 2000::/3 dev ${DEVICE} ${IP6SRCADDR}
 	    fi
         fi
 fi
