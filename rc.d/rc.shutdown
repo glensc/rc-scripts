@@ -6,7 +6,7 @@
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.17 2001/05/16 02:14:36 baggins Exp $
+# $Id: rc.shutdown,v 1.18 2002/01/27 02:13:29 baggins Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -44,7 +44,7 @@ remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm |^none|^\/dev\/root
 while [ -n "$remaining" -a "$retry" -gt 0 ]
 do	
 	show "Unmounting file systems" ; busy
-	if ERRORS=$(umount -a $FORCE -t noproc 2>&1) ; then
+	if ERRORS=$(umount -a $FORCE -t noproc,devfs 2>&1) ; then
 		ok
 	else
 		fail
