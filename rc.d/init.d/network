@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.58 2002/12/17 14:01:10 baggins Exp $
+# $Id: network,v 1.59 2003/07/10 12:26:08 baggins Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -118,7 +118,15 @@ set_down_loopback
 interfaces_boot=$((
 	. /etc/rc.d/init.d/functions; \
 	cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
-	egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|:)' | \
+	egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br:)' | \
+	egrep 'ifcfg-[a-z0-9\.]+$' | \
+	for i in `cat`; do \
+	    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+	done | \
+	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+interfaces_br_boot=$((
+	. /etc/rc.d/init.d/functions; \
+	cd /etc/sysconfig/interfaces && ls -1 ifcfg-br* | \
 	egrep 'ifcfg-[a-z0-9\.]+$' | \
 	for i in `cat`; do \
 	    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
@@ -150,6 +158,10 @@ case "$1" in
 		run_cmd -a "$(nls 'Bringing up tunnel interface') $i" /sbin/ifup tnlcfg-$i boot
 	done
 	
+	for i in $interfaces_br_boot ; do
+		run_cmd -a "$(nls 'Bringing up interface') $i" /sbin/ifup $i boot
+	done
+
 	network_postinit
 
         touch /var/lock/subsys/network
