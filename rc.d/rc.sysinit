@@ -487,8 +487,8 @@ if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
 			
     
 	run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelock && \
-	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmignorelock \
-	&& [ "$lvmversion" = "2" ] && run_cmd "Synchronizing LVM /dev devices" /sbin/vgscan --mknodes $lvmignorelock
+	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmignorelock
+	[ "$lvmversion" = "2" ] && /sbin/vgscan --mknodes $lvmignorelock > /dev/null 2>&1
 
 fi
 
