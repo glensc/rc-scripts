@@ -1,8 +1,8 @@
-dnl $Id: configure.in,v 1.15 1999/09/27 16:03:49 wiget Exp $
+dnl $Id: configure.in,v 1.16 1999/09/28 14:43:40 kloczek Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
-VERSION=0.0.10
+VERSION=0.0.11
 ALL_LINGUAS="pl"
 
 SHSCRIPTS="rc.d/rc 			\
