@@ -1,4 +1,4 @@
-- nie wszyscy maj± zainstalowan± quote
-
-- o ile to mo¿liwe usun±æ u¿ywanie awk i sed zastêpowaæ u¿yewaniem sh lub
-  przynajmeniej zastêpowaæ awka sedem
+- BIND_DEV przy obs³udze tuneli trudno jest obs³u¿yæ z tego
+  wzglêdu, ¿e interfejsy s± podnoszone _po_ starcie tuneli.
+  Trzeba bêdzie przenie¶æ konfiguracjê interfejsów tuneli
+  z np. ifcfg-icm do tnlcfg-icm. Nie ma innego wyj¶cia :-(
