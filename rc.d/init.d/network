@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.52 2002/03/07 11:16:36 blues Exp $
+# $Id: network,v 1.53 2002/03/29 08:45:14 wojrus Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -67,6 +67,7 @@ set_up_loopback
 setup_forwarding on
 setup_nat on
 setup_routes on
+setup_ip_rules on
 # Setup IPX
 if is_yes "$IPX"; then
 	if [ -n $IPXAUTOPRIMARY ] ; then
@@ -107,6 +108,7 @@ network_deinit()
 {
 setup_forwarding off
 setup_routes off
+setup_ip_rules off
 
 # Set down NAT rules
 setup_nat off

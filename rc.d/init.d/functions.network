@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.68 2002/02/03 16:14:32 adasi Exp $
+# $Id: functions.network,v 1.69 2002/03/29 08:45:14 wojrus Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -502,6 +502,22 @@ if [ -f "/var/run/ppp-$DEVICE.pid" ] ; then
 fi
 if [ -z "$REALDEVICE" ] ; then
 	REALDEVICE=$DEVICE
+fi
+}
+# following function setups advanced routing rules
+# Olgierd Pieczul <wojrus@pld.org.pl>
+setup_ip_rules () {
+typeset args
+if [ -f /etc/sysconfig/ip-rules ] ; then
+        if [ "$1" = "on" -o "$1" = "yes" ] ; then
+                egrep "^(from|to|iif|tos|fwmark|dev|pref)[[:blank:]]" /etc/sysconfig/ip-rules | while read args; do
+                        /sbin/ip rule add $args
+                done
+        else
+                egrep "^(from|to|iif|tos|fwmark|dev|pref)[[:blank:]]" /etc/sysconfig/ip-rules | while read args; do
+                        /sbin/ip rule del $args
+                done
+        fi
 fi
 }
 
