@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.5 2002/08/24 16:05:52 misiek Exp $
+# $Id: functions.network,v 1.6 2002/11/08 23:45:05 alchemyx Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -74,11 +74,11 @@ typeset src via dst
 if [ -r /etc/sysconfig/static-nat ]; then
 	grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
 		if [ "$1" = "on" ]; then
-			/sbin/ip route add nat $src via $dst
-			/sbin/ip rule add from $dst nat $src
+			/sbin/ip route add nat $dst via $src
+			/sbin/ip rule add from $src nat $dst
 		elif [ "$1" = "off" ]; then
-			/sbin/ip rule del from $dst nat $src
-			/sbin/ip route del nat $src via $dst
+			/sbin/ip rule del from $src nat $dst
+			/sbin/ip route del nat $dst via $src
 	fi
 	done
 fi
