@@ -1,4 +1,4 @@
-# $Id: network,v 1.8 2000/02/03 11:50:05 misiek Exp $
+# $Id: network,v 1.9 2000/08/04 14:02:20 baggins Exp $
 ######################################################################
 # MAIN PART
 
@@ -16,6 +16,10 @@ NISDOMAIN=
 
 GATEWAY=
 GATEWAYDEV=
+
+GATEWAY6=
+GATEWAY6DEV=
+GATEWAY6DEFAULT=
 
 # Do you want to use IPX networking ?
 IPX=no
