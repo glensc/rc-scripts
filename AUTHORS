@@ -1,5 +1,5 @@
 
-	$Id: AUTHORS,v 1.4 1999/07/31 11:24:17 misiek Exp $
+	$Id: AUTHORS,v 1.5 1999/12/11 12:45:13 misiek Exp $
 
 In alphabetical order:
 
@@ -10,6 +10,9 @@ Artur Frysiak		<wiget@pld.org.pl>
 Tomasz K³oczko		<kloczek@wun.zie.pg.gda.pl>
 	- automake/autoconf updates
 	- rc-scripts.spec updates
+
+Jacek Konieczny		<jajcus@zeus.polsl.gliwice.pl>
+	- LDAP support
 
 Arkadiusz Mi¶kiewicz	<misiek@pld.org.pl>
 	- networking functions
