@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.61 2000/12/09 12:02:47 mkochano Exp $
+# $Id: functions,v 1.62 2000/12/14 09:49:25 jajcus Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -390,14 +390,17 @@ status()
 {
 	# Test syntax.
 	if [ $# = 0 ] ; then
-		msg_usage " status {program}"
+		msg_usage " status {subsys} [{daemon}]"
 		return 1
 	fi
 
+	subsys=$1
+	daemon=${2:-$subsys}
+
 	# First try "pidof"
-	pid=$(pidof -o $$ -o $PPID -o %PPID -x $1)
+	pid=$(pidof -o $$ -o $PPID -o %PPID -x $daemon)
 	if [ -n "$pid" ] ; then
-	        nls "%s (pid %s) is running..." "$1" "$pid"
+	        nls "%s (pid %s) is running..." "$daemon" "$pid"
 	        return 0
         else
                 pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
@@ -405,25 +408,25 @@ status()
                              (("[" prog "]") == $5) ||
                            ((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
                 if [ "$pid" != "" ] ; then
-                        nls "%s (pid %s) is running..." "$1" "$pid"
+                        nls "%s (pid %s) is running..." "$daemon" "$pid"
                         return 0
                 fi
 	fi
 
 	# Next try "/var/run/*.pid" files
-	if [ -f /var/run/$1.pid ] ; then
+	if [ -f /var/run/$daemon.pid ] ; then
 	        pid=$(head -1 /var/run/$1.pid)
 	        if [ -n "$pid" ] ; then
 	                nls "%s dead but pid file exists" "$1"
 	                return 1
 	        fi
 	fi
-	# See if /var/lock/subsys/$1 exists
-	if [ -f /var/lock/subsys/$1 ]; then
-		nls "%s dead but subsys locked" "$1"
+	# See if /var/lock/subsys/$subsys exists
+	if [ -f /var/lock/subsys/$subsys ]; then
+		nls "%s dead but subsys locked" "$daemon"
 		return 2
 	fi
-	nls "%s is stopped" "$1"
+	nls "%s is stopped" "$subsys"
 	return 3
 }
 
