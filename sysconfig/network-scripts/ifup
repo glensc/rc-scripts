@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.18 1999/07/31 11:24:20 misiek Exp $
+#	$Id: ifup,v 1.19 1999/08/02 10:08:05 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -87,8 +87,7 @@ if [ -x "$OTHERSCRIPT" -a -z "$IPv6_ONLY" ]; then
 fi
 
 # is this device available? (this catches PCMCIA devices for us)
-/sbin/ip link show ${DEVICE} 2>&1 | grep -s "does not exist" > /dev/null
-if [ "$?" == "0" ]; then
+if ! (/sbin/ip link set arp ${ARP} dev ${DEVICE} > /dev/null 2>&1); then
     echo "Delaying ${FULLDEVNAME} initialization."
     exit 0
 fi

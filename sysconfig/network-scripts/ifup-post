@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.8 1999/07/31 11:24:20 misiek Exp $
+#	$Id: ifup-post,v 1.9 1999/08/02 10:08:05 misiek Exp $
 #
 
 cd /etc/sysconfig/network-scripts
@@ -12,7 +12,7 @@ source_config
 
 # pelna nazwa dewajsa jaka podal user
 FULLDEVNAME="$DEVICE"
-# przyjmuje warto¶æ np: "dummy" czy "eth" itd. (do poprawki - teraz przyjmuje "dummy0:")
+# przyjmuje warto¶æ np: "dummy" czy "eth" itd.
 DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
 # przyjmuje eth0 przy {eth0,eth0:1,eth0:alias}
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
