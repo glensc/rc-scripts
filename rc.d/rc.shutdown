@@ -6,7 +6,7 @@
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.18 2002/01/27 02:13:29 baggins Exp $
+# $Id: rc.shutdown,v 1.19 2002/09/28 23:05:40 areq Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -40,7 +40,7 @@ fi
 sig=-15
 retry=3
 force=
-remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
 while [ -n "$remaining" -a "$retry" -gt 0 ]
 do	
 	show "Unmounting file systems" ; busy
