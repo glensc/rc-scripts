@@ -5,7 +5,7 @@
 # description:	This script is setting time zone information for your machine.
 # Author:	Pawel Wilk <siefca@pld.org.pl>
 #
-# $Id: timezone,v 1.3 2000/03/04 22:40:06 siefca Exp $
+# $Id: timezone,v 1.4 2000/04/05 10:33:23 bszx Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -18,24 +18,24 @@ NLS_DOMAIN="rc-scripts"
 
 ZONE_FILE="$ZONE_INFO_DIR"
 
-if [[ "$ZONE_INFO_SCHEME" != "" ]]; then
+if [ "$ZONE_INFO_SCHEME" != "" ]; then
     ZONE_FILE="$ZONE_FILE/$ZONE_INFO_SCHEME"
 fi
 
-if [[ "$ZONE_INFO_AREA" != "" ]]; then
+if [ "$ZONE_INFO_AREA" != "" ]; then
     ZONE_FILE="$ZONE_FILE/$ZONE_INFO_AREA"
 fi
 
 ZONE_FILE="$ZONE_FILE/$TIME_ZONE"
 
-[ -L /etc/localtime -a "`resolvesymlink /etc/localtime`" == "$ZONE_FILE" ] && exit 0
+[ -L /etc/localtime -a "`resolvesymlink /etc/localtime`" = "$ZONE_FILE" ] && exit 0
 
 # See how we were called.
 case "$1" in
   start)
         rm -f /etc/localtime
 	if [ -f "$ZONE_FILE" ]; then
-		if [[ "$ZONE_INFO_AREA" != "" ]]; then
+		if [ "$ZONE_INFO_AREA" != "" ]; then
 		    run_cmd "Setting time zone information ($ZONE_INFO_AREA, $TIME_ZONE)" ln -s $ZONE_FILE /etc/localtime
 		else
 		    run_cmd "Setting time zone information ($TIME_ZONE)" ln -s $ZONE_FILE /etc/localtime
