@@ -12,6 +12,7 @@ interfaces_DATA = \
 	ifcfg-irda0 \
 	ifcfg-irlan0 \
 	ifcfg-ppp0.callback \
+	ifcfg-ppp0.eagle-usb-neostrada \
 	ifcfg-ppp0.gprs-plusgsm \
 	ifcfg-ppp0.leased1 \
 	ifcfg-ppp0.leased2 \

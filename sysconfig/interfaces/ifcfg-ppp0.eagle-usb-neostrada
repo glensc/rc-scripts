@@ -1,0 +1,9 @@
+DEVICE=ppp0
+ONBOOT=yes
+PPPOA_EAGLE=yes
+AUTH=no
+MTU=1480
+PERSIST=yes
+DEFROUTE=yes
+USEPEERDNS=yes
+USER=XXX@neostrada.pl
