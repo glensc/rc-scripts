@@ -65,6 +65,7 @@ case "$1" in
 	;;
   status)
 	status <service>
+	exit $?
         ;;
   *)
         #echo "Usage: %s {start|stop|status|restart|reload}" $0
