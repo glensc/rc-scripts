@@ -391,7 +391,7 @@ daemon()
 	fi
 
 	if [ -n "$KSH_VERSION" ]; then
-		limits="`echo ${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS} | sed -e 's/-\([SH]\?\)u/-\1p/'`"
+		limits="`echo ${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS} | awk '/-Su/ {sub(/-Su/,"-Sp");} /-Hu/ {sub(/-Hu/,"-Hp");} /-u/ {sub(/-u/,"-p");} {print;}'`"
 	elif [ -n "$ZSH_VERSION" ]; then
 		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
 	elif [ -n "$BASH_VERSION" ]; then
@@ -399,8 +399,8 @@ daemon()
 #	elif [ -n "`$SH -c 'echo ${.sh.version}' 2>/dev/null`" ]; then
 	fi
 	while echo "$limits" | grep -q '[^ ]'; do
-		ulimit `echo ${limits} | sed -e 's/^ *\(-[^-]*\)\(-.*\)\?$/\1/'`
-		limits="`echo ${limits} | sed -e 's/^ *\(-[^-]*\)\(-.*\)\?$/\2/'`"
+		ulimit `echo ${limits} | awk '/^ *-[^-]*-.*$/ {sub(/^[^-]*-/,"");sub(/-.*$/,"");sub(/^.*$/,"-&");}{print;}'
+		limits="`echo ${limits} | awk '/^ *-[^-]*-.*$/ {sub(/^[^-]*-[^-]*/,"");}{print;}'
 	done
 
 	# And start it up.
@@ -520,7 +520,7 @@ pidofproc()
 		pid=
 		read line < /var/run/${base}.pid
 		for p in $line; do
-			[ -z "$(echo "$p" | sed 's/[0-9]//g')" ] && pid="$pid $p"
+			[ -z "$(echo "$p" | awk '{gsub(/[0-9]/,"");print;}')" ] && pid="$pid $p"
 		done
 		if [ -n "$pid" ]; then
 			echo $pid
