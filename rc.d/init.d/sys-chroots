@@ -32,6 +32,13 @@ case "$1" in
 		    msg_starting "System chroots services for $dir"; started
 
 		    # Cleaning part, keep in sync with rc.sysinit
+
+		    # Clear mtab
+		    :>/etc/mtab
+		    [ -f /etc/cryptomtab ] && :>/etc/cryptomtab
+
+		    # Remove stale backups
+		    rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
 		    
 		    # Clean up /var
     		    # I'd use find, but /usr may not be mounted.
@@ -68,6 +75,17 @@ case "$1" in
 		    fi
 
 		    # Do our things
+		    
+		    # proc
+		    chroot $dir mount -o gid=17 -t proc proc /proc
+		    # sysfs is also needed before any other things (under kernel > 2.5)
+		    if grep -q sysfs /proc/filesystems ; then
+			chroot $dir mount -o gid=17 -t sysfs sysfs /sys
+		    fi
+		    # selinux
+		    if grep -q selinuxfs /proc/filesystems ; then
+			chroot $dir mount -o gid=17 -t selinuxfs selinuxfs /selinux
+		    fi
 		    chroot $dir mount -a
 		    chroot $dir /sbin/chkconfig network off
 		    chroot $dir /sbin/chkconfig single off
