@@ -1,9 +1,15 @@
 #!/bin/sh
 
+# Set up a default search path.
+PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+export PATH
+
 VERSION="`basename $0` ver. 0.91"
 USAGE="Usage: `basename $0` < option > | --status-all | \
 [ service_name [ command | --full-restart ] ]"
+
 SERVICE=
+
 if [ -d /etc/rc.d/init.d ]; then
     SERVICEDIR="/etc/rc.d/init.d"
 else
@@ -28,7 +34,7 @@ while [ $# -gt 0 ]; do
        ;;
     *)
        if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
-          cd /
+          cd ${SERVICEDIR}
           for SERVICE in * ; do
             case "${SERVICE}" in
               functions | halt | killall | single| linuxconf| kudzu | \
@@ -36,7 +42,7 @@ while [ $# -gt 0 ]; do
                   ;;
               *)
                 if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-                  env -i LANG=$LANG "${SERVICEDIR}/${SERVICE}" status
+                  env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" status
                 fi
                 ;;
             esac
@@ -44,10 +50,9 @@ while [ $# -gt 0 ]; do
           exit 0
        elif [ $# -eq 2 -a "${2}" = "--full-restart" ]; then
           SERVICE="${1}"
-          cd /
           if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-            env -i LANG=$LANG "${SERVICEDIR}/${SERVICE}" stop
-            env -i LANG=$LANG "${SERVICEDIR}/${SERVICE}" start
+            env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" stop
+            env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" start
             exit $?
           fi
        elif [ -z "${SERVICE}" ]; then
@@ -61,7 +66,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-   env -i LANG=$LANG "${SERVICEDIR}/${SERVICE}" ${OPTIONS}
+   env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${OPTIONS}
 else
    echo "${SERVICE}: unrecognized service" >&2
    exit 1
