@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.63 2001/10/09 22:49:00 baggins Exp $
+# $Id: functions.network,v 1.64 2001/10/10 02:03:51 baggins Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -244,7 +244,7 @@ fi
 setup_ip_param ()
 {
 # detect network device type (ie. dummy, eth for dummy0, eth0 ..)
-DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]\.[0-9]*$/,NUL); print $0 } ')
+DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*\.?[0-9]*$/,NUL); print $0 } ')
 # real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
 DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
