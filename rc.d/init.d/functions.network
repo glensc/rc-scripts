@@ -1,6 +1,6 @@
 #
-# $Id: functions.network,v 1.40 2000/04/18 08:30:16 jajcus Exp $
-# vi:syntax=sh
+# $Id: functions.network,v 1.41 2000/04/21 17:37:53 jajcus Exp $
+# 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
 
@@ -438,4 +438,13 @@ echo $MASK
 return
 }
 
-
+# Retrievies PPPD PID and real interface name from /var/run/ppp-*.pid
+get_ppp_device_and_pid () {
+	
+	if [ -f "/var/run/ppp-$DEVICE.pid" ] ; then
+		eval `{
+		         read PID ; echo "PID='$PID'" 
+			 read REALDEVICE ; echo "REALDEVICE=$REALDEVICE"
+		      } < "/var/run/ppp-$DEVICE.pid"`
+	fi
+}
