@@ -345,6 +345,7 @@ if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "usb" /proc/devices
 			run_cmd "Mounting USB filesystem" mount /proc/bus/usb
 		fi
 		for alias in $aliases ; do 
+		    	[ "$alias" = "off" ] && continue
 			run_cmd "$(nls 'Initializing USB controller') ($alias)" /sbin/modprobe $alias
 		done
 		[ $? -eq 0 -a -n "$aliases" ] && usb=1
