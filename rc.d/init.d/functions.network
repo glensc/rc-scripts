@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.17 1999/08/14 12:01:18 misiek Exp $
+# $Id: functions.network,v 1.18 1999/08/20 13:37:48 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -163,7 +163,6 @@ set_down_loopback()
 {
 ip route del 127.0.0.0/8 dev lo  scope link
 ip addr del 127.0.0.1/8 dev lo
-ip addr del ::1/128 scope host dev lo
 ip link set dev lo down
 }
 
