@@ -39,7 +39,7 @@ msgstr \"\"
 \"Last-Translator: FULL NAME <EMAIL\@ADDRESS>\\n\"
 \"Language-Team: LANGUAGE <LL\@li.org>\\n\"
 \"MIME-Version: 1.0\\n\"
-\"Content-Type: text/plain; charset=iso8859-2\\n\"
+\"Content-Type: text/plain; charset=CHARSET\\n\"
 \"Content-Transfer-Encoding: 8bit\\n\"
 
 # Translation of words: \"DONE\", \"WORK\", \"BUSY\", \"FAIL\", \"DIED\"
