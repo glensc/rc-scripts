@@ -1,9 +1,27 @@
-dnl $Id: configure.in,v 1.13 1999/08/31 23:12:44 wiget Exp $
+dnl $Id: configure.in,v 1.14 1999/09/15 21:17:30 wiget Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
 VERSION=0.0.9
 ALL_LINGUAS="pl"
+
+SHSCRIPTS="rc.d/rc 			\
+	rc.d/init.d/allowlogin 		\
+	rc.d/init.d/functions 		\
+	rc.d/init.d/functions.network 	\
+	rc.d/init.d/halt 		\
+	rc.d/init.d/killall 		\
+	rc.d/init.d/netfs 		\
+	rc.d/init.d/network 		\
+	rc.d/init.d/nfsfs 		\
+	rc.d/init.d/random 		\
+	rc.d/init.d/reboot 		\
+	rc.d/init.d/shutdwn 		\
+	rc.d/init.d/single 		\
+	rc.d/rc 			\
+	rc.d/rc.init 			\
+	rc.d/rc.local 			\
+	rc.d/rc.sysinit"
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
@@ -33,7 +51,7 @@ for lang in $ALL_LINGUAS; do
 done
 
 POTSRC=
-for src in $BASHSCRIPTS; do
+for src in $SHSCRIPTS; do
         POTSRC="$POTSRC \$(top_srcdir)/$src"
 done
 AC_ARG_WITH(localedir,
