@@ -20,7 +20,9 @@ sbin_PROGRAMS =	\
 	
 EXTRA_PROGRAMS = \
 	testd 
-	
+
+EXTRA_DIST = $(sysconf_DATA)
+
 doexec_SOURCES = doexec.c
 
 resolvesymlink_SOURCE = resolvesymlink.c
