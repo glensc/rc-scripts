@@ -1,82 +1,8 @@
 #
-# $Id: functions.network,v 1.70 2002/04/09 11:03:42 jajcus Exp $
+# $Id: functions.network,v 1.71 2002/04/09 11:05:09 jajcus Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
-
-# This will work only after starting interface to which LDAP server is connected
-find_ldap_interfaces()
-{
-typeset BSWITH QUERY
-is_no "$USE_LDAP" && return 0
-
-if [ -n "$LDAP_BASE_DN" ] ; then
-	BSWITCH="-b$LDAP_BASE_DN" 
-else
-	BSWITH=""
-fi
-
-QUERY="(&(objectclass=pldinterface)(if_onboot=yes))"
-ldapsearch "$BSWITCH" "$QUERY" if_device | \
-	awk ' (/^if_device=/) { gsub(/^if_device=/,NIL); print $0; } '
-}
-
-# find aliases for device
-find_ldap_aliases()
-{
-typeset BSWITH QUERY
-is_no "$USE_LDAP" && return 0
-
-if [ -n "$LDAP_BASE_DN" ] ; then
-	BSWITCH="-b$LDAP_BASE_DN" 
-else
-	BSWITH=""
-fi
-
-QUERY="(&(objectclass=pldinterface)(if_onboot=yes)(if_device~=$1:*))"
-ldapsearch "$BSWITCH" "$QUERY" if_device | \
-	grep "^if_device=" | awk ' { gsub(/^if_device=/,NIL); print $0; } '
-}
-
-get_ldap_config ()
-{
-typeset BSWITH QUERY IPV6_ADDR IPADDR_ALIASES FIELD VALUE VAR
-is_no "$USE_LDAP" && return 0
-
-# Initialise fields which  can have multiple values:
-IPV6_ADDR=""
-IPADDR_ALIASES=""
-
-QUERY="(&(objectclass=pldinterface)(if_device=$1))"
-if [ -n "$LDAP_BASE_DN" ] ; then
-	BSWITCH="-b$LDAP_BASE_DN" 
-else
-	BSWITH=""
-fi
-
-ldapsearch "$BSWITCH" "$QUERY" | awk ' (/=/) { gsub(/=/," "); print $0; } ' | {
-	while read FIELD VALUE ; do
-		# Field, which have name compatible with other 
-		# LDAP object
-		if [ "$FIELD" = "iphostnumber" ] ; then
-			VAR="IPADDR";
-		else # Other fields
-			VAR=$(echo "$FIELD" | awk '(/^if_/) { data=toupper($0); gsub(/IF_/,NIL,data); print data; }')
-		fi
-		# Fields which can have multiple values:
-		if   [ "$VAR" = "IPV6_ADDR" \
-		    -o "$VAR" = "IPADDR_ALIASES" ]  && \
-		     [ -n "`eval echo \$$VAR`" ] ; then
-			echo "$VAR=\"\$$VAR $VALUE\"" ;
-
-		# single value fields, or the first value
-		elif [ -n "$VAR" ] ; then
-			eval "$VAR=\"$VALUE\""
-			echo "$VAR=\"$VALUE\""
-		fi
-	done
-}
-}
 
 source_config ()
 {
@@ -88,8 +14,6 @@ if echo "$CONFIG"|egrep "^/" >/dev/null 2>&1 ; then
 	fi
 elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
 	. "/etc/sysconfig/interfaces/$CONFIG"
-elif is_yes "$USE_LDAP"; then
-	eval `get_ldap_config $DEVNAME`
 fi
 if [ -n "${PREFIX}" ] && ! $(echo $IPADDR | grep "/" 2>&1 >/dev/null) ; then
 	IPADDR="$IPADDR/$PREFIX"
