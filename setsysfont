@@ -1,30 +1,30 @@
 #!/bin/sh
 #
-#	$Id: setsysfont,v 1.4 1999/07/31 11:24:17 misiek Exp $
+#	$Id: setsysfont,v 1.5 1999/08/02 13:04:45 kloczek Exp $
 #
 
 [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
 [ -f /etc/sysconfig/console ] && . /etc/sysconfig/console
 
 if [ -x /usr/bin/consolechars -o -x /bin/consolechars ]; then
-  if [ -n "$SYSFONT" ]; then
-  	consolechars -f $SYSFONT
-  elif [ -n "$CONSOLEFONT" ]; then
-	consolechars -f $CONSOLEFONT
-  fi
-  if [ "$CONSOLEMAP" != "" ]; then
-	consolechars -m $CONSOLEMAP
-  fi
-  if [ "$KEYTABLE" != "" ]; then
-	loadkeys $KEYTABLE
-  fi
+	if [ -n "$SYSFONT" ]; then
+		consolechars -f $SYSFONT
+	elif [ -n "$CONSOLEFONT" ]; then
+		consolechars -f $CONSOLEFONT
+	fi
+	if [ "$CONSOLEMAP" != "" ]; then
+		consolechars -m $CONSOLEMAP
+	fi
+	if [ "$KEYTABLE" != "" ]; then
+		loadkeys $KEYTABLE
+	fi
 
 
 elif [ -x /usr/bin/setfont ]; then
-  if [ -n "$SYSFONT" ]; then
-    /usr/bin/setfont $SYSFONT
-  fi
+	if [ -n "$SYSFONT" ]; then
+		/usr/bin/setfont $SYSFONT
+	fi
 else
-  echo "can't set font"
-  exit 1
+	echo "can't set font"
+	exit 1
 fi
