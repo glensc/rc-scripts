@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.70 2003/01/15 22:34:10 ankry Exp $
+#	$Id: ifup,v 1.71 2003/04/07 19:54:39 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -218,7 +218,7 @@ else
 fi
 
 # device have to have ip address set before
-if [ is_yes "$PROXYARP" ]; then
+if is_yes "$PROXYARP"; then
     run_cmd "Enabling proxy ARP on ${DEVICE}" sysctl -w net.ipv4.conf.${DEVICE}.proxy_arp=1
 fi
 
