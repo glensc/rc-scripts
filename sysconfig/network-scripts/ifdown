@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.24.2.1 2000/10/18 20:10:54 misiek Exp $
+#	$Id: ifdown,v 1.24.2.2 2000/10/23 22:17:57 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -54,22 +54,27 @@ check_device_down && exit 0
 
 if [ "$BOOTMETHOD" = "bootp" -o "$BOOTMETHOD" = "pump" ]; then
 	/sbin/pump -r -i ${DEVICE}
+	RESULT=$?
 fi
 
 if [ "$BOOTMETHOD" = "dhcp" ]; then
     if [ -x /sbin/dhcpcd ];then
         /sbin/dhcpcd -k ${DEVICE}
+	RESULT=$?
     elif [ -x /sbin/dhclient ];then
         if [ -f /var/run/dhclient.pid ];then
             PID=$(cat /var/run/dhclient.pid)
             if ps ax --no-header|grep -q $PID;then
                 kill $PID
+		RESULT=$?
             fi
         fi
     elif [ -x /sbin/dhcpxd ];then
         /sbin/dhcpxd -k ${DEVICE}
+	RESULT=$?
     elif [ -x /sbin/pump ];then
         pump -r -i ${DEVICE}
+	RESULT=$?
     fi
 fi
 
@@ -79,9 +84,12 @@ ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
 if [ "$HANDLING" -eq 4 ]; then
     exit 0
 fi
-	
-exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
 
+if [ "$RESULT" -ne "0" ]; then
+	return $RESULT
+fi
+
+exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
 
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4
