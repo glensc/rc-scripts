@@ -192,9 +192,9 @@ fi
 %attr(755,root,root) %dir %{_sysconfdir}/sysconfig/interfaces/data
 %attr(755,root,root) %dir %{_sysconfdir}/ppp
 %attr(755,root,root) %{_sysconfdir}/ppp/*
-%attr(755,root,root) %dir %{_sysconfdir}/network-scripts
-%attr(755,root,root) %{_sysconfdir}/network-scripts/if*
-#%attr(755,root,root) %{_sysconfdir}/network-scripts/tnl*
+%attr(755,root,root) %dir %{_sysconfdir}/sysconfig/network-scripts
+%attr(755,root,root) %{_sysconfdir}/sysconfig/network-scripts/if*
+#%attr(755,root,root) %{_sysconfdir}/sysconfig/network-scripts/tnl*
 
 %attr(644,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/network
 %attr(644,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/static-routes
