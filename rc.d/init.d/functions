@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.48 2000/04/08 21:41:31 zagrodzki Exp $
+# $Id: functions,v 1.49 2000/05/01 18:43:55 zagrodzki Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -23,10 +23,8 @@ INIT_COL=67
 # Colors workaround
 termput() 
 {
-	if [ "$COLOR_INIT" = "no" ]; then
-        	:
-	elif [ ! -d /usr/share/terminfo ] || \
-	     ! ( [ -x /usr/bin/tput ] || [ -x /bin/tput ] ) ; then
+	if [ ! -d /usr/share/terminfo ] || \
+	     [ ! -x /usr/bin/tput -a ! -x /bin/tput ]; then
 		case "$1" in
 		  hpa)
 		  	echo -ne "\033[$(($2+1))G"
@@ -38,7 +36,7 @@ termput()
 		  	echo -ne "\033[0K"
 			;;
 		  setaf)
-		  	echo -ne "\033[0;3${2}m"
+		  	[ is_yes "$COLOR_INIT" ] && echo -ne "\033[0;3${2}m"
 		  	;;
 		  esac
 	else
@@ -51,10 +49,10 @@ printf_()
 {
 	text="$1" ;
 	shift ;
-	if [ -n "$1" ]; then
+	if [ $# -gt 0 ]; then
 		m="$1";
         	shift;
-		while [ -n "$1" ]; do
+		while [ $# -gt 0 ]; do
 			m="$m\",\"$1" ;
 			shift ;
 		done
@@ -137,37 +135,37 @@ show()
 
 busy() 
 {
-	termput hpa $INIT_COL
+	deltext
 	echo -n "`termput setaf 6`[`termput setaf 5` `nls --nls-domain rc-scripts "BUSY"` `termput setaf 6`]`termput setaf 7`"
 }
 
 ok() 
 {
-	termput hpa $INIT_COL
+	deltext
 	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "DONE"` `termput setaf 6`]`termput setaf 7`"
 }
 
 started()
 {
-	termput hpa $INIT_COL
+	deltext
 	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "WORK"` `termput setaf 6`]`termput setaf 7`"
 }
 
 fail() 
 {
-	termput hpa $INIT_COL
+	deltext
 	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "FAIL"` `termput setaf 6`]`termput setaf 7`"
 }
 
 died() 
 {
-	termput hpa $INIT_COL
+	deltext
 	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "DIED"` `termput setaf 6`]`termput setaf 7`"
 }
 
 deltext() 
 {
-	echo -ne "`nls "\b\b\b\b\b\b\b\b"`"	
+	termput hpa $INIT_COL
 }
 
 # Usage run_cmd Message command_to_run
@@ -179,9 +177,9 @@ run_cmd()
 	show "$MESSAGE"; busy
 	shift
 	if _ERRORS="`initlog -c \"$*\" 2>&1`"; then
-		deltext; ok
+		ok
 	else
-		deltext; fail;  [ -n "$_ERRORS" ] && echo $_ERRORS
+		fail;  [ -n "$_ERRORS" ] && echo $_ERRORS
 		exit_code=1
 	fi
 	unset _ERRORS
@@ -218,11 +216,9 @@ daemon()
 	# And start it up.
 	busy
 	if _ERRORS="`nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$*" 2>&1`"; then
-		deltext
 		ok
 	else
 		exit_code=1
-		deltext
 		fail
 		[ -n "$_ERRORS" ] && echo $_ERRORS
 	fi
@@ -272,20 +268,19 @@ killproc()
 						fi
 					fi
 				fi
-				ps h $pid >/dev/null 2>&1 && (deltext; fail) || (deltext; ok)
+				ps h $pid >/dev/null 2>&1 && fail || ok
 			else
-				deltext; died
+				died
 			fi
 		# use specified level only
 		else
 			if ps h $pid >/dev/null 2>&1; then
-				kill $killlevel $pid && (deltext; ok) || (deltext; fail)
+				kill $killlevel $pid && ok || fail
 			else
-				deltext; died
+				died
 			fi
 		fi
 	else
-		deltext
 		died
 	fi
 
