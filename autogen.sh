@@ -5,8 +5,19 @@
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
+cd "$srcdir"
+
 PKG_NAME="PLD Linux Distribution rc-scripts"
 
+if [ "$1" = "changelog" -a -x ~/bin/svn2log.py ]; then
+    rm -f ${TMPDIR:-/tmp}/svn2log.tmp
+    awk -F":" ' { login=$1; if ($3 != "") { name=$3 } else { name=$1 }; email=$2; printf "%s\t%s <%s@pld-linux.org>\n", login, name, login } ' ~/.CVS-PLD/CVSROOT/users > ${TMPDIR:-/tmp}/svn2log.tmp
+    svn log -v --xml | ~/bin/svn2log.py --domain "pld-linux.org" -p /rc-scripts/trunk -u ${TMPDIR:-/tmp}/svn2log.tmp --exclude ChangeLog -o ChangeLog
+    rm -f ${TMPDIR:-/tmp}/svn2log.tmp
+    exit 0
+fi
+							
+    
 (test -f $srcdir/configure.ac \
   && test -d $srcdir/src) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
