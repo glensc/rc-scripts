@@ -1,4 +1,4 @@
-# $Id: network,v 1.23 2003/07/28 12:02:20 blues Exp $
+# $Id: network,v 1.24 2003/07/28 12:11:27 blues Exp $
 ######################################################################
 # MAIN PART
 
@@ -44,12 +44,6 @@ IPV6_GLOBALROUTEGW=
 IPV6_GLOBALROUTEDEV=
 
 # Other
-
-# If you are part of some huge network - you need to set this values. To have
-# proper values - use kernel docs.
-#GC_THRESH1=
-#GC_THRESH2=
-#GC_THRESH3=
 
 # Do you want set static ARP table (based on /etc/ethers config file) ?
 STATIC_ARP=no
