@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.43 2000/08/04 14:08:23 baggins Exp $
+#	$Id: ifup,v 1.44 2000/08/04 15:06:47 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -187,13 +187,15 @@ else
 	ip -family inet6 addr add ${ADDR6} dev ${DEVICE} label ${FULLDEVNAME}
       done  
 
-      if [ "${GATEWAY6}" != "" ]; then
-	if [ "${GATEWAY6DEV}" = "" -o "${GATEWAY6DEV}" = "${FULLDEVNAME}" ]; then
-	  if [ "${GATEWAY6DEFAULT}" != "" ] ; then
-	    ip -family inet6 route add ${GATEWAY6DEFAULT} via ${GATEWAY6} dev ${DEVICE}
-	  else
-	    # set up default gateway
-	    ip -family inet6 route add default via ${GATEWAY6} dev ${DEVICE}
+      if is_no "${IPV6_FORWARDING}" ; then
+	if [ "${GATEWAY6}" != "" ]; then
+	  if [ "${GATEWAY6DEV}" = "" -o "${GATEWAY6DEV}" = "${FULLDEVNAME}" ]; then
+	    if [ "${GATEWAY6DEFAULT}" != "" ] ; then
+		ip -family inet6 route add ${GATEWAY6DEFAULT} via ${GATEWAY6} dev ${DEVICE}
+	    else
+		# set up default gateway
+		ip -family inet6 route add default via ${GATEWAY6} dev ${DEVICE}
+	    fi
 	  fi
 	fi
       fi
