@@ -1,5 +1,12 @@
 - brak jest mo¿liwo¶ci postawienia ifc tylko na ipv6
+
 - nie wszyscy maj± zainstalowan± quote
+
 - dlaczego nie mo¿na wykonaæ `tnlup cron` tylko trzeba `tnlup tnlcfg-cron` ?
+
 - o ile to mo¿liwe usun±æ u¿ywanie awk i sed zastêpowaæ u¿yewaniem sh lub
   przynajmeniej zastêpowaæ awka sedem
+
+- dodaæ mo¿liwo¶æ ustawiania statycznej tablicy arp (patrz: man ethers arp
+  opcja -f). Najpawdopodobniej najlepszym miescem bêdzie punkt miê
+  podnoszeniem lo a nastepnych interfejsów.
