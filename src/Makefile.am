@@ -4,7 +4,7 @@ GLIBDIR = @GLIBDIR@
 GCFLAGS = @GCFLAGS@
 GLIBNAME = @GLIBNAME@
 
-DEFS = @DEFS@ -D_GNU_SOURCE=1
+DEFS = @DEFS@ -D_GNU_SOURCE=1 -DSBINDIR=\""@sbindir@"\"
 
 sysconf_DATA = \
 	initlog.conf

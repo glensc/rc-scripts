@@ -32,6 +32,10 @@ static char * safeEnviron[] = {
 #define NOT_FOUND 0
 #define FOUND_TRUE 1
 
+#ifndef SBINDIR
+#define SBINDIR "/sbin"
+#endif
+
 static void
 usage(void) {
     fprintf(stderr, "usage: usernetctl <interface-config> <up|down|report>\n");
@@ -143,9 +147,9 @@ main(int argc, char ** argv) {
     if (argc != 3) usage();
 
     if (!strcmp(argv[2], "up")) {
-	cmd = "./ifup";
+	cmd = SBINDIR "/ifup";
     } else if (!strcmp(argv[2], "down")) {
-	cmd = "./ifdown";
+	cmd = SBINDIR "/ifdown";
     } else if (!strcmp(argv[2], "report")) {
 	report = 1;
     } else {
