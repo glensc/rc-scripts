@@ -31,7 +31,7 @@ msgstr "Wchodzê w tryb nieinteraktywny"
 #: ./rc.d/rc:112
 #: ./rc.d/rc:113
 msgid "%sResource Manager: %sEntering runlevel number"
-msgstr "%sZarz±dca zasobów: %sWejscie na poziom"
+msgstr "%sZarz±dca zasobów: %sWej¶cie na poziom"
 
 #: ./rc.d/rc:114
 #: ./rc.d/init.d/functions:185
@@ -45,7 +45,7 @@ msgstr "Ustawianie /etc/ld.so.cache"
 #: ./rc.d/rc:205
 #: ./rc.d/rc:206
 msgid "%sResource Manager: %sRunlevel has been reached"
-msgstr "%sZarz±dca zasobów: %sOsi±gnieto poziom"
+msgstr "%sZarz±dca zasobów: %sOsi±gniêto poziom"
 
 #: ./rc.d/rc.shutdown:24
 #: ./rc.d/init.d/single:33
@@ -151,7 +151,7 @@ msgstr "Sprawdzanie g³ównego systemu plików"
 #: ./rc.d/rc.sysinit:443
 #: ./rc.d/rc.sysinit:502
 msgid "*** An error occurred during the file system check."
-msgstr "*** Podczas sprawdzania systemów plików wykryto b³ad niemo¿liwy do usuniêcia."
+msgstr "*** Podczas sprawdzania systemów plików wykryto b³±d niemo¿liwy do usuniêcia."
 
 #: ./rc.d/rc.sysinit:183
 #: ./rc.d/rc.sysinit:412
@@ -176,11 +176,11 @@ msgstr "Automatyczny restart w toku"
 
 #: ./rc.d/rc.sysinit:212
 msgid "Setting up ISA PNP devices (userspace pnp)"
-msgstr "Ustawianie urz±dzen ISA PNP (userspace pnp)"
+msgstr "Ustawianie urz±dzeñ ISA PNP (userspace pnp)"
 
 #: ./rc.d/rc.sysinit:215
 msgid "Setting up ISA PNP devices (kernelspace pnp)"
-msgstr "Ustawianie urz±dzen ISA PNP (kernelspace pnp)"
+msgstr "Ustawianie urz±dzeñ ISA PNP (kernelspace pnp)"
 
 #: ./rc.d/rc.sysinit:221
 msgid "Remounting root filesystem in rw mode"
@@ -192,7 +192,7 @@ msgstr "Sprawdzanie quot na g³ównym systemie plików"
 
 #: ./rc.d/rc.sysinit:245
 msgid "Enabling Delay Login"
-msgstr "Wlaczanie opózniania logowania"
+msgstr "W³±czanie opó¼niania logowania"
 
 #: ./rc.d/rc.sysinit:247
 msgid "System bootup in progress - please wait"
@@ -293,7 +293,7 @@ msgstr "W³±czanie swapa"
 
 #: ./rc.d/init.d/functions:124
 msgid "ERROR: Networking is down. %s can't be run."
-msgstr "BLAD: Sieæ nie jest uruchomiona. %s nie mo¿e zostaæ uruchomiony."
+msgstr "B£¡D: Sieæ nie jest uruchomiona. %s nie mo¿e zostaæ uruchomiony."
 
 #: ./rc.d/init.d/functions:129
 msgid "Starting %s service"
@@ -321,11 +321,11 @@ msgstr "U¿ycie: %s"
 
 #: ./rc.d/init.d/functions:180
 msgid "BUSY"
-msgstr " ZAJETY "
+msgstr " ZAJÊTY "
 
 #: ./rc.d/init.d/functions:191
 msgid "WORK"
-msgstr "AKTYWUJE"
+msgstr "AKTYWUJÊ"
 
 #: ./rc.d/init.d/functions:197
 msgid "FAIL"
@@ -358,7 +358,7 @@ msgstr "%s jest zatrzymany"
 
 #: ./rc.d/init.d/functions:465
 msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
-msgstr "Uruchomic us³ugê %s (T)ak/(N)ie/(K)ontynuuj? [T] "
+msgstr "Uruchomiæ us³ugê %s (T)ak/(N)ie/(K)ontynuuj? [T] "
 
 #: ./rc.d/init.d/functions:564
 msgid "Loading %s kernel module(s)"
@@ -470,7 +470,7 @@ msgstr "Zapisanie podstawy generatora losowego"
 
 #: ./rc.d/init.d/random:54
 msgid "The random data source exists"
-msgstr "Zród³o losowych danych istnieje"
+msgstr "¬ród³o losowych danych istnieje"
 
 #: ./rc.d/init.d/random:56
 msgid "The random data source is missing"
@@ -478,7 +478,7 @@ msgstr "Brak ¼ród³a losowych danych"
 
 #: ./rc.d/init.d/single:61
 msgid "Telling INIT to go to single user mode"
-msgstr "Nakazywanie procesowi INIT przej¶cia do trybu pojedyñczego u¿ytkownika"
+msgstr "Nakazywanie procesowi INIT przej¶cie do trybu pojedynczego u¿ytkownika"
 
 #: ./rc.d/init.d/timezone:39
 msgid "Setting time zone information (%s, %s)"
@@ -566,7 +566,7 @@ msgstr "nie istnieje dla"
 
 #: ./sysconfig/network-scripts/ifup-sl:67
 msgid "dip started for %s on %s at %s"
-msgstr "dip wystartowal dla %s na %s przy %s"
+msgstr "dip wystartowa³ dla %s na %s przy %s"
 
 #: ./sysconfig/network-scripts/ifup-sl:97
 msgid "slattach started for %s on %s at %s"
