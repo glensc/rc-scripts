@@ -1,4 +1,4 @@
-$Id: TODO,v 1.14 2001/05/15 16:03:33 baggins Exp $
+$Id: TODO,v 1.15 2002/01/22 23:45:27 gotar Exp $
 
 Features missing:
 - IPSec (freeswan) support
@@ -12,11 +12,11 @@ Important:
   protocol)
 
 Not realy important but mayby nice:
-- Add checing for preveliges during restarting 
-  and if thay are not enought say fuck off in a 
+- Add checking for privileges during restarting
+  and if they are not enough say fuck off in a
   nice way.
 
-  
+
 Other:
 - maybe merge ATM rc scripts
 
