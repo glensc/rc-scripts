@@ -28,7 +28,7 @@ if grep -q sysfs /proc/filesystems ; then
 fi
 
 # selinux
-if grep -q selinuxfs /proc/filesystems ; then
+if grep -q selinuxfs /proc/filesystems && ! grep -q selinuxfs /proc/mounts; then
     mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
 fi
 
