@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.76 2003/05/15 22:39:08 ankry Exp $
+# $Id: functions,v 1.77 2003/08/10 20:49:35 arekm Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:	Greg Galloway and Marc Ewing
@@ -20,6 +20,21 @@ INIT_COL=67
 [ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
 
 [ -z "$COLUMNS" ] && COLUMNS=80
+
+kernelver()
+{
+	awk '{print $3}' /proc/version | awk -F. '{print sprintf("%03d%03d%03d",$1,$2,$3)}'
+}
+
+kernelverser()
+{
+	awk '{print $3}' /proc/version | awk -F. '{print sprintf("%03d%03d",$1,$2)}'
+}
+
+kernelvermser()
+{
+	awk '{print $3}' /proc/version | awk -F. '{print sprintf("%03d",$1)}'
+}
 
 # Colors workaround
 termput()
