@@ -1,4 +1,4 @@
-$Id: sysconfig.txt,v 1.4 2001/05/15 16:03:36 baggins Exp $
+$Id: sysconfig.txt,v 1.5 2002/02/02 17:30:20 adasi Exp $
 
 Files in /etc/sysconfig
 =======================
@@ -72,6 +72,17 @@ Files in /etc/sysconfig
     <address> via <addressreal>
 
   NAT will translate address <address> to <addressreal>.
+
+/etc/sysconfig/masquerade
+
+  Configuration file for masquerade.
+  Contain lines of the form:
+    <address> by <interface> to <destination>
+
+  Where <address> is source address or class, <interface> is 
+  interface by whom packets will be sent and <destination> 
+  is destination address or class (usually 0.0.0.0/0).
+  All address classes should be in form of 192.168.1.0/24.
 
 /etc/sysconfig/static-routes:
 
