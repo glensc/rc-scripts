@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.42 2000/03/22 17:20:51 wiget Exp $
+# $Id: rc-scripts.spec.in,v 1.43 2000/03/22 21:41:02 wiget Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -114,7 +114,7 @@ for i in 0 1 6; do
 done
 
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
-	doc/*.txt 
+	doc/*.txt rc.d/init.d/\<templete\>.init
 
 %post
 if [ -f /etc/inittab.rpmsave ]; then
@@ -132,6 +132,7 @@ fi
 %doc sysconfig/interfaces/tnl*
 %doc sysconfig/interfaces/data/chat-ppp*
 %doc doc/net-scripts.txt.gz
+%doc rc.d/init.d/\<templete\>.init.gz
 
 %attr(755,root,root) %dir %{_sysconfdir}/rc.d/rc?.d
 
