@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.24.2.2 2000/10/23 22:17:57 misiek Exp $
+#	$Id: ifdown,v 1.24.2.3 2001/03/19 15:48:18 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -42,9 +42,9 @@ if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
 fi
 	
 if [ -x $OTHERSCRIPT ]; then
-    if [ "$HANDLING" -eq 0 ]; then
+    if [ "$HANDLING" = "0" ]; then
     	exec $OTHERSCRIPT $CONFIG $2
-    elif [ "$HANDLING" -eq 1 ]; then
+    elif [ "$HANDLING" = "1" ]; then
     	$OTHERSCRIPT $CONFIG $2
     fi
 fi
@@ -81,7 +81,7 @@ fi
 ip link set ${DEVICE} down
 ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
 
-if [ "$HANDLING" -eq 4 ]; then
+if [ "$HANDLING" = "4" ]; then
     exit 0
 fi
 
