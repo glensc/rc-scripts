@@ -450,11 +450,11 @@ daemon()
 			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
 			shift
 			;;
-        --fork)
-         prog="/usr/bin/setsid sh -c \""
-         end='&'
-         shift
-         ;;
+        	  --fork)
+         		prog="/usr/bin/setsid sh -c \""
+         		end='&'
+         		shift
+         		;;
 		  -*|+*) SERVICE_RUN_NICE_LEVEL=$1
 			shift;;
 		esac
@@ -496,12 +496,22 @@ daemon()
 # A function to stop a program.
 killproc()
 {
-	typeset notset killlevel base pid result
+	typeset notset killlevel base pid pidfile result
 	# Test syntax.
 	if [ $# = 0 ]; then
 		msg_usage " killproc {program} [signal]"
 		return 2
 	fi
+
+	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+		case $1 in
+			--pidfile)
+				shift
+				pidfile="$1"
+				shift
+			;;
+		esac
+	done
 
 	busy
 
@@ -518,8 +528,8 @@ killproc()
 	base=$(basename "$1")
 
 	# Find pid.
-	pid=$(pidofproc "$1")
-	[ -z "$pid" ] && pid=$(pidofproc "$base")
+	pid=$(pidofproc "$1" "$pidfile")
+	[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
 
 	# Kill it.
 	if [ -n "$pid" -a "$pid" != "$$" ] && checkpid $pid 2>&1 ; then
@@ -581,8 +591,10 @@ killproc()
 # A function to find the pid of a program.
 pidofproc()
 {
-	typeset pid base
+	typeset pid pidfile base
 	base=$(basename "$1")
+	pidfile="$base.pid"
+	[ -n "$2" ] && pidfile="$2"
 
 	# Test syntax.
 	if [ $# = 0 ] ; then
@@ -590,11 +602,11 @@ pidofproc()
 		return 2
 	fi
 
-	# First try "/var/run/*.pid" files
-	if [ -f /var/run/${base}.pid ] ; then
+	# First try pidfile or "/var/run/*.pid"
+	if [ -f /var/run/${pidfile} ] ; then
 		typeset line p pid
 		pid=
-		read line < /var/run/${base}.pid
+		read line < /var/run/${pidfile}
 		for p in $line; do
 			[ -z "$(echo "$p" | awk '{gsub(/[0-9]/,"");print;}')" ] && pid="$pid $p"
 		done
