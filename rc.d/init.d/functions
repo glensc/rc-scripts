@@ -323,6 +323,25 @@ checkpid()
 	return 1
 }
 
+# outside chroot get only thsese processes which are outside chroot.
+# inside chroot get only these processes which are inside of chroot.
+# (note: some processes like named are chrooted but run outside chroot)
+filter_chroot()
+{
+	[ $# -lt 1 ] && return
+        good_pids=""
+	for root_pid in $@; do
+		root_dir=$(resolvesymlink /proc/${root_pid}/root)
+		if [ -n "$root_dir" ]; then
+			for r_dir in ${SYSTEM_CHROOTS}; do
+				[ "$rewt" = "$CHROOT_TO_DIR" ] && good_pids="$good_pids $root_pid"
+			done
+			[ "$root_dir" = "/" -o "$root_dir" = "/usr/share/empty" ] && good_pids="$good_pids $root_pid"
+		fi
+       done
+       echo $good_pids
+}
+
 # Usage run_cmd Message command_to_run
 run_cmd()
 {
@@ -521,14 +540,12 @@ pidofproc()
 		for p in $line; do
 			[ -z "$(echo "$p" | awk '{gsub(/[0-9]/,"");print;}')" ] && pid="$pid $p"
 		done
-		if [ -n "$pid" ]; then
-			echo $pid
-			return 0
-		fi
 	fi
 
 	# Next try "pidof"
-	pidof -o $$ -o $PPID -o %PPID -x "$1"
+	[ -z "$pid" ] && pidof -o $$ -o $PPID -o %PPID -x "$1"
+	pid=$(filter_chroot "$pid")
+	echo $pid
 }
 
 status()
@@ -546,6 +563,7 @@ status()
 
 	# First try "pidof"
 	pid=$(pidof -o $$ -o $PPID -o %PPID -x $daemon)
+	pid=$(filter_chroot "$pid")
 
 	if [ "$pid" != "" ]; then
 		nls "%s (pid %s) is running..." "$daemon" "$pid"
@@ -564,6 +582,7 @@ status()
 	# Next try "/var/run/*.pid" files
 	if [ -f /var/run/${base}.pid ]; then
 		read pid < /var/run/${base}.pid
+		pid=$(filter_chroot "$pid")
 		if [ "$pid" != "" ]; then
 			nls "%s dead but pid file exists" "$subsys"
 			return 1
