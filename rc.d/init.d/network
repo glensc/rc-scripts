@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.21 1999/09/13 13:25:02 misiek Exp $
+# $Id: network,v 1.22 1999/09/15 10:35:07 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -85,14 +85,14 @@ set_down_loopback
 # find all the interfaces besides loopback.
 # ignore aliases, alternative configurations, and editor backup files
 interfaces="`(cd /etc/sysconfig/interfaces && ls ifcfg* | \
-egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | sed 's/^ifcfg-//g' | xargs)`"
+egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | sed 's/^ifcfg-//g' | xargs) 2> /dev/null`"
 interfaces_boot="`(cd /etc/sysconfig/interfaces && ls ifcfg* | \
 egrep -v '(ifcfg-lo|ifcfg-sit|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
-xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g')`"
+xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g') 2> /dev/null`"
 interfaces_sit_boot="`(cd /etc/sysconfig/interfaces && ls ifcfg-sit* | \
-egrep 'ifcfg-[a-z0-9]+$' | xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g')`"
+egrep 'ifcfg-[a-z0-9]+$' | xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g') 2> /dev/null`"
 tunnels="`(cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
-xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^tnlcfg-//g')`"
+xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^tnlcfg-//g') 2> /dev/null`"
 
 # See how we were called.
 case "$1" in
