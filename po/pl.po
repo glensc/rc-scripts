@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.31 2000/09/19 12:46:44 saq Exp $
+# $Id: pl.po,v 1.32 2000/09/19 13:36:54 saq Exp $
 #
 # ,fuzzy
 msgid ""
@@ -400,3 +400,63 @@ msgstr "Ustawienie /etc/ld.so.cache"
 # (4 + "\b" * count of letters) in one of five previous words
 #~ msgid "\b\b\b\b\b\b\b\b"
 #~ msgstr "\b\b\b\b\b\b\b\b\b\b\b\b"
+
+#: ../sysconfig/network-scripts/ifup:16
+msgid "usage: ifup <device name>"
+msgstr "Uzycie: ifup <nazwa urzadzenia>"
+
+#: ../sysconfig/network-scripts/ifup:24
+msgid "Users cannot control this device."
+msgstr "Uzytkownicy nie moga kontrolowac tego urzadzenia."
+
+#: ../sysconfig/network-scripts/ifup:135
+msgid "Determining IP information for %s"
+msgstr "Ustalanie informacji IP dla %s"
+
+#: ../sysconfig/network-scripts/ifup:138 ../sysconfig/network-scripts/ifup:145
+msgid " done."
+msgstr " zrobione."
+
+#: ../sysconfig/network-scripts/ifup:140 ../sysconfig/network-scripts/ifup:147
+msgid " failed."
+msgstr " problemy."
+
+#: ../sysconfig/network-scripts/ifup-sl:41
+msgid "/usr/sbin/dip does not exist or is not executable"
+msgstr "/usr/sbin/dip nie istnieje lub nie jest wykonywalny"
+
+#: ../sysconfig/network-scripts/ifup-sl:44
+msgid "/usr/sbin/dip does not exist or is not executable for %s"
+msgstr "/usr/sbin/dip nie istnieje lub nie jest wykonywalny dla %s"
+
+#: ../sysconfig/network-scripts/ifup-sl:42
+msgid "ifup-sl for $DEVICE exiting"
+msgstr "ifup-sl dla $DEVICE konczy"
+
+#: ../sysconfig/network-scripts/ifup-sl:53
+msgid "does not exist"
+msgstr "nie istnieje"
+
+#: ../sysconfig/network-scripts/ifup-sl:56
+msgid "does not exist for %s"
+msgstr "nie istnieje dla %s"
+
+#: ../sysconfig/network-scripts/ifup-sl:63
+msgid "dip started for %s on %s at %s"
+msgstr "dip wystartowal dla %s na %s przy %s"
+
+#: ../sysconfig/network-scripts/ifup-sl:93
+msgid "slattach started for %s on %s at %s"
+msgstr "slattach wystartowal dla %s na %s przy %s"
+
+#: ../sysconfig/network-scripts/ifup-sl:84
+msgid "/sbin/slattach does not exist or is not executable"
+msgstr "/sbin/slattach nie istnieje lub nie jest wykonywalny"
+
+#: ../sysconfig/network-scripts/ifup-sl:87
+msgid "/sbin/slattach does not exist or is not executable for %s"
+msgstr "/sbin/slattach nie istnieje lub nie jest wykonywalny dla %s"
+
+#: ../sysconfig/network-scripts/ifup-sl:85
+msgid "exiting"
+msgstr "konczy"
