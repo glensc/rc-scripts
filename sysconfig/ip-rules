@@ -7,7 +7,7 @@
 # destination arguments: table IP/name, address, realms
 #
 # Entry format:
-<rule>	<rule-arg>	<dest>	<dest-arg>
+#<rule>	<rule-arg>	<dest>	<dest-arg>
 
 # examples:
 #from 10.0.1/24 	table	100
