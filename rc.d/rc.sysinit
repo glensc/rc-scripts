@@ -372,6 +372,11 @@ if [ $usb = "1" ]; then
 	fi
 fi
 
+# Load usb storage here, to match most other things
+if [ -n "$needusbstorage" ]; then
+        modprobe usb-storage >/dev/null 2>&1
+fi
+
 # Load sound modules if they need persistent DMA buffers
 if grep -q "options sound dmabuf=1" /etc/modules.conf 2>/dev/null ; then
 	RETURN=0
@@ -679,11 +684,6 @@ if [ -f /proc/scsi/scsi ] && grep -q 'Type:   Sequential-Access' /proc/scsi/scsi
 			insmod -p st >/dev/null 2>&1 && modprobe -s st >/dev/null 2>&1
 		fi
 	fi
-fi
-
-# Load usb storage here, to match most other things
-if [ -n "$needusbstorage" ]; then
-        modprobe usb-storage >/dev/null 2>&1
 fi
 
 # There could be a new kernel version. Remove old psdevtab database
