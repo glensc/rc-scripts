@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.14 1999/12/18 16:26:30 kloczek Exp $
+# $Id: pl.po,v 1.15 2000/01/31 14:29:38 misiek Exp $
 #
 msgid ""
 msgstr ""
@@ -119,34 +119,34 @@ msgstr "Host:"
 # ../rc.d/rc.sysinit:95
 # ../rc.d/rc.sysinit:238
 msgid ""
-"\n"
-"\n"
-"*** An error occurred during the file system check.\n"
-"*** Dropping you to a shell; the system will reboot\n"
-"*** when you leave the shell.\n"
+"*** An error occurred during the file system check."
 msgstr ""
-"\n"
-"\n"
-"*** Podczas sprawdzania systemow plikow wykryto blad niemozliwy do "
-"usuniecia\n"
-"*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
-"*** naprawic uszkodzenie. Po wyjsciu z popwloki system zostanie\n"
-"*** automatycznie zrestartowany.\n"
+"*** Podczas sprawdzania systemow plikow wykryto blad niemozliwy do usuniecia."
+
+msgid ""
+"*** Dropping you to a shell; the system will reboot"
+msgstr ""
+"*** Uruchamiam powloke; system zostanie zrestartowany"
+
+msgid ""
+"*** when you leave the shell."
+msgstr ""
+"*** po opuszczeniu powloki."
 
 # ../rc.d/rc.sysinit:214
 msgid ""
-"\n"
-"\n"
-"*** An error occurred during the RAID startup\n"
-"*** Dropping you to a shell; the system will reboot\n"
-"*** when you leave the shell.\n"
+"*** An error occurred during the RAID startup"
 msgstr ""
-"\n"
-"\n"
-"*** Podczas inicjacji urzadzen RAID wykryto blad niemozliwy do usuniecia\n"
-"*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
-"*** naprawic uszkodzenie. Po wyjsciu z powloki system zostanie\n"
-"*** automatycznie zrestartowany.\n"
+"*** Podczas inicjacji urzadzen RAID wykryto blad niemozliwy do usuniecia."
+
+msgid ""
+"*** Dropping you to a shell; the system will reboot"
+msgstr ""
+"*** Uruchamiam powloke; system zostanie zrestartowany"
+msgid ""
+"*** when you leave the shell."
+msgstr ""
+"*** po opuszczeniu powloki."
 
 msgid "Initializing random number generator"
 msgstr "Inicjalizacja generatora liczb losowych"
