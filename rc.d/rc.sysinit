@@ -714,9 +714,12 @@ for afile in /var/lock/* /var/run/*; do
 	fi
 done
 # Delete stale files
-rm -f /var/lib/rpm/__db*
-rm -f /var/spool/postoffice/.pid.*
-
+rm -f /var/lib/rpm/__db* /var/spool/postoffice/.pid.* /tmp/.X*-lock \
+	/tmp/.lock.* /tmp/.gdm_socket /tmp/.s.PGSQL.*
+rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
+	/tmp/kde-* /tmp/ksocket-* /tmp/mc-* /tmp/mcop-* /tmp/orbit-*  \
+	/tmp/scrollkeeper-*  /tmp/ssh-*
+	      
 {
 # Clean up utmp/wtmp
 if ! is_no "$NEED_XFILES" ; then
