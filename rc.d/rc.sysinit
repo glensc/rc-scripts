@@ -704,9 +704,17 @@ rm -f /etc/psdevtab
 
 # Now that we have all of our basic modules loaded and the kernel going,
 # let's dump the syslog ring somewhere so we can find it later
-mv -f /var/log/dmesg /var/log/dmesg.old
-dmesg > /var/log/dmesg
-chmod 640 /var/log/dmesg /var/log/dmesg.old
+dmesg -s 131072 > /var/log/dmesg
+i=5
+while [ $i -ge 0 ]; do
+        if [ -f /var/log/dmesg.$i ]; then
+            chmod 0600 /var/log/dmesg.$i
+            mv -f /var/log/dmesg.$i /var/log/dmesg.$(($i+1))
+        fi
+        i=$(($i-1))
+done
+cp -f /var/log/dmesg /var/log/dmesg.0
+chmod 0600 /var/log/dmesg /var/log/dmesg.0
 
 kill -TERM $(/sbin/pidof getkey) >/dev/null 2>&1
 } &
