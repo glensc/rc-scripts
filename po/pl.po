@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.32 2000/09/19 13:36:54 saq Exp $
+# $Id: pl.po,v 1.33 2001/02/12 20:30:48 zagrodzki Exp $
 #
 # ,fuzzy
 msgid ""
@@ -394,8 +394,8 @@ msgstr "Ustawienie /etc/ld.so.cache"
 #~ msgid "Date set to"
 #~ msgstr "Data ustawiona na"
 
-#~ msgid "to enter interactive startup."
-#~ msgstr "zeby wejsc w tryb interaktywny"
+msgid "to enter interactive startup."
+msgstr "zeby wejsc w tryb interaktywny."
 
 # (4 + "\b" * count of letters) in one of five previous words
 #~ msgid "\b\b\b\b\b\b\b\b"
