@@ -24,10 +24,14 @@ address is in a complete Class A, B, or C network. Many networks do
 not use the default netmasks, in which case an inappropriate value will
 be returned.
 
+.IP \fI--prefix\fR
+That same as \fB--netmask\fR but returns prefix (see CIDR specyfication)
+
 .IP \fI--network\fR 
 Display the network address for the given IP address and netmask.
 
 .SH AUTHOR
 .nf
 Erik Troan <ewt@redhat.com>
+Modifications: Arkadiusz Miskiewicz <misiek@pld.org.pl>
 .fi
