@@ -21,6 +21,47 @@ INIT_COL=67
 
 [ -z "$COLUMNS" ] && COLUMNS=80
 
+is_yes()
+{
+	# Test syntax
+	if [ $# = 0 ] ; then
+		msg_usage " is_yes {value}"
+		return 2
+	fi
+
+	# Check value
+	case "$1" in
+	  yes|Yes|YES|true|True|TRUE|on|On|ON|Y|y|1)
+		# true returns zero
+		return 0
+		;;
+	  *)
+		# false returns one
+		return 1
+		;;
+	esac
+}
+
+is_no()
+{
+	# Test syntax
+	if [ $# = 0 ] ; then
+		msg_usage " is_no {value}"
+		return 2
+	fi
+
+	case "$1" in
+	  no|No|NO|false|False|FALSE|off|Off|OFF|N|n|0)
+		# true returns zero
+		return 0
+		;;
+	  *)
+		# false returns one
+		return 1
+		;;
+	esac
+}
+
 if is_yes "$FASTRC"; then
 	INIT_DOTS=$(awk "BEGIN{for(\$i=0;\$i<$INIT_COL;\$i++)printf(\".\");}")
 	initlog()
@@ -535,47 +576,6 @@ confirm() {
 	  *)
 		confirm $1
 		return $?
-		;;
-	esac
-}
-
-is_yes()
-{
-	# Test syntax
-	if [ $# = 0 ] ; then
-		msg_usage " is_yes {value}"
-		return 2
-	fi
-
-	# Check value
-	case "$1" in
-	  yes|Yes|YES|true|True|TRUE|on|On|ON|Y|y|1)
-		# true returns zero
-		return 0
-		;;
-	  *)
-		# false returns one
-		return 1
-		;;
-	esac
-}
-
-is_no()
-{
-	# Test syntax
-	if [ $# = 0 ] ; then
-		msg_usage " is_no {value}"
-		return 2
-	fi
-
-	case "$1" in
-	  no|No|NO|false|False|FALSE|off|Off|OFF|N|n|0)
-		# true returns zero
-		return 0
-		;;
-	  *)
-		# false returns one
-		return 1
 		;;
 	esac
 }
