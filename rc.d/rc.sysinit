@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.62 2000/05/30 05:49:46 waszi Exp $
+# $Id: rc.sysinit,v 1.63 2000/06/01 19:33:25 baggins Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -248,7 +248,9 @@ echo ${HOSTNAME} > /etc/HOSTNAME
 mount -f /
 mount -f /proc
 
-if ! grep -i nomodules /proc/cmdline >/dev/null && [ -f /proc/ksyms ]; then
+if [ ! -f /proc/modules ]; then
+	USEMODULES=
+elif ! grep -i nomodules /proc/cmdline >/dev/null ; then
 	USEMODULES=y
 else
 	USEMODULES=
