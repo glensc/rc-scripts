@@ -6,7 +6,7 @@
 #               Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.8 2000/05/30 05:51:34 waszi Exp $
+# $Id: rc.shutdown,v 1.9 2000/06/18 09:52:05 kloczek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -40,25 +40,22 @@ fi
 # Unmount file systems, killing processes if we have to.
 sig=
 retry=3
-remaining=`awk '!/(^#| (proc|devfs|devpts|\/) |^none|^\/dev\/root)/ {print $2}' /proc/mounts`
+remaining=`awk '!/(^#|proc|loopfs|devfs|devpts|^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts`
 while [ -n "$remaining" -a "$retry" -gt 0 ]
 do
-	_ERRORS=""
 	show "Unmounting file systems"; busy
-	if _ERRORS="`LC_ALL=C;LANG=C;initlog -c \"umount -a -f -t noproc\" 2>&1`"; then
-    		deltext; ok
+	if [ "$retry" -lt 3 ]; then
+		run_cmd "Unmounting file systems"  umount -a -f -t noproc
 	else
-    		deltext; fail; echo $_ERRORS
+		run_cmd "Unmounting file systems"  umount -a -f -t noproc
 	fi
-	unset _ERRORS
-        
 	sleep 2
-        remaining=`awk '!/(^#| (proc|devfs|devpts|\/) |^none|^\/dev\/root)/ {print $2}' /proc/mounts`
-        [ -z "$remaining" ] && break
-        [ -x /sbin/fuser ] && /sbin/fuser -k -m $sig $remaining >/dev/null 2>/dev/null
-        sleep 5
-        retry=$(($retry-1))
-        sig=-9
+	remaining=`awk '!/(^#|proc|loopfs|devfs|devpts|^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts`
+	[ -z "$remaining" ] && break
+	/sbin/fuser -k -m $sig $remaining >/dev/null
+	sleep 5
+	retry=$(($retry-1))
+	sig=-9
 done
 
 run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
