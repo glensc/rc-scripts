@@ -182,6 +182,9 @@ if is_yes "${AUTH}"; then
 elif is_no "${AUTH}"; then
   opts="$opts noauth"
 fi
+if [ -n "$PASSWORD" ]; then
+  opts="$opts plugin ifcfg-password.so ifcfg /etc/sysconfig/interfaces/$CONFIG"
+fi
 
 if ! is_no "${UNIT}"; then
     UNIT=$(echo "${DEVICE}" | awk ' { gsub(/ppp/,NUL); print $0} ')
