@@ -1,3 +1,8 @@
+2003-08-07  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit:
+	- add support for mdadm when trying to start RAID devices
+
 2003-08-06  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
 
 	* dumb.sh: - from athcool.init
