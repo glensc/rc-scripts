@@ -1,5 +1,11 @@
 2003-07-10  Jan Rêkorajski  <baggins@pld-linux.org>
 
+	* sysconfig/interfaces/ifcfg-description:
+	- description for VLAN_REORDER_HDR
+
+	* sysconfig/network-scripts/ifup-vlan:
+	- seems like API changed, allow REORDER_HDR on VLANs
+
 	* rc.d/init.d/network:
 	- we should stop bridges first if we are staring them last
 
