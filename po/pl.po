@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.4 1999/09/27 14:24:52 wiget Exp $
+# $Id: pl.po,v 1.5 1999/09/27 14:53:27 kloczek Exp $
 #
 msgid ""
 msgstr ""
@@ -26,7 +26,7 @@ msgid "%sResource Manager: %sLeaving runlevel number%s"
 msgstr "%sZarzadca zasobow: %sOpuszczam poziom%s"
 
 msgid "Configured devices:"
-msgstr "Skonfigurowane urz±dzenia sieciowe:"
+msgstr "Skonfigurowane urzadzenia sieciowe:"
 
 msgid "Checking root filesystems."
 msgstr "Sprawdzanie glownego systemu plikow."
@@ -42,10 +42,10 @@ msgstr "Aktywne punkty przylaczenia SMB:"
 
 # ../rc.d/init.d/functions.network:160
 msgid "Setting up IP spoofing protection"
-msgstr ""
+msgstr "Ustawienie zabezpieczenia przed IP spoofingiem"
 
 msgid "Setting clock"
-msgstr "Ustawienie zegara"
+msgstr "Ustawienie zegara systemowego"
 
 msgid "Mounting NCP filesystems"
 msgstr "Podlaczam systemy plikow typu NCP"
@@ -54,7 +54,7 @@ msgid "Mounting SMB filesystems"
 msgstr "Podlaczam systemy plikow typu SMB"
 
 msgid "Automatic reboot in progress."
-msgstr "Automatyczny reboot w toku."
+msgstr "Automatyczny restart w toku."
 
 msgid "/proc filesystem unavailable"
 msgstr "System plikow /proc niedostepny"
@@ -74,7 +74,7 @@ msgstr "Odlaczenie systemow plikow typu SMB"
 
 # ../rc.d/init.d/functions:275
 msgid "%s dead but pid file exists"
-msgstr ""
+msgstr "%s zabity ale plik z numerem procesu istnieje"
 
 msgid "Configured SMB mountpoints:"
 msgstr "Skonfigurowane punkty przylaczenia SMB"
@@ -86,7 +86,7 @@ msgid "Mounting remote filesystems"
 msgstr "Podlaczam zdalne systemy plikow"
 
 msgid "Configured NFS mountpoints:"
-msgstr "Skonfigurowane punkty przy³aczenia NFS"
+msgstr "Skonfigurowane punkty przylaczenia NFS"
 
 msgid "Automatic reboot in progress"
 msgstr "Automatyczny reboot w toku"
@@ -99,7 +99,7 @@ msgstr "Wysylanie do wszystkich procesow sygnalu KILL"
 
 # ../rc.d/init.d/random:56
 msgid "The random data source is missing"
-msgstr ""
+msgstr "Oczekiwane ¬ród³o losowych danych"
 
 msgid "BUSY"
 msgstr " ZAJETY "
@@ -134,10 +134,10 @@ msgstr "Ladowanie modul obslugi dzwieku"
 
 # ../rc.d/init.d/functions:251
 msgid "Usage: status {program}\n"
-msgstr ""
+msgstr "Uzycie: status {program}\n"
 
 msgid "Remounting root filesystem in ro mode"
-msgstr "Przelaczenie glownego systemu plikow w tryb ro"
+msgstr "Przelaczenie glownego systemu plikow w tryb tylko do odczytu"
 
 msgid "Enabling dynamic IP patch"
 msgstr ""
@@ -147,24 +147,24 @@ msgstr "Przesylanie wartosci %s do /proc/sys/kernel/panic"
 
 # ../rc.d/init.d/functions:220
 msgid "Usage: pidofproc {program}\n"
-msgstr ""
+msgstr "Uzycie: pidofproc {program}\n"
 
 msgid "The system is halted"
-msgstr "System jest zatrzymany"
+msgstr "Dzialanie systemu zatrzymane"
 
 # ../rc.d/init.d/functions:157
 msgid "Usage: killproc {program} [signal]"
-msgstr ""
+msgstr "Uzycie: killproc {program} [signal]"
 
 msgid "Remounting root filesystem in rw mode"
-msgstr "Przelaczenie glownego systemu plikow w tryb rw"
+msgstr "Przelaczenie glownego systemu plikow w tryb zapis/odczyt"
 
 msgid "Please stand by while rebooting the system"
 msgstr "Prosze czekac - restart system"
 
 # ../rc.d/rc.sysinit:61
 msgid "Host:"
-msgstr ""
+msgstr "Host:"
 
 msgid "Unmounting remote filesystems"
 msgstr "Odlaczanie zdalnych systemow plikow"
@@ -215,7 +215,7 @@ msgstr "Wyszukiwanie powiazan pomiedzy modulami"
 
 # ../rc.d/init.d/functions:281
 msgid "%s dead but subsys locked"
-msgstr ""
+msgstr "%s zabity ale podsystem zablokowany"
 
 msgid "Unmounting file systems"
 msgstr "Odlaczenie systemow plikow"
@@ -256,13 +256,13 @@ msgstr "Ustawienie zakresu portow lokalnych"
 
 # ../rc.d/init.d/shutdwn:53
 msgid "Turning off RAID for $mddev"
-msgstr ""
+msgstr "Wylaczenie obslugi RAID dla $mddev"
 
 msgid "*** Dropping you to a shell; the system will reboot"
 msgstr "*** Przenosze Cie do powloki; system zostanie zrestartowany"
 
 msgid "Remounting remaining filesystems ro mode"
-msgstr "Przelaczenie pozostalych systemow plikow w trym ro"
+msgstr "Przelaczenie pozostalych systemow plikow w tryb tylko do odczytu"
 
 msgid "WORK"
 msgstr "AKTYWUJE"
@@ -290,7 +290,7 @@ msgstr "Wlaczam quote na lokalnych systemach plikow"
 
 # ../rc.d/init.d/random:54
 msgid "The random data source exists"
-msgstr ""
+msgstr "Zrodlo losowych danych istnieje"
 
 msgid "Mounting NFS filesystems"
 msgstr "Podlaczenie systemow plikow typu NFS"
