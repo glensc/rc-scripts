@@ -1,8 +1,7 @@
-dnl $Id: configure.in,v 1.41 2002/03/19 18:17:58 misiek Exp $
-PACKAGE=rc-scripts
-VERSION=0.4.0
+dnl $Id: configure.ac,v 1.1 2002/05/11 09:30:50 misiek Exp $
 
-AC_INIT($PACKAGE, $VERSION, [pld-rc-scripts@pld.org.pl])
+AC_INIT(["rc-scripts"], ["0.4.0"], [pld-rc-scripts@pld.org.pl], [rc-scripts])
+AM_INIT_AUTOMAKE
 
 ALL_LINGUAS="pl"
 
@@ -10,14 +9,13 @@ echo -n "Finding shell scripts"
 SHSCRIPTS=""
 for shfile in $(find rc.d sysconfig -type f); do
     echo -n "."
-    if (file ${shfile} | grep -q 'shell script'); then
+    if (LANG=C file ${shfile} | grep -q 'shell script'); then
 	SHSCRIPTS="${SHSCRIPTS} ${shfile}"
     fi
 done
 echo "done"
 
 dnl Checks for programs.
-AC_ARG_PROGRAM
 AC_PROG_CC
 AC_ISC_POSIX
 AC_PROG_INSTALL
