@@ -89,15 +89,11 @@ case "$1" in
   status)
 	echo "Configured devices:"
 	echo "lo $interfaces"
-
-	echo "Currently active devices:"
-	echo "`/sbin/ifconfig | grep ^[a-z] | awk '{print $1}'`"
-
 	echo "Configured tunnels:"
 	echo "$tunnels"
 
-	echo "Currently active tunnels:"
-	echo "`/sbin/ip tunnel show | egrep -v "^sit0|^tunl0" | cut -d":" -f1 | xargs`"
+	echo "Currently active devices:"
+	/sbin/ip link show | egrep '^[^ ].*' |sed 's/[0-9]*: \(.*\):.*/\1/'|xargs
 	;;
   restart)
 	$0 stop
