@@ -747,10 +747,6 @@ rm -f /var/lib/rpm/__db* /var/spool/postoffice/.pid.* /tmp/.X*-lock \
 rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
 	/tmp/kde-* /tmp/ksocket-* /tmp/mc-* /tmp/mcop-* /tmp/orbit-*  \
 	/tmp/scrollkeeper-*  /tmp/ssh-*
-# Make ICE directory
-mkdir -m 1777 -p /tmp/.ICE-unix > /dev/null 2>&1
-chown root:root /tmp/.ICE-unix
-restorecon /tmp/.ICE-unix > /dev/null 2>&1
 
 {
 # Clean up utmp/wtmp
@@ -770,6 +766,12 @@ fi
 if is_yes "$CLEAN_TMP"; then
 	rm -rf /tmp/* /tmp/.[a-zA-Z0-9]*
 fi
+
+# System protected dirs
+mkdir -m 1777 -p /tmp/.ICE-unix > /dev/null 2>&1
+chown root:root /tmp/.ICE-unix
+restorecon /tmp/.ICE-unix > /dev/null 2>&1
+
 
 # Right, now turn on swap in case we swap to files
 swapon -a >/dev/null 2>&1
