@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.46 2000/11/16 15:58:54 baggins Exp $
+# $Id: functions.network,v 1.47 2001/05/13 17:10:17 baggins Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -114,7 +114,7 @@ fi
 
 set_hostname()
 {
-local hostname domain
+typeset hostname domain
 hostname=$(echo $1 | awk ' { gsub(/\..*$/,NIL); print $0; } ')
 domain=$(echo $1 | awk ' { sub(/^[^\.]*\./,NIL); print $0; } ')
 
@@ -199,7 +199,7 @@ if [ -n "$VARD" -a -e /proc/sys/net/$WHAT ]; then
 	        is_no "$VARD" && [ "$SET" = "1" ] && SET="$(($SET - 1))"
 		is_yes "$VARD" && [ "$SET" = "0" ] && SET="$(($SET + 1))"
 		if [ -n "$MESSAGE" ]; then
-			show "`nls "Setting %s to %s" "$MESSAGE" "$SET"`"; busy
+			show "`nls 'Setting %s to %s' "$MESSAGE" "$SET"`"; busy
 			if (echo "$SET" > /proc/sys/net/$WHAT) 2> /dev/null; then
 				deltext; ok
 			else
@@ -210,7 +210,7 @@ if [ -n "$VARD" -a -e /proc/sys/net/$WHAT ]; then
 		fi
 	elif [ "$TODO" = "stop" ]; then
 		if [ -n "$MESSAGE" ]; then
-			show "`nls "Setting %s to %s" "$MESSAGE" "$DEF"`"; busy
+			show "`nls 'Setting %s to %s' "$MESSAGE" "$DEF"`"; busy
 			if (echo "$DEF" > /proc/sys/net/$WHAT) 2> /dev/null; then
 				deltext; ok
 			else
@@ -364,7 +364,7 @@ fi
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 #
 calcprefix() {
-local OISF len olen bad prefix
+typeset OISF len olen bad prefix
 OISF=$IFS
 IFS="."
 prefix=0
@@ -405,7 +405,7 @@ return
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 #
 calcnetmask() {
-local prefix a MASK
+typeset prefix a MASK
 MASK=""
 if [ "`echo "${1}" | grep "^[0-9]"`" = "" ]; then
 	prefix=32

@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.62 2000/12/14 09:49:25 jajcus Exp $
+# $Id: functions,v 1.63 2001/05/13 17:10:17 baggins Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -51,7 +51,7 @@ termput()
 # printf equivalent
 printf_()
 {
-	local text m
+	typeset text m
 	text="$1" ;
 	shift ;
 	if [ $# -gt 0 ]; then
@@ -68,7 +68,7 @@ printf_()
 # National language support function
 nls()
 {
-	local msg_echo old_nls_domain text message
+	typeset msg_echo old_nls_domain text message
 	msg_echo='\n'
 	old_nls_domain="$NLS_DOMAIN"
 	# parse command line
@@ -144,7 +144,7 @@ msg_usage()
 # Some functions to handle PLD-style messages
 show() 
 {	
-	local text
+	typeset text
 	text=$(nls "$@")
 	echo -n "$text"
 	awk "BEGIN { for (j=length(\"$text\"); j<$INIT_COL; j++) printf \".\" }"
@@ -156,7 +156,7 @@ show()
 # used).
 progress()
 {
-	local COLOR
+	typeset COLOR
 	if [ -n "$2" ]; then COLOR="$2"; else COLOR="2"; fi
 	deltext
 	echo -n "$(termput setaf 6)[$(termput setaf "$COLOR") $(nls --nls-domain rc-scripts "$1") $(termput setaf 6)]$(termput op)"
@@ -201,7 +201,7 @@ deltext()
 # Usage run_cmd Message command_to_run
 run_cmd()
 {
-	local exit_code errors message force_err
+	typeset exit_code errors message force_err
 	typeset -i force_err=0
 	typeset -i exit_code=0
 	case "$1" in
@@ -228,7 +228,7 @@ run_cmd()
 # A function to start a program (now it's usefull on read-only filesystem too)
 daemon() 
 {
-	local nicelevel exit_code errors prog
+	typeset nicelevel exit_code errors prog
 	typeset -i nicelevel=0
 	typeset -i exit_code=0
 	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
@@ -276,7 +276,7 @@ daemon()
 # A function to stop a program.
 killproc() 
 {
-	local notset killlevel base pid
+	typeset notset killlevel base pid
 	# Test syntax.
 	if [ $# = 0 ]; then
 		msg_usage " killproc {program} [signal]"
@@ -356,7 +356,7 @@ killproc()
 # A function to find the pid of a program.
 pidofproc() 
 {
-	local pid
+	typeset pid
 	# Test syntax.
 	if [ $# = 0 ] ; then
 		msg_usage " pidofproc {program}"
@@ -432,7 +432,7 @@ status()
 
 # Confirm whether we really want to run this service
 confirm() {
-	local answer
+	typeset answer
 	nls -n "Start service %s (Y)es/(N)o/(C)ontinue? [Y] " "$1"
 	read answer
 	case $answer in
@@ -509,7 +509,7 @@ is_module()
 
 _modprobe()
 {
-	local parsed single die args foo result
+	typeset parsed single die args foo result
 	parsed=no
 	while is_no "$parsed" ; do
 		case "$1" in

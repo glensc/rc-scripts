@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.54 2001/04/19 23:31:48 misiek Exp $
+#	$Id: ifup,v 1.55 2001/05/13 17:10:19 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -132,7 +132,7 @@ fi
 
 if [ -n "$DYNIP" -a "$ISALIAS" = "no" ]; then
 
-    echo -n "`nls "Determining IP information for %s" $FULLDEVNAME...`"
+    echo -n "`nls 'Determining IP information for %s' $FULLDEVNAME'...'`"
     if [ "$DYNIP" = "pump" ]; then
        if /sbin/pump -i $FULLDEVNAME ; then
           nls " done."

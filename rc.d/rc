@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.26 2000/11/16 16:01:17 baggins Exp $
+# $Id: rc,v 1.27 2001/05/13 17:10:16 baggins Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -90,9 +90,9 @@ stty onlcr -ixon 0>&1
 af2="`termput setaf 2`"
 af6="`termput setaf 6`"
 af7="`termput setaf 7`"
-text="`nls "%sResource Manager: %sEntering runlevel number" "$af2" "$af7"`"
-text_size="`nls "%sResource Manager: %sEntering runlevel number" "" ""`"
-resp_size="`nls "DONE"`"
+text="`nls '%sResource Manager: %sEntering runlevel number' "$af2" "$af7"`"
+text_size="`nls '%sResource Manager: %sEntering runlevel number' "" ""`"
+resp_size="`nls 'DONE'`"
 echo -n "$text"
 awk "BEGIN { for (j=length(\"$text_size\"); j<$INIT_COL+${#resp_size}-${#runlevel}; j++) printf \".\" }"
 echo "${af6}[${af2} $runlevel ${af6}]${af7}"
@@ -176,8 +176,8 @@ else
 fi
 
 # Say something ;)
-text="`nls "%sResource Manager: %sRunlevel has been reached" "$af2" "$af7"`"
-text_size="`nls "%sResource Manager: %sRunlevel has been reached" "" ""`"
+text="`nls '%sResource Manager: %sRunlevel has been reached' "$af2" "$af7"`"
+text_size="`nls '%sResource Manager: %sRunlevel has been reached' "" ""`"
 echo -n "$text"
 awk "BEGIN { for (j=length(\"$text_size\"); j<$INIT_COL+${#resp_size}-${#runlevel}; j++) printf \".\" }"
 echo "${af6}[${af2} $runlevel ${af6}]${af7}"
