@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-post,v 1.10 2000/03/27 16:07:52 misiek Exp $
+#	$Id: ifdown-post,v 1.11 2000/11/16 15:58:55 baggins Exp $
 #
 # This should be called whenever an interface goes down, not just when
 # it is brought down explicitly.
@@ -16,10 +16,10 @@ source_config
 
 # full device name as specified by user
 FULLDEVNAME="$DEVICE"
-# type of device for example "dummy" or "eth"
-DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
-# name of real device ie. eth0 when eth0,eth0:1,eth0:alias
-DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
+# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
+DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*$/,NUL); print $0 } ')
+# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
+DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
 if echo "$FULLDEVNAME" | grep -q ':' ; then
         ISALIAS=yes

@@ -16,7 +16,7 @@ SUFFIXES = .po .mo .gmo
 	$(MSGFMT) -o $@ $<
 
 .po.gmo: $(PACKAGE).pot
-	file=$(srcdir)/`echo $* | sed 's,.*/,,'`.gmo \
+	file=$(srcdir)/`echo $* | awk ' { gsub(/.*\//,NIL); print $0; } '`.gmo \
 	  && rm -f $$file && $(GMSGFMT) -o $$file $<
 
 $(PACKAGE).pot: Makefile $(POTSRC)
@@ -32,7 +32,7 @@ update-po: Makefile
 	catalogs='$(CATALOGS)'; \
 	for cat in $$catalogs; do \
 	  cat=`basename $$cat`; \
-	  lang=`echo $$cat | sed 's/\$(CATOBJEXT)$$//'`; \
+	  lang=`echo $$cat | awk ' { gsub(/\$(CATOBJEXT)$$/,NIL); print $0; } '`; \
 	  mv $$lang.po $$lang.old.po; \
 	  echo "$$lang:"; \
 	  if $(MSGMERGE) $$lang.old.po $(PACKAGE).pot -o $$lang.po; then \
@@ -59,7 +59,7 @@ install-data-hook: all
 	    *.gmo) destdir=$(gnulocaledir);; \
 	    *)     destdir=$(localedir);; \
 	  esac; \
-	  lang=`echo $$cat | sed 's/\$(CATOBJEXT)$$//'`; \
+	  lang=`echo $$cat | awk ' { gsub(/\$(CATOBJEXT)$$/,NIL); print $0; } '`; \
 	  dir=$(DESTDIR)$$destdir/$$lang/LC_MESSAGES; \
 	  if test -r "$(MKINSTALLDIRS)"; then \
 	    $(MKINSTALLDIRS) $$dir; \
@@ -96,7 +96,7 @@ uninstall-hook:
 	catalogs='$(CATALOGS)'; \
 	for cat in $$catalogs; do \
 	  cat=`basename $$cat`; \
-	  lang=`echo $$cat | sed 's/\$(CATOBJEXT)$$//'`; \
+	  lang=`echo $$cat | awk ' { gsub(/\$(CATOBJEXT)$$/,NIL); print $0; } '`; \
 	  rm -f $(DESTDIR)$(localedir)/$$lang/LC_MESSAGES/$(PACKAGE)$(INSTOBJEXT); \
 	  rm -f $(DESTDIR)$(localedir)/$$lang/LC_MESSAGES/$(PACKAGE)$(INSTOBJEXT).m; \
 	  rm -f $(DESTDIR)$(gnulocaledir)/$$lang/LC_MESSAGES/$(PACKAGE)$(INSTOBJEXT); \

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.21 2000/06/12 08:38:15 waszi Exp $
+#	$Id: ifup-post,v 1.22 2000/11/16 15:58:55 baggins Exp $
 #
 
 run_up() { :; }
@@ -15,10 +15,10 @@ source_config
 
 # full device name as specified by user
 FULLDEVNAME="$DEVICE"
-# type of device for example "dummy" or "eth"
-DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
-# name of real device ie. eth0 when eth0,eth0:1,eth0:alias
-DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
+# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
+DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*$/,NUL); print $0 } ')
+# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
+DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
 get_ppp_device_and_pid
 

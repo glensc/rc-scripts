@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.52 2000/11/06 19:28:05 baggins Exp $
+#	$Id: ifup,v 1.53 2000/11/16 15:58:55 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -41,10 +41,10 @@ IPSETUP=no
 
 # full network device name
 FULLDEVNAME="$DEVICE"
-# real name of device (is eth0 for eth0,eth0:1,eth0:alias)
-DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
-# detect network device type (dummy, eth ..)
-DEVICETYPE=`echo $DEVICE | sed "s/[0-9]*$//"`
+# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
+DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*$/,NUL); print $0 } ')
+# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
+DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
 if echo "$FULLDEVNAME" | grep -q ':' ; then
     ISALIAS=yes

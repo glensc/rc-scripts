@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.25 2000/09/23 20:43:05 saq Exp $
+#	$Id: ifdown,v 1.26 2000/11/16 15:58:55 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -52,8 +52,10 @@ if [ -z "$NETMASK" -a -n "$PREFIX" ]; then
 fi
 
 FULLDEVNAME="$DEVICE"
-DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
-DEVICETYPE=`echo $DEVICE | sed "s/[0-9]*$//"`
+# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
+DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*$/,NUL); print $0 } ')
+# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
+DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
 
 if [ -x $OTHERSCRIPT ]; then

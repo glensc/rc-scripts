@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.39 2000/11/06 16:24:46 baggins Exp $
+# $Id: network,v 1.40 2000/11/16 15:58:54 baggins Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -199,8 +199,7 @@ case "$1" in
 	echo "$tunnels"
 
 	nls "Currently active devices and tunnels:"
-	/sbin/ip link show | egrep '^[^ ].*' | sed 's/[0-9]*: \(.*\):.*/\1/' | \
-		awk '{ printf("%s ",$0) }'; echo
+	/sbin/ip link show | awk -F":" ' (/UP/) { print $2 }' | xargs
 	;;
   restart)
 	$0 stop
@@ -212,3 +211,6 @@ case "$1" in
 esac
 
 exit 0
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
