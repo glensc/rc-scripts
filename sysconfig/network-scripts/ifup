@@ -151,6 +151,13 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" ]; then
 		esac
 	fi
 	DHCP_ARGS="$DHCP_OPTIONS $DHCP_ARGS"
+
+	if check_link_down ${DEVICE}; then
+		if ! run_cmd "$(nls 'Determining IP information for') $DEVICE ($(basename $DHCP_CLIENT))" /bin/false
+		    	echo "${DEVIVE}: Check cable?"
+			exit 1
+		fi
+	fi
 	
 	if ! run_cmd "$(nls 'Determining IP information for') $DEVICE ($(basename $DHCP_CLIENT))" $DHCP_CLIENT $DHCP_ARGS ; then
 		exit 1

@@ -502,6 +502,48 @@ wireless_param () {
 
 }
 
+check_mii_tool ()
+{
+   [ -x /sbin/mii-tool ] || return 2
+   output=$(LC_ALL=C mii-tool $1 2>&1)
+   echo $output | LC_ALL=C grep -q "link ok" && return 1
+   echo $output | LC_ALL=C grep -q "no link" && return 0 || return 2
+}
+
+check_ethtool ()
+{
+   [ -x /sbin/ethtool ] || return 2
+   output=$(LC_ALL=C ethtool $1 2>&1)
+   echo $output | LC_ALL=C grep -q "Link detected: yes" && return 1
+   echo $output | LC_ALL=C grep -q "Link detected: no" && return 0 || return 2
+}
+
+
+check_link_down ()
+{
+    if [ -x /sbin/mii-tool -o -x /sbin/ethtool ]; then
+        if ! LC_ALL=C ip link show dev $1 2>/dev/null| grep -q UP ; then
+           ip link set dev $1 up >/dev/null 2>&1
+           timeout=0
+           while [ $timeout -le 10 ]; do
+                check_mii_tool $1
+                m=$?
+                check_ethtool $1
+                e=$?
+                if [ $m -eq 1 ] || [ $e -eq 1 ] ; then
+                    return 1
+                fi
+                if [ $m -eq 2 ] && [ $e -eq 2 ] ; then
+                    return 1
+                fi
+                usleep 500000
+                timeout=$((timeout+1))
+           done
+           return 0
+        fi
+    fi
+    return 1
+}
 
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4
