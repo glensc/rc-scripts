@@ -1,7 +1,10 @@
-# $Id: system,v 1.11 2000/03/08 16:29:11 misiek Exp $
+# $Id: system,v 1.12 2000/03/09 10:57:57 zagrodzki Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
+
+# Print status at which column
+INIT_COL=67
 
 # Messages with a higher priority than this will be printed
 # to the console (default 1)
