@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.72 2002/05/11 08:41:30 misiek Exp $
+# $Id: functions.network,v 1.73 2002/05/11 08:48:45 misiek Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -275,7 +275,7 @@ if is_yes "$IPV6_NETWORKING"; then
 	    	if [ -n "${IPV6_GLOBALROUTEGW}" ]; then
 	    	    ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR} onlink
 	    	elif [ "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
-	            ip -6 route add 2000::/3 via dev ${DEVICE} ${IP6SRCADDR}
+	            ip -6 route add 2000::/3 dev ${DEVICE} ${IP6SRCADDR}
 		fi
 	    fi
         fi
