@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.10 1999/09/13 13:37:04 misiek Exp $
+# $Id: rc,v 1.11 1999/09/15 21:20:36 wiget Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -58,7 +58,11 @@ stty onlcr -ixon 0>&1
 
 
 # Say something ;)
-text="`termput setaf 2``nls "Resource Manager:"``termput setaf 7` `nls "Leaving runlevel number"`............................................................................"
+af2="`termput setaf 2`"
+af7="`termput setaf 7`"
+line="............................................................................"
+text="`nls "%sResource Manager: %sLeaving runlevel number%s" $af2 $af7 $line`"
+unset af2 af7 line
 awk "BEGIN {printf \"%.78s\", \"$text\";}"
 echo "`termput setaf 6`[`termput setaf 2` $runlevel `termput setaf 6`]`termput setaf 7`"
 
@@ -104,7 +108,11 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 fi
 
 # Say something ;)
-text="`termput setaf 2``nls "Resource Manager:"``termput setaf 7` `nls "Runlevel has been reached"`............................................................................"
+af2="`termput setaf 2`"
+af7="`termput setaf 7`"
+line="............................................................................"
+text="`nls "%sResource Manager: %sRunlevel has been reached%s" $af2 $af7 $line`"
+unset af2 af7 line
 awk "BEGIN {printf \"%.78s\", \"$text\";}"
 echo "`termput setaf 6`[`termput setaf 2` $runlevel `termput setaf 6`]`termput setaf 7`"
 
