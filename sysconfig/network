@@ -1,4 +1,4 @@
-# $Id: network,v 1.14 2001/05/15 16:03:42 baggins Exp $
+# $Id: network,v 1.15 2001/11/05 16:58:50 kloczek Exp $
 ######################################################################
 # MAIN PART
 
@@ -14,7 +14,7 @@ IPV4_FORWARDING=no
 # Set hostname here (only hostname)
 HOSTNAME=pldmachine
 
-# Set domainname here
+# Set NIS domain name here
 NISDOMAIN=
 
 # IPv4 gateway
