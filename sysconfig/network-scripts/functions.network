@@ -64,23 +64,22 @@ if [ -n "$domain" ] ; then
 fi
 }
 
-# PLD Linux Distribution network functions
-# Copyright (C) 1999, 2000 Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
-
 # Setup Network Address Translation (NAT)
 setup_nat()
 {
 typeset src via dst
 if [ -r /etc/sysconfig/static-nat ]; then
-	grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
-		if [ "$1" = "on" ]; then
+	if [ "$1" = "on" ]; then
+		grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
 			/sbin/ip route add nat $dst via $src
 			/sbin/ip rule add from $src nat $dst
-		elif [ "$1" = "off" ]; then
+		done
+	elif [ "$1" = "off" ]; then
+		/sbin/ip route show table all | egrep "^nat[[:blank:]]" | while read nat dst via src args; do
 			/sbin/ip rule del from $src nat $dst
 			/sbin/ip route del nat $dst via $src
+		done
 	fi
-	done
 fi
 }
 
@@ -410,16 +409,16 @@ fi
 # following function setups advanced routing rules
 # Olgierd Pieczul <wojrus@pld-linux.org>
 setup_ip_rules () {
-typeset args
+typeset args prio from src
 if [ -f /etc/sysconfig/static-routes ] ; then
 	if is_yes "$1"; then
-                egrep "^(from|to|iif|tos|fwmark|dev|pref)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
+		egrep "^(from|to|iif|tos|fwmark|dev|pref|priority|prio)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
                         /sbin/ip rule add $args
                 done
         elif is_no "$1"; then
-                egrep "^(from|to|iif|tos|fwmark|dev|pref)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
-                        /sbin/ip rule del $args
-                done
+		/sbin/ip rule show | egrep -v -e "from all lookup (main|default|local) \$" -e " map-to " | while read prio from src args; do
+			[ "$src" == "all" ] && ip rule delete $args || ip rule delete $from $src $args
+		done
         fi
 fi
 }
