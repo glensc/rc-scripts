@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.15 2000/01/31 14:29:38 misiek Exp $
+# $Id: pl.po,v 1.16 2000/02/17 10:59:14 misiek Exp $
 #
 msgid ""
 msgstr ""
@@ -218,8 +218,8 @@ msgid "%sResource Manager: %sEntering runlevel number%s"
 msgstr "%sZarzadca zasobow: %sWejscie na poziom%s"
 
 # ../rc.d/rc.sysinit:224
-msgid "(RAID Repair) #"
-msgstr "(Naprawa RAID) #"
+msgid "(RAID Repair)# "
+msgstr "(Naprawa RAID)# "
 
 # ../rc.d/init.d/functions.network:145
 msgid "Setting local port range"
@@ -271,8 +271,8 @@ msgstr "Wylaczemoe swap i zliczania"
 msgid "NIS Domain:"
 msgstr "Domena NIS:"
 
-msgid "(Repair filesystem) #"
-msgstr "(Naprawa systemu plikow) #"
+msgid "(Repair filesystem)# "
+msgstr "(Naprawa systemu plikow)# "
 
 # ../rc.d/init.d/network:132
 msgid "Currently active devices and tunnels:"
