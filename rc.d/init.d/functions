@@ -307,7 +307,7 @@ show()
 			termput op
 		fi
 		echo -n "$text"
-		awk "BEGIN { for (j=length(\"$text\"); j<$INIT_COL; j++) printf \".\" }"
+		awk "BEGIN { for (j=length(\"$CHARS$text\"); j<$INIT_COL; j++) printf \".\" }"
 	fi
 }
 
