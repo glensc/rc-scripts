@@ -53,7 +53,7 @@ getkey_SOURCES = getkey.c
 getkey_LDADD = -lpopt
 
 ppp_watch_SOURCES = ppp-watch.c shvar.c shvar.h
-ppp_watch_LDADD = /usr/lib/libglib.a
+ppp_watch_LDADD = @libdir@/libglib.a
 INCLUDES = `glib-config --cflags`
 
 consoletype_SOURCES = consoletype.c
