@@ -1,3 +1,13 @@
+###########
 # $RUN_SULOGIN_ON_ERR -	if "yes" this cause run on any errors sulogin instead
 #			shell
+
 RUN_SULOGIN_ON_ERR=yes
+
+###########
+# $DO_AUTO_SETUP_MEDIA - if "yes" perform automated setting up permission on
+#			/dev/hd? devices (664 on cdrom, 660 on disk) and
+#			prepare /etc/fstab for allow mount/umout for all
+#			normal users
+
+DO_AUTO_SETUP_MEDIA=yes

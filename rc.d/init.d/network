@@ -36,7 +36,7 @@ fi
 [ -x /sbin/ifconfig ] || exit 0
 
 # Load IPv6 module
-if [ "${IP6NETWORKING}" = "yes" ]; then
+if [ "${IPV6NETWORKING}" = "yes" ]; then
        if [ -r /lib/modules/`uname -r`/ipv6/ipv6.o ]; then
        /sbin/modprobe net-pf-10
        fi
@@ -45,12 +45,11 @@ fi
 # Even if IPX is configured, without the utilities we can't do much
 [ ! -x /usr/bin/ipx_internal_net -o ! -x /usr/bin/ipx_configure ] && IPX=
 
-cd /etc/sysconfig/network-scripts
+cd /etc/sysconfig/interfaces
 
 # find all the interfaces besides loopback.
 # ignore aliases, alternative configurations, and editor backup files
-interfaces=`ls ifcfg* | egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
-            sed 's/^ifcfg-//g'`
+interfaces=`ls -1 | egrep -v ':' | egrep -v '^(lo|data)$' | egrep '[a-z0-9]+$'`
 
 ipv4_forward_set ()
 {
@@ -146,7 +145,7 @@ case "$1" in
 	ipv4_forward_set
 	ipv4_icmp_echo_ignore_broadcasts
 
-	./ifup ifcfg-lo
+	/sbin/ifup lo
 
 	case "$IPX" in
 	  yes|true)
@@ -157,7 +156,7 @@ case "$1" in
 	esac
 
 	for i in $interfaces; do
-		./ifup $i boot
+		[ -f $i ] && /sbin/ifup $i boot
 	done
 
 	ipv4_spoofing_protection
@@ -169,14 +168,14 @@ case "$1" in
 	ipv4_spoofing_protection
 
 	for i in $interfaces; do
-		./ifdown $i boot
+		[ -f $i ] && /sbin/ifdown $i boot
 	done
 	case "$IPX" in
 	  yes|true)
 	    /usr/bin/ipx_internal_net del
 	    ;;
 	esac
-	./ifdown ifcfg-lo
+	/sbin/ifdown lo
 	show "Disabling IPv4 packet forwarding"
 	busy
 	echo 0 > /proc/sys/net/ipv4/ip_forward

@@ -101,6 +101,11 @@ if [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
     fi
 fi
 
+# setup media type dependent parameters
+if [ -f /etc/rc.d/rc.media ]; then
+	. /etc/rc.d/rc.media
+fi
+
 # Remount the root filesystem read-write.
 echo "Remounting root filesystem in read-write mode."
 mount -n -o remount,rw /

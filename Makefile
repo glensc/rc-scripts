@@ -7,7 +7,8 @@ all:
 	(cd src; make CFLAGS="$(CFLAGS)")
 
 install:
-	mkdir -p $(ROOT)/etc/profile.d $(ROOT)/sbin/network-scripts $(ROOT)/etc/sysconfig/interfaces
+	install -d $(ROOT)/etc/profile.d $(ROOT)/sbin/network-scripts
+	install -d $(ROOT)/etc/sysconfig/{interfaces,ipchains.d}
 	install -m644 inittab $(ROOT)/etc
 	install -m644 adjtime $(ROOT)/etc
 	install -m644 inputrc $(ROOT)/etc
@@ -28,6 +29,9 @@ install:
 	(cd src; make install ROOT=$(ROOT))
 	mkdir -p $(ROOT)/var/run/netreport
 	chmod og=rwx,o=rx $(ROOT)/var/run/netreport
+	
+	install -m644 sysconfig/ipchains $(ROOT)/etc/sysconfig
+	cp -af sysconfig/ipchains.d $(ROOT)/etc/sysconfig
 
 tag-archive:
 	@cvs -Q tag -F $(CVSTAG)

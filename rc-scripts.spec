@@ -4,7 +4,7 @@ Summary(fr):	inittab et scripts /etc/rc.d
 Summary(pl):	inittab i skrypty startowe z katalogu /etc/rc.d
 Summary(tr):	inittab ve /etc/rc.d dosyalarý
 Name:		rc-scripts
-Version:	0.0.3
+Version:	0.0.4
 Copyright:	GPL
 Group:		Base
 Group(pl):	Bazowe	
@@ -55,8 +55,23 @@ Prereq:		/sbin/chkconfig
 %description -n net-scripts
 Scripts that activate and deactivate most network interfaces.
 
-%description -n net-scripts
+%description -l pl -n net-scripts
 Skrypty s³u¿±ce do aktywacji i deaktywacji interfejsów sieciowych
+
+%package -n ipchains-setup
+Summary:	firewall chains setup script
+Summary(pl):	skrypty konfiguruj±cy regu³y filtrowania pakietów IP
+Group:		Base
+Group(pl):	Bazowe	
+Requires:	rc-scripts = %{version}
+Requires:	ipchains
+Prereq:		/sbin/chkconfig
+
+%description -n ipchains-setup
+Script making IP firewall rules setup easier 
+
+%description -l pl -n ipchains-setup
+Skrypt u³atwiaj±cy konfigurowanie regu³ filtracji pakietów IP
 
 %prep
 %setup -q
@@ -105,6 +120,14 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del network
 fi
 
+%post -n ipchains-setup
+/sbin/chkconfig --add ipchains
+
+%preun -n ipchains-setup
+if [ "$1" = "0" ]; then
+	/sbin/chkconfig --del ipchains
+fi
+
 %files
 %defattr(644,root,root,754)
 %doc sysconfig.txt.gz
@@ -136,6 +159,7 @@ fi
 /usr/man/man1/doexec.1.gz
 
 %files -n net-scripts
+%defattr(644,root,root,754)
 %doc /etc/sysconfig/interfaces/*-template!
 %doc /etc/sysconfig/interfaces/data/chat-ppp*
 %doc net-scripts.txt.gz
@@ -163,7 +187,20 @@ fi
 /usr/man/man1/usernetctl.1.gz
 /usr/man/man1/ipcalc.1.gz
 
+%files -n ipchains-setup
+%defattr(644,root,root,754)
+%doc ipchains-setup.txt.gz
+%attr(754,root,root) /etc/rc.d/init.d/ipchains
+%attr(755,root,root) %dir /etc/sysconfig/ipchains.d/
+%attr(755,root,root) %dir /etc/sysconfig/interfaces/data
+%attr(755,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ipchains.d/*
+%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ipchains
+
 %changelog
+* Wed Apr 28 1999 Jacek Konieczny <jajcus@zeus.polsl.gliwice.pl>
+  [0.0.4-1]
+- added ipchains-setup  
+
 * Thu Apr 22 1999 Jacek Konieczny <jajcus@zeus.polsl.gliwice.pl>
   [0.0.3-1]
 - split into two packages: rc-scripts & net-scripts  
