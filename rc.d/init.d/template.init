@@ -6,7 +6,7 @@
 #
 # description:	<service> long service description
 #
-# $Id: template.init,v 1.7 2003/05/05 00:07:23 ankry Exp $
+# $Id: template.init,v 1.8 2003/05/08 17:18:33 ankry Exp $
 
 
 # Source function library
@@ -74,10 +74,8 @@ case "$1" in
 	if [ -f /var/lock/subsys/<service> ]; then
 		# show "Reload %s service" <service>
 		msg_reloading <service>
-		busy
 		killproc <service> -HUP
 		RETVAL=$?
-		[ $RETVAL -eq 0 ] && ok || died
 	else
 		# show "%s service is not running." <service>
 		msg_not_running <service>
