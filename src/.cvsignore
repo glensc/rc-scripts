@@ -8,3 +8,5 @@ usleep
 netreport
 usernetctl
 testd
+initlog
+loglevel
