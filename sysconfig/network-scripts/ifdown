@@ -1,19 +1,29 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.29 2001/06/25 20:44:49 marcus Exp $
+#	$Id: ifdown,v 1.30 2001/07/05 15:56:34 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-
-DEV=$1
-
-[ -z "$DEV" ] && {
-    echo "usage: ifdown <device name>" >&2
-    exit 1
-}
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/.functions
+
+# Will be removed in the future
+if is_yes "$NETWORKING" ; then
+	if [ -z "$IPV4_NETWORKING" ] ; then
+		echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
+		echo "Please upgrade your config"
+		echo "Assuming you want IPv4 networking"
+		IPV4_NETWORKING=yes
+	fi
+fi
+
+DEV=$1
+
+[ -z "$DEV" ] && {
+    nls "Usage: %s <device name>" "ifdown" >&2
+    exit 1
+}
 
 if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
 	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
@@ -21,7 +31,7 @@ else
 	CONFIG="$DEV"
 fi
 
-if [ `id -u` != 0 ]; then
+if [ "$(id -u)" != "0" ]; then
     if [ -x /sbin/usernetctl ]; then
         exec /sbin/usernetctl $CONFIG down
     fi
@@ -31,65 +41,70 @@ fi
 
 source_config
 
-if [ "$BOOTPROTO" = bootp ]; then
-    DYNIP=pump
+# set all major variables
+setup_ip_param
+
+OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
+
+# shutdown tleds software
+if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
+	/usr/bin/tleds -qk "$DEVICE"
+fi
+	
+if [ -x $OTHERSCRIPT ]; then
+    if [ "$HANDLING" = "0" ]; then
+    	exec $OTHERSCRIPT $CONFIG $2
+    elif [ "$HANDLING" = "1" ]; then
+    	$OTHERSCRIPT $CONFIG $2
+    fi
+fi
+
+# Check to make sure the device is actually up
+check_device_down && exit 0
+
+if [ "$BOOTPROTO" = "bootp" -o "$BOOTPROTO" = "pump" ]; then
+	/sbin/pump -r -i ${DEVICE}
+	RESULT=$?
 fi
 
 if [ "$BOOTPROTO" = "dhcp" ]; then
-    DYNIP=dhcpcd
-fi
-
-# IPv4, IPv6 or both ?
-[ -n "$IPV6_ADDR" ]             && IPv6=yes || IPv6=no
-[ -n "$IPADDR" -o -n "$DYNIP" ] && IPv4=yes || IPv4=no
-
-if [ -z "$PREFIX" -a -n "$NETMASK" ]; then
-	PREFIX="`calcprefix $NETMASK`"
-fi
-
-if [ -z "$NETMASK" -a -n "$PREFIX" ]; then
-	NETMASK="`calcnetmask $PREFIX`"
-fi
-
-FULLDEVNAME="$DEVICE"
-# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
-DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*$/,NUL); print $0 } ')
-# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
-DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
-OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
-
-if [ -x $OTHERSCRIPT ]; then
-    if [ "$DEFAULTHANDLING" = "yes" ]; then
-        $OTHERSCRIPT $CONFIG $2
-    else
-	$OTHERSCRIPT $CONFIG $2
-	exit $?
+    if [ -x /sbin/dhcpcd ];then
+        /sbin/dhcpcd -k ${DEVICE}
+	RESULT=$?
+    elif [ -x /sbin/dhclient ];then
+        if [ -f /var/run/dhclient.pid ];then
+            PID=$(cat /var/run/dhclient.pid)
+            if ps ax --no-header|grep -q $PID;then
+                kill $PID
+		RESULT=$?
+            fi
+        fi
+    elif [ -x /sbin/dhcpxd ];then
+        /sbin/dhcpxd -k ${DEVICE}
+	RESULT=$?
+    elif [ -x /sbin/pump ];then
+        pump -r -i ${DEVICE}
+	RESULT=$?
     fi
 fi
 
-if echo "$FULLDEVNAME" | grep -q ':' ; then
-    ISALIAS=yes
-else
-    ISALIAS=no
+ip link set ${DEVICE} down
+ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+
+vlan_setup
+if is_yes $ETH_VLANS && echo "$DEVICE" | grep -q '\.' ; then
+	/sbin/vconfig rem $DEVICE 2>&1 > /dev/null
 fi
 
-if [ "$ISALIAS" = "yes" ]; then
-	if [ "$IPv4" = "yes" ]; then
-		ip -family inet addr del ${IPADDR}/${PREFIX} dev ${DEVICE} label ${FULLDEVNAME}
-	fi
-		for ADDR in ${IPV6_ADDR} ; do
-			ip -family inet6 addr del ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
-		done
-else
-    if [ "$DYNIP" = "dhcpcd" ]; then
-       /sbin/dhcpcd -k $FULLDEVNAME
-    fi
-    ip link set ${DEVICE} down
-    ip addr flush dev ${DEVICE} 2> /dev/null
-    vlan_setup
-    if is_yes $ETH_VLANS && echo "$DEVICE" | grep -q '\.' ; then
-        /sbin/vconfig rem $DEVICE 2>&1 > /dev/null
-    fi
+if [ "$HANDLING" = "4" ]; then
+    exit 0
+fi
+
+if [ "$RESULT" -ne "0" ]; then
+	return $RESULT
 fi
 
 exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4

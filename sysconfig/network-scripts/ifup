@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.62 2001/06/26 14:53:27 marcus Exp $
+#	$Id: ifup,v 1.63 2001/07/05 15:56:34 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -8,17 +8,29 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 . /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/.functions
 
+# Will be removed in the future
+if is_yes "$NETWORKING" ; then
+	if [ -z "$IPV4_NETWORKING" ] ; then
+		echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
+		echo "Please upgrade your config"
+		echo "Assuming you want IPv4 networking"
+		IPV4_NETWORKING=yes
+		export IPV4_NETWORKING
+	fi
+fi
+
 need_hostname
 
+# device name must be ifcfg-somename
 DEV=$1
 
 [ -z "$DEV" ] && {
-    nls "usage: ifup <device name>" >&2
+    nls "Usage: %s <device name>" "ifup" >&2
     exit 1
 }
 
 if [ `id -u` != 0 ]; then
-    if [ -u /sbin/usernetctl ]; then
+    if [ -x /sbin/usernetctl ]; then
 	exec /sbin/usernetctl $DEV up
     fi
     nls "Users cannot control this device." >&2
@@ -39,98 +51,31 @@ fi
 
 IPSETUP=no
 
-# full network device name
-FULLDEVNAME="$DEVICE"
-# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
-DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]\.[0-9]*$/,NUL); print $0 } ')
-# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
-DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
-
-if echo "$FULLDEVNAME" | grep -q ':' ; then
-    ISALIAS=yes
-else
-    ISALIAS=no
-fi
-
-# 802.1Q VLANs
-vlan_setup
-if is_yes $ETH_VLANS && echo "$DEVICE" | grep -q '\.' ; then
-    VLANDEVICE=$(echo $DEVICE | awk ' { gsub(/\..*$/,NUL); print $0 } ')
-    VLANNUMBER=$(echo $DEVICE | awk " { gsub(/$VLANDEVICE\./,NUL); print \$0 } ") 
-    /sbin/ip link set $VLANDEVICE up
-    /sbin/vconfig add $VLANDEVICE $VLANNUMBER 2>&1 > /dev/null
-    /sbin/vconfig set_flag $DEVICE 1 2>&1 > /dev/null
-fi
-
-# Old BOOTP variable
-if is_yes "$BOOTP"; then
-    BOOTPROTO=bootp
-fi
-
-if [ "$BOOTPROTO" = bootp ]; then
-    DYNIP=pump
-fi
-
-if [ "$BOOTPROTO" = "dhcp" ]; then
-    DYNIP=dhcpcd
-fi
-
-# IPv4, IPv6 or both ?
-[ -n "$IPV6_ADDR" ]             && IPv6=yes || IPv6=no
-[ -n "$IPADDR" -o -n "$DYNIP" ] && IPv4=yes || IPv4=no
-
-# Tunnel device ?
-[ -f /etc/sysconfig/interfaces/tnlcfg-${FULLDEVNAME} ] && TNL=yes || TNL=no
-
-if [ "$TNL" = "yes" ]; then
-	TNLOPTS="onlink"
-fi
-
-if [ -z "$PREFIX" -a -z "$NETMASK" ]; then
-	PREFIX="32"
-fi
-
-if [ -z "$PREFIX" -a -n "$NETMASK" ]; then
-	PREFIX="`calcprefix $NETMASK`"
-fi
-
-if [ -z "$NETMASK" -a -n "$PREFIX" ]; then
-	NETMASK="`calcnetmask $PREFIX`"
-fi
-
-is_yes "$MULTICAST"	&& MULTICAST=on			|| MULTICAST=off
-[ -n "$SRC_ADDR" ]	&& SRC_ADDR="src ${SRC_ADDR}"	|| SRC_ADDR=""
-[ -n "$SCOPE" ]		&& SCOPE="scope ${SCOPE}"	|| SCOPE=""
-
-if [ "$ARP" ]; then
-	is_yes "$ARP"    && ARP=on	|| ARP=off
-elif [ "$DEVICETYPE" = "eth" ]; then
-	ARP=on
-else
-	ARP=off
-fi
+# set all major variables
+setup_ip_param
 
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
 if [ -x "$OTHERSCRIPT" ]; then
-    if [ "$DEFAULTHANDLING" = "yes" ]; then
+    if is_yes "$DEFAULTHANDLING" ; then HANDLING=1 ; fi
+    if [ "$HANDLING" = "0" ]; then
+    	exec $OTHERSCRIPT $CONFIG $2
+    elif [ "$HANDLING" = "1" ]; then
         $OTHERSCRIPT $CONFIG $2
-    else
-        exec $OTHERSCRIPT $CONFIG $2
     fi
 fi
 
 # is this device available? (this catches PCMCIA devices for us)
 if ! (/sbin/ip link set multicast ${MULTICAST} dev ${DEVICE} > /dev/null 2>&1); then
-    echo "Delaying ${FULLDEVNAME} initialization."
-    exit 0
+    nls "Delaying %s initialization" ${DEVICE}
+    exit 1
 fi
 
-if [ "$SLAVE" = "yes" -a "$ISALIAS" = "no" -a "$MASTER" != "" -a -x /sbin/ifenslave ]; then
-    RFLAG="" ; [ "${RECIEVE-ONLY}" = "yes" ] && RFLAG="-r"
+if is_yes "$SLAVE" && [ -n "$MASTER" -a -x /sbin/ifenslave ]; then
+    RFLAG="" && is_yes "${RECIEVE-ONLY}" && RFLAG="-r"
 
     ip link set ${DEVICE} down
-    echo "Enslaving $DEVICE to $MASTER"
+    nls "Enslaving %s to %s" "$DEVICE" "$MASTER"
     ifenslave $RFLAG "$MASTER" "$DEVICE"
 
     exit 0
@@ -140,112 +85,121 @@ if [ -n "$MACADDR" ]; then
    ip link set ${DEVICE} address ${MACADDR}
 fi
 
-if [ -n "$DYNIP" -a "$ISALIAS" = "no" ]; then
+ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} down
 
-    echo -n "`nls 'Determining IP information for %s' $FULLDEVNAME'...'`"
-    if [ "$DYNIP" = "pump" ]; then
-       if /sbin/pump -i $FULLDEVNAME ; then
-          nls " done."
-       else
-          nls " failed."
-          exit 1
-       fi
-    else
-       if /sbin/dhcpcd $FULLDEVNAME $DHCPOPTIONS ; then
-          nls " done."
-       else
-          nls " failed."
-          exit 1
-       fi
+if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
+	run_cmd "Disabling IPv6 autoconfiguration" sysctl -w net.ipv6.conf.${DEVICE}=0
+fi
+	
+if [ "$HANDLING" = "2" ]; then
+	exit 0
+fi
+
+if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" ]; then
+
+    if is_yes "$IPV4_NETWORKING"; then
+	if [ "$BOOTPROTO" = "bootp" -o "$BOOTPROTO" = "pump" ]; then
+		DHCP_CLIENT=/sbin/pump
+	fi
+    
+	if [ -z "$DHCP_CLIENT" ]; then
+		if [ -x /sbin/dhcpcd ]; then
+	       		DHCP_CLIENT=/sbin/dhcpcd
+		elif [ -x /sbin/dhclient ]; then
+			DHCP_CLIENT=/sbin/dhclient
+		elif [ -x /sbin/dhcpxd ]; then
+			DHCP_CLIENT=/sbin/dhcpxd
+		elif [ -x /sbin/pump ]; then
+			DHCP_CLIENT=/sbin/pump
+		else
+			nls "Can't find a dhcp client."
+			exit 1
+		fi
+	fi
+	
+	DHCP_ARGS=
+	if [ -n "$DHCP_CLIENT" ]; then
+		case $(basename $DHCP_CLIENT) in
+			pump)
+			[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
+			DHCP_ARGS="$DHCP_ARGS -i $DEVICE"
+			;;
+			dhcpcd)
+			[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
+			DHCP_ARGS="$DHCP_ARGS $DEVICE"
+			;;
+			dhcpxd)
+			[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-H $DHCP_HOSTNAME"
+			DHCP_ARGS="$DHCP_ARGS $DEVICE"
+			;;
+			dhclient)
+			# Can't specify a host with dhclient ?
+			DHCP_ARGS="$DEVICE"
+			;;
+		esac
+	fi
+	DHCP_ARGS="$DHCP_OPTIONS $DHCP_ARGS"
+	
+	if ! run_cmd "$(nls 'Determining IP information for') $DEVICE ($(basename $DHCP_CLIENT))" $DHCP_CLIENT $DHCP_ARGS ; then
+		exit 1
+	fi
+
+	# give time for determining IP information
+	check_device_down && sleep 1 && check_device_down && sleep 3
+	check_device_down && ip link set ${DEVICE} up
     fi
 
 else
 
-    if [ "$IPv4" = "yes" ]; then
-        if [ -z "$PREFIX" ]; then
-	    eval `/bin/ipcalc --prefix ${IPADDR}`
-        fi
+    # IPv4 in use ?
+    if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}" ] ; then
+	# If broadcast is missing then autocalculate it
+	if ! (echo $IP4ADDROPT | egrep -q "brd|broadcast"); then
+	    IP4ADDROPT="brd + ${IP4ADDROPT}"
+	fi
 
-        if [ -z "$BROADCAST" ]; then
-	    eval `/bin/ipcalc --broadcast ${IPADDR} ${NETMASK}`
-        fi
-
-        if [ -z "$NETWORK" ]; then
-	    eval `/bin/ipcalc --network ${IPADDR} ${NETMASK}`
-        fi
-    fi
-
-    # IPv4 rules
-    if [ "$IPv4" = "yes" ]; then
 	if [ -n "$REMIP" ]; then
-	    ip -family inet addr add ${IPADDR} peer ${REMIP} dev ${DEVICE} label ${FULLDEVNAME} ${SCOPE}
-	else    
-    	    ip -family inet addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME} ${SCOPE}
-	fi
-        # Another IPv4 aliases support
-        for ADDR4 in ${IPADDR_ALIASES} ; do
-	    ip -family inet addr add ${ADDR4} dev ${DEVICE} label ${FULLDEVNAME} broadcast \+
-        done
-    fi
-
-    ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
-
-    # IPv6 rules
-    if is_yes "${IPV6_NETWORKING}"; then
-      proc_net ipv6/conf/${DEVICE}/autoconf start 0 1 IPV6_AUTOCONF "IPv6 address autoconfiguration on ${DEVICE}"
-
-      for ADDR6 in ${IPV6_ADDR} ; do
-	ip -family inet6 addr add ${ADDR6} dev ${DEVICE} label ${FULLDEVNAME}
-      done  
-
-      if is_no "${IPV6_FORWARDING}" ; then
-	if [ "${GATEWAY6}" != "" ]; then
-	  if [ "${GATEWAY6DEV}" = "" -o "${GATEWAY6DEV}" = "${FULLDEVNAME}" ]; then
-		# set up default gateway
-		ip -family inet6 route add default via ${GATEWAY6} dev ${DEVICE}
-	  fi
-	fi
-      else
-	if [ "${IPV6_GLOBALROUTE}" != "" ] ; then
-	  if [ "${IPV6_GLOBALROUTEDEV}" = "" -o "${IPV6_GLOBALROUTEDEV}" = "${FULLDEVNAME}" ]; then
-	    ip -family inet6 route add 2000::/3 via ${IPV6_GLOBALROUTE} dev ${DEVICE}
-	  fi
-	fi
-      fi
-    fi
-
-    if [ "${GATEWAY}" != "" ]; then
-	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${FULLDEVNAME}" ]; then
-	    # set up default gateway
-	    ip -family inet route add default via ${GATEWAY} dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}
-	    DEFGW=${GATEWAY}
+	    ip addr add ${IP4ADDR} peer ${REMIP} dev ${DEVICE} ${IP4ADDROPT}
+	else
+	    ip addr add ${IP4ADDR} dev ${DEVICE} ${IP4ADDROPT}
 	fi
     fi
 
-    if [ "$BOOTPROTO" = bootp -a "$ISALIAS" = no ]; then
-	if [ -n "$GATEWAYS" ]; then
-	    for gw in $GATEWAYS; do
-		if [ "$gw" != "${DEFGW}" ]; then
-		    ip -family inet route add default via $gw dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}
-		fi
-	    done
-	fi
+    # Set device up
+    ip link set ${DEVICE} up
 
-	if [ -n "$DNSSRVS" -a -n "$SEARCH" ]; then
-	    echo "search $SEARCH" > /etc/resolv.conf
-	    for dns in $DNSSRVS; do
-		    echo "nameserver $dns" >> /etc/resolv.conf
-	    done
-	fi
-
-	if [ -n "$BOOTPHOSTNAME" -a -n "$NEEDHOSTNAME" ]; then
-	    set_hostname $BOOTPHOSTNAME
-	fi
+    # IPv6 in use ?
+    if is_yes "$IPV6_NETWORKING" && [ -n "${IP6ADDR}" ] ; then
+    	ip addr add ${IP6ADDR} dev ${DEVICE} ${IP6ADDROPT}
     fi
+
+    # IPv4/6 gateways and default routes
+    setup_ip_gw_ro
+fi
+
+# 802.1Q VLANs
+vlan_setup
+if is_yes $ETH_VLANS && echo "$DEVICE" | grep -q '\.' ; then
+	VLANDEVICE=$(echo $DEVICE | awk ' { gsub(/\..*$/,NUL); print $0 } ')
+	VLANNUMBER=$(echo $DEVICE | awk " { gsub(/$VLANDEVICE\./,NUL); print \$0 } ") 
+	/sbin/ip link set $VLANDEVICE up
+	/sbin/vconfig add $VLANDEVICE $VLANNUMBER 2>&1 > /dev/null
+	/sbin/vconfig set_flag $DEVICE 1 2>&1 > /dev/null
+fi
+
+if [ "$HANDLING" = "3" ]; then
+	exit 0
 fi
 
 if is_yes "$IPX"; then
 	/etc/sysconfig/network-scripts/ifup-ipx $DEVICE
 fi
 
+if [ "$HANDLING" = "4" ]; then
+	exit 0
+fi
+
 exec /etc/sysconfig/network-scripts/ifup-post $CONFIG
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
