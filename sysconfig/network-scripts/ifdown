@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.19 1999/12/19 16:04:29 jajcus Exp $
+#	$Id: ifdown,v 1.20 1999/12/20 19:36:27 jajcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -15,14 +15,6 @@ DEV=$1
 . /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/.functions
 
-if [ `id -u` != 0 ]; then
-    if [ -x /sbin/usernetctl ]; then
-        exec /sbin/usernetctl $CONFIG down
-    fi
-    echo "Users cannot control this device." >&2
-    exit 1
-fi
-
 IFCONFIGS="`ls /etc/sysconfig/interfaces/ifcfg-*|egrep -v '~$'`"
 if [ "$IFCONFIGS" ]; then
     IFCONFIGS="`egrep -L '^#!' $IFCONFIGS`"
@@ -33,6 +25,14 @@ fi
 
 if [ -z "$CONFIG" ]; then
     CONFIG="$DEV"
+fi
+
+if [ `id -u` != 0 ]; then
+    if [ -x /sbin/usernetctl ]; then
+        exec /sbin/usernetctl $CONFIG down
+    fi
+    echo "Users cannot control this device." >&2
+    exit 1
 fi
 
 source_config
