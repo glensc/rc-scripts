@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 1997-2002 Red Hat, Inc. All rights reserved.
+ *
+ * This software may be freely redistributed under the terms of the GNU
+ * public license.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ */
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -26,7 +37,7 @@ int main(int argc, char ** argv) {
     }
 
     if (argc > 1) {
-	  if (strcmp(argv[1], "-r") == 0) {
+	  if (argc == 2 && strcmp(argv[1], "-r") == 0) {
 		  action = DEL;
 	  } else {
 		  usage();

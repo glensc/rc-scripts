@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 1999-2003 Red Hat, Inc. All rights reserved.
+ *
+ * This software may be freely redistributed under the terms of the GNU
+ * public license.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ */
 
 #include <errno.h>
 #include <fcntl.h>
@@ -137,7 +148,7 @@ int monitor(char *cmdname, int pid, int numfds, int *fds, int reexec, int quiet,
     char **cmdargs=NULL;
     char **tmpargs=NULL;
     int cmdargc;
-    char *procpath;
+    char *procpath = NULL;
     
     if (reexec) {
 	procpath=malloc(20*sizeof(char));
@@ -266,8 +277,9 @@ int runCommand(char *cmd, int reexec, int quiet, int debug) {
       cmdname = basename(args[0]);
     else
       cmdname = basename(args[1]);
-    if ((cmdname[0] =='K' || cmdname[0] == 'S') && ( '0' <= cmdname[1] <= '9' )
-       && ( '0' <= cmdname[2] <= '9' ) )
+    if ((cmdname[0] =='K' || cmdname[0] == 'S') && 
+        ( cmdname[1] >= '0' && cmdname[1] <= '9' ) &&
+        ( cmdname[2] >= '0' && cmdname[2] <= '9' ) )
       cmdname+=3;
     if (!reexec) {
        pid=forkCommand(args,&fds[0],&fds[1],NULL,quiet);

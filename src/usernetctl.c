@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 1997-2003 Red Hat, Inc. All rights reserved.
+ *
+ * This software may be freely redistributed under the terms of the GNU
+ * public license.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ */
+
 #include <alloca.h>
 #include <ctype.h>
 #include <errno.h>
@@ -7,6 +19,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <limits.h>
 
 /* This will be running setuid root, so be careful! */
 static char * safeEnviron[] = {
@@ -58,6 +71,7 @@ testSafe(char *ifaceConfig) {
 
 static int
 userCtl(char *file) {
+    char *buf;
     char *contents = NULL;
     char *chptr = NULL;
     char *next = NULL;
@@ -66,7 +80,7 @@ userCtl(char *file) {
 
     size = testSafe(file);
 
-    contents = malloc(size + 2);
+    buf = contents = malloc(size + 2);
 
     if ((fd = open(file, O_RDONLY)) == -1) {
 	fprintf(stderr, "failed to open %s: %s\n", file, strerror(errno));
@@ -93,8 +107,11 @@ userCtl(char *file) {
 
 	if (!strncmp(contents, "USERCTL=", 8)) {
 	    contents += 8;
-	    if (contents[0] == '"' &&
-		contents[strlen(contents) - 1] == '"') {
+	    if ((contents[0] == '"' &&
+		 contents[strlen(contents) - 1] == '"') ||
+		(contents[0] == '\'' &&
+		 contents[strlen(contents) - 1] == '\''))
+		{
 		contents++;
 		contents[strlen(contents) - 1] = '\0';
 	    }
@@ -110,7 +127,7 @@ userCtl(char *file) {
 	contents = next;
     }
 
-    free(contents);
+    free(buf);
 
     return retval;
 }
@@ -119,24 +136,24 @@ int
 main(int argc, char ** argv) {
     char * ifaceConfig;
     char * chptr;
-    char * cmd;
+    char * cmd = NULL;
     int report = 0;
     char tmp;
 
     if (argc != 3) usage();
 
     if (!strcmp(argv[2], "up")) {
-	cmd = "/sbin/ifup";
+	cmd = "./ifup";
     } else if (!strcmp(argv[2], "down")) {
-	cmd = "/sbin/ifdown";
+	cmd = "./ifdown";
     } else if (!strcmp(argv[2], "report")) {
 	report = 1;
     } else {
 	usage();
     }
 
-    if (chdir("/etc/sysconfig/interfaces")) {
-	fprintf(stderr, "error switching to /etc/sysconfig/interfaces: "
+    if (chdir("/etc/sysconfig/network-scripts")) {
+	fprintf(stderr, "error switching to /etc/sysconfig/network-scripts: "
 		"%s\n", strerror(errno));
 	exit(1);
     }
@@ -152,8 +169,15 @@ main(int argc, char ** argv) {
     /* automatically prepend "ifcfg-" if it is not specified */
     if (strncmp(ifaceConfig, "ifcfg-", 6)) {
 	char *temp;
+        size_t len = strlen(ifaceConfig);
 
-	temp = (char *) alloca(strlen(ifaceConfig) + 7);
+	/* Make sure a wise guys hasn't tried an integer wrap-around or
+	   stack overflow attack. There's no way it could refer to anything 
+	   bigger than the largest filename, so cut 'em off there. */
+        if (len > PATH_MAX)
+		exit(1);
+
+	temp = (char *) alloca(len + 7);
 	strcpy(temp, "ifcfg-");
 	/* strcat is safe because we got the length from strlen */
 	strcat(temp, ifaceConfig);

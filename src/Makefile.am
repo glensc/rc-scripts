@@ -12,6 +12,7 @@ bin_PROGRAMS = \
 	resolvesymlink
 	
 sbin_PROGRAMS =	\
+	genhostid \
 	netreport \
 	usernetctl \
 	initlog \
@@ -32,6 +33,8 @@ resolvesymlink_SOURCE = resolvesymlink.c
 ipcalc_SOURCES = ipcalc.c
 ipcalc_LDADD = -lpopt
 
+genhostid_SOURCES = genhostid.c
+
 netreport_SOURCES = netreport.c
 
 testd_SOURCES = testd.c
@@ -47,6 +50,7 @@ initlog_SOURCES = initlog.c initlog.h process.c process.h
 initlog_LDADD = -lpopt
 
 getkey_SOURCES = getkey.c
+getkey_LDADD = -lpopt
 
 ppp_watch_SOURCES = ppp-watch.c shvar.c shvar.h
 ppp_watch_LDADD = /usr/lib/libglib.a

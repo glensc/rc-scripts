@@ -6,7 +6,7 @@
  * one argument: the logical name of the device to bring up.  Does not
  * detach until the interface is up or has permanently failed to come up.
  *
- * Copyright 1999-2001 Red Hat, Inc.
+ * Copyright 1999-2003 Red Hat, Inc.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -161,6 +161,9 @@ detach(char *device) {
     /* We're in the child process, which only writes the exit status
      * of the pppd process to its parent (i.e., it reads nothing). */
     close (pipeArray[0]);
+
+    /* Don't leak this into programs we call. */
+    fcntl(pipeArray[1], F_SETFD, FD_CLOEXEC);
 
     /* Redirect stdio to /dev/null. */
     fd = open("/dev/null", O_RDONLY);
@@ -433,7 +436,7 @@ interfaceIsUp(char *device) {
     strncpy(ifr.ifr_name, device, sizeof(ifr.ifr_name) - 1);
     ifr.ifr_name[sizeof(ifr.ifr_name) - 1] = '\0';
 
-    /* We return TRUE if the ioctl succeeded and the interface is UP. */
+    /* We return TRUE iff the ioctl succeeded and the interface is UP. */
     if (ioctl(sock, SIOCGIFFLAGS, &ifr) == -1) {
         retcode = FALSE;
     } else if (ifr.ifr_flags & IFF_UP) {
@@ -490,7 +493,7 @@ main(int argc, char **argv) {
     int maxfail = 0;		// MAXFAIL Patch <ssharkey@linux-no-limits.com>
 
     if (argc < 2) {
-	fprintf (stderr, "usage: ppp-watch [ifcfg-]<logical-name> [boot]\n");
+	fprintf (stderr, "usage: ppp-watch <interface-name> [boot]\n");
 	exit(30);
     }
 
@@ -606,7 +609,7 @@ main(int argc, char **argv) {
 	    dying = TRUE;
 
 	    /* Get the pid of our child pppd. */
-	    pppLogicalToPhysical(&pppdPid, real_device, NULL);
+	    pppLogicalToPhysical(&pppdPid, device, NULL);
 
 	    /* We don't know what our child pid is.  This is very confusing. */
 	    if (!pppdPid) {
@@ -636,7 +639,7 @@ main(int argc, char **argv) {
 	    ifcfg = shvarfilesGet(device);
 
 	    /* Get the PID of our child pppd. */
-	    pppLogicalToPhysical(&pppdPid, real_device, NULL);
+	    pppLogicalToPhysical(&pppdPid, device, NULL);
 	    kill(pppdPid, SIGTERM);
 
 	    /* We'll redial when the SIGCHLD arrives, even if PERSIST is
@@ -654,7 +657,7 @@ main(int argc, char **argv) {
 	if (theSigio) {
 	    theSigio = 0;
 
-	    pppLogicalToPhysical(NULL, real_device, &physicalDevice);
+	    pppLogicalToPhysical(NULL, device, &physicalDevice);
 	    if (physicalDevice) {
 		if (interfaceIsUp(physicalDevice)) {
 		    /* The interface is up, so report a success to a parent if
@@ -711,10 +714,11 @@ main(int argc, char **argv) {
 		break;
 	    }
 
-            /* We default to retrying the connect phase for backward
-	     * compatibility, unless RETRYCONNECT is false. */
+            /* PGB 08/20/02: We no longer retry connecting MAXFAIL
+	       times on a failed connect script unless RETRYCONNECT is
+	       true. */
 	    if ((WEXITSTATUS(status) == 8) &&
-		!svTrueValue(ifcfg, "RETRYCONNECT", TRUE)) {
+		!svTrueValue(ifcfg, "RETRYCONNECT", FALSE)) {
                 failureExit(WEXITSTATUS(status));
             }
 
@@ -740,6 +744,7 @@ main(int argc, char **argv) {
 		sleep(timeout);
 		sigprocmask(SIG_BLOCK, &blockedsigs, NULL);
 		if (!theSigterm &&
+		    !theSigint &&
 		    !theSighup &&
 		    !theSigio &&
 		    !theSigchld &&
@@ -765,13 +770,8 @@ main(int argc, char **argv) {
 		}
 		if ( maxfail != 0 ) {
 		    dialCount++;
-		    if ( dialCount < maxfail ) {
-			fork_exec(FALSE, IFUP_PPP, "daemon", device, boot);
-	   	    } else {
+		    if ( dialCount >= maxfail )
 			failureExit(WEXITSTATUS(status));
-		    }	
-		} else {	
-	   	    fork_exec(FALSE, IFUP_PPP, "daemon", device, boot);
 		} 
 	    } else {
 		failureExit(WEXITSTATUS(status));

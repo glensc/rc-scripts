@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 1999-2003 Red Hat, Inc. All rights reserved.
+ *
+ * This software may be freely redistributed under the terms of the GNU
+ * public license.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ */
 
 #include <ctype.h>
 #include <errno.h>
@@ -272,8 +283,9 @@ int logEvent(char *cmd, int eventtype,char *string) {
     
     if (cmd) {
 	logentry.cmd = strdup(basename(cmd));
-	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') && ( 30 <= logentry.cmd[1] <= 39 )
-	    && ( 30 <= logentry.cmd[2] <= 39 ) )
+	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') &&
+	    ( logentry.cmd[1] >= '0' && logentry.cmd[1] <= '9' ) &&
+	    ( logentry.cmd[2] >= '0' && logentry.cmd[2] <= '9' ) )
 	  logentry.cmd+=3;
     } else
       logentry.cmd = strdup(_("(none)"));
@@ -298,8 +310,9 @@ int logString(char *cmd, char *string) {
     
     if (cmd) {
 	logentry.cmd = strdup(basename(cmd));
-	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') && ( 30 <= logentry.cmd[1] <= 39 )
-	    && ( 30 <= logentry.cmd[2] <= 39 ) )
+	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') && 
+	    ( logentry.cmd[1] >= '0' && logentry.cmd[1] <= 0x39 ) &&
+	    ( logentry.cmd[2] >= '0' && logentry.cmd[2] <= 0x39 ) )
 	  logentry.cmd+=3;
     } else
       logentry.cmd = strdup(_(""));
@@ -412,6 +425,11 @@ int processArgs(int argc, char **argv, int silent) {
         if (!silent)
 	 fprintf(stderr, _("--name requires one of --event or --string\n"));
 	return -1;
+    }
+    if (cmdevent && cmd) {
+	    if (!silent)
+	      fprintf(stderr, _("--cmd and --run are incompatible with --event\n"));
+	    return -1;
     }
     if (conffile) {
 	readConfiguration(conffile);
