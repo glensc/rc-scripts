@@ -1,4 +1,136 @@
 ------------------------------------------------------------------------
+rev 1471:  arekm | 2003-10-31 01:49:16 +0100 (Fri, 31 Oct 2003) | 1 line
+Changed paths:
+   M /rc-scripts/trunk/configure.ac
+
+Prepare release 0.4.0.4.
+------------------------------------------------------------------------
+rev 1470:  arekm | 2003-10-31 01:47:20 +0100 (Fri, 31 Oct 2003) | 1 line
+Changed paths:
+   M /rc-scripts/trunk/rc-scripts.spec.in
+
+Include genhostid in rpm package.
+------------------------------------------------------------------------
+rev 1469:  arekm | 2003-10-31 01:46:08 +0100 (Fri, 31 Oct 2003) | 2 lines
+Changed paths:
+   M /rc-scripts/trunk/po/Makefile.am
+
+Fix handling custom builddir (until now objects were created in $(srcdir) not in builddir).
+
+------------------------------------------------------------------------
+rev 1468:  arekm | 2003-10-31 01:24:42 +0100 (Fri, 31 Oct 2003) | 2 lines
+Changed paths:
+   M /rc-scripts/trunk/configure.ac
+
+Fix finding shell scripts procedure when building with builddir different than place where configure file resides.
+
+------------------------------------------------------------------------
+rev 1467:  arekm | 2003-10-31 01:08:59 +0100 (Fri, 31 Oct 2003) | 1 line
+Changed paths:
+   M /rc-scripts/trunk/doc/consoletype.1
+   M /rc-scripts/trunk/doc/initlog.1
+   M /rc-scripts/trunk/doc/ipcalc.1
+   M /rc-scripts/trunk/doc/netreport.1
+   M /rc-scripts/trunk/doc/ppp-watch.8
+
+Update manual pages for each updated utility.
+------------------------------------------------------------------------
+rev 1466:  arekm | 2003-10-31 01:07:54 +0100 (Fri, 31 Oct 2003) | 1 line
+Changed paths:
+   M /rc-scripts/trunk/doc/Makefile.am
+   A /rc-scripts/trunk/doc/genhostid.1
+
+Include genhostid man page.
+------------------------------------------------------------------------
+rev 1465:  arekm | 2003-10-31 01:03:24 +0100 (Fri, 31 Oct 2003) | 1 line
+Changed paths:
+   M /rc-scripts/trunk/adjtime
+
+- One more zero to reflect real format of this file.
+------------------------------------------------------------------------
+rev 1464:  arekm | 2003-10-31 01:02:02 +0100 (Fri, 31 Oct 2003) | 1 line
+Changed paths:
+   M /rc-scripts/trunk/service
+
+Set default PATH and use it along with TERM when starting services.
+------------------------------------------------------------------------
+rev 1463:  arekm | 2003-10-31 00:58:03 +0100 (Fri, 31 Oct 2003) | 2 lines
+Changed paths:
+   M /rc-scripts/trunk/src/Makefile.am
+   M /rc-scripts/trunk/src/consoletype.c
+   A /rc-scripts/trunk/src/genhostid.c
+   M /rc-scripts/trunk/src/getkey.c
+   M /rc-scripts/trunk/src/initlog.c
+   M /rc-scripts/trunk/src/ipcalc.c
+   M /rc-scripts/trunk/src/netreport.c
+   M /rc-scripts/trunk/src/ppp-watch.c
+   M /rc-scripts/trunk/src/process.c
+   M /rc-scripts/trunk/src/usernetctl.c
+
+Update bunch of utils in src/. New getnhostid utility. ipcalc has enhanced PREFIX support. getkey has been rewrited to use popt (rh).
+
+------------------------------------------------------------------------
+rev 1462:  arekm | 2003-10-31 00:43:55 +0100 (Fri, 31 Oct 2003) | 2 lines
+Changed paths:
+   M /rc-scripts/trunk/rc.d/rc.sysinit
+
+Try to query 131072 bytes kernel buffer for dmesg and keep dmesg file from last five runs.
+
+------------------------------------------------------------------------
+rev 1461:  arekm | 2003-10-31 00:33:48 +0100 (Fri, 31 Oct 2003) | 2 lines
+Changed paths:
+   M /rc-scripts/trunk/rc.d/rc.sysinit
+
+Plase usbdevfs and devfs filesystems into /etc/mtab, too.
+
+------------------------------------------------------------------------
+rev 1460:  arekm | 2003-10-31 00:30:01 +0100 (Fri, 31 Oct 2003) | 2 lines
+Changed paths:
+   M /rc-scripts/trunk/rc.d/rc.sysinit
+
+Handle situation where multiple usb-controller aliases were defined and some of them were "off".
+
+------------------------------------------------------------------------
+rev 1459:  arekm | 2003-10-31 00:27:29 +0100 (Fri, 31 Oct 2003) | 2 lines
+Changed paths:
+   M /rc-scripts/trunk/rc.d/rc.sysinit
+
+Firewire modules are now loaded if proper modprobe aliases were found (from mdk).
+
+------------------------------------------------------------------------
+rev 1458:  arekm | 2003-10-31 00:21:05 +0100 (Fri, 31 Oct 2003) | 2 lines
+Changed paths:
+   M /rc-scripts/trunk/rc.d/rc.sysinit
+
+Use -e option for first swapon call. Now swapon will silently skip swap devices it they are not available at this time (like for example swap files on some partitions).
+
+------------------------------------------------------------------------
+rev 1456:  arekm | 2003-10-30 22:41:23 +0100 (Thu, 30 Oct 2003) | 2 lines
+Changed paths:
+   M /rc-scripts/trunk/sysconfig/network-scripts/ifdown
+   M /rc-scripts/trunk/sysconfig/network-scripts/ifdown-br
+
+- first flush addresses and then down interface. Previously things were done in reversed order and that caused problems on 2.6 kernels (ip flush was hanging). Additionaly things are now done in sync with how it's done in set_down_loopback().
+
+------------------------------------------------------------------------
+rev 1455:  arekm | 2003-10-28 02:09:19 +0100 (Tue, 28 Oct 2003) | 1 line
+Changed paths:
+   M /rc-scripts/trunk/rc.d/rc.sysinit
+
+- fix /sys mount and simplify check if usbfs is already mounted
+------------------------------------------------------------------------
+rev 1452:  arekm | 2003-10-26 01:34:19 +0200 (Sun, 26 Oct 2003) | 1 line
+Changed paths:
+   M /rc-scripts/trunk/ChangeLog
+
+- update for upcoming 0.4.0.3 release
+------------------------------------------------------------------------
+rev 1451:  arekm | 2003-10-26 01:32:31 +0200 (Sun, 26 Oct 2003) | 1 line
+Changed paths:
+   M /rc-scripts/trunk/configure.ac
+
+- 0.4.0.3 release
+------------------------------------------------------------------------
 rev 1445:  arekm | 2003-10-19 00:26:15 +0200 (Sun, 19 Oct 2003) | 1 line
 Changed paths:
    M /rc-scripts/trunk/rc.d/rc.sysinit
