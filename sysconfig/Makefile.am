@@ -8,7 +8,7 @@ sysconfig_DATA = \
 	system \
 	network \
 	static-routes \
-	static-nat
-	ipchains
+	static-nat \
+	i18n
 
 EXTRA_DIST = $(sysconfig_DATA)
