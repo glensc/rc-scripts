@@ -1,11 +1,11 @@
 #
-# inittab       This file describes how the INIT process should set up
-#               the system in a certain run-level.
+# inittab	This file describes how the INIT process should set up
+#		the system in a certain run-level.
 #
-#		$Id: inittab,v 1.5 2001/05/15 16:03:33 baggins Exp $
+#		$Id: inittab,v 1.6 2002/01/17 21:14:42 gotar Exp $
 #
-# Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
-#               Modified for RHS Linux by Marc Ewing and Donnie Barnes
+# Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+#		Modified for RHS Linux by Marc Ewing and Donnie Barnes
 #
 
 # Default runlevel. The runlevels used by PLD are:
@@ -16,7 +16,7 @@
 #   4 - unused
 #   5 - X11
 #   6 - reboot (Do NOT set initdefault to this)
-# 
+#
 id:3:initdefault:
 
 # System initialization.
@@ -36,10 +36,13 @@ ud::once:/sbin/update
 # Trap CTRL-ALT-DELETE
 ca::ctrlaltdel:/sbin/shutdown -t3 -r now
 
+# Trap KeyboardSignal
+#kb::kbrequest:<insert your action here>
+
 # When our UPS tells us power has failed, assume we have a few minutes
 # of power left.  Schedule a shutdown for 2 minutes from now.
 # This does, of course, assume you have powerd installed and your
-# UPS connected and working correctly.  
+# UPS connected and working correctly.
 pf::powerfail:/sbin/shutdown -f -h +2 "Power Failure; System Shutting Down"
 
 # If power was restored before the shutdown kicked in, cancel it.
