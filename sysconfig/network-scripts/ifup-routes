@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-routes,v 1.10 2001/05/16 13:12:07 baggins Exp $
+#	$Id: ifup-routes,v 1.11 2001/10/24 22:16:02 kloczek Exp $
 #
 # adds static routes which go through device $DEVICE
 
@@ -43,7 +43,7 @@ grep "^$DEVICE[[:blank:]]" /etc/sysconfig/static-routes | while read device args
 			continue
 		fi
 	fi
-	/sbin/ip route add $args dev $REALDEVICE
+	/sbin/ip route add $args dev $DEVICE
 done
 
 
