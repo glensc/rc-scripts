@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.16 2000/02/17 10:59:14 misiek Exp $
+# $Id: pl.po,v 1.17 2000/03/08 16:29:10 misiek Exp $
 #
 msgid ""
 msgstr ""
@@ -286,6 +286,33 @@ msgstr "Ladowanie podstawowy font systemowy"
 
 msgid "Setting up /etc/ld.so.cache"
 msgstr "Ustawienie /etc/ld.so.cache"
+
+msgid "Entering interactive startup"
+msgstr "Wchodze w tryb interaktywny"
+
+msgid "Entering non-interactive startup"
+msgstr "Wchodze w tryb nie interaktywny"
+
+msgid "Press"
+msgstr "Prosze wcisnac"
+
+msgid "to enter interactive startup."
+msgstr "by wejsc w tryb interaktywny."
+
+msgid "Starting Device Filesystem Daemon"
+msgstr "Startuje Zarzadce Systemu Plikow Urzadzen (DevFsd)"
+
+msgid "Turning off Magic SysRq key"
+msgstr "Wylaczam klawisz Magic SysRq"
+
+msgid "Turning off Stop-A/Break-A"
+msgstr "Wylaczam klawisz Stop-A/Break-A"
+
+msgid "Start service"
+msgstr "Wystartowac usluge"
+
+msgid "(Y)es/(N)o/(C)ontinue? [Y] "
+msgstr "(T)ak/(N)ie/(K)ontynuj? [T] "
 
 # Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
 # must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!

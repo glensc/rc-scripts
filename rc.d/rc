@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.16 2000/01/04 17:23:39 baggins Exp $
+# $Id: rc,v 1.17 2000/03/08 16:29:09 misiek Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -63,6 +63,19 @@ else
 	[ "$runlevel" = "$previous" ] && exit 0
 fi
 
+# See if we want to be in user confirmation mode
+if [ "$previous" = "N" ]; then
+	if grep -qi confirm /proc/cmdline >/dev/null \
+		|| [ -f /var/run/confirm ]; then
+		rm -f /var/run/confirm
+		CONFIRM="yes"
+		nls "Entering interactive startup"
+	else
+		CONFIRM=
+		nls "Entering non-interactive startup"
+	fi
+fi
+					  
 # set onlcr to avoid staircase effect and do not lock scrolling
 stty onlcr -ixon 0>&1
 
@@ -117,6 +130,23 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		subsys=${i#/etc/rc.d/rc$runlevel.d/S??}
 		[ -f /var/lock/subsys/$subsys ] || \
 		    [ -f /var/lock/subsys/${subsys}.init ] && continue
+
+		# If we're in confirmation mode, get user confirmation
+		[ -n "$CONFIRM" ]  &&
+		{
+			confirm $subsys
+			case $? in
+			  0)
+				:
+			  ;;
+			  2)
+				CONFIRM=
+			  ;;
+			  *)
+				continue
+			  ;;
+			esac
+		}
 
 		# Bring the subsystem up.
 		$i start

@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.37 2000/03/08 15:43:07 zagrodzki Exp $
+# $Id: functions,v 1.38 2000/03/08 16:29:10 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -103,26 +103,31 @@ show()
 
 busy() 
 {
+	termput hpa 67
 	echo -n "`termput setaf 6`[`termput setaf 5` `nls --nls-domain rc-scripts "BUSY"` `termput setaf 6`]`termput setaf 7`"
 }
 
 ok() 
 {
+	termput hpa 67
 	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "DONE"` `termput setaf 6`]`termput setaf 7`"
 }
 
 started()
 {
+	termput hpa 67
 	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "WORK"` `termput setaf 6`]`termput setaf 7`"
 }
 
 fail() 
 {
+	termput hpa 67
 	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "FAIL"` `termput setaf 6`]`termput setaf 7`"
 }
 
 died() 
 {
+	termput hpa 67
 	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "DIED"` `termput setaf 6`]`termput setaf 7`"
 }
 
@@ -327,6 +332,27 @@ status()
 	fi
 	nls "%s is stopped" "$1"
 	return 3
+}
+
+# Confirm whether we really want to run this service
+confirm() {
+	echo -n "`nls "Start service"` $1 `nls "(Y)es/(N)o/(C)ontinue? [Y] "`"
+	read answer
+	case $answer in
+		y|Y|t|T|"")
+			return 0
+		;;
+		c|C|k|K)
+			return 2
+		;;
+		n|N)
+			return 1
+		;;
+		*)
+			confirm $1
+			return $?
+		;;
+	esac
 }
 
 is_yes()

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.48 2000/02/28 12:50:45 misiek Exp $
+# $Id: rc.sysinit,v 1.49 2000/03/08 16:29:09 misiek Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -53,8 +53,13 @@ else
 fi
 
 # Print welcome message
-echo -e "\t\t\t`termput setaf 6` Powered by `termput setaf 2`PLD/Linux`termput setaf 7`"
-
+echo -e "\t\t\t`termput setaf 6`Powered by `termput setaf 2`PLD GNU/Linux`termput setaf 7`"
+if [ "$PROMPT" != "no" ]; then
+	echo -en "\t\t`nls "Press"` '`termput setaf 1`I`termput setaf 7`' `nls "to enter interactive startup."`"
+	echo
+	sleep 1
+fi
+   
 # set up devfsd
 if [ -x /sbin/devfsd -a -f /etc/devfsd.conf ]; then
 	if [ "$RUN_DEVFSD" = "yes" ]; then
@@ -65,6 +70,18 @@ fi
 # Set console loglevel
 /bin/dmesg -n $CONSOLE_LOGLEVEL
 
+# Turn off sysrq
+if [ -f /proc/sys/kernel/sysrq -a "$MAGIC_SYSRQ" = "no" ]; then
+        echo "0" > /proc/sys/kernel/sysrq
+	run_cmd "Turning off Magic SysRq key" /bin/true
+fi
+
+# Turn off Stop-A
+if [ -f /proc/sys/kernel/stop-a -a "$STOP_A" = "no" ]; then
+	echo "0" > /proc/sys/kernel/stop-a
+	run_cmd "Turning off Stop-A/Break-A" /bin/true
+fi
+				
 # we need /proc mounted before starting fsck
 mount -n -t proc /proc /proc
 
@@ -323,12 +340,21 @@ if [ -x /sbin/quotaon ]; then
 	run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -a
 fi
 
+{
 # Clean out /etc & /var/{run/*,log/{b,w}tmpx}}.
 rm -f /etc/mtab~ /fastboot /fsckoptions /forcefsck
-rm -f /var/run/utmp  
-:>/var/run/utmpx
-chown root.utmp /var/run/utmpx
-chmod 0664 /var/run/utmpx
+
+# Clean up utmp/wtmp
+:>/var/run/utmp
+touch /var/log/wtmp
+chown root.utmp /var/run/utmp /var/log/wtmp
+chmod 0664 /var/run/utmp /var/log/wtmp
+if [ -n "$NEED_XFILES" ]; then
+	:>/var/run/utmpx
+	touch /var/log/wtmpx
+	chown root.utmp /var/run/utmpx /var/log/wtmpx
+	chmod 0664 /var/run/utmpx /var/log/wtmpx
+fi
 
 # Clean /tmp
 if [ "$CLEAN_TMP" = "yes" ]; then
@@ -424,14 +450,10 @@ if [ -f /proc/scsi/scsi ] && cat /proc/scsi/scsi | grep -q 'Type:   Sequential-A
 	fi
 fi
 
-# there could be a new kernel version.  reinit /etc/psdevtab, to be sure.
+# there could be a new kernel version.  remove old psdevtab database
 rm -f /etc/psdevtab
-#if [ -x /bin/ps ]; then
-#show "Rebuilding /etc/psdevtab database"; busy
-#if (ps > /dev/null 2>&1); then deltext; ok; else deltext; fail; fi
-#fi
 
-if ([ -f /proc/sys/kernel/panic -a "$PANIC_REBOOT_TIME" -gt "0" ] 2>/dev/null); then
+if [ -f /proc/sys/kernel/panic -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
 show "`nls "Sending val. %s to /proc/sys/kernel/panic" "$PANIC_REBOOT_TIME"`"; busy
 if (echo $PANIC_REBOOT_TIME > /proc/sys/kernel/panic); then deltext; ok; else deltext; fail; fi
 fi
@@ -441,5 +463,14 @@ fi
 dmesg > /var/log/dmesg
 chmod 640 /var/log/dmesg
 
+# Now that we have all of our basic modules loaded and the kernel going,
+# let's dump the syslog ring somewhere so we can find it later
+kill -TERM `/sbin/pidof getkey` >/dev/null 2>&1
+} &
+if [ "$PROMPT" != "no" ]; then
+   /sbin/getkey i && touch /var/run/confirm
+fi
+wait
+   
 # Feed entropy into the entropy pool
 /etc/rc.d/init.d/random start

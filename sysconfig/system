@@ -1,4 +1,4 @@
-# $Id: system,v 1.10 2000/02/18 08:35:18 waszi Exp $
+# $Id: system,v 1.11 2000/03/08 16:29:11 misiek Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -45,3 +45,12 @@ RUN_LDCONFIG=yes
 
 # Start DevFS daemon to preserve compatibility with old "style" device names
 RUN_DEVFSD=no
+
+# Set to anything other than 'no' to allow hotkey interactive startup...
+PROMPT=yes
+
+# Setting this to something other than 'no' will turn on magic sysrq keys
+MAGIC_SYSRQ=yes
+
+# Setting this to something other than 'no' will turn on stop-a (Sparc only)
+STOP_A=no
