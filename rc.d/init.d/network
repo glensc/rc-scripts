@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.29 1999/12/15 18:41:07 misiek Exp $
+# $Id: network,v 1.30 1999/12/30 12:09:45 jajcus Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -52,6 +52,7 @@ proc_networking start
 
 # Setup NAT rules
 setup_nat on
+setup_routes on
 }
 
 network_postinit()
@@ -66,6 +67,7 @@ static_arp
 # - down lo interface.
 network_deinit()
 {
+setup_routes off
 # Set down NAT rules
 setup_nat off
 

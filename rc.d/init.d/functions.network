@@ -1,6 +1,6 @@
 #
-# $Id: functions.network,v 1.33 1999/12/15 18:41:07 misiek Exp $
-#
+# $Id: functions.network,v 1.34 1999/12/30 12:09:45 jajcus Exp $
+# vi:syntax=sh
 # This is not a shell script; it provides functions to network scripts
 # that source it.
 
@@ -274,17 +274,35 @@ if [ "$IPV4_ANTI_SPOOFING" != "default" -a -n "$IPV4_ANTI_SPOOFING" ] || \
 fi
 }
 
+#
+# following function sets up routes not associated to any device
+# eg. unreachable or blackhole routes
+# (c) 1999 Jacek Konieczny <jajcus@pld.org.pl>
+#
+setup_routes(){
+
+	if [ -f /etc/sysconfig/static-routes ]; then
+		if [ $1 = "on" ] ; then
+			egrep "^(none)|(any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+				/sbin/ip route add $args
+			done
+		else
+			egrep "^(none)|(any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+				/sbin/ip route del $args 2>/dev/null
+			done
+		fi
+	fi
+}
+
 # Add ONLY IPv4 address (IPv6 address is added automaticly)
 set_up_loopback()
 {
 ip link set dev lo up arp on
 ip addr add 127.0.0.1/8 dev lo
-ip route add 127.0.0.0/8 dev lo scope link
 }
 
 set_down_loopback()
 {
-ip route flush dev lo
 ip addr flush dev lo
 ip link set dev lo down
 }
@@ -385,3 +403,5 @@ done
 echo $MASK
 return
 }
+
+
