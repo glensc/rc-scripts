@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.7 1999/09/27 15:14:20 wiget Exp $
+# $Id: pl.po,v 1.8 1999/09/27 15:29:02 kloczek Exp $
 #
 msgid ""
 msgstr ""
@@ -169,6 +169,12 @@ msgid ""
 "*** Dropping you to a shell; the system will reboot\n"
 "*** when you leave the shell.\n"
 msgstr ""
+"\n"
+"\n"
+"*** Wykryto blad na jednym z systemow plikowych nie mozliwy do usuniecia\n"
+"*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
+"*** naprawic uszkodzenie. Po wyjsciu z popwloki system zostanie automatycznie\n"
+"*** zrestartowany.\n"
 
 msgid "Mounting remote filesystems, start nfsd"
 msgstr "Podlaczenie zdalnych systemow plikow, uruchomienie nfsd"
@@ -181,6 +187,12 @@ msgid ""
 "*** Dropping you to a shell; the system will reboot\n"
 "*** when you leave the shell.\n"
 msgstr ""
+"\n"
+"\n"
+"*** Wykryto blad w trakcie inicjacji urz±dzen RAID niemo¿liwy do usuniecia\n"
+"*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
+"*** naprawic uszkodzenie. Po wyjsciu z powloki system zostanie automatycznie\n"
+"*** zrestartowany.\n"
 
 msgid "Initializing random number generator"
 msgstr "Inicjalizacja generatora liczb losowych"
@@ -335,30 +347,3 @@ msgstr "Ustawienie /etc/ld.so.cache"
 
 msgid "Loading default system font"
 msgstr "Ladowanie podstawowy font systemowy"
-
-#~ msgid "*** when you leave the shell."
-#~ msgstr "*** gdy ja opuscisz."
-
-#~ msgid "*** Dropping you to a shell; the system will reboot\n"
-#~ msgstr "*** Przenosze Cie do powloki; system zostanie zrestartowany\n"
-
-#~ msgid "*** when you leave the shell.\n"
-#~ msgstr "*** gdy ja opuscisz.\n"
-
-#~ msgid "*** An error occurred during the file system check."
-#~ msgstr "*** Wystapil blad podczas kontroli systemu plikow."
-
-#~ msgid "*** An error occurred during the RAID startup"
-#~ msgstr "*** Wystapil blad podczas startu systemu RAID"
-
-#~ msgid "*** Dropping you to a shell; the system will reboot"
-#~ msgstr "*** Przenosze Cie do powloki; system zostanie zrestartowany"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "*** An error occurred during the file system check.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "*** Wystapil blad podczas kontroli systemu plikow.\n"
