@@ -1,9 +1,9 @@
-dnl $Id: configure.ac,v 1.1 2002/05/11 09:30:50 misiek Exp $
+dnl $Id: configure.ac,v 1.2 2002/05/11 09:34:53 misiek Exp $
 
 AC_INIT(["rc-scripts"], ["0.4.0"], [pld-rc-scripts@pld.org.pl], [rc-scripts])
 AM_INIT_AUTOMAKE
 
-ALL_LINGUAS="pl"
+ALL_LINGUAS="pl de"
 
 echo -n "Finding shell scripts"
 SHSCRIPTS=""
