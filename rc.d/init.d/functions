@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.26 1999/09/15 21:20:36 wiget Exp $
+# $Id: functions,v 1.27 1999/09/27 09:56:25 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -21,14 +21,10 @@ termput()
         	:
 	elif [ ! -d /usr/share/terminfo ] || \
 	     ! ( [ -x /usr/bin/tput ] || [ -x /bin/tput ] ) ; then
-                if [ "$2" == "1" ]; then echo -ne "\033[0;31m"
-                elif [ "$2" == "2" ]; then echo -ne "\033[0;32m"
-                elif [ "$2" == "5" ]; then echo -ne "\033[0;35m"
-                elif [ "$2" == "6" ]; then echo -ne "\033[0;36m"
-                elif [ "$2" == "7" ]; then echo -ne "\033[0;37m"
+		echo -ne "\033[0;3${2}m"
                 fi
 	else
-		tput $@
+		tput "$@"
 	fi
 }
 
@@ -57,7 +53,7 @@ if [ -x /bin/gettext ] || [ -x /usr/bin/gettext ]; then
 	fi
 	text="`TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="$NLS_DOMAIN" "$1"`"
 	shift
-	printf_ "$text" $@
+	printf_ "$text" "$@"
 	echo
 else
 	echo "$@"
@@ -192,8 +188,10 @@ killproc()
 						fi
 					fi
 				fi
+				ps h $pid >/dev/null 2>&1 && (deltext; fail) || (deltext; ok)
+			else
+				deltext; died
 			fi
-			ps h $pid >/dev/null 2>&1 && (deltext; fail) || (deltext; ok)
 		# use specified level only
 		else
 			if ps h $pid >/dev/null 2>&1; then
@@ -204,7 +202,7 @@ killproc()
 		fi
 	else
 		deltext
-		fail
+		died
 	fi
 
         # Remove pid file if any.
