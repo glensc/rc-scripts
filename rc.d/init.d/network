@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.31 2000/02/03 11:50:04 misiek Exp $
+# $Id: network,v 1.32 2000/02/18 18:07:01 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -96,7 +96,9 @@ TODO="$1"
 # IPv4 forwarding
 proc_net ipv4/ip_forward $TODO 1 0 IPV4_FORWARDING "IPv4 forwarding"
 # IPv6 forwarding
-proc_net ipv6/conf/all/forwarding $TODO 1 0 IPV6_FORWARDING "IPv6 forwarding"
+if [ "$IPV6_NETWORKING" = "yes" ]; then
+   proc_net ipv6/conf/all/forwarding $TODO 1 0 IPV6_FORWARDING "IPv6 forwarding"
+fi
 # Others proc/net
 proc_net ipv4/conf/all/accept_redirects $TODO 1 0 IPV4_ACCEPT_ICMP_REDIR ""
 proc_net ipv4/conf/all/accept_source_route $TODO 1 1 IPV4_ACCEPT_SOURCE_ROUTE ""
