@@ -1,3 +1,7 @@
+2003-08-06  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
+
+	* dumb.sh: - from athcool.init
+
 2003-07-28  Pawe³ Go³aszewski  <blues@pld-linux.org>
 
 	* sysctl.conf: - added gc_thresh entries
