@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: ifup-vlan,v 1.2 2002/07/13 16:25:08 misiek Exp $
+#    $Id: ifup-vlan,v 1.3 2003/07/10 18:36:44 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -67,7 +67,7 @@ setup_ip_param
 /sbin/vconfig set_name_type DEV_PLUS_VID_NO_PAD
 /sbin/ip link set ${VLAN_DEV} up
 /sbin/vconfig add ${VLAN_DEV} ${VLAN_ID}
-/sbin/vconfig set_flag ${DEVICE} 1
+/sbin/vconfig set_flag ${DEVICE} 1 ${VLAN_REORDER_HDR:-1}
 RESULT=$?
 
 # XXX: more VLAN specific options support
