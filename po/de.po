@@ -1,6 +1,6 @@
 # German translation of rc-scripts.
 # Pawel Sakowski <pawel@sakowski.eu.org>, 2000.
-# $Id: de.po,v 1.3 2000/09/19 13:36:40 saq Exp $
+# $Id: de.po,v 1.4 2000/09/21 13:53:21 saq Exp $
 #
 
 msgid ""
@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../rc.d/init.d/allowlogin:22
 msgid "Allowing users to login"
-msgstr "Die Benützer werden erlaubt anzumelden"
+msgstr "Die Benutzer werden erlaubt anzumelden"
 
 #: ../rc.d/init.d/allowlogin:29
 msgid "System shutdown in progress \n"
@@ -95,11 +95,11 @@ msgstr "%s tot, aber das Subsystem gesperrt"
 
 #: ../rc.d/init.d/functions:352
 msgid "%s dead but pid file exists"
-msgstr "%s tot, aber pid-Datei existiert"
+msgstr "%s tot, aber die pid-Datei existiert"
 
 #: ../rc.d/init.d/functions:382
 msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
-msgstr "Den %s-Dienst starten (J)a/(N)ein/(W)eiterführen? [J] "
+msgstr "Den %s-Dienst starten? (J)a/(N)ein/(W)eiterführen [J] "
 
 #: ../rc.d/init.d/functions:470
 msgid "Loading %s kernel module(s)"
@@ -125,7 +125,7 @@ msgstr "INIT wird befehlt, in den Single-Modus zu gehen"
 
 #: ../rc.d/rc.shutdown:32
 msgid "Turning off swap and accounting"
-msgstr "Die Auslagerung und Das Protokollieren werden ausgeschaltet"
+msgstr "Die Auslagerung und das Protokollieren werden ausgeschaltet"
 
 #: ../rc.d/rc.shutdown:42 ../rc.d/rc.sysinit:190 ../rc.d/rc.sysinit:346
 #: ../rc.d/rc.sysinit:375
@@ -138,11 +138,11 @@ msgstr "RAID wird für %s ausgeschaltet"
 
 #: ../rc.d/rc:71
 msgid "Entering interactive startup"
-msgstr "Anfang der interaktiven Startetappe"
+msgstr "Anfang des interaktiven Hochfahrens"
 
 #: ../rc.d/rc:74
 msgid "Entering non-interactive startup"
-msgstr "Anfang der uninteraktiven Startetappe"
+msgstr "Anfang des uninteraktiven Hochfahrens"
 
 #: ../rc.d/rc:172
 msgid "Setting up /etc/ld.so.cache"
@@ -158,7 +158,7 @@ msgstr "Das Root-Dateisystem wird mit Schreibschütz erneut gemountet"
 
 #: ../rc.d/rc.shutdown:77
 msgid "Remounting remaining filesystems ro mode"
-msgstr "Übrige Dateisysteme werden mit Schreibschütz erneut gemountet"
+msgstr "Die übrige Dateisysteme werden mit Schreibschütz erneut gemountet"
 
 #: ../rc.d/rc:92 ../rc.d/rc:93
 msgid "%sResource Manager: %sEntering runlevel number"
@@ -245,7 +245,7 @@ msgstr "wird beendet"
 
 #: ../rc.d/init.d/functions.network:169
 msgid "Starting network router discovery daemon"
-msgstr "Netzwerkrouter-Erforschung-Server wird gestartet"
+msgstr "Der Netzwerkrouter-Erforschung-Server wird gestartet"
 
 #: ../rc.d/init.d/network:191
 msgid "Configured devices:"
@@ -265,11 +265,11 @@ msgstr "%s wird auf %s eingestellt"
 
 #: ../rc.d/init.d/functions.network:235
 msgid "Enabling dynamic IP patch"
-msgstr "Der Dynamisch-IP-Fleck wird eingeschaltet"
+msgstr "Der Dynamisches-IP-Fleck wird eingeschaltet"
 
 #: ../rc.d/init.d/functions.network:245
 msgid "Disabling dynamic IP patch"
-msgstr "Der Dynamisch-IP-Fleck wird ausgeschaltet"
+msgstr "Der Dynamisches-IP-Fleck wird ausgeschaltet"
 
 #: ../rc.d/init.d/functions.network:263
 msgid "Setting local port range"
@@ -321,7 +321,7 @@ msgstr "Das Device-Dateisystem wird gemountet"
 
 #: ../rc.d/rc.sysinit:73
 msgid "Starting Device Filesystem Daemon"
-msgstr "Device-Dateisystem-Server wird gestartet"
+msgstr "Der Device-Dateisystem-Server wird gestartet"
 
 #: ../rc.d/rc.sysinit:83
 msgid "Turning off Magic SysRq key"
@@ -354,7 +354,7 @@ msgstr "NIS-Domäne:"
 
 #: ../rc.d/rc.sysinit:169
 msgid "Checking root filesystems."
-msgstr "Die Root-Dateisysteme wird nachgesehen."
+msgstr "Die Root-Dateisysteme werden nachgesehen."
 
 #: ../rc.d/rc.sysinit:210
 msgid "Setting up ISA PNP devices"
@@ -382,11 +382,11 @@ msgstr "*** Während des Dateisystem-Prüfens ist ein Fehler passiert."
 
 #: ../rc.d/rc.sysinit:179 ../rc.d/rc.sysinit:335 ../rc.d/rc.sysinit:364
 msgid "*** Dropping you to a shell; the system will reboot"
-msgstr "*** Lasse Sie in der Shell; das System wird neustarten"
+msgstr "*** Lasse Sie in der Shell; das System wird neustarten,"
 
 #: ../rc.d/rc.sysinit:180 ../rc.d/rc.sysinit:336 ../rc.d/rc.sysinit:365
 msgid "*** when you leave the shell."
-msgstr "*** nachdem sie Sie die Shell verlassen haben."
+msgstr "*** nachdem Sie die Shell verlassen haben."
 
 #: ../rc.d/rc.sysinit:183 ../rc.d/rc.sysinit:368
 msgid "(Repair filesystem)# "
@@ -410,11 +410,11 @@ msgstr "Die RAID-Geräte werden gestartet."
 
 #: ../rc.d/rc.sysinit:355
 msgid "Checking filesystems."
-msgstr "Dateisysteme werden nachgesehen."
+msgstr "Die Dateisysteme werden nachgesehen."
 
 #: ../rc.d/rc.sysinit:220
 msgid "Checking root filesystem quotas"
-msgstr "Die Quotas des Root-Dateisystems werden nachgesehen"
+msgstr "Die Root-Dateisystem-Quotas werden nachgesehen"
 
 #: ../rc.d/rc.sysinit:379
 msgid "Checking filesystem quotas"
@@ -422,11 +422,11 @@ msgstr "Die Dateisystem-Quotas werden geprüft"
 
 #: ../rc.d/rc.sysinit:395
 msgid "Turning on quotas for local filesystems"
-msgstr "Die Quotas für lokale Dateisysteme werden eingeschaltet"
+msgstr "Die Quotas für die lokalen Dateisysteme werden eingeschaltet"
 
 #: ../rc.d/rc.sysinit:386
 msgid "Mounting local filesystems."
-msgstr "Lokale Dateisysteme werden gemountet."
+msgstr "Die lokalen Dateisysteme werden gemountet."
 
 #: ../rc.d/rc.sysinit:390
 msgid "Loading default system font"
@@ -434,7 +434,7 @@ msgstr "Der standarde Zeichensatz wird geladen"
 
 #: ../rc.d/rc.sysinit:404
 msgid "Setting %s seconds for kernel reboot after panic."
-msgstr "%s Sekunden werden für Kern-Neustart nach der Panik eingestellt."
+msgstr "%s Sekunden werden für den Kern-Neustart nach der Panik eingestellt."
 
 #: ../rc.d/rc.sysinit:140
 msgid "Activating swap partitions"
