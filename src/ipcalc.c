@@ -22,7 +22,7 @@ int main(int argc, char ** argv) {
 	    { "netmask", '\0', 0, &showNetmask, 0 },
 	    { "network", '\0', 0, &showNetwork, 0 },
 	    { "silent", '\0', 0, &beSilent, 0 },
-	    { "short-netmask", '\0', 0, &showShortNetmask, 0 },
+	    { "prefix", '\0', 0, &showPrefix, 0 },
 	    { NULL, '\0', 0, 0, 0 },
     };
 
@@ -71,17 +71,20 @@ int main(int argc, char ** argv) {
 	return 1;
     }
 
-    if (showShortNetmask)
+    if (showPrefix)
 	    showNetmask = 1;
 
     if (showNetmask) {
-	if (showShortNetmask) {
+	if (showPrefix) {
 		if (((ntohl(ip) & 0xFF000000) >> 24) <= 127)
 		    chptr = "8";
 		else if (((ntohl(ip) & 0xFF000000) >> 24) <= 191)
 		    chptr = "16";
 		else 
 		    chptr = "24";
+
+		printf("PREFIX=%s\n", chptr);
+		
 	} else {
                 if (((ntohl(ip) & 0xFF000000) >> 24) <= 127)
                     chptr = "255.0.0.0";
@@ -89,9 +92,10 @@ int main(int argc, char ** argv) {
                     chptr = "255.255.0.0";
                 else
                     chptr = "255.255.255.0";
+
+		printf("NETMASK=%s\n", chptr);
 	}
 
-	printf("NETMASK=%s\n", chptr);
     }
 
     if (showBroadcast) {
