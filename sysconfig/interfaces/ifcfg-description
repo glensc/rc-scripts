@@ -1,4 +1,4 @@
-#	$Id: ifcfg-description,v 1.18 2002/11/12 15:54:04 kloczek Exp $
+#	$Id: ifcfg-description,v 1.19 2003/01/15 22:34:06 ankry Exp $
 DEVICE=<name>
 [ BOOTPROTO={none|bootp|dhcp|pump} ]
   You can specify which dhcp client to use with the DHCP_CLIENT, if
@@ -31,8 +31,8 @@ IP6_PRIM_IF=""		#
 IP6_SRC_IF=""		# 
 
 [ ONBOOT={no|yes} ]
-[ MULTICAST={|no|yes} ]	- for eth automamaticly set to yes
-[ ARP={no|yes} ]	- for eth automamaticly set to yes
+[ MULTICAST={|no|yes} ]	- for eth automatically set to yes
+[ ARP={no|yes} ]	- for eth automatically set to yes
 [ IPV6_DISABLE_AUTOCONF={yes|no} ] - disable IPv6 autoconfiguration
 
 [ IPX=yes|no ]
@@ -45,6 +45,7 @@ fi
 
 [ MTU= ]
 [ METRIC= ]
+[ PROXYARP={yes|no} ]
 
 QDISC=[sfq|teql0|red|prio|...] (queueing discipline)
 QDISC_CLASS=[htb|cbq|none]     (use cbq|htb as class based discipline;

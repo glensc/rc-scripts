@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.69 2002/07/13 23:04:42 misiek Exp $
+#	$Id: ifup,v 1.70 2003/01/15 22:34:10 ankry Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -82,7 +82,7 @@ if is_yes "$SLAVE" && [ -n "$MASTER" -a -x /sbin/ifenslave ]; then
 fi
 
 if [ -n "$MACADDR" ]; then
-   ip link set ${DEVICE} address ${MACADDR}
+    ip link set ${DEVICE} address ${MACADDR}
 fi
 
 ip link set ${DEVICE} multicast ${MULTICAST} ${ARP} down
@@ -92,7 +92,7 @@ if [ -n "$MTU" ]; then
 fi
 
 if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
-	run_cmd "Disabling IPv6 autoconfiguration" sysctl -w net.ipv6.conf.${DEVICE}=0
+    run_cmd "Disabling IPv6 autoconfiguration" sysctl -w net.ipv6.conf.${DEVICE}.autoconf=0
 fi
 
 if is_wireless_device "${DEVICE}"; then
@@ -217,6 +217,10 @@ else
     setup_ip_gw_ro
 fi
 
+# device have to have ip address set before
+if [ is_yes "$PROXYARP" ]; then
+    run_cmd "Enabling proxy ARP on ${DEVICE}" sysctl -w net.ipv4.conf.${DEVICE}.proxy_arp=1
+fi
 
 if [ "$HANDLING" = "3" ]; then
 	exit 0
