@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.34 2000/06/12 08:38:15 waszi Exp $
+# $Id: network,v 1.35 2000/08/28 15:35:48 zagrodzki Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -134,15 +134,24 @@ proc_net ipv4/tcp_window_scaling $TODO 1 0 IPV4_NO_WINDOW_SCALING ""
 
 # find all the interfaces besides loopback.
 # ignore aliases, alternative configurations, and editor backup files
-interfaces="`(cd /etc/sysconfig/interfaces && ls ifcfg* | \
-egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | sed 's/^ifcfg-//g' | xargs) 2> /dev/null`"
-interfaces_boot="`(cd /etc/sysconfig/interfaces && ls ifcfg* | \
-egrep -v '(ifcfg-lo|ifcfg-sit|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
-xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g') 2> /dev/null`"
-interfaces_sit_boot="`(cd /etc/sysconfig/interfaces && ls ifcfg-sit* | \
-egrep 'ifcfg-[a-z0-9]+$' | xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g') 2> /dev/null`"
-tunnels="`(cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
-xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^tnlcfg-//g') 2> /dev/null`"
+
+interfaces="`(ls /etc/sysconfig/interfaces/ifcfg* | \
+egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
+sed 's!^/etc/sysconfig/interfaces/ifcfg-!!g') 2> /dev/null`"
+
+interfaces_boot="`(alias xx="ls /etc/sysconfig/interfaces/ifcfg* |\
+egrep -v '(ifcfg-lo|ifcfg-sit|:)' | egrep 'ifcfg-[a-z0-9]+$'" ; \
+for i in \`xx\`; do ONBOOT=""; . $i; if is_yes "$ONBOOT"; then \
+echo $i; fi; done | sed 's!^/etc/sysconfig/interfaces/ifcfg-!!g') 2> /dev/null`"
+
+interfaces_sit_boot="`(alias xx="ls /etc/sysconfig/interfaces/ifcfg-sit* | \
+egrep 'ifcfg-[a-z0-9]+$'"; for i in \`xx\`; do ONBOOT=""; . $i; \
+if is_yes "$ONBOOT"; then echo $i; fi; done | \
+sed 's!^/etc/sysconfig/interfaces/ifcfg-!!g') 2> /dev/null`"
+
+tunnels="`(alias xx="ls /etc/sysconfig/interfaces/tnlcfg-*"; \
+for i in \`xx\`; do ONBOOT=""; . $i; if is_yes "$ONBOOT"; then echo $i; \
+fi; done | sed 's!^/etc/sysconfig/interfaces/tnlcfg-!!g') 2> /dev/null`"
 
 # See how we were called.
 case "$1" in
@@ -191,7 +200,8 @@ case "$1" in
 	echo "$tunnels"
 
 	nls "Currently active devices and tunnels:"
-	/sbin/ip link show | egrep '^[^ ].*' |sed 's/[0-9]*: \(.*\):.*/\1/'|xargs
+	/sbin/ip link show | egrep '^[^ ].*' | sed 's/[0-9]*: \(.*\):.*/\1/' | \
+		tr '\n' ' '; echo
 	;;
   restart)
 	$0 stop
