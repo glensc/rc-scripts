@@ -394,11 +394,11 @@ return
 # Retrievies PPPD PID and real interface name from /var/run/ppp-*.pid
 get_ppp_device_and_pid () {
 	
-if [ -f "/var/run/ppp-$DEVICE.pid" ] ; then
+if [ -f "/var/run/ppp-$DEVNAME.pid" ] ; then
 	eval `{
 	         read PID ; echo "PID='$PID'" 
 		 read REALDEVICE ; echo "REALDEVICE=$REALDEVICE"
-	      } < "/var/run/ppp-$DEVICE.pid"`
+	      } < "/var/run/ppp-$DEVNAME.pid"`
 fi
 
 if [ -z "$REALDEVICE" ] ; then
