@@ -86,17 +86,17 @@ fi
 
 kernelver()
 {
-	awk '{print $3}' /proc/version | awk -F. '{print sprintf("%03d%03d%03d",$1,$2,$3)}'
+	awk '{split($3,v,"."); printf("%03d%03d%03d\n", v[1],v[2],v[3]);}' /proc/version
 }
 
 kernelverser()
 {
-	awk '{print $3}' /proc/version | awk -F. '{print sprintf("%03d%03d",$1,$2)}'
+	awk '{split($3,v,"."); printf("%03d%03d\n", v[1],v[2]);}' /proc/version
 }
 
 kernelvermser()
 {
-	awk '{print $3}' /proc/version | awk -F. '{print sprintf("%03d",$1)}'
+	awk '{split($3,v,"."); printf("%03d\n", v[1]);}' /proc/version
 }
 
 # Colors workaround
@@ -520,7 +520,7 @@ pidofproc()
 		pid=
 		read line < /var/run/${base}.pid
 		for p in $line; do
-			[ -z "$(echo "$p" | awk '{gsub(/[0-9]/,""); print $0;}')" ] && pid="$pid $p"
+			[ -z "$(echo "$p" | sed 's/[0-9]//g')" ] && pid="$pid $p"
 		done
 		if [ -n "$pid" ]; then
 			echo $pid
