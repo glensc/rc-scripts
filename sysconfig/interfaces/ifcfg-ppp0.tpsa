@@ -4,6 +4,7 @@ ONBOOT=no
 HARDFLOWCTL=yes
 MODEMPORT=/dev/ttyS1
 LINESPEED=115200
+AUTH=no
 QDISC="sfq quantum 1500b perturb 5"
 DEBUG=yes
 PERSIST=no
