@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.14 1999/10/13 16:37:23 baggins Exp $
+# $Id: rc,v 1.15 1999/12/30 12:11:37 jajcus Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -38,10 +38,11 @@ previous=$1
 export runlevel previous
 
 # if runlevel is 0 (halt) or 6 (reboot) change to first
-# virtual console
+# virtual console, and send messages to /dev/console 
+# (it can be serial console too) 
 if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
-	exec 0<> /dev/tty1 1>&0 2>&0
 	[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo
+	exec 0<> /dev/console 1>&0 2>&0
 else
 # if previous runlevel = current runlevel do nothing
 	[ "$runlevel" = "$previous" ] && exit 0
