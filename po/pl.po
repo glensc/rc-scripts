@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.37 2001/10/04 07:41:48 qboosh Exp $
+# $Id: pl.po,v 1.38 2002/01/17 20:47:06 gotar Exp $
 #
 msgid ""
 msgstr ""
@@ -22,7 +22,7 @@ msgstr ""
 #: ./rc.d/rc:197
 #: ./rc.d/rc:198
 msgid "%sResource Manager: %sRunlevel has been reached"
-msgstr "%sZarzadca zasobow: %sZostal osiagniety poziom"
+msgstr "%sZarzadca zasobów: %sZostal osiagniety poziom"
 
 #: ./rc.d/init.d/random:22
 msgid "Initializing random number generator"
@@ -48,11 +48,11 @@ msgstr "Nieaktywne urzadzenia sieciowe i tunele:"
 
 #: ./rc.d/init.d/network:57
 msgid "Setting network parameters"
-msgstr "Ustawianie parametrow sieci"
+msgstr "Ustawianie parametrów sieci"
 
 #: ./rc.d/init.d/functions:550
 msgid "Could not load %s kernel module(s)"
-msgstr "Nie mozna zaladowac modulu(ow) %s"
+msgstr "Nie mozna zaladowac modulu(ów) %s"
 
 #: ./rc.d/init.d/network:144
 msgid "Bringing up interface from LDAP"
@@ -60,7 +60,7 @@ msgstr "Podnoszenie interfejsu z LDAP"
 
 #: ./rc.d/rc.sysinit:400
 msgid "Checking filesystems."
-msgstr "Sprawdzenie systemow plikow."
+msgstr "Sprawdzanie systemów plików."
 
 #: ./rc.d/rc.sysinit:378
 msgid "(RAID Repair)# "
@@ -68,11 +68,11 @@ msgstr "(Naprawa RAID)# "
 
 #: ./rc.d/rc.sysinit:324
 msgid "Loading synthesiser module"
-msgstr "Ladowanie modul syntetyzera"
+msgstr "Ladowanie modulu syntetyzera"
 
 #: ./rc.d/init.d/network:177
 msgid "Shutting down tunnel interface"
-msgstr "Wy³±czanie tunelu"
+msgstr "Wylaczanie tunelu"
 
 #: ./rc.d/init.d/functions:418
 msgid "%s dead but pid file exists"
@@ -96,20 +96,20 @@ msgstr "Ustalanie informacji IP dla"
 
 #: ./rc.d/init.d/single:60
 msgid "Telling INIT to go to single user mode"
-msgstr "Informowanie procesu INIT by przeszedl do trybu single"
+msgstr "Nakazywanie procesowi INIT przejscia do trybu pojedynczego uzytkownika"
 
 #: ./rc.d/init.d/network:165
 msgid "Unmounting NFS filesystems"
-msgstr "Przekazywanie procesowi INIT by przeszedl do trybu single"
+msgstr "Odlaczanie systemów plików NFS"
 
 #: ./rc.d/init.d/single:34
 #: ./rc.d/rc.shutdown:26
 msgid "Sending all processes the KILL signal"
-msgstr "Wysylanie do wszystkich procesow sygnalu KILL"
+msgstr "Wysylanie do wszystkich procesów sygnalu KILL"
 
 #: ./rc.d/rc.sysinit:213
 msgid "Setting up ISA PNP devices"
-msgstr "Ustawienie urzadzen ISA PNP"
+msgstr "Ustawianie urzadzen ISA PNP"
 
 #: ./rc.d/init.d/functions:130
 msgid "%s service is not running."
@@ -121,7 +121,7 @@ msgstr "Wylaczanie forwardowania pakietow IPv6"
 
 #: ./rc.d/init.d/functions:533
 msgid "Loading %s kernel module(s)"
-msgstr "Ladowanie modulu(ow) %s"
+msgstr "Ladowanie modulu(ów) %s"
 
 #: ./rc.d/rc:93
 msgid "Entering non-interactive startup"
@@ -134,7 +134,7 @@ msgstr "%s nie istnieje lub nie jest wykonywalny"
 
 #: ./rc.d/init.d/timezone:40
 msgid "Setting time zone information (%s)"
-msgstr "Ustawianie informacji o strefi czasowej (%s)"
+msgstr "Ustawianie informacji o strefie czasowej (%s)"
 
 #: ./rc.d/init.d/network:148
 msgid "Setting tunnel"
@@ -142,7 +142,7 @@ msgstr "Podnoszenie tunelu"
 
 #: ./rc.d/rc.sysinit:440
 msgid "Mounting local filesystems."
-msgstr "Podlaczenie lokalnych systemow plikow."
+msgstr "Podlaczanie lokalnych systemów plików."
 
 #: ./rc.d/rc.sysinit:232
 msgid "System bootup in progress  - please wait"
@@ -154,7 +154,7 @@ msgstr "Start systemu w toku - prosze czekac"
 #: ./rc.d/rc.sysinit:421
 #: ./rc.d/rc.sysinit:482
 msgid "Unmounting file systems"
-msgstr "Odlaczenie systemow plikow"
+msgstr "Odlaczanie systemów plików"
 
 #: ./rc.d/init.d/functions:401
 #: ./rc.d/init.d/functions:409
@@ -167,7 +167,7 @@ msgstr "Wylaczanie forwardowania pakietow IPv4"
 
 #: ./sysconfig/network-scripts/ifup:76
 msgid "Enslaving %s to %s"
-msgstr "Ustawienie %s na %s"
+msgstr "Ustawianie %s na %s"
 
 #: ./sysconfig/network-scripts/ifup:89
 msgid "Disabling IPv6 autoconfiguration"
@@ -175,11 +175,11 @@ msgstr "Wylaczanie autokonfiguracji IPv6"
 
 #: ./rc.d/rc.sysinit:321
 msgid "Loading sound module"
-msgstr "Ladowanie modul obslugi dzwieku"
+msgstr "Ladowanie modulu obslugi dzwieku"
 
 #: ./rc.d/rc.sysinit:394
 msgid "Scanning for LVM volume groups"
-msgstr "Poszukiwanie woluminow grup LVM"
+msgstr "Poszukiwanie woluminów grup LVM"
 
 #: ./rc.d/init.d/network:207
 msgid "Currently active devices and tunnels:"
@@ -187,11 +187,11 @@ msgstr "Aktywne urzadzenia sieciowe i tunele:"
 
 #: ./rc.d/rc:191
 msgid "Setting up /etc/ld.so.cache"
-msgstr "Ustawienie /etc/ld.so.cache"
+msgstr "Ustawianie /etc/ld.so.cache"
 
 #: ./rc.d/init.d/functions:115
 msgid "Starting %s service"
-msgstr "Uruchomienie uslugi %s"
+msgstr "Uruchamianie uslugi %s"
 
 #: ./rc.d/init.d/functions:171
 #: ./rc.d/rc:113
@@ -217,7 +217,7 @@ msgstr "Nie moge znalezc klienta dhcp."
 
 #: ./rc.d/rc.sysinit:505
 msgid "Turning on quotas for local filesystems"
-msgstr "Wlaczam quote na lokalnych systemach plikow"
+msgstr "Wlaczam quote na lokalnych systemach plików"
 
 #: ./sysconfig/network-scripts/ifup:35
 msgid "Users cannot control this device."
@@ -225,7 +225,7 @@ msgstr "Uzytkownicy nie moga kontrolowac tego urzadzenia."
 
 #: ./rc.d/rc.shutdown:36
 msgid "Turning off quotas for local filesystems"
-msgstr "Wylaczam quote na lokalnych systemach plikow"
+msgstr "Wylaczam quote na lokalnych systemach plików"
 
 #: ./rc.d/init.d/functions.network:222
 msgid "Enabling IPv6 packet forwarding"
@@ -233,7 +233,7 @@ msgstr "Wlaczanie forwardowania pakietow IPv6"
 
 #: ./rc.d/rc.sysinit:487
 msgid "Remounting encrypted filesystems back in rw mode"
-msgstr "Przelaczanie zaszyfrowanych systemow plikow w tryb zapis/odczyt"
+msgstr "Przelaczanie zaszyfrowanych systemów plików w tryb zapis/odczyt"
 
 #: ./rc.d/rc.sysinit:387
 msgid "Automatic reboot in progress"
@@ -250,11 +250,11 @@ msgstr "%s zabity ale podsystem zablokowany"
 #: ./rc.d/rc:111
 #: ./rc.d/rc:112
 msgid "%sResource Manager: %sEntering runlevel number"
-msgstr "%sZarzadca zasobow: %sWejscie na poziom"
+msgstr "%sZarzadca zasobów: %sWejscie na poziom"
 
 #: ./rc.d/rc.shutdown:32
 msgid "Turning off swap and accounting"
-msgstr "Wylaczenie swap i zliczania"
+msgstr "Wylaczanie swap i zliczania"
 
 #: ./rc.d/init.d/network:190
 msgid "Shutting down unconfigured interface %s"
@@ -266,11 +266,11 @@ msgstr "AKTYWUJE"
 
 #: ./rc.d/rc.shutdown:82
 msgid "Remounting remaining filesystems ro mode"
-msgstr "Przelaczenie pozostalych systemow plikow w tryb tylko do odczytu"
+msgstr "Przelaczanie pozostalych systemów plików w tryb tylko do odczytu"
 
 #: ./rc.d/init.d/network:171
 msgid "Unmounting NCP filesystems"
-msgstr "Odlaczenie systemow plikow NCP"
+msgstr "Odlaczanie systemów plikow NCP"
 
 #: ./rc.d/init.d/functions.network:213
 msgid "Enabling IPv4 packet forwarding"
@@ -278,7 +278,7 @@ msgstr "Wlaczanie forwardowania pakietow IPv4"
 
 #: ./rc.d/init.d/network:168
 msgid "Unmounting SMB filesystems"
-msgstr "Odlaczenie systemow plikow SMB"
+msgstr "Odlaczanie systemów plików SMB"
 
 #: ./rc.d/init.d/network:149
 msgid "Bringing up tunnel interface"
@@ -286,7 +286,7 @@ msgstr "Podnoszenie tunelu"
 
 #: ./rc.d/rc.sysinit:395
 msgid "Activating LVM volume groups"
-msgstr "Aktywacja grup woluminow LVM"
+msgstr "Aktywacja grup woluminów LVM"
 
 #: ./rc.d/init.d/network:140
 msgid "Bringing up interface"
@@ -294,7 +294,7 @@ msgstr "Podnoszenie interfejsu"
 
 #: ./rc.d/rc.sysinit:433
 msgid "Checking filesystem quotas"
-msgstr "Sprawdzenie quota w systemach plikow"
+msgstr "Sprawdzanie quot w systemach plików"
 
 #: ./rc.d/init.d/timezone:47
 msgid "Unsetting time zone information"
@@ -319,19 +319,19 @@ msgstr "Wlaczanie urzadzenia RAID %s"
 
 #: ./rc.d/rc.sysinit:563
 msgid "Enabling swap space"
-msgstr "Wlaczenie swapa"
+msgstr "Wlaczanie swapa"
 
 #: ./rc.d/rc.sysinit:73
 msgid "Starting Device Filesystem Daemon"
-msgstr "Startuje Zarzadce Systemu Plikow Urzadzen (devfsd)"
+msgstr "Startuje Zarzadce Systemu Plików Urzadzen (devfsd)"
 
 #: ./rc.d/rc:180
 msgid "The system is halted"
-msgstr "Dzialanie systemu zatrzymane"
+msgstr "System zatrzymany"
 
 #: ./rc.d/init.d/allowlogin:22
 msgid "Allowing users to login"
-msgstr "Pozwalenie uzytkownikom na logowanie sie"
+msgstr "Pozwolenie uzytkownikom na logowanie sie"
 
 #: ./rc.d/rc:181
 #: ./rc.d/rc:185
@@ -343,11 +343,11 @@ msgstr "Przy nastepnym starcie systemu program fsck bedzie pominiety."
 #: ./rc.d/rc.sysinit:422
 #: ./rc.d/rc.sysinit:483
 msgid "Remounting root filesystem in ro mode"
-msgstr "Przelaczenie glownego systemu plikow w tryb tylko do odczytu"
+msgstr "Przelaczanie glównego systemu plików w tryb tylko do odczytu"
 
 #: ./rc.d/rc.sysinit:67
 msgid "Mounting Device Filesystem"
-msgstr "Podlaczanie systemow plikow urzaden (DEVfs)"
+msgstr "Podlaczanie systemów plików urzadzen (DEVfs)"
 
 #: ./sysconfig/network-scripts/ifup-sl:56
 msgid "does not exist"
@@ -355,11 +355,11 @@ msgstr "nie istnieje"
 
 #: ./rc.d/rc.sysinit:171
 msgid "Checking root filesystem"
-msgstr "Sprawdzanie glownego systemu plikow"
+msgstr "Sprawdzanie glównego systemu plików"
 
 #: ./sysconfig/network-scripts/ifup:68
 msgid "Delaying %s initialization"
-msgstr "Opozniam inicjalizacje %s"
+msgstr "Opózniam inicjalizacje %s"
 
 #: ./rc.d/rc.sysinit:183
 #: ./rc.d/rc.sysinit:375
@@ -375,7 +375,7 @@ msgstr "Host:"
 #: ./rc.d/rc.sysinit:132
 #: ./rc.d/rc.sysinit:499
 msgid "Setting clock"
-msgstr "Ustawienie zegara systemowego"
+msgstr "Ustawianie zegara systemowego"
 
 #: ./rc.d/init.d/functions:427
 msgid "%s is stopped"
@@ -392,15 +392,15 @@ msgstr "%s nie jest obecny. Nie moge kontynuowac."
 
 #: ./rc.d/init.d/timezone:38
 msgid "Setting time zone information (%s, %s)"
-msgstr "Ustawianie informacji o strefi czasowej (%s, %s)"
+msgstr "Ustawianie informacji o strefie czasowej (%s, %s)"
 
 #: ./rc.d/init.d/functions:120
 msgid "%s service is already running."
-msgstr "Usluga %s juz jest uruchomiona."
+msgstr "Usluga %s jest juz uruchomiona."
 
 #: ./rc.d/rc.shutdown:74
 msgid "Turning off RAID for %s"
-msgstr "Wylaczenie obslugi RAID dla %s"
+msgstr "Wylaczanie obslugi RAID dla %s"
 
 #: ./rc.d/init.d/functions:135
 msgid "Reloading %s service"
@@ -410,7 +410,7 @@ msgstr "Przeladowanie uslugi %s"
 #: ./rc.d/rc.sysinit:409
 #: ./rc.d/rc.sysinit:470
 msgid "*** An error occurred during the file system check."
-msgstr "*** Podczas sprawdzania systemow plikow wykryto blad niemozliwy do usuniecia."
+msgstr "*** Podczas sprawdzania systemów plików wykryto blad niemozliwy do usuniecia."
 
 #: ./rc.d/init.d/network:200
 msgid "Configured devices:"
@@ -418,11 +418,11 @@ msgstr "Skonfigurowane urzadzenia sieciowe:"
 
 #: ./rc.d/rc.sysinit:219
 msgid "Remounting root filesystem in rw mode"
-msgstr "Przelaczenie glownego systemu plikow w tryb zapis/odczyt"
+msgstr "Przelaczanie glównego systemu plików w tryb zapis/odczyt"
 
 #: ./rc.d/rc.sysinit:230
 msgid "Enabling Delay Login"
-msgstr "Wlaczenie opozniania logowania"
+msgstr "Wlaczanie opózniania logowania"
 
 #: ./rc.d/init.d/random:40
 msgid "Saving random seed"
@@ -430,7 +430,7 @@ msgstr "Zapisanie podstawy generatora losowego"
 
 #: ./rc.d/rc.sysinit:447
 msgid "Checking encrypted filesystems"
-msgstr "Sprawdzanie zaszyfrowanych systemow plikow"
+msgstr "Sprawdzanie zaszyfrowanych systemów plików"
 
 #: ./sysconfig/network-scripts/ifup-sl:96
 msgid "slattach started for %s on %s at %s"
@@ -442,7 +442,7 @@ msgstr "wystapily problemy przy ustawianiu bridge'a %s"
 
 #: ./rc.d/init.d/random:53
 msgid "The random data source exists"
-msgstr "Zrodlo losowych danych istnieje"
+msgstr "Zródlo losowych danych istnieje"
 
 #: ./rc.d/init.d/functions:434
 msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
@@ -450,7 +450,7 @@ msgstr "Uruchomic usluge %s (T)ak/(N)ie/(K)ontynuuj? [T] "
 
 #: ./rc.d/rc.sysinit:223
 msgid "Checking root filesystem quotas"
-msgstr "Sprawdzanie quota na glownym systemie plikow"
+msgstr "Sprawdzanie quoty na glównym systemie plików"
 
 #: ./rc.d/init.d/network:178
 msgid "Removing tunnel"
@@ -479,13 +479,13 @@ msgstr "PROBLEMY"
 
 #: ./rc.d/init.d/random:55
 msgid "The random data source is missing"
-msgstr "Oczekiwane zrodlo danych losowych"
+msgstr "Oczekiwane zródlo danych losowych"
 
 #: ./rc.d/rc.sysinit:186
 #: ./rc.d/rc.sysinit:414
 #: ./rc.d/rc.sysinit:475
 msgid "(Repair filesystem)# "
-msgstr "(Naprawa systemu plikow)# "
+msgstr "(Naprawa systemu plików)# "
 
 #: ./rc.d/rc.sysinit:147
 msgid "NIS Domain:"
