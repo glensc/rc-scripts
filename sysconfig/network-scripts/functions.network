@@ -273,11 +273,11 @@ setup_routes()
 typeset args
 if [ -f /etc/sysconfig/static-routes ]; then
 	if [ "$1" = "on" -o "$1" = "yes" ] ; then
-		egrep "^(none)|(any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+		egrep "^(none|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
 			/sbin/ip route add $args
 		done
 	else
-		egrep "^(none)|(any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+		egrep "^(none|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
 			/sbin/ip route del $args 2>/dev/null
 		done
 	fi
