@@ -328,7 +328,10 @@ checkpid()
 # (note: some processes like named are chrooted but run outside chroot)
 filter_chroot()
 {
-	[ $# -lt 1 ] && return
+	if [ $# -lt 1 -o ! -d /proc/1 ] ; then
+		echo $@
+		return
+	fi
         good_pids=""
 	for root_pid in $@; do
 		root_dir=$(resolvesymlink /proc/${root_pid}/root)
