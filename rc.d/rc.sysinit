@@ -161,6 +161,41 @@ else
 	domainname ""
 fi
 
+# Initialize USB controllers
+usb=0
+if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "usb" /proc/devices 2>/dev/null ; then
+        aliases=$(/sbin/modprobe -c | awk '/^alias usb-controller/ { print $3 }')
+        if [ -n "$aliases" -a "$aliases" != "off" ] ; then
+                /sbin/modprobe -k usbcore
+                for alias in $aliases ; do
+                        [ "$alias" = "off" ] && continue
+                        run_cmd "$(nls 'Initializing USB controller') ($alias)" /sbin/modprobe $alias
+                done
+                [ $? -eq 0 -a -n "$aliases" ] && usb=1
+        fi
+	if grep -iq "usb" /proc/devices 2>/dev/null ; then
+		usb=1
+	fi
+fi
+
+if [ "$usb" = "1" -a ! -f /proc/bus/usb/devices ]; then
+	run_cmd "Mounting USB filesystem" mount -t usbdevfs usbdevfs /proc/bus/usb
+fi
+
+needusbstorage=
+if [ "$usb" = "1" ]; then
+	needusbstorage=$(LC_ALL=C cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08")
+	LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
+        mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02")
+        kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01")
+        if [ -n "$kbdoutput" ]; then
+                run_cmd "Initializing USB keyboard" modprobe keybdev
+        fi
+        if [ -n "$mouseoutput" ]; then
+                run_cmd "Initializing USB mouse" modprobe mousedev
+        fi
+fi
+
 # Setup hdparm thing (if exists and is needed)
 if ! grep -iq nohdparm /proc/cmdline; then
 	[ -x /etc/rc.d/rc.hdparm ] && /etc/rc.d/rc.hdparm
@@ -335,46 +370,9 @@ if [ -f /proc/sys/kernel/modprobe ]; then
 	fi
 fi
 
-# Initialize USB controller and HID devices
-usb=0
-if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "usb" /proc/devices 2>/dev/null ; then
-	aliases=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+usb-controller" | awk '{ print $3 }')
-	if [ -n "$aliases" -a "$aliases" != "off" ] ; then
-		/sbin/modprobe -k usbcore
-		if [ ! -e /proc/bus/usb/devices ]; then
-			run_cmd "Mounting USB filesystem" mount /proc/bus/usb
-		fi
-		for alias in $aliases ; do 
-		    	[ "$alias" = "off" ] && continue
-			run_cmd "$(nls 'Initializing USB controller') ($alias)" /sbin/modprobe $alias
-		done
-		[ $? -eq 0 -a -n "$aliases" ] && usb=1
-	fi
-fi
-
-if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && grep -q "usb" /proc/devices 2>/dev/null ; then
-	usb=1
-fi
-
-needusbstorage=
-if [ $usb = "1" ]; then
-	mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02")
-	kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01")
-	needusbstorage=$(cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08")
-	if [ -n "$kbdoutput" ] || [ -n "$mouseoutput" ]; then
-		run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
-	fi
-	if [ -n "$kbdoutput" ]; then
-		run_cmd "Initializing USB keyboard" modprobe keybdev
-	fi
-	if [ -n "$mouseoutput" ]; then
-		run_cmd "Initializing USB mouse" modprobe mousedev
-	fi
-fi
-
 # Load usb storage here, to match most other things
 if [ -n "$needusbstorage" ]; then
-        modprobe usb-storage >/dev/null 2>&1
+        modprobe -k usb-storage >/dev/null 2>&1
 fi
 
 # Load firewire devices
