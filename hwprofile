@@ -1,7 +1,7 @@
 #!/bin/sh
 # (C) 2001 Arkadiusz Mi¶kiewicz <misiek@pld.ORG.PL>
 # Hardware Profiles for rc-scripts TOTALNEW.
-# $Id: hwprofile,v 1.2 2002/03/19 18:19:57 misiek Exp $
+# $Id$
 
 PROFDIR="/etc/sysconfig/hwprofiles"
 QUIET=0

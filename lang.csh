@@ -1,6 +1,6 @@
 #!/bin/csh
 #
-#	$Id: lang.csh,v 1.4 2001/05/15 16:03:33 baggins Exp $
+#	$Id$
 #
 
 test -f /etc/sysconfig/i18n

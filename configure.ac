@@ -1,4 +1,4 @@
-dnl $Id: configure.ac,v 1.2 2002/05/11 09:34:53 misiek Exp $
+dnl $Id$
 
 AC_INIT(["rc-scripts"], ["0.4.0"], [pld-rc-scripts@pld.org.pl], [rc-scripts])
 AM_INIT_AUTOMAKE

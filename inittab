@@ -2,7 +2,7 @@
 # inittab	This file describes how the INIT process should set up
 #		the system in a certain run-level.
 #
-#		$Id: inittab,v 1.7 2003/05/31 11:59:02 arekm Exp $
+#		$Id$
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 #		Modified for RHS Linux by Marc Ewing and Donnie Barnes

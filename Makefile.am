@@ -1,5 +1,5 @@
 #
-#	$Id: Makefile.am,v 1.8 2002/03/19 18:17:58 misiek Exp $
+#	$Id$
 #
 
 SUBDIRS = src ppp isapnp sysconfig rc.d doc po

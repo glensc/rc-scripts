@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: setsysfont,v 1.6 2001/05/15 16:03:33 baggins Exp $
+#	$Id$
 #
 
 [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n

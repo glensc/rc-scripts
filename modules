@@ -1,5 +1,5 @@
 # /etc/modules: kernel modules to load at boot time.
-# $Id: modules,v 1.2 2001/05/15 16:05:05 baggins Exp $
+# $Id$
 #
 # This file should contain the names of kernel modules that are
 # to be loaded at boot time, one per line.  Comments begin with

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: lang.sh,v 1.7 2000/06/27 09:50:07 waszi Exp $
+#	$Id$
 #
 
 if [ -f /etc/sysconfig/i18n ]; then
