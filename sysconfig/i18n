@@ -1,5 +1,12 @@
 # $Id$
 
+# known, working solution
+
+#LANG=pl_PL
+
+# If you feel brave, or don't ever plan to use text console
+# you can set locale to unicode
+
 #LANG=pl_PL.UTF-8
 
 # list of supported locales
