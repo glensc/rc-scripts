@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.21 2000/03/22 21:03:57 kloczek Exp $
+# $Id: pl.po,v 1.22 2000/03/22 21:04:59 kloczek Exp $
 #
 msgid ""
 msgstr ""
@@ -381,7 +381,7 @@ msgstr "Domena NIS:"
 #: ../rc.d/init.d/functions:110
 #, fuzzy
 msgid "Stopping %s service"
-msgstr "Stopowanie serwisu %f"
+msgstr "Zatrzymywanie serwisu %f"
 
 # ../rc.d/init.d/network:132
 #: ../rc.d/init.d/network:179
