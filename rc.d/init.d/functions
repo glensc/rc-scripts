@@ -203,6 +203,8 @@ rc_splash()
 {
 	typeset action
 
+	action="$1"
+
 	if ! is_no "$BOOT_SPLASH"; then
 		[ -x /bin/splash ] && /bin/splash "$action"
 	fi
