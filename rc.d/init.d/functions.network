@@ -288,7 +288,7 @@ fi
 #
 
 calcprefix() {
-local OISF len olen bad
+local OISF len olen bad prefix
  OISF=$IFS
  IFS="."
  prefix=0
