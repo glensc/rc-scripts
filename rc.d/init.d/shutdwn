@@ -47,7 +47,7 @@ fi
 
 show "Remounting remaining filesystems ro mode"; busy
 if (mount | awk '/ext2/ { print $3 }' | \
-	while read line; do 
+	while read line; do \
 		mount -n -o ro,remount $line done); then
 	deltext; ok
 else
