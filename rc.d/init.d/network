@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.53 2002/03/29 08:45:14 wojrus Exp $
+# $Id: network,v 1.54 2002/04/09 11:05:59 jajcus Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -139,10 +139,6 @@ case "$1" in
 
 	for i in $interfaces_boot $interfaces_sit_boot ; do
 		run_cmd -a "$(nls 'Bringing up interface') $i" /sbin/ifup $i boot
-	done
-
-	for i in $(find_ldap_interfaces) ; do
-		run_cmd -a "$(nls 'Bringing up interface from LDAP') $i" /sbin/ifup $i boot
 	done
 
 	for i in $tunnels; do
