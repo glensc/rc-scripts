@@ -1,3 +1,7 @@
+2003-09-09  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: - add sysfs to mtab
+
 2003-09-08  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
 
 	* rc.d/rc.sysinit: - mount sysfs in the same way as proc is
