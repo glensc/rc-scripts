@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.34.2.1 2000/10/18 20:10:50 misiek Exp $
+# $Id: network,v 1.34.2.2 2000/10/22 09:59:16 misiek Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -120,7 +120,7 @@ interfaces_sit_boot=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
 	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
 tunnels=$((cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
 	xargs egrep -l "ONBOOT=[^n][^o]" | \
-	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+	awk ' { gsub(/tnlcfg-/,NIL); print $0 } ') 2> /dev/null)
 
 # See how we were called.
 case "$1" in
