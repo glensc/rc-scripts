@@ -8,7 +8,7 @@ init_SCRIPTS = \
 	network \
 	random \
 	single \
-	allowlogin
+	timezone
 	
 init_DATA = functions
 

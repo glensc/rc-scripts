@@ -9,6 +9,7 @@ sysconfig_DATA = \
 	network \
 	static-routes \
 	static-nat \
-	i18n
+	i18n \
+	timezone
 
 EXTRA_DIST = $(sysconfig_DATA)

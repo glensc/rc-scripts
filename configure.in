@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.23 2000/03/02 17:22:15 wiget Exp $
+dnl $Id: configure.in,v 1.24 2000/03/04 13:59:16 siefca Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
@@ -13,6 +13,7 @@ SHSCRIPTS="rc.d/rc 			\
 	rc.d/init.d/network 		\
 	rc.d/init.d/random 		\
 	rc.d/init.d/single 		\
+	rc.d/init.d/timezone 		\
 	rc.d/rc 			\
 	rc.d/rc.init 			\
 	rc.d/rc.local 			\
