@@ -13,11 +13,11 @@ INSTOBJEXT = .mo
 SUFFIXES = .po .mo .gmo
 
 .po.mo: $(PACKAGE).pot
-	$(MSGFMT) -c -o $@ $<
+	$(MSGFMT) -c --statistics -o $@ $<
 
 .po.gmo: $(PACKAGE).pot
 	file=`echo $* | awk ' { gsub(/.*\//,NIL); print $0; } '`.gmo \
-	  && rm -f $$file && $(GMSGFMT) -c -o $$file $<
+	  && rm -f $$file && $(GMSGFMT) -c --statistics -o $$file $<
 
 $(PACKAGE).pot: Makefile $(POTSRC)
 	$(makepot) $(POTSRC) >$(PACKAGE).po; \
