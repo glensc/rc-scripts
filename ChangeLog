@@ -1,3 +1,78 @@
+2004-01-08 22:01 [r3134]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* configure.ac: - 0.4.0.7 release
+
+2004-01-08 02:43 [r3133]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: When shutting down
+	  ip rule and ip route, clear rules using current kernel tables
+	  configuration not data stored in configuration files so we always
+	  end in clean state (by Arkadiusz Chomicki <duch@wla.pl>).
+
+2004-01-07 08:37 [r3132]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/rc: Typo fixed (revious->previous) in bootsplash code.
+	  Arkadiusz Chomicki <duch@wla.pl>
+
+2004-01-02 16:44 [r3109-3110]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* autogen.sh: Second option when doing changelog is directory name
+	  like rc-scripts.
+
+	* rc.d/rc.sysinit: Zero /etc/cryptomtab if such file exists.
+
+2003-12-28 19:23 [r3090]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: Don't mount selinuxfs if it's already mounted
+	  (by init for example).
+
+2003-12-27 14:43 [r3081]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Fix static routes
+	  conf parsing. (Arkadiusz Chomicki <chomar@wla.pl>)
+
+2003-12-25 18:43 [r3076]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* autogen.sh: changelog generation part can be now used in other
+	  modules.
+
+2003-12-25 13:20 [r3073]  £ukasz Jerna¶ <deejay1@pld-linux.org>
+
+	* rc.d/init.d/template.init: - typo
+
+2003-12-23 17:15 [r3065]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+
+	* rc.d/init.d/functions: - fixed bug when $limits is empty
+
+2003-12-23 00:37 [r3064]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/network: When starting execute rc_splash 'bootnetwork
+	  start'.
+
+2003-12-23 00:31 [r3063]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: Read sysconfig/bootsplash, too.
+
+2003-12-22 17:43 [r3062]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+
+	* rc.d/init.d/functions: - removed sed (I'm sorry I done buggy
+	  change last time, now it is good one - tested and working)
+
+2003-12-22 00:59 [r3061]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/rc: Much more accurate calculations of start/stop scripts
+	  required in new runlevel.
+
+2003-12-21 22:55 [r3060]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: Revert few pzurowski changes since they
+	  are broken even after fixing syntax.
+
+2003-12-21 22:31 [r3059]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: Pawe³ ¯urowski optimizations were broken
+	  (missing quotation marks). Fixed now.
+
 2003-12-21 21:25 [r3056]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
 
 	* rc-scripts.spec.in: Add pkgconfig to BuildRequires.
