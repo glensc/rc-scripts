@@ -5,8 +5,6 @@
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
-cd "$srcdir"
-
 PKG_NAME="PLD Linux Distribution rc-scripts"
 
 if [ "$1" = "changelog" -a -x ~/bin/svn2log.py ]; then
@@ -16,7 +14,9 @@ if [ "$1" = "changelog" -a -x ~/bin/svn2log.py ]; then
     rm -f ${TMPDIR:-/tmp}/svn2log.tmp
     exit 0
 fi
-							
+
+cd "$srcdir"
+
     
 (test -f $srcdir/configure.ac \
   && test -d $srcdir/src) || {
