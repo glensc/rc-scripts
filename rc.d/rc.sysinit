@@ -523,6 +523,7 @@ fi
 _RUN_QUOTACHECK=0
 # Check filesystems
 if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline; then
+    	rc_splash "fsck start"
 	show "Checking filesystems"; started
 	initlog -c "fsck -C -T -R -A -a $fsckoptions"
 
@@ -550,6 +551,7 @@ if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline; then
 	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
 		_RUN_QUOTACHECK=1
 	fi
+	rc_splash "fsck stop"
 fi
 
 # Mount all other filesystems (except for NFS and /proc, which is already

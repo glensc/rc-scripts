@@ -199,6 +199,15 @@ nls()
 	NLS_DOMAIN="$old_nls_domain"
 }
 
+rc_splash()
+{
+	typeset action
+
+	if ! is_no "$BOOT_SPLASH"; then
+		[ -x /bin/splash ] && /bin/splash "$action"
+	fi
+}
+
 msg_network_down()
 {
 	nls "ERROR: Networking is down. %s can't be run." "$1" >&2

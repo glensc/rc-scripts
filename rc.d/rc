@@ -132,6 +132,8 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		[ ! -f /var/lock/subsys/$subsys ] && \
 		    [ ! -f /var/lock/subsys/${subsys}.init ] && continue
 
+		rc_splash "$i stop"
+		
 		# Bring the subsystem down.
 		$i stop
 	done
@@ -168,6 +170,7 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 			esac
 		}
 
+		rc_splash "$i start"
 		# Bring the subsystem up.
 		$i start
 	done
@@ -199,6 +202,8 @@ else
 		fi
 	fi
 fi
+
+rc_splash "master"
 
 # Say something ;)
 text="$(nls '%sResource Manager: %sRunlevel has been reached' "$af2" "$af7")"
