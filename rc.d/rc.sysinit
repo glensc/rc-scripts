@@ -308,10 +308,11 @@ if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
 fi
 
 # Clear mtab
->/etc/mtab
+:>/etc/mtab
+[ -f /etc/cryptomtab ] && :>/etc/cryptomtab
 
 # Remove stale backups
-rm -f /etc/mtab~ /etc/mtab~~
+rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
 
 # Enter root, /proc, /sys, devfs and other into mtab.
 mount -f /
