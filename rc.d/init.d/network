@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.56 2002/05/11 09:50:50 misiek Exp $
+# $Id: network,v 1.57 2002/08/23 22:13:17 zagrodzki Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -118,15 +118,22 @@ set_down_loopback
 
 # find all the interfaces besides loopback.
 # ignore aliases, alternative configurations, and editor backup files
-interfaces=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
-	egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
+interfaces_boot=$((
+	. /etc/rc.d/init.d/functions; \
+	cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
+	egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|:)' | \
+	egrep 'ifcfg-[a-z0-9\.]+$' | \
+	for i in `cat`; do \
+	    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+	done | \
 	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-interfaces_boot=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
-	egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|:)' | egrep 'ifcfg-[a-z0-9\.]+$' | \
-	xargs egrep -l "ONBOOT=[^n][^o]" | \
-	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-interfaces_sit_boot=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
-	egrep 'ifcfg-[a-z0-9]+$' | xargs egrep -l "ONBOOT=[^n][^o]" | \
+interfaces_sit_boot=$((
+	. /etc/rc.d/init.d/functions; \
+	cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
+	egrep 'ifcfg-[a-z0-9]+$' | \
+	for i in `cat`; do \
+	    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+	done | \
 	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
 tunnels=$((cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
 	xargs egrep -l "ONBOOT=[^n][^o]" | \
