@@ -70,11 +70,13 @@ GLIBDIR=none
 AC_MSG_CHECKING([glib2 dir])
 GLIBDIR="`$PKG_CONFIG --variable=libdir glib-2.0`"
 GLIBNAME="libglib-2.0.a"
+GCFLAGS="`$PKG_CONFIG --cflags-only-I glib-2.0`"
 if test "x$GLIBDIR" = "x"; then
     AC_MSG_RESULT([none])
     AC_MSG_CHECKING([glib dir])
     GLIBDIR="`$PKG_CONFIG --variable=libdir glib`"
     GLIBNAME="libglib.a"
+    GCFLAGS="`$PKG_CONFIG --cflags-only-I glib`"
 fi
 if test "x$GLIBDIR" = "x"; then
     GLIBDIR=/usr/lib
@@ -98,6 +100,7 @@ AC_SUBST(rcdir)
 AC_SUBST(docdir)
 AC_SUBST(GLIBDIR)
 AC_SUBST(GLIBNAME)
+AC_SUBST(GCFLAGS)
 
 AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile \
 	ppp/Makefile \

@@ -1,6 +1,7 @@
 @SET_MAKE@
 
 GLIBDIR = @GLIBDIR@
+GCFLAGS = @GCFLAGS@
 GLIBNAME = @GLIBNAME@
 
 DEFS = @DEFS@ -D_GNU_SOURCE=1
@@ -57,6 +58,6 @@ getkey_LDADD = -lpopt
 
 ppp_watch_SOURCES = ppp-watch.c shvar.c shvar.h
 ppp_watch_LDADD = $(GLIBDIR)/$(GLIBNAME)
-INCLUDES = `glib-config --cflags`
+INCLUDES = $(GCFLAGS)
 
 consoletype_SOURCES = consoletype.c
