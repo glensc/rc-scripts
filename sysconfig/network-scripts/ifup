@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.42.2.8 2001/05/13 17:47:46 misiek Exp $
+#	$Id: ifup,v 1.42.2.9 2001/05/13 19:15:29 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -173,7 +173,7 @@ if is_yes "$IPX"; then
 	/etc/sysconfig/network-scripts/ifup-ipx $DEVICE
 fi
 
-if [ "$HANDLING" "4" ]; then
+if [ "$HANDLING" = "4" ]; then
 	exit 0
 fi
 
