@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.30 1999/10/27 12:09:56 wiget Exp $
+# $Id: functions,v 1.31 1999/11/26 16:31:26 wiget Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -12,7 +12,13 @@
 # First set up a default search path.
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 
-[ -z "$COLUMNS" ] && COLUMNS=80
+if [ -f /etc/sysconfig/system ]; then
+	. /etc/sysconfig/system
+fi
+
+if [ -z "$COLUMNS" ]; then 
+	COLUMNS=80
+fi
 
 # Colors workaround
 termput() 
