@@ -97,7 +97,10 @@ else
 		if is_yes "${DEBUG}"; then
 		    chatdbg="-v"
 		fi
-		echo "connect \"/usr/sbin/chat $chatdbg -f ${CHATSCRIPT} -r ${REPORTFILE} ${chatdbg}\"" >> ${PEERCONF}
+		if [ -n "${DATAFORCHAT}" ]; then
+			chatreadenv=-E
+		fi
+		echo "connect \"/usr/sbin/chat $chatreadenv -f ${CHATSCRIPT} -r ${REPORTFILE} ${chatdbg}\"" >> ${PEERCONF}
 	    fi
 	fi
 	
@@ -206,6 +209,9 @@ MODEM="${MODEMPORT}"; export MODEM
 (logger -p daemon.info -t ifup-ppp \
     $(nls 'pppd started for %s on device "%s" at speed %s' "$DEVICE" "$MODEMPORT" "${LINESPEED:-(unspecified)} on unit ${UNIT}") &)&
 
+if [ -n "${DATAFORCHAT}" ]; then
+	export $DATAFORCHAT
+fi
 /usr/sbin/pppd $opts ${MODEMMODE} "${MODEMPORT}" ${LINESPEED} \
 	ipparam ${DEVNAME} linkname ${DEVNAME} \
 	${PPPOPTIONS}
