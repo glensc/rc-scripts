@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.121 2003/07/05 11:59:54 arekm Exp $
+# $Id: rc.sysinit,v 1.122 2003/08/07 10:20:11 arekm Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -421,18 +421,37 @@ if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
 fi
 
 # Add raid devices
-if [ -f /etc/raidtab ]; then
+if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
 
 	modprobe -s md >/dev/null 2>&1
 	if [ -f /proc/mdstat ]; then
+	    gomdadm=1
+	    goraidtab=1
 	    rc=0
-	
-	    for i in $(grep -v "^#" /etc/raidtab | grep "raiddev" | awk '{print $2}') ; do
-		RAIDDEV=$(basename $i)
-		RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat)
-		show "Starting up RAID device %s" $RAIDDEV
-		busy
-		if [ -z "$RAIDSTAT" ]; then
+	    
+	    if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
+		gomdadm=0
+		for i in $(mdadm --examine --brief --scan --config=partitions | awk	'/^ARRAY/ { print $2 }'); do
+		    if (grep -qE "([[:blank:]]|)ARRAY[[:blank:]]${i}" /etc/mdadm.conf); then
+			gomdadm=1
+			break
+		    fi
+		done
+		if [ "$gomdadm" -eq 1 ]; then
+		    run_cmd "Starting up RAID devices" /sbin/mdadm --assemble --scan
+		    rc=$?
+		    [ "$rc" -eq 0 ] && goraidtab=0
+		fi
+	    fi
+	    
+	    if [ -f /etc/raidtab -a "$goraidtab" -eq 1 ]; then
+		
+		for i in $(grep -v "^#" /etc/raidtab | grep "raiddev" | awk '{print $2}') ; do
+		    RAIDDEV=$(basename $i)
+		    RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat)
+		    show "Starting up RAID device %s" $RAIDDEV
+		    busy
+		    if [ -z "$RAIDSTAT" ]; then
 			# Try raidstart first...if that fails then
 			# fall back to raid0run and if that fails too
 			# fall back to raidadd, raidrun.
@@ -456,10 +475,11 @@ if [ -f /etc/raidtab ]; then
 			else
 				ok
 			fi
-		else
+		    else
 			ok
-		fi
-	    done
+		    fi
+		done
+	    fi
 
 	    # A non-zero return means there were problems
 	    if [ $rc -gt 0 ]; then
