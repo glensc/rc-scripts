@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.40 2000/03/09 11:11:42 zagrodzki Exp $
+# $Id: functions,v 1.41 2000/03/09 11:30:54 zagrodzki Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -134,7 +134,7 @@ died()
 
 deltext() 
 {
-	echo -ne "`nls --nls-domain rc-scripts "\b\b\b\b\b\b\b\b"`"	
+	echo -ne "`nls "\b\b\b\b\b\b\b\b"`"	
 }
 
 # Usage run_cmd Message command_to_run
@@ -172,7 +172,7 @@ daemon()
 	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 	# Test syntax.
 	case $1 in
-	'')	echo '$0: Usage: daemon [+/-nicelevel] {program}'
+	'')	nls "Usage: daemon [+/-nicelevel] {program}\n"
 		return 1;;
 	-*|+*) SERVICE_RUN_NICE_LEVEL=$1
 		shift;;
@@ -202,7 +202,7 @@ killproc()
 {
 	# Test syntax.
 	if [ $# = 0 ]; then
-		nls "Usage: killproc {program} [signal]"
+		nls "Usage: killproc {program} [signal]\n"
 		return 1
 	fi
 
@@ -305,7 +305,7 @@ status()
 	# First try "pidof"
 	pid=`pidof $1`
 	if [ "$pid" != "" ] ; then
-	        nls "%s (pid %s) is running..." "$1" "$pid"
+	        nls "%s (pid %s) is running...\n" "$1" "$pid"
 	        return 0
         else
                 pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
@@ -313,7 +313,7 @@ status()
                              (("[" prog "]") == $5) ||
                            ((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
                 if [ "$pid" != "" ] ; then
-                        nls "%s (pid %s) is running..." "$1" "$pid"
+                        nls "%s (pid %s) is running...\n" "$1" "$pid"
                         return 0
                 fi
 	fi
@@ -322,16 +322,16 @@ status()
 	if [ -f /var/run/$1.pid ] ; then
 	        pid=`head -1 /var/run/$1.pid`
 	        if [ "$pid" != "" ] ; then
-	                nls "%s dead but pid file exists" "$1"
+	                nls "%s dead but pid file exists\n" "$1"
 	                return 1
 	        fi
 	fi
 	# See if /var/lock/subsys/$1 exists
 	if [ -f /var/lock/subsys/$1 ]; then
-		nls "%s dead but subsys locked" "$1"
+		nls "%s dead but subsys locked\n" "$1"
 		return 2
 	fi
-	nls "%s is stopped" "$1"
+	nls "%s is stopped\n" "$1"
 	return 3
 }
 
@@ -395,4 +395,44 @@ is_no()
 	[ "$1" = "" ] ||\
 		return 1
 	return 0
+}
+
+msg_Network_Down()
+{
+	nls "ERROR: Networking is down. %s can't be run.\n" "$1"
+}
+
+msg_starting()
+{
+	nls "Starting %s service" "$1"
+}
+
+msg_Already_Running()
+{
+	nls "%s service is already running.\n" "$1"
+}
+
+msg_stopping()
+{
+	nls "Stopping %s service" "$1"
+}
+
+msg_Not_Running()
+{
+	nls "%s service is not running.\n" "$1"
+}
+
+msg_reloading()
+{
+	nls "Reloading %s service" "$1"
+}
+
+msg_Usage_reload()
+{
+	nls "Usage: %s {start|stop|status|restart|reload|force-reload}\n" "$1"
+}
+
+msg_Usage_noreload()
+{
+	nls "Usage: %s {start|stop|status|restart|force-reload}\n" "$1"
 }
