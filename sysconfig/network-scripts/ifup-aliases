@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-aliases,v 1.12 2001/05/16 13:12:07 baggins Exp $
+#	$Id: ifup-aliases,v 1.13 2001/07/21 19:19:22 baggins Exp $
 #
 # adds all addresses of device $1
 
@@ -100,7 +100,7 @@ for nr in $(awk 'BEGIN { for (j=1; j<256; j++) print j}'); do
 done
 
 # Setup IPv4-compatible addresses
-if is_yes "$IPV6_NETWORKING" && [ "$BOOTMETHOD6" = "v4compat" ]; then
+if is_yes "$IPV6_NETWORKING" && [ "$BOOTPROTO6" = "v4compat" ]; then
 	# enable automatic tunnels
 	ip link set sit0 up
 
