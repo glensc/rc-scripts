@@ -75,8 +75,8 @@ if [ ! -f /fastboot ]; then
 		echo "*** Dropping you to a shell; the system will reboot"
 		echo "*** when you leave the shell."
 
-		PS1="(Repair filesystem) \#"; export PS1
-		if [ "$RUN_SULOGIN_ON_ERR" = "yes"]; then
+		PS1='(Repair filesystem) #'; export PS1
+		if [ "$RUN_SULOGIN_ON_ERR" == "yes" ]; then
 			sulogin
 		else
 			/bin/sh
@@ -85,7 +85,7 @@ if [ ! -f /fastboot ]; then
 		run_cmd "Unmounting file systems" umount -a
 		mount -n -o remount,ro /
 		run_cmd "Automatic reboot in progress." reboot
-	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
+	elif [ "$rc" == "1" -a -x /sbin/quotacheck ]; then
 		_RUN_QUOTACHECK=1
 	fi
 fi
@@ -116,7 +116,7 @@ fi
 run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
 
 # Update quotas if fsck was run on /.
-if [ X"$_RUN_QUOTACHECK" = X1 -a -x /sbin/quotacheck ]; then
+if [ X"$_RUN_QUOTACHECK" == "X1" -a -x /sbin/quotacheck ]; then
         run_cmd "Checking root filesystem quotas"  /sbin/quotacheck -v /
 fi
 
@@ -200,8 +200,8 @@ if [ -f /proc/mdstat -a -f /etc/raidtab -a -x /sbin/raidstart ]; then
 		echo "*** Dropping you to a shell; the system will reboot"
 		echo "*** when you leave the shell."
 
-		PS1="(RAID Repair) \#"; export PS1
-		if [ "$RUN_SULOGIN_ON_ERR" == "yes"]; then
+		PS1='(RAID Repair) #'; export PS1
+		if [ "$RUN_SULOGIN_ON_ERR" == "yes" ]; then
 			sulogin
 		else
 			/bin/sh
@@ -228,8 +228,8 @@ if [ ! -f /fastboot ]; then
 		echo "*** Dropping you to a shell; the system will reboot"
 		echo "*** when you leave the shell."
 
-		PS1="(Repair filesystem) \#"; export PS1
-		if [ "$RUN_SULOGIN_ON_ERR" = "yes"]; then
+		PS1='(Repair filesystem) #'; export PS1
+		if [ "$RUN_SULOGIN_ON_ERR" == "yes" ]; then
 			sulogin
 		else
 			/bin/sh
@@ -238,7 +238,7 @@ if [ ! -f /fastboot ]; then
 		run_cmd "Unmounting file systems" umount -a
 		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
 		run_cmd "Automatic reboot in progress." reboot
-	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
+	elif [ "$rc" == "1" -a -x /sbin/quotacheck ]; then
 		run_cmd "Checking filesystem quotas"/sbin/quotacheck -v -R -a
 	fi
 fi
@@ -299,9 +299,9 @@ if [ -f /etc/sysconfig/clock ]; then
 	. /etc/sysconfig/clock
 
 	# convert old style clock config to new values
-	if [ "${CLOCKMODE}" = "GMT" ]; then
+	if [ "${CLOCKMODE}" == "GMT" ]; then
 		UTC=true
-	elif [ "${CLOCKMODE}" = "ARC" ]; then
+	elif [ "${CLOCKMODE}" == "ARC" ]; then
 	    ARC=true
 	fi
 fi

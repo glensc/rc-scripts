@@ -6,7 +6,8 @@ else	MODE=ipip || MODE=gre || MODE=sit ; then
 
 	REMOTEADDR=<IPv4 addres>
 	[ LOCALADDR=<IPv4 addres> ]
-	[ REALDEVICE=<name of physic device>
+        [ BIND_DEV= ] do jakiego device przybindowaæ (ma zwi±zek z routingiem itp)
+
 	[ TTL= ]
 	[ TOS= ]
 	[ SEQ={no|yes} ]
@@ -18,6 +19,6 @@ else	MODE=ipip || MODE=gre || MODE=sit ; then
 	[ CSUM={no|yes} ]
 	[ ICSUM={no|yes} ]
 	[ OCSUM={no|yes} ]
-	[ NOPMTUDISC={no|yes} ]
+	[ PMTUDISC={no|yes} ]
 fi
 	

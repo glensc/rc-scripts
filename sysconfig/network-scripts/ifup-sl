@@ -86,8 +86,9 @@ else
 
 	# Check if slattach (or other process) is using $MODEMPORT
 	# if not - execute slattach
-        if fuser -s $MODEMPORT; then
+        if [ -x /usr/sbin/fuser ] && fuser -s $MODEMPORT; then
         logger -p daemon.info -t ifup-sl "some process is currently using $MODEMPORT"
+	echo "some process is currently using $MODEMPORT - aborting..."
         else
         slattach -p $PROTOCOL -s $LINESPEED $MODEMPORT &
         usleep 500

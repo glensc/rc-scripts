@@ -55,6 +55,10 @@ if [ "$BOOTP" = "yes" ]; then
     BOOTPROTO=bootp
 fi
 
+if [ "$BOOTPROTO" = bootp -o "$BOOTPROTO" = dhcp ]; then
+    PUMP=true
+fi
+
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
 if [ -x $OTHERSCRIPT ]; then
@@ -62,7 +66,7 @@ if [ -x $OTHERSCRIPT ]; then
 fi
 
 # is this device available? (this catches PCMCIA devices for us)
-/sbin/ifconfig ${REALDEVICE} 2>&1 | grep -s "unknown interface" > /dev/null
+/sbin/ifconfig ${REALDEVICE} 2>&1 | grep -s "not found" > /dev/null
 if [ "$?" = "0" ]; then
     echo "Delaying ${DEVICE} initialization."
     exit 0
@@ -74,56 +78,25 @@ if [ "$SLAVE" = yes -a "$ISALIAS" = no -a "$MASTER" != "" -a \
 
     ifconfig ${DEVICE} down
     echo "Enslaving $DEVICE to $MASTER"
-    ifenslave $RFLAG "$DEVICE" "$MASTER"
+    ifenslave $RFLAG "$MASTER" "$DEVICE"
 
     exit 0
 fi
 
-if [ "$BOOTPROTO" = bootp -a "$ISALIAS" = no ]; then
-#   ifconfig ${DEVICE} down
-    ip link set ${DEVICE} down
-#   ifconfig ${DEVICE} 0.0.0.0 broadcast 255.255.255.255 netmask 0.0.0.0
-    ip addr add 0.0.0.0/0 broadcast 255.255.255.255 dev ${DEVICE}
-#   route add default ${DEVICE}
-    ip route add 0.0.0.0/0 dev ${DEVICE}
-    echo "Sending bootp request"
-    TMPFILE=`/bin/mktemp /tmp/bootp-${DEVICE}.XXXXXX` || {
-#	ifconfig ${DEVICE} down
-	ip link set ${DEVICE} down
-	echo 'mktemp failed'
-	exit 1
-    }
-    bootpc --returniffail --timeoutwait 6 --dev ${DEVICE} 2>/dev/null > ${TMPFILE}
-    if [ "$?" = "0" ]; then
-	. ${TMPFILE}
-	BOOTPHOSTNAME="$HOSTNAME"
-	echo "bootp response received -- using IP ${IPADDR}"
-    elif [ -z "$IPADDR" ]; then
-#	ifconfig ${DEVICE} down
-	ip link set ${DEVICE} down
-	echo "No bootp response recieved -- not configuring device ${DEVICE}."
-	rm -f ${TMPFILE}
-	exit 1
-    else 
-	echo "No bootp response recieved -- using default configuration for device ${DEVICE}."
-    fi
-
-    rm -f ${TMPFILE}
-elif [ "$BOOTPROTO" = dhcp -a "$ISALIAS" = no ]; then
-    echo -n "Using DHCP for ${DEVICE}... "
-    IFNAME=${DEVICE} \
-	/sbin/dhcpcd -c /etc/sysconfig/network-scripts/ifdhcpc-done ${DEVICE} 
-    echo "echo \$$ > /var/run/dhcp-wait-${DEVICE}.pid; exec sleep 30" | sh
-
-    if [ -f /var/run/dhcp-wait-${DEVICE}.pid ]; then
-	echo "failed."
-	exit 1
-    else
-	rm -f /var/run/dhcp-wait-${DEVICE}.pid
-	echo "done."
-	IPSETUP=yes
-    fi
+if [ -n "$MACADDR" ]; then
+   ifconfig ${DEVICE} hw ether ${MACADDR}
 fi
+
+if [ -n "$PUMP" ]; then
+    echo -n "Determining IP information for $DEVICE..."
+    if /sbin/pump -i $DEVICE ; then
+       echo " done."
+    else
+       echo " failed."
+       exit 1
+    fi
+
+else
 
 if [ "$IPSETUP" != yes ]; then
     if [ -z "$NETMASK" ]; then
@@ -138,16 +111,16 @@ if [ "$IPSETUP" != yes ]; then
 	eval `/bin/ipcalc --network ${IPADDR} ${NETMASK}`
     fi
 
-    ifconfig ${DEVICE} ${MACADDR:+hw ether $MACADDR} ${IPADDR} \
-      netmask ${NETMASK} broadcast ${BROADCAST}
+    ifconfig ${DEVICE} ${IPADDR} netmask ${NETMASK} broadcast ${BROADCAST}
 
     if [ "${IP6VNETWORKING}" = "yes" ] ; then 
       for ADDR in ${IP6VADDRS} ; do
         ip addr add ${ADDR} dev ${DEVICE}
       done  
     fi
-    
-    if [ "$ISALIAS" = no ] ; then
+
+# hack for 2.2 kernels
+    if [ "$ISALIAS" = no ] && [ -z "`route -n | sed "s/ .*//" | grep ${NETWORK}`" ]; then
 # potrzebna zamiana netmaski z postaci np. 255.255.255.255 -> 32
 	route add -net ${NETWORK} netmask ${NETMASK} ${DEVICE}
     else

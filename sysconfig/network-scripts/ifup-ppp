@@ -19,7 +19,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 if [ "$1" != daemon ] ; then
   # disconnect stdin, out, err to disassociate from controlling tty
   # so that no HUPs will get through.
-  $0 daemon $*& </dev/null >/dev/null 2>/dev/null
+  $0 daemon $* </dev/null >/dev/null 2>/dev/null &
   exit 0
 fi
 shift
@@ -60,6 +60,8 @@ if [ "${HARDFLOWCTL}" = yes ] ; then
   opts="$opts modem crtscts"
 fi
 if [ "${ESCAPECHARS}" = yes ] ; then
+  opts="$opts asyncmap FFFFFFFF"
+elif [ "${ESCAPECHARS}" = no ] ; then
   opts="$opts asyncmap 00000000"
 fi
 if [ "${DEFROUTE}" = yes ] ; then

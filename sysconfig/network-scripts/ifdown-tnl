@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#
+# Uwagi:
+# - przy dodawaniu routingu w ifup pamiêtac o "onlink" (patrz dokumentacja do iproute)
+# - gdzie¶ trzeba umie¶ciæ modprobe ipip && modprobe ip_gre
+#
+
+cd /etc/sysconfig/network-scripts
+. /etc/rc.d/init.d/functions.network
+
+CONFIG=$1
+source_config
+
+if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
+then
+        exit
+fi
+
+if [ "${MODE}" == "ipip" ] || [ "${MODE}" == "sit" ] || [ "${MODE}" == "gre" ]; then
+
+	ip tunnel del ${DEVICE}
+
+elif [ "${MODE}" == "ipxip" ] || [ "${MODE}" == "ipipx" ]; then
+
+echo "obs³uga ipxip jeszcze nie zrobiona"
+
+fi

@@ -1,0 +1,72 @@
+#!/bin/sh
+#
+# Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#
+# Uwagi:
+# - przy dodawaniu routingu w ifup pamiêtac o "onlink" (patrz dokumentacja do iproute)
+# - gdzie¶ trzeba umie¶ciæ modprobe ipip && modprobe ip_gre
+#
+
+cd /etc/sysconfig/network-scripts
+. /etc/rc.d/init.d/functions.network
+
+CONFIG=$1
+source_config
+
+if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
+then
+        exit
+fi
+
+[ -z "${TTL}" ] && TTL=inherit
+[ -z "${TOS}" ] && TOS=inherit
+[ -z "${LOCALADDR}" ] && LOCALADDR=any
+[ -z "${REMOTEADDR}" ] && REMOTEADDR=any
+[ -n "${BIND_DEV}" ] && BIND_DEV="dev $BIND_DEV"
+
+if [ "${SEQ}" == "yes" ]; then
+	SEQ=seq
+else
+	[ "${ISEQ}" == "yes" ] && SEQ=iseq
+	[ "${OSEQ}" == "yes" ] && SEQ="$SEQ oseq"
+fi
+
+if [ "${CSUM}" == "yes" ]; then
+	CSUM=csum
+else
+        [ "${ICSUM}" == "yes" ] && CSUM=icsum
+        [ "${ICSUM}" == "yes" ] && CSUM="$SEQ ocsum"
+fi
+
+[ "${ISEQ}" == "yes" ] && ISEQ=iseq
+[ "${ISEQ}" == "yes" ] && ISEQ=iseq
+[ "${ISEQ}" == "yes" ] && ISEQ=iseq
+[ "${ISEQ}" == "yes" ] && ISEQ=iseq
+
+[ "${TTL}" != "0" -a "${TTL}" != "inherit" ] && PMTUDISC=yes
+
+if [ "${PMTUDISC}" == "yes" ]; then
+	PMTUDISC=pmtudisc
+else
+	PMTUDISC=nopmtudisc
+fi
+
+if [ -n "${KEY}" ]; then
+IKEY=""
+OKEY=""
+fi
+
+if [ "${MODE}" == "ipip" ] || [ "${MODE}" == "sit" ]; then
+	
+	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos ${TOS} ${PMTUDISC} $BIND_DEV
+
+elif [ "${MODE}" == "gre" ]; then
+
+	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos
+${TOS} ${PMTUDISC} $BIND_DEV $CSUM $ISEQ ${KEY} ${IKEY} ${OKEY}
+
+elif [ "${MODE}" == "ipxip" ] || [ "${MODE}" == "ipipx" ]; then
+
+echo "obs³uga ipxip jeszcze nie zrobiona"
+
+fi
