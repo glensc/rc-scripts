@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-# lpd           This shell script takes care of starting and stopping
-#               lpd (printer daemon).
+# testd         This shell script takes care of starting and stopping
+#               testd (example daemon).
 #
 
 # Source function library.

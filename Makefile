@@ -7,19 +7,24 @@ all:
 	(cd src; make CFLAGS="$(CFLAGS)")
 
 install:
-	mkdir -p $(ROOT)/etc/profile.d $(ROOT)/sbin
+	mkdir -p $(ROOT)/etc/profile.d $(ROOT)/sbin/network-scripts $(ROOT)/etc/sysconfig/interfaces
 	install -m644 inittab $(ROOT)/etc
 	install -m644 adjtime $(ROOT)/etc
 	install -m644 inputrc $(ROOT)/etc
+	install -m644 sysconfig/network $(ROOT)/etc/sysconfig
+	install -m644 sysconfig/system $(ROOT)/etc/sysconfig
+	install -m644 sysconfig/static-routes $(ROOT)/etc/sysconfig
+	install -m755 network-scripts/if* $(ROOT)/sbin/network-scripts
+	install -m644 network-scripts/network-functions $(ROOT)/sbin/network-scripts
 	install -m755 setsysfont $(ROOT)/sbin
 	install -m755 lang.sh $(ROOT)/etc/profile.d
-	cp -af rc.d sysconfig ppp $(ROOT)/etc
-	mkdir -p $(ROOT)/sbin
-	mv $(ROOT)/etc/sysconfig/network-scripts/ifup $(ROOT)/sbin
-	mv $(ROOT)/etc/sysconfig/network-scripts/ifdown $(ROOT)/sbin
-	(cd $(ROOT)/etc/sysconfig/network-scripts; \
-	  ln -sf ../../../sbin/ifup . ; \
-	  ln -sf ../../../sbin/ifdown . )
+	cp -af sysconfig/interfaces $(ROOT)/etc/sysconfig
+	cp -af rc.d ppp $(ROOT)/etc
+	install -m755 $(ROOT)/sbin/network-scripts/ifup $(ROOT)/sbin
+	install -m755 $(ROOT)/sbin/network-scripts/ifdown $(ROOT)/sbin
+	(cd $(ROOT)/sbin/network-scripts; \
+	  ln -sf ../ifup . ; \
+	  ln -sf ../ifdown . )
 	(cd src; make install ROOT=$(ROOT))
 	mkdir -p $(ROOT)/var/run/netreport
 	chmod og=rwx,o=rx $(ROOT)/var/run/netreport

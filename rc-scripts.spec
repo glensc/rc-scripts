@@ -14,14 +14,12 @@ Buildroot:	/tmp/buildroot-%{name}-%{version}
 Requires:	mingetty
 Requires:	mktemp
 Requires:	modutils >= 2.1.121
-Provides:	initscripts
 Prereq:		/sbin/chkconfig
 Obsoletes:	initscripts
 
 %description
 This package contains the scripts use to boot a system, change run
-levels, and shut the system down cleanly. It also contains the scripts
-that activate and deactivate most network interfaces.
+levels, and shut the system down cleanly.
 
 %description -l de
 Dieses Paket enthält die Scripts, die zum Hochfahren des Systems, Ändern
@@ -44,6 +42,22 @@ Bu paket, sistem açmak, çalýþma düzeylerini deðiþtirmek ve sistemi düzgün bir
 þekilde kapatmak için gereken dosyalarý içerir. Ayrýca pek çok bilgisayar aðý
 arayüzlerini etkinleþtiren ya da edilginleþtiren programcýklar içerir.
 
+%package -n net-scripts
+Summary:	network startup scripts
+Summary(pl):	skrypty startowe sieci
+Group:		Base
+Group(pl):	Bazowe	
+Requires:	rc-scripts = %{version}
+Requires:	modutils >= 2.1.121
+Provides:	initscripts
+Prereq:		/sbin/chkconfig
+
+%description -n net-scripts
+Scripts that activate and deactivate most network interfaces.
+
+%description -n net-scripts
+Skrypty s³u¿±ce do aktywacji i deaktywacji interfejsów sieciowych
+
 %prep
 %setup -q
 
@@ -57,10 +71,10 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 make ROOT=$RPM_BUILD_ROOT install 
 
 gzip -9nf $RPM_BUILD_ROOT/usr/man/man*/* \
-	sysconfig.txt
+	sysconfig.txt net-scripts.txt
 
 %post
-for i in  halt network nfsfs random reboot single  
+for i in  halt nfsfs random reboot single  
 	do /sbin/chkconfig --add $i
 done 
 if [ -f /etc/inittab.rpmsave ]; then
@@ -75,51 +89,86 @@ fi
 if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del random
 	/sbin/chkconfig --del nfsfs
-	/sbin/chkconfig --del network
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
+%post -n net-scripts
+/sbin/chkconfig --add network
+for l in /etc/sysconfig/network-scripts/ifcfg-* ; do 
+  if [ -f "$l" ] ; then
+    NEWNAME=`basename $l | sed -e 's /^ifcfg-//'`
+    [ -f /etc/sysconfig/interfaces/$NEWNAME ] || cp $l /etc/sysconfig/interfaces/$NEWNAME
+  fi
+done
+
+%preun -n net-scripts
+if [ "$1" = "0" ]; then
+	/sbin/chkconfig --del network
+fi
 
 %files
 %defattr(644,root,root,754)
 %doc sysconfig.txt.gz
-%doc sysconfig/network-scripts/ifcfg-ppp*
-%doc sysconfig/network-scripts/chat-ppp*
 
 %config(noreplace) %verify(not md5 mtime size) /etc/adjtime
 %config(noreplace) %verify(not md5 mtime size) /etc/inittab
 
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/network-ip6
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/network-ip6.conf
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/system
 
-%attr(755,root,root) %dir /etc/sysconfig/network-scripts
-%attr(644,root,root) /etc/sysconfig/network-scripts/ifcfg-lo
-%attr(644,root,root) /etc/sysconfig/network-scripts/network-*
-%attr(754,root,root) /etc/sysconfig/network-scripts/ifdhcpc-done
-%attr(754,root,root) /etc/sysconfig/network-scripts/ifup
-%attr(754,root,root) /etc/sysconfig/network-scripts/ifup-*
-%attr(754,root,root) /etc/sysconfig/network-scripts/ifdown
-%attr(754,root,root) /etc/sysconfig/network-scripts/ifdown-*
-
-%attr(754,root,root) /etc/rc.d/init.d/*
+%attr(644,root,root) /etc/rc.d/init.d/functions
+%attr(754,root,root) /etc/rc.d/init.d/halt
+%attr(754,root,root) /etc/rc.d/init.d/killall
+%attr(754,root,root) /etc/rc.d/init.d/nfsfs
+%attr(754,root,root) /etc/rc.d/init.d/random
+%attr(754,root,root) /etc/rc.d/init.d/reboot
+%attr(754,root,root) /etc/rc.d/init.d/shutdwn
+%attr(754,root,root) /etc/rc.d/init.d/single
 
 %attr(754,root,root) /etc/rc.d/rc.sysinit
 %attr(754,root,root) /etc/rc.d/rc.serial
 %attr(754,root,root) /etc/rc.d/rc
 %attr(754,root,root) /etc/rc.d/rc.local
 %attr(755,root,root) /etc/profile.d/lang.sh
-%attr(754,root,root) /sbin/*
-%attr(755,root,root) /bin/*
-%attr(755,root,root) /usr/sbin/usernetctl
+%attr(755,root,root) /bin/doexec
+%attr(755,root,root) /bin/usleep
+%attr(755,root,root) /sbin/setsysfont
 
+/usr/man/man1/usleep.1.gz
+/usr/man/man1/doexec.1.gz
+
+%files -n net-scripts
+%doc /etc/sysconfig/interfaces/*-template!
+%doc /etc/sysconfig/interfaces/data/chat-ppp*
+%doc net-scripts.txt.gz
+%attr(754,root,root) /etc/rc.d/init.d/network
 %attr(750,root,root) %dir /var/run/netreport
+%attr(755,root,root) %dir /etc/sysconfig/interfaces
+%attr(755,root,root) %dir /etc/sysconfig/interfaces/data
 %attr(755,root,root,755) /etc/ppp
 
-/usr/man/man1/*
+%attr(755,root,root) %dir /sbin/network-scripts
+%attr(755,root,root) /sbin/network-scripts/if*
+%attr(644,root,root) /sbin/network-scripts/network-functions
+%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/interfaces/lo
+
+%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/network
+%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/static-routes
+
+%attr(755,root,root) /usr/sbin/usernetctl
+%attr(755,root,root) /bin/ipcalc
+%attr(755,root,root) /sbin/netreport
+%attr(755,root,root) /sbin/ifup
+%attr(755,root,root) /sbin/ifdown
+
+/usr/man/man1/netreport.1.gz
+/usr/man/man1/usernetctl.1.gz
+/usr/man/man1/ipcalc.1.gz
 
 %changelog
+* Thu Apr 22 1999 Jacek Konieczny <jajcus@zeus.polsl.gliwice.pl>
+  [0.0.3-1]
+- split into two packages: rc-scripts & net-scripts  
+- directory structure changed - only config in /etc
+
 * Tue Mar 23 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [0.0.2-1]
 - be more verbose while upgrading when /etc/inittab.rpmsave is found,

@@ -131,8 +131,8 @@ if [ "$IPSETUP" != yes ]; then
     ifconfig ${DEVICE} ${MACADDR:+hw ether $MACADDR} ${IPADDR} \
       netmask ${NETMASK} broadcast ${BROADCAST}
 
-    if [ "${IP6NETWORKING}" = "yes" ] ; then 
-      for ADDR in ${IP6ADDRS} ; do
+    if [ "${IP6VNETWORKING}" = "yes" ] ; then 
+      for ADDR in ${IP6VADDRS} ; do
         ifconfig ${DEVICE} add ${ADDR}
       done  
     fi
