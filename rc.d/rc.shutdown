@@ -6,7 +6,7 @@
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.12.2.1 2000/10/18 20:10:49 misiek Exp $
+# $Id: rc.shutdown,v 1.12.2.2 2001/05/10 19:23:24 misiek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -81,7 +81,7 @@ if [ -x /sbin/raidstop -a -f /etc/raidtab ]; then
 fi
 
 show "Remounting remaining filesystems ro mode"; busy
-if ( mount | awk '/ext2|ext3|reiserfs/ { print $3 }' | \
+if ( mount | awk '/ext2|ext3|reiserfs|xfs|jfs/ { print $3 }' | \
 	while read line; do 
 	mount -n -o ro,remount $line; done ); then
 	ok
