@@ -176,7 +176,7 @@ case "$1" in
 	network_init
 
 	for i in $interfaces_boot $interfaces_vlan_boot $interfaces_sit_boot ; do
-		run_cmd -a "$(nls 'Bringing up interface') $i" /sbin/ifup $i boot
+		run_cmd -a "$(nls 'Bringing up interface %s' "$i")" /sbin/ifup $i boot
 	done
 
 	for i in $tunnels; do
