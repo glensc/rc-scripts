@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.35 2000/08/28 15:35:48 zagrodzki Exp $
+# $Id: network,v 1.36 2000/08/28 15:38:14 zagrodzki Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -201,7 +201,7 @@ case "$1" in
 
 	nls "Currently active devices and tunnels:"
 	/sbin/ip link show | egrep '^[^ ].*' | sed 's/[0-9]*: \(.*\):.*/\1/' | \
-		tr '\n' ' '; echo
+		awk '{ printf("%s ",$0) }'; echo
 	;;
   restart)
 	$0 stop
