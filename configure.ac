@@ -194,6 +194,12 @@ AC_CONFIG_FILES([Makefile \
 	src/Makefile \
 	doc/Makefile \
 	man/Makefile \
+	man/de/Makefile \
+	man/es/Makefile \
+	man/fr/Makefile \
+	man/ja/Makefile \
+	man/ru/Makefile \
+	man/sv/Makefile \
 	ppp/Makefile \
 	isapnp/Makefile \
 	sysconfig/Makefile \
