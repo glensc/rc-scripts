@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.42.2.5 2000/11/05 14:01:24 misiek Exp $
+#	$Id: ifup,v 1.42.2.6 2000/12/03 20:02:17 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -34,7 +34,7 @@ fi
 
 source_config
 
-if [ "foo$2" = "fooboot" -n "${ONBOOT}" ] && is_no "${ONBOOT}"; then
+if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
     exit
 fi
 
