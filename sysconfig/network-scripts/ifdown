@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.23 2000/05/29 19:36:43 baggins Exp $
+#	$Id: ifdown,v 1.24 2000/05/31 17:55:05 zagrodzki Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -80,7 +80,7 @@ if [ "$ISALIAS" = "yes" ]; then
 		done
 else
     if [ "$DYNIP" = "dhcpcd" ]; then
-       /sbin/dhcpcd -k $FULLDEVNAME ; then
+       /sbin/dhcpcd -k $FULLDEVNAME
     fi
     ip link set ${DEVICE} down
     ip addr flush dev ${DEVICE} 2> /dev/null
