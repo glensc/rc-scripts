@@ -13,8 +13,8 @@ ppp_SCRIPTS = \
 EXTRA_DIST = $(ppp_SCRIPTS)	
 
 install-data-hook: all
-	ln -s ip-up	$(DESTDIR)$(pppdir)/ipv6-up
-	ln -s ip-down	$(DESTDIR)$(pppdir)/ipv6-down
+	ln -sf ip-up	$(DESTDIR)$(pppdir)/ipv6-up
+	ln -sf ip-down	$(DESTDIR)$(pppdir)/ipv6-down
 
 uninstall-hook:
 	rm -f		$(DESTDIR)$(pppdir)/ipv6-up
