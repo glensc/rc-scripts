@@ -336,13 +336,18 @@ run_cmd()
 	return $exit_code
 }
 
-# A function to start a program (now it's usefull on read-only filesystem too)
+# A function to start a program (now it's useful on read-only filesystem too)
 daemon()
 {
-	typeset errors="" prog=""
+	typeset errors="" prog="" limits=""
 	typeset -i exit_code=0
 	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
-	# Test syntax. Don't use -o instead || here - this will broke ksh --misiek
+	# "-u unlimited" (-p for ksh) to make sure daemons will be able to fork.
+	# "-c 0" to make sure it doesn't core dump anywhere; while this could mask
+	# problems with the daemon, it also closes some security problems.
+	# Users' limits are set via pam_limits.
+	[ -z "$DEFAULT_SERVICE_LIMITS" ] && DEFAULT_SERVICE_LIMITS_HARD="-u unlimited -c 0"
+	# Test syntax. Don't use -o instead || here - this will break ksh --misiek
 	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
 		case $1 in
 		  '')
@@ -372,20 +377,18 @@ daemon()
 		prog="$prog $*"
 	fi
 
-	# make sure it doesn't core dump anywhere; while this could mask
-	# problems with the daemon, it also closes some security problems
-	ulimit -c 0
-
-	# Make sure daemons will be able to fork.
-	# Limits are set via pam_limits.
 	if [ -n "$KSH_VERSION" ]; then
-		ulimit -p unlimited
+		limits="`echo ${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS} | sed -e 's/-\([SH]\?\)u/-\1p/'`"
 	elif [ -n "$ZSH_VERSION" ]; then
-		ulimit -u unlimited
+		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
 	elif [ -n "$BASH_VERSION" ]; then
-		ulimit -u unlimited
+		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
 #	elif [ -n "`$SH -c 'echo ${.sh.version}' 2>/dev/null`" ]; then
 	fi
+	while echo "$limits" | grep -q '[^ ]'; do
+		ulimit `echo ${limits} | sed -e 's/^ *\(-[^-]*\)\(-.*\)\?$/\1/'`
+		limits="`echo ${limits} | sed -e 's/^ *\(-[^-]*\)\(-.*\)\?$/\2/'`"
+	done
 
 	# And start it up.
 	busy

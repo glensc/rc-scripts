@@ -21,6 +21,17 @@ RUN_SULOGIN_ON_ERR=yes
 # $SERVICE_RUN_NICE_LEVEL is not defined in /etc/sysconfig/<service>
 DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 
+# Default limits set before running demons (hard and soft) if
+# $SERVICE_LIMITS are not defined in /etc/sysconfig/<service>
+# Use "-u" for process limits (automatically translated to "-p" for ksh).
+# Use "-Sx" or "-Hx" to set only soft or hard "x" limit.
+# Advised limits are:
+# "-u unlimited" to make sure daemons will be able to fork;
+# "-c 0" to make sure it doesn't core dump anywhere; while this could mask
+# problems with the daemon, it also closes some security problems;
+# users' limits are set via pam_limits.
+DEFAULT_SERVICE_LIMITS="-u unlimited -c 0"
+
 # Setup PNP using userspace tools?
 RUN_USERPNP=yes
 # Setup kernel space PNP (2.4.x)
