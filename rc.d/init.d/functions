@@ -390,7 +390,7 @@ daemon()
 	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
 		case $1 in
 		  '')
-			msg_usage " daemon [--user user] [+/-nicelevel] {program}"
+			msg_usage " daemon [--user user] [--fork] [+/-nicelevel] {program}"
 			return 2
 			;;
 		  --check)
@@ -404,6 +404,11 @@ daemon()
 			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
 			shift
 			;;
+        --fork)
+         prog="/usr/bin/setsid sh -c \""
+         end='&'
+         shift
+         ;;
 		  -*|+*) SERVICE_RUN_NICE_LEVEL=$1
 			shift;;
 		esac
@@ -411,9 +416,9 @@ daemon()
 	# If command to execute ends with quotation mark, add remaining
 	# arguments and close quotation.
 	if [ "$prog" != "${prog%\"}" ]; then
-		prog="$prog $*\""
+		prog="$prog $*$end\""
 	else
-		prog="$prog $*"
+		prog="$prog $*$end"
 	fi
 
 	if [ -n "$KSH_VERSION" ]; then
