@@ -285,7 +285,6 @@ fi
 # folowing function calculates network prefix from given network mask
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 #
-
 calcprefix() {
 local OISF len olen bad prefix
  OISF=$IFS
@@ -319,4 +318,34 @@ local OISF len olen bad prefix
  fi
  return
 }
-	       
+#
+# folowing function calculates network mask from given prefix
+# (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
+#
+calcnetmask() {
+local prefix a
+prefix=$[ $1 ]
+for i in 1 2 3 4
+ do
+  case $prefix in
+   7) a=254 ;;
+   6) a=252 ;;
+   5) a=248 ;;
+   4) a=240 ;;
+   3) a=224 ;;
+   2) a=192 ;;
+   1) a=128 ;;
+   *) if [ $prefix -ge 8 ]; then a=255; fi 
+      if [ $prefix -le 0 ]; then a=0; fi
+      ;;
+  esac
+  prefix=`expr $prefix - 8`
+  if [ -z $MASK ]
+   then MASK=$a
+   else MASK=$MASK.$a
+  fi
+ done
+echo $MASK
+return
+}
+						 
