@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.9 1999/08/02 10:08:05 misiek Exp $
+#	$Id: ifup-post,v 1.10 1999/08/14 11:40:15 misiek Exp $
 #
 
 cd /etc/sysconfig/network-scripts
@@ -23,7 +23,7 @@ else
     ISALIAS=no
 fi
 
-/etc/sysconfig/network-scripts/ifup-routes ${DEVICE}
+/etc/sysconfig/network-scripts/ifup-routes ${FULLDEVNAME}
 
 if [ "$ISALIAS" == "no" ] ; then
     /etc/sysconfig/network-scripts/ifup-aliases ${DEVICE}
