@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.14 1999/07/20 09:03:43 wiget Exp $
+# $Id: rc-scripts.spec.in,v 1.15 1999/07/22 09:09:35 wiget Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -61,36 +61,6 @@ Bu paket, sistem açmak, çalýþma düzeylerini deðiþtirmek ve sistemi düzgün bir
 þekilde kapatmak için gereken dosyalarý içerir. Ayrýca pek çok bilgisayar aðý
 arayüzlerini etkinleþtiren ya da edilginleþtiren programcýklar içerir.
 
-%package -n net-scripts
-Summary:	network startup scripts
-Summary(pl):	skrypty startowe sieci
-Group:		Base
-Group(pl):	Bazowe	
-Requires:	%{name} = %{version}
-Requires:	modutils >= 2.1.121
-Prereq:		/sbin/chkconfig
-
-%description -n net-scripts
-Scripts that activate and deactivate most network interfaces.
-
-%description -l pl -n net-scripts
-Skrypty s³u¿±ce do aktywacji i deaktywacji interfejsów sieciowych
-
-%package -n ipchains-setup
-Summary:	firewall chains setup script
-Summary(pl):	skrypty konfiguruj±cy regu³y filtrowania pakietów IP
-Group:		Base
-Group(pl):	Bazowe	
-Requires:	net-scripts = %{version}
-Requires:	ipchains
-Prereq:		/sbin/chkconfig
-
-%description -n ipchains-setup
-Script making IP firewall rules setup easier 
-
-%description -l pl -n ipchains-setup
-Skrypt u³atwiaj±cy konfigurowanie regu³ filtracji pakietów IP
-
 %prep
 %setup -q
 
@@ -110,7 +80,7 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/*.txt 
 
 %post
-for i in  halt random reboot single  
+for i in  halt random reboot single  network nfsfs allowlogin
 	do /sbin/chkconfig --add $i
 done 
 if [ -f /etc/inittab.rpmsave ]; then
@@ -120,16 +90,6 @@ if [ -f /etc/inittab.rpmsave ]; then
 	echo "/etc/inittab.rpmsave renamed to /etc/inittab."
 	mv /etc/inittab.rpmsave /etc/inittab
 fi
-
-%preun
-if [ "$1" = "0" ]; then
-	/sbin/chkconfig --del random
-	/sbin/chkconfig --del nfsfs
-fi
-
-%post -n net-scripts
-/sbin/chkconfig --add network
-/sbin/chkconfig --add nfsfs
 for l in /etc/sysconfig/network-scripts/ifcfg-* ; do 
   if [ -f "$l" ] ; then
     NEWNAME=`basename $l | sed -e 's /^ifcfg-//'`
@@ -137,10 +97,13 @@ for l in /etc/sysconfig/network-scripts/ifcfg-* ; do
   fi
 done
 
-%preun -n net-scripts
+%preun
 if [ "$1" = "0" ]; then
+	/sbin/chkconfig --del random
+	/sbin/chkconfig --del nfsfs
 	/sbin/chkconfig --del network
 fi
+
 
 %post -n ipchains-setup
 /sbin/chkconfig --add ipchains
@@ -181,8 +144,6 @@ fi
 %{_mandir}/man1/doexec.1.gz
 %{_mandir}/man1/initlog.1.gz
 
-#%files -n net-scripts
-#%defattr(644,root,root,754)
 %doc sysconfig/interfaces/ifc*
 %doc sysconfig/interfaces/tun*
 %doc sysconfig/interfaces/data/chat-ppp*
@@ -213,15 +174,6 @@ fi
 %{_mandir}/man1/netreport.1.gz
 %{_mandir}/man1/usernetctl.1.gz
 %{_mandir}/man1/ipcalc.1.gz
-
-#%files -n ipchains-setup
-#%defattr(644,root,root,754)
-#%doc doc/ipchains-setup.txt.gz
-#%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/ipchains
-#%attr(755,root,root) %dir %{_sysconfdir}/sysconfig/ipchains.d/
-#%attr(755,root,root) %dir %{_sysconfdir}/sysconfig/interfaces/data
-#%attr(750,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/ipchains.d/*
-#%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/ipchains
 
 %changelog
 * Thu Apr 29 1999 PLD Team <bugs@pld.org.pl>
