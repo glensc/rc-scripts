@@ -1,3 +1,7 @@
+2003-09-10  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: - also be able to find 2.6 modules (.ko)
+
 2003-09-10  Jan Rêkorajski  <baggins@pld-linux.org>
 
 	* rc.d/init.d/functions: - fixed is_module - modules may be gzipped
