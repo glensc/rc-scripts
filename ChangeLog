@@ -1,3 +1,43 @@
+2004-11-26 22:49 [r5351]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Version 0.4.0.17.
+
+2004-11-13 21:43 [r5320]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: Drop condition when checking
+	  cable - not needed.
+
+2004-11-13 21:37 [r5319]  Bartosz Taudul <wolf/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: - fix typo
+
+2004-11-13 21:31 [r5318]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/functions.network: Link status checking
+	  for ifup dhcp iface (from FC3).
+
+2004-11-13 20:31 [r5315]  Adam Go녠biowski <adamg/at/pld-linux.org>
+
+	* sysconfig/system: - s/outsite/outside/
+
+2004-11-13 11:36 [r5312-5313]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Drop obsolete msg_() functions.
+
+	* rc.d/rc.sysinit, rc.d/init.d/functions: More SELinux support from
+	  FC initscripts.
+
+2004-10-25 19:27 [r4863]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Use usbfs as USB filesystem name (not sure about
+	  2.4?).
+
+2004-10-01 21:28 [r4677]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: Modprobe ppp modules when
+	  /dev/ppp doesn't exists (udev and devfs case).
+
 2004-09-25 22:22 [r4656]  Arkadiusz Mi턪iewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Move .ICE-unix creation a bit lower in case of
