@@ -86,6 +86,7 @@ if [ "$BOOTPROTO" = "dhcp" ]; then
         pump -r -i ${DEVICE}
 	RESULT=$?
     fi
+    sleep 1
 fi
 
 vlan_setup
