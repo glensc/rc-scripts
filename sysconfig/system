@@ -1,4 +1,4 @@
-# $Id: system,v 1.8 2000/01/04 17:23:40 baggins Exp $
+# $Id: system,v 1.9 2000/02/10 10:31:36 misiek Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -33,6 +33,12 @@ LOAD_SOUND=no
 
 # Try to setup proper symlinks in /boot (based on kernel version) ?
 SET_SLINKS=yes
+
+# Run depmod at startup ?
+# Values:
+# yes/no	- as usually
+# ifmissing	- if modules.dep is missing
+RUN_DEPMOD=ifmissing
 
 # Run /sbin/ldconfig at startup ?
 RUN_LDCONFIG=yes
