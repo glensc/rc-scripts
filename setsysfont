@@ -20,6 +20,8 @@ if [ -x /usr/bin/consolechars -o -x /bin/consolechars ]; then
 elif [ -x /usr/bin/setfont ]; then
 	if [ -n "$SYSFONT" ]; then
 		/usr/bin/setfont $SYSFONT
+	elif [ -n "$CONSOLEFONT" ]; then
+		/usr/bin/setfont $CONSOLEFONT
 	fi
 else
 	echo "can't set font"
