@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: ifdown-br,v 1.1.2.2 2001/09/30 10:19:42 misiek Exp $
+#    $Id: ifdown-br,v 1.1.2.3 2001/10/25 08:27:06 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -44,12 +44,13 @@ fi
 setup_ip_param
 
 # set device down and forget all addresses
-for device in ${BRIDGE_DEVS} ${DEVICE}; do
+for device in ${BRIDGE_DEVS; do
 	ip link set ${device} down
 	ip addr flush dev ${device} 2>&1 | grep -v "Nothing to flush"
 	brctl delif ${DEVICE} ${device}
 done
 
+ip link set ${DEVICE} down
 brctl delbr ${DEVICE}
 
 # This must be last line !
