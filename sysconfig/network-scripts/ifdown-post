@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-post,v 1.13 2002/05/11 09:50:53 misiek Exp $
+#	$Id: ifdown-post,v 1.14 2002/08/22 13:21:25 misiek Exp $
 #
 # This should be called whenever an interface goes down, not just when
 # it is brought down explicitly.
@@ -20,9 +20,23 @@ setup_ip_param
 # set REALDEVICE
 get_ppp_device_and_pid
 
-# Delete root queueing discipline
-if [ -n "$QDISC" ]; then
-	tc qdisc del dev "$REALDEVICE" root $QDISC
+# (QoS) Delete root queueing discipline
+if [ -n "${BANDWIDTH_OUT}" ]; then
+    if [ "${QDISC_CLASS}" = "htb" -o "${QDISC_CLASS}" = "cbq" ]; then
+	tc qdisc del dev ${REALDEVICE} root
+    elif [ -z "${QDISC}" -o "${QDISC}" = "tbf" ]; then
+	tc qdisc del dev ${REALDEVICE} root
+    elif [ -n "${QDISC}" ]; then
+	tc qdisc del dev ${REALDEVICE} root
+    fi
+else
+    if [ -n "${QDISC}" ]; then
+	tc qdisc add dev ${REALDEVICE} root
+    fi
+fi
+
+if [ -n "${BANDWIDTH_IN}" ]; then
+    tc qdisc del dev ${REALDEVICE} ingress
 fi
 
 # execute run_down() function (if available in device configuration file)

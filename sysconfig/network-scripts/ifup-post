@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.26 2002/08/11 17:05:09 misiek Exp $
+#	$Id: ifup-post,v 1.27 2002/08/22 13:21:25 misiek Exp $
 #
 
 run_up() { :; }
@@ -19,10 +19,37 @@ setup_ip_param
 # set REALDEVICE
 get_ppp_device_and_pid
 
-if [ -n "$QDISC" ]; then
-# Set the queuing discipline
-#    eg: sfq for better link sharing or teql0 for link equalizer
-	tc qdisc add dev "$REALDEVICE" root $QDISC
+# Simple QoS support (bandwidth limit)
+if [ -n "${BANDWIDTH_OUT}" ]; then
+    if [ "${QDISC_CLASS}" = "htb" -o "${QDISC_CLASS}" = "cbq" ]; then
+        case "${QDISC_CLASS}" in
+            htb)
+                tc qdisc add dev ${REALDEVICE} root handle 1: htb default 10
+                tc class add dev ${REALDEVICE} parent 1: classid 1:10 htb rate ${BANDWIDTH_OUT}kbit ceil ${BANDWIDTH_OUT}kbit
+                [ -n "${QDISC}" ] && tc qdisc add dev ${REALDEVICE} parent 1:10 ${QDISC}
+                ;;
+            cbq)
+		# FIXME: hardcoded ethernet speed (bandwidth)
+                tc qdisc add dev ${REALDEVICE} root handle 1: cbq bandwidth 100000kbit cell 8 avpkt 1000 mpu 64
+                tc class add dev ${REALDEVICE} parent 1: classid 1:10 cbq bandwidth 100000kbit rate ${BANDWIDTH_OUT}kbit maxburst 5 avpkt 1000 allot 1514 bounded
+                [ -n "${QDISC}" ] && tc qdisc add dev ${REALDEVICE} parent 1:10 ${QDISC}
+		tc filter add dev ${REALDEVICE} protocol ip parent 1: u32 match ip src 0.0.0.0/0 flowid 1:10
+                ;;
+        esac
+    elif [ -z "${QDISC}" -o "${QDISC}" = "tbf" ]; then
+	tc qdisc add dev ${REALDEVICE} root tbf rate ${BANDWIDTH_OUT}kbit latency 50ms burst 51200
+    elif [ -n "${QDISC}" ]; then
+	tc qdisc add dev ${REALDEVICE} root ${QDISC}
+    fi
+else
+    if [ -n "${QDISC}" ]; then
+	tc qdisc add dev ${REALDEVICE} root ${QDISC}
+    fi
+fi
+
+if [ -n "${BANDWIDTH_IN}" ]; then
+    tc qdisc add dev ${REALDEVICE} handle ffff: ingress
+    tc filter add dev ${REALDEVICE} parent ffff: protocol ip prio 50 u32 match ip src 0.0.0.0/0 police rate ${BANDWIDTH_IN}kbit burst 10k drop flowid :3
 fi
 
 /etc/sysconfig/network-scripts/ifup-aliases ${CONFIG}
