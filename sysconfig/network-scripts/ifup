@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.42.2.1 2000/10/18 20:10:55 misiek Exp $
+#	$Id: ifup,v 1.42.2.2 2000/10/22 00:54:45 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -75,6 +75,10 @@ fi
 
 ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} down
 
+if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
+	run_cmd "Disabling IPv6 autoconfiguration" sysctl -w net.ipv6.conf.${DEVICE}=0
+fi
+	
 if [ "$HANDLING" -eq 2 ]; then
 	exit 0
 fi
