@@ -182,10 +182,10 @@
   <refsect1>
     <title><filename>/etc/sysconfig/static-routes</filename></title>
     <para>Contains lines of the form:</para>
-    <para><literal>&lt;device> to [type] &lt;network>/&lt;prefix> via &lt;gateway></literal></para>
-    <para>&lt;device> may be a device name to have the route brought up and
-      down with the device, or "any" to have the correct devices calculated
-      at run time. [type] is optional. RH style isn't supported !</para>
+    <para><literal>&lt;device&gt; to [type] &lt;network&gt;/&lt;prefix&gt; via &lt;gateway&gt;</literal></para>
+    <para>&lt;device&gt; may be a device name to have the route brought up and
+      down with the device, or "none" if the route is not to be bound to any specific
+      device. [type] is optional. RH style isn't supported !</para>
     <para>Also you can set few options after "&lt;gateway>":</para>
       <simplelist columns=1>
 	<member>tos &lt;tos></member>
