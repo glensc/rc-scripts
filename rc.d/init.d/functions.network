@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.39 2000/03/27 16:07:50 misiek Exp $
+# $Id: functions.network,v 1.40 2000/04/18 08:30:16 jajcus Exp $
 # vi:syntax=sh
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -116,11 +116,22 @@ fi
 
 set_hostname()
 {
-echo "$1" > /etc/HOSTNAME
-hostname $1
-if [ ! grep search /etc/resolv.conf ]; then
-	domain=`echo $1 | sed 's/^[^\.]*\.//'`
-	echo "search $domain" >> /etc/resolv.conf
+hostname=`echo $1 | sed 's/\..*$//'`
+domain=`echo $1 | sed 's/^[^\.]*\.//'`
+
+if [ -n "$hostname" ] ; then
+	echo "$hostname" > /etc/HOSTNAME
+	hostname $hostname
+fi	
+
+if [ -n "$domain" ] ; then
+	>/etc/resolv.conf.new
+	if ! grep -q "search $domain" /etc/resolv.conf ; then
+		echo "search $domain" >> /etc/resolv.conf.new
+	fi
+	echo "domain $domain" >> /etc/resolv.conf.new
+	grep -v "^domain " /etc/resolv.conf >> /etc/resolv.conf.new
+	mv -f /etc/resolv.conf.new /etc/resolv.conf
 fi
 }
 
