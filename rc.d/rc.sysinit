@@ -662,8 +662,8 @@ for afile in /var/lock/* /var/run/*; do
 		rm -f $afile 2> /dev/null
 	fi
 done
-
-# Delete stale pid files
+# Delete stale files
+rm -f /var/lib/rpm/__db*
 rm -f /var/spool/postoffice/.pid.*
 
 {
