@@ -1,39 +1,67 @@
 #
-# $Id: functions.network,v 1.26 1999/09/28 14:02:41 kloczek Exp $
+# $Id: functions.network,v 1.27 1999/09/28 16:15:56 jajcus Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
 
+# This will work only after starting interface to which LDAP server is connected
+find_ldap_interfaces()
+{
+	[ "$USE_LDAP" == "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+	if [ -n "$LDAP_BASE_DN" ] ; then
+		BSWITCH="-b$LDAP_BASE_DN" 
+	else
+		BSWITH=""
+	fi
+ 	QUERY="(&(objectclass=pldinterface)(if_onboot=yes))"
+	ldapsearch "$BSWITCH" "$QUERY" if_device | \
+		grep "^if_device=" | sed -e "s/^if_device=//"
+}
+
+# find aliases for device
+find_ldap_aliases()
+{
+	[ "$USE_LDAP" == "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+	if [ -n "$LDAP_BASE_DN" ] ; then
+		BSWITCH="-b$LDAP_BASE_DN" 
+	else
+		BSWITH=""
+	fi
+ 	QUERY="(&(objectclass=pldinterface)(if_onboot=yes)(if_device~=$1:*))"
+	ldapsearch "$BSWITCH" "$QUERY" if_device | \
+		grep "^if_device=" | sed -e "s/^if_device=//"
+}
+
 get_ldap_config ()
 {
-[ -x /usr/bin/ldapsearch ] || exit 1
-
-# Initialise fields which  can have multiple values:
-IPV6_ADDR=""
-IPADDR_ALIASES=""
+	[ "$USE_LDAP" == "yes" ] && [ -x /usr/bin/ldapsearch ] || exit 1
+ 	# Initialise fields which  can have multiple values:
+	IPV6_ADDR=""
+	IPADDR_ALIASES=""
 	
-QUERY="(&(objectclass=pldinterface)(if_device=$1))"
-if [ -n "$LDAP_BASE_DN" ] ; then
-	BSWITCH='-b"$LDAP_BASE_DN"' 
-else
-	BSWITH=''
-fi
+ 	QUERY="(&(objectclass=pldinterface)(if_device=$1))"
+	if [ -n "$LDAP_BASE_DN" ] ; then
+	  BSWITCH="-b$LDAP_BASE_DN" 
+	else
+	  BSWITH=""
+	fi
+	ldapsearch "$BSWITCH" "$QUERY" | grep "=" | sed -e "s/=/ /" | {
+		while read FIELD VALUE ; do
+			# Field, which have name compatible with other 
+			# LDAP object
+			if [ "$FIELD" = "iphostnumber" ] ; then
+				VAR="IPADDR";
+			else # Other fields
+				VAR=`echo "$FIELD" | grep "^if_" \
+				     | tr [:lower:] [:upper:] \
+				     | sed -e "s/IF_//"`
+			fi
+			# Fields which can have multiple values:
+			if   [ "$VAR" = "IPV6_ADDR" \
+			    -o "$VAR" = "IPADDR_ALIASES" ]  && \
+			     [ -n "`eval echo \$$VAR`" ] ; then
+				echo "$VAR=\"\$$VAR $VALUE\"" ;
 
-ldapsearch "$BSWITCH" "$QUERY" | grep "=" | sed -e "s/=/ /" | {
-	while read FIELD VALUE ; do
-		# Field, which have name compatible with other 
-		# LDAP object
-		if [ "$FIELD" = "iphostnumber" ] ; then
-			VAR="ADDR";
-		else # Other fields
-			VAR=`echo "$FIELD" | grep "^if_" \
-			     | tr [:lower:] [:upper:] | sed -e "s/IF_//"`
-		fi
-
-		# Fields which can have multiple values:
-		if [ "$VAR" = "IPV6_ADDR" -o "$VAR" = "IPADDR_ALIASES" ]  && \
-		   [ -n "`eval echo \$$VAR`" ] ; then
-			echo "$VAR=\"\$$VAR $VALUE\"" ;
 			# single value fields, or the first value
 			elif [ -n "$VAR" ] ; then
 				eval "$VAR=\"$VALUE\""
