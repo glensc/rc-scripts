@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.23 1999/09/27 09:53:23 misiek Exp $
+# $Id: functions.network,v 1.24 1999/09/28 12:48:16 kloczek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -43,25 +43,13 @@ get_ldap_config ()
 
 source_config ()
 {
-    DEVNAME=`basename $CONFIG | sed 's/^ifcfg-//g'`
+	DEVNAME=`basename $CONFIG | sed 's/^ifcfg-//g'`
 
-    if basename $CONFIG | grep -q '[^g]-' ; then
-	PARENTCONFIG=`echo $CONFIG | sed 's/-[^-]*$//g'`
-	PARENTDEVNAME=`echo $PARENTCONFIG | sed 's/^ifcfg-//g'`
-	if [ -f $PARENTCONFIG ] ; then
-		. ./$PARENTCONFIG
-    	elif [ "$USE_LDAP" = "yes" ] ; then
-		`get_ldap_config $PARENTDEVNAME`
-	else 
-	    nls "Missing config file %s.\n" "$PARENTCONFIG" >&2
-	    exit 1
+	if [ -f $CONFIG ] ; then
+		. /etc/sysconfig/interfaces/$CONFIG
+	elif [ "$USE_LDAP" = "yes" ] ; then
+		eval `get_ldap_config $DEVNAME`
 	fi
-    fi
-    if [ -f $CONFIG ] ; then
-    	. /etc/sysconfig/interfaces/$CONFIG
-    elif [ "$USE_LDAP" = "yes" ] ; then
-        eval `get_ldap_config $DEVNAME`
-    fi
 }
 
 do_netreport ()
