@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.36 2000/08/28 15:38:14 zagrodzki Exp $
+# $Id: network,v 1.37 2000/11/02 21:40:49 baggins Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -130,6 +130,9 @@ proc_net ipv4/tcp_timestamps $TODO 0 1 IPV4_NO_TIMESTAMPS ""
 proc_net ipv4/tcp_stdurg $TODO 1 0 IPV4_RFC793 ""
 proc_net ipv4/tcp_syncookies $TODO 1 0 IPV4_SYN_COOKIES ""
 proc_net ipv4/tcp_window_scaling $TODO 1 0 IPV4_NO_WINDOW_SCALING ""
+# ... and proc/net/ipv6 goodies
+proc_net ipv6/conf/default/autoconf $TODO 0 1 IPV6_AUTOCONF ""
+proc_net ipv6/conf/default/autoconf_route $TODO 0 1 IPV6_AUTOCONF_ROUTE ""
 }
 
 # find all the interfaces besides loopback.
