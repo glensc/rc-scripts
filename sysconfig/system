@@ -1,4 +1,4 @@
-# $Id: system,v 1.16 2000/04/25 12:01:09 waszi Exp $
+# $Id: system,v 1.17 2000/07/13 14:51:46 baggins Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -30,6 +30,9 @@ DELAY_LOGIN=yes
 
 # Clean /tmp at startup ?
 CLEAN_TMP=yes
+
+# We want utmpx/wtmpx
+NEED_XFILES=yes
 
 # Load kernel sound modules at startup ? (say no if you are using ALSA
 # drivers). If you choice to load sound modules, you may also want sound
