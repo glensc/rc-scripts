@@ -49,7 +49,7 @@ case "$1" in
   stop)
         # Stop daemons.
         # show "Stopping %s service" <service>
-	if [ -f /var/lock/subsys/syslogd ]; then
+	if [ -f /var/lock/subsys/<service> ]; then
 		msg_stopping <service>
 		killproc <service>
 		rm -f /var/lock/subsys/<service> >/dev/null 2>&1
