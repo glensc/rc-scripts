@@ -149,7 +149,7 @@ else
 fi
 
 # Start up swapping
-run_cmd "Activating swap partitions" swapon -a
+run_cmd "Activating swap partitions" swapon -a -e
 
 # Set the hostname
 run_cmd "$(nls 'Host:') ${HOSTNAME}" hostname ${HOSTNAME}
