@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.12 1999/09/28 16:17:30 jajcus Exp $
+#	$Id: ifdown,v 1.13 1999/10/06 16:52:37 kloczek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -28,7 +28,7 @@ source_config
 
 # IPv4, IPv6 or both ?
 [ -n "$IPV6_ADDR" ]                   && IPv6=yes || IPv6=no
-[ -n "$IPADDR" -o "$PUMP" == "true" ] && IPv4=yes || IPv4=no
+[ -n "$IPADDR" -o "$PUMP" = "true" ] && IPv4=yes || IPv4=no
 
 if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
 	PREFIX="`calcprefix $NETMASK`"
@@ -43,8 +43,8 @@ DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
 
-if [ -x $OTHERSCRIPT -a "$IPv4" == "yes" ]; then
-    if [ "$DEFAULTHANDLING" == "yes" ]; then
+if [ -x $OTHERSCRIPT -a "$IPv4" = "yes" ]; then
+    if [ "$DEFAULTHANDLING" = "yes" ]; then
         $OTHERSCRIPT $CONFIG $2
     else
 	$OTHERSCRIPT $CONFIG $2
@@ -58,8 +58,8 @@ else
     ISALIAS=no
 fi
 
-if [ "$ISALIAS" == "yes" ]; then
-	if [ "$IPv4" == "yes" ]; then
+if [ "$ISALIAS" = "yes" ]; then
+	if [ "$IPv4" = "yes" ]; then
 		ip -family inet addr del ${IPADDR}/${PREFIX} dev ${DEVICE} label ${FULLDEVNAME}
 	fi
 		for ADDR in ${IPV6_ADDR} ; do

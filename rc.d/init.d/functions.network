@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.27 1999/09/28 16:15:56 jajcus Exp $
+# $Id: functions.network,v 1.28 1999/10/06 16:52:37 kloczek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -124,10 +124,10 @@ setup_nat()
 {
 	if [ -r /etc/sysconfig/static-nat ]; then
 		grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
-			if [ "$1" == "on" ]; then
+			if [ "$1" = "on" ]; then
 				/sbin/ip route add nat $src via $dst
 				/sbin/ip rule add from $dst nat $src
-			elif [ "$1" == "off" ]; then
+			elif [ "$1" = "off" ]; then
 				/sbin/ip rule del from $dst nat $src
 				/sbin/ip route del nat $src via $dst
 		fi
@@ -152,9 +152,9 @@ MESSAGE="$6"
 eval VARD=\$${VAR}
 
 if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
-	if [ "$TODO" == "start" ]; then
-	        [ "$VARD" == "no" -a "$SET" == "1" ] && SET="$(($SET - 1))"
-		[ "$VARD" == "yes" -a "$SET" == "0" ] && SET="$(($SET + 1))"
+	if [ "$TODO" = "start" ]; then
+	        [ "$VARD" = "no" -a "$SET" = "1" ] && SET="$(($SET - 1))"
+		[ "$VARD" = "yes" -a "$SET" = "0" ] && SET="$(($SET + 1))"
 		if [ -n "$MESSAGE" ]; then
 			show "`nls "Setting %s to %s" "$MESSAGE" "$SET"`"; busy
 			if (echo "$SET" > /proc/sys/net/$WHAT) 2> /dev/null; then
@@ -165,7 +165,7 @@ if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
 		else
 			echo "$SET" > /proc/sys/net/$WHAT
 		fi
-	elif [ "$TODO" == "stop" ]; then
+	elif [ "$TODO" = "stop" ]; then
 		if [ -n "$MESSAGE" ]; then
 			show "`nls "Setting %s to %s" "$MESSAGE" "$DEF"`"; busy
 			if (echo "$DEF" > /proc/sys/net/$WHAT) 2> /dev/null; then
@@ -188,7 +188,7 @@ case "$IPV4_DYNAMIC_IP_PATCH_VALUE" in
 	*)	IPV4_DYNAMIC_IP_PATCH_VALUE=7 ;;
 esac
 
-if [ "$IPV4_DYNAMIC_IP_PATCH" == "yes" ] && [ "$1" == "on" ]; then
+if [ "$IPV4_DYNAMIC_IP_PATCH" = "yes" ] && [ "$1" = "on" ]; then
 show "Enabling dynamic IP patch"; busy
 if echo $IPV4_DYNAMIC_IP_PATCH_VALUE > /proc/sys/net/ipv4/ip_dynaddr; then deltext; ok; else deltext; fail; fi
 else
@@ -203,7 +203,7 @@ ipv4_local_port_range()
 {
 if [ "$IPV4_LOCAL_PORT_RANGE" != "default" -a -n "$IPV4_LOCAL_PORT_RANGE" ] || \
    [ ! -e /proc/sys/net/ipv4/ip_local_port_range ]; then
-	if [ "$IPV4_LOCAL_PORT_RANGE" == "yes" ] && [ "$1" == "on" ]; then
+	if [ "$IPV4_LOCAL_PORT_RANGE" = "yes" ] && [ "$1" = "on" ]; then
 		show "Setting local port range"; busy
 		if echo "$IPV4_LOCAL_PORT_RANGE" > /proc/sys/net/ipv4/ip_local_port_range; then
 			deltext
@@ -229,7 +229,7 @@ ipv4_anti_spoofing()
 {
 if [ "$IPV4_ANTI_SPOOFING" != "default" -a -n "$IPV4_ANTI_SPOOFING" ] || \
    [ ! -e /proc/sys/net/ipv4/conf/all/rp_filter ]; then
-	if [ "$IPV4_ANTI_SPOOFING" == "yes" ] && [ "$1" == "on" ]; then
+	if [ "$IPV4_ANTI_SPOOFING" = "yes" ] && [ "$1" = "on" ]; then
 		show "Setting up IP spoofing protection"; busy
 		if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 1 > $f; done); then
 			deltext
@@ -268,7 +268,7 @@ ip link set dev lo down
 
 static_arp()
 {
-if [ "$STATIC_ARP" == "yes" ]; then
+if [ "$STATIC_ARP" = "yes" ]; then
 	if [ -r /etc/ethers -a -x /sbin/arp ]; then
 		/sbin/arp -f /etc/ethers
 	fi
@@ -277,7 +277,7 @@ fi
 
 modprobe_net()
 {
-[ "$IPV6_NETWORKING" == "yes" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ] && modprobe -s -k net-pf-10
+[ "$IPV6_NETWORKING" = "yes" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ] && modprobe -s -k net-pf-10
 }
 
 #
@@ -313,7 +313,7 @@ for i in $1; do
 done
 
 IFS=$OIFS
-if [ "$bad" == "0" ]; then
+if [ "$bad" = "0" ]; then
 	echo "$prefix"
 else
 	echo "32"
@@ -328,7 +328,7 @@ return
 calcnetmask() {
 local prefix a MASK
 MASK=""
-if [ "`echo "${1}" | grep "^[0-9]"`" == "" ]; then
+if [ "`echo "${1}" | grep "^[0-9]"`" = "" ]; then
 	prefix=32
 else
 	typeset -i prefix=$1

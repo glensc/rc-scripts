@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnldown,v 1.7 1999/09/27 10:01:33 misiek Exp $
+#	$Id: tnldown,v 1.8 1999/10/06 16:52:37 kloczek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -29,18 +29,18 @@ then
         exit
 fi
 
-if [ "${IPV6_TUNNELCONFIG}" != "yes" ] && [ "${MODE}" == "sit" ] || \
-   [ "${IPX}" != "yes" ] && [ "${MODE}" == "ipxip" ] || \
-   [ "${IPX}" != "yes" ] && [ "${MODE}" == "ipipx" ]
+if [ "${IPV6_TUNNELCONFIG}" != "yes" ] && [ "${MODE}" = "sit" ] || \
+   [ "${IPX}" != "yes" ] && [ "${MODE}" = "ipxip" ] || \
+   [ "${IPX}" != "yes" ] && [ "${MODE}" = "ipipx" ]
 then
         exit
 fi
 
-if [ "${MODE}" == "ipip" ] || [ "${MODE}" == "sit" ] || [ "${MODE}" == "gre" ]; then
+if [ "${MODE}" = "ipip" ] || [ "${MODE}" = "sit" ] || [ "${MODE}" = "gre" ]; then
 
 	ip tunnel del ${DEVICE}
 
-elif [ "${MODE}" == "ipxip" ] || [ "${MODE}" == "ipipx" ]; then
+elif [ "${MODE}" = "ipxip" ] || [ "${MODE}" = "ipipx" ]; then
 
 echo "obs³uga ipxip jeszcze nie zrobiona"
 

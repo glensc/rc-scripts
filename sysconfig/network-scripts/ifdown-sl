@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-sl,v 1.7 1999/09/28 16:17:30 jajcus Exp $
+#	$Id: ifdown-sl,v 1.8 1999/10/06 16:52:37 kloczek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -30,7 +30,7 @@ done
 fi
 #
 # The proctitle for connected dip daemons is actually "-dip (ipaddr)"
-#	with ipaddr == local on dial-out,  remote on dial-in
+#	with ipaddr = local on dial-out,  remote on dial-in
 # Grab the PID of connected dial-out daemon.
 #
 if [ -z "$PID" ]; then

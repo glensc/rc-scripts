@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.11 1999/09/27 10:01:33 misiek Exp $
+#	$Id: tnlup,v 1.12 1999/10/06 16:52:37 kloczek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -29,16 +29,16 @@ then
         exit
 fi
 
-if [ "${IPV6_TUNNELCONFIG}" != "yes" ] && [ "${MODE}" == "sit" ] || \
-   [ "${IPX}" != "yes" ] && [ "${MODE}" == "ipxip" ] || \
-   [ "${IPX}" != "yes" ] && [ "${MODE}" == "ipipx" ]
+if [ "${IPV6_TUNNELCONFIG}" != "yes" ] && [ "${MODE}" = "sit" ] || \
+   [ "${IPX}" != "yes" ] && [ "${MODE}" = "ipxip" ] || \
+   [ "${IPX}" != "yes" ] && [ "${MODE}" = "ipipx" ]
 then
 	exit
 fi
 
-if [ "${MODE}" == "gre" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ip_gre.o`" != "" ]; then
+if [ "${MODE}" = "gre" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ip_gre.o`" != "" ]; then
 	modprobe -s -k ip_gre
-elif [ "${MODE}" == "ipip" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipip.o`" != "" ]; then
+elif [ "${MODE}" = "ipip" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipip.o`" != "" ]; then
 	modprobe -s -k ipip
 fi
 
@@ -48,30 +48,30 @@ fi
 [ -n "${TOS}" ] && TOS="tos ${TOS}"
 [ -n "${BIND_DEV}" ] && BIND_DEV="dev ${BIND_DEV}"
 
-if [ "${SEQ}" == "yes" ]; then
+if [ "${SEQ}" = "yes" ]; then
 	SEQ=seq
 else
-	[ "${ISEQ}" == "yes" ] && SEQ=iseq
-	[ "${OSEQ}" == "yes" ] && SEQ="${SEQ} oseq"
+	[ "${ISEQ}" = "yes" ] && SEQ=iseq
+	[ "${OSEQ}" = "yes" ] && SEQ="${SEQ} oseq"
 fi
 
-if [ "${CSUM}" == "yes" ]; then
+if [ "${CSUM}" = "yes" ]; then
 	CSUM=csum
 else
-        [ "${ICSUM}" == "yes" ] && CSUM=icsum
-        [ "${ICSUM}" == "yes" ] && CSUM="${SEQ} ocsum"
+        [ "${ICSUM}" = "yes" ] && CSUM=icsum
+        [ "${ICSUM}" = "yes" ] && CSUM="${SEQ} ocsum"
 fi
 
-[ "${ISEQ}" == "yes" ] && ISEQ=iseq
-[ "${ISEQ}" == "yes" ] && ISEQ=iseq
-[ "${ISEQ}" == "yes" ] && ISEQ=iseq
-[ "${ISEQ}" == "yes" ] && ISEQ=iseq
+[ "${ISEQ}" = "yes" ] && ISEQ=iseq
+[ "${ISEQ}" = "yes" ] && ISEQ=iseq
+[ "${ISEQ}" = "yes" ] && ISEQ=iseq
+[ "${ISEQ}" = "yes" ] && ISEQ=iseq
 
 [ "${TTL}" != "0" -a "${TTL}" != "inherit" ] && PMTUDISC=yes
 
-if [ "${PMTUDISC}" == "yes" ]; then
+if [ "${PMTUDISC}" = "yes" ]; then
 	PMTUDISC=pmtudisc
-elif [ "${PMTUDISC}" == "no" ]; then
+elif [ "${PMTUDISC}" = "no" ]; then
 	PMTUDISC=nopmtudisc
 fi
 
@@ -80,15 +80,15 @@ IKEY=""
 OKEY=""
 fi
 
-if [ "${MODE}" == "ipip" ] || [ "${MODE}" == "sit" ]; then
+if [ "${MODE}" = "ipip" ] || [ "${MODE}" = "sit" ]; then
 	
 	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV}
 
-elif [ "${MODE}" == "gre" ]; then
+elif [ "${MODE}" = "gre" ]; then
 
 	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV} ${CSUM} ${ISEQ} ${KEY} ${IKEY} ${OKEY}
 
-elif [ "${MODE}" == "ipxip" ] || [ "${MODE}" == "ipipx" ]; then
+elif [ "${MODE}" = "ipxip" ] || [ "${MODE}" = "ipipx" ]; then
 
 echo "obs³uga ipxip jeszcze nie zrobiona"
 

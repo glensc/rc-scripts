@@ -5,7 +5,7 @@
 # chkconfig: 2345 99 1
 # description: Allow users to login.
 #
-# $Id: allowlogin,v 1.4 1999/09/27 09:54:58 misiek Exp $
+# $Id: allowlogin,v 1.5 1999/10/06 16:52:37 kloczek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -20,13 +20,13 @@ NLS_DOMAIN="rc-scripts"
 # See how we were called.
 case "$1" in
   start)
-	if [ "$DELAY_LOGIN" == "yes" ] && [ -f /etc/nologin.boot ]; then
+	if [ "$DELAY_LOGIN" = "yes" ] && [ -f /etc/nologin.boot ]; then
 		run_cmd "Allowing users to login" rm -f /etc/nologin /etc/nologin.boot
 	fi
         ;;
   stop)
 	# /etc/nologin when shutting down system
-	if [ "$DELAY_LOGIN" == "yes" ] && [ ! -f /etc/nologin ]; then
+	if [ "$DELAY_LOGIN" = "yes" ] && [ ! -f /etc/nologin ]; then
 	        nls "System shutdown in progress \n" > /etc/nologin
 	        chmod 644 /etc/nologin
 	        cp -fp /etc/nologin /etc/nologin.boot

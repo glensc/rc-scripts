@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.28 1999/09/27 18:31:05 wiget Exp $
+# $Id: functions,v 1.29 1999/10/06 16:52:37 kloczek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -17,7 +17,7 @@ export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 # Colors workaround
 termput() 
 {
-	if [ "$COLOR_INIT" == "no" ]; then
+	if [ "$COLOR_INIT" = "no" ]; then
         	:
 	elif [ ! -d /usr/share/terminfo ] || \
 	     ! ( [ -x /usr/bin/tput ] || [ -x /bin/tput ] ) ; then
@@ -173,7 +173,7 @@ killproc()
 
         # Kill it.
         if [ "$pid" != "" ] ; then
-		if [ "$notset" == "1" ] ; then
+		if [ "$notset" = "1" ] ; then
 			if ps h $pid>/dev/null 2>&1; then
 				# TERM first, then KILL if not dead
 				kill -TERM $pid >/dev/null 2>&1

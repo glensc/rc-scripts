@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.27 1999/09/28 16:17:30 jajcus Exp $
+#	$Id: ifup,v 1.28 1999/10/06 16:52:37 kloczek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -28,7 +28,7 @@ fi
 
 source_config
 
-if [ "foo$2" == "fooboot" -a "${ONBOOT}" == "no" ]; then
+if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]; then
     exit
 fi
 
@@ -48,22 +48,22 @@ else
 fi
 
 # Old BOOTP variable
-if [ "$BOOTP" == "yes" ]; then
+if [ "$BOOTP" = "yes" ]; then
     BOOTPROTO=bootp
 fi
 
-if [ "$BOOTPROTO" == bootp -o "$BOOTPROTO" == "dhcp" ]; then
+if [ "$BOOTPROTO" = bootp -o "$BOOTPROTO" = "dhcp" ]; then
     PUMP=true
 fi
 
 # IPv4, IPv6 or both ?
 [ -n "$IPV6_ADDR" ]                   && IPv6=yes || IPv6=no
-[ -n "$IPADDR" -o "$PUMP" == "true" ] && IPv4=yes || IPv4=no
+[ -n "$IPADDR" -o "$PUMP" = "true" ] && IPv4=yes || IPv4=no
 
 # Tunnel device ?
 [ -f /etc/sysconfig/interfaces/tnlcfg-${FULLDEVNAME} ] && TNL=yes || TNL=no
 
-if [ "$TNL" == "yes" ]; then
+if [ "$TNL" = "yes" ]; then
 	TNLOPTS="onlink"
 fi
 
@@ -75,12 +75,12 @@ if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
 	NETMASK="`calcnetmask $PREFIX`"
 fi
 
-[ "$MULTICAST" == "yes" ] && MULTICAST=on               || MULTICAST=off
+[ "$MULTICAST" = "yes" ] && MULTICAST=on               || MULTICAST=off
 [ -n "$SRC_ADDR" ]        && SRC_ADDR="src ${SRC_ADDR}" || SRC_ADDR=""
 [ -z "$PROTOCOL" ]        && PROTOCOL=ip
 
 if [ "$ARP" ]; then
-	[ "$ARP" == "yes" ]	&& ARP=on	|| ARP=off
+	[ "$ARP" = "yes" ]	&& ARP=on	|| ARP=off
 elif [ "$DEVICETYPE" = "eth" ]; then
 	ARP=on
 else
@@ -89,8 +89,8 @@ fi
 
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
-if [ -x "$OTHERSCRIPT" -a "$IPv4" == "yes" ]; then
-    if [ "$DEFAULTHANDLING" == "yes" ]; then
+if [ -x "$OTHERSCRIPT" -a "$IPv4" = "yes" ]; then
+    if [ "$DEFAULTHANDLING" = "yes" ]; then
         $OTHERSCRIPT $CONFIG $2
     else
         exec $OTHERSCRIPT $CONFIG $2
@@ -103,8 +103,8 @@ if ! (/sbin/ip link set multicast ${MULTICAST} dev ${DEVICE} > /dev/null 2>&1); 
     exit 0
 fi
 
-if [ "$SLAVE" == "yes" -a "$ISALIAS" == "no" -a "$MASTER" != "" -a -x /sbin/ifenslave ]; then
-    RFLAG="" ; [ "${RECIEVE-ONLY}" == "yes" ] && RFLAG="-r"
+if [ "$SLAVE" = "yes" -a "$ISALIAS" = "no" -a "$MASTER" != "" -a -x /sbin/ifenslave ]; then
+    RFLAG="" ; [ "${RECIEVE-ONLY}" = "yes" ] && RFLAG="-r"
 
     ip link set ${DEVICE} down
     echo "Enslaving $DEVICE to $MASTER"
@@ -117,7 +117,7 @@ if [ -n "$MACADDR" ]; then
    ip link set ${DEVICE} address ${MACADDR}
 fi
 
-if [ -n "$PUMP" ] && [ "$ISALIAS" == "no" ]; then
+if [ -n "$PUMP" ] && [ "$ISALIAS" = "no" ]; then
 
     echo -n "Determining IP information for $DEVICEFULLNAME..."
     if /sbin/pump -i $DEVICEFULLNAME ; then
@@ -129,7 +129,7 @@ if [ -n "$PUMP" ] && [ "$ISALIAS" == "no" ]; then
 
 else
 
-if [ "$IPv4" == "yes" ]; then
+if [ "$IPv4" = "yes" ]; then
     if [ -z "$PREFIX" ]; then
 	eval `/bin/ipcalc --prefix ${IPADDR}`
     fi
@@ -145,7 +145,7 @@ fi
 
     ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
 
-if [ "$IPv4" == "yes" ]; then
+if [ "$IPv4" = "yes" ]; then
     ip -family inet addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME}
 
     # Another IPv4 aliases support
@@ -156,7 +156,7 @@ fi
 
 
 # IPv6 rules
-    if [ "${IPV6_NETWORKING}" == "yes" ] ; then
+    if [ "${IPV6_NETWORKING}" = "yes" ] ; then
 
       for ADDR6 in ${IPV6_ADDR} ; do
 	ip -family inet6 addr add ${ADDR6} dev ${DEVICE} label ${FULLDEVNAME}
@@ -164,7 +164,7 @@ fi
       done  
 
       # only for sit tunnel device
-      if (ip tunnel show ${FULLDEVNAME} 2>&1 | grep -q "ipv6/ip") && [ "$TNL" == "yes" ]; then
+      if (ip tunnel show ${FULLDEVNAME} 2>&1 | grep -q "ipv6/ip") && [ "$TNL" = "yes" ]; then
 
 	for ADDR4 in `ip -4 addr | grep inet | grep -v "127\..*\..*\..*" | \
 		      sed -e "s#.*inet ##" | sed -e "s#/.*##" | xargs`; do
@@ -177,8 +177,8 @@ fi
     fi
 
 # hack for 2.2 kernels
-if [ "$IPv4" == "yes" ]; then
-    if [ "$ISALIAS" == "no" ] && [ -z "`ip -f inet route | sed "s/ .*//" | grep ${NETWORK}`" ]; then
+if [ "$IPv4" = "yes" ]; then
+    if [ "$ISALIAS" = "no" ] && [ -z "`ip -f inet route | sed "s/ .*//" | grep ${NETWORK}`" ]; then
 	ip -family inet route add ${NETWORK}/${PREFIX} dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}
     else
 	ip -family inet route add ${IPADDR}/32 dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}
@@ -217,7 +217,7 @@ fi
     fi
 fi
 
-if [ "$IPX" == "yes" ]; then
+if [ "$IPX" = "yes" ]; then
 	/etc/sysconfig/network-scripts/ifup-ipx $DEVICE
 fi
 

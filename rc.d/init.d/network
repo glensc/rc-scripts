@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.24 1999/09/28 16:16:42 jajcus Exp $
+# $Id: network,v 1.25 1999/10/06 16:52:37 kloczek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -21,7 +21,7 @@ NLS_DOMAIN="rc-scripts"
 . /etc/sysconfig/network
 
 # Check that networking is up.
-[ "${NETWORKING}" == "no" -o "${NETWORKING}" == "" ] && exit 0
+[ "${NETWORKING}" = "no" -o "${NETWORKING}" = "" ] && exit 0
 
 [ -x /sbin/ip ] || exit 0
 
