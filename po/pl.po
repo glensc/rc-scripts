@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.29 2000/05/13 07:11:55 wiget Exp $
+# $Id: pl.po,v 1.30 2000/06/29 08:24:14 waszi Exp $
 #
 # ,fuzzy
 msgid ""
@@ -361,7 +361,7 @@ msgstr ""
 
 #: ../rc.d/rc.shutdown:32
 msgid "Turning off swap and accounting"
-msgstr "Wylaczemoe swap i zliczania"
+msgstr "Wylaczenie swap i zliczania"
 
 #: ../rc.d/rc.sysinit:147
 msgid "NIS Domain:"
