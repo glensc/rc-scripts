@@ -451,11 +451,23 @@ if [ -x /sbin/evms_activate ]; then
 fi
 # LVM
 if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-	modprobe -s -k lvm-mod >/dev/null 2>&1
-	# device mapper (2.5+ and patched 2.4)
-	modprobe -s -k dm-mod >/dev/null 2>&1
-	run_cmd "Scanning for LVM volume groups" /sbin/vgscan && \
-	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y
+	lvmversion=$(/sbin/vgchange --version 2>/dev/null|head -n 1|awk '{gsub("vgdisplay: Logical Volume Manager ",""); gsub("LVM version:     ",""); gsub(/\..*/,"");print $1}')
+   	if [ "$lvmversion" = "1" ] ; then
+		modprobe -s -k lvm-mod >/dev/null 2>&1
+		lvmignorelock=""
+	elif [ "$lvmversion" = "2" ] ; then
+		modprobe -s -k dm-mod >/dev/null 2>&1
+		lvmignorelock="--ignorelockingfailure"
+	else
+	    modprobe -s -k lvm-mod >/dev/null 2>&1
+	    # device mapper (2.5+ and patched 2.4)
+	    modprobe -s -k dm-mod >/dev/null 2>&1
+	    lvmignorelock=""
+	fi
+			
+    
+	run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelock && \
+	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmignorelock
 fi
 
 # Add raid devices
