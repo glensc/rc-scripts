@@ -106,6 +106,12 @@ if [ -n "$CONSOLE_LOGLEVEL" ]; then
 	/bin/dmesg -n $CONSOLE_LOGLEVEL
 fi
 
+if [ -f /etc/udev/udev.conf ];then
+	. /etc/udev/udev.conf
+fi
+
+[ -x /sbin/start_udev ] && run_cmd "Starting udev" /sbin/start_udev
+	
 # /dev must be also mounted before everything but only if we want use them ;-)
 if is_yes "$MOUNT_DEVFS"; then
 	run_cmd "Mounting Device Filesystem" mount -n -t devfs /dev /dev
