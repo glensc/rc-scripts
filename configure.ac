@@ -83,6 +83,15 @@ if test "x$GLIBDIR" = "x"; then
 fi
 AC_MSG_RESULT([$GLIBDIR])
 
+DPKG_C_GCC_ATTRIBUTE([,,],supported,[int x],[,,],ATTRIB,[Define if function attributes a la GCC 2.5 and higher are available.],
+  DPKG_C_GCC_ATTRIBUTE(noreturn,noreturn,[int x],noreturn,NORETURN,[Define if nonreturning functions a la GCC 2.5 and higher are available.])
+  DPKG_C_GCC_ATTRIBUTE(const,const,[int x],const,CONST,[Define if constant functions a la GCC 2.5 and higher are available.])
+  DPKG_C_GCC_ATTRIBUTE(unused,unused,[int x],unused,UNUSED,[Define if unused variables la GCC 2.5 and higher are available.])
+  DPKG_C_GCC_ATTRIBUTE(format...,format,[char *y, ...],[format(printf,1,2)],PRINTFFORMAT,[Define if printf-format argument lists a la GCC are available.]))
+
+AC_CHECK_TYPE(ptrdiff_t,int)
+AC_CHECK_HEADERS([stddef.h])
+
 dnl Output
 AC_SUBST(BASHSCRIPTS)
 AC_SUBST(CATALOGS)
@@ -102,7 +111,89 @@ AC_SUBST(GLIBDIR)
 AC_SUBST(GLIBNAME)
 AC_SUBST(GCFLAGS)
 
-AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile \
+AH_BOTTOM([
+#ifdef HAVE_STDDEF_H
+#include <stddef.h>
+#endif
+
+/* Use the definitions: */
+
+/* The maximum length of a #! interpreter displayed by dpkg-deb. */
+#ifdef PATH_MAX
+#define INTERPRETER_MAX PATH_MAX
+#else
+#define INTERPRETER_MAX 1024
+#endif
+
+/* GNU C attributes. */
+#ifndef FUNCATTR
+#ifdef HAVE_GNUC25_ATTRIB
+#define FUNCATTR(x) __attribute__(x)
+#else
+#define FUNCATTR(x)
+#endif
+#endif
+
+/* GNU C printf formats, or null. */
+#ifndef ATTRPRINTF
+#ifdef HAVE_GNUC25_PRINTFFORMAT
+#define ATTRPRINTF(si,tc) format(printf,si,tc)
+#else
+#define ATTRPRINTF(si,tc)
+#endif
+#endif
+#ifndef PRINTFFORMAT
+#define PRINTFFORMAT(si,tc) FUNCATTR((ATTRPRINTF(si,tc)))
+#endif
+
+/* GNU C nonreturning functions, or null. */
+#ifndef ATTRNORETURN
+#ifdef HAVE_GNUC25_NORETURN
+#define ATTRNORETURN noreturn
+#else /* ! HAVE_GNUC25_NORETURN */
+#define ATTRNORETURN
+#endif /* HAVE_GNUC25_NORETURN */
+#endif /* ATTRNORETURN */
+
+#ifndef NONRETURNING
+#define NONRETURNING FUNCATTR((ATTRNORETURN))
+#endif /* NONRETURNING */
+
+/* Combination of both the above. */
+#ifndef NONRETURNPRINTFFORMAT
+#define NONRETURNPRINTFFORMAT(si,tc) FUNCATTR((ATTRPRINTF(si,tc),ATTRNORETURN))
+#endif
+
+/* GNU C constant functions, or null. */
+#ifndef ATTRCONST
+#ifdef HAVE_GNUC25_CONST
+#define ATTRCONST const
+#else
+#define ATTRCONST
+#endif
+#endif
+#ifndef CONSTANT
+#define CONSTANT FUNCATTR((ATTRCONST))
+#endif
+
+/* GNU C unused functions, or null. */
+#ifndef ATTRUNUSED
+#ifdef HAVE_GNUC25_UNUSED
+#define ATTRUNUSED
+#else
+#define ATTRUNUSED
+#endif
+#endif
+#ifndef UNUSED
+#define UNUSED FUNCATTR((ATTRUNUSED))
+#endif
+])
+
+AC_CONFIG_HEADER(src/config.h)
+AC_CONFIG_FILES([Makefile \
+	src/Makefile \
+	doc/Makefile \
+	man/Makefile \
 	ppp/Makefile \
 	isapnp/Makefile \
 	sysconfig/Makefile \

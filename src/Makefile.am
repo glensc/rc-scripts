@@ -23,7 +23,8 @@ sbin_PROGRAMS =	\
 	loglevel \
 	getkey \
 	ppp-watch \
-	consoletype
+	consoletype \
+	start-stop-daemon
 	
 EXTRA_PROGRAMS = \
 	testd 
@@ -61,3 +62,6 @@ ppp_watch_LDADD = $(GLIBDIR)/$(GLIBNAME)
 INCLUDES = $(GCFLAGS)
 
 consoletype_SOURCES = consoletype.c
+
+start_stop_daemon_SOURCES = start-stop-daemon.c
+
