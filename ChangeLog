@@ -1,3 +1,9 @@
+2003-07-28  Pawe³ Go³aszewski  <blues@pld-linux.org>
+
+	* sysconfig/network: - typo
+
+	* sysconfig/network: - GATEWAY setup is back - with comment
+
 2003-07-12  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
 
 	* rc.d/init.d/network: - added nameif support
