@@ -12,7 +12,8 @@ init_SCRIPTS = \
 	random \
 	reboot \
 	shutdwn \
-	single
+	single \
+	allowlogin
 
 init_DATA = functions functions.network
 	

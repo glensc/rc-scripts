@@ -67,6 +67,7 @@ if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
 fi
 
 [ "$MULTICAST" == "yes" ] && MULTICAST=on               || MULTICAST=off
+[ -z "$ARP" ]		  && ARP=yes
 [ "$ARP" == "yes" ]       && ARP=on                     || ARP=off
 [ -n "$SRC_ADDR" ]        && SRC_ADDR="src ${SRC_ADDR}" || SRC_ADDR=""
 [ -z "$PROTOCOL" ]        && PROTOCOL=ip
