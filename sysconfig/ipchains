@@ -1,6 +1,0 @@
-# $Id: ipchains,v 1.2 1999/07/31 11:24:19 misiek Exp $
-# default policies for input, output and forward chains
-
-INPUT_POLICY=ACCEPT
-OUTPUT_POLICY=ACCEPT
-FORWARD_POLICY=ACCEPT
