@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-#	$Id: ifup-routes,v 1.14 2002/08/11 17:05:09 misiek Exp $
+#	$Id: ifup-neigh,v 1.1 2002/08/11 17:05:08 misiek Exp $
 #
-# adds static routes which go through device $DEVICE
+# adds static arps for device $DEVICE
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
@@ -11,11 +11,11 @@
 DEV=$1
 
 if [ -z "$DEV" ]; then
-	nls "Usage: %s <device name>" "ifup-routes" >&2
+	nls "Usage: %s <device name>" "ifup-neigh" >&2
 	exit 1
 fi
 
-if [ ! -f /etc/sysconfig/static-routes ]; then
+if [ ! -f /etc/sysconfig/static-arp ]; then
 	exit 0
 fi
 
@@ -33,17 +33,12 @@ setup_ip_param
 get_ppp_device_and_pid
 
 # note the trailing white space character in the grep gets rid of aliases
-egrep "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
-	if (echo $args | grep -q ":") then
-		if is_no "$IPV6_NETWORKING"; then
-			continue
-		fi
-	else
-		if is_no "$IPV4_NETWORKING"; then
-			continue
-		fi
+egrep "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-arp | while read iface mac ip state args; do
+	if is_no "$IPV4_NETWORKING"; then
+		continue
 	fi
-	/sbin/ip route add $args dev $REALDEVICE
+	[ -z "$state" ] && state="stale"
+	/sbin/ip neigh replace $ip lladdr $mac nud $state dev $DEVICE
 done
 
 

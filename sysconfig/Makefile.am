@@ -11,6 +11,7 @@ sysconfig_DATA = \
 	network \
 	static-routes \
 	static-nat \
+	static-arp \
 	i18n \
 	timezone \
 	ip-rules

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.25 2002/05/11 09:50:53 misiek Exp $
+#	$Id: ifup-post,v 1.26 2002/08/11 17:05:09 misiek Exp $
 #
 
 run_up() { :; }
@@ -27,6 +27,7 @@ fi
 
 /etc/sysconfig/network-scripts/ifup-aliases ${CONFIG}
 /etc/sysconfig/network-scripts/ifup-routes ${CONFIG}
+/etc/sysconfig/network-scripts/ifup-neigh ${CONFIG}
 
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then

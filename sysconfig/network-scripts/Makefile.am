@@ -18,6 +18,7 @@ networkscripts_SCRIPTS = \
 	ifup-aliases \
 	ifup-br \
 	ifup-ipx \
+	ifup-neigh \
 	ifup-plip \
 	ifup-post \
 	ifup-ppp \
