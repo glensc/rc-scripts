@@ -180,12 +180,12 @@ case "$1" in
 	done
 
 	for i in $tunnels; do
-		run_cmd -a "$(nls 'Setting tunnel') $i" /sbin/tnlup $i boot
-		run_cmd -a "$(nls 'Bringing up tunnel interface') $i" /sbin/ifup tnlcfg-$i boot
+		run_cmd -a "$(nls 'Setting tunnel %s' "$i")" /sbin/tnlup $i boot
+		run_cmd -a "$(nls 'Bringing up tunnel interface %s' "$i")" /sbin/ifup tnlcfg-$i boot
 	done
 	
 	for i in $interfaces_br_boot ; do
-		run_cmd -a "$(nls 'Bringing up bridge interface') $i" /sbin/ifup $i boot
+		run_cmd -a "$(nls 'Bringing up bridge interface %s' "$i")" /sbin/ifup $i boot
 	done
 
 	network_postinit
@@ -216,16 +216,16 @@ case "$1" in
 	fi
 
 	for i in $interfaces_br_boot ; do
-		run_cmd -a "$(nls 'Shutting down bridge interface') $i" /sbin/ifdown $i boot
+		run_cmd -a "$(nls 'Shutting down bridge interface %s' "$i")" /sbin/ifdown $i boot
 	done
 
 	for i in $tunnels; do
-		run_cmd -a "$(nls 'Shutting down tunnel interface') $i" /sbin/ifdown tnlcfg-$i boot
-		run_cmd -a "$(nls 'Removing tunnel') $i" /sbin/tnldown $i boot
+		run_cmd -a "$(nls 'Shutting down tunnel interface %s' "$i")" /sbin/ifdown tnlcfg-$i boot
+		run_cmd -a "$(nls 'Removing tunnel %s' "$i")" /sbin/tnldown $i boot
 	done
 
 	for i in $interfaces_sit_boot $interfaces_vlan_boot $interfaces_boot ; do
-		run_cmd -a "$(nls 'Shutting down interface') $i" /sbin/ifdown $i boot
+		run_cmd -a "$(nls 'Shutting down interface %s' "$i")" /sbin/ifdown $i boot
 	done
 
 	network_deinit

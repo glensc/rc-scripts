@@ -54,10 +54,10 @@ DIPSCRIPT=/etc/sysconfig/interfaces/data/dip-$DEVNAME
   DIPSCRIPT=/etc/sysconfig/interfaces/data/dip-$PARENTDEVNAME
 }
 [ -f $DIPSCRIPT ] || {
-  echo "/etc/sysconfig/interfaces/data/dip-$DEVICE $(nls 'does not exist')"
-  echo "ifup-sl - $DEVICE $(nls exiting)"
+  nls '%s does not exist' "/etc/sysconfig/interfaces/data/dip-$DEVICE"
+  nls 'ifup-sl - %s exiting' "$DEVICE"
   logger -p daemon.info -t ifup-sl \
-    "/etc/sysconfig/interfaces/data/dip-$DEVICE $(nls 'does not exist for') $DEVICE"
+    "$(nls '%s does not exist for %s' "/etc/sysconfig/interfaces/data/dip-$DEVICE" "$DEVICE")"
   exit 1
 }
 
@@ -86,7 +86,7 @@ else
 
 [ -x /sbin/slattach ] || {
 	nls "%s is missing. Can't continue." "/sbin/slattach"
-        echo "ifup-sl - $DEVICE $(nls exiting)"
+	nls "ifup-sl - %s exiting" "$DEVICE"
         logger -p daemon.info -t ifup-sl \
         "$(nls '%s does not exist or is not executable for %s' "/sbin/slattach" "$DEVICE")"
         exit 1
