@@ -100,39 +100,7 @@ if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
 fi
 
 if is_wireless_device "${DEVICE}"; then
-    [ -z "${WLAN_NICKNAME}" ] && WLAN_NICKNAME="$(hostname -f)"
-
-    # wlan mode needs to be first
-    [ -n "${WLAN_MODE}" ] && iwconfig ${DEVICE} mode ${WLAN_MODE}
-    iwconfig ${DEVICE} nickname ${WLAN_NICKNAME}
-    [ -n "${WLAN_ESSID}" ] && iwconfig ${DEVICE} essid ${WLAN_ESSID}
-    [ -n "${WLAN_NWID}" ] && iwconfig ${DEVICE} nwid ${WLAN_NWID}
-    if [ -n "${WLAN_FREQ}" -a "${WLAN_MODE}" != "Managed" ] ; then
-	iwconfig ${DEVICE} freq ${WLAN_FREQ}
-    elif [ -n "${WLAN_CHANNEL}" -a "${WLAN_MODE}" != "Managed" ]; then
-	iwconfig ${DEVICE} channel ${WLAN_CHANNEL}
-    fi
-    [ -n "${WLAN_SENS}" ] && iwconfig ${DEVICE} sens ${WLAN_SENS}
-    [ -n "${WLAN_AP}" ] && iwconfig ${DEVICE} ap ${WLAN_AP}
-    [ -n "${WLAN_BITRATE}" ] && iwconfig ${DEVICE} rate ${WLAN_BITRATE}
-    [ -n "${WLAN_RTS_THRESHOLD}" ] && iwconfig ${DEVICE} rts ${WLAN_RTS_THRESHOLD}
-    [ -n "${WLAN_FRAGMENTATION_THRESHOLD}" ] && iwconfig ${DEVICE} frag ${WLAN_FRAGMENTATION_THRESHOLD}
-    if [ -n "${WLAN_KEY}" ]; then
-	iwconfig ${DEVICE} key ${WLAN_KEY}
-	[ -n "${WLAN_ENCRYPTION}" ] && iwconfig ${DEVICE} key ${WLAN_ENCRYPTION}
-    fi
-    if is_no "${WLAN_ENCRYPTION}"; then
-	iwconfig ${DEVICE} key off
-    fi
-    [ -n "${WLAN_POWER}" ] && iwconfig ${DEVICE} power ${WLAN_POWER}
-    [ -n "${WLAN_TXPOWER}" ] && iwconfig ${DEVICE} txpower ${WLAN_TXPOWER}
-    [ -n "${WLAN_RETRY}" ] && iwconfig ${DEVICE} retry ${WLAN_RETRY}
-    if is_yes "${WLAN_COMMIT}"; then
-	iwconfig ${DEVICE} commit
-    fi
-    [ -n "${WLAN_NWID}" ] && iwconfig ${DEVICE} nwid ${WLAN_NWID}
-    # essid should be last due to netowork rescanning by wlan devices
-    [ -n "${WLAN_ESSID}" ] && iwconfig ${DEVICE} essid ${WLAN_ESSID}
+    wireless_param ${DEVICE}
 fi
 	
 if [ "$HANDLING" = "2" ]; then

@@ -49,6 +49,13 @@ for device in $BRIDGE_DEVS; do
 	ip addr flush dev ${device} 2>&1 | grep -v "Nothing to flush"
 done
 
+# set wireless parameters
+for device in $BRIDGE_DEVS; do
+        if is_wireless_device "${device}"; then
+            wireless_param "${device}" "br"
+        fi
+done
+
 brctl addbr ${DEVICE}
 
 # add interfaces to bridge
