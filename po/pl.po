@@ -176,7 +176,7 @@ msgstr "Automatyczny restart w toku"
 
 #: ./rc.d/rc.sysinit:212
 msgid "Setting up ISA PNP devices (userspace pnp)"
-msgstr "Ustawianie urzadzen ISA PNP (userspace pnp"
+msgstr "Ustawianie urzadzen ISA PNP (userspace pnp)"
 
 #: ./rc.d/rc.sysinit:215
 msgid "Setting up ISA PNP devices (kernelspace pnp)"
