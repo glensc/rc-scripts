@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.53 2000/06/02 14:47:49 mkochano Exp $
+# $Id: functions,v 1.54 2000/07/28 18:37:00 baggins Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -438,4 +438,54 @@ is_no()
 	[ "$1" = "" ] ||\
 		return 1
 	return 0
+}
+
+_modprobe()
+{
+	parsed=no
+	while is_no $parsed ; do
+		case "$1" in
+			"single")
+				single=yes
+				shift
+				;;
+			"die")
+				die=yes
+				shift
+				;;
+			-*)
+				args="$args $1"
+				shift
+				;;
+			*)
+				parsed=yes
+				;;
+		esac
+	done
+	if is_yes "${single}" ; then
+		foo="$@"
+		show "Loading %s kernel module(s)" "$foo"
+		unset foo
+		busy
+	fi
+	if [ -x /sbin/modprobe ] ; then
+		/sbin/modprobe -s $args "$@"
+		result=$?
+	else
+		deltext ; fail
+		result=1
+	fi
+	if is_yes "${single}" ; then
+		deltext
+		if [ $result == "0" ] ; then
+			is_yes "${single}" && ok
+		else
+			fail
+			if is_yes "$die" ; then
+				nls "Could not load %s kernel module(s)" "$@"
+				exit 1
+			fi
+		fi
+	fi
+	unset single die args result
 }
