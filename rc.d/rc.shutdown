@@ -6,7 +6,7 @@
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.19 2002/09/28 23:05:40 areq Exp $
+# $Id: rc.shutdown,v 1.20 2002/11/27 23:41:53 misiek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -90,6 +90,11 @@ fi
 if [ "$runlevel" = "0" ] ; then
        	show "The system is halted"; ok
 	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+
+	 if [ -r /etc/ups/upsmon.conf -a -f /etc/killpower -a -f /etc/sysconfig/ups ] ; then
+	     . /etc/sysconfig/ups
+	     is_yes "$POWEROFF_UPS" && /etc/rc.d/init.d/ups powerdown
+	 fi
 	eval halt -d -p
 else
 	show "Please stand by while rebooting the system"; ok
