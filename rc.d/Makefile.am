@@ -8,6 +8,6 @@ rc_SCRIPTS = \
 	rc \
 	rc.local \
 	rc.sysinit \
-	rc.initscript
+	rc.init
 
 EXTRA_DIST = $(rc_SCRIPTS)	
