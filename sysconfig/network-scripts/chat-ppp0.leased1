@@ -1,8 +1,0 @@
-# (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
-# chat script for setting up hardwired (leased) serial line.
-# refer to ifcfg-ppp0.leased1 for more info 
-REPORT  CONNECT
-ABORT   'NO CARRIER'
-''              \\r$INITSTRING
-OK              ''
-CONNECT
