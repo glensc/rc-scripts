@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.64 2001/05/15 16:03:38 baggins Exp $
+# $Id: functions,v 1.65 2001/07/17 18:21:28 baggins Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -44,7 +44,26 @@ termput()
 			;;
 		  esac
 	else
-		tput "$@"
+		# check if we are on proper terminal
+		tput longname > /dev/null 2>&1 /dev/null || return
+
+	        case "$1" in
+		  hpa)
+		  	tput "$@"
+			;;
+		  cuu*)
+		  	tput "$@"
+			;;
+		  el)
+		  	tput "$@"
+			;;
+		  setaf)
+		  	is_yes "$COLOR_INIT" && tput "$@"
+			;;
+		  op)
+		  	tput setaf 9
+			;;
+		 esac
 	fi
 }
 
