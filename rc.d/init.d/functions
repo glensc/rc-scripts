@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.13 1999/07/13 12:49:36 misiek Exp $
+# $Id: functions,v 1.14 1999/07/13 12:52:52 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -39,7 +39,7 @@ fi
 show() 
 {
 	text="$*"..................................................................................
-	printf "%.65s" $text
+	printf "%.65s" "$text"
 }
 
 busy() 
