@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.63 2001/07/05 15:56:34 baggins Exp $
+#	$Id: ifup,v 1.64 2001/07/05 22:21:42 marcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -63,6 +63,16 @@ if [ -x "$OTHERSCRIPT" ]; then
     elif [ "$HANDLING" = "1" ]; then
         $OTHERSCRIPT $CONFIG $2
     fi
+fi
+
+# 802.1Q VLANs
+vlan_setup
+if is_yes $ETH_VLANS && echo "$DEVICE" | grep -q '\.' ; then
+	VLANDEVICE=$(echo $DEVICE | awk ' { gsub(/\..*$/,NUL); print $0 } ')
+	VLANNUMBER=$(echo $DEVICE | awk " { gsub(/$VLANDEVICE\./,NUL); print \$0 } ") 
+	/sbin/ip link set $VLANDEVICE up
+	/sbin/vconfig add $VLANDEVICE $VLANNUMBER 2>&1 > /dev/null
+	/sbin/vconfig set_flag $DEVICE 1 2>&1 > /dev/null
 fi
 
 # is this device available? (this catches PCMCIA devices for us)
@@ -177,15 +187,6 @@ else
     setup_ip_gw_ro
 fi
 
-# 802.1Q VLANs
-vlan_setup
-if is_yes $ETH_VLANS && echo "$DEVICE" | grep -q '\.' ; then
-	VLANDEVICE=$(echo $DEVICE | awk ' { gsub(/\..*$/,NUL); print $0 } ')
-	VLANNUMBER=$(echo $DEVICE | awk " { gsub(/$VLANDEVICE\./,NUL); print \$0 } ") 
-	/sbin/ip link set $VLANDEVICE up
-	/sbin/vconfig add $VLANDEVICE $VLANNUMBER 2>&1 > /dev/null
-	/sbin/vconfig set_flag $DEVICE 1 2>&1 > /dev/null
-fi
 
 if [ "$HANDLING" = "3" ]; then
 	exit 0
