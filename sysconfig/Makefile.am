@@ -7,7 +7,7 @@ sysconfigdir = @sysconfigdir@
 sysconfig_DATA = \
 	clock \
 	init-colors \
-	init-colors.plddefault \
+	init-colors.gentoo \
 	hwprof \
 	system \
 	network \
