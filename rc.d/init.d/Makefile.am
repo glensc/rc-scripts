@@ -6,8 +6,6 @@ init_SCRIPTS = \
 	allowlogin \
 	killall \
 	network \
-	nfsfs \
-	netfs \
 	random \
 	single \
 	allowlogin
