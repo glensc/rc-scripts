@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.69 2002/03/29 08:45:14 wojrus Exp $
+# $Id: functions.network,v 1.70 2002/04/09 11:03:42 jajcus Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -160,7 +160,6 @@ if [ -r /etc/sysconfig/static-nat ]; then
 fi
 }
 
-}
 # Setup static ARP
 static_arp()
 {
