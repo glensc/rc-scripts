@@ -1,4 +1,4 @@
-#	$Id: ifcfg-description,v 1.9 2000/07/20 10:03:50 mis Exp $
+#	$Id: ifcfg-description,v 1.10 2000/07/20 10:07:00 mis Exp $
 	DEVICE=<real device name>:<aliasnumber>
 or
 	DEVICE=<name>
@@ -17,7 +17,7 @@ IPV6_ADDR="<IPv6 addres1>/<prefix len> <IPv6 addres2>/<prefix len> <...>"
 [ ARP={no|yes} ]
 [ SRC_ADDR=<IPv4 addres> ]
 	
-[ IPXFRAMETYPE={802.2|802.3|ETHERII|SNAP} ]
+[ IPXFRAMETYPE={802.2|802.2TR|802.3|EtherII|SNAP} ]
 [ IPXNETWORK= ]
 [ IPXPRIMARY={no|yes} ]
 	
