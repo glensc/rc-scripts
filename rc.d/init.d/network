@@ -66,10 +66,10 @@ ipv4_forward_set ()
 	    else
 		if [ "$FORWARD_IPV4" = "no" -o "$FORWARD_IPV4" = "false" ]; then
 		    value=0
-		    message="Disabling IPv4 packet forwarding: "
+		    message="Disabling IPv4 packet forwarding"
 		else
 		    value=1
-		    message="Enabling IPv4 packet forwarding :"
+		    message="Enabling IPv4 packet forwarding"
 		fi
 
 		if [ $value != `cat /proc/sys/net/ipv4/ip_forward` ]; then
@@ -93,10 +93,10 @@ ipv4_spoofing_protection ()
             else
                if [ "$SPOOFING_IPV4" = "no" -o "$SPOOFING_IPV4" = "false" ]; then
                     value=0
-                    message="Disabling IPv4 spoofing protection: "
+                    message="Disabling IPv4 spoofing protection"
                 else
                     value=1
-                    message="Enabling IPv4 spoofing protection: "
+                    message="Enabling IPv4 spoofing protection"
                 fi
 
                 if [ $value != `cat /proc/sys/net/ipv4/conf/all/rp_filter` ]; then
@@ -123,10 +123,10 @@ ipv4_icmp_echo_ignore_broadcasts ()
             else
                 if [ "$IGNORE_ICMP_BCAST_IPV4" = "no" -o "$IGNORE_ICMP_BCAST_IPV4" = "false" ]; then
                     value=0
-                    message="Disabling IPv4 ign icmp_echo to our bcasts: "
+                    message="Disabling IPv4 ign icmp_echo to our bcasts"
                 else
                     value=1
-                    message="Enabling IPv4 ign icmp_echo to our bcasts: "
+                    message="Enabling IPv4 ign icmp_echo to our bcasts"
                 fi
 
                 if [ $value != `cat /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts` ]; then
@@ -177,7 +177,7 @@ case "$1" in
 	    ;;
 	esac
 	./ifdown ifcfg-lo
-	show "Disabling IPv4 packet forwarding: "
+	show "Disabling IPv4 packet forwarding"
 	busy
 	echo 0 > /proc/sys/net/ipv4/ip_forward
 	deltext; ok

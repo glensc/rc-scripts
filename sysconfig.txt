@@ -36,6 +36,7 @@ Files in /etc/sysconfig
 /etc/sysconfig/network:
 
   NETWORKING=yes|no
+  IP6NETWORKING=yes|no
   HOSTNAME=<fqdn by default, but whatever hostname you want>
     Note: for compatibility with some old software people might
     install (like trn), the /etc/HOSTNAME file should contain the
@@ -196,6 +197,7 @@ Files in /etc/sysconfig/network-scripts/
     DEVICE=<name of physical device (except dynamically-allocated PPP
       devices where it is the "logical name")
     IPADDR=
+    IP6ADDRS=<blank separated list of ipv6 addresses>
     NETMASK=
     GATEWAY=
     ONBOOT=yes|no

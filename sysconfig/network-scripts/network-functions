@@ -12,9 +12,9 @@ source_config ()
 	    echo "Missing config file $PARENTCONFIG." >&2
 	    exit 1
 	}
-	. $PARENTCONFIG
+	. ./$PARENTCONFIG
     fi
-    . $CONFIG
+    . ./$CONFIG
 }
 
 do_netreport ()
@@ -48,3 +48,4 @@ set_hostname()
 	echo "search $domain" >> /etc/resolv.conf
     fi
 }
+

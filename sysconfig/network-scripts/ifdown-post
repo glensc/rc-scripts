@@ -3,7 +3,7 @@
 # it is brought down explicitly.
 
 cd /etc/sysconfig/network-scripts
-. network-functions
+. ./network-functions
 
 CONFIG=$1
 source_config

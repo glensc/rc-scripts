@@ -2,5 +2,5 @@
 #
 # You can put here anything :)
 #
-echo " Disconet time: `date` z $PPP_REMOTE                    " >> /var/log/ppp.log
+echo " Disconnect time: `date` from $PPP_REMOTE                    " >> /var/log/ppp.log
 echo "+---------------------------------------------------------------+" >> /var/log/ppp.log

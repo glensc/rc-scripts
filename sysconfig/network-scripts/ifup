@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
-. network-functions
+. ../network
+. ./network-functions
 
 need_hostname
 
@@ -19,7 +20,7 @@ CONFIG=$1
     exit 1
 }
 
-if [ $UID != 0 ]; then
+if [ `id -u` != 0 ]; then
     if [ -x /usr/sbin/usernetctl ]; then
 	exec /usr/sbin/usernetctl $CONFIG up
     fi
@@ -129,6 +130,13 @@ if [ "$IPSETUP" != yes ]; then
 
     ifconfig ${DEVICE} ${MACADDR:+hw ether $MACADDR} ${IPADDR} \
       netmask ${NETMASK} broadcast ${BROADCAST}
+
+    if [ "${IP6NETWORKING}" = "yes" ] ; then 
+      for ADDR in ${IP6ADDRS} ; do
+        ifconfig ${DEVICE} add ${ADDR}
+      done  
+    fi
+    
     if [ "$ISALIAS" = no ] ; then
 	route add -net ${NETWORK} netmask ${NETMASK} ${DEVICE}
     else

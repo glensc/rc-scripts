@@ -4,7 +4,7 @@ Summary(fr):	inittab et scripts /etc/rc.d
 Summary(pl):	inittab i skrypty startowe z katalogu /etc/rc.d
 Summary(tr):	inittab ve /etc/rc.d dosyalarý
 Name:		rc-scripts
-Version:	0.0.1
+Version:	0.0.3
 Copyright:	GPL
 Group:		Base
 Group(pl):	Bazowe	
@@ -64,7 +64,10 @@ for i in  halt network nfsfs random reboot single
 	do /sbin/chkconfig --add $i
 done 
 if [ -f /etc/inittab.rpmsave ]; then
+	echo "**** Found old /etc/inittab.rpmsave ****"
+	echo "/etc/inittab renamed to /etc/inittab.rpmnew"
 	mv /etc/inittab /etc/inittab.rpmnew
+	echo "/etc/inittab.rpmsave renamed to /etc/inittab."
 	mv /etc/inittab.rpmsave /etc/inittab
 fi
 
@@ -117,8 +120,14 @@ rm -rf $RPM_BUILD_ROOT
 /usr/man/man1/*
 
 %changelog
+* Tue Mar 23 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [0.0.2-1]
+- be more verbose while upgrading when /etc/inittab.rpmsave is found,
+- added seting NETWORK="no" variable to when /etc/sysconfig/network is not present
+  or when NETWORK in this file is not defined.
+
 * Sun Mar 21 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-  [0.0.1]
+  [0.0.1-1]
 - added /etc/sysconfig/system,
 - removed man group from man pages,
 - added in %post not replacing /etc/inittab on upgrade from initscripts,

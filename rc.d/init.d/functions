@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# Version:	@(#) /etc/init.d/functions $Revision: 1.4 $ $Date: 1999/06/14 20:12:05 $
+# Version:	@(#) /etc/init.d/functions $Revision: 1.5 $ $Date: 1999/06/14 20:44:32 $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -18,19 +18,19 @@ function show {
 }
 
 function busy {
-  echo -ne "`tput setaf 6`[`tput setaf 5` BUSY `tput setaf 6`]`tput setaf 7`"
+  echo -n "`tput setaf 6`[`tput setaf 5` BUSY `tput setaf 6`]`tput setaf 7`"
 }
 
 function ok {
-  echo -ne "`tput setaf 6`[`tput setaf 2` DONE `tput setaf 6`]`tput setaf 7`"
+  echo  "`tput setaf 6`[`tput setaf 2` DONE `tput setaf 6`]`tput setaf 7`"
 }
 
 function fail {
-  echo -ne "`tput setaf 6`[`tput setaf 1` FAIL `tput setaf 6`]`tput setaf 7`"
+  echo  "`tput setaf 6`[`tput setaf 1` FAIL `tput setaf 6`]`tput setaf 7`"
 }
 
 function died {
-  echo -ne "`tput setaf 6`[`tput setaf 1` DIED `tput setaf 6`]`tput setaf 7`"
+  echo  "`tput setaf 6`[`tput setaf 1` DIED `tput setaf 6`]`tput setaf 7`"
 }
 
 function deltext {
@@ -56,7 +56,7 @@ daemon() {
 
 	# And start it up.
 	busy
-	if nice -n $nicelevel "$@" &> $TMPFILE; then
+	if nice -n $nicelevel "$@" >$TMPFILE 2>&1; then
 	  deltext
 	  ok
 	else
@@ -98,16 +98,16 @@ killproc() {
         if [ "$pid" != "" ] ; then
 		if [ "$notset" = 1 ] ; then
 			# TERM first, then KILL if not dead
-			kill -TERM $pid &> $TMPFILE
+			kill -TERM $pid >$TMPFILE 2>&1
 			usleep 100000
 			dead=`ps -o pid= $pid`
 			if [ "$dead" != "" ]; then
 				sleep 3
-				kill -KILL $pid &> $TMPFILE
+				kill -KILL $pid >$TMPFILE 2>&1
 			fi
 		# use specified level only
 		else
-	                kill $killlevel $pid &> $TMPFILE
+	                kill $killlevel $pid >$TMPFILE 2>&1
 		fi
 	else
 	  rm -f /var/run/$base.pid
@@ -154,8 +154,17 @@ pidofproc() {
 	fi
 
 	# Finally try to extract it from ps
-	echo `ps -C $1 -o pid=`
-	return 0
+	pids=`ps -C $1 -o pid=`
+
+	# Return the first PID, which is not our
+	for pid in $pids ; do
+		if [ $pid != $$ ] ; then
+	  		echo $pid
+			return 0
+		fi
+	done  
+	
+	return 1
 }
 
 status() {

@@ -2,7 +2,7 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
-. network-functions
+. ./network-functions
 
 CONFIG=$1
 
@@ -17,7 +17,7 @@ CONFIG=$1
     exit 1
 }
 
-if [ $UID != 0 ]; then
+if [ `id -u` != 0 ]; then
     if [ -x /usr/sbin/usernetctl ]; then
         exec /usr/sbin/usernetctl $CONFIG down
     fi
