@@ -1,4 +1,4 @@
-#	$Id: ifcfg-description,v 1.17 2002/08/24 16:05:50 misiek Exp $
+#	$Id: ifcfg-description,v 1.18 2002/11/12 15:54:04 kloczek Exp $
 DEVICE=<name>
 [ BOOTPROTO={none|bootp|dhcp|pump} ]
   You can specify which dhcp client to use with the DHCP_CLIENT, if
@@ -8,7 +8,7 @@ DEVICE=<name>
   /sbin/dhcpxd
   /sbin/pump
   if you have a preferred client define the DHCP_CLIENT variable.
-  You can also pass some options to dhcl client via DHCP_OPTIONS.
+  You can also pass some options to dhcp client via DHCP_OPTIONS.
 
 [ BOOTPROTO6={none|dhcp6|v4compat}
   dhcp6 isn't supported, yet.
