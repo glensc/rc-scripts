@@ -152,8 +152,8 @@ main(int argc, char ** argv) {
 	usage();
     }
 
-    if (chdir("/etc/sysconfig/network-scripts")) {
-	fprintf(stderr, "error switching to /etc/sysconfig/network-scripts: "
+    if (chdir("/etc/sysconfig/interfaces")) {
+	fprintf(stderr, "error switching to /etc/sysconfig/interfaces: "
 		"%s\n", strerror(errno));
 	exit(1);
     }
