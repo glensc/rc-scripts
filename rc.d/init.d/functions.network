@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.61 2001/07/13 17:47:43 marcus Exp $
+# $Id: functions.network,v 1.62 2001/10/01 17:10:36 baggins Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -249,8 +249,13 @@ DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]\.[0-9]*$/,NUL); print $0 } ')
 DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
 eval IP4ADDR="\$IPADDR${IP4_PRIM_IF:-}"
-eval IP4ADDROPT="\$IP_AOPTS${IP4_PRIM_IF:-}"
-eval IP4ROUTEOPT="\$IP_ROPTS${IP4_PRIM_IF:-}"
+if echo "${IP4ADDR}" | grep -q ":" ; then
+	IP6ADDR=${IP4ADDR}
+	IP4ADDR=""
+else
+	eval IP4ADDROPT="\$IP_AOPTS${IP4_PRIM_IF:-}"
+	eval IP4ROUTEOPT="\$IP_ROPTS${IP4_PRIM_IF:-}"
+fi
 if [ -n "${IP6_PRIM_IF}" ] ; then
 	eval IP6ADDR="\$IPADDR${IP6_PRIM_IF:-}"
 	eval IP6ADDROPT="\$IPV6_AOPTS${IP6_PRIM_IF:-}"
