@@ -474,7 +474,7 @@ if [ -x /sbin/evms_activate ]; then
 		fi
 	fi
 fi
-# LVM
+# LVM (keep in sync with LVM starting after RAID run!)
 if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
 	lvmversion=$(/sbin/vgchange --version 2>/dev/null | awk '{gsub("vgchange: Logical Volume Manager ",""); gsub("LVM version:     ",""); gsub(/\..*/,"");print $1; exit}')
    	if [ "$lvmversion" = "1" ] ; then
@@ -503,19 +503,21 @@ if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
 	modprobe -s md >/dev/null 2>&1
 	if [ -f /proc/mdstat ]; then
 	    goraidtab=1
+	    golvm=0
 	    rc=0
 	    
 	    if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
 		if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf); then
 		    run_cmd "Starting up RAID devices" /sbin/mdadm --assemble --scan
 		    rc=$?
-		    [ "$rc" -eq 0 ] && goraidtab=0
+		    [ "$rc" -eq 0 ] && goraidtab=0 && golvm=1
 		fi
 	    fi
 	    
 	    if [ -f /etc/raidtab -a "$goraidtab" -eq 1 ]; then
 		
 		for i in $(grep -v "^#" /etc/raidtab | grep "raiddev" | awk '{print $2}') ; do
+		    golvm=1
 		    RAIDDEV=$(basename $i)
 		    RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat)
 		    show "Starting up RAID device %s" $RAIDDEV
@@ -572,9 +574,13 @@ if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
 		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
 		run_cmd "Automatic reboot in progress" reboot
 	    fi
-	    if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-		run_cmd "Scanning for LVM volume groups" /sbin/vgscan && \
-			run_cmd "Activating LVM volume groups" /sbin/vgchange -a y
+	    # LVM on RAID (keep in sync with LVM setting few lines above)
+	    if [ "$golvm" -eq "1" ]; then
+		if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
+    		    run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelock && \
+			    run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmignorelock
+	    	    [ "$lvmversion" = "2" ] && /sbin/vgscan --mknodes $lvmignorelock > /dev/null 2>&1
+		fi
 	    fi
 	    show "Starting up RAID devices"; ok
 	fi
