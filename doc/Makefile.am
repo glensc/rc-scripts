@@ -11,7 +11,6 @@ man_MANS = \
 	usleep.1
 	
 doc_DATA = \
-	ipchains-setup.txt \
 	net-scripts.txt \
 	sysconfig.txt \
 	sysvinitfiles
