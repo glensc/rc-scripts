@@ -1,16 +1,15 @@
 #!/bin/sh
 #
-#	$Id: ifdown-post,v 1.7 1999/09/28 16:17:30 jajcus Exp $
+#	$Id: ifdown-post,v 1.8 1999/10/13 21:28:40 kloczek Exp $
 #
 # This should be called whenever an interface goes down, not just when
 # it is brought down explicitly.
 
-cd /etc/sysconfig/network-scripts
-
 CONFIG=$1
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/rc.d/init.d/functions.network
+. /etc/sysconfig/network-scripts/.functions
+
 source_config
 
 # Notify programs that have requested notification

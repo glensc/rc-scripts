@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.32 1999/10/13 17:35:33 baggins Exp $
+# $Id: rc-scripts.spec.in,v 1.33 1999/10/13 21:28:40 kloczek Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -129,7 +129,7 @@ fi
 %attr(755,root,root) %dir %{_sysconfdir}/rc.d/rc?.d
 
 %{_sysconfdir}/rc.d/init.d/functions
-%{_sysconfdir}/rc.d/init.d/functions.network
+%{_sysconfdir}/sysconfig/network-scripts/.functions
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/allowlogin
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/killall
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/random

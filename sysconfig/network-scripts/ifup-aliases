@@ -1,11 +1,11 @@
 #!/bin/sh
 #
-#	$Id: ifup-aliases,v 1.8 1999/09/28 16:17:30 jajcus Exp $
+#	$Id: ifup-aliases,v 1.9 1999/10/13 21:28:40 kloczek Exp $
 #
 # adds aliases of device $1
 
 . /etc/sysconfig/network
-. /etc/rc.d/init.d/functions.network
+. /etc/sysconfig/network-scripts/.functions
 
 if [ "$1" = "" ]; then
 	echo "usage: $0 <net-device>"

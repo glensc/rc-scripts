@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ipx,v 1.6 1999/09/28 16:17:30 jajcus Exp $
+#	$Id: ifup-ipx,v 1.7 1999/10/13 21:28:40 kloczek Exp $
 #
 # configures IPX on $1 if appropriate
 
@@ -22,7 +22,7 @@ case $IPX in yes|true) ;; *) exit 0 ;; esac
 
 cd /etc/sysconfig/network-scripts
 . /etc/rc.d/init.d/functions
-. /etc/rc.d/init.d/functions.network
+. /etc/sysconfig/network-scripts/.functions
 
 CONFIG=$1
 [ -f "$CONFIG" ] || CONFIG=ifcfg-$CONFIG

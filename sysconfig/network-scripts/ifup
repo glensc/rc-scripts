@@ -1,13 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.28 1999/10/06 16:52:37 kloczek Exp $
+#	$Id: ifup,v 1.29 1999/10/13 21:28:40 kloczek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
-cd /etc/sysconfig/network-scripts
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/rc.d/init.d/functions.network
+. /etc/sysconfig/network-scripts/.functions
 
 need_hostname
 

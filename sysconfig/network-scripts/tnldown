@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-#	$Id: tnldown,v 1.8 1999/10/06 16:52:37 kloczek Exp $
+#	$Id: tnldown,v 1.9 1999/10/13 21:28:40 kloczek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 
 cd /etc/sysconfig/network-scripts
-. /etc/rc.d/init.d/functions.network
+. /etc/sysconfig/network-scripts/.functions
 . /etc/sysconfig/network
 
 CONFIG=$1

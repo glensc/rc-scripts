@@ -1,11 +1,11 @@
 #!/bin/sh
 #
-#	$Id: ifup-plip,v 1.8 1999/07/31 11:24:20 misiek Exp $
+#	$Id: ifup-plip,v 1.9 1999/10/13 21:28:40 kloczek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
-. /etc/rc.d/init.d/functions.network
+. /etc/sysconfig/network-scripts/.functions
 
 CONFIG=$1
 source_config
