@@ -1,0 +1,10 @@
+.deps
+*.o
+Makefile
+Makefile.in
+doexec
+ipcalc
+usleep
+netreport
+usernetctl
+testd
