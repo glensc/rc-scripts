@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.23 1999/09/13 13:26:43 misiek Exp $
+#	$Id: ifup,v 1.24 1999/09/15 10:16:49 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -148,20 +148,21 @@ fi
 
 
 # IPv6 rules
-    if [ "${IPV6_NETWORKING}" == "yes" ] ; then 
+    if [ "${IPV6_NETWORKING}" == "yes" ] ; then
 
       for ADDR6 in ${IPV6_ADDR} ; do
 	ip -family inet6 addr add ${ADDR6} dev ${DEVICE} label ${FULLDEVNAME}
 	ip -family inet6 route add ${ADDR6} dev ${DEVICE}
       done  
 
-      if [ "$IPv6" == "yes" ]; then
-	ip -family inet6 addr add fe80::${IPADDR} dev ${DEVICE} label ${FULLDEVNAME} scope link
+      # only for sit tunnel device
+      if (ip tunnel show ${FULLDEVNAME} 2>&1 | grep -q "ipv6/ip") && \
+	 [ -f /etc/sysconfig/interfaces/tnlcfg-${FULLDEVNAME} ]; then
 
-	for ADDR4 in ${IPADDR_ALIASES} ; do
-	  # network prefix > /dev/null
-	  ADDR4="`echo ${ADDR4} | sed -e "s#/.*##"`"
-	  ip -family inet6 addr add fe80::${ADDR4} dev ${DEVICE} scope link
+	for ADDR4 in `ip -4 addr | grep inet | grep -v "127\..*\..*\..*" | \
+		      sed -e "s#.*inet ##" | sed -e "s#/.*##" | xargs`; do
+	ip -family inet6 addr add fe80::${ADDR4}/10 dev ${DEVICE} \
+	label ${FULLDEVNAME} scope link 2> /dev/null
 	done
 
       fi
