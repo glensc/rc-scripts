@@ -36,6 +36,18 @@ sleep 2
 kill -KILL ${PID} > /dev/null 2>&1
 logger -p daemon.info -t ifdown-ppp "ifdown-ppp unable to nicely kill pppd-$DEVICE (pppd-$DEVNAME)" &
 
+# Special cases
+if is_yes "${PPPOA_EAGLE}"; then
+    EAGLECTRL="/usr/sbin/adictrl"
+    if [ ! -x $EAGLECTRL ]; then
+	EAGLECTRL="/usr/sbin/eaglectrl"
+    fi
+    if [ -x $EAGLECTRL ]; then
+	PPPOA_IFACE=$( $EAGLECTRL -i 2>/dev/null)
+	[ -n "$PPPOA_IFACE" ] && ip link set "$PPPOA_IFACE" down
+    fi
+fi
+
 /etc/sysconfig/network-scripts/ifdown-post $1
 
 exit 1
