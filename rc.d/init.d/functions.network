@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.45 2000/07/21 18:51:45 zagrodzki Exp $
+# $Id: functions.network,v 1.45.2.1 2000/10/18 20:10:50 misiek Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -7,7 +7,9 @@
 # This will work only after starting interface to which LDAP server is connected
 find_ldap_interfaces()
 {
-is_yes "$USE_LDAP" && [ -x /usr/bin/ldapsearch ] || exit 1
+local BSWITH QUERY
+is_no "$USE_LDAP" && return 0
+
 if [ -n "$LDAP_BASE_DN" ] ; then
 	BSWITCH="-b$LDAP_BASE_DN" 
 else
@@ -16,13 +18,15 @@ fi
 
 QUERY="(&(objectclass=pldinterface)(if_onboot=yes))"
 ldapsearch "$BSWITCH" "$QUERY" if_device | \
-	grep "^if_device=" | sed -e "s/^if_device=//"
+	awk ' (/^if_device=/) { gsub(/^if_device=/,NIL); print $0; } '
 }
 
 # find aliases for device
 find_ldap_aliases()
 {
-is_yes "$USE_LDAP" && [ -x /usr/bin/ldapsearch ] || exit 1
+local BSWITH QUERY
+is_no "$USE_LDAP" && return 0
+
 if [ -n "$LDAP_BASE_DN" ] ; then
 	BSWITCH="-b$LDAP_BASE_DN" 
 else
@@ -31,14 +35,13 @@ fi
 
 QUERY="(&(objectclass=pldinterface)(if_onboot=yes)(if_device~=$1:*))"
 ldapsearch "$BSWITCH" "$QUERY" if_device | \
-	grep "^if_device=" | sed -e "s/^if_device=//"
+	grep "^if_device=" | awk ' { gsub(/^if_device=/,NIL); print $0; } '
 }
 
 get_ldap_config ()
 {
-if is_yes "$USE_LDAP" && [ -x /usr/bin/ldapsearch ]; then
-	exit 1
-fi
+local local BSWITH QUERY IPV6_ADDR IPADDR_ALIASES FIELD VALUE VAR
+is_no "$USE_LDAP" && return 0
 
 # Initialise fields which  can have multiple values:
 IPV6_ADDR=""
@@ -51,16 +54,14 @@ else
 	BSWITH=""
 fi
 
-ldapsearch "$BSWITCH" "$QUERY" | grep "=" | sed -e "s/=/ /" | {
+ldapsearch "$BSWITCH" "$QUERY" | awk ' (/=/) { gsub(/=/," "); print $0; } ' | {
 	while read FIELD VALUE ; do
 		# Field, which have name compatible with other 
 		# LDAP object
 		if [ "$FIELD" = "iphostnumber" ] ; then
 			VAR="IPADDR";
 		else # Other fields
-			VAR=`echo "$FIELD" | grep "^if_" \
-			     | tr [:lower:] [:upper:] \
-			     | sed -e "s/IF_//"`
+			VAR=$(echo "$FIELD" | awk '(/^if_/) { data=toupper($0); gsub(/IF_/,NIL,data); print data; }')
 		fi
 		# Fields which can have multiple values:
 		if   [ "$VAR" = "IPV6_ADDR" \
@@ -79,7 +80,7 @@ ldapsearch "$BSWITCH" "$QUERY" | grep "=" | sed -e "s/=/ /" | {
 
 source_config ()
 {
-DEVNAME="`basename "$CONFIG" | sed 's/^ifcfg-//g'`"
+DEVNAME=$(basename "$CONFIG" | awk ' { gsub(/^ifcfg-/,NIL); print $0; } ')
         
 if echo "$CONFIG"|egrep "^/" >/dev/null 2>&1 ; then
 	if [ -f "$CONFIG" ] ; then
@@ -116,8 +117,9 @@ fi
 
 set_hostname()
 {
-hostname=`echo $1 | sed 's/\..*$//'`
-domain=`echo $1 | sed 's/^[^\.]*\.//'`
+local hostname domain
+hostname=$(echo $1 | awk ' { gsub(/\..*$/,NIL); print $0; } ')
+domain=$(echo $1 | awk ' { sub(/^[^\.]*\./,NIL); print $0; } ')
 
 if [ -n "$hostname" ] ; then
 	echo "$hostname" > /etc/HOSTNAME
@@ -135,14 +137,13 @@ if [ -n "$domain" ] ; then
 fi
 }
 
-# PLD/Linux network functions
+# PLD GNU/Linux network functions
 # Copyright (C) 1999, 2000 Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
-
-# All functions must be called "name_of_function on" or "name_of_function off"
 
 # Setup Network Address Translation (NAT)
 setup_nat()
 {
+local src via dst
 if [ -r /etc/sysconfig/static-nat ]; then
 	grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
 		if [ "$1" = "on" ]; then
@@ -156,155 +157,220 @@ if [ -r /etc/sysconfig/static-nat ]; then
 fi
 }
 
-# network router discovery daemon
-rdisc()
+# Setup static ARP
+static_arp()
 {
+local rc arpdev host hwaddr flags neflags
+if is_yes "$STATIC_ARP" && [ -r /etc/ethers ]; then
+	if [ -x /sbin/arp ]; then
+		run_cmd "Setting static ARP entries" /sbin/arp -f /etc/ethers
+	else
+		show "Setting static ARP entries"; busy
+		rc=0
+		arpdev=$(ip link show | awk -F':' '(/UP/) && ! (/NOARP/) && ! (/lo:/) && ! (/NONE:/) { print $2; exit }')
+		if [ -z "$arpdev" ]; then
+			rc=1
+		else
+			# ip supports only ip addresses
+			grep "^[0-9]" /etc/ethers | \
+			while read host hwaddr flags; do
+				case "$flags" in
+				  *temp*)
+				  neflags="nud stale"
+				  ;;
+				  *)
+				  neflags="nud permanent"
+				  ;;
+				esac
+				if ! /sbin/ip neigh add $host lladdr $hwaddr $neflags dev $arpdev; then
+					rc=1
+				fi
+			done
+		fi
+		if [ "$rc" -gt 0 ]; then
+			fail
+		fi
+	fi
+fi
+}
+
+setup_forwarding ()
+{
+if is_yes "$IPV4_NETWORKING" && is_yes "$IPV4_FORWARDING" && [ -f /proc/sys/net/ipv4/ip_forward ];
+then
+	if [ "$1" = "on" ]; then
+		run_cmd "Enabling IPv4 packed forwarding" sysctl -w net.ipv4.ip_forward=1
+	else
+		run_cmd "Disabling IPv4 packed forwarding" sysctl -w net.ipv4.ip_forward=0
+	fi
+fi
+
+if is_yes "$IPV6_NETWORKING" && is_yes "$IPV6_FORWARDING" && [ -f /proc/sys/net/ipv6/conf/all/forwarding ];
+then
+	if [ "$1" = "on" ]; then
+		run_cmd "Enabling IPv6 packed forwarding" sysctl -w net.ipv6.conf.all.forwarding=1
+	else
+		run_cmd "Disabling IPv6 packed forwarding" sysctl -w net.ipv6.conf.all.forwarding=0
+	fi
+fi
+}
+
+# Set up all IP && IP parameter variables
+setup_ip_param ()
+{
+# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
+DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*$/,NUL); print $0 } ')
+# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
+DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
+
+eval IP4ADDR="\$IP_${IP4_PRIM_NR:-1}_ADDR"
+eval IP4ADDROPT="\$IP_${IP4_PRIM_NR:-1}_AOPTS"
+eval IP4ROUTEOPT="\$IP_${IP4_PRIM_NR:-1}_ROPTS"
+eval IP6ADDR="\$IP_${IP6_PRIM_NR:-1}_ADDR"
+eval IP6ADDROPT="\$IP_${IP6_PRIM_NR:-1}_AOPTS"
+eval IP6ADDROPT="\$IP_${IP6_PRIM_NR:-1}_AOPTS"
+eval IP4SRCADDR="\$IP_${IP4_SRC_NR}_ADDR"
+[ -n "$IP4SRCADDR" ] && IP4SRCADDR="src $IP4SRCADDR"
+eval IP6SRCADDR="\$IP_${IP6_SRC_NR}_ADDR"
+[ -n "$IP6SRCADDR" ] && IP6SRCADDR="src $IP4SRCADDR"
+
+# If tunnel device then add onlink option in routing
+[ -n "$MODE" ] && TNLOPTS="onlink"
+
+# new rc-scripts 0.4.x option
+if [ -z "$HANDLING" ]; then
+	typeset -i HANDLING=0
+fi
+
+# set handling for bridge
+case "$DEVICETYPE" in
+	br|atm|lec)
+		HANDLING=1
+		;;
+esac
+		
+# Multicast ready devices
+if is_yes "$MULTICAST"; then
+	MULTICAST="on"
+else
+	case "$DEVICETYPE" in
+		eth|br)
+			MULTICAST="on"
+			;;
+		*)
+			MULTICAST="off"
+			;;
+	esac
+fi
+
+# ARP ready devices
+if is_yes "$ARP"; then
+	ARP="on"
+else
+	case "$DEVICETYPE" in
+		eth|br|lec|atm)
+			ARP="on"
+			;;
+		*)
+			ARP="off"
+			;;
+	esac
+fi
+				
+}
+
+check_device_down ()
+{
+	if (ip link show dev ${DEVICE} 2> /dev/null | grep -q UP); then
+		return 1
+	else
+		return 0
+	fi
+}
+
+# Start all needed ATM daemons (if not started yet!)
+atm_daemons_start ()
+{
+if is_no "$ATM"; then
+	return
+fi
+modprobe -qk atm0
+modprobe -qk lec0
+
+if is_yes "$SIGNALLING" && ! (pidof -s /sbin/astmsigd > /dev/null 2>&1); then
+	msg_starting "ATM signalling"
+	daemon atmsigd -b -c /etc/atm/atmsigd.conf \
+		$(is_yes "$SIGNALLING_DEBUG" && echo "-d")
+fi
+
+if is_yes "$ILMI" && ! (pidof -s /sbin/ilmid > /dev/null 2>&1); then
+	msg_starting "ATM ILMI"
+	if [ -f /etc/atm/ilmi.conf ]; then
+		. /etc/atm/ilmi.conf
+		daemon ilmid -b -l $ILMI_LOGFILE \
+			$([ -z "$ILMI_QOS" ] || echo "-q $ILMI_QOS ") \
+			$([ "$ILMI_DEBUG" = "yes" ] && echo "-d ") \
+			$([ -z "$ILMI_UNI" ] || echo "-u $ILMI_UNI ") \
+			$([ -z "$ILMI_LOCAL_IP" ] || echo "-i $ILMI_LOCAL_IP ")
+	else
+		daemon ilmid -b -l syslog
+	fi
+fi
+
+if is_yes "$CLIP" && ! (pidof -s /sbin/atmarpd > /dev/null 2>&1); then
+	msg_starting "ATM CLIP"
+	daemon atmarpd -b
+fi
+}
+
+atm_daemons_stop ()
+{
+if is_no "$ATM"; then
+	return
+fi
+
+is_yes "$CLIP" && msg_stopping "ATM CLIP" && killproc atmarpd
+is_yes "$SIGNALLING" && msg_stopping "ATM signalling" && killproc atmsigd
+is_yes "$ILMI" && msg_stopping "ATM ILMI" && killproc ilmid
+}
+
+setup_ip_gw_ro () 
+{
+# IPv4 gateway
+if is_yes "$IPV4_NETWORKING"; then
+	if [ -z "${GATEWAYDEV}" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
+	    # set up default gateway
+	    if [ -n "${GATEWAY}" ]; then
+	  	ip -4 route add default via ${GATEWAY} dev ${DEVICE} ${IP4SRCADDR} ${TNLOPTS}
+	    	DEFGW=${GATEWAY}
+	    elif [ "${GATEWAYDEV}" = "${DEVICE}" ]; then
+	 	ip -4 route add default dev ${DEVICE} ${IP4SRCADDR} ${TNLOPTS}
+	    fi
+	fi
+fi
+
+# IPv6 gateway && IPv6 globalroute
 if is_yes "$IPV6_NETWORKING"; then
-  [ -z "$IPV6_RDISC_MODE" ] && IPV6_RDISC_MODE=host
-  if is_yes "$IPV6_RDISC"; then
-  RDISC_OPTS="-fs"
-	case "$1" in
-	on|start)
-		[ "$IPV6_RDISC_MODE" = "router" ] && \
-		RDISC_OPTS="$RDISC_OPTS -r"
-		run_cmd "Starting network router discovery daemon" \
-			/usr/sbin/rdisc $RDISC_OPTS
-		;;
-	off|stop)
-		msg_stopping "network router discovery daemon"
-		killproc rdisc -HUP
-		;;
-	esac
-  fi
-fi
-}
-
-# proc_net <zmien> <start/stop> <co ustaw> <co default> <nazwa_zmiennej> [komunikat]
-# proc_net ipv4/ip_forward start 1         0            IPV4_FORWARDING  "IPv4 forwarding"
-#
-# wy¶wietli siê komunikat "Setting IPv4 forwarding to 1"
-# je¶li nie podano komunikatu nic nie jest wy¶wietlane
-
-proc_net()
-{
-WHAT="$1"
-TODO="$2"
-SET="$3"
-DEF="$4"
-VAR="$5"
-MESSAGE="$6"
-eval VARD=\$${VAR}
-
-if [ -n "$VARD" -a -e /proc/sys/net/$WHAT ]; then
-	if [ "$TODO" = "start" ]; then
-	        is_no "$VARD" && [ "$SET" = "1" ] && SET="$(($SET - 1))"
-		is_yes "$VARD" && [ "$SET" = "0" ] && SET="$(($SET + 1))"
-		if [ -n "$MESSAGE" ]; then
-			show "`nls "Setting %s to %s" "$MESSAGE" "$SET"`"; busy
-			if (echo "$SET" > /proc/sys/net/$WHAT) 2> /dev/null; then
-				deltext; ok
-			else
-				deltext; fail
-			fi
-		else
-			echo "$SET" > /proc/sys/net/$WHAT
+	if is_no "${IPV6_FORWARDING}" ; then
+    	    if [ -z "${GATEWAY6DEV}" -o "${GATEWAY6DEV}" = "${DEVICE}" ]; then
+	    	# set up default gateway
+	    	if [ -n "${GATEWAY6}" ]; then
+	    		ip -6 route add default via ${GATEWAY6} dev ${DEVICE} ${IP6SRCADDR}
+			DEFGW6=${GATEWAY6}
+	    	elif [ "${GATEWAY6DEV}" = "${DEVICE}" ]; then
+	    		ip -6 route add default dev ${DEVICE} ${IP6SRCADDR}
+	    	fi
+	    fi
+        else
+            if [ -z "${IPV6_GLOBALROUTEDEV}" -o "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
+	    	# set up default route
+	    	if [ -n "${IPV6_GLOBALROUTEGW}" ]; then
+	    	    ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR}
+	    	elif [ "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
+	            ip -6 route add 2000::/3 via dev ${DEVICE} ${IP6SRCADDR}
 		fi
-	elif [ "$TODO" = "stop" ]; then
-		if [ -n "$MESSAGE" ]; then
-			show "`nls "Setting %s to %s" "$MESSAGE" "$DEF"`"; busy
-			if (echo "$DEF" > /proc/sys/net/$WHAT) 2> /dev/null; then
-				deltext; ok
-			else
-				deltext; fail
-			fi
-		fi
-	fi
-fi
-return 0
-}
-
-ipv4_dynamic_ip_patch()
-{
-if [ "$IPV4_DYNAMIC_IP_PATCH" != "default" -a -n "$IPV4_DYNAMIC_IP_PATCH" ] ||
-   [ ! -e /proc/sys/net/ipv4/ip_dynaddr ]; then
-	case "$IPV4_DYNAMIC_IP_PATCH_VALUE" in
-		[1-9])	;;
-		*)	IPV4_DYNAMIC_IP_PATCH_VALUE=7 ;;
-	esac
-
-	if is_yes "$IPV4_DYNAMIC_IP_PATCH" && [ "$1" = "on" ]; then
-		show "Enabling dynamic IP patch"
-		busy
-		if echo $IPV4_DYNAMIC_IP_PATCH_VALUE > /proc/sys/net/ipv4/ip_dynaddr; then
-			deltext
-			ok
-		else
-			deltext
-			fail
-		fi
-	else
-		show "Disabling dynamic IP patch"
-		busy
-		if echo 0 > /proc/sys/net/ipv4/ip_dynaddr; then
-			deltext
-			ok
-		else
-			deltext
-			fail
-		fi
-	fi
-fi
-}
-
-ipv4_local_port_range()
-{
-if [ "$IPV4_LOCAL_PORT_RANGE" != "default" -a -n "$IPV4_LOCAL_PORT_RANGE" ] || \
-   [ ! -e /proc/sys/net/ipv4/ip_local_port_range ]; then
-	if is_yes "$IPV4_LOCAL_PORT_RANGE" && [ "$1" = "on" ]; then
-		show "Setting local port range"; busy
-		if echo "$IPV4_LOCAL_PORT_RANGE" > /proc/sys/net/ipv4/ip_local_port_range; then
-			deltext
-			ok
-		else
-			deltext
-			fail
-		fi
-	else
-		show "Setting default local port range"; busy
-		if echo "1024 4999" > /proc/sys/net/ipv4/ip_local_port_range; then
-			deltext
-			ok
-		else
-			deltext
-			fail
-		fi
-	fi
-fi
-}
-
-ipv4_anti_spoofing()
-{
-if [ "$IPV4_ANTI_SPOOFING" != "default" -a -n "$IPV4_ANTI_SPOOFING" ] || \
-   [ ! -e /proc/sys/net/ipv4/conf/all/rp_filter ]; then
-	if is_yes "$IPV4_ANTI_SPOOFING" && [ "$1" = "on" ]; then
-		show "Setting up IP spoofing protection"; busy
-		if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 1 > $f; done); then
-			deltext
-			ok
-		else
-			deltext
-			fail
-		fi
-	else
-		show "Setting down IP spoofing protection"; busy
-		if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 0 > $f; done); then
-			deltext
-			ok
-		else
-			deltext
-			fail
-		fi
-	fi
+	    fi
+        fi
 fi
 }
 
@@ -313,50 +379,45 @@ fi
 # eg. unreachable or blackhole routes
 # (c) 1999 Jacek Konieczny <jajcus@pld.org.pl>
 #
-setup_routes(){
-
-	if [ -f /etc/sysconfig/static-routes ]; then
-		if [ "$1" = "on" -o "$1" = "yes" ] ; then
-			egrep "^(none)|(any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
-				/sbin/ip route add $args
-			done
-		else
-			egrep "^(none)|(any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
-				/sbin/ip route del $args 2>/dev/null
-			done
-		fi
+setup_routes()
+{
+local args
+if [ -f /etc/sysconfig/static-routes ]; then
+	if [ "$1" = "on" -o "$1" = "yes" ] ; then
+		egrep "^(none)|(any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+			/sbin/ip route add $args
+		done
+	else
+		egrep "^(none)|(any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+			/sbin/ip route del $args 2>/dev/null
+		done
 	fi
+fi
 }
 
 # Add ONLY IPv4 address (IPv6 address is added automaticly)
 set_up_loopback()
 {
-ip link set dev lo up arp on
-ip addr add 127.0.0.1/8 dev lo
+if is_yes "$IPV4_NETWORKING"; then
+	ip addr add 127.0.0.1/8 dev lo
+fi
+ip link set dev lo arp on up
 }
 
 set_down_loopback()
 {
-ip addr flush dev lo 2> /dev/null
+ip addr flush dev lo 2>&1 | grep -v "Nothing to flush"
 ip link set dev lo down
-}
-
-static_arp()
-{
-if is_yes "$STATIC_ARP"; then
-	if [ -r /etc/ethers -a -x /sbin/arp ]; then
-		/sbin/arp -f /etc/ethers
-	fi
-fi
 }
 
 modprobe_net()
 {
-if is_yes "$IPV6_NETWORKING" && [ "`ls -R /lib/modules/\`uname -r\`/ 2>/dev/null | grep ipv6.o`" != "" ]; then
-	modprobe -s -k net-pf-10
-	if is_yes "$IPV6_TUNNELCONFIG" && [ "`ls -R /lib/modules/\`uname -r\`/ 2>/dev/null | grep ipip.o`" != "" ]; then
-		modprobe -s -k ipip
-	fi
+if is_yes "$IPV6_NETWORKING" && is_module "ipv6"; then
+	_modprobe single -k ipv6
+fi
+
+if is_yes "$IPX" && is_module "ipx"; then
+	_modprobe single -k ipx
 fi
 }
 
@@ -364,7 +425,8 @@ fi
 # folowing function calculates network prefix from given network mask
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 #
-calcprefix() {
+calcprefix()
+{
 local OISF len olen bad prefix
 OISF=$IFS
 IFS="."
@@ -405,7 +467,8 @@ return
 # folowing function calculates network mask from given prefix
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 #
-calcnetmask() {
+calcnetmask()
+{
 local prefix a MASK
 MASK=""
 if [ "`echo "${1}" | grep "^[0-9]"`" = "" ]; then
@@ -443,14 +506,17 @@ return
 # Retrievies PPPD PID and real interface name from /var/run/ppp-*.pid
 get_ppp_device_and_pid () {
 	
-	if [ -f "/var/run/ppp-$DEVICE.pid" ] ; then
-		eval `{
-		         read PID ; echo "PID='$PID'" 
-			 read REALDEVICE ; echo "REALDEVICE=$REALDEVICE"
-		      } < "/var/run/ppp-$DEVICE.pid"`
-	fi
-	if [ -z "$REALDEVICE" ] ; then
-		REALDEVICE=$DEVICE
-	fi
+if [ -f "/var/run/ppp-$DEVICE.pid" ] ; then
+	eval `{
+	         read PID ; echo "PID='$PID'" 
+		 read REALDEVICE ; echo "REALDEVICE=$REALDEVICE"
+	      } < "/var/run/ppp-$DEVICE.pid"`
+fi
+if [ -z "$REALDEVICE" ] ; then
+	REALDEVICE=$DEVICE
+fi
 }
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
 
