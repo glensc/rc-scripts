@@ -14,7 +14,11 @@ BuildPrereq:	popt-devel
 Requires:	mingetty
 Requires:	mktemp
 Requires:	modutils >= 2.1.121
-Requires:	textutils >= 1.22l
+Requires:	textutils
+Requires:	sh-utils
+Requires:	/bin/cut
+Requires:	/bin/nice
+Requires:	/bin/basename
 Prereq:		/sbin/chkconfig
 Obsoletes:	initscripts
 Provides:	initscripts
