@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.42.2.7 2001/03/19 15:48:18 misiek Exp $
+#	$Id: ifup,v 1.42.2.8 2001/05/13 17:47:46 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -128,7 +128,7 @@ if [ -n "$BOOTMETHOD" -a "$BOOTMETHOD" != "none" ]; then
 	fi
 	DHCP_ARGS="$DHCP_OPTIONS $DHCP_ARGS"
 	
-	if ! run_cmd "$(nls "Determining IP information for") $DEVICE ($(basename $DHCP_CLIENT))" $DHCP_CLIENT $DHCP_ARGS ; then
+	if ! run_cmd "$(nls 'Determining IP information for') $DEVICE ($(basename $DHCP_CLIENT))" $DHCP_CLIENT $DHCP_ARGS ; then
 		exit 1
 	fi
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.13.2.3 2001/04/16 14:50:01 dobrek Exp $
+#	$Id: ifup-ppp,v 1.13.2.4 2001/05/13 17:47:46 misiek Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -38,7 +38,7 @@ fi
   nls "/usr/sbin/pppd does not exist or is not executable"
   nls "ifup-ppp for %s exiting" "$DEVICE"
     logger -p daemon.info -t ifup-ppp \
-    "$(nls "/usr/sbin/pppd does not exist or is not executable for %s" "$DEVICE")"
+    "$(nls '/usr/sbin/pppd does not exist or is not executable for %s' "$DEVICE")"
   exit 1
 }
 

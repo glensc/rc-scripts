@@ -6,7 +6,7 @@
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.12.2.2 2001/05/10 19:23:24 misiek Exp $
+# $Id: rc.shutdown,v 1.12.2.3 2001/05/13 17:47:45 misiek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -72,7 +72,7 @@ if [ -x /sbin/raidstop -a -f /etc/raidtab ]; then
 	if [ -f /proc/mdstat ] ; then
 		mddevs=$(awk '/^md.* active/ {print $1}' /proc/mdstat)
 		for mddev in $mddevs ; do
-			MESSAGE="$(nls "Turning off RAID for %s" "$mddev")"
+			MESSAGE="$(nls 'Turning off RAID for %s' "$mddev")"
 			run_cmd "$MESSAGE" raidstop /dev/$mddev
 		done
 		unset mddev mddevs
