@@ -6,7 +6,7 @@
 #               Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.6 2000/05/09 15:46:22 kloczek Exp $
+# $Id: rc.shutdown,v 1.7 2000/05/29 19:03:51 baggins Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -33,6 +33,10 @@ halt -p
 run_cmd "Turning off swap and accounting" swapoff -a
 [ -x /sbin/accton ] && /sbin/accton
 
+if [ -x /sbin/quotaoff ]; then
+	run_cmd "Turning off quotas for local filesystems" /sbin/quotaoff -a
+fi
+
 # Unmount file systems, killing processes if we have to.
 sig=
 retry=3
@@ -51,7 +55,7 @@ do
 	sleep 2
         remaining=`awk '!/(^#| (proc|devfs|devpts|\/) |^none|^\/dev\/root)/ {print $2}' /proc/mounts`
         [ -z "$remaining" ] && break
-        [ -x /sbin/fuser ] && /sbin/fuser -k -m $sig $remaining >/dev/null
+        [ -x /sbin/fuser ] && /sbin/fuser -k -m $sig $remaining >/dev/null 2>/dev/null
         sleep 5
         retry=$(($retry-1))
         sig=-9
