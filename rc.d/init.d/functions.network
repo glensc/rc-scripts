@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.14 1999/08/06 13:02:54 misiek Exp $
+# $Id: functions.network,v 1.15 1999/08/06 13:06:59 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -75,8 +75,8 @@ eval VARD=\$${VAR}
 
 if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
 	if [ "$TODO" == "start" ]; then
-	        [ "$VARD" == "no" -a "$SET" == "1" ] && SET="(($SET - 1))"
-		[ "$VARD" == "yes" -a "$SET" == "0" ] && SET="(($SET + 1))"
+	        [ "$VARD" == "no" -a "$SET" == "1" ] && SET="$(($SET - 1))"
+		[ "$VARD" == "yes" -a "$SET" == "0" ] && SET="$(($SET + 1))"
 		if [ -n "$MESSAGE" ]; then
 			show "`nls Setting` $MESSAGE `nls to` $SET"; busy
 			if (echo "$SET" > /proc/sys/net/$WHAT) 2> /dev/null; then
