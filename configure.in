@@ -1,8 +1,8 @@
-dnl $Id: configure.in,v 1.24 2000/03/04 13:59:16 siefca Exp $
+dnl $Id: configure.in,v 1.25 2000/03/16 23:36:12 kloczek Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
-VERSION=0.1.5
+VERSION=0.2.0
 ALL_LINGUAS="pl"
 
 SHSCRIPTS="rc.d/rc 			\
