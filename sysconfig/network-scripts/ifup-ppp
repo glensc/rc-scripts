@@ -32,10 +32,10 @@ if [ "$2" = "boot" ] && is_no "${ONBOOT}"; then
   exit
 fi
 if [ ! -x /usr/sbin/pppd ]; then
-  nls "/usr/sbin/pppd does not exist or is not executable"
-  nls "ifup-ppp for %s exiting" "$DEVICE"
+  nls "%s does not exist or is not executable" "/usr/sbin/pppd"
+  nls "%s for %s exiting" "ifup-ppp" "$DEVICE"
     logger -p daemon.info -t ifup-ppp \
-    "$(nls '/usr/sbin/pppd does not exist or is not executable for %s' "$DEVICE")"
+    "$(nls '%s does not exist or is not executable for %s' "/usr/sbin/pppd" "$DEVICE")"
   exit 1
 fi
 
@@ -59,8 +59,18 @@ if [ -n "${PPPOE_DEV}" ]; then
 	MODEMPORT="pppoe -I ${PPPOE_DEV} ${PPPOE_OPT}"
     fi
 elif is_yes "${PPPOA_EAGLE}"; then
-    adictrl -w
-    PPPOA_IFACE=$(adictrl -i 2>/dev/null)
+    if [ $(kernelverser) == 002006 ]; then
+    	EAGLECTRL="/usr/sbin/eaglectrl"
+    else
+    	EAGLECTRL="/usr/sbin/adictrl"
+    fi
+    if [ ! -x $EAGLECTRL ]; then
+  	nls "%s does not exist or is not executable" "$EAGLECTRL"
+	nls "%s for %s exiting" "ifup-ppp" "$DEVICE"
+  	exit 1
+    fi
+    $EAGLECTRL -w
+    PPPOA_IFACE=$( $EAGLECTRL -i 2>/dev/null)
     if [ -z "$PPPOA_IFACE" ]; then
        PPPOA_IFACE="(unknown)"
     else
