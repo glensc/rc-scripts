@@ -1,0 +1,8 @@
+# $Id: clock,v 1.1.2.1 2001/03/05 14:48:59 misiek Exp $
+# Should the hardware clock be kept in Coordinated Universal Time 
+# (instead of local time).
+UTC=false
+# true means  your  machine  uses epoch 1980 in its hardware  clock
+ARC=false
+# true means your machine uses  epoch  1900  in  its hardware   clock
+SRM=false
