@@ -58,6 +58,12 @@ if [ -n "${PPPOE_DEV}" ]; then
 	MODEMMODE="pty"
 	MODEMPORT="pppoe -I ${PPPOE_DEV} ${PPPOE_OPT}"
     fi
+elif is_yes "${PPPOA_EAGLE}"; then
+    adictrl -w
+    PPPOA_IFACE=$(adictrl -i 2>/dev/null)
+    [ -z "$PPPOA_IFACE" ] && PPPOA_IFACE="(unknown)"
+    MODEMMODE="pty"
+    MODEMPORT="pppoa -I ${PPPOA_IFACE} ${PPPOA_OPT}"
 else
     if is_no "${DIRECT_CONNECT}" || [ -z "${DIRECT_CONNECT}" ]; then
 	
