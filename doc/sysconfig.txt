@@ -1,4 +1,4 @@
-$Id: sysconfig.txt,v 1.8 2002/06/18 22:06:19 klakier Exp $
+$Id: sysconfig.txt,v 1.9 2002/06/19 18:13:07 klakier Exp $
 
 Files in /etc/sysconfig
 =======================
@@ -43,7 +43,9 @@ Files in /etc/sysconfig
     Note: for compatibility with some old software people might
     install (like trn), the /etc/HOSTNAME file should contain the
     same value as here.
-  NISDOMAIN=<domain name / nis domain name, e.g. "mydomain.org">
+  NISDOMAIN=<nis domain name, e.g. "mydomain.org">
+    Note: set this only if you use NIS system. DNS domainname 
+    should be set in /etc/resolv.conf
   FORWARD_IPV4=yes|no (The current Red Hat Linux installation
     sets this to no by default for RFC compliance, but if
     FORWARD_IPV4 is not set at all, forwarding is *enabled*
