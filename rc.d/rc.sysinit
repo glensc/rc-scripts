@@ -89,6 +89,23 @@ fi
 # Disable splash when requested
 [ -e /proc/splash ] && is_no "$BOOT_SPLASH" && echo "0" > /proc/splash
 
+# Check SELinux status
+selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
+SELINUX=
+if [ -n "$selinuxfs" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
+        if [ -r $selinuxfs/enforce ] ; then
+                SELINUX=$(cat $selinuxfs/enforce)
+        else
+                # assume enforcing if you can't read it
+                SELINUX=1
+        fi
+fi
+
+if [ -x /sbin/restorecon ] && LC_ALL=C fgrep -q " /dev " /proc/mounts ; then
+        /sbin/restorecon  -R /dev 2>/dev/null
+fi
+
+
 if [ "$CONSOLETYPE" = "vt" -a -x /sbin/setsysfont ]; then
     run_cmd "Setting default font" /sbin/setsysfont
 fi
@@ -268,6 +285,7 @@ if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ];
 		echo
 
 		PS1="$(nls '(Repair filesystem)# ')"; export PS1
+		[ "$SELINUX" = "1" ] && disable_selinux
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
 			/sbin/sulogin
 		else
@@ -333,6 +351,13 @@ if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
 	run_cmd "Checking root filesystem quotas" /sbin/quotacheck -vnug /
 fi
 
+# Clean up SELinux labels
+if [ -n "$SELINUX" ]; then
+    for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache ; do
+	[ -r $file ] && restorecon $file  >/dev/null 2>&1
+    done
+fi
+		  
 # Clear mtab
 :>/etc/mtab
 [ -f /etc/cryptomtab ] && :>/etc/cryptomtab
@@ -570,6 +595,7 @@ if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
 		echo
 
 		PS1="$(nls '(RAID Repair)# ')"; export PS1
+		[ "$SELINUX" = "1" ] && disable_selinux
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
 			/sbin/sulogin
 		else
@@ -612,6 +638,7 @@ if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline; then
 		echo
 
 		PS1="$(nls '(Repair filesystem)# ')"; export PS1
+		[ "$SELINUX" = "1" ] && disable_selinux
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
 			/sbin/sulogin
 		else
@@ -667,6 +694,7 @@ if [ -z "$fastboot" ] && grep "^[^#].*encryption=" /etc/fstab | grep -v -q "noau
 		echo
 
 		PS1="`nls '(Repair filesystem)# '`"; export PS1
+		[ "$SELINUX" = "1" ] && disable_selinux
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
 			/sbin/sulogin
 		else
@@ -702,6 +730,8 @@ fi
 if [ -x /sbin/quotaon ]; then
 	run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -aug
 fi
+
+[ -n "$SELINUX" ] && [ -f /.autorelabel ] && relabel_selinux
 
 # Turn on process accounting
 if [ -x /etc/rc.d/rc.acct ]; then
@@ -770,8 +800,7 @@ fi
 # System protected dirs
 mkdir -m 1777 -p /tmp/.ICE-unix > /dev/null 2>&1
 chown root:root /tmp/.ICE-unix
-restorecon /tmp/.ICE-unix > /dev/null 2>&1
-
+[ -n "$SELINUX" ] && restorecon /tmp/.ICE-unix >/dev/null 2>&1
 
 # Right, now turn on swap in case we swap to files
 swapon -a >/dev/null 2>&1

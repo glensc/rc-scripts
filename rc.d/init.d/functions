@@ -814,6 +814,29 @@ msg_Already_Running () { msg_already_running "$*"; }
 msg_Not_Running () { msg_not_running "$*"; }
 msg_Usage () { msg_usage "$*"; }
 
+disable_selinux() {
+	selinuxfs=`awk '/ selinuxfs / { print $2 }' /proc/mounts`
+	echo "*** Warning -- SELinux is active"
+	echo "*** Disabling security enforcement for system recovery."
+	echo "*** Run 'setenforce 1' to reenable."
+	echo "0" > $selinuxfs/enforce
+}
+
+relabel_selinux() {
+	selinuxfs=`awk '/ selinuxfs / { print $2 }' /proc/mounts`
+	echo "
+         *** Warning -- SELinux relabel is required. ***
+         *** Disabling security enforcement.         ***
+         *** Relabeling could take a very long time, ***
+         *** depending on file system size.          ***
+         "
+    	echo "0" > $selinuxfs/enforce
+    	/sbin/fixfiles -F relabel > /dev/null 2>&1
+    	rm -f  /.autorelabel
+    	echo "*** Enabling security enforcement.         ***"
+    	echo $SELINUX > $selinuxfs/enforce
+}
+
 #/*
 # * Local variables:
 # * mode: sh
