@@ -4,6 +4,7 @@ docdir = @docdir@
 
 man_MANS = \
 	doexec.1 \
+	initlog.1 \
 	ipcalc.1 \
 	netreport.1 \
 	usernetctl.1 \
