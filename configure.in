@@ -1,26 +1,24 @@
-dnl $Id: configure.in,v 1.16 1999/09/28 14:43:40 kloczek Exp $
+dnl $Id: configure.in,v 1.17 1999/10/12 14:09:29 baggins Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
-VERSION=0.0.11
+VERSION=0.0.12
 ALL_LINGUAS="pl"
 
 SHSCRIPTS="rc.d/rc 			\
 	rc.d/init.d/allowlogin 		\
 	rc.d/init.d/functions 		\
 	rc.d/init.d/functions.network 	\
-	rc.d/init.d/halt 		\
 	rc.d/init.d/killall 		\
 	rc.d/init.d/netfs 		\
 	rc.d/init.d/network 		\
 	rc.d/init.d/nfsfs 		\
 	rc.d/init.d/random 		\
-	rc.d/init.d/reboot 		\
-	rc.d/init.d/shutdwn 		\
 	rc.d/init.d/single 		\
 	rc.d/rc 			\
 	rc.d/rc.init 			\
 	rc.d/rc.local 			\
+	rc.d/rc.shutdown		\
 	rc.d/rc.sysinit"
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
