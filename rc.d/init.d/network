@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.51 2002/02/03 16:14:31 adasi Exp $
+# $Id: network,v 1.52 2002/03/07 11:16:36 blues Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -75,7 +75,7 @@ if is_yes "$IPX"; then
 		else
 			IPXAUTOPRIMARY="off"
 		fi
-		/usr/bin/ipx_configure --auto_primary=$IPXAUTOPRIMARY
+		/sbin/ipx_configure --auto_primary=$IPXAUTOPRIMARY
 	fi
 	if [ -n $IPXAUTOFRAME ] ; then
 		if is_yes "$IPXAUTOFRAME"; then
@@ -83,10 +83,10 @@ if is_yes "$IPX"; then
 		else
 			IPXAUTOFRAME="off"
 		fi
-		/usr/bin/ipx_configure --auto_interface=$IPXAUTOFRAME
+		/sbin/ipx_configure --auto_interface=$IPXAUTOFRAME
 	fi
 	if [ -n "$IPXINTERNALNETNUM" -a "$IPXINTERNALNETNUM" != "0" ]; then
-		/usr/bin/ipx_internal_net add $IPXINTERNALNETNUM $IPXINTERNALNODENUM
+		/sbin/ipx_internal_net add $IPXINTERNALNETNUM $IPXINTERNALNODENUM
 	fi
 fi
 }
