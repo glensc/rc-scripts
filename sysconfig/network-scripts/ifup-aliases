@@ -1,8 +1,11 @@
 #!/bin/sh
 #
-#	$Id: ifup-aliases,v 1.7 1999/08/14 11:25:50 misiek Exp $
+#	$Id: ifup-aliases,v 1.8 1999/09/28 16:17:30 jajcus Exp $
 #
 # adds aliases of device $1
+
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions.network
 
 if [ "$1" = "" ]; then
 	echo "usage: $0 <net-device>"
@@ -15,10 +18,17 @@ if [ "$BASH_VERSINFO" ]; then
 else
         allow_null_glob_expansion=foo
 fi
+
 cd /etc/sysconfig/interfaces/
+
 for alias in ifcfg-$1:* ; do
         [ -f $alias ] && /sbin/ifup $alias
-        done
+done
+
+for alias in `find_ldap_aliases` ; do
+        /sbin/ifup $alias
+done
+
 if [ "$BASH_VERSINFO" ]; then
         shopt -u nullglob
 else

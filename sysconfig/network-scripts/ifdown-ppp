@@ -1,10 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifdown-ppp,v 1.6 1999/07/13 12:49:37 misiek Exp $
+#	$Id: ifdown-ppp,v 1.7 1999/09/28 16:17:30 jajcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
 . /etc/rc.d/init.d/functions.network
 
 CONFIG=$1

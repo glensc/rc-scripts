@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.6 1999/07/13 12:49:37 misiek Exp $
+#	$Id: ifup-ppp,v 1.7 1999/09/28 16:17:30 jajcus Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -28,6 +28,8 @@ shift
 
 CONFIG=$1
 cd /etc/sysconfig/network-scripts
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
 . /etc/rc.d/init.d/functions.network
 source_config
 if [ -z "$HOLDOFF" ]; then

@@ -1,11 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.26 1999/09/27 20:02:52 wiget Exp $
+#	$Id: ifup,v 1.27 1999/09/28 16:17:30 jajcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
 . /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
 . /etc/rc.d/init.d/functions.network
 
 need_hostname
@@ -13,12 +14,6 @@ need_hostname
 CONFIG=$1
 
 [ -z "$CONFIG" ] && {
-    echo "usage: ifup <device name>" >&2
-    exit 1
-}
-
-[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=ifcfg-$CONFIG
-[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
     echo "usage: ifup <device name>" >&2
     exit 1
 }
