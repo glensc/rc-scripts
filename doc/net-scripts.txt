@@ -1,17 +1,14 @@
-$Id: net-scripts.txt,v 1.3 1999/07/13 12:49:34 misiek Exp $
+$Id: net-scripts.txt,v 1.4 1999/10/07 00:49:51 kloczek Exp $
 
-Files in /sbin/network-scripts/
+rc-scripts files:
 ========================================
 
-/sbin/network-scripts/ifup:
-/sbin/network-scripts/ifdown:
+/sbin/ifup:
+/sbin/ifdown:
 
-  Symlinks to /sbin/ifup and /sbin/ifdown, respectively.
   These are the only two scripts "in" this directory that should
   be called directly; these two scripts call all the other
-  scripts as needed.  These symlinks are here for legacy purposes
-  only -- they'll will probably be removed in future versions, so
-  only /sbin/ifup and /sbin/ifdown should currently be used.
+  scripts as needed.
 
   These scripts take one argument normally: the name of the device
   (e.g. eth0).  They are called with a second argument of "boot"
@@ -26,10 +23,10 @@ Files in /sbin/network-scripts/
   most of the code for handling alternative interface configurations
   and interface change notification through netreport.
 
-/sbin/network-scripts/ifup-post
+/etc/sysconfig/network-scripts/ifup-post
 
   Called when any network device EXCEPT a SLIP device comes
-  up.  Calls /sbin/network-scripts/ifup-routes to
+  up.  Calls /etc/sysconfig/network-scripts/ifup-routes to
   bring up static routes that depend on that device.  Calls
   /sbin/network-scripts/ifup-aliases to bring up
   aliases for that device.  Sets the hostname if it is not
@@ -40,15 +37,15 @@ Files in /sbin/network-scripts/
   Could be extended to fix up nameservice configuration, call
   arbitrary scripts, etc, as needed.
 
-/sbin/network-scripts/ifup-routes
+/etc/sysconfig/network-scripts/ifup-routes
 
   Set up static routes for a device.
 
-/sbin/network-scripts/ifup-aliases
+/etc/sysconfig/network-scripts/ifup-aliases
 
   Bring up aliases for a device.
 
-/sbin/network-scripts/ifdhcpc-done
+/etc/sysconfig/network-scripts/ifdhcpc-done
 
   Called by dhcpcd once dhcp configuration is complete; sets
   up /etc/resolv.conf from the version dhcpcd dropped in
@@ -57,8 +54,8 @@ Files in /sbin/network-scripts/
 Files in /etc/sysconfig/interfaces/
 ========================================
 
-/etc/sysconfig/interfaces/<interface-name> and
-/etc/sysconfig/interfaces/<interface-name>-<clone-name>:
+/etc/sysconfig/interfaces/ifcfg-<interface-name> and
+/etc/sysconfig/interfaces/ifcfg-<interface-name>-<clone-name>:
 
   The first defines an interface, and the second contains
   only the parts of the definition that are different in a
@@ -159,7 +156,7 @@ Files in /etc/sysconfig/interfaces/
       
 
 
-/etc/sysconfig/interfaces/<interface-name>-<anything>!:
+/etc/sysconfig/interfaces/ifcfg-<interface-name>-<anything>!:
 
   Template or backup file. This will not be interpreted
   by net-scripts.
