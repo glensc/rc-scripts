@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.7 1999/07/31 11:24:20 misiek Exp $
+#	$Id: tnlup,v 1.8 1999/08/14 12:01:18 misiek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -36,6 +36,12 @@ if [ "$IPV6_TUNNELCONFIG" != "yes" ] && [ "$MODE" == "sit" ] ||
    [ "$IPX" != "yes" ] && [ "$MODE" == "ipxip" ] || [ "$IPX" != "yes" ] && [ "$MODE" == "ipipx" ]
 then
 	exit
+fi
+
+if [ "$MODE" == "gre" ]; then
+	modprobe ip_gre 2> /dev/null
+elif [ "$MODE" == "ipip" ]; then
+	modprobe ipip 2> /dev/null
 fi
 
 [ -z "${TTL}" ] && TTL=64

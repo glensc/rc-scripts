@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.16 1999/08/07 10:16:14 wiget Exp $
+# $Id: functions.network,v 1.17 1999/08/14 12:01:18 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -180,7 +180,7 @@ fi
 modprobe_net()
 {
 [ "$IPV6_NETWORKING" == "yes" ] && modprobe net-pf-10 2> /dev/null
-modprobe ipip ip_gre 2> /dev/null
+#modprobe ipip ip_gre 2> /dev/null
 }
 
 #
