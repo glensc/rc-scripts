@@ -5,7 +5,7 @@
 #
 # Copyright (c) 1999 Free Software Fundation, Inc.
 # Artur Frysiak <wiget@pld.org.pl>
-# $Id: makepot.pl,v 1.1 1999/09/15 21:16:39 wiget Exp $
+# $Id: makepot.pl,v 1.2 2000/03/21 23:57:17 wiget Exp $
 # 
 
 my %pot;
@@ -14,10 +14,10 @@ sub potentry {
 	my( $msg, $lnr, $filename ) = @_;
 #print STDERR "msg = $msg\nlnr = $lnr\nfilename = $filename\n";	
 	if (defined $pot{"$msg"}) {
-		$pot{"$msg"} = $pot{"$msg"} . "\n# $filename:$lnr";
+		$pot{"$msg"} = $pot{"$msg"} . "\n#. $filename:$lnr";
 #print STDERR "append $msg\n";		
 	} else {
-		$pot{"$msg"} = "\n# $filename:$lnr";
+		$pot{"$msg"} = "\n#. $filename:$lnr";
 #print STDERR "new $msg\n";		
 	};
 };
@@ -56,7 +56,7 @@ for (my $a = 0; $a <= $#ARGV; $a++) {
 	open (POTSRC, "< " . $filename) || die "Can't open " . $filename;
 	foreach (<POTSRC>) {
 		chop;
-		if (/(run_cmd|nls|show)\s"(?!\`nls\s\")([^"]*)"/g) {
+		if (/(run_cmd|nls|show)\s[\sa-zA-Z0-9-]*"(?!\`nls\s\")([^"]*)"/g) {
 #			potentry($1,$lnr,$filename) if defined $1;
 			potentry($2,$lnr,$filename) if defined $2;
 			potentry($3,$lnr,$filename) if defined $3;
