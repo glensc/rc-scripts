@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.42 2002/02/21 00:08:36 gotar Exp $
+# $Id: pl.po,v 1.43 2002/02/21 00:31:34 gotar Exp $
 #
 
 msgid ""
@@ -397,7 +397,7 @@ msgstr "Wlaczanie forwardowania pakietów IPv6"
 msgid "Disabling IPv6 packet forwarding"
 msgstr "Wylaczanie forwardowania pakietów IPv6"
 
-#: ./rc.d/init.d/network:22
+#: ./rc.d/init.d/network:23
 #: ./rc.d/init.d/network:43
 #: ./sysconfig/network-scripts/ifdown-br:36
 #: ./sysconfig/network-scripts/ifup-br:36
@@ -530,7 +530,7 @@ msgstr "Zamykanie systemu w toku \n"
 
 #: ./sysconfig/network-scripts/ifdown:24
 #: ./sysconfig/network-scripts/ifup:28
-#: ./sysconfig/network-scripts/ifup-aliases:14
+#: ./sysconfig/network-scripts/ifup-aliases:15
 #: ./sysconfig/network-scripts/ifup-ipx:14
 #: ./sysconfig/network-scripts/ifup-routes:14
 #: ./sysconfig/network-scripts/tnldown:30
