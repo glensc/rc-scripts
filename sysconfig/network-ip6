@@ -5,21 +5,21 @@
 #!D:IPv6 network configuration file
 #
 #!C:Copyright 1997-1998 Peter Bieringer <pb@bieringer.de>
+#!C:changes (versions X.XXa) by Grzegorz Stanislawski <stangrze@open.net.pl>
 #
-#!V:Version 1.11 05.03.1998
+#!V:Version 1.11a 10.11.1998
 
-# Changes from:
-# 1.00: nothing important
-# 1.10: add IP6FORWARDING switch (to differ between a host and a router)
-
+# Changes to:
+#  1.11: add IP6FORWARDING switch (to differ between a host and a router)
+#  1.11a: removed support for radvd
 
 ## IPv6 configuration debugging
 # Bit0: show all commands, bit1:don't execute anything
 IP6DEBUG=0
 
 ## IPv6 network configuration? {yes|no}
-#IP6NETWORKING=yes
-IP6NETWORKING=no
+IP6NETWORKING=yes
+#IP6NETWORKING=no
 
 # Take information from the file
 IP6INTERFACEFILE=/etc/sysconfig/network-ip6.conf
@@ -30,15 +30,15 @@ IP6INTERFACEFILE=/etc/sysconfig/network-ip6.conf
 # similar to the default gateway in IPv4)
 
 # Allow gateway configurations {yes|no}
-#IP6GATEWAYCONFIG=yes
-IP6GATEWAYCONFIG=no
+IP6GATEWAYCONFIG=yes
+#IP6GATEWAYCONFIG=no
 
 # Take information from the file 
 IP6ROUTEFILE=/etc/sysconfig/network-ip6.conf
 
 # Allow forwarding option, host is a router {yes|no}
-#IP6FORWARDING=yes
-IP6FORWARDING=no
+IP6FORWARDING=yes
+#IP6FORWARDING=no
 
 
 ## IPv6 tunnels
@@ -47,21 +47,8 @@ IP6FORWARDING=no
 # tunnel to you
 
 # Allow IPv6 tunnel interface configuration {yes|no}
-#IP6TUNNELCONFIG=yes
-IP6TUNNELCONFIG=no
+IP6TUNNELCONFIG=yes
+#IP6TUNNELCONFIG=no
  
 # Take information from the file
-IP6TUNNELFILE=/etc/sysconfig/network-ip6.conf
-
-
-
-## Router Advertisement Daemon
-# Start Daemon {yes|no}
-#IP6RADVD=yes
-IP6RADVD=no
-
-# Sepcify configuration file
-IP6RADVDFILE="/etc/sysconfig/radvd.conf"
-
-# Specify options
-#IP6RADVDOPTIONS="-d 9"
+IP6TUNNELFILE=/etc/sysconfig/tunnels-ip6.conf

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
 #
@@ -52,7 +52,7 @@ if [ ! -f /fastboot ]; then
 		echo "*** Dropping you to a shell; the system will reboot"
 		echo "*** when you leave the shell."
 
-		PS1="(Repair filesystem) #"; export PS1
+		PS1="(Repair filesystem) \#"; export PS1
 		sulogin
 
 		echo "Unmounting file systems"
@@ -94,10 +94,6 @@ fi
 echo "Remounting root filesystem in read-write mode."
 mount -n -o remount,rw /
 
-if [ ! -f /etc/HOSTNAME ]; then
-    echo ${HOSTNAME} > /etc/HOSTNAME
-fi
-
 # Clear mtab
 >/etc/mtab
 
@@ -111,26 +107,17 @@ else
     USEMODULES=
 fi
 
-# Get the modules ready to go -- we use awk here as cut is in /usr/bin
+# Set up kernel version-dependent symlinks.
 rm -f /lib/modules/preferred
-if [ -n $USEMODULES ]; then
-    set `cat /proc/cmdline`
-    while [ $# -gt 0 ]; do
-	if echo $1 | grep '^BOOT_IMAGE=' > /dev/null ; then
-	    image=`echo $1 | awk -F= '{ print $2 }'`
-	    kernelfile=`/sbin/lilo -I $image`
-	    if [ -n "$kernelfile" ]; then
-		kernelname=`echo $kernelfile | awk -F- '{ print $1 }'`
-		versioninfo=`echo $kernelfile | sed "s|${kernelname}-||"`
-		if [ "$kernelname" = "/boot/vmlinuz" -a \
-		     -d /lib/modules/$versioninfo -a \
-		     $versioninfo != `uname -r` ]; then
-		     ln -sf $versioninfo /lib/modules/preferred
-		fi
-	    fi
-	fi
-	shift
-    done
+if [ -n "$USEMODULES" ]; then
+    ktag="`cat /proc/version`"
+    mtag=`grep -l "$ktag" /lib/modules/*/.rhkmvtag` 2> /dev/null
+    if [ -n "$mtag" ]; then
+	mver=`echo $mtag | sed -e 's,/lib/modules/,,' -e 's,/.rhkmvtag,,' -e 's,[ 	].*$,,'`
+	ln -sf /lib/modules/$mver /lib/modules/preferred
+	ln -sf /boot/System.map-$mver /boot/System.map
+	ln -sf /boot/module-info-$mver /boot/module-info
+    fi
 fi
 
 if [ -x /sbin/depmod -a -n "$USEMODULES" ]; then
@@ -156,14 +143,40 @@ if ! grep -i nomodules /proc/cmdline >/dev/null ; then
     fi
 fi
 
-if [ -x /sbin/kerneld -a -n "$USEMODULES" ]; then
-    if [ -f /proc/sys/kernel/modprobe ]; then
+if [ -f /proc/sys/kernel/modprobe ]; then
 	# /proc/sys/kernel/modprobe indicates built-in kmod instead
 	echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
-    else
-	/sbin/kerneld
-	KERNELD=yes
-    fi
+fi
+
+# Add raid devices
+if [ -f /proc/mdstat -a -f /etc/raidtab -a -x /sbin/raidadd ]; then
+	echo "Starting up RAID devices."
+	raidadd -a
+
+	rc=$?
+
+	if [ $rc = 0 ]; then
+		raidrun -a
+		rc=$?
+	fi
+
+	# A non-zero return means there were problems.
+	if [ $rc -gt 0 ]; then
+		echo
+		echo
+		echo "*** An error occurred during the RAID startup"
+		echo "*** Dropping you to a shell; the system will reboot"
+		echo "*** when you leave the shell."
+
+		PS1="(RAID Repair) \#"; export PS1
+		sulogin
+
+		echo "Unmounting file systems"
+		umount -a
+		mount -n -o remount,ro /
+		echo "Automatic reboot in progress."
+		reboot
+	fi
 fi
 
 # Check filesystems
@@ -171,15 +184,17 @@ if [ ! -f /fastboot ]; then
 	echo "Checking filesystems."
 	fsck -R -A -V -a $fsckoptions
 
+	rc=$?
+
 	# A return of 2 or higher means there were serious problems.
-	if [ $? -gt 1 ]; then
+	if [ $rc -gt 1 ]; then
 		echo
 		echo
 		echo "*** An error occurred during the file system check."
 		echo "*** Dropping you to a shell; the system will reboot"
 		echo "*** when you leave the shell."
 
-		PS1="(Repair filesystem) #"; export PS1
+		PS1="(Repair filesystem) \#"; export PS1
 		sulogin
 
 		echo "Unmounting file systems"
@@ -219,16 +234,15 @@ rm -f /var/lock/LCK*
 # Delete stale subsystem files.
 rm -f /var/lock/subsys/*
 
-if [ -n "$KERNELD" ]; then
-    touch /var/lock/subsys/kerneld
-fi
-
 # Delete stale pid files
 rm -f /var/run/*.pid
 rm -f /var/spool/postoffice/.pid.*
 
 # Delete X locks
 rm -f /tmp/.X*-lock
+
+# Delete Postgres sockets
+rm -f /tmp/.s.PGSQL.*
 
 # Set the system clock.
 echo -n "Setting clock"
@@ -254,14 +268,20 @@ else
     CLOCK=/sbin/clock
 fi
 
-if [ $UTC = "true" ]; then
+case "$UTC" in
+  yes|true)
     CLOCKFLAGS="$CLOCKFLAGS -u";
     echo -n " (utc)"
-fi
-if [ $ARC = "true" ]; then
+  ;;
+esac
+
+case "$ARC" in
+  yes|true)
     CLOCKFLAGS="$CLOCKFLAGS -A";
     echo -n " (arc)"
-fi
+  ;;
+esac
+
 echo -n ": "
 $CLOCK $CLOCKFLAGS
 
@@ -295,6 +315,7 @@ fi
 # Now that we have all of our basic modules loaded and the kernel going,
 # let's dump the syslog ring somewhere so we can find it later
 dmesg > /var/log/dmesg
+chmod 640 /var/log/dmesg
 
 # Feed entropy into the entropy pool
 /etc/rc.d/init.d/random start

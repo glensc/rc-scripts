@@ -4,10 +4,3 @@
 # You can put your own initialization stuff in here if you don't
 # want to do the full Sys V style init stuff.
 
-arch=$(uname -m)
-a="a"
-case "_$arch" in
-        _a*) a="an";;
-        _i*) a="an";;
-esac
-

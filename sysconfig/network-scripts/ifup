@@ -2,7 +2,6 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
-
 . network-functions
 
 need_hostname
@@ -10,11 +9,13 @@ need_hostname
 CONFIG=$1
 
 [ -z "$CONFIG" ] && {
+    echo "usage: ifup <device name>" >&2
     exit 1
 }
 
 [ -f "$CONFIG" ] || CONFIG=ifcfg-$CONFIG
 [ -f "$CONFIG" ] || {
+    echo "usage: ifup <device name>" >&2
     exit 1
 }
 
@@ -128,8 +129,15 @@ if [ "$IPSETUP" != yes ]; then
 
     ifconfig ${DEVICE} ${MACADDR:+hw ether $MACADDR} ${IPADDR} \
       netmask ${NETMASK} broadcast ${BROADCAST}
-    if [ "$ISALIAS" != no ] ; then
+    if [ "$ISALIAS" = no ] ; then
+	route add -net ${NETWORK} netmask ${NETMASK} ${DEVICE}
+    else
 	route add -host ${IPADDR} ${DEVICE}
+    fi
+
+    # this is broken! it's only here for compatibility with old RH systems
+    if [ "${GATEWAY}" != "" -a "${GATEWAY}" != "none" ]; then
+	route add default gw ${GATEWAY} metric 1 ${DEVICE}
     fi
 
     . /etc/sysconfig/network
@@ -137,7 +145,7 @@ if [ "$IPSETUP" != yes ]; then
     if [ "${GATEWAY}" != "" ]; then
 	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 	    # set up default gateway
-	    route add default gw ${GATEWAY} dev ${DEVICE} 
+	    route add default gw ${GATEWAY} ${DEVICE}
 	    DEFGW=${GATEWAY}
 	fi
     fi
@@ -146,7 +154,7 @@ if [ "$IPSETUP" != yes ]; then
 	if [ -n "$GATEWAYS" ]; then
 	    for gw in $GATEWAYS; do
 		if [ $gw != "${DEFGW}" ]; then
-		    route add default gw $gw dev ${DEVICE}
+		    route add default gw $gw ${DEVICE}
 		fi
 	    done
 	fi
@@ -163,18 +171,9 @@ if [ "$IPSETUP" != yes ]; then
 	fi
     fi
 fi
-# IPv6 section
-if [ -f /etc/rc.d/init.d/functions-ip6 ]; then
-	. /etc/rc.d/init.d/functions-ip6
-	ifup-ip6 ${DEVICE}
-	ifup-routes-ip6 ${DEVICE}
+
+if [ "$IPX" = yes ]; then
+	/etc/sysconfig/network-scripts/ifup-ipx $DEVICE
 fi
 
-case $CONFIG in
-  eth*)
-	/etc/sysconfig/network-scripts/ifup-ipx $CONFIG
-	;;
-esac
-
 exec /etc/sysconfig/network-scripts/ifup-post $CONFIG
-echo $0 $1 executing...

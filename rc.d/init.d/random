@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 #
 # random	Script to snapshot random state and reload it at boot time.
 #
 # Author:       Theodore Ts'o <tytso@mit.edu>
 #
-# chkconfig: 2345 20 80
+# chkconfig: 12345 20 80
 # description: Saves and restores system entropy pool for higher quality \
 #              random number generation.
 

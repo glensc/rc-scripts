@@ -1,9 +1,7 @@
-#!/bin/bash
-#
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# Version:	@(#) /etc/init.d/functions 1.01 26-Oct-1993
+# Version:	@(#) /etc/init.d/functions $Revision: 1.3 $ $Date: 1999/06/14 20:08:16 $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -11,43 +9,32 @@
 #
 
 # First set up a default search path.
-export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
+PATH="/sbin:/usr/sbin:/bin:/usr/bin"; export PATH
 
 # Some functions to handle PLD-style messages
-show() 
-{
-	text="$*".............................................
-	echo -ne `echo $text | cut -c1-45`
+function show {
+  text="$*".............................................
+  echo -ne `echo $text | cut -c1-45`
 }
 
-busy() 
-{
-	echo -n "`tput setaf 6`[`tput setaf 5` BUSY `tput setaf 6`]`tput setaf 7`"
+function busy {
+  echo -ne "`tput setaf 6`[`tput setaf 5` BUSY `tput setaf 6`]`tput setaf 7`"
 }
 
-ok() 
-{
-	echo "`tput setaf 6`[`tput setaf 2` DONE `tput setaf 6`]`tput setaf 7`"
+function ok {
+  echo -ne "`tput setaf 6`[`tput setaf 2` DONE `tput setaf 6`]`tput setaf 7`"
 }
 
-started()
-{
-	echo "`tput setaf 6`[`tput setaf 2` WORK `tput setaf 6`]`tput setaf 7`"
+function fail {
+  echo -ne "`tput setaf 6`[`tput setaf 1` FAIL `tput setaf 6`]`tput setaf 7`"
 }
 
-fail() 
-{
-	echo "`tput setaf 6`[`tput setaf 1` FAIL `tput setaf 6`]`tput setaf 7`"
+function died {
+  echo -ne "`tput setaf 6`[`tput setaf 1` DIED `tput setaf 6`]`tput setaf 7`"
 }
 
-died() 
-{
-	echo "`tput setaf 6`[`tput setaf 1` DIED `tput setaf 6`]`tput setaf 7`"
-}
-
-deltext() 
-{
-	echo -ne '\b\b\b\b\b\b\b\b'
+function deltext {
+  echo -ne '\b\b\b\b\b\b\b\b'
 }
 
 # A function to start a program.
@@ -113,7 +100,7 @@ killproc() {
 			# TERM first, then KILL if not dead
 			kill -TERM $pid &> $TMPFILE
 			usleep 100000
-			dead=`ps aux | awk '{print $2}' | grep $pid`
+			dead=`ps -o pid= $pid`
 			if [ "$dead" != "" ]; then
 				sleep 3
 				kill -KILL $pid &> $TMPFILE
@@ -160,17 +147,17 @@ pidofproc() {
 	fi
 
 	# Next try "pidof"
-	pid=`pidof $1`
+	#pid=`pidof $1`
 	if [ "$pid" != "" ] ; then
 	        echo $pid
 	        return 0
 	fi
 
 	# Finally try to extract it from ps
-	ps auxw | awk 'BEGIN { prog=ARGV[1]; ARGC=1 } 
-			   { if ((prog == $11) || (("(" prog ")") == $11) ||
-			   ((prog ":") == $11)) { print $2 } }' $1
+	echo `ps -C $1 -o pid=`
+	return 0
 }
+
 status() {
 	# Test syntax.
 	if [ $# = 0 ] ; then
@@ -184,9 +171,9 @@ status() {
 	        echo "$1 (pid $pid) is running..."
 	        return 0
         else
-                pid=`ps auxww | grep $1 | egrep -v grep\|$0 | awk '{print $2}'`
+                pid=`echo \`ps -C $1 -o pid= \``
                 if [ "$pid" != "" ] ; then
-                        echo "$1 (pid $pid) is running..."
+                        echo  "$1 (pid $pid) is running..."
                         return 0
                 fi
 	fi

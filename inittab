@@ -4,7 +4,7 @@
 #
 # Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 #               Modified for RHS Linux by Marc Ewing and Donnie Barnes
-#		Modified for PLD Linux by Wojtek ¦lusarczyk	
+#
 
 # Default runlevel. The runlevels used by PLD are:
 #   0 - halt (Do NOT set initdefault to this)
@@ -32,7 +32,7 @@ l6:6:wait:/etc/rc.d/rc 6
 ud::once:/sbin/update
 
 # Trap CTRL-ALT-DELETE
-#ca::ctrlaltdel:/sbin/shutdown -t3 -r now 
+ca::ctrlaltdel:/sbin/shutdown -t3 -r now
 
 # When our UPS tells us power has failed, assume we have a few minutes
 # of power left.  Schedule a shutdown for 2 minutes from now.
@@ -51,7 +51,8 @@ pr:12345:powerokwait:/sbin/shutdown -c "Power Restored; Shutdown Cancelled"
 4:2345:respawn:/sbin/mingetty tty4
 5:2345:respawn:/sbin/mingetty tty5
 6:2345:respawn:/sbin/mingetty tty6
+7:2345:respawn:/sbin/mingetty tty7
+8:2345:respawn:/sbin/mingetty tty8
 
 # Run xdm in runlevel 5
-x:5:respawn:/usr/bin/X11/xdm -nodaemon
-
+#x:5:respawn:/usr/bin/X11/xdm -nodaemon

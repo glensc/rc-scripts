@@ -2,15 +2,23 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
+. network-functions
 
 CONFIG=$1
-. network-functions
 source_config
 
 # signals ifup-sl not to persist
 rm -f /var/run/sl-$DEVICE.dev
 
 PID=`pidof dip-$DEVICE`
+#
+# The proctitle for connected dip daemons is actually "-dip (ipaddr)"
+#	with ipaddr == local on dial-out,  remote on dial-in
+# Grab the PID of connected dial-out daemon.
+#
+if [ -z "$PID" ]; then
+  PID=`pidof -- -dip\ \($IPADDR\)`
+fi
 if [ -z "$PID" ]; then
   exit 1
 fi

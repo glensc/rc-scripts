@@ -1,0 +1,137 @@
+#!/bin/sh
+#
+# /etc/rc.d/init.d/network-ip6.init
+#
+# based on 
+## 	network       Bring up/down networking
+##
+## 	Modified:	Ngo Than
+## 	Date:		07.04.1998
+######################################################################
+##	Modified: Erik Heim <erik@seitz.de>
+## 	Date    : 19.3.98
+## 	Reason  : for startup
+#####################################################################
+
+# and based on my several add-on scripts for IPv6
+#
+# IPv6 network configuration
+#
+# Copyright 1997-1998 Peter Bieringer <pb@bieringer.de>
+#
+# Version 2.01 23.07.1998
+#
+# Changes to
+#  2.00: Merging of single scripts into one
+#  2.01: Updates for dual usage (DLD 5.4 or another RedHat compatible system)
+
+subsys_parameter=$1
+LOCKDIR=/var/lock/subsys
+##################################################################
+start_and_stop() {
+	# Source function library.
+	[ ! -f /etc/rc.d/init.d/functions ] && exit 1
+	. /etc/rc.d/init.d/functions
+    # If some used functions were not defined until now...
+    # At the moment, only Delix DLD 5.4 supports them directly
+	
+	if ! print_message >/dev/null 2>&1; then
+	    print_message () {
+		$0 ${subsys_parameter}_msg
+	    }
+	fi
+	if ! check_lock >/dev/null 2>&1; then
+	    check_lock() {
+		local LOCK_FAIL
+		if [ $# = 0 ]; then
+		    echo "check_lock Lockfile start|stop"
+		    return 2
+		fi
+		LOCK_FAIL=0
+		if [ -f "$1" -a "$2" = "stop" ]; then LOCK_FAIL=1 ; fi
+		if [ ! -f "$1" -a "$2" = "start" ]; then LOCK_FAIL=1 ; fi
+		echo
+		return $LOCK_FAIL
+	    }
+	fi
+
+	if ! logexec >/dev/null 2>&1; then
+	    logexec() {
+		$*
+	    }
+	fi
+
+    ## End of defines
+	
+	[ ! -f /etc/sysconfig/network ] && exit 1
+	. /etc/sysconfig/network
+	# Source PCMCIA
+	if [ -f	 /etc/sysconfig/pcmcia ]; then
+		. /etc/sysconfig/pcmcia
+	fi
+	# Check that networking is up.
+	[ "$NETWORKING" = "yes" ] || exit 2
+	[ -x /sbin/ifconfig ] || exit 1
+	[ ! -d /etc/sysconfig/network-scripts ] && exit 1
+	
+	print_message
+	
+	check_lock $LOCKDIR/network-ip6 "$subsys_parameter"
+	if [ "$?" = 0 ]; then exit 0 ; fi
+
+
+        [ ! -f /etc/rc.d/init.d/functions-ip6 ] && exit 1
+	. /etc/rc.d/init.d/functions-ip6
+
+	test-ip6 || exit 
+
+	cd /etc/sysconfig/network-scripts
+	interfaces=`/bin/ls ifcfg* | egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$'`
+}
+
+##################################################################
+# See how we were called.
+##################################################################
+case "$subsys_parameter" in
+  start_msg)
+	echo -n "Start IPv6-Networkinterface(s)-Configuration."
+        ;;
+  stop_msg)
+	echo -n "Stop IPv6-Networkinterface(s)-Configuration."
+        ;;
+  start)
+        start_and_stop
+	for i in $interfaces; do
+	    REALDEVICE=`echo $i | sed 's/ifcfg-//g'`
+	    logexec ifup-ip6 $REALDEVICE
+	    logexec ifup-routes-ip6 $REALDEVICE
+	done
+	
+	logexec touch $LOCKDIR/network-ip6.init
+	
+        exit $FAIL
+        ;;
+  stop)
+        start_and_stop
+	for i in $interfaces; do
+	    REALDEVICE=`echo $i | sed 's/ifcfg-//g'`
+	    logexec ifdown-routes-ip6 $REALDEVICE
+	    logexec ifdown-ip6 $REALDEVICE
+	done
+	
+        logexec rm -f $LOCKDIR/network-ip6.init
+        exit $FAIL
+        ;;
+  restart)
+	$0 stop
+	$0 start
+	exit $?
+	;;
+  *)
+	echo "Usage: network-ip6 {start|stop|restart|start_msg|stop_msg}"
+        exit 1
+        ;;
+esac
+
+exit 0
+

@@ -21,7 +21,7 @@ fi
 . /etc/sysconfig/network
 
 # Check that networking is up.
-[ ${NETWORKING} = "no" ] && exit 0
+[ "${NETWORKING}" = "no" ] && exit 0
 
 case `uname -r` in
 0.*|1.*|2.0.*)

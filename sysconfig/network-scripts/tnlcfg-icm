@@ -1,0 +1,23 @@
+MODE={ipip|gre|sit|ipxip}
+DEVICE=<device name>
+if 	MODE=ipxip ; then
+	?
+else	MODE=ipip || MODE=gre || MODE=sit ; then
+
+	REMOTEADDR=<IPv4 addres>
+	[ LOCALADDR=<IPv4 addres> ]
+	[ REALDEVICE=<name of physic device>
+	[ TTL= ]
+	[ TOS= ]
+	[ SEQ={no|yes} ]
+	[ ISEQ={no|yes} ]
+	[ OSEQ={no|yes} ]
+	[ KEY= ]
+	[ IKEY= ]
+	[ OKEY= ]
+	[ CSUM={no|yes} ]
+	[ ICSUM={no|yes} ]
+	[ OCSUM={no|yes} ]
+	[ NOPMTUDISC={no|yes} ]
+fi
+	

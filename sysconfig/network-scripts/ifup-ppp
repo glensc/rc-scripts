@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -41,6 +41,13 @@ fi
     "/usr/sbin/pppd does not exist or is not executable for $DEVICE"
   exit 1
 }
+#[ -f /etc/sysconfig/network-scripts/chat-$DEVICE ] || {
+#  echo "/etc/sysconfig/network-scripts/chat-$DEVICE does not exist"
+#  echo "ifup-ppp for $DEVICE exiting"
+#  logger -p daemon.info -t ifup-ppp \
+#    "/etc/sysconfig/network-scripts/chat-$DEVICE does not exist for $DEVICE"
+#  exit 1
+#}
 opts="lock"
 if [ "${PERSIST}" = "yes" ]; then
   opts="$opts persist holdoff $HOLDOFF"
@@ -78,15 +85,19 @@ fi
 if [ -n "${REPORTFILE}"  ] ; then
   chatrpt="-r ${REPORTFILE}"
 fi
+#CHATSCRIPT=/etc/sysconfig/network-scripts/chat-$DEVNAMR
+#[ -f $CHATSCRIPT ] || {
+#  CHATSCRIPT=/etc/sysconfig/network-scripts/chat-$PARENTDEVNAME
+#}
+> /var/run/ppp-$DEVICE.dev
 (logger -p daemon.info -t ifup-ppp \
     "pppd started for $DEVICE on $MODEMPORT at $LINESPEED" &)&
-> /var/run/ppp-$DEVICE.dev
-
 if [ -n "${CHATSCRIPT}"  ] ; then
   export chatdbg chatrpt CHATSCRIPT
   export $DATAFORCHAT
   /usr/sbin/pppd -detach $opts $MODEMPORT $LINESPEED \
-    connect 'eval /usr/sbin/chat $chatdbg $chatrpt `cat ${CHATSCRIPT}`' \
+    connect 'eval /usr/sbin/chat $chatdbg $chatrpt \
+    `grep -v ^# ${CHATSCRIPT}`' \
     remotename $DEVICE ipparam $DEVICE \
     ${PPPOPTIONS} &
 else

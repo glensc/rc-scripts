@@ -1,7 +1,8 @@
+#!/bin/sh
 #
 # Setting serial ports. This will work only if you have setserial package installed.
 #
-# Format of /etc/serial.conf:
+# Format of /etc/sysconfig/serial:
 #/dev/ttyS0 uart 16450 port 0x3F8 irq 4
 #/dev/ttyS1 uart 16450 port 0x2F8 irq 3
 #/dev/ttyS2 uart 16450 port 0x3E8 irq 4
@@ -12,14 +13,11 @@ SETSERIAL=/bin/setserial
 [ -f $SETSERIAL ] || exit 0
 
 
-ALLDEVS="/dev/ttyS?"
-if /bin/ls /dev/ttyS?? >& /dev/null ; then
-	ALLDEVS="$ALLDEVS /dev/ttyS??"
-fi
+ALLDEVS="/dev/ttyS*"
 
 echo "Setting serial ports:"
-if test -f /etc/serial.conf ; then
-	grep -v ^# < /etc/serial.conf | grep "/dev/" | while read device args
+if test -f /etc/sysconfig/serial ; then
+	grep -v ^# < /etc/sysconfig/serial | grep "/dev/" | while read device args
 	do
 	    ${SETSERIAL} -z $device $args
 	done 

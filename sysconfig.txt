@@ -45,6 +45,11 @@ Files in /etc/sysconfig
     FORWARD_IPV4 is not set at all, forwarding is *enabled*
     for compatibility with the configuration files used on
     Red Hat Linux versions 4.2 and earlier.)
+  IGNORE_ICMP_BCAST_IPV4=yes|no (Please note that if you accept ICMP echo
+    requests with a broadcast/multicast destination address your network
+    may be used as an exploder for denial of service packet flooding attacks
+   to other hosts.
+  SPOOFING_IPV4=yes|no (anti spoofing protection)
   GATEWAY=<gateway IP>
   GATEWAYDEV=<gateway device> (e.g. eth0)
   NISDOMAIN=<nis domain name>
@@ -136,6 +141,13 @@ Files in /etc/sysconfig
   BACKUPTAB=/etc/backuptab
     The file in which we keep our list of backup(s) we want to make.
 
+/etc/sysconfig/sendmail:
+  DAEMON=yes|no
+    yes implies -bd
+  QUEUE=1h
+    given to sendmail as -q$QUEUE
+    -q option is not given to sendmail if /etc/sysconfig/sendmail
+    exists and QUEUE is empty or undefined.
 
 
 Files in /etc/sysconfig/network-scripts/
@@ -243,6 +255,19 @@ Files in /etc/sysconfig/network-scripts/
     RETRYTIMEOUT=<number of seconds, default currently 60>
       (time to wait before re-attempting to establish a connection
       after a previous attempt fails.)
+    INITSCRIPT=<modem command>
+      string which initialises your modem. Usualy something like 
+      AT&F0&C1&D2
+      (PLD rc-scripts specific option)
+    DATAFORCHAT=<list of variables>
+      List of variables which should be exported to chat script.
+      Used mostly for passing USERNAME and PASSWORD into it. (see below)
+      (PLD rc-scripts specific option)
+    <anything>=<anything>
+      Variable name and it's value for use by chat script.
+      Note: You don't have to define variables here, if they are defined 
+      in parent process enviroment they will be used.
+      in.ex. USERNAME usualy is. 
 
 /etc/sysconfig/network-scripts/chat-<interface-name>:
 
@@ -250,7 +275,18 @@ Files in /etc/sysconfig/network-scripts/
   the connection.  For SLIP devices, a DIP script is written
   from the chat script; for PPP devices, the chat script is used
   directly.
-
+  In PLD version of rc-scripts, this file is parsed by shell
+  (actually by grep in firstplace to get rid of comments) before it
+  is passed to chat.
+  This allows you to substitute shell variables with their values 
+  defined in ifcfg-<interface name> or more generally in current env.
+  If You wonder about purbose, imagine one chat-script for all links 
+  at ISP's border router or computer in home where all users have own IPS's
+  accounts and want to pay only for themselfes.
+  Unfortunetly this parsing have impact on chat script syntax.
+  All characters that have special meaning for shell have to be escaped.
+  
+  
 /etc/sysconfig/network-scripts/dip-<interface-name>
 
   A write-only script created from the chat script by netcfg.
@@ -289,34 +325,21 @@ Files in /etc/sysconfig/network-scripts/
 /etc/sysconfig/i18n
 
   LANG= can be any two letter ISO language code
+  LC_ALL= is the setting of the localedata configuration (eg fr_CA)
   LINGUAS= can be a : separated list of language codes
   SYSTERM= use to set default TERM environment variable
 
   The above three variables are used in rc.sysinit.
 
-  SYSFONT= any font with is legal input to the 'setfont' command (see
-    kbd package)
+  SYSFONT= any font that is legal when used as
+	/usr/sbin/setfont $SYSFONT ...
+    (See kbd package for sysfont command)
+
+  UNIMAP= any unicode font that is legal fodder for
+	/usr/sbin/setfont $SYSFONT-u $UNIMAP
 
   The above is used by the /sbin/setsysfont command (which is run
   by rc.sysinit at boot time).
 
-
-##### ONLY IN POLISH (someone wants translate it to english ?) ###########
-
-/etc/sysconfig/bridge (musisz zainstalowaæ pakiet bridgex)
-
-   INTERFACES= lista interfejsów dla których w³±czamy bridging np.
-               INTERFACES="eth0 eth1"
-
-   bridgingon() {
-   		tu umie¶æ komendy startuj±ce bridging dla odpowiednich
-		protoko³ów itd.
-		}
-
-/etc/sysconfig/console
-
-   CONSOLEFONT= font który za³adowaæ
-   CONSOLEMAP= Application-charset map (u¿ywana w trybie != Unicode)
-   KEYTABLE= tablica klawiatury
 
 

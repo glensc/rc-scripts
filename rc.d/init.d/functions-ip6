@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 #!F:functions-ip6
 #
@@ -11,28 +11,48 @@
 # 	tunnels-up-ip6, tunnels-down-ip6
 #
 #!C:Copyright 1997-1998 Peter Bieringer <pb@bieringer.de>
+#!C:some code by Gregorz Stanislawski <stangrze@open.net.pl>
 #
-#!V:Version: 2.39 01.05.1998
+#!V:Version: 2.41a 10.11.1998
 #
-# Changes from:
-# 2.32: exchange 'exit' with 'return' (bad mistake...)
-# 2.33: new debug level (bit 2) 
-# 2.34: minor improvements 
-# 2.35: info  
-# 2.36: add IP6FORWARDING switch (to differ between a host and a router)
-# 2.37: add forwarding switch for kernel versions >= 2.1.90 (idea by Dan Anderson anderson@computer.org)
-# 2.38: make IP6FORWARDING independed from IP6GATEWAYCONFIG
-
+# Changes to:
+#  2.34: new debug level (bit 2) 
+#  2.35: minor improvements 
+#  2.36: info  
+#  2.37: add IP6FORWARDING switch (to differ between a host and a router)
+#  2.38: add forwarding switch for kernel versions >= 2.1.90
+#        (idea by Dan Anderson anderson@computer.org)
+#  2.39: make IP6FORWARDING independed from IP6GATEWAYCONFIG
+#  2.40: NBMA tunnel setup support, see 'network-ip6.conf v2.11+' for details
+#  2.41: Error sign to get a right exit value of each function (only 0 = ok)
+#  2.41a: 
+#    - Scripts now make use of iproute2 package by Alexey Kuznietsov.
+#    - Config file splited to 2 files: network-ip6.conf & tunnels-ip6.conf.
+#    - Changes to file layout. for better incorporation into PLD or Redhat systems. 
+#    - Removed support for radvd (Most of people use mrtd anyway)
+#    - Removed support fod nbma tunnel conf.
+ 
 IP6NETWORKFILE=/etc/sysconfig/network-ip6
 
 # debug level & 2 prevents from executing any network configuration
 # debug level & 4 shows messages in the test section
+
+# Return values
+#  0 = ok
+#  1 = error occurs
+#  2 = not enabled, i.e. no IPv6 kernel support or switched off by configuration
+
+# File as error sign
+EXITFAIL=/tmp/functions-ip6.error
 
 
 ##### Test for IPv6
 
 function test-ip6()
 {
+    # Remove error sign file
+    rm -f $EXITFAIL
+    
     if [ "$IP6DEBUG" = "" ] ; then IP6DEBUG=0; fi
 
     if ! [ $[ $IP6DEBUG & 4 ] = 0 ] ; then
@@ -45,12 +65,7 @@ function test-ip6()
     fi
 
     if ! [ -f /proc/net/if_inet6 ]; then
-        if ! [ $[ $IP6DEBUG & 4 ] = 0 ] ; then
-            echo -e "\a Not compiled for IPv6 - stop!"
-        else
-            echo -e "\a Kernel not compiled for IPv6 - stop!"
-        fi
-        return 1
+        return 2
     else
         if ! [ $[ $IP6DEBUG & 4 ] = 0 ] ; then
             echo " Ok!"
@@ -91,8 +106,10 @@ function test-ip6()
     if ! [ "$IP6NETWORKING" = "yes" ] ; then
         if ! [ $[ $IP6DEBUG & 4 ] = 0 ] ; then
 	    echo -e "\a No - stop!"
+	else
+	    echo -e "\a IPv6 configuration isn't enabled - stop!"
 	fi
-        return 3
+        return 2
     else
         if ! [ $[ $IP6DEBUG & 4 ] = 0 ] ; then
             echo " Yes!"
@@ -124,14 +141,25 @@ function return-ip6()
 function ifup-routes-ip6()
 {
     # Run IPv6 test
-    test-ip6 || return 1    
+    test-ip6 || return    
 
     # Allow forwarding option, host is a router?
     if [ "$IP6FORWARDING" = "yes" ]; then
         # Switch on IPv6 forwarding in the kernel if off
 	
+	# Which mechanism? kernel >= 2.1.90 uses forwarding switch by device
+        if [ -f /proc/sys/net/ipv6/forwarding ]; then
+	    # for kernel < 2.1.90
+            if ! [ "`cat /proc/sys/net/ipv6/forwarding`" = "1" ]; then
+                echo "  Switch on IPv6 forwarding in the kernel"
+                if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
+    	    	    echo "1" > /proc/sys/net/ipv6/forwarding
+        	fi
+            fi
+	fi
+	
 	if [ -f /proc/sys/net/ipv6/conf/all/forwarding ]; then
-
+	    # for kernel >= 2.1.90
 	    for i in /proc/sys/net/ipv6/conf/*/forwarding; do
                 if ! [ "`cat $i`" = "1" ]; then
 		    device=`echo $i | cut -d / -f 7` 
@@ -155,6 +183,7 @@ function ifup-routes-ip6()
 
     # Device "lo" need no IPv6 configuration
     if [ "$1" = "lo" ]; then
+        echo "  Device lo needs no IPv6 routing configuration"
         return 1;
     fi
 
@@ -177,32 +206,41 @@ function ifup-routes-ip6()
 
     grep "^$1" $IP6ROUTEFILE | while read device key gateway route; do
 	if [ "$key" = "route" ]; then
-            echo "  Add IPv6 route $route gw $gateway dev $device"
+            echo "  Add IPv6 route $route via $gateway dev $device"
             if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-                 route -A inet6 add $route gw $gateway dev $device
+                route -A inet6 add $route gw $gateway metric 1 dev $device || touch $EXITFAIL
 	    fi
         fi
     done
 
     return-ip6
+    
+    if [ -f $EXITFAIL ]; then
+	return 1
+	rm -f $EXITFAIL
+    else
+	return 0
+    fi
 }
 
 
 function ifdown-routes-ip6()
 {
     # Run IPv6 test
-    test-ip6 || return 1    
+    test-ip6 || return
 
     if ! [ "$IP6GATEWAYCONFIG" = "yes" ]; then return 1; fi
 
     echo " Clear IPv6 routes"
 
     if [ "$1" = "" ]; then
+	echo -e "\a  Usage: $0 <net-device>"
 	return 1
     fi
     
     # Device "lo" need no IPv6 configuration
     if [ "$1" = "lo" ]; then
+        echo "  Device lo needs no IPv6 routing configuration"
         return 1;
     fi
 
@@ -225,14 +263,21 @@ function ifdown-routes-ip6()
     
     grep "^$1" $IP6ROUTEFILE | while read device key gateway route; do
 	if [ "$key" = "route" ]; then
-            echo "  Del IPv6 route $route gw $gateway dev $device"
+            echo "  Del IPv6 route $route via $gateway dev $device"
             if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-                route -A inet6 del $route gw $gateway dev $device
+                route -A inet6 del $route gw $gateway dev $device || touch $EXITFAIL
  	    fi
         fi
     done
 
     return-ip6
+    
+    if [ -f $EXITFAIL ]; then
+	return 1
+	rm -f $EXITFAIL
+    else
+	return 0
+    fi
 }
 
 
@@ -241,8 +286,9 @@ function ifdown-routes-ip6()
 ## Configure tunnels up
 function tunnels-up-ip6()
 {
+echo "test"
     # Run IPv6 test
-    test-ip6 || return 1    
+    test-ip6 || return    
 
     if ! [ "$IP6TUNNELCONFIG" = "yes" ]; then return 1; fi
 
@@ -268,55 +314,53 @@ function tunnels-up-ip6()
         # get IPv6-over-IPv4 tunnels up (enables automatic to 0::0/96)
         echo "  Get IPv6-over-IPv4 tunnels up (enables automatic to 0::0/96)"
         if [ $[ $IP6DEBUG & 2 ] = 0 ] ; then
-            ifconfig sit0 up
+            ifconfig sit0 up || touch $EXITFAIL
         fi
 
         # Take configured tunnels from $IP6TUNNELFILE
-        TUNNELDEV=1
 
-	grep "^sit" $IP6TUNNELFILE | while read device key ip4gateway;  do  
-
-            if [ "$device" = "sit$TUNNELDEV" ]; then
-
+	grep -v "^#" $IP6TUNNELFILE | while read device key local remote ttl realdev;  do  
 	        if [ "$key" = "tunnel" ]; then
-                    echo "  Add tunnel sit$TUNNELDEV to $ip4gateway"
+                    echo "  Add tunnel $device to $remote"
 	    
 	            # Set up a tunnel
-                    if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-	                ifconfig sit0 tunnel ::$ip4gateway
-                    fi
+#                    if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
+#	                ifconfig sit0 tunnel ::$remote || touch $EXITFAIL
+#                    fi
             
 	            # Start tunnel device sit?
                     if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-	                ifconfig sit$TUNNELDEV up
+	                iptunnel add $device mode sit remote $remote local $local ttl $ttl dev $realdev
+echo "Tunnel $device added"
+			ifconfig $device up arp multicast
+echo "Tunnel $device is configured and up"
+ 			route -A inet6 add fe80::$remote dev $device
+echo "Routing to $remote via $device added"
                     fi
                 
-                    grep "^sit$TUNNELDEV" $IP6TUNNELFILE | while { read device key network; } do
+                    grep "^$device" $IP6TUNNELFILE | while { read device key network; } do
                     
 	                if [ "$key" = "route" ]; then
-                            echo "   Add route to tunnel sit$TUNNELDEV for network $network"
+                            echo "   Add route to tunnel $device for network $network"
 	    
 	                    # Set route to tunnel
                             if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-	                        route -A inet6 add $network gw fe80::$ip4gateway dev sit$TUNNELDEV
+                            route -A inet6 add $network gw fe80::$remote dev $device || touch $EXITFAIL
                             fi
     		        fi
                     done
 
-                    # Increment for next tunnel
-                    TUNNELDEV=$[ $TUNNELDEV + 1 ]
                 fi
-            fi 
 	done 
-        
-
-#won't work, problem with local scope in while...
-#        if [ $[ $TUNNELDEV < 2 ] = 1 ]; then
-#           echo -e "\a  No tunnels configured!"
-#            echo "  $IP6TUNNELFILE: possible error in your tunnel setup!"
-#        fi
 
     return-ip6
+    
+    if [ -f $EXITFAIL ]; then
+	return 1
+	rm -f $EXITFAIL
+    else
+	return 0
+    fi
 }	
 
 
@@ -325,7 +369,7 @@ function tunnels-up-ip6()
 function tunnels-down-ip6()
 {
     # Run IPv6 test
-    test-ip6 || return 1    
+    test-ip6 || return
 
     if ! [ "$IP6TUNNELCONFIG" = "yes" ]; then return 1; fi
 
@@ -352,46 +396,47 @@ function tunnels-down-ip6()
 
         # Take configured tunnels from $IP6TUNNELFILE
 
-	grep "^sit" $IP6TUNNELFILE | while read device key ip4gateway; do
-
-            if [ "$device" = "sit$TUNNELDEV" ]; then
+	grep -v "^#" $IP6TUNNELFILE | while read device key local remote ttl realdev;  do  
 
 	        if [ "$key" = "tunnel" ]; then
-                
-                    grep "^sit$TUNNELDEV" $IP6TUNNELFILE | while read device key network; do
+                    grep "^$device" $IP6TUNNELFILE | while read device key host; do
                     
 	                if [ "$key" = "route" ]; then
-                            echo "   Del route to tunnel sit$TUNNELDEV for network $network"
+                            echo "   Del route to tunnel $device for host $host"
 	    
 	                    # Set route to tunnel
                             if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-	                        route -A inet6 del $network gw fe80::$ip4gateway dev sit$TUNNELDEV
+	                        route -A inet6 del $network gw fe80::$remote dev $device || touch $EXITFAIL
                             fi
     		        fi
                     done
 
-                    echo "  Delete tunnel sit$TUNNELDEV"
+                    echo "  Delete tunnel $device"
 	    
 	            # Stop tunnel device sit?
                     if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-	                ifconfig sit$TUNNELDEV down
+	                ifconfig $device down  
+			iptunnel del $device || touch $EXITFAIL
                     fi
 
-                    # Increment for next tunnel
-                    TUNNELDEV=$[ $TUNNELDEV + 1 ]
-                    
                 fi
-            fi
 	done
 
         # Stop IPv6-over-IPv4 tunnels
         echo "  Stop IPv6-over-IPv4 tunnels"
         if [ $[ $IP6DEBUG & 2 ] = 0 ] ; then 
 	    echo "  Delete basic tunnel device sit0"
-            ifconfig sit0 down
+            ifconfig sit0 down || touch $EXITFAIL
         fi
 
     return-ip6
+    
+    if [ -f $EXITFAIL ]; then
+	return 1
+	rm -f $EXITFAIL
+    else
+	return 0
+    fi
 }
 
 	
@@ -402,16 +447,18 @@ function tunnels-down-ip6()
 function ifup-ip6()
 {
     if [ "$1" = "" ]; then
+	echo -e "\a  Usage: $0 <net-device>"
 	return 1
     fi
 
     # Device "lo" need no IPv6 configuration
     if [ "$1" = "lo" ]; then
+        echo "  Device lo needs no IPv6 configuration"
         return 1;
     fi
 
     # Run IPv6 test
-    test-ip6 || return 1    
+    test-ip6 || return    
 
     echo " Brings interface $1 up for IPv6"
 
@@ -424,17 +471,24 @@ function ifup-ip6()
 	if [ "$key" = "iface" ]; then
             echo "  Add for dev $device IPv6 address $prefix:$suffix/$length"
             if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-                ifconfig $device add $prefix:$suffix/$length
+                ifconfig $device add $prefix:$suffix/$length || touch $EXITFAIL
 	    fi
     
             echo "  Add IPv6 route $prefix::0/$length through dev $device"
             if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-                route -A inet6 add $prefix::0/$length dev $device
+                route -A inet6 add $prefix::0/$length dev $device || touch $EXITFAIL
 	    fi
         fi
     done
 
     return-ip6
+
+    if [ -f $EXITFAIL ]; then
+	return 1
+	rm -f $EXITFAIL
+    else
+	return 0
+    fi
 }
 
 
@@ -443,6 +497,7 @@ function ifup-ip6()
 function ifdown-ip6()
 {
     if [ "$1" = "" ]; then
+	echo -e "\a  Usage: $0 <net-device>"
 	return 1
     fi
 
@@ -450,7 +505,7 @@ function ifdown-ip6()
     if [ "$1" = "lo" ]; then return 0; fi
 
     # Run IPv6 test
-    test-ip6 || return 1    
+    test-ip6 || return    
 
     echo " Brings interface $1 down from IPv6"
 
@@ -463,15 +518,22 @@ function ifdown-ip6()
 	if [ "$key" = "iface" ]; then
             echo "  Del IPv6 route $prefix::0/$length through dev $device"
             if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-                route -A inet6 del $prefix::0/$length dev $device
+                route -A inet6 del $prefix::0/$length dev $device || touch $EXITFAIL
             fi
 
             echo "  Del for dev $device IPv6 address $prefix:$suffix/$length"
             if [ $[ $IP6DEBUG & 2 ] = 0 ]; then
-                ifconfig $device del $prefix:$suffix/$length
+                ifconfig $device del $prefix:$suffix/$length || touch $EXITFAIL
 	    fi
         fi
     done
 
     return-ip6
+    
+    if [ -f $EXITFAIL ]; then
+	return 1
+	rm -f $EXITFAIL
+    else
+	return 0
+    fi
 }

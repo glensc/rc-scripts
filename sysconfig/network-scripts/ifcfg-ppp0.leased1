@@ -1,0 +1,30 @@
+# (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
+# config file for setting up hardwired (leased) serial line.
+#  This configuration uses chats with modem, so You have to have an inteligent
+# modem (AT commands compatible).
+# But You can monitor connection speed.
+DEVICE=ppp0
+CHATSCRIPT=chat-ppp0.leased1
+ONBOOT=yes
+IPADDR=192.168.255.254
+REMIP=192.168.255.253
+NETMASK=255.255.255.252
+HARDFLOWCTL=yes
+MODEMPORT=/dev/cua1
+LINESPEED=115200
+DEBUG=no
+PERSIST=yes
+HOLDOFF=10
+#demand option not finished yet ;-(
+DEMAND=no
+#ACTIVEFILTER=
+#IDLE=
+# one end is "calling"
+INITSTRING="ATs0=0&l1"
+# while other is "receiving"
+#INITSTRING="ATs0=1&l1"
+#if your modem doesn't support AT&L1 command try with ATD on one side 
+#and ATA on the other. 
+DATAFORCHAT="INITSTRING"
+
+REPORTFILE=/var/log/ppp0.log

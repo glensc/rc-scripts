@@ -1,10 +1,10 @@
 #!/bin/sh
 #
-# halt          Script for system halt.
+# reboot          Script for system halt/reboot.
 #
-# chkconfig: 0 00 99
+# chkconfig: 6 00 00
 # description:	This file is executed by init when it goes into runlevel \
-#               runlevel 0 (halt). It calls common code for halt/reboot \
+#               runlevel 6 (reboot). It calls common code for halt/reboot \
 #		from shutdwn which kills all processes, unmounts file  \
 #		systems and then either halts or reboots.
 #
@@ -18,8 +18,8 @@ case "$1" in
 	;;
   start*)
 	. /etc/rc.d/init.d/shutdwn
-        echo "The system is halted"
+	echo "Please stand by while rebooting the system..."
 	[ -f /fastboot ] && echo "On the next boot fsck will be skipped."
-	eval halt -d
+	eval reboot -d
 	;;
 esac
