@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.20 2000/04/24 16:56:04 zagrodzki Exp $
+# $Id: rc,v 1.21 2000/05/01 18:57:10 zagrodzki Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -88,13 +88,14 @@ stty onlcr -ixon 0>&1
 
 # Say something ;)
 af2="`termput setaf 2`"
+af6="`termput setaf 6`"
 af7="`termput setaf 7`"
 text="`nls "%sResource Manager: %sEntering runlevel number" "$af2" "$af7"`"
 text_size="`nls "%sResource Manager: %sEntering runlevel number" "" ""`"
-unset af2 af7
+resp_size="`nls "DONE"`"
 echo -n "$text"
-awk "BEGIN { for (j=length(\"$text_size\")-9; j<$INIT_COL; j++) printf \".\" }"
-echo "`termput setaf 6`[`termput setaf 2` $runlevel `termput setaf 6`]`termput setaf 7`"
+awk "BEGIN { for (j=length(\"$text_size\"); j<$INIT_COL+${#resp_size}-${#runlevel}; j++) printf \".\" }"
+echo "${af6}[${af7} $runlevel ${af6}]${af7}"
 
 # Is there an rc directory for this new runlevel?
 if [ -d /etc/rc.d/rc$runlevel.d ]; then
@@ -167,7 +168,7 @@ if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
 		eval reboot -d
 	fi
 else
-	if [ "$RUN_LDCONFIG" = "yes" -o ! -f /etc/ld.so.cache ] ; then
+	if is_yes "$RUN_LDCONFIG" || [ ! -f /etc/ld.so.cache ] ; then
 		if [ -x /sbin/ldconfig ]; then
 			run_cmd "Setting up /etc/ld.so.cache" /sbin/ldconfig -X
 		fi
@@ -175,12 +176,10 @@ else
 fi
 
 # Say something ;)
-af2="`termput setaf 2`"
-af7="`termput setaf 7`"
 text="`nls "%sResource Manager: %sRunlevel has been reached" "$af2" "$af7"`"
 text_size="`nls "%sResource Manager: %sRunlevel has been reached" "" ""`"
 unset af2 af7
 echo -n "$text"
-awk "BEGIN { for (j=length(\"$text_size\")-9; j<$INIT_COL; j++) printf \".\" }"
-echo "`termput setaf 6`[`termput setaf 2` $runlevel `termput setaf 6`]`termput setaf 7`"
+awk "BEGIN { for (j=length(\"$text_size\"); j<$INIT_COL+${#resp_size}-${#runlevel}; j++) printf \".\" }"
+echo "${af6}[${af2} $runlevel ${af6}]${af7}`"
 
