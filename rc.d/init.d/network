@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.37 2000/11/02 21:40:49 baggins Exp $
+# $Id: network,v 1.38 2000/11/06 15:42:19 baggins Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -143,7 +143,7 @@ egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
 sed 's!^/etc/sysconfig/interfaces/ifcfg-!!g') 2> /dev/null`"
 
 interfaces_boot="`(alias xx="ls /etc/sysconfig/interfaces/ifcfg* |\
-egrep -v '(ifcfg-lo|ifcfg-sit|:)' | egrep 'ifcfg-[a-z0-9]+$'" ; \
+egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-lec|ifcfg-atm|:)' | egrep 'ifcfg-[a-z0-9]+$'" ; \
 for i in \`xx\`; do ONBOOT=""; . $i; if is_yes "$ONBOOT"; then \
 echo $i; fi; done | sed 's!^/etc/sysconfig/interfaces/ifcfg-!!g') 2> /dev/null`"
 
