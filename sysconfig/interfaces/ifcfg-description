@@ -31,6 +31,7 @@ IP6_PRIM_IF=""		#
 IP6_SRC_IF=""		# 
 
 [ ONBOOT={no|yes} ]
+[ HOTPLUG={no|yes} ] - bring up from hotplug (default to no)
 [ MULTICAST={|no|yes} ]	- for eth automatically set to yes
 [ ARP={no|yes} ]	- for eth automatically set to yes
 [ IPV6_DISABLE_AUTOCONF={yes|no} ] - disable IPv6 autoconfiguration
