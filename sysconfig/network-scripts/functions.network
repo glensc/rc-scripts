@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.4 2002/08/21 21:30:42 misiek Exp $
+# $Id: functions.network,v 1.5 2002/08/24 16:05:52 misiek Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -425,10 +425,12 @@ if [ -f "/var/run/ppp-$DEVICE.pid" ] ; then
 		 read REALDEVICE ; echo "REALDEVICE=$REALDEVICE"
 	      } < "/var/run/ppp-$DEVICE.pid"`
 fi
+
 if [ -z "$REALDEVICE" ] ; then
 	REALDEVICE=$DEVICE
 fi
 }
+
 # following function setups advanced routing rules
 # Olgierd Pieczul <wojrus@pld.org.pl>
 setup_ip_rules () {

@@ -1,4 +1,4 @@
-	$Id: README,v 1.9 2002/03/24 03:59:16 blues Exp $
+	$Id: README,v 1.10 2002/08/24 16:05:45 misiek Exp $
 
 rc-scripts is a derivative of the initscripts 3.78 release by
 RedHat Software, but with bugs removed and newer features added.
@@ -36,6 +36,7 @@ Other required or suggested packages:
   IrDA		irda-utils
   serial/ppp	ppp, dip, wvdial
   serial/slip	slattach
+  PPPoE		pppd + rp-pppoe (plugin or userspace program)
   
 Also you should know that format of interface configuration
 files is totally different from these used in RedHat/Mandrake

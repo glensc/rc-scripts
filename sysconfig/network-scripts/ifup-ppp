@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.20 2002/07/13 16:25:08 misiek Exp $
+#	$Id: ifup-ppp,v 1.21 2002/08/24 16:05:52 misiek Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -49,39 +49,50 @@ if [ -z "${REPORTFILE}"  ] ; then
     REPORTFILE=/dev/null
 fi
 
-if is_no "${DIRECT_CONNECT}" || [ -z "${DIRECT_CONNECT}" ]; then
-    
-    PEERCONF=/etc/ppp/peers/${DEVNAME}
-    
-    if [ ! -f ${PEERCONF} ]; then
-	if [ -z "${WVDIALSECT}" ]; then
-	    # XXX: REPORTFILE support is problematic here --misiek
-	    [ -f "${CHATSCRIPT}" ] || CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-${PARENTDEVNAME}
-	    if [ ! -f "${CHATSCRIPT}" ]; then
-		nls '/etc/sysconfig/network-scripts/chat-%s does not exist' "${DEVNAME}"
-		nls 'ifup-ppp for %s exiting' "${DEVNAME}"
-		logger -p daemon.info -t ifup-ppp \
-		"$(nls '/etc/sysconfig/network-scripts/chat-%s does not exist for %s' "${DEVNAME}" "${DEVICE}")"
-		exit 1
-	    fi
-	fi
-	logger -s -p daemon.notice -t ifup-ppp "$(nls 'Setting up a new %s config file' "${PEERCONF}")"
-	if [ -f /etc/ppp/peers/${DEVICE} ]; then
-	    cp -f /etc/ppp/peers/${DEVICE} ${PEERCONF}
-	else
-	    touch ${PEERCONF}
-	fi
-	if [ "${WVDIALSECT}" ]; then
-	    echo "connect \"/usr/bin/wvdial --chat ${WVDIALSECT} >> ${REPORTFILE} 2>&1 \"" >> ${PEERCONF}
-	else
-	    if is_yes "${DEBUG}"; then
-		chatdbg="-v"
-	    fi
-	    echo "connect \"/usr/sbin/chat $chatdbg -f ${CHATSCRIPT} -r ${REPORTFILE} ${chatdbg}\"" >> ${PEERCONF}
-	fi
+if [ -n "${PPPOE_DEV}" ]; then
+    if is_yes "${PPPOE_KERNEL}"; then
+	modprobe -s -k pppoe
+	MODEMMODE="plugin rp-pppoe.so"
+	MODEMPORT="${PPPOE_DEV}"
+    else
+	MODEMMODE="pty"
+	MODEMPORT="pppoe -I ${PPPOE_DEV} ${PPPOE_OPT}"
     fi
-
-    opts="$opts call ${DEVNAME}"
+else
+    if is_no "${DIRECT_CONNECT}" || [ -z "${DIRECT_CONNECT}" ]; then
+	
+	PEERCONF=/etc/ppp/peers/${DEVNAME}
+	
+	if [ ! -f ${PEERCONF} ]; then
+	    if [ -z "${WVDIALSECT}" ]; then
+	    # XXX: REPORTFILE support is problematic here --misiek
+		[ -f "${CHATSCRIPT}" ] || CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-${PARENTDEVNAME}
+		if [ ! -f "${CHATSCRIPT}" ]; then
+		    nls '/etc/sysconfig/network-scripts/chat-%s does not exist' "${DEVNAME}"
+		    nls 'ifup-ppp for %s exiting' "${DEVNAME}"
+		    logger -p daemon.info -t ifup-ppp \
+			"$(nls '/etc/sysconfig/network-scripts/chat-%s does not exist for %s' "${DEVNAME}" "${DEVICE}")"
+		    exit 1
+		fi
+	    fi
+	    logger -s -p daemon.notice -t ifup-ppp "$(nls 'Setting up a new %s config file' "${PEERCONF}")"
+	    if [ -f /etc/ppp/peers/${DEVICE} ]; then
+		cp -f /etc/ppp/peers/${DEVICE} ${PEERCONF}
+	    else
+		touch ${PEERCONF}
+	    fi
+	    if [ "${WVDIALSECT}" ]; then
+		echo "connect \"/usr/bin/wvdial --chat ${WVDIALSECT} >> ${REPORTFILE} 2>&1 \"" >> ${PEERCONF}
+	    else
+		if is_yes "${DEBUG}"; then
+		    chatdbg="-v"
+		fi
+		echo "connect \"/usr/sbin/chat $chatdbg -f ${CHATSCRIPT} -r ${REPORTFILE} ${chatdbg}\"" >> ${PEERCONF}
+	    fi
+	fi
+	
+	opts="$opts call ${DEVNAME}"
+    fi
 fi
 
 if [ -z "$HOLDOFF" ]; then
@@ -156,6 +167,7 @@ if is_yes "${IPX_PPP}"; then
 	opts="$opts ipx-routing ${IPX_PPP_ROUTING}"
     fi
 fi
+
 if [ -n "${PAPNAME}" ] ; then
   opts="$opts user ${PAPNAME}"
 fi
@@ -171,10 +183,15 @@ elif is_no "${AUTH}"; then
   opts="$opts noauth"
 fi
 
-(logger -p daemon.info -t ifup-ppp \
-    $(nls 'pppd started for %s on %s at %s' "$DEVICE" "$MODEMPORT" "$LINESPEED") &)&
+if ! is_no "${UNIT}"; then
+    UNIT=$(echo "${DEVICE}" | awk ' { gsub(/ppp/,NUL); print $0} ')
+    opts="$opts unit ${UNIT}"
+fi
 
-/usr/sbin/pppd $opts ${MODEMPORT} ${LINESPEED} \
+(logger -p daemon.info -t ifup-ppp \
+    $(nls 'pppd started for %s on device %s at speed %s' "$DEVICE" "$MODEMPORT" "${LINESPEED:-(unspecified)} on unit ${UNIT}") &)&
+
+/usr/sbin/pppd $opts ${MODEMMODE} "${MODEMPORT}" ${LINESPEED} \
 	ipparam ${DEVNAME} linkname ${DEVNAME} \
 	${PPPOPTIONS}
 	
