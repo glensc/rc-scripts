@@ -36,7 +36,7 @@ Files in /etc/sysconfig
 /etc/sysconfig/network:
 
   NETWORKING=yes|no
-  IP6NETWORKING=yes|no
+  IPV6NETWORKING=yes|no
   HOSTNAME=<fqdn by default, but whatever hostname you want>
     Note: for compatibility with some old software people might
     install (like trn), the /etc/HOSTNAME file should contain the

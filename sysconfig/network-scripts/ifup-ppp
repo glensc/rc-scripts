@@ -26,7 +26,7 @@ shift
 
 CONFIG=$1
 cd /etc/sysconfig/network-scripts
-. ./network-functions
+. /etc/rc.d/init.d/functions.network
 source_config
 if [ -z "$HOLDOFF" ]; then
   HOLDOFF=30

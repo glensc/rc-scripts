@@ -9,17 +9,21 @@
 #		systems and then either halts or reboots.
 #
 # Author:       Grzegorz Stanislawski <stangrze@open.net.pl>
+# Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 
 # See how we were called.
+
+. /etc/rc.d/init.d/functions
+
 case "$1" in
   stop*)
 	exit 0
 	;;
   start*)
 	. /etc/rc.d/init.d/shutdwn
-	echo "Please stand by while rebooting the system..."
-	[ -f /fastboot ] && echo "On the next boot fsck will be skipped."
+	show "Please stand by while rebooting the system "; ok
+	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
 	eval reboot -d
 	;;
 esac

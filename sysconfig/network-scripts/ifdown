@@ -2,7 +2,7 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
-. ./network-functions
+. /etc/rc.d/init.d/functions.network
 
 CONFIG=$1
 
@@ -11,8 +11,8 @@ CONFIG=$1
     exit 1
 }
 
-[ -f "$CONFIG" ] || CONFIG=ifcfg-$CONFIG
-[ -f "$CONFIG" ] || {
+[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=ifcfg-$CONFIG
+[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
     echo "usage: ifdown <device name>" >&2
     exit 1
 }

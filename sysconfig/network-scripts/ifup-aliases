@@ -7,10 +7,10 @@ if [ "$1" = "" ]; then
 	exit 1
 fi
 
-aliases="`echo /etc/sysconfig/network-scripts/ifcfg-$1:*`"
-if [ "$aliases" = '/etc/sysconfig/network-scripts/ifcfg-$1:*' ]; then
+aliases="`echo /etc/sysconfig/interfaces/ifcfg-$1:*`"
+if [ "$aliases" = '/etc/sysconfig/interfaces/ifcfg-$1:*' ]; then
 	allow_null_glob_expansion=foo
-	for alias in /etc/sysconfig/network-scripts/ifcfg-$1:* ; do
+	for alias in /etc/sysconfig/interfaces/ifcfg-$1:* ; do
 	    /etc/sysconfig/network-scripts/ifup $alias
 	done
 	unset allow_null_glob_expansion

@@ -1,17 +1,119 @@
+# Do you need networking ?
 NETWORKING=yes
-IPV6NETWORKING=no
-FORWARD_IPV4=no
+
+# Do you need IPv6 networking, too ?
+IPV6_NETWORKING=no
+
+# Do you want enable IPv4 forwarding ?
+IPV4_FORWARDING=no
+
+# Set hostname here (only hostname)
 HOSTNAME=pldmachine
+
+# Set domainname here
 NISDOMAIN=
 
-SPOOFING_IPV4=
-
-IGNORE_ICMP_BCAST_IP=
 GATEWAY=
 GATEWAYDEV=
 
+
+# Do you want to use IPX networking ?
 IPX=no
 IPXAUTOPRIMARY=
 IPXAUTOFRAME=
 IPXINTERNALNETNUM=
 IPXINTERNALNODENUM=
+
+######################################################################
+# IPv4 goodies
+
+# Do you want to enable IPv4 anti spoofing ?
+IPV4_ANTI_SPOOFING=
+
+# Kernel should accept ICMP redirect messages ?
+# The default is 'yes', if the kernel is configured for
+# a regular host; and 'no' for a router configuration.
+IPV4_ACCEPT_ICMP_REDIR=
+
+# Kernel should accept source routed packets ?
+# The default Is 'yes' for routers and 'no' for hosts.
+IPV4_ACCEPT_SOURCE_ROUTE=
+
+# Log packets with source addresses with no known route to kernel log ?
+IPV4_LOG_MARTIANS=
+
+# Do multicast routing ? The kernel needs to be compiled with
+# CONFIG_MROUTE and a multicast routing daemon is required.
+IPV4_MULTICAST=
+
+# Do proxy ARP ?
+IPV4_PROXY_ARP=
+
+# Accept ICMP redirect messages only for gateways, listed in
+# default gateway list ?
+IPV4_ACCEPT_ICMP_REDIR_GATE=
+
+# Send ICMP redirects to other hosts ?
+IPV4_SEND_ICMP_REDIR=
+
+# Ignore all ICMP echo requests ? 
+IPV4_IGN_ALL_ICMP=
+
+# Ignore ICMP echo requests to broadcast and multicast addresses ?
+IPV4_IGN_CAST_ICMP=
+
+# Enable MTU discovery patch ? (KERNEL MUST SUPPORT THIS)
+# MTU (maximal transfer unit) is the size of the chunks we send out
+# over the net. "Path MTU Discovery" means that, instead of always
+# sending very small chunks, we start out sending big ones and if we
+# then discover that some host along the way likes its chunks smaller,
+# we adjust to a smaller size.
+IPV4_MTU_DISCOVERY=
+
+# Enable debugging of IP masquerading ?
+IPV4_MASQ_DEBUGGING=
+
+# Bug-to-bug compatibility with some broken printers. On retransmit
+# try to send bigger packets to work around bugs in certain TCP
+# stacks. Can be turned off by setting it to zero. 
+IPV4_RETRANS_COLLAPSE=
+	 
+# Disable select acknowledgments after RFC2018 ?
+# TCP may experience poor performance when multiple packets are lost
+# from one window of data. With the limited information available
+# from cumulative acknowledgments, a TCP sender can only learn about a
+# single lost packet per round trip time. An aggressive sender could
+# choose to retransmit packets early, but such retransmitted segments
+# may have already been successfully received.
+IPV4_NO_SELECT_ACK=
+
+# Disable timestamps as defined in RFC1323 ?
+# Timestamps are designed to provide compatible interworking with
+# TCP's that do not implement the TCP Extensions for High Performance
+IPV4_NO_TIMESTAMPS=
+
+# Enable the strict RFC793 interpretation of the TCP urgent pointer field.
+IPV4_RFC793=
+
+# Enable SYN flood protection ?
+IPV4_SYN_COOKIES=
+
+# Disable window scaling as defined in RFC1323 ?
+# The window scale extension expands the definition of the TCP
+# window to 32 bits and then uses a scale factor to carry this
+# 32-bit value in the 16-bit Window field of the TCP header.
+IPV4_NO_WINDOW_SCALING=
+
+# Enable dynamic socket address rewriting on interface address change.
+# This is useful for dialup interface with changing IP addresses.
+# (default no)
+# IPV4_DYNAMIC_IP_PATCH_VALUE - value from 1 to 9
+IPV4_DYNAMIC_IP_PATCH=
+IPV4_DYNAMIC_IP_PATCH_VALUE=
+
+# Range of ports used by TCP and UDP to choose the local
+# port. Contains two numbers, the first number is the lowest port,
+# the second number the highest local port. Default is "1024 4999".
+# Should be changed to "32768 61000" for high-usage systems.
+IPV4_LOCAL_PORT_RANGE="1024 4999"
+

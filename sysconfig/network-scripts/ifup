@@ -2,8 +2,8 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
-. ../network
-. ./network-functions
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions.network
 
 need_hostname
 
@@ -14,8 +14,8 @@ CONFIG=$1
     exit 1
 }
 
-[ -f "$CONFIG" ] || CONFIG=ifcfg-$CONFIG
-[ -f "$CONFIG" ] || {
+[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=ifcfg-$CONFIG
+[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
     echo "usage: ifup <device name>" >&2
     exit 1
 }
@@ -133,7 +133,7 @@ if [ "$IPSETUP" != yes ]; then
 
     if [ "${IP6VNETWORKING}" = "yes" ] ; then 
       for ADDR in ${IP6VADDRS} ; do
-        ifconfig ${DEVICE} add ${ADDR}
+        ip addr add add ${ADDR} dev ${DEVICE}
       done  
     fi
     

@@ -1,5 +1,7 @@
 #!/bin/sh
 #
+# Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#
 # Setting serial ports. This will work only if you have setserial package installed.
 #
 # Format of /etc/sysconfig/serial:
@@ -15,12 +17,22 @@ SETSERIAL=/bin/setserial
 
 ALLDEVS="/dev/ttyS*"
 
-echo "Setting serial ports:"
-if test -f /etc/sysconfig/serial ; then
-	grep -v ^# < /etc/sysconfig/serial | grep "/dev/" | while read device args
+show "Setting serial ports "; started
+if test -f /etc/sysconfig/serial ; then 
+	grep -v "^#" < /etc/sysconfig/serial | grep "/dev/" | while read device args; 
 	do
-	    ${SETSERIAL} -z $device $args
-	done 
-fi
+	${SETSERIAL} -z $device $args
+	done
+fi 
 
-${SETSERIAL} -bg ${ALLDEVS}
+for a in ${ALLDEVS}; do
+	WHAT="`${SETSERIAL} -bg $a`"
+	if (echo $WHAT | grep -q " at "); then
+		if [ -x /usr/bin/cut ]; then
+			show "`echo $WHAT | cut -d"/" -f3`"; ok
+		else
+			show "$WHAT"; ok
+		fi
+	fi
+done
+

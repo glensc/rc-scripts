@@ -1,0 +1,29 @@
+# (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
+# config file for setting up hardwired (leased) serial line.
+#  This config assumes "transparent" modem (in ex. goramo), null modem
+# cable or current loop. 
+# Advantage is smaller logfiles and slower 'pid spinning' (no chat is
+# executed)
+# You can configure Your AT Hayes compatibile modem to transparent mode
+# using ATS0=0&L1&S5&W on master "calling" side and ATS0=1&L1&S5&W on
+# slave "reciving" side 
+# Note: After commiting last &W You won't be able to talk to Your modem 
+# until You reset it to factory defaults using some jumper.
+# if You don't have any jumper YOU HAVE BEEN WARNED. 
+DEVICE=ppp0
+ONBOOT=yes
+IPADDR=192.168.255.254
+REMIP=192.168.255.253
+NETMASK=255.255.255.252
+HARDFLOWCTL=yes
+MODEMPORT=/dev/ttyS1
+LINESPEED=115200
+DEBUG=no
+PERSIST=yes
+HOLDOFF=10
+#demand option not finished yet ;-(
+DEMAND=no
+#ACTIVEFILTER=
+#IDLE=
+
+REPORTFILE=/var/log/ppp0.log

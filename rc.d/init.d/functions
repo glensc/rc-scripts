@@ -1,52 +1,67 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# Version:	@(#) /etc/init.d/functions $Revision: 1.6 $ $Date: 1999/06/14 21:05:09 $
+# Version:	@(#) /etc/init.d/functions $Revision: 1.7 $ $Date: 1999/06/14 21:17:10 $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
-# Modified for PLD by Marek Obuchowicz <elephant@shadow.eu.org>
-#
+# Modified for PLD by:
+#		Marek Obuchowicz <elephant@shadow.eu.org>
+#		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl> 
 
 # First set up a default search path.
 PATH="/sbin:/usr/sbin:/bin:/usr/bin"; export PATH
 
+[ -z "$COLUMNS" ] && COLUMNS=80
+
 # Some functions to handle PLD-style messages
-function show {
+show() 
+{
   text="$*".............................................
   echo -ne `echo $text | cut -c1-45`
 }
 
-function busy {
+busy() 
+{
   echo -n "`tput setaf 6`[`tput setaf 5` BUSY `tput setaf 6`]`tput setaf 7`"
 }
 
-function ok {
+ok() 
+{
   echo  "`tput setaf 6`[`tput setaf 2` DONE `tput setaf 6`]`tput setaf 7`"
 }
 
-function fail {
+started()
+{
+  echo  "`tput setaf 6`[`tput setaf 2` WORK `tput setaf 6`]`tput setaf 7`"
+}
+
+fail() 
+{
   echo  "`tput setaf 6`[`tput setaf 1` FAIL `tput setaf 6`]`tput setaf 7`"
 }
 
-function died {
+died() 
+{
   echo  "`tput setaf 6`[`tput setaf 1` DIED `tput setaf 6`]`tput setaf 7`"
 }
 
-function deltext {
+deltext() 
+{
   echo -ne '\b\b\b\b\b\b\b\b'
 }
 
-# A function to start a program.
-daemon() {
-	TMPFILE=`mktemp /tmp/init-XXXXXX`
-	
+# A function to start a program (now it's usefull on read-only filesystem too)
+daemon() 
+{
 	nicelevel=0
+	_ERRORS=""
+	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 	# Test syntax.
 	case $1 in
 	    '')    echo '$0: Usage: daemon [+/-nicelevel] {program}'
 	           return 1;;
-	    -*|+*) nicelevel=$1
+	    -*|+*) SERVICE_RUN_NICE_LEVEL=$1
 	           shift;;
 	esac
 
@@ -56,19 +71,20 @@ daemon() {
 
 	# And start it up.
 	busy
-	if nice -n $nicelevel "$@" >$TMPFILE 2>&1; then
+	if _ERRORS="`nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c \"$@\" 2>&1`"; then
 	  deltext
 	  ok
 	else
 	  deltext
 	  fail
-	  cat $TMPFILE
+	  echo $_ERRORS
 	fi
-	rm -f $TMPFILE
+       unset _ERRORS
 }
 
 # A function to stop a program.
-killproc() {
+killproc() 
+{
 	# Test syntax.
 	if [ $# = 0 ]; then
 		echo "Usage: killproc {program} [signal]"
@@ -130,7 +146,8 @@ killproc() {
 }
 
 # A function to find the pid of a program.
-pidofproc() {
+pidofproc() 
+{
 	# Test syntax.
 	if [ $# = 0 ] ; then
 		echo "Usage: pidofproc {program}"
@@ -167,7 +184,8 @@ pidofproc() {
 	return 1
 }
 
-status() {
+status() 
+{
 	# Test syntax.
 	if [ $# = 0 ] ; then
 		echo "Usage: status {program}"

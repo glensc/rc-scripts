@@ -7,6 +7,7 @@
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+# Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 
 # Source function library.
@@ -19,11 +20,31 @@ runlevel=$2
 previous=$1
 export runlevel previous
 
+# if runlevel is 0 (halt) or 6 (reboot) change to first
+# virtual console
+if [ "$runlevel" == "0" ] || [ "$runlevel" == "6" ]; then
+	exec 0<> /dev/tty1 1>&0 2>&0
+	[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo
+else
+# if previous runlevel == current runlevel do nothing
+	[ "$runlevel" == "$previous" ] && exit 0
+fi
+
+# set onlcr to avoid staircase effect and do not lock scrolling
+stty onlcr -ixon 0>&1
+
 # Get first argument. Set new runlevel to this argument.
 [ "$1" != "" ] && runlevel="$argv1"
 
 # Tell linuxconf what runlevel we are in
 [ -d /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
+
+
+# Say something ;)
+echo "`tput setaf 2`Resource Manager:`tput setaf 7` Leaving  runlevel number \
+.....`tput setaf 6`[`tput setaf 2` $previous `tput setaf 6`]`tput setaf 7`"
+echo "`tput setaf 2`Resource Manager:`tput setaf 7` Entering runlevel number \
+.....`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
 
 # Is there an rc directory for this new runlevel?
 if [ -d /etc/rc.d/rc$runlevel.d ]; then
@@ -32,9 +53,10 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		# Check if the script is there.
 		[ ! -f $i ] && continue
 
-		# Don't run [KS]??foo.{rpmsave,rpmorig} scripts
+		# Don't run [KS]??foo.{rpmsave,rpmorig,rpmnew} scripts
 		[ "${1%.rpmsave}" != "${1}" ] && continue
 		[ "${1%.rpmorig}" != "${1}" ] && continue
+		[ "${1%.rpmnew}" != "${1}" ] && continue
 
 		# Check if the subsystem is already up.
 		subsys=${i#/etc/rc.d/rc$runlevel.d/K??}
@@ -53,6 +75,7 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		# Don't run [KS]??foo.{rpmsave,rpmorig} scripts
 		[ "${1%.rpmsave}" != "${1}" ] && continue
 		[ "${1%.rpmorig}" != "${1}" ] && continue
+		[ "${1%.rpmnew}" != "${1}" ] && continue
 
 		# Check if the subsystem is already up.
 		subsys=${i#/etc/rc.d/rc$runlevel.d/S??}
@@ -63,3 +86,13 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		$i start
 	done
 fi
+
+# Say something ;)
+echo "`tput setaf 2`Resource Manager:`tput setaf 7` Runlevel has been \
+reached.....`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
+
+if [ -f /etc/nologin.boot ]
+then
+   rm -f /etc/nologin /etc/nologin.boot
+fi
+	

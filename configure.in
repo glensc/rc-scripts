@@ -1,0 +1,34 @@
+AC_INIT()
+
+PACKAGE=rc-scripts
+VERSION=0.0.5
+
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_ISC_POSIX
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+
+pppdir='${sysconfdir}/ppp'
+networkscriptsdir='${sbindir}/network-scripts'
+sysconfigdir='${sysconfdir}/sysconfig'
+rcdir='${sysconfdir}/rc.d'
+docdir="${prefix}/doc/$PACKAGE-$VERSION"
+libdir="${prefix}/lib"
+
+AC_SUBST(pppdir)
+AC_SUBST(networkscriptsdir)
+AC_SUBST(sysconfigdir)
+AC_SUBST(rcdir)
+AC_SUBST(docdir)
+AC_SUBST(libdir)
+
+AC_OUTPUT(Makefile src/Makefile doc/Makefile \
+	ppp/Makefile ppp/ip-up.d/Makefile ppp/ip-down.d/Makefile \
+	sysconfig/Makefile \
+	sysconfig/network-scripts/Makefile \
+	rc.d/Makefile rc.d/init.d/Makefile
+	rc-scripts.spec)

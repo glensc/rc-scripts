@@ -10,10 +10,13 @@
 #
 # Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 #               Modified for PLD Linux by Grzegorz Stanislawski
+# Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 
 # Set the path.
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+. /etc/rc.d/init.d/functions
 
 case "$1" in
    stop*)
@@ -23,22 +26,37 @@ case "$1" in
 # Kill all processes.
 	[ "${BASH+bash}" = bash ] && enable kill
 
-	echo "Sending all processes the TERM signal..."
-	kill -15 -1
+	show "Sending all processes the TERM signal "
+	daemon killall5 -15
 	sleep 5
-	echo "Sending all processes the KILL signal.."
-	kill -9 -1
+	show "Sending all processes the KILL signal "
+	daemon killall5 -9
 
 	rm -f /var/lock/subsys/*
 
 	# this looks nices
 	[ -x /usr/bin/clear ] && /usr/bin/clear
 
-	## we just killed kerneld :-(
-	#/etc/rc.d/init.d/kerneld start
+# make sure modprobe is working
+if [ -f /proc/sys/kernel/modprobe ]; then
+   echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
+fi
+
+# If they want to run something in single user mode, might as well run it...
+for i in /etc/rc.d/rc1.d/S[0-9][0-9]*; do
+        # Check if the script is there.
+        [ ! -f $i ] && continue
+
+       # Don't run [KS]??foo.{rpmsave,rpmorig} scripts
+       [ "${i%.rpmsave}" != "${i}" ] && continue
+       [ "${i%.rpmorig}" != "${i}" ] && continue
+       [ "${i%.rpmnew}" != "${i}" ] && continue
+       [ "$i" = "/etc/rc.d/rc1.d/S00single" ] && continue
+       $i start
+done
 
 	# Now go to the single user level.
-	echo "Telling INIT to go to single user mode."
+	show "Telling INIT to go to single user mode."; ok
 	exec init -t1 S
 	;;
 esac

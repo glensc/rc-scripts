@@ -3,11 +3,15 @@
 # /etc/rc.d/rc.sysinit - run once at boot time
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
+# Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 
 # Set the path
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
+# Read functions
+
+. /etc/rc.d/init.d/functions
 
 # Read network config data.
 if [ -f /etc/sysconfig/network ]; then
@@ -22,15 +26,19 @@ if [ -f /etc/sysconfig/system ]; then
     . /etc/sysconfig/system
 else
     RUN_SULOGIN_ON_ERR=yes
+    RUN_ISAPNP=yes
+    PANIC_REBOOT_TIME=0
+    DELAY_LOGIN=yes
+    CLEAN_TMP=no
 fi
 
 # Start up swapping.
-echo "Activating swap partitions"
+show "Activating swap partitions"; ok
 swapon -a
 
 # Set the hostname.
 hostname ${HOSTNAME}
-echo hostname: `hostname`
+echo "Setting hostname: `tput bold``hostname``tput sgr0`"
 
 # Set the NIS domain name
 if [ -n "$NISDOMAIN" ]; then
@@ -46,7 +54,7 @@ if [ -f /fsckoptions ]; then
 fi
 
 if [ ! -f /fastboot ]; then
-	echo "Checking root filesystems."
+	show "Checking root filesystems."; started
 	fsck -V -a $fsckoptions /
 
 	rc=$?
@@ -69,17 +77,17 @@ if [ ! -f /fastboot ]; then
 		echo "Unmounting file systems"
 		umount -a
 		mount -n -o remount,ro /
-		echo "Automatic reboot in progress."
-		reboot
+		show "Automatic reboot in progress."; busy
+		if reboot; then deltext; ok; else deltext; fail; fi
 	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
-		echo "Checking root filesystem quotas"
-		/sbin/quotacheck -v /
+		show "Checking root filesystem quotas"; busy
+		if (/sbin/quotacheck -v /); then deltext; ok; else deltext; fail; fi
 	fi
 fi
 
 if [ -x /sbin/quotaon ]; then
-    echo "Turning on user and group quotas for root filesystem"
-    /sbin/quotaon /
+    show "Turning on quotas on root filesystem"; busy
+    if (/sbin/quotaon /); then deltext; ok; else deltext; fail; fi
 fi
 
 # check for arguments 
@@ -93,22 +101,36 @@ fi
 
 # set up pnp 
 if [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
-    if [ -n "$PNP" ]; then
-	echo "Setting up ISA PNP devices"
-	/sbin/isapnp /etc/isapnp/isapnp.conf
+    if [ -n "$PNP" ] && [ "$RUN_ISAPNP" == "yes" ]; then
+	show "Setting up ISA PNP devices"; busy
+	if _OUTPUT="`/sbin/isapnp /etc/isapnp/isapnp.conf 2>&1`"; then
+	deltext; ok
+	echo $_OUTPUT
+	else
+	deltext; fail
+	echo $_OUTPUT
+	fi
     else
-	echo "Skipping ISA PNP configuration at users request"
+	show "Skipping ISA PNP configuration at users request"; ok
     fi
 fi
 
-# setup media type dependent parameters
-if [ -f /etc/rc.d/rc.media ]; then
-	. /etc/rc.d/rc.media
+# Remount the root filesystem read-write.
+show "Remounting root filesystem in rw mode"; busy
+if (mount -n -o remount,rw /); then deltext; ok; else deltext; fail; fi
+
+# /etc/nologin when starting system
+if [ "$DELAY_LOGIN" == "yes" ] && [ ! -f /etc/nologin ]; then
+  show "Enabling Delay Login"; busy
+  echo > /etc/nologin
+  echo "[EN] System bootup in progress  - please wait" >> /etc/nologin
+  echo "[PL] Startowanie systemu w toku - proszê czekaæ" >> /etc/nologin
+  echo >> /etc/nologin
+  chmod 644 /etc/nologin
+  cp -fp /etc/nologin /etc/nologin.boot
+  deltext; ok
 fi
 
-# Remount the root filesystem read-write.
-echo "Remounting root filesystem in read-write mode."
-mount -n -o remount,rw /
 
 # Clear mtab
 >/etc/mtab
@@ -127,9 +149,9 @@ fi
 rm -f /lib/modules/preferred
 if [ -n "$USEMODULES" ]; then
     ktag="`cat /proc/version`"
-    mtag=`grep -l "$ktag" /lib/modules/*/.rhkmvtag` 2> /dev/null
+    mtag="`grep -l "$ktag" /lib/modules/*/.rhkmvtag 2> /dev/null`"
     if [ -n "$mtag" ]; then
-	mver=`echo $mtag | sed -e 's,/lib/modules/,,' -e 's,/.rhkmvtag,,' -e 's,[ 	].*$,,'`
+	mver="`echo $mtag | sed -e 's,/lib/modules/,,' -e 's,/.rhkmvtag,,' -e 's,[ 	].*$,,'`"
 	ln -sf /lib/modules/$mver /lib/modules/preferred
 	ln -sf /boot/System.map-$mver /boot/System.map
 	ln -sf /boot/module-info-$mver /boot/module-info
@@ -138,13 +160,12 @@ fi
 
 if [ -x /sbin/depmod -a -n "$USEMODULES" ]; then
     # Get ready for kerneld if module support in the kernel
-    echo -n "Finding module dependencies... "
+    show "Finding module dependencies... "; busy
     if [ -e /lib/modules/preferred ]; then
-	depmod -a preferred
+	if depmod -a preferred; then deltext; ok; else deltext; fail; fi
     else
-	depmod -a
+	if depmod -a; then deltext; ok; else deltext; fail; fi
     fi
-    echo "done"
 fi
 
 # load sound modules
@@ -166,7 +187,7 @@ fi
 
 # Add raid devices
 if [ -f /proc/mdstat -a -f /etc/raidtab -a -x /sbin/raidadd ]; then
-	echo "Starting up RAID devices."
+	show "Starting up RAID devices."; started
 	raidadd -a
 
 	rc=$?
@@ -191,17 +212,17 @@ if [ -f /proc/mdstat -a -f /etc/raidtab -a -x /sbin/raidadd ]; then
 			/bin/sh
 		fi
 
-		echo "Unmounting file systems"
-		umount -a
-		mount -n -o remount,ro /
-		echo "Automatic reboot in progress."
-		reboot
+		show "Unmounting file systems"; busy
+		if (umount -a; 	mount -n -o remount,ro /); then
+		deltext; ok; else deltext; fail; fi
+		show "Automatic reboot in progress."; busy
+		if reboot; then deltext; ok; else deltext; fail; fi
 	fi
 fi
 
 # Check filesystems
 if [ ! -f /fastboot ]; then
-	echo "Checking filesystems."
+	show "Checking filesystems."; started
 	fsck -R -A -V -a $fsckoptions
 
 	rc=$?
@@ -221,36 +242,48 @@ if [ ! -f /fastboot ]; then
 			/bin/sh
 		fi
 
-		echo "Unmounting file systems"
-		umount -a
-		mount -n -o remount,ro /
-		echo "Automatic reboot in progress."
-		reboot
+		show "Unmounting file systems"; busy
+		if (umount -a; 	mount -n -o remount,ro /); then deltext; ok; else deltext; fail; fi
+		show "Automatic reboot in progress."; busy
+		if reboot; then deltext; ok; else deltext; fail; fi
 	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
-		echo "Checking filesystem quotas"
-		/sbin/quotacheck -v -R -a
+		show "Checking filesystem quotas"; busy
+		if (/sbin/quotacheck -v -R -a); then deltext; ok; else deltext; fail; fi
 	fi
 fi
 
 # Mount all other filesystems (except for NFS and /proc, which is already
 # mounted). Contrary to standard usage,
 # filesystems are NOT unmounted in single user mode.
-echo "Mounting local filesystems."
-mount -a -t nonfs,proc
+show "Mounting local filesystems."; busy
+if (mount -a -t nonfs,proc); then deltext; ok; else deltext; fail; fi
 
 # set the console font
 if [ -x /sbin/setsysfont ]; then
-    /sbin/setsysfont
+    show "Loading default system font"; busy
+    if (/sbin/setsysfont > /dev/null 2>&1); then deltext; ok; else deltext; fail; fi
 fi
 
 if [ -x /sbin/quotaon ]; then
-    echo "Turning on user and group quotas for local filesystems"
-    /sbin/quotaon -a
+    show "Turning on quotas for local filesystems"; busy
+    if (/sbin/quotaon -a); then deltext; ok; else deltext; fail; fi
 fi
 
-# Clean out /etc.
+# Clean out /etc & /var/{run/*,log/{b,w}tmpx}}.
 rm -f /etc/mtab~ /fastboot /fsckoptions
->/var/run/utmp
+rm -f /var/run/utmp  
+:>/var/run/utmpx
+chown root.utmpx /var/run/utmpx
+chmod 664 /var/run/utmpx
+
+# Uncomment if you planing to run `utmpd'
+#:>/var/log/wtmp
+#:>/var/run/utmp
+
+# Clean /tmp
+if [ "$CLEAN_TMP" == "yes" ]; then
+rm -rf /tmp/*
+fi
 
 # Delete UUCP lock files.
 rm -f /var/lock/LCK*
@@ -269,7 +302,7 @@ rm -f /tmp/.X*-lock
 rm -f /tmp/.s.PGSQL.*
 
 # Set the system clock.
-echo -n "Setting clock"
+show "Setting clock"; busy
 
 ARC=0
 UTC=0
@@ -295,25 +328,26 @@ fi
 case "$UTC" in
   yes|true)
     CLOCKFLAGS="$CLOCKFLAGS -u";
-    echo -n " (utc)"
+#    echo -n " (utc)"
   ;;
 esac
 
 case "$ARC" in
   yes|true)
     CLOCKFLAGS="$CLOCKFLAGS -A";
-    echo -n " (arc)"
+#   echo -n " (arc)"
   ;;
 esac
 
-echo -n ": "
-$CLOCK $CLOCKFLAGS
+#echo -n ": "
+if ($CLOCK $CLOCKFLAGS); then deltext; ok; else deltext; fail; fi
 
-date
+show "Date set to `date`"; ok
 
 # Right, now turn on swap in case we swap to files.
-echo "Enabling swap space."
-swapon -a 2>&1 | grep -v "busy"
+show "Enabling swap space."; busy
+if [ "`LANG=C swapon -a 2>&1 | grep -v "busy"`" == "" ]; then
+deltext; ok; else deltext; fail; fi
 
 # Initialize the serial ports.
 if [ -f /etc/rc.d/rc.serial ]; then
@@ -336,6 +370,23 @@ if [ -f /proc/scsi/scsi ] && cat /proc/scsi/scsi | grep -q 'Type:   Sequential-A
 	fi
 fi
 
+# there could be a new kernel version.  reinit /etc/psdevtab, to be sure.
+rm -f /etc/psdevtab
+#if [ -x /bin/ps ]; then
+#show "Rebuilding /etc/psdevtab database"; busy
+#if (ps > /dev/null 2>&1); then deltext; ok; else deltext; fail; fi
+#fi
+
+if [ -x /sbin/ldconfig ]; then
+show "Setting up /etc/ld.so.cache"; busy
+if (/sbin/ldconfig -X); then deltext; ok; else deltext; fail; fi
+fi
+
+if ([ -f /proc/sys/kernel/panic ] && [ "$PANIC_REBOOT_TIME" -gt "0" ] 2>/dev/null); then
+show "Sending val. $PANIC_REBOOT_TIME to /proc/sys/kernel/panic"; busy
+if (echo $PANIC_REBOOT_TIME > /proc/sys/kernel/panic); then deltext; ok; else deltext; fail; fi
+fi
+
 # Now that we have all of our basic modules loaded and the kernel going,
 # let's dump the syslog ring somewhere so we can find it later
 dmesg > /var/log/dmesg
@@ -343,3 +394,4 @@ chmod 640 /var/log/dmesg
 
 # Feed entropy into the entropy pool
 /etc/rc.d/init.d/random start
+

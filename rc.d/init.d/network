@@ -9,181 +9,56 @@
 
 # Source function library.
 . /etc/rc.d/init.d/functions
+. /etc/rc.d/init.d/functions.network
 
-if [ ! -f /etc/sysconfig/network ]; then
-	NETWORKING="no"
-	exit 0
-fi
+[ ! -f /etc/sysconfig/network ] && exit 0
 
 . /etc/sysconfig/network
 
-if [ "${NETWORKING}" = "" ]; then
-	NETWORKING="no"
-fi
-
-if [ -f /etc/sysconfig/pcmcia ]; then
-	. /etc/sysconfig/pcmcia
-fi
-
-if [ -f /etc/sysconfig/network-ip6 ]; then
-       . /etc/sysconfig/network-ip6
-fi
-
-
 # Check that networking is up.
-[ "${NETWORKING}" = "no" ] && exit 0
+[ "${NETWORKING}" = "no" -o "${NETWORKING}"="" ] && exit 0
 
 [ -x /sbin/ifconfig ] || exit 0
 
-# Load IPv6 module
-if [ "${IPV6NETWORKING}" = "yes" ]; then
-       if [ -r /lib/modules/`uname -r`/ipv6/ipv6.o ]; then
-       /sbin/modprobe net-pf-10
-       fi
-fi
-
-# Even if IPX is configured, without the utilities we can't do much
-[ ! -x /usr/bin/ipx_internal_net -o ! -x /usr/bin/ipx_configure ] && IPX=
-
-cd /etc/sysconfig/interfaces
-
-# find all the interfaces besides loopback.
-# ignore aliases, alternative configurations, and editor backup files
-interfaces=`ls -1 | egrep -v ':' | egrep -v '^(lo|data)$' | egrep '[a-z0-9]+$'`
-
-ipv4_forward_set ()
+######
+# initialize networking:
+# - check IPv4, IPv6, IPX can be handled by system
+# - setup default IPv{4,6} interfaces policy like:
+#   - forwarding,
+#   - spoofig protection,
+#   - icmp echo ignore broadcasts,
+# - setup lo interface
+network_init()
 {
-	# Turn IP forwarding on or off. We do this before bringing up the
-	# interfaces to make sure we don't forward when we shouldn't, and
-	# we do it even if networking isn't configured (why not?).
-	if [ -d /proc/sys/net/ipv4 ]; then
-	    # people could have left this out of their kernel, which isn't
-	    # exactly an error
-	    if [ ! -f /proc/sys/net/ipv4/ip_forward ] ; then
-		echo "/proc/sys/net/ipv4/ip_forward is missing --" \
-			"cannot control IP forwarding" >&2
-	    else
-		if [ "$FORWARD_IPV4" = "no" -o "$FORWARD_IPV4" = "false" ]; then
-		    value=0
-		    message="Disabling IPv4 packet forwarding"
-		else
-		    value=1
-		    message="Enabling IPv4 packet forwarding"
-		fi
+[ -f /etc/sysconfig/interfaces/ifcfg-lo ] && /sbin/ifup lo boot
 
-		if [ $value != `cat /proc/sys/net/ipv4/ip_forward` ]; then
-		    show $message
-		    busy
-		    echo "$value" > /proc/sys/net/ipv4/ip_forward
-		    deltext; ok
-		fi
-	    fi
-	fi
 }
 
-ipv4_spoofing_protection ()
- {
-        if [ -d /proc/sys/net/ipv4 ]; then
-            # people could have left this out of their kernel, which isn't
-            # exactly an error
-            if [ ! -f /proc/sys/net/ipv4/conf/all/rp_filter ] ; then
-                echo "/proc/sys/net/ipv4/conf/all/rp_filter is missing --" \
-                        "cannot control IP spoofing protection" >&2
-            else
-               if [ "$SPOOFING_IPV4" = "no" -o "$SPOOFING_IPV4" = "false" ]; then
-                    value=0
-                    message="Disabling IPv4 spoofing protection"
-                else
-                    value=1
-                    message="Enabling IPv4 spoofing protection"
-                fi
+######
+# deinitialize networking
+# - down lo interface.
+network_deinit()
+{
+[ -f /etc/sysconfig/interfaces/ifcfg-lo ] && /sbin/ifdown lo boot
 
-                if [ $value != `cat /proc/sys/net/ipv4/conf/all/rp_filter` ]; then
-                    show $message
-                    busy
-                   for f in /proc/sys/net/ipv4/conf/*/rp_filter; do
-                        echo $value > $f
-                   done
-                    deltext
-                    ok
-                fi
-            fi
-       fi
 }
 
-ipv4_icmp_echo_ignore_broadcasts ()
-{
-        if [ -d /proc/sys/net/ipv4 ]; then
-            # people could have left this out of their kernel, which isn't
-            # exactly an error
-            if [ ! -f /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts ] ; then
-                echo "/proc/sys/net/ipv4/icmp_echo_ignore_broadcasts is missing --" \
-                        "cannot control IP ignoring icmp to broadcasts" >&2
-            else
-                if [ "$IGNORE_ICMP_BCAST_IPV4" = "no" -o "$IGNORE_ICMP_BCAST_IPV4" = "false" ]; then
-                    value=0
-                    message="Disabling IPv4 ign icmp_echo to our bcasts"
-                else
-                    value=1
-                    message="Enabling IPv4 ign icmp_echo to our bcasts"
-                fi
-
-                if [ $value != `cat /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts` ]; then
-                    show $message
-                    busy
-                    echo "$value" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
-                    deltext
-                    ok
-                fi
-            fi
-       fi
- }
+interfaces="`ls -1 /etc/sysconfig/interfaces/ifcfg-* | grep -v ifcfg-lo | xargs 2> /dev/null`"
 
 # See how we were called.
 case "$1" in
   start)
-	ipv4_forward_set
-	ipv4_icmp_echo_ignore_broadcasts
-
-	/sbin/ifup lo
-
-	case "$IPX" in
-	  yes|true)
-	    /usr/bin/ipx_configure --auto_primary=$IPXAUTOPRIMARY \
-				   --auto_interface=$IPXAUTOFRAME
-	    /usr/bin/ipx_internal_net add $IPXINTERNALNETNUM $IPXINTERNALNODENUM
-	    ;;
-	esac
-
+	network_init
 	for i in $interfaces; do
 		[ -f $i ] && /sbin/ifup $i boot
 	done
-
-	ipv4_spoofing_protection
-
         touch /var/lock/subsys/network
         ;;
   stop)
-	SPOOFING_IPV4=no
-	ipv4_spoofing_protection
-
 	for i in $interfaces; do
 		[ -f $i ] && /sbin/ifdown $i boot
 	done
-	case "$IPX" in
-	  yes|true)
-	    /usr/bin/ipx_internal_net del
-	    ;;
-	esac
-	/sbin/ifdown lo
-	show "Disabling IPv4 packet forwarding"
-	busy
-	echo 0 > /proc/sys/net/ipv4/ip_forward
-	deltext; ok
-
-	IGNORE_ICMP_BCAST_IPV4=no
-	ipv4_icmp_echo_ignore_broadcasts
-
+	network_deinit
         rm -f /var/lock/subsys/network
         ;;
   status)

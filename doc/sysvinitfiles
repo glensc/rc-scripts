@@ -1,4 +1,4 @@
-Writing System V init scripts for Red Hat Linux
+Writing System V init scripts for PLD Linux
 ===============================================
 
 All System V init scripts are named /etc/rc.d/init.d/<servicename>
@@ -9,7 +9,7 @@ where <servicename> is the name of the service.  There must be no
 Sample Script
 =============
 
-#!/bin/bash
+#!/bin/sh
 #
 #	/etc/rc.d/init.d/<servicename>
 #
@@ -25,16 +25,21 @@ Sample Script
 # Source function library.
 . /etc/rc.d/init.d/functions
 
+# Running service --  nice level.
+if [ -f /etc/sysconfig/<service> ]; then
+    . /etc/sysconfig/<service>
+fi    
+
 <define any local shell functions used by the code that follows>
 
 case "$1" in
     start)
-	echo -n "Starting <servicename> services: "
+	show Starting <servicename> services
 	<start daemons, perhaps with the daemon function>
 	touch /var/lock/subsys/<servicename>
 	;;
     stop)
-	echo -n "Shutting down <servicename> services: "
+	show Shutting down <servicename> services
 	<stop daemons, perhaps with the killproc function>
 	rm -f /var/lock/subsys/<servicename>
 	;;
@@ -58,7 +63,7 @@ case "$1" in
 	$0; see the description under the probe tag below.>
 	;;
     *)
-	echo "Usage: <servicename> {start|stop|status|reload|restart[|probe]"
+	echo "Usage: $0 {start|stop|status|reload|restart[|probe]"
 	exit 1
 	;;
 esac
@@ -77,9 +82,9 @@ Functions in /etc/rc.d/init.d/functions
 
 daemon [+/-nicelevel] program [arguments] [&]
 
-	Starts a daemon, if it is not already running.  Does
-	other useful things like keeping the daemon from dumping
-	core if it terminates unexpectedly.
+	Obsoletes starts a daemon, if it is not already running.
+	Does other useful things like keeping  the  daemon  from 
+	dumping core if it terminates unexpectedly.
 
 killproc program [signal]
 
@@ -141,8 +146,8 @@ Tags
 
 	Optional, multiple entries allowed.  For each static config
 	file used by the daemon, use a single entry.  For example:
-	# config: /etc/httpd/conf/httpd.conf
-	# config: /etc/httpd/conf/srm.conf
+	# config: /etc/httpd/httpd.conf
+	# config: /etc/httpd/srm.conf
 
 	Optionally, if the server will automatically reload the config
 	file if it is changed, you can append the word "autoreload" to
@@ -179,3 +184,4 @@ Tags
 	configuration files.
 
 Copyright (c) 1998 Red Hat Software, Inc.
+Modified Corrected & Overlocked by PLD (r) Team 1999.

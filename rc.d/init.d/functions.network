@@ -1,0 +1,283 @@
+# This is not a shell script; it provides functions to network scripts
+# that source it.
+
+source_config ()
+{
+    DEVNAME=`basename $CONFIG | sed 's/^ifcfg-//g'`
+
+    if basename $CONFIG | grep -q '[^g]-' ; then
+	PARENTCONFIG=`echo $CONFIG | sed 's/-[^-]*$//g'`
+	PARENTDEVNAME=`echo $PARENTCONFIG | sed 's/^ifcfg-//g'`
+	[ -f $PARENTCONFIG ] || {
+	    echo "Missing config file $PARENTCONFIG." >&2
+	    exit 1
+	}
+	. ./$PARENTCONFIG
+    fi
+    . /etc/sysconfig/interfaces/$CONFIG
+}
+
+do_netreport ()
+{
+  # Notify programs that have requested notification
+  ( cd /var/run/netreport || exit
+    for i in * ; do
+      [ -f $i ] && \
+        kill -SIGIO $i >/dev/null 2>&1 || \
+          rm -f $i >/dev/null 2>&1
+    done
+  )
+}
+
+need_hostname()
+{
+    if [ "`hostname`" = "(none)" -o "`hostname`" = "localhost" -o \
+	 "`hostname`" = "localhost.localdomain" ]; then
+	NEEDHOSTNAME=yes
+    else
+	unset NEEDHOSTNAME
+    fi
+}
+
+set_hostname()
+{
+    echo "$1" > /etc/HOSTNAME
+    hostname $1
+    if ! grep search /etc/resolv.conf; then
+	domain=`echo $1 | sed 's/^[^\.]*\.//'`
+	echo "search $domain" >> /etc/resolv.conf
+    fi
+}
+
+# PLD network functions
+# (C) 1999 Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#
+# All functions must be called "name_of_function on" or "name_of_function off"
+
+ipv4_forwarding()
+{
+if [ "$IPV4_FORWARDING" != "default" -a -n "$IPV4_FORWARDING" ] || [ ! -e /proc/sys/net/ipv4/ip_forward ]; then
+
+if [ "$IPV4_FORWARDING" == "yes" ] && [ "$1" == "on" ]; then
+show Enabling IPv4 forwarding; busy
+if echo 1 > /proc/sys/net/ipv4/ip_forward; then deltext; ok; else deltext; fail; fi
+else
+show Disabling IPv4 forwarding ; busy
+if echo 0 > /proc/sys/net/ipv4/ip_forward; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_ign_all_icmp()
+{
+if [ "$IPV4_IGN_ALL_ICMP" != "default" -a -n "$IPV4_IGN_ALL_ICMP" ] || [ ! -e /proc/sys/net/ipv4/icmp_echo_ignore_all ]; then
+
+if [ "$IPV4_IGN_ALL_ICMP" == "yes" ] && [ "$1" == "on" ]; then
+show Ignoring ICMP echo to any addresses; busy
+if echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all; then deltext; ok; else deltext; fail; fi
+else
+show Allowing ICMP echo to any addresses; busy
+if echo 0 > /proc/sys/net/ipv4/icmp_echo_ignore_all; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_ign_bmcast_icmp()
+{
+if [ "$IPV4_IGN_BMCAST_ICMP" != "default" -a -n "$IPV4_IGN_BMCAST_ICMP" -a "$IPV4_IGN_ALL_ICMP" != "yes" ] || [ ! -e /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts ]; then
+
+if [ "$IPV4_IGN_BMCAST_ICMP" == "yes" ] && [ "$1" == "on" ]; then
+show Ignoring ICMP echo to multi and broadcast; busy
+if echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts; then deltext; ok; else deltext; fail; fi
+else
+show Allowing ICMP echo to multi and broadcast; busy
+if echo 0 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+
+ipv4_no_mtu_discovery()
+{
+if [ "$IPV4_NO_MTU_DISCOVERY" != "default" -a -n "$IPV4_NO_MTU_DISCOVERY" ] || [ ! -e /proc/sys/net/ipv4/ip_no_pmtu_disc ]; then
+
+if [ "$IPV4_NO_MTU_DISCOVERY" == "yes" ] && [ "$1" == "on" ]; then
+show Disabling MTU Discovery Path; busy
+if echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc; then deltext; ok; else deltext; fail; fi
+else
+show Enabling MTU Discovery Path; busy
+if echo 0 > /proc/sys/net/ipv4/ip_no_pmtu_disc; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_masq_debugging()
+{
+if [ "$IPV4_MASQ_DEBUGGING" != "default" -a -n "$IPV4_MASQ_DEBUGGING" ] || [ ! -e /proc/sys/net/ipv4/ip_masq_debug ]; then
+
+if [ "$IPV4_MASQ_DEBUGGING" == "yes" ] && [ "$1" == "on" ]; then
+show Enabling Masquerade Debug Mode; busy
+if echo 1 > /proc/sys/net/ipv4/ip_masq_debug; then deltext; ok; else deltext; fail; fi
+else
+show Disabling Masquerade Debug Mode; busy
+if echo 0 > /proc/sys/net/ipv4/ip_masq_debug; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_no_retrans_collapse()
+{
+if [ "$IPV4_NO_RETRANS_COLLAPSE" != "default" -a -n "$IPV4_NO_RETRANS_COLLAPSE" ] || [ ! -e /proc/sys/net/ipv4/tcp_retrans_collapse ]; then
+
+if [ "$IPV4_NO_RETRANS_COLLAPSE" == "yes" ] && [ "$1" == "on" ]; then
+show Turning off retrans collapse; busy
+if echo 0 > /proc/sys/net/ipv4/tcp_retrans_collapse; then deltext; ok; else deltext; fail; fi
+else
+show Turning on retrans collapse; busy
+if echo 1 > /proc/sys/net/ipv4/tcp_retrans_collapse; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_no_select_ack()
+{
+if [ "$IPV4_NO_SELECT_ACK" != "default" -a -n "$IPV4_NO_SELECT_ACK" ] || [ ! -e /proc/sys/net/ipv4/tcp_sack ]; then
+
+if [ "$IPV4_NO_SELECT_ACK" == "yes" ] && [ "$1" == "on" ]; then
+show Disabling select acknowledgments \(RFC2018\); busy
+if echo 0 > /proc/sys/net/ipv4/tcp_sack; then deltext; ok; else deltext; fail; fi
+else
+show Enabling select acknowledgments \(RFC2018\); busy
+if echo 1 > /proc/sys/net/ipv4/tcp_sack; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_no_timestamps()
+{
+if [ "$IPV4_NO_TIMESTAMPS" != "default" -a -n "$IPV4_NO_TIMESTAMPS" ] || [ ! -e /proc/sys/net/ipv4/tcp_timestamps ]; then
+
+if [ "$IPV4_NO_TIMESTAMPS" == "yes" ] && [ "$1" == "on" ]; then
+show Disabling timestamps \(RFC1323\); busy
+if echo 0 > /proc/sys/net/ipv4/tcp_timestamps; then deltext; ok; else deltext; fail; fi
+else
+show Enabling timestamps \(RFC1323\); busy
+if echo 1 > /proc/sys/net/ipv4/tcp_timestamps; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_rfc793()
+{
+if [ "$IPV4_RFC793" != "default" -a -n "$IPV4_RFC793" ] || [ ! -e /proc/sys/net/ipv4/tcp_stdurg ]; then
+
+if [ "$IPV4_RFC793" == "yes" ] && [ "$1" == "on" ]; then
+show Enabling strict interpretation of RFC793; busy
+if echo 1 > /proc/sys/net/ipv4/tcp_stdurg; then deltext; ok; else deltext; fail; fi
+else
+show Disabling strict interpretation of RFC793; busy
+if echo 0 > /proc/sys/net/ipv4/tcp_stdurg; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_syn_cookies()
+{
+if [ "$IPV4_SYN_COOKIES" != "default" -a -n "$IPV4_SYN_COOKIES" ] || [ ! -e /proc/sys/net/ipv4/tcp_syncookies ]; then
+
+if [ "$IPV4_SYN_COOKIES" == "yes" ] && [ "$1" == "on" ]; then
+show Enabling SYN Cookies; busy
+if echo 1 > /proc/sys/net/ipv4/tcp_syncookies; then deltext; ok; else deltext; fail; fi
+else
+show Disabling SYN Cookies; busy
+if echo 0 > /proc/sys/net/ipv4/tcp_syncookies; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_no_window_scaling()
+{
+if [ "$IPV4_NO_WINDOW_SCALING" != "default" -a -n "$IPV4_NO_WINDOW_SCALING" ] || [ ! -e /proc/sys/net/ipv4/tcp_window_scaling ]; then
+
+if [ "$IPV4_NO_WINDOW_SCALING" == "yes" ] && [ "$1" == "on" ]; then
+show Disabling window scaling \(RFC1323\); busy
+if echo 0 > /proc/sys/net/ipv4/tcp_window_scaling; then deltext; ok; else deltext; fail; fi
+else
+show Enabling window scaling \(RFC1323\); busy
+if echo 1 > /proc/sys/net/ipv4/tcp_window_scaling; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_dynamic_ip_patch()
+{
+if [ "$IPV4_DYNAMIC_IP_PATCH" != "default" -a -n "$IPV4_DYNAMIC_IP_PATCH" ] || [ ! -e /proc/sys/net/ipv4/ip_dynaddr ]; then
+
+case "$IPV4_DYNAMIC_IP_PATCH_VALUE" in
+	[1-9])	;;
+	*)	IPV4_DYNAMIC_IP_PATCH_VALUE=7 ;;
+esac
+
+if [ "$IPV4_DYNAMIC_IP_PATCH" == "yes" ] && [ "$1" == "on" ]; then
+show Enabling dynamic IP patch; busy
+if echo $IPV4_DYNAMIC_IP_PATCH_VALUE > /proc/sys/net/ipv4/ip_dynaddr; then deltext; ok; else deltext; fail; fi
+else
+show Diabling dynamic IP patch; busy
+if echo 0 > /proc/sys/net/ipv4/ip_dynaddr; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_local_port_range()
+{
+if [ "$IPV4_LOCAL_PORT_RANGE" != "default" -a -n "$IPV4_LOCAL_PORT_RANGE" ] || [ ! -e /proc/sys/net/ipv4/ip_local_port_range ]; then
+
+if [ "$IPV4_LOCAL_PORT_RANGE" == "yes" ] && [ "$1" == "on" ]; then
+show Setting local port range; busy
+if echo "$IPV4_LOCAL_PORT_RANGE" > /proc/sys/net/ipv4/ip_local_port_range; then deltext; ok; else deltext; fail; fi
+else
+show Setting default local port range; busy
+if echo "1024 4999" > /proc/sys/net/ipv4/ip_local_port_range; then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+ipv4_anti_spoofing()
+{
+if [ "$IPV4_ANTI_SPOOFING" != "default" -a -n "$IPV4_ANTI_SPOOFING" ] || [ ! -e /proc/sys/net/ipv4/conf/all/rp_filter ]; then
+
+if [ "$IPV4_ANTI_SPOOFING" == "yes" ] && [ "$1" == "on" ]; then
+show Setting up IP spoofing protection; busy
+if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 1 > $f; done); then deltext; ok; else deltext; fail; fi
+else
+show Setting down IP spoofing protection; busy
+if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 0 > $f; done); then deltext; ok; else deltext; fail; fi
+fi
+
+fi
+}
+
+
+# FUNCTIONS TO IMPLEMENT
+#ipv4_forwarding()
+#ipv4_accept_icmp_redir()
+#ipv4_accept_source_route()
+#ipv4_log_martians()
+#ipv4_multicast()
+#ipv4_proxy_arp()
+#ipv4_accept_icmp_redir_gate()
+#ipv4_send_icmp_redir()
+

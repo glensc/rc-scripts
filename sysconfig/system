@@ -1,13 +1,21 @@
-###########
-# $RUN_SULOGIN_ON_ERR -	if "yes" this cause run on any errors sulogin instead
-#			shell
-
+# On errors (when system is starting) run sulogin instead of shell ?
 RUN_SULOGIN_ON_ERR=yes
 
-###########
-# $DO_AUTO_SETUP_MEDIA - if "yes" perform automated setting up permission on
-#			/dev/hd? devices (664 on cdrom, 660 on disk) and
-#			prepare /etc/fstab for allow mount/umout for all
-#			normal users
+# Default run nice level for all services if
+# $SERVICE_RUN_NICE_LEVEL is not defined in /etc/sysconfig/<service>
+DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 
-DO_AUTO_SETUP_MEDIA=yes
+# Run isapnp at system startup ?
+RUN_ISAPNP=yes
+
+# After how many seconds reboot system after kernel panic ?
+# 0 - never reboot system (suggested 60)
+PANIC_REBOOT_TIME=0
+
+# Do not allow users to login when system is starting
+# (but allow when it end "starting" process) ?
+DELAY_LOGIN=yes
+
+# Clean /tmp at startup ?
+CLEAN_TMP=yes
+
