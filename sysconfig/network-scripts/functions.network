@@ -64,7 +64,7 @@ if [ -n "$domain" ] ; then
 fi
 }
 
-# PLD GNU/Linux network functions
+# PLD Linux Distribution network functions
 # Copyright (C) 1999, 2000 Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 
 # Setup Network Address Translation (NAT)
