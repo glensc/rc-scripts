@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.19 1999/08/31 23:51:42 wiget Exp $
+# $Id: network,v 1.20 1999/09/02 12:24:35 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -50,6 +50,8 @@ proc_net ipv4/ip_forward start 1 0 IPV4_FORWARDING "IPv4 forwarding"
 # IPv6 forwarding
 proc_net ipv6/conf/all/forwarding start 1 0 IPV6_FORWARDING "IPv6 forwarding"
 
+# Setup NAT rules
+setup_nat on
 }
 
 network_postinit()
@@ -64,6 +66,8 @@ static_arp
 # - down lo interface.
 network_deinit()
 {
+# Set down NAT rules
+setup_nat off
 
 # IPv6 forwarding
 proc_net ipv6/conf/all/forwarding stop 1 0 IPV6_FORWARDING "IPv6 forwarding"
@@ -80,20 +84,27 @@ set_down_loopback
 
 # find all the interfaces besides loopback.
 # ignore aliases, alternative configurations, and editor backup files
-interfaces="`(cd /etc/sysconfig/interfaces && ls ifcfg* | egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | sed 's/^ifcfg-//g')`"
-interfaces_boot="`(cd /etc/sysconfig/interfaces && ls ifcfg* | egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g')`"
-tunnels="`(cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | xargs ) 2> /dev/null`"
+interfaces="`(cd /etc/sysconfig/interfaces && ls ifcfg* | \
+egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | sed 's/^ifcfg-//g')`"
+interfaces_boot="`(cd /etc/sysconfig/interfaces && ls ifcfg* | \
+egrep -v '(ifcfg-lo|ifcfg-sit|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
+xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g')`"
+interfaces_sit_boot="`(cd /etc/sysconfig/interfaces && ls ifcfg-sit* | \
+egrep 'ifcfg-[a-z0-9]+$' | xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^ifcfg-//g')`"
+tunnels="`(cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
+xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^tnlcfg-//g')`"
 
 # See how we were called.
 case "$1" in
   start)
 	network_init
-	for i in $tunnels; do
-		/sbin/tnlup $i boot
+	for i in $interfaces_boot $interfaces_sit_boot; do
+		/sbin/ifup $i boot
 	done
 
-	for i in $interfaces_boot; do
-		/sbin/ifup $i boot
+	for i in $tunnels; do
+		/sbin/tnlup $i boot
+		/sbin/ifup tnlcfg-$i boot
 	done
 	
 	network_postinit
@@ -101,13 +112,14 @@ case "$1" in
         touch /var/lock/subsys/network
         ;;
   stop)
-	for i in $interfaces_boot; do
-		/sbin/ifdown $i boot
+	for i in $tunnels; do
+		/sbin/ifdown tnlcfg-$i boot
+		/sbin/tnldown $i boot
 	done
 
-	for i in $tunnels; do
-                /sbin/tnldown $i boot
-        done
+	for i in $interfaces_sit_boot $interfaces_boot; do
+		/sbin/ifdown $i boot
+	done
 
 	network_deinit
         rm -f /var/lock/subsys/network
