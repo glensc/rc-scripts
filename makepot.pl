@@ -5,7 +5,7 @@
 #
 # Copyright (c) 1999 Free Software Fundation, Inc.
 # Artur Frysiak <wiget@pld.org.pl>
-# $Id: makepot.pl,v 1.5 2001/05/15 16:03:33 baggins Exp $
+# $Id: makepot.pl,v 1.6 2001/05/15 17:28:02 baggins Exp $
 # Changes:
 # 2000-08-25 Arkadiusz Miskiewicz <misiek@pld.org.pl>
 # - support for $(nls "xyz"), progress "xyz" and '' instead of "".
@@ -59,7 +59,7 @@ for (my $a = 0; $a <= $#ARGV; $a++) {
 	open (POTSRC, "< " . $filename) || die "Can't open " . $filename;
 	foreach (<POTSRC>) {
 		chop;
-		if ((/(run_cmd|nls|show|progress)\s[\sa-zA-Z0-9-]*"(?!(\`|\$\()nls\s\")([^"]*)"/g) or (/(run_cmd|nls|show|progress)\s[\sa-zA-Z0-9-]*'(?!(\`|\$\()nls\s\")([^"]*)'/g)) {
+		if ((/(run_cmd|nls|show|progress)\s[\sa-zA-Z0-9-]*"(?!(\`|\$\()nls\s[\"\'])([^"]*)"/g) or (/(run_cmd|nls|show|progress)\s[\sa-zA-Z0-9-]*'(?!(\`|\$\()nls\s[\"\'])([^"]*)'/g)) {
 #			potentry($1,$lnr,$filename) if defined $1;
 			potentry($2,$lnr,$filename) if defined $2;
 			potentry($3,$lnr,$filename) if defined $3;
