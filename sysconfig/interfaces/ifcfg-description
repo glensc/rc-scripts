@@ -1,5 +1,14 @@
 #	$Id$
 DEVICE=<name>
+
+[ BOOTPRIO=number ]
+  ifcfg-* interfaces are configured in BOOTPRIO order starting
+  from lowest value first. You need to set BOOTPRIO in _all_ your
+  ifcfg* files because if you won't do that only these interfaces
+  with BOOTPRIO variable will be configured. Use the same schema
+  when setting variable for example BOOTPRIO=numer
+  or BOOTPRIO="numer" because sorting is done by sort command.
+
 [ BOOTPROTO={none|bootp|dhcp|pump} ]
   You can specify which dhcp client to use with the DHCP_CLIENT, if
   the DHCP_CLIENT is not specified we trying to launch in order :

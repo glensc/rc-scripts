@@ -118,40 +118,52 @@ set_down_loopback
 
 # find all the interfaces besides loopback.
 # ignore aliases, alternative configurations, and editor backup files
-interfaces_boot=$((
-	. /etc/rc.d/init.d/functions; \
-	cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
-	egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br|ifcfg-(.*)\.(.*))' | \
-	egrep 'ifcfg-[a-z0-9\.]+$' | \
-	for i in `cat`; do \
-	    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
-	done | \
-	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-interfaces_vlan_boot=$((
-	. /etc/rc.d/init.d/functions; \
-	cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
-	egrep 'ifcfg-(.*)\.(.*)' | \
-	egrep 'ifcfg-[a-z0-9\.]+$' | \
-	for i in `cat`; do \
-	    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
-	done | \
-	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-interfaces_br_boot=$((
-	. /etc/rc.d/init.d/functions; \
-	cd /etc/sysconfig/interfaces && ls -1 ifcfg-br* | \
-	egrep 'ifcfg-[a-z0-9\.]+$' | \
-	for i in `cat`; do \
-	    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
-	done | \
-	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-interfaces_sit_boot=$((
-	. /etc/rc.d/init.d/functions; \
-	cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
-	egrep 'ifcfg-[a-z0-9]+$' | \
-	for i in `cat`; do \
-	    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
-	done | \
-	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+if [ -n "$(grep "^BOOTPRIO=" /etc/sysconfig/interfaces/ifcfg* 2> /dev/null)" ]; then
+	interfaces_boot=$(( \
+		. /etc/rc.d/init.d/functions; \
+		egrep 'BOOTPRIO' ifcfg* | sort -t= -n -k2,2 | \
+		awk ' { gsub(/:BOOTPRIO.*/,NIL); print $0 } '| egrep -v 'ifcfg-lo' | \
+		for i in `cat`; do \
+		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" &&
+		    echo "$i"; \
+		done | \
+		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+else
+	interfaces_boot=$((
+		. /etc/rc.d/init.d/functions; \
+		cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
+		egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br|ifcfg-(.*)\.(.*))' | \
+		egrep 'ifcfg-[a-z0-9\.]+$' | \
+		for i in `cat`; do \
+		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+		done | \
+		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+	interfaces_vlan_boot=$((
+		. /etc/rc.d/init.d/functions; \
+		cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
+		egrep 'ifcfg-(.*)\.(.*)' | \
+		egrep 'ifcfg-[a-z0-9\.]+$' | \
+		for i in `cat`; do \
+		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+		done | \
+		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+	interfaces_br_boot=$((
+		. /etc/rc.d/init.d/functions; \
+		cd /etc/sysconfig/interfaces && ls -1 ifcfg-br* | \
+		egrep 'ifcfg-[a-z0-9\.]+$' | \
+		for i in `cat`; do \
+		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+		done | \
+		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+	interfaces_sit_boot=$((
+		. /etc/rc.d/init.d/functions; \
+		cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
+		egrep 'ifcfg-[a-z0-9]+$' | \
+		for i in `cat`; do \
+		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+		done | \
+		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+fi
 tunnels=$((cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
 	xargs egrep -l "ONBOOT=[^n][^o]" | \
 	awk ' { gsub(/tnlcfg-/,NIL); print $0 } ') 2> /dev/null)
