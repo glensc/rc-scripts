@@ -4,21 +4,22 @@ libdir = @libdir@
 
 sbin_SCRIPTS = \
 	ifdown \
+	ifup \
+	tnldown \
+	tnlup
+
+networkscriptsdir = @networkscriptsdir@
+
+networkscripts_SCRIPTS = \
 	ifdown-ppp \
 	ifdown-sl \
-	ifup \
 	ifup-aliases \
 	ifup-ipx \
 	ifup-plip \
 	ifup-post \
 	ifup-ppp \
 	ifup-routes \
-	ifup-sl \
-	tnldown \
-	tnlup
-
-#lib_DATA = network-functions
-
+	ifup-sl 
 
 #SUBDIRS = data
 
@@ -29,3 +30,4 @@ interfaces_DATA =
 EXTRA_DIST = \
 	$(interfaces_DATA) \
 	$(sbin_SCRIPTS) \
+	$(networkscripts_SCRIPTS)

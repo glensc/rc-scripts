@@ -175,8 +175,8 @@ fi
 %{_mandir}/man1/doexec.1.gz
 %{_mandir}/man1/initlog.1.gz
 
-%files -n net-scripts
-%defattr(644,root,root,754)
+#%files -n net-scripts
+#%defattr(644,root,root,754)
 %doc sysconfig/interfaces/ifc*
 %doc sysconfig/interfaces/tun*
 %doc sysconfig/interfaces/data/chat-ppp*
@@ -189,6 +189,9 @@ fi
 %attr(755,root,root) %dir %{_sysconfdir}/sysconfig/interfaces/data
 %attr(755,root,root) %dir %{_sysconfdir}/ppp
 %attr(755,root,root) %{_sysconfdir}/ppp/*
+%attr(755,root,root) %dir %{_sysconfdir}/network-scripts
+%attr(755,root,root) %{_sysconfdir}/network-scripts/if*
+#%attr(755,root,root) %{_sysconfdir}/network-scripts/tnl*
 
 %attr(644,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/network
 %attr(644,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/static-routes
@@ -205,10 +208,10 @@ fi
 %{_mandir}/man1/usernetctl.1.gz
 %{_mandir}/man1/ipcalc.1.gz
 
-%files -n ipchains-setup
-%defattr(644,root,root,754)
-%doc doc/ipchains-setup.txt.gz
-%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/ipchains
+#%files -n ipchains-setup
+#%defattr(644,root,root,754)
+#%doc doc/ipchains-setup.txt.gz
+#%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/ipchains
 #%attr(755,root,root) %dir %{_sysconfdir}/sysconfig/ipchains.d/
 #%attr(755,root,root) %dir %{_sysconfdir}/sysconfig/interfaces/data
 #%attr(750,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/ipchains.d/*
