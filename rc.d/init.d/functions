@@ -425,7 +425,7 @@ run_cmd()
 # A function to start a program (now it's useful on read-only filesystem too)
 daemon()
 {
-	typeset errors="" prog="" limits=""
+	typeset errors="" prog="" limits="" waitname="" waittime=""
 	typeset -i exit_code=0
 	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 	# "-u unlimited" (-p for ksh) to make sure daemons will be able to fork.
@@ -456,8 +456,19 @@ daemon()
          		end='&'
          		shift
          		;;
+		  --waitforname)
+		  	shift
+			waitname="$1"
+			shift
+			;;
+		  --waitfortime)
+		  	shift
+			waittime="$1"
+			shift
+			;;
 		  -*|+*) SERVICE_RUN_NICE_LEVEL=$1
-			shift;;
+			shift
+			;;
 		esac
 	done
 	# If command to execute ends with quotation mark, add remaining
@@ -483,6 +494,17 @@ daemon()
 	busy
 	cd /
 	if errors=$(USER=root HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
+		if [ -n "$waitname" -a -n "$waittime" ]; then
+			# Save basename.
+			base=$(basename "$waitname")
+			# Find pid.
+			pid=$(pidofproc "$waitname" "$pidfile")
+			[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
+			i=0
+			while [ "$i" -lt "$waittime" ]; do
+				checkpid $pid && sleep 1 || break
+			done
+		fi
 		log_success "$1 startup"
 		ok
 	else
@@ -510,6 +532,16 @@ killproc()
 				shift
 				pidfile="$1"
 				shift
+			;;
+			--waitforname)
+                        	shift
+                        	waitname="$1"
+                        	shift
+			;;
+                  	--waitfortime)
+                        	shift
+                        	waittime="$1"
+                        	shift
 			;;
 		esac
 	done
@@ -579,6 +611,13 @@ killproc()
 		died
 		log_failed "$1 shutdown"
 		result=7
+	fi
+	
+	if [ -n "$waitname" -a -n "$waittime" ]; then
+		i=0
+		while [ "$i" -lt "$waittime" ]; do
+			checkpid $pid && sleep 1 || break
+		done
 	fi
 
 	# Remove pid file if any.
