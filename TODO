@@ -1,13 +1,15 @@
-$Id: TODO,v 1.12.2.5 2001/01/13 10:40:36 misiek Exp $
+$Id: TODO,v 1.12.2.6 2001/02/23 21:10:08 misiek Exp $
 
 Features missing:
 - IPSec (freeswan) support
-- NLS with national characters support (soon)
+- NLS with national characters support
 
 Important:
 - don't set any flags automaticly; always follow user
   suggestion (multicast, arp)
 - MTU for ethernet
+- merge baggins changes in atm-rc (added support for RFC1483/2684 Bridged
+  protocol)
 
 Other:
 
