@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.67 2002/05/11 09:50:53 misiek Exp $
+#	$Id: ifup,v 1.68 2002/07/13 16:25:07 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -65,16 +65,6 @@ if [ -x "$OTHERSCRIPT" ]; then
     fi
 fi
 
-# 802.1Q VLANs
-vlan_setup
-if is_yes $ETH_VLANS && echo "$DEVICE" | grep -q '\.' ; then
-	VLANDEVICE=$(echo $DEVICE | awk ' { gsub(/\..*$/,NUL); print $0 } ')
-	VLANNUMBER=$(echo $DEVICE | awk " { gsub(/$VLANDEVICE\./,NUL); print \$0 } ") 
-	/sbin/ip link set $VLANDEVICE up
-	/sbin/vconfig add $VLANDEVICE $VLANNUMBER 2>&1 > /dev/null
-	/sbin/vconfig set_flag $DEVICE 1 2>&1 > /dev/null
-fi
-
 # is this device available? (this catches PCMCIA devices for us)
 if ! (/sbin/ip link set multicast ${MULTICAST} dev ${DEVICE} > /dev/null 2>&1); then
     nls "Delaying %s initialization" ${DEVICE}
@@ -103,6 +93,42 @@ fi
 
 if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
 	run_cmd "Disabling IPv6 autoconfiguration" sysctl -w net.ipv6.conf.${DEVICE}=0
+fi
+
+if is_wireless_device "${DEVICE}"; then
+    [ -z "${WLAN_NICKNAME}" ] && WLAN_NICKNAME="$(hostname -f)"
+
+    # wlan mode needs to be first
+    [ -n "${WLAN_MODE}" ] && iwconfig ${DEVICE} mode ${WLAN_MODE}
+    iwconfig ${DEVICE} nickname ${WLAN_NICKNAME}
+    [ -n "${WLAN_ESSID}" ] && iwconfig ${DEVICE} essid ${WLAN_ESSID}
+    [ -n "${WLAN_NWID}" ] && iwconfig ${DEVICE} nwid ${WLAN_NWID}
+    if [ -n "${WLAN_FREQ}" -a "${WLAN_MODE}" != "Managed" ] ; then
+	iwconfig ${DEVICE} freq ${WLAN_FREQ}
+    elif [ -n "${WLAN_CHANNEL}" -a "${WLAN_MODE}" != "Managed" ]; then
+	iwconfig ${DEVICE} channel ${WLAN_CHANNEL}
+    fi
+    [ -n "${WLAN_SENS}" ] && iwconfig ${DEVICE} sens ${WLAN_SENS}
+    [ -n "${WLAN_AP}" ] && iwconfig ${DEVICE} ap ${WLAN_AP}
+    [ -n "${WLAN_BITRATE}" ] && iwconfig ${DEVICE} rate ${WLAN_BITRATE}
+    [ -n "${WLAN_RTS_THRESHOLD}" ] && iwconfig ${DEVICE} rts ${WLAN_RTS_THRESHOLD}
+    [ -n "${WLAN_FRAGMENTATION_THRESHOLD}" ] && iwconfig ${DEVICE} frag ${WLAN_FRAGMENTATION_THRESHOLD}
+    if [ -n "${WLAN_KEY}" ]; then
+	iwconfig ${DEVICE} key ${WLAN_KEY}
+	[ -n "${WLAN_ENCRYPTION}" ] && iwconfig ${DEVICE} key ${WLAN_ENCRYPTION}
+    fi
+    if is_no "${WLAN_ENCRYPTION}" || [ -z "${WLAN_ENCRYPTIOn}" -o -z "${WLAN_KEY}" ]; then
+	iwconfig ${DEVICE} key off
+    fi
+    [ -n "${WLAN_POWER}" ] && iwconfig ${DEVICE} ${WLAN_POWER}
+    [ -n "${WLAN_TXPOWER}" ] && iwconfig ${DEVICE} ${WLAN_TXPOWER}
+    [ -n "${WLAN_RETRY}" ] && iwconfig ${DEVICE} ${WLAN_RETRY}
+    if is_yes "${WLAN_COMMIT}"; then
+	iwconfig ${DEVICE} commit
+    fi
+    [ -n "${WLAN_NWID}" ] && iwconfig ${DEVICE} nwid ${WLAN_NWID}
+    # essid should be last due to netowork rescanning by wlan devices
+    [ -n "${WLAN_ESSID}" ] && iwconfig ${DEVICE} essid ${WLAN_ESSID}
 fi
 	
 if [ "$HANDLING" = "2" ]; then

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.105 2002/07/06 12:22:56 wojrus Exp $
+# $Id: rc.sysinit,v 1.106 2002/07/13 16:25:04 misiek Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -504,7 +504,7 @@ fi
 # before mount - that's where the password is entered.
 # mount is buggy - when remounting loopback filesystem, loop=XXX
 # option is removed from /etc/mtab
-if grep -q "encryption=" /etc/fstab; then
+if grep -q "^[^#].*encryption=" /etc/fstab; then
 	show "Checking encrypted filesystems"; started
 	LOOPLIST="$(
 	grep "encryption=" /etc/fstab | grep -v 'noauto' | grep -w 'ro' |\

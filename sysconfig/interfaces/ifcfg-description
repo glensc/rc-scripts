@@ -1,4 +1,4 @@
-#	$Id: ifcfg-description,v 1.14 2001/07/21 19:18:46 baggins Exp $
+#	$Id: ifcfg-description,v 1.15 2002/07/13 16:25:06 misiek Exp $
 DEVICE=<name>
 [ BOOTPROTO={none|bootp|dhcp|pump} ]
   You can specify which dhcp client to use with the DHCP_CLIENT, if
@@ -57,6 +57,26 @@ if 	DEVICE=eth* ; then
 
 	[ MEDIA={auto|10baseT|10base2|AUI} ]
 	[ MAC=<hw addres> ]
+
+	if 	DEVICE=wireless interface (man iwconfig(8))
+		WLAN_ESSID=<ESSID or Network Name (Domain ID)>|any|off
+		WLAN_NWID=<Network ID (Domain ID)>|off
+		WLAN_FREQ=<frequency> (2.422G)
+		WLAN_CHANNEL=<channel number> (3)
+		WLAN_SENS=<the sensitivity threshold>
+		WLAN_MODE=ad-hoc|managed|master|repeater|secondary|auto
+		WLAN_AP=<Access Point address>|any|auto|off
+		WLAN_NICKNAME=<station nickname)
+		WLAN_BITRATE=<bitrate like 11M>|auto|fixed
+		WLAN_RTS_THRESHOLD=<rts/cts threshold>|auto|fixed|off
+		WLAN_FRAGMENTATION_THRESHOLD=<frag threshold>|auto|fixed|off
+		WLAN_KEY=XXXX-XXXX-XXXX-XXXX|XXXXXXXX|s:<ascii string>
+		WLAN_ENCRYPTION=on|off|open|restricted
+		WLAN_POWER=period <value>|timeout <value>|on|off|all|unicast|multicast
+		WLAN_TXPOWER=<power in dBm>|<power in mW>mW|auto|on|off
+		WLAN_RETRY=limit <value>|lifetime <value>
+		WLAN_COMMIT=yes|no (some cards require manual commit of changes)
+	fi
 	
 elif	DEVICE=ppp* || DEVICE=sl* ; then
 	
@@ -124,8 +144,13 @@ elif	DEVICE=br* ; then	/* Bridge */
 			          a number between 0 and 255>
 				Note: see note above
 	fi
+elif    DEVICE=irda* ; then     /* IrDA */
+        
+        IRDAPORT=<device, say /dev/ttyS1>
+        DONGLE=<driver, see README.irattach from irda-utils package>
+        DISCOVERY=yes|no (starts discovery of remote IrDA devices)
 fi
-
+				
 # You can also run some other programs *after* uping od downing
 # device. Just create functions run_up() and run_down()
 run_up()

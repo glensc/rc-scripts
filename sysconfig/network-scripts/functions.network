@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.2 2002/05/11 09:50:53 misiek Exp $
+# $Id: functions.network,v 1.3 2002/07/13 16:25:07 misiek Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -172,6 +172,11 @@ if [ -z "$DEVICETYPE" ]; then
 	DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*\.?[0-9]*$/,NUL); print $0 } ')
 fi
 
+# Setup DEVICETYPE for special cases.
+if (echo ${DEVICE} | LC_ALL=C egrep -q '^[a-z0-9]+\.[0-9]+$'); then
+	DEVICETYPE=vlan
+fi
+
 # real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
 DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
@@ -203,7 +208,7 @@ fi
 
 # set handling for bridge
 case "$DEVICETYPE" in
-	br|atm|lec)
+	br|atm|lec|irda|vlan)
 		HANDLING=1
 		;;
 esac
@@ -439,6 +444,15 @@ if [ -f /etc/sysconfig/ip-rules ] ; then
                 done
         fi
 fi
+}
+
+#
+
+is_wireless_device () {
+    if [ -x /sbin/iwconfig ]; then
+	LC_ALL=C iwconfig "${1}" 2>&1 | grep -q "no wireless extensions" || return 0
+    fi
+    return 1
 }
 
 # This must be last line !

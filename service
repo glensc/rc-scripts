@@ -15,8 +15,8 @@ if [ $# -eq 0 ]; then
    exit 1
 fi
 
-while [ $# -gt 0 ]
-do
+cd /
+while [ $# -gt 0 ]; do
   case "${1}" in
     --help | -h | --h* )
        echo $"${USAGE}" >&2
@@ -28,15 +28,15 @@ do
        ;;
     *)
        if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
-          cd "${SERVICEDIR}"
-          for SERVICE in *; do
+          cd /
+          for SERVICE in * ; do
             case "${SERVICE}" in
               functions | halt | killall | single| linuxconf| kudzu | \
                   *rpmorig | *rpmnew | *rpmsave | *~ | *.orig)
                   ;;
               *)
                 if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-                  "${SERVICEDIR}/${SERVICE}" status
+                  env -i LANG=$LANG "${SERVICEDIR}/${SERVICE}" status
                 fi
                 ;;
             esac
@@ -44,10 +44,10 @@ do
           exit 0
        elif [ $# -eq 2 -a "${2}" = "--full-restart" ]; then
           SERVICE="${1}"
-          cd "${SERVICEDIR}"
+          cd /
           if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-            "${SERVICEDIR}/${SERVICE}" stop
-            "${SERVICEDIR}/${SERVICE}" start
+            env -i LANG=$LANG "${SERVICEDIR}/${SERVICE}" stop
+            env -i LANG=$LANG "${SERVICEDIR}/${SERVICE}" start
             exit $?
           fi
        elif [ -z "${SERVICE}" ]; then
@@ -61,8 +61,8 @@ do
 done
 
 if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-   "${SERVICEDIR}/${SERVICE}" ${OPTIONS}
+   env -i LANG=$LANG "${SERVICEDIR}/${SERVICE}" ${OPTIONS}
 else
-   echo "${SERVICE}: unrecognized service" >&2
+   echo $"${SERVICE}: unrecognized service" >&2
    exit 1
 fi
