@@ -267,7 +267,7 @@ rm -f /etc/mtab~ /etc/mtab~~
 mount -f /
 mount -f /proc
 if grep -q sysfs /proc/filesystems ; then
-    	mount -f -t sysfs sysfs /sys
+    	mount -f /sys
 fi
 if is_yes "$MOUNT_DEVFS"; then
 	mount -f -t devfs devfs /dev
@@ -341,7 +341,7 @@ if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "usb" /proc/devices
 	aliases=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+usb-controller" | awk '{ print $3 }')
 	if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 		/sbin/modprobe -k usbcore
-		if ! grep -qE "(usbdevfs|usbfs)" /etc/mtab && [ ! -f /proc/bus/usb/devices ]; then
+		if [ ! -e /proc/bus/usb/devices ]; then
 			run_cmd "Mounting USB filesystem" mount /proc/bus/usb
 		fi
 		for alias in $aliases ; do 
