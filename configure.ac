@@ -67,8 +67,18 @@ fi
 
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 GLIBDIR=none
-AC_MSG_CHECKING([glib dir])
-GLIBDIR="`$PKG_CONFIG --variable=libdir glib`"
+AC_MSG_CHECKING([glib2 dir])
+GLIBDIR="`$PKG_CONFIG --variable=libdir glib-2.0`"
+GLIBNAME="libglib-2.0.a"
+if test "x$GLIBDIR" = "x"; then
+    AC_MSG_RESULT([none])
+    AC_MSG_CHECKING([glib dir])
+    GLIBDIR="`$PKG_CONFIG --variable=libdir glib`"
+    GLIBNAME="libglib.a"
+fi
+if test "x$GLIBDIR" = "x"; then
+    GLIBDIR=/usr/lib
+fi
 AC_MSG_RESULT([$GLIBDIR])
 
 dnl Output
@@ -87,6 +97,7 @@ AC_SUBST(downdir)
 AC_SUBST(rcdir)
 AC_SUBST(docdir)
 AC_SUBST(GLIBDIR)
+AC_SUBST(GLIBNAME)
 
 AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile \
 	ppp/Makefile \
