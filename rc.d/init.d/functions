@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.52 2000/06/02 14:36:39 mkochano Exp $
+# $Id: functions,v 1.53 2000/06/02 14:47:49 mkochano Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -159,16 +159,19 @@ ok()
 started()
 {
 	progress "WORK"
+	echo
 }
 
 fail() 
 {
 	progress "FAIL" 1
+	echo
 }
 
 died() 
 {
 	progress "DIED" 1
+	echo
 }
 
 deltext() 
