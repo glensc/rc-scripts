@@ -1,0 +1,79 @@
+#!/bin/sh
+#
+#    ifdown-irda - IrDA configuration script
+#    Copyright (C) 2001  Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#    $Id: ifdown-irda,v 1.1.2.1 2001/09/30 10:19:42 misiek Exp $
+#
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+cd /etc/sysconfig/network-scripts
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/functions.network
+
+CONFIG=$1
+source_config
+
+if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
+	exit
+fi
+
+. /etc/sysconfig/network
+
+# set all major variables
+setup_ip_param
+
+ip link set ${DEVICE} down
+ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+
+PID=$(pidof irattach)
+for x in $PID; do
+    if grep -q "$MODEMPORT" /proc/$x/cmdline; then
+	logger -p daemon.info -t ifdown-sl "signal TERM send to \"$(ps -o cmd=$x)\" - this should be irattach"
+	kill -TERM $x
+	PID=$x
+    fi
+done
+					    
+if [ -z "$PID" ]; then
+      exit 1
+fi
+
+kill $PID > /dev/null 2>&1
+if [ ! -d /proc/$PID ]; then
+    /etc/sysconfig/network-scripts/ifdown-post $1
+    exit 0
+fi
+sleep 2
+if [ ! -d /proc/$PID ]; then
+    /etc/sysconfig/network-scripts/ifdown-post $1
+    exit 0
+fi
+
+kill -KILL $PID > /dev/null 2>&1
+if [ -d /proc/$PID ]; then
+    logger -p daemon.info -t ifdown-irda "$(nls 'ifdown-%s unable to kill %s for %s' "irda" "irattach" "$DEVICE")" &
+else
+    /etc/sysconfig/network-scripts/ifdown-post $1
+fi
+
+exit 1
+	    
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
+

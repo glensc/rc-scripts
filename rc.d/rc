@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.25.2.2 2001/05/13 17:47:45 misiek Exp $
+# $Id: rc,v 1.25.2.3 2001/09/30 10:19:36 misiek Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -175,17 +175,22 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 fi
 
 # if runlevel is 0 (halt) or 6 (reboot) run rc.shutdown
-if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
-	/etc/rc.d/rc.shutdown
-	if [ "$runlevel" = "0" ] ; then
-        	show "The system is halted"; ok
-		[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
-		eval halt -d -p
-	else
-		show "Please stand by while rebooting the system"; ok
-		[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
-		eval reboot -d
-	fi
+if [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
+	unset LC_ALL
+	unset LANG
+	unset LC_CTYPE
+	unset LC_NUMERIC
+	unset LC_TIME
+	unset LC_COLLATE
+	unset LC_MONETARY
+	unset LC_MESSAGES
+	unset LC_PAPER
+	unset LC_NAME
+	unset LC_ADDRESS
+	unset LC_TELEPHONE
+	unset LC_MEASUREMENT
+	unset LC_IDENTIFICATION
+	exec /etc/rc.d/rc.shutdown ${runlevel}
 else
 	if is_yes "$RUN_LDCONFIG" || [ ! -f /etc/ld.so.cache ] ; then
 		if [ -x /sbin/ldconfig ]; then

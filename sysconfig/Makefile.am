@@ -1,11 +1,12 @@
 @SET_MAKE@
 
-SUBDIRS = network-scripts interfaces
+SUBDIRS = network-scripts interfaces hwprofiles
 
 sysconfigdir = @sysconfigdir@
 
 sysconfig_DATA = \
 	clock \
+	hwprof \
 	system \
 	network \
 	static-routes \

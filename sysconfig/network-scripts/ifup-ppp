@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.13.2.4 2001/05/13 17:47:46 misiek Exp $
+#	$Id: ifup-ppp,v 1.13.2.5 2001/09/30 10:19:42 misiek Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -14,41 +14,79 @@
 #    You only have to add it's name into DATAFORCHAT variable
 #    Note, that chat-ppp file is now parsed by shell, so you have to escape
 #    with "\" all shell special characters like \$;:)(& etc.
- 
+
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 # ifup-post for PPP is handled through /etc/ppp/ip-up
 
-CONFIG=$1
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
+CONFIG=$1
 source_config
-
 # set all major variables
 setup_ip_param
-
-[ -z "$HOLDOFF" ] && HOLDOFF=30
 
 if [ "$2" = "boot" ] && is_no "${ONBOOT}"; then
   exit
 fi
-[ -x /usr/sbin/pppd ] || {
+if [ ! -x /usr/sbin/pppd ]; then
   nls "/usr/sbin/pppd does not exist or is not executable"
   nls "ifup-ppp for %s exiting" "$DEVICE"
     logger -p daemon.info -t ifup-ppp \
     "$(nls '/usr/sbin/pppd does not exist or is not executable for %s' "$DEVICE")"
   exit 1
-}
+fi
 
 # modprobe ppp in case of kernel with devfs
 # (/dev/ppp is missing and ppp fails without this) --misiek
-if [ -c /dev/.devfsd ]; then
-	modprobe -s -k char-major-108
-fi
+[ -c /dev/.devfsd ] && modprobe -s -k char-major-108
 
 opts="lock"
+
+if [ -z "${REPORTFILE}"  ] ; then
+    REPORTFILE=/dev/null
+fi
+
+if is_no "${DIRECT_CONNECT}" || [ -z "${DIRECT_CONNECT}" ]; then
+    
+    PEERCONF=/etc/ppp/peers/${DEVNAME}
+    
+    if [ ! -f ${PEERCONF} ]; then
+	if [ -z "${WVDIALSECT}" ]; then
+	    # XXX: REPORTFILE support is problematic here --misiek
+	    [ -f "${CHATSCRIPT}" ] || CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-${PARENTDEVNAME}
+	    if [ ! -f "${CHATSCRIPT}" ]; then
+		nls '/etc/sysconfig/network-scripts/chat-%s does not exist' "${DEVNAME}"
+		nls 'ifup-ppp for %s exiting' "${DEVNAME}"
+		logger -p daemon.info -t ifup-ppp \
+		"$(nls '/etc/sysconfig/network-scripts/chat-%s does not exist for %s' "${DEVNAME}" "${DEVICE}")"
+		exit 1
+	    fi
+	fi
+	logger -s -p daemon.notice -t ifup-ppp "$(nls 'Setting up a new %s config file' "${PEERCONF}")"
+	if [ -f /etc/ppp/peers/${DEVICE} ]; then
+	    cp -f /etc/ppp/peers/${DEVICE} ${PEERCONF}
+	else
+	    touch ${PEERCONF}
+	fi
+	if [ "${WVDIALSECT}" ]; then
+	    echo "connect \"/usr/bin/wvdial --chat ${WVDIALSECT} >> ${REPORTFILE} 2>&1 \"" >> ${PEERCONF}
+	else
+	    if is_yes "${DEBUG}"; then
+		chatdbg="-v"
+	    fi
+	    echo "connect \"/usr/sbin/chat $chatdbg -f ${CHATSCRIPT} -r ${REPORTFILE} ${chatdbg}\"" >> ${PEERCONF}
+	fi
+    fi
+
+    opts="$opts call ${DEVNAME}"
+fi
+
+if [ -z "$HOLDOFF" ]; then
+  HOLDOFF=30
+fi
 if is_yes "${PERSIST}"; then
   if [ -z "${MAXFAIL}" ]; then 
   MAXFAIL="0"
@@ -59,23 +97,26 @@ if is_yes "${DEMAND}"; then
   if [ -z "${IDLE}" ]; then
   IDLE="0"
   fi
-  opts="$opts demand idle ${IDLE}"
+  opts="$opts demand ktune idle ${IDLE}"
 fi
-if is_yes "${HARDFLOWCTL}"; then
-  opts="$opts modem crtscts"
+if ! is_no "${HARDFLOWCTL}"; then
+  opts="$opts crtscts"
+fi
+if is_yes "${MODEMCTL}"; then
+    opts="$opts modem"
 fi
 if is_yes "${ESCAPECHARS}"; then
   opts="$opts asyncmap FFFFFFFF"
-elif [ "${ESCAPECHARS}" = no ] ; then
+else
   opts="$opts asyncmap 00000000"
 fi
-if is_yes "${DEFROUTE}" = yes; then
+if ! is_no "${DEFROUTE}"; then
   # pppd will no longer delete an existing default route
   # so we have to help it out a little here.
   ip route del 0/0 > /dev/null 2>&1
   opts="$opts defaultroute"
 fi
-if is_yes "${PEERDNS}"; then
+if ! is_no "${PEERDNS}"; then
   opts="$opts usepeerdns"
 fi
 if [ -n "${MRU}" ] ; then
@@ -88,7 +129,8 @@ if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}${REMIP}" ] ; then
   # if either IP address is set, the following will work.
   opts="$opts ${IP4ADDR}:${REMIP}"
 fi
-if is_yes "$IPV6_NETWORKING" && is_yes "$IPV6_PPP"; then
+if is_yes "$IPV6_NETWORKING"; then
+ if is_yes "$IPV6_PPP"; then
 	if [ -n "${IP6ADDR}${REMIP6}" ] ; then
 	  opts="$opts ipv6 ${IP6ADDR},${REMIP6}"
 	elif is_yes "$IPV6_CP_USEV4"; then
@@ -96,50 +138,46 @@ if is_yes "$IPV6_NETWORKING" && is_yes "$IPV6_PPP"; then
 	elif is_yes "$IPV6_CP_PERSISTENT"; then
 	  opts="$opts ipv6cp-use-persistent"
 	fi
-else
-	opts="$opts noipv6"
+ elif is_no "$IPV6_PPP"; then
+    opts="$opts noipv6"
+ fi
+elif is_no "$IPV6_NETWORKING"; then
+    opts="$opts noipv6"
+fi
+if is_yes "${IPX_PPP}"; then
+    opts="$opts ipx"
+    if [ -n "${IPX_PPP_NETWORK}" ]; then
+	opts="$opts ipx-network ${IPX_PPP_NETWORK}"
+    fi
+    if [ -n "${IPX_PPP_NODE}" ]; then
+	opts="$opts ipx-node ${IPX_PPP_NODE}"
+    fi
+    if [ -n "${IPX_PPP_ROUTING}" ]; then
+	opts="$opts ipx-routing ${IPX_PPP_ROUTING}"
+    fi
 fi
 if [ -n "${PAPNAME}" ] ; then
-  opts="$opts name ${PAPNAME}"
+  opts="$opts user ${PAPNAME}"
 fi
 if [ -n "${REMOTENAME}" ] ; then
   opts="$opts remotename ${REMOTENAME}"
 fi
 if is_yes "${DEBUG}"; then
   opts="$opts debug"
-  chatdbg="-v"
 fi
-case "${AUTH}" in
-  yes) opts="$opts auth"
-  ;;
-  no) opts="$opts noauth"
-  ;;
-  *)
-  ;;
-esac
-if [ -n "${REPORTFILE}"  ] ; then
-  chatrpt="-r ${REPORTFILE}"
+if is_yes "${AUTH}"; then
+  opts="$opts auth"
+elif is_no "${AUTH}"; then
+  opts="$opts noauth"
 fi
 
 (logger -p daemon.info -t ifup-ppp \
-    "pppd started for $DEVICE on $MODEMPORT at $LINESPEED" &)&
-if [ -n "${CHATSCRIPT}"  ] ; then
-  export chatdbg chatrpt CHATSCRIPT
-  if [ -n "${DATAFORCHAT" ]; then
-  	export $DATAFORCHAT
-  fi
-  /usr/sbin/pppd $opts $MODEMPORT $LINESPEED \
-    connect 'eval /usr/sbin/chat -E $chatdbg $chatrpt \
-    $(grep -v ^# ${CHATSCRIPT})' \
-    linkname "${DEVICE}" ipparam "${CONFIG}" \
-    ${PPPOPTIONS}
-else
-  /usr/sbin/pppd $opts $MODEMPORT $LINESPEED \
-    linkname "${DEVICE}" ipparam "${CONFIG}" \
-    ${PPPOPTIONS}
-fi
+    $(nls 'pppd started for %s on %s at %s' "$DEVICE" "$MODEMPORT" "$LINESPEED") &)&
 
-
+/usr/sbin/pppd $opts ${MODEMPORT} ${LINESPEED} \
+	ipparam ${DEVNAME} linkname ${DEVNAME} \
+	${PPPOPTIONS}
+	
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4
 

@@ -1,0 +1,7 @@
+#	$Id: ifcfg-irlan0,v 1.1.2.1 2001/09/30 10:19:41 misiek Exp $
+#	alias irlan0 irlan
+DEVICE=irlan0
+BOOTMETHOD=dhcp
+ONBOOT=yes
+
+

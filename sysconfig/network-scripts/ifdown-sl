@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifdown-sl,v 1.10.2.1 2000/10/18 20:10:55 misiek Exp $
+#	$Id: ifdown-sl,v 1.10.2.2 2001/09/30 10:19:42 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 CONFIG=$1
 source_config
@@ -55,7 +55,7 @@ fi
 
 kill -KILL $PID > /dev/null 2>&1
 if [ -d /proc/$PID ]; then
-  logger -p daemon.info -t ifdown-sl "ifdown-sl unable to kill sl-$DEVICE" &
+  logger -p daemon.info -t ifdown-sl "$(nls 'ifdown-%s unable to kill %s for %s' "sl" "slattach" "$DEVICE")" &
 else
   /etc/sysconfig/network-scripts/ifdown-post $1
 fi

@@ -17,12 +17,12 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: tnlup,v 1.19.2.3 2000/11/05 14:01:24 misiek Exp $
+#    $Id: tnlup,v 1.19.2.4 2001/09/30 10:19:42 misiek Exp $
 #
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 DEV=$1
 

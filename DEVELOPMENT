@@ -1,6 +1,6 @@
 	   READ THIS BEFORE CHANGEING SOMETHING IN RC-SCRIPTS PACKAGE
 		    Arkadiusz Miskiewicz <misiek@pld.org.pl>
-	    $Id: DEVELOPMENT,v 1.1.2.2 2001/06/09 08:46:32 misiek Exp $
+	    $Id: DEVELOPMENT,v 1.1.2.3 2001/09/30 10:19:34 misiek Exp $
 
 1)
 	consult all major changes with people on pld-rc-scripts@pld.org.pl
@@ -38,3 +38,6 @@ uruchamianie uslugi
 zamiast
 uruchamiam usluge
 
+6)	ChangeLog entry in TOTALNEW branch IS NO LONGER AUTOMATICLY
+	GENERATED, so you need to prepare valid ChangeLog entry yourself
+	or send it in mail together with patch.

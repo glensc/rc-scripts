@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-post,v 1.10.2.1 2000/10/18 20:10:55 misiek Exp $
+#	$Id: ifdown-post,v 1.10.2.2 2001/09/30 10:19:42 misiek Exp $
 #
 # This should be called whenever an interface goes down, not just when
 # it is brought down explicitly.
@@ -8,7 +8,7 @@
 CONFIG=$1
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 source_config
 

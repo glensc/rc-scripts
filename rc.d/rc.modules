@@ -4,7 +4,7 @@
 #	Arkadiusz Miskiewicz <misiek@pld.org.pl>
 #
 # rc.modules: launch modules specified in /etc/modules
-# $Id: rc.modules,v 1.1.2.1 2000/10/18 20:10:49 misiek Exp $
+# $Id: rc.modules,v 1.1.2.2 2001/09/30 10:19:36 misiek Exp $
 
 [ -f /etc/modules ] || exit 0
 
@@ -15,6 +15,6 @@
 while read module args
 do
   [ -z "$module" ] && continue
-  _modprobe single -k $module
+  _modprobe single --opt "$args" $module
 done
 

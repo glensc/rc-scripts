@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifdown-ppp,v 1.9.2.1 2000/10/18 20:10:55 misiek Exp $
+#	$Id: ifdown-ppp,v 1.9.2.2 2001/09/30 10:19:42 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 CONFIG=$1
 source_config
@@ -18,38 +18,34 @@ fi
 
 # set all major variables
 setup_ip_param
-
 get_ppp_device_and_pid
 
 if [ -z "$PID" ]; then
-  exit 1
+    exit 1
 fi
 
 rm -f /var/run/ppp-$DEVICE.pid
 
-# pppd might have chat as a child; remember chat's pid to kill after pppd.
-# (After, not before, so that pppd doesn't just restart it).
+[ ! -d /proc/${PID} ] && exit 0
 
-CHATPID=$(ps axl | awk '$4 ~ /^'"$PID"'$/ {print $3}' 2>/dev/null)
+kill -TERM ${PID} > /dev/null 2>&1
 
-kill $PID > /dev/null 2>&1
-[ -n "$CHATPID" ] && kill $CHATPID > /dev/null 2>&1
-if [ ! -d /proc/$PID ]; then
-  /etc/sysconfig/network-scripts/ifdown-post $1
-  exit 0
-fi
 sleep 2
-if [ ! -d /proc/$PID ]; then
-  /etc/sysconfig/network-scripts/ifdown-post $1
-  exit 0
+if [ ! -d /proc/${PID} ]; then
+    /etc/sysconfig/network-scripts/ifdown-post $1
+    exit 0
 fi
 
-kill -KILL $PID > /dev/null 2>&1
-if [ -d /proc/$PID ]; then
-  logger -p daemon.info -t ifdown-ppp "ifdown-ppp unable to kill pppd-$DEVICE" &
-else
-  /etc/sysconfig/network-scripts/ifdown-post $1
+sleep 2
+[ -d /proc/${PID} ] && sleep 5
+
+if [ ! -d /proc/${PID} ]; then
+    /etc/sysconfig/network-scripts/ifdown-post $1
+    exit 0
 fi
+
+kill -KILL ${PID} > /dev/null 2>&1
+logger -p daemon.info -t ifdown-ppp "ifdown-ppp unable to nicely kill pppd-$DEVICE" &
 
 exit 1
 

@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.24.2.5 2001/06/09 08:42:57 misiek Exp $
+#	$Id: ifdown,v 1.24.2.6 2001/09/30 10:19:42 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 DEV=$1
 
@@ -46,6 +46,10 @@ if [ -x $OTHERSCRIPT ]; then
     	exec $OTHERSCRIPT $CONFIG $2
     elif [ "$HANDLING" = "1" ]; then
     	$OTHERSCRIPT $CONFIG $2
+	RESULT=$?
+	if [ ${RESULT} -ne 0 ]; then
+	    exit 1
+        fi
     fi
 fi
 
@@ -81,13 +85,20 @@ if [ "$BOOTMETHOD" = "dhcp" ]; then
         /sbin/dhcpxd -k ${DEVICE}
 	RESULT=$?
     elif [ -x /sbin/pump ];then
-        pump -r -i ${DEVICE}
+        /sbin/pump -r -i ${DEVICE}
 	RESULT=$?
     fi
 fi
 
 ip link set ${DEVICE} down
 ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+
+# wait up to 5 seconds for device to actually come down...
+waited=0
+while ! check_device_down && [ "$waited" -lt 50 ] ; do
+    usleep 10000
+    waited=$(( ${waited} + 1 ))
+done                
 
 if [ "$HANDLING" = "4" ]; then
     exit 0
@@ -97,7 +108,12 @@ if [ "$RESULT" != "0" ]; then
 	return $RESULT
 fi
 
-exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
+# don't leave an outdated key sitting around
+if [ -n "${WIRELESS_ENC_KEY}" -a -x /sbin/iwconfig ]; then
+    /sbin/iwconfig ${DEVICE} enc 0 > /dev/null 2>&1
+fi
+    
+exec /etc/sysconfig/network-scripts/ifdown-post ${CONFIG}
 
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4

@@ -1,0 +1,13 @@
+# $Id: ifcfg-eth0,v 1.3.2.1 2001/09/30 10:19:41 misiek Exp $
+DEVICE=eth0
+#BOOTMETHOD=dhcp
+#DHCP_OPTIONS="-H -R"
+#MACADDR="00:e0:7d:8a:4c:84"
+IP_1_ADDR=192.168.0.1/32
+IP_2_ADDR=3ffe:aaa:bbb:ccc::/128
+IP_3_ADDR=3ffe:bbb:ccc:ddd::/64
+IP_4_ADDR=10.0.0.1/24
+IP4_PRIM_NR=4
+MUTLICAST=no
+ONBOOT=yes
+

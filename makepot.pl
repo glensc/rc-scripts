@@ -5,11 +5,13 @@
 #
 # Copyright (c) 1999 Free Software Fundation, Inc.
 # Artur Frysiak <wiget@pld.org.pl>
-# $Id: makepot.pl,v 1.4.2.1 2000/10/18 20:10:45 misiek Exp $
+# $Id: makepot.pl,v 1.4.2.2 2001/09/30 10:19:34 misiek Exp $
 # Changes:
-# 2000-08-25 Arkadiusz Miskiewicz <misiek@pld.org.pl>
-# - support for $(nls "xyz"), progress "xyz" and '' instead of "".
-# 
+# $Log: makepot.pl,v $
+# Revision 1.4.2.2  2001/09/30 10:19:34  misiek
+# - merge my private tree
+#
+#
 
 my %pot;
 
@@ -39,7 +41,7 @@ msgstr \"\"
 \"Last-Translator: FULL NAME <EMAIL\@ADDRESS>\\n\"
 \"Language-Team: LANGUAGE <LL\@li.org>\\n\"
 \"MIME-Version: 1.0\\n\"
-\"Content-Type: text/plain; charset=iso8859-2\\n\"
+\"Content-Type: text/plain; charset=ISO-8859-2\\n\"
 \"Content-Transfer-Encoding: 8bit\\n\"
 
 # Translation of words: \"DONE\", \"WORK\", \"BUSY\", \"FAIL\", \"DIED\"
@@ -59,7 +61,7 @@ for (my $a = 0; $a <= $#ARGV; $a++) {
 	open (POTSRC, "< " . $filename) || die "Can't open " . $filename;
 	foreach (<POTSRC>) {
 		chop;
-		if ((/(run_cmd|nls|show|progress)\s[\sa-zA-Z0-9-]*"(?!(\`|\$\()nls\s\")([^"]*)"/g) or (/(run_cmd|nls|show|progress)\s[\sa-zA-Z0-9-]*'(?!(\`|\$\()nls\s\")([^"]*)'/g)) {
+		if ((/(run_cmd|nls|show|progress)\s[\sa-zA-Z0-9-]*"(?!(\`|\$\()nls\s[\"\'])([^"]*)"/g) or (/(run_cmd|nls|show|progress)\s[\sa-zA-Z0-9-]*'(?!(\`|\$\()nls\s[\"\'])([^"]*)'/g)) {
 #			potentry($1,$lnr,$filename) if defined $1;
 			potentry($2,$lnr,$filename) if defined $2;
 			potentry($3,$lnr,$filename) if defined $3;

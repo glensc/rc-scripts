@@ -11,21 +11,29 @@ sbin_SCRIPTS = \
 networkscriptsdir = @networkscriptsdir@
 
 networkscripts_SCRIPTS = \
+	functions.network \
+	ifdown-atm \
 	ifdown-br \
+	ifdown-irda \
 	ifdown-lec \
-	ifdown-ppp \
 	ifdown-post \
+	ifdown-ppp \
 	ifdown-sl \
+	ifdown-vlan \
 	ifup-aliases \
 	ifup-atm \
 	ifup-br \
 	ifup-ipx \
+	ifup-irda \
+	ifup-iucv \
 	ifup-lec \
 	ifup-plip \
+	ifup-plusb \
 	ifup-post \
 	ifup-ppp \
 	ifup-routes \
-	ifup-sl 
+	ifup-sl \
+	ifup-vlan
 
 #SUBDIRS = data
 

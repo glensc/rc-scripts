@@ -1,22 +1,13 @@
-$Id: TODO,v 1.12.2.7 2001/03/19 13:29:24 dobrek Exp $
+$Id: TODO,v 1.12.2.8 2001/09/30 10:19:34 misiek Exp $
 
-Features missing:
 - IPSec (freeswan) support
 - NLS with national characters support
-
-Important:
-- don't set any flags automaticly; always follow user
-  suggestion (multicast, arp)
-- MTU for ethernet
 - merge baggins changes in atm-rc (added support for RFC1483/2684 Bridged
   protocol)
-
-Not realy important but mayby nice:
-- Add checing for preveliges during restarting 
-  and if thay are not enought say fuck off in a 
-  nice way.
-
-  
-Other:
+- add checing for preveliges during restarting and if thay are not enought
+  say fuck off in a nice way
+- rewrite/new _modprobe()
+- make v4mapped optional per interface
+- add 6to4 support
 
 We are waiting for suggestions.

@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifup-aliases,v 1.10.2.1 2000/10/18 20:10:55 misiek Exp $
+#	$Id: ifup-aliases,v 1.10.2.2 2001/09/30 10:19:42 misiek Exp $
 #
 # adds all addresses of device $1
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 # device name must be ifcfg-somename
 DEV=$1
@@ -34,11 +34,9 @@ for nr in $(awk 'BEGIN { for (j=1; j<256; j++) print j}'); do
 	eval IP_ROUTE_OPT="\$IP_${nr}_ROPTS"
 	
 	[ -z "$IP_ADDR" ] && continue
-	# Be sure that primary address is added
-	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
-		if (ip addr show dev $DEVICE | egrep -q "[[:space:]]${IP_ADDR}[[:space:]]"); then
-			continue
-		fi
+	# If address is already on place then skip it
+	if (ip addr show dev $DEVICE | egrep -q "[[:space:]]${IP_ADDR}([[:space:]]|/[[:digit:]])"); then
+		continue
 	fi
 	# Check for IPv6 address
 	if (echo $IP_ADDR | grep -q ":"); then

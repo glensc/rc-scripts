@@ -9,6 +9,8 @@
 #include <sys/poll.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 
 #include <popt.h>
 
@@ -280,3 +282,16 @@ int runCommand(char *cmd, int reexec, int quiet, int debug) {
     }
     return x;
 }
+
+void setupCustomLimits(void) {
+  int i;
+  struct rlimit rlim;
+  
+  for (i=0; i< RLIM_NLIMITS; i++) {
+    rlim.rlim_max = rlim.rlim_cur = RLIM_INFINITY;
+    setrlimit(i, &rlim);
+  }
+  rlim.rlim_max = rlim.rlim_cur = 0;
+  setrlimit(RLIMIT_CORE, &rlim);
+}
+

@@ -19,12 +19,12 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: ifdown-atm,v 1.1.2.1 2000/11/04 01:15:08 baggins Exp $
+#    $Id: ifdown-atm,v 1.1.2.2 2001/09/30 10:19:42 misiek Exp $
 #
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 DEV=$1
 

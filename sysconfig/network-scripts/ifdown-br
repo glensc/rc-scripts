@@ -17,14 +17,14 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: ifdown-br,v 1.1.2.1 2000/10/18 20:10:55 misiek Exp $
+#    $Id: ifdown-br,v 1.1.2.2 2001/09/30 10:19:42 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 cd /etc/sysconfig/network-scripts
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 CONFIG=$1
 source_config

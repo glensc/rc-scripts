@@ -428,6 +428,7 @@ int processArgs(int argc, char **argv, int silent) {
     } else if (logstring) {
 	logString(cmdname,logstring);
     } else if ( cmd && *cmd) {
+        setupCustomLimits();
 	return(runCommand(cmd,reexec,quiet,debug));
     } else {
         if (!silent)

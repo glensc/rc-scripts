@@ -1,0 +1,5 @@
+# Hardware Profiles configuration
+
+# Enable HWPROFILES support?
+HWPROFILES=no
+

@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.42.2.10 2001/06/09 12:24:24 misiek Exp $
+#	$Id: ifup,v 1.42.2.11 2001/09/30 10:19:42 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network-scripts/functions.network
 
 need_hostname
 
@@ -50,6 +50,10 @@ if [ -x "$OTHERSCRIPT" ]; then
     	exec $OTHERSCRIPT $CONFIG $2
     elif [ "$HANDLING" = "1" ]; then
         $OTHERSCRIPT $CONFIG $2
+	RESULT=$?
+	if [ ${RESULT} -ne 0 ]; then
+	    exit 1
+	fi
     fi
 fi
 

@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.54.2.7 2001/05/31 14:28:42 misiek Exp $
+# $Id: functions,v 1.54.2.8 2001/09/30 10:19:38 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -47,13 +47,7 @@ termput()
 		tput longname > /dev/null 2>&1 /dev/null || return
 
 	        case "$1" in
-		  hpa)
-		  	tput "$@"
-			;;
-		  cuu*)
-		  	tput "$@"
-			;;
-		  el)
+		  hpa | cuu* | el)
 		  	tput "$@"
 			;;
 		  setaf)
@@ -113,8 +107,8 @@ nls()
 		return
 	fi
 			
-	if [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
-		text=$(TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="${NLS_DOMAIN:-rc-scripts}" "$message")
+	if [ -x /bin/gettext ]; then
+		text=$(TEXTDOMAINDIR="/etc/sysconfig/locale" /bin/gettext -e --domain="${NLS_DOMAIN:-rc-scripts}" "$message")
 		printf_ "$text" "$@"
 	else
 		printf_ "$message" "$@"
@@ -349,19 +343,19 @@ killproc()
 			if ps h $pid >/dev/null 2>&1; then
 				if (kill $killlevel $pid); then
 				   ok
-				   log_success "$1 shutdown"
+				   log_success "$1 shutdown/reload (signal $killlevel)"
 				else
 				   fail
-				   log_failed "$1 shutdown"
+				   log_failed "$1 shutdown/reload (signal $killlevel)"
 				fi
 			else
 				died
-				log_failed "$1 shutdown"
+				log_failed "$1 shutdown/reload (signal $killlevel)"
 			fi
 		fi
 	else
 		died
-		log_failed "$1 shutdown"
+		log_failed "$1 shutdown/reload (signal $killlevel)"
 	fi
 
         # Remove pid file if any.
@@ -399,10 +393,18 @@ pidofproc()
 
 status() 
 {
+	typeset subsys
+
 	# Test syntax.
 	if [ $# = 0 ] ; then
-		msg_usage " status {program}"
+		msg_usage " status {program} [init.d script name]"
 		return 1
+	fi
+
+	if [ -n "$2" ]; then
+		subsys="$2"
+	else
+		subsys="$1"
 	fi
 
 	# First try "pidof"
@@ -420,8 +422,8 @@ status()
 	                return 1
 	        fi
 	fi
-	# See if /var/lock/subsys/$1 exists
-	if [ -f /var/lock/subsys/$1 ]; then
+	# See if /var/lock/subsys/$subsys exists
+	if [ -f /var/lock/subsys/$subsys ]; then
 		nls "%s dead but subsys locked" "$1"
 		return 2
 	fi
@@ -507,7 +509,7 @@ is_module()
 
 _modprobe()
 {
-	typeset parsed single die args foo result
+	typeset parsed single die args opt foo result
 	parsed=no
 	while is_no "$parsed" ; do
 		case "$1" in
@@ -517,6 +519,11 @@ _modprobe()
 				;;
 			"die")
 				die=yes
+				shift
+				;;
+			"--opt")
+				opt="$opt $1"
+				shift
 				shift
 				;;
 			-*)
@@ -534,7 +541,7 @@ _modprobe()
 		busy
 	fi
 	if [ -x /sbin/modprobe ] ; then
-		/sbin/modprobe -s $args "$@"
+		/sbin/modprobe -s $args "$@" "$opt"
 		result=$?
 	else
 		deltext ; fail

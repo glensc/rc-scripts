@@ -1,4 +1,4 @@
-# $Id: network,v 1.8.2.1 2000/10/18 20:10:51 misiek Exp $
+# $Id: network,v 1.8.2.2 2001/09/30 10:19:40 misiek Exp $
 ######################################################################
 # MAIN PART
 
@@ -45,6 +45,9 @@ GATEWAY6DEV=
 IPV6_GLOBALROUTEGW=
 IPV6_GLOBALROUTEDEV=
 
+# Do you need VLAN networks?
+VLAN_NETWORKING=yes
+
 # Reading configuration from LDAP
 
 # Do you want to use LDAP?
@@ -55,8 +58,11 @@ LDAP_BASE_DN=
 
 # Other
 
-# Do you want set static arp table (based on /etc/ethers config file) ?
+# Do you want set static ARP table (based on /etc/ethers config file) ?
 STATIC_ARP=no
+
+# Do you want set static RARP table (based on /etc/ethers config file) ?
+STATIC_RARP=no
 
 # Specify interface on which you want to enable tleds software
 # (also you need tleds package installed) -- default set to no

@@ -5,5 +5,6 @@
 #define CMD_FD	21
 
 int runCommand(char *cmd, int reexec, int quiet, int debug);
+void setupCustomLimits(void);
 
 #endif

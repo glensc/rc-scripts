@@ -1,4 +1,4 @@
-# $Id: system,v 1.17.2.1 2000/10/18 20:10:51 misiek Exp $
+# $Id: system,v 1.17.2.2 2001/09/30 10:19:40 misiek Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -17,8 +17,10 @@ RUN_SULOGIN_ON_ERR=yes
 # $SERVICE_RUN_NICE_LEVEL is not defined in /etc/sysconfig/<service>
 DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 
-# Run isapnp at system startup ?
-RUN_ISAPNP=yes
+# Setup PNP using userspace tools?
+RUN_USERPNP=yes
+# Setup kernel space PNP (2.4.x)
+RUN_KERNELPNP=yes
 
 # After how many seconds reboot system after kernel panic ?
 # 0 - never reboot system (suggested 60)

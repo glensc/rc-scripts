@@ -6,13 +6,16 @@
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.12.2.3 2001/05/13 17:47:45 misiek Exp $
+# $Id: rc.shutdown,v 1.12.2.4 2001/09/30 10:19:36 misiek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
 
-# NLS
-NLS_DOMAIN="rc-scripts"
+# We can't use real NLS here! There are shells that support them and you end up
+# with unmountable /usr)
+NLS_DOMAIN=qwertyuiop
+
+runlevel="${1}"
 
 # move to root dir
 cd /
@@ -31,36 +34,67 @@ halt -w
 
 # Turn off swap, then unmount file systems.
 run_cmd "Turning off swap and accounting" swapoff -a
-[ -x /sbin/accton ] && LC_ALL=C /sbin/accton 2>&1 | grep -v "not implemented"
-
-if [ -x /sbin/quotaoff ]; then
-	run_cmd "Turning off quotas for local filesystems" /sbin/quotaoff -a
-fi
+[ -x /sbin/accton ] && /sbin/accton 2>&1 | grep -v "not implemented"
+[ -x /sbin/quotaoff ] && run_cmd "Turning off quotas" /sbin/quotaoff -a
 
 # Unmount file systems, killing processes if we have to.
-sig=-15
-retry=3
-force=
-remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
-while [ -n "$remaining" -a "$retry" -gt 0 ]
-do	
-	show "Unmounting file systems" ; busy
-	if ERRORS=$(LC_ALL=C exec umount -a $FORCE -t noproc 2>&1) ; then
-		ok
+# Unmount binded mounts
+remainingbind=$(awk '$4 ~ /bind/ {print $2}' /etc/mtab 2> /dev/null)
+# Unmount loopback stuff first
+remainingloop=$(awk '!/^#/ && $1 ~ /^\/dev\/loop/ && $2 != "/" {print $2}' /proc/mounts)
+
+if [ -n "$remainingbind" ]; then
+    remaining="$remainingbind"
+    [ -n "$remainingloop" ] && remaining="$remaining $remainingloop"
+else
+    remaining="$remainingloop"
+fi
+
+if [ -n "$remaining" ]; then
+    sig=
+    retry=3
+    while [ -n "$remaining" -a "$retry" -gt 0 ]; do
+	if [ "$retry" -lt 3 ]; then
+	    run_cmd "Unmounting bind and loopback filesystems (retry)" umount $remaining
 	else
-		fail
-		[ -n "$ERRORS" ] && echo "$ERRORS"
+	    run_cmd "Unmounting bind and loopback filesystems" umount $remaining
 	fi
-	
-	sleep 2
-	remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+	remainingbind=$(awk '$4 ~ /bind/ {print $2}' /etc/mtab 2> /dev/null)
+	remainingloop=$(awk '!/^#/ && $1 ~ /^\/dev\/loop/ && $2 != "/" {print $2}' /proc/mounts)
+	if [ -n "$remainingbind" ]; then
+	    remaining="$remainingbind"
+	    [ -n "$remainingloop" ] && remaining="$remaining $remainingloop"
+	else
+	    remaining="$remainingloop"
+	fi
 	[ -z "$remaining" ] && break
 	/sbin/fuser -k -m $sig $remaining > /dev/null
 	sleep 5
-	retry=$(($retry-1))
+	retry=$(( $retry - 1 ))
 	sig=-9
-	force="-f"
+    done
+fi
+
+sig=
+retry=3
+remaining=$(awk '!/(^#|proc|loopfs|autofs|devfs|devpts|shm|^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+
+while [ -n "$remaining" -a "$retry" -gt 0 ]; do
+    if [ "$retry" -lt 3 ]; then
+	run_cmd "Unmounting file systems (retry)"  umount -a -f -t noproc
+    else
+	run_cmd "Unmounting file systems" umount -a -f -t noproc
+    fi
+    sleep 2
+    remaining=$(awk '!/(^#|proc|loopfs|autofs|devfs|devpts|shm|^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+    [ -z "$remaining" ] && break
+    /sbin/fuser -k -m $sig $remaining >/dev/null
+    sleep 5
+    retry=$(( $retry - 1 ))
+    sig=-9
 done
+
+[ -f /proc/bus/usb/devices ] && umount /proc/bus/usb
 
 run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
 
@@ -72,12 +106,11 @@ if [ -x /sbin/raidstop -a -f /etc/raidtab ]; then
 	if [ -f /proc/mdstat ] ; then
 		mddevs=$(awk '/^md.* active/ {print $1}' /proc/mdstat)
 		for mddev in $mddevs ; do
-			MESSAGE="$(nls 'Turning off RAID for %s' "$mddev")"
-			run_cmd "$MESSAGE" raidstop /dev/$mddev
+			run_cmd "Turning off RAID for $mddev" /sbin/raidstop /dev/$mddev
 		done
 		unset mddev mddevs
 	fi
-	#runcmd "Turning off RAID" /sbin/raidstop -a
+	# runcmd "Turning off RAID" /sbin/raidstop -a
 fi
 
 show "Remounting remaining filesystems ro mode"; busy
@@ -87,6 +120,16 @@ if ( mount | awk '/ext2|ext3|reiserfs|xfs|jfs/ { print $3 }' | \
 	ok
 else
 	fail
+fi
+
+if [ "$runlevel" = "0" ] ; then
+      	show "The system is halted"; ok
+	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+	eval halt -d -p
+else
+	show "Please stand by while rebooting the system"; ok
+	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+	eval reboot -d
 fi
 
 # This must be last line !

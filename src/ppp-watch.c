@@ -78,7 +78,7 @@
 #include <glib.h>
 #include "shvar.h"
 
-#define IFCFGPREFIX "/etc/sysconfig/network-scripts/ifcfg-"
+#define IFCFGPREFIX "/etc/sysconfig/interfaces/ifcfg-"
 #define IFUP_PPP "/etc/sysconfig/network-scripts/ifup-ppp"
 
 static int theSigterm = 0;
@@ -614,7 +614,11 @@ main(int argc, char **argv) {
 	    }
 
 	    /* Die, pppd, die. */
-	    kill(pppdPid, sendsig);
+	    if (sendsig = SIGTERM) {
+		kill(-pppdPid, SIGHUP);   /* It should disconect in nice way. */
+		usleep(1000000);
+		kill(-pppdPid, sendsig);
+	    }
 	    if (sendsig == SIGKILL) {
 		kill(-pppdPid, SIGTERM); /* Give it a chance to die nicely, then
 					    kill its whole process group. */
