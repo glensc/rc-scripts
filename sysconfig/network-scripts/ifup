@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.48 2000/09/23 20:43:05 saq Exp $
+#	$Id: ifup,v 1.49 2000/10/17 20:42:13 saq Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -18,7 +18,7 @@ DEV=$1
 }
 
 if [ `id -u` != 0 ]; then
-    if [ -x /sbin/usernetctl ]; then
+    if [ -u /sbin/usernetctl ]; then
 	exec /sbin/usernetctl $DEV up
     fi
     nls "Users cannot control this device." >&2
