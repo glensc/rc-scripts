@@ -1,4 +1,4 @@
-$Id: TODO,v 1.12.2.4 2000/11/05 14:01:23 misiek Exp $
+$Id: TODO,v 1.12.2.5 2001/01/13 10:40:36 misiek Exp $
 
 Features missing:
 - IPSec (freeswan) support
@@ -7,6 +7,7 @@ Features missing:
 Important:
 - don't set any flags automaticly; always follow user
   suggestion (multicast, arp)
+- MTU for ethernet
 
 Other:
 
