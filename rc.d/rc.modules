@@ -9,11 +9,13 @@
 . /etc/rc.d/init.d/functions
 
 kernel=$(awk '{print $3}' /proc/version | awk -F. '{print sprintf("%d.%d",$1,$2)}')
+kerneleq=$(awk '{print $3}' /proc/version | awk -F. '{print sprintf("%d.%d.%d",$1,$2,$3)}')
 
 # Loop over every line in /etc/modules.
 ( \
 	[ -f /etc/modules ] && egrep -v "^(#|[[:blank:]]*#)" /etc/modules; \
 	[ -f "/etc/modules.${kernel}" ] && egrep -v "^(#|[[:blank:]]*#)" "/etc/modules.${kernel}"; \
+	[ -f "/etc/modules.${kerneleq}" ] && egrep -v "^(#|[[:blank:]]*#)" "/etc/modules.${kerneleq}"; \
 	echo \
 ) | # make sure there is a LF at the end
 while read module args
