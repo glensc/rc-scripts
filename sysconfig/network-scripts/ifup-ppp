@@ -235,7 +235,7 @@ fi
 MODEM="${MODEMPORT}"; export MODEM
 
 (logger -p daemon.info -t ifup-ppp \
-    $(nls 'pppd started for %s on device %s at speed %s' "$DEVICE" "$MODEMPORT" "${LINESPEED:-(unspecified)} on unit ${UNIT}") &)&
+    "$(nls 'pppd started for %s on device %s at speed %s' "$DEVICE" "$MODEMPORT" "${LINESPEED:-(unspecified)} on unit ${UNIT}")" &)&
 
 if [ -n "${DATAFORCHAT}" ]; then
 	export $DATAFORCHAT
