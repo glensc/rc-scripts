@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.50 2002/02/02 17:13:01 adasi Exp $
+# $Id: network,v 1.51 2002/02/03 16:14:31 adasi Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -67,7 +67,6 @@ set_up_loopback
 setup_forwarding on
 setup_nat on
 setup_routes on
-setup_masq on
 # Setup IPX
 if is_yes "$IPX"; then
 	if [ -n $IPXAUTOPRIMARY ] ; then
@@ -111,8 +110,6 @@ setup_routes off
 
 # Set down NAT rules
 setup_nat off
-# Set down masquerade rules
-setup_masq off
 # Set DOWN loopback interface
 set_down_loopback
 }

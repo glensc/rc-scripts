@@ -179,21 +179,6 @@
     <para>
       NAT will translate address &lt;address> to &lt;addressreal>.</para>
   </refsect1>
-
-  <refsect1>
-    <title><filename>/etc/sysconfig/masquerade</filename></title>
-    <para>
-      Configuration file for masquerade.
-      Contain lines of the form:</para>
-    <para>
-<literal>&lt;address> by &lt;interface> to &lt;destination></literal></para>
-    <para>
-      Where &lt;address> is source address or class, &lt;interface> is
-      interface by whom packets will be sent and &lt;destination>
-      is destination address or class (usually 0.0.0.0/0).
-      All address classes should be in form of 192.168.1.0/24.</para>
-  </refsect1>
-
   <refsect1>
     <title><filename>/etc/sysconfig/static-routes</filename></title>
     <para>Contains lines of the form:</para>
