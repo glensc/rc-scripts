@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.46 2000/03/22 20:43:17 wiget Exp $
+# $Id: functions,v 1.47 2000/04/01 10:24:30 waszi Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -29,7 +29,7 @@ termput()
 	     ! ( [ -x /usr/bin/tput ] || [ -x /bin/tput ] ) ; then
 		case "$1" in
 		  hpa)
-		  	echo -ne "\033[${2}G"
+		  	echo -ne "\033[$(($2+1))G"
 			;;
 		  cuu*)
 		  	echo -ne "\033[${2}A"
