@@ -126,17 +126,17 @@ main(int argc, char ** argv) {
     if (argc != 3) usage();
 
     if (!strcmp(argv[2], "up")) {
-	cmd = "./ifup";
+	cmd = "/sbin/ifup";
     } else if (!strcmp(argv[2], "down")) {
-	cmd = "./ifdown";
+	cmd = "/sbin/ifdown";
     } else if (!strcmp(argv[2], "report")) {
 	report = 1;
     } else {
 	usage();
     }
 
-    if (chdir("/etc/sysconfig/network-scripts")) {
-	fprintf(stderr, "error switching to /etc/sysconfig/network-scripts: "
+    if (chdir("/etc/sysconfig/interfaces")) {
+	fprintf(stderr, "error switching to /etc/sysconfig/interfaces: "
 		"%s\n", strerror(errno));
 	exit(1);
     }

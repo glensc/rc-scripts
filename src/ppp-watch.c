@@ -78,7 +78,7 @@
 #include <glib.h>
 #include "shvar.h"
 
-#define IFCFGPREFIX "/etc/sysconfig/network-scripts/ifcfg-"
+#define IFCFGPREFIX "/etc/sysconfig/interfaces/ifcfg-"
 #define IFUP_PPP "/etc/sysconfig/network-scripts/ifup-ppp"
 
 static int theSigterm = 0;
