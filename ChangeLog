@@ -1,3 +1,7 @@
+2003-08-19  Andrzej M. Krzysztofowicz  <ankry@pld-linux.org>
+
+	* dumb.sh: - for nessusd.init
+
 2003-08-10  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
 
 	* rc.d/rc.sysinit: - simplified mdadm support
