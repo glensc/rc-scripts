@@ -9,11 +9,16 @@
 # chkconfig: 345 15 95
 # description: Mounts and unmounts all Network File System (NFS) \
 #              mount points.
+#
+# $Id: nfsfs,v 1.3 1999/07/31 11:24:19 misiek Exp $
 
 # Source networking configuration.
 if [ ! -f /etc/sysconfig/network ]; then
     exit 0
 fi
+
+# NLS
+NLS_DOMAIN="rc-scripts"
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -39,11 +44,11 @@ esac
 case "$1" in
   start)
 	if [ -n "$RPCSTATD" ]; then
-		show Mounting remote filesystems, start nfsd
+		show "Mounting remote filesystems, start nfsd"
 		busy
 		$RPCSTATD
 	else
-		show Mounting remote filesystems
+		show "Mounting remote filesystems"
 		busy
 	fi
 	mount -a -t nfs
@@ -52,12 +57,12 @@ case "$1" in
 	ok
 	;;
   stop)
-	show Unmounting remote filesystems
+	show "Unmounting remote filesystems"
 	daemon umount -a -t nfs
 	if [ -n "$NFSD" ]; then
 		pidof $NFSD > /dev/null 2>&1
 		if [ $? != 0 ]; then
-			show Stopping NFS clients
+			show "Stopping NFS clients"
 			killproc $RPCSTATD
 			echo
 		fi
@@ -66,16 +71,16 @@ case "$1" in
 	;;
   status)
 	if [ -f /proc/mounts ] ; then
-		echo "Configured NFS mountpoints:"
+		nls "Configured NFS mountpoints:"
 		grep -v '^#' /etc/fstab | \
 		  awk '{ if ($3 ~ /^nfs$/ && $4 !~ /noauto/)
 				print $2}'
-		echo "Active NFS mountpoints:"
+		nls "Active NFS mountpoints:"
 		grep -v '^#' /proc/mounts | \
 		  awk '{ if ($3 ~ /^nfs$/ && $4 !~ /noauto/)
 				print $2}'
 	else
-		echo "/proc filesystem unavailable"
+		nls "/proc filesystem unavailable"
 	fi
 	;;
   restart)
@@ -86,7 +91,7 @@ case "$1" in
 	mount -a -t nfs
 	;;
   *)
-	echo "Usage: nfsfs {start|stop|restart|reload|status}"
+	echo "Usage: $0 {start|stop|restart|reload|status}"
 	exit 1
 esac
 

@@ -7,6 +7,11 @@
 # chkconfig: 12345 20 80
 # description: Saves and restores system entropy pool for higher quality \
 #              random number generation.
+#
+# $Id: random,v 1.3 1999/07/31 11:24:19 misiek Exp $
+
+# NLS
+NLS_DOMAIN="rc-scripts"
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -16,7 +21,7 @@ random_seed=/var/run/random-seed
 # See how we were called.
 case "$1" in
   start)
-	show Initializing random number generator
+	show "Initializing random number generator"
 	busy
 	# Carry a random seed from start-up to start-up
 	# Load and then save 512 bytes, which is the size of the entropy pool
@@ -34,7 +39,7 @@ case "$1" in
   stop)
 	# Carry a random seed from shut-down to start-up
 	# Save 512 bytes, which is the size of the entropy pool
-	show Saving random seed
+	show "Saving random seed"
 	busy
 	touch $random_seed
 	chmod 600 $random_seed
@@ -47,9 +52,9 @@ case "$1" in
   status)
 	# this is way overkill, but at least we have some status output...
 	if [ -c /dev/random ] ; then
-		echo "The random data source exists"
+		nls "The random data source exists"
 	else
-		echo "The random data source is missing"
+		nls "The random data source is missing"
 	fi
 	;;
   restart|reload)

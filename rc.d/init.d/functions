@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.16 1999/07/15 13:43:20 misiek Exp $
+# $Id: functions,v 1.17 1999/07/31 11:24:19 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -35,41 +35,56 @@ else
 unset tput || :
 fi
 
+# National language support function
+nls()
+{
+if [ -x /bin/gettext ] || [ -x /usr/bin/gettext ]; then
+	if [ -z "$NLS_DOMAIN" ]; then
+		NLS_DOMAIN="rc-scripts"
+	fi
+	TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="$NLS_DOMAIN" "$@"
+	echo
+else
+	echo "$@"
+fi
+}
+
 # Some functions to handle PLD-style messages
 show() 
-{
-	text="$*"..................................................................................
-	printf "%.65s" "$text"
+{	
+	what="`nls DONE`"; typeset -i offset=${#what}
+	text="`nls "$*"`"..................................................................................
+	printf "%.`expr 69 - $offset`s" "$text"
 }
 
 busy() 
 {
-	echo -n "`tput setaf 6`[`tput setaf 5` BUSY `tput setaf 6`]`tput setaf 7`"
+	echo -n "`tput setaf 6`[`tput setaf 5` `nls BUSY` `tput setaf 6`]`tput setaf 7`"
 }
 
 ok() 
 {
-	echo  "`tput setaf 6`[`tput setaf 2` DONE `tput setaf 6`]`tput setaf 7`"
+	echo  "`tput setaf 6`[`tput setaf 2` `nls DONE` `tput setaf 6`]`tput setaf 7`"
 }
 
 started()
 {
-	echo  "`tput setaf 6`[`tput setaf 2` WORK `tput setaf 6`]`tput setaf 7`"
+	echo  "`tput setaf 6`[`tput setaf 2` `nls WORK` `tput setaf 6`]`tput setaf 7`"
 }
 
 fail() 
 {
-	echo  "`tput setaf 6`[`tput setaf 1` FAIL `tput setaf 6`]`tput setaf 7`"
+	echo  "`tput setaf 6`[`tput setaf 1` `nls FAIL` `tput setaf 6`]`tput setaf 7`"
 }
 
 died() 
 {
-	echo  "`tput setaf 6`[`tput setaf 1` DIED `tput setaf 6`]`tput setaf 7`"
+	echo  "`tput setaf 6`[`tput setaf 1` `nls DIED` `tput setaf 6`]`tput setaf 7`"
 }
 
 deltext() 
 {
-	echo -ne '\b\b\b\b\b\b\b\b'
+	echo -ne "`nls '\b\b\b\b\b\b\b\b'`"	
 }
 
 # Usage run_cmd Message command_to_run

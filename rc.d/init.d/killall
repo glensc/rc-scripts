@@ -1,5 +1,6 @@
 #!/bin/sh
-
+# 
+# $Id: killall,v 1.4 1999/07/31 11:24:19 misiek Exp $
 # Bring down all unneeded services that are still running (there shouldn't 
 # be any, so this is just a sanity check)
 

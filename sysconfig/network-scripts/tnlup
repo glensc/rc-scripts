@@ -1,12 +1,11 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.6 1999/07/29 13:59:37 misiek Exp $
+#	$Id: tnlup,v 1.7 1999/07/31 11:24:20 misiek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 # Uwagi:
 # - przy dodawaniu routingu w ifup pamiêtac o "onlink" (patrz dokumentacja do iproute)
-# - gdzie¶ trzeba umie¶ciæ modprobe ipip && modprobe ip_gre
 #
 
 cd /etc/sysconfig/network-scripts
@@ -79,12 +78,12 @@ fi
 
 if [ "${MODE}" == "ipip" ] || [ "${MODE}" == "sit" ]; then
 	
-	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos ${TOS} ${PMTUDISC} $BIND_DEV
+	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos ${TOS} ${PMTUDISC} ${BIND_DEV}
 
 elif [ "${MODE}" == "gre" ]; then
 
 	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos
-${TOS} ${PMTUDISC} $BIND_DEV $CSUM $ISEQ ${KEY} ${IKEY} ${OKEY}
+${TOS} ${PMTUDISC} ${BIND_DEV} $CSUM $ISEQ ${KEY} ${IKEY} ${OKEY}
 
 elif [ "${MODE}" == "ipxip" ] || [ "${MODE}" == "ipipx" ]; then
 

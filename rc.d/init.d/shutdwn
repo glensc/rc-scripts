@@ -6,19 +6,23 @@
 #               Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
+# $Id: shutdwn,v 1.6 1999/07/31 11:24:19 misiek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
+
+# NLS
+NLS_DOMAIN="rc-scripts"
 
 . /etc/rc.d/init.d/functions
 
 # Kill all processes.
 [ "${BASH+bash}" = bash ] && enable kill
 
-show "Sending all processes the TERM signal "
+show "Sending all processes the TERM signal"
 daemon killall5 -15
 sleep 5
-show "Sending all processes the KILL signal "
+show "Sending all processes the KILL signal"
 daemon killall5 -9
 
 # Write to wtmp file before unmounting /var
@@ -48,7 +52,7 @@ fi
 show "Remounting remaining filesystems ro mode"; busy
 if (mount | awk '/ext2/ { print $3 }' | \
 	while read line; do \
-		mount -n -o ro,remount $line done); then
+	mount -n -o ro,remount $line; done); then
 	deltext; ok
 else
 	deltext; fail

@@ -10,6 +10,11 @@
 #
 # Author:       Grzegorz Stanislawski <stangrze@open.net.pl>
 # Changes:	Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#
+# $Id: halt,v 1.4 1999/07/31 11:24:19 misiek Exp $
+
+# NLS
+NLS_DOMAIN="rc-scripts"
 
 # See how we were called.
 

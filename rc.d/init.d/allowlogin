@@ -5,6 +5,10 @@
 # chkconfig: 2345 99 1
 # description: Allow users to login.
 #
+# $Id: allowlogin,v 1.2 1999/07/31 11:24:19 misiek Exp $
+
+# NLS
+NLS_DOMAIN="rc-scripts"
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -24,8 +28,7 @@ case "$1" in
 	# /etc/nologin when shutting down system
 	if [ "$DELAY_LOGIN" == "yes" ] && [ ! -f /etc/nologin ]; then
 	        echo > /etc/nologin
-	        echo "[EN] System shutdown in progress " >> /etc/nologin
-	        echo "[PL] Zatrzymywanie systemu w toku" >> /etc/nologin
+	        nls "System shutdown in progress " >> /etc/nologin
 	        echo >> /etc/nologin
 	        chmod 644 /etc/nologin
 	        cp -fp /etc/nologin /etc/nologin.boot

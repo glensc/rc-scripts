@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.11 1999/07/15 13:29:44 misiek Exp $
+# $Id: functions.network,v 1.12 1999/07/31 11:24:19 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -78,7 +78,7 @@ if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
 	        [ "$VARD" == "no" -a "$SET" == "1" ] && SET="(($SET - 1))"
 		[ "$VARD" == "yes" -a "$SET" == "0" ] && SET="(($SET + 1))"
 		if [ -n "$MESSAGE" ]; then
-			show "Setting $MESSAGE to $SET"; busy
+			show "`nls Setting` $MESSAGE `nls to` $SET"; busy
 			if (echo "$SET" > /proc/sys/net/$WHAT) 2> /dev/null; then
 				deltext; ok
 			else
@@ -147,6 +147,31 @@ show Setting down IP spoofing protection; busy
 if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 0 > $f; done); then deltext; ok; else deltext; fail; fi
 fi
 
+fi
+}
+
+# Add ONLY IPv4 address (IPv6 address is added automaticly)
+set_up_loopback()
+{
+ip link set dev lo up arp on
+ip addr add 127.0.0.1/8 dev lo
+ip route add 127.0.0.0/8 dev lo scope link
+}
+
+set_down_loopback()
+{
+ip route del 127.0.0.0/8 dev lo  scope link
+ip addr del 127.0.0.1/8 dev lo
+ip addr del ::1/128 scope host dev lo
+ip link set dev lo down
+}
+
+static_arp()
+{
+if [ "$1" == "yes" ]; then
+	if [ -f /etc/ethers -a -x /sbin/arp ]; then
+		/sbin/arp -f /etc/ethers
+	fi
 fi
 }
 

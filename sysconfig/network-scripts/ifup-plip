@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-plip,v 1.7 1999/07/13 12:49:37 misiek Exp $
+#	$Id: ifup-plip,v 1.8 1999/07/31 11:24:20 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -15,22 +15,15 @@ then
 	exit
 fi
 
-ifconfig ${DEVICE} ${IPADDR} pointopoint ${REMIP}
-#route add -net ${NETWORK} netmask ${NETMASK} ${DEVICE}
-ip route add ${NETWORK}/${PREFIX} dev ${DEVICE}
-
-# this is broken! it's only here to keep compatibility with old RH sytstems
-if [ "${GATEWAY}" != "" -a "${GATEWAY}" != "none" ]
-then
-	route add default gw ${GATEWAY} metric 1 ${DEVICE}
-fi
+ip -family inet addr add ${IPADDR}/32 peer ${REMIP} dev ${DEVICE}
+ip -family inet route add ${NETWORK}/${PREFIX} dev ${DEVICE}
 
 . /etc/sysconfig/network
 
 if [ "${GATEWAY}" != "" ]; then
 	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 		# set up default gateway
-		ip route add default via ${GATEWAY}
+		ip -family inet route add default via ${GATEWAY}
 	fi
 fi
 

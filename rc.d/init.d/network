@@ -7,6 +7,11 @@
 #              start at boot time.
 # probe: true
 
+# $Id: network,v 1.14 1999/07/31 11:24:19 misiek Exp $
+
+# NLS
+NLS_DOMAIN="rc-scripts"
+
 # Source function library.
 . /etc/rc.d/init.d/functions
 . /etc/rc.d/init.d/functions.network
@@ -30,14 +35,23 @@
 # - setup lo interface
 network_init()
 {
-[ -f /etc/sysconfig/interfaces/ifcfg-lo ] && /sbin/ifup lo boot
+# Set UP loopback interface
+set_up_loopback
+
+# Modprobe needed devices
 modprobe_net
+
+# Set static ARP table
+static_arp
 
 # Spoofing protection
 ipv4_anti_spoofing on
 
 # IPv4 forwarding
 proc_net ipv4/ip_forward start 1 0 IPV4_FORWARDING "IPv4 forwarding"
+
+# IPv6 forwarding
+proc_net ipv6/conf/all/forwarding start 1 0 IPV6_FORWARDING "IPv6 forwarding"
 
 }
 
@@ -47,17 +61,26 @@ proc_net ipv4/ip_forward start 1 0 IPV4_FORWARDING "IPv4 forwarding"
 network_deinit()
 {
 
+# IPv6 forwarding
+proc_net ipv6/conf/all/forwarding stop 1 0 IPV6_FORWARDING "IPv6 forwarding"
+
 # IPv4 forwarding
 proc_net ipv4/ip_forward stop 1 0 IPV4_FORWARDING "IPv4 forwarding"
 
 # Spoofing protection
 ipv4_anti_spoofing off
 
-[ -f /etc/sysconfig/interfaces/ifcfg-lo ] && /sbin/ifdown lo boot
-
+# Set DOWN loopback interface
+set_down_loopback
 }
 
-interfaces="`(cd /etc/sysconfig/interfaces && ls -1 ifcfg-* | grep -v ifcfg-lo | xargs ) 2> /dev/null`"
+# Normal sort order
+interfaces_up="`(cd /etc/sysconfig/interfaces && ls -1 ifcfg-* | \
+grep -v ifcfg-lo | xargs ) 2> /dev/null`"
+# Reverse sort order
+interfaces_down="`(cd /etc/sysconfig/interfaces && ls -r -1 ifcfg-* | \
+grep -v ifcfg-lo | xargs ) 2> /dev/null`"
+# Normal sort order
 tunnels="`(cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | xargs ) 2> /dev/null`"
 
 # See how we were called.
@@ -68,14 +91,14 @@ case "$1" in
 		[ -f /etc/sysconfig/interfaces/$i ] && /sbin/tnlup $i boot
 	done
 
-	for i in $interfaces; do
+	for i in $interfaces_up; do
 		[ -f /etc/sysconfig/interfaces/$i ] && /sbin/ifup $i boot
 	done
 
         touch /var/lock/subsys/network
         ;;
   stop)
-	for i in $interfaces; do
+	for i in $interfaces_down; do
 		[ -f /etc/sysconfig/interfaces/$i ] && /sbin/ifdown $i boot
 	done
 
@@ -87,12 +110,12 @@ case "$1" in
         rm -f /var/lock/subsys/network
         ;;
   status)
-	echo "Configured devices:"
+	nls "Configured devices:"
 	echo "lo $interfaces"
-	echo "Configured tunnels:"
+	nls "Configured tunnels:"
 	echo "$tunnels"
 
-	echo "Currently active devices:"
+	nls "Currently active devices:"
 	/sbin/ip link show | egrep '^[^ ].*' |sed 's/[0-9]*: \(.*\):.*/\1/'|xargs
 	;;
   restart)
@@ -100,7 +123,7 @@ case "$1" in
 	$0 start
 	;;
   *)
-        echo "Usage: network {start|stop|restart|status}"
+        echo "Usage: $0 {start|stop|restart|status}"
         exit 1
 esac
 

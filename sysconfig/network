@@ -1,3 +1,4 @@
+# $Id: network,v 1.5 1999/07/31 11:24:19 misiek Exp $
 ######################################################################
 # MAIN PART
 
@@ -22,6 +23,11 @@ IPXAUTOPRIMARY=
 IPXAUTOFRAME=
 IPXINTERNALNETNUM=
 IPXINTERNALNODENUM=
+
+# Other
+
+# Do you want set static arp table (based on /etc/ethers config file) ?
+STATIC_ARP=no
 
 ######################################################################
 # IPv4 goodies

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.7 1999/07/13 12:49:37 misiek Exp $
+#	$Id: ifup-post,v 1.8 1999/07/31 11:24:20 misiek Exp $
 #
 
 cd /etc/sysconfig/network-scripts
@@ -10,9 +10,14 @@ need_hostname
 CONFIG=$1
 source_config
 
-DEVICETYPE=`echo $DEVICE | sed "s/[0-9]*$//"`
-REALDEVICE=`echo $DEVICE | sed 's/:.*//g'`
-if echo $DEVICE | grep -q ':' ; then
+# pelna nazwa dewajsa jaka podal user
+FULLDEVNAME="$DEVICE"
+# przyjmuje warto¶æ np: "dummy" czy "eth" itd. (do poprawki - teraz przyjmuje "dummy0:")
+DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
+# przyjmuje eth0 przy {eth0,eth0:1,eth0:alias}
+DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
+
+if echo "$FULLDEVNAME" | grep -q ':' ; then
     ISALIAS=yes
 else
     ISALIAS=no
@@ -20,15 +25,14 @@ fi
 
 /etc/sysconfig/network-scripts/ifup-routes ${DEVICE}
 
-if [ "$ISALIAS" = no ] ; then
+if [ "$ISALIAS" == "no" ] ; then
     /etc/sysconfig/network-scripts/ifup-aliases ${DEVICE}
 fi
 
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICE}" != lo -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
-# przy zastêpowaniu ifconfiga iproutem trzeba uwa¿aæ na aliasy eth0:1
-    IPADDR=`ifconfig ${DEVICE} | grep 'inet addr' | 
-	    awk -F: '{ print $2 } ' | awk '{ print $1 }'`
+     IPADDR=`ip addr show dev ${DEVICE} label ${FULLDEVNAME} | 
+	    awk '{ print $2 }' |awk -F"/" '{ print $1 }'`
     eval `/bin/ipcalc --silent --hostname ${IPADDR}` && set_hostname $HOSTNAME
 fi
 

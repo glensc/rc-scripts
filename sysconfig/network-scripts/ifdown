@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.8 1999/07/13 12:49:37 misiek Exp $
+#	$Id: ifdown,v 1.9 1999/07/31 11:24:20 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -30,12 +30,17 @@ fi
 
 source_config
 
-if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
-    PREFIX="`calcprefix $NETMASK`"
-fi
+# Is interface IPv6 only ?
+[ -z "$IPADDR" -a "$PUMP" != "true" ] && IPv6_ONLY=yes || IPv6_ONLY=""
 
-if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
+if [ -z "$IPv6_ONLY" ]; then
+  if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
+    PREFIX="`calcprefix $NETMASK`"
+  fi
+
+  if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
     NETMASK="`calcnetmask $PREFIX`"
+  fi
 fi
 
 FULLDEVNAME="$DEVICE"
@@ -43,19 +48,24 @@ DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
 
-if [ -x $OTHERSCRIPT ]; then
+if [ -x $OTHERSCRIPT -a -z "$IPv6_ONLY" ]; then
 	$OTHERSCRIPT $CONFIG $2
 	exit $?
 fi
 
-if echo $DEVICE | grep -q ':' ; then
+if echo "$FULLDEVNAME" | grep -q ':' ; then
     ISALIAS=yes
 else
     ISALIAS=no
 fi
 
 if [ "$ISALIAS" == "yes" ]; then
-    ip addr del ${IPADDR}/${PREFIX} dev ${DEVICE}
+	if [ -z "$IPv6_ONLY" ]; then
+		ip -family inet addr del ${IPADDR}/${PREFIX} dev ${DEVICE} label ${FULLDEVNAME}
+	fi
+		for ADDR in ${IPV6_ADDR} ; do
+			ip -family inet6 addr del ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
+		done
 else
     ip link set ${DEVICE} down
     ip addr flush dev ${DEVICE} 2> /dev/null

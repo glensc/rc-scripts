@@ -5,12 +5,27 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.6 1999/07/13 12:49:35 misiek Exp $
+# $Id: rc,v 1.7 1999/07/31 11:24:18 misiek Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
+
+# NLS
+if [ -f /etc/sysconfig/i18n ]; then
+        . /etc/sysconfig/i18n
+        [ -n "$LANG" ] && export LANG || unset LANG
+        [ -n "$LC_CTYPE" ] && export LC_CTYPE || unset LC_CTYPE
+        [ -n "$LC_COLLATE" ] && export LC_COLLATE || unset LC_COLLATE
+        [ -n "$LC_MESSAGES" ] && export LC_MESSAGES || unset LC_MESSAGES
+        [ -n "$LC_NUMERIC" ] && export LC_NUMERIC || unset LC_NUMERIC
+        [ -n "$LC_MONETARY" ] && export LC_MONETARY || unset LC_MONETARY
+        [ -n "$LC_TIME" ] && export LC_TIME || unset LC_TIME
+        [ -n "$LC_ALL" ] && export LC_ALL || unset LC_ALL
+        [ -n "$LANGUAGE" ] && export LANGUAGE || unset LANGUAGE
+        [ -n "$LINGUAS" ] && export LINGUAS || unset LINGUAS
+fi
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -43,10 +58,8 @@ stty onlcr -ixon 0>&1
 
 
 # Say something ;)
-echo "`tput setaf 2`Resource Manager:`tput setaf 7` Leaving  runlevel number \
-.........................`tput setaf 6`[`tput setaf 2` $previous `tput setaf 6`]`tput setaf 7`"
-echo "`tput setaf 2`Resource Manager:`tput setaf 7` Entering runlevel number \
-.........................`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
+printf "%.78s" "`tput setaf 2``nls "Resource Manager:"``tput setaf 7` `nls "Leaving runlevel number"`............................................................................"
+echo "`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
 
 # Is there an rc directory for this new runlevel?
 if [ -d /etc/rc.d/rc$runlevel.d ]; then
@@ -90,6 +103,6 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 fi
 
 # Say something ;)
-echo "`tput setaf 2`Resource Manager:`tput setaf 7` Runlevel has been \
-reached.........................`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
+printf "%.78s" "`tput setaf 2``nls "Resource Manager:"``tput setaf 7` `nls "Runlevel has been reached"`............................................................................"
+echo "`tput setaf 6`[`tput setaf 2` $runlevel `tput setaf 6`]`tput setaf 7`"
 

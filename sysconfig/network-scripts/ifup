@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.17 1999/07/22 21:51:39 stangrze Exp $
+#	$Id: ifup,v 1.18 1999/07/31 11:24:20 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -41,12 +41,12 @@ IPSETUP=no
 
 # pelna nazwa dewajsa jaka podal user
 FULLDEVNAME="$DEVICE"
-# przyjmuje warto¶æ np: "dummy" czy "eth" itd. (do poprawki - teraz przyjmuje "dummy0:")
+# przyjmuje warto¶æ np: "dummy" czy "eth"
 DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
 # przyjmuje eth0 przy {eth0,eth0:1,eth0:alias}
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 
-if echo $FULLDEVNAME | grep -q ':' ; then
+if echo "$FULLDEVNAME" | grep -q ':' ; then
     ISALIAS=yes
 else
     ISALIAS=no
@@ -57,11 +57,14 @@ if [ "$BOOTP" == "yes" ]; then
     BOOTPROTO=bootp
 fi
 
-if [ "$BOOTPROTO" = bootp -o "$BOOTPROTO" == "dhcp" ]; then
+if [ "$BOOTPROTO" == bootp -o "$BOOTPROTO" == "dhcp" ]; then
     PUMP=true
 fi
 
-if [ -z "$IPADDR" ]; then
+# Is interface IPv6 only ?
+[ -z "$IPADDR" -a "$PUMP" != "true" ] && IPv6_ONLY=yes || IPv6_ONLY=""
+
+if [ -z "$IPv6_ONLY" ]; then
     if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
 	PREFIX="`calcprefix $NETMASK`"
     fi
@@ -79,12 +82,12 @@ fi
 
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
-if [ -x "$OTHERSCRIPT" ]; then
+if [ -x "$OTHERSCRIPT" -a -z "$IPv6_ONLY" ]; then
     exec $OTHERSCRIPT $CONFIG $2
 fi
 
 # is this device available? (this catches PCMCIA devices for us)
-/sbin/ifconfig ${DEVICE} 2>&1 | grep -s "not found" > /dev/null
+/sbin/ip link show ${DEVICE} 2>&1 | grep -s "does not exist" > /dev/null
 if [ "$?" == "0" ]; then
     echo "Delaying ${FULLDEVNAME} initialization."
     exit 0
@@ -116,6 +119,7 @@ if [ -n "$PUMP" ] && [ "$ISALIAS" == "no" ]; then
 
 else
 
+if [ -z "$IPv6_ONLY" ]; then
     if [ -z "$PREFIX" ]; then
 	eval `/bin/ipcalc --prefix ${IPADDR}`
     fi
@@ -127,33 +131,38 @@ else
     if [ -z "$NETWORK" ]; then
 	eval `/bin/ipcalc --network ${IPADDR} ${NETMASK}`
     fi
+fi
 
     ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
-    ip addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME}
+
+if [ -z "$IPv6_ONLY" ]; then
+    ip -family inet addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME}
+fi
 
 
 # IPv6 rules
     if [ "${IPV6_NETWORKING}" == "yes" ] ; then 
       for ADDR in ${IPV6_ADDR} ; do
-	   ip addr add ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
-	   ip route add ${ADDR} dev ${DEVICE}
+	   ip -family inet6 addr add ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
+	   ip -family inet6 route add ${ADDR} dev ${DEVICE}
       done  
     fi
 
 # hack for 2.2 kernels
-# uiprouciæ
-    if [ "$ISALIAS" == "no" ] && [ -z "`route -n | sed "s/ .*//" | grep ${NETWORK}`" ]; then
-	ip route add ${NETWORK}/${PREFIX} dev ${DEVICE} ${SRC_ADDR}
+if [ -z "$IPv6_ONLY" ]; then
+    if [ "$ISALIAS" == "no" ] && [ -z "`ip -f inet route | sed "s/ .*//" | grep ${NETWORK}`" ]; then
+	ip -family inet route add ${NETWORK}/${PREFIX} dev ${DEVICE} ${SRC_ADDR}
     else
-	ip route add ${IPADDR}/32 dev ${DEVICE} ${SRC_ADDR}
+	ip -family inet route add ${IPADDR}/32 dev ${DEVICE} ${SRC_ADDR}
     fi
+fi
 
     . /etc/sysconfig/network
 
     if [ "${GATEWAY}" != "" ]; then
 	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 	    # set up default gateway
-	    ip route add default via ${GATEWAY} dev ${DEVICE} ${SRC_ADDR}
+	    ip -family inet route add default via ${GATEWAY} dev ${DEVICE} ${SRC_ADDR}
 	    DEFGW=${GATEWAY}
 	fi
     fi
@@ -162,7 +171,7 @@ else
 	if [ -n "$GATEWAYS" ]; then
 	    for gw in $GATEWAYS; do
 		if [ "$gw" != "${DEFGW}" ]; then
-		    ip route add default via $gw dev ${DEVICE} ${SRC_ADDR}
+		    ip -family inet route add default via $gw dev ${DEVICE} ${SRC_ADDR}
 		fi
 	    done
 	fi
@@ -180,7 +189,7 @@ else
     fi
 fi
 
-if [ "$IPX" = yes ]; then
+if [ "$IPX" == yes ]; then
 	/etc/sysconfig/network-scripts/ifup-ipx $DEVICE
 fi
 

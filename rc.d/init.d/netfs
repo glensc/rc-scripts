@@ -8,11 +8,16 @@
 # chkconfig: 345 15 85
 # description: Mounts and unmounts all Network File System (NFS), \
 #	       SMB (Lan Manager/Windows), and NCP (NetWare) mount points.
+#
+# $Id: netfs,v 1.2 1999/07/31 11:24:19 misiek Exp $
 
 # Source networking configuration.
 if [ ! -f /etc/sysconfig/network ]; then
     exit 0
 fi
+
+# NLS
+NLS_DOMAIN="rc-scripts"
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -47,31 +52,31 @@ case "$1" in
   status)
 	if [ -f /proc/mounts ] ; then
 	        [ -n "$NFSFSTAB" ] && {
-		     echo "Configured NFS mountpoints:"
+		     nls "Configured NFS mountpoints:"
 		     for fs in $NFSFSTAB; do echo $fs ; done
 		}
 	        [ -n "$SMBFSTAB" ] && {
-		     echo "Configured SMB mountpoints:"
+		     nls "Configured SMB mountpoints:"
 		     for fs in $SMBFSTAB; do echo $fs ; done
 		}
 	        [ -n "$NCPFSTAB" ] && {
-		     echo "Configured NCP mountpoints:"
+		     nls "Configured NCP mountpoints:"
 		     for fs in $NCPFSTAB; do echo $fs ; done
 		}
 		[ -n "$NFSMTAB" ] && {
-                      echo "Active NFS mountpoints:"
+                      nls "Active NFS mountpoints:"
 		      for fs in $NFSMTAB; do echo $fs ; done
 		}
 		[ -n "$SMBMTAB" ] && {
-                      echo "Active SMB mountpoints:"
+                      nls "Active SMB mountpoints:"
 		      for fs in $SMBMTAB; do echo $fs ; done
 		}
 		[ -n "$NCPMTAB" ] && {
-                      echo "Active NCP mountpoints:"
+                      nls "Active NCP mountpoints:"
 		      for fs in $NCPMTAB; do echo $fs ; done
 		}
 	else
-		echo "/proc filesystem unavailable"
+		nls "/proc filesystem unavailable"
 	fi
 	;;
   restart)
@@ -82,7 +87,7 @@ case "$1" in
         $0 start
 	;;
   *)
-	echo "Usage: netfs {start|stop|restart|reload|status}"
+	echo "Usage: $0 {start|stop|restart|reload|status}"
 	exit 1
 esac
 

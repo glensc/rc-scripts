@@ -1,3 +1,4 @@
+dnl $Id: configure.in,v 1.9 1999/07/31 11:24:17 misiek Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts

@@ -11,10 +11,14 @@
 # Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 #               Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
-#
+# 
+# $Id: single,v 1.6 1999/07/31 11:24:19 misiek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+# NLS
+NLS_DOMAIN="rc-scripts"
 
 . /etc/rc.d/init.d/functions
 
@@ -26,10 +30,10 @@ case "$1" in
 # Kill all processes.
 	[ "${BASH+bash}" = bash ] && enable kill
 
-	show "Sending all processes the TERM signal "
+	show "Sending all processes the TERM signal"
 	daemon killall5 -15
 	sleep 5
-	show "Sending all processes the KILL signal "
+	show "Sending all processes the KILL signal"
 	daemon killall5 -9
 
 	rm -f /var/lock/subsys/*

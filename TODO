@@ -2,7 +2,3 @@
 
 - o ile to mo¿liwe usun±æ u¿ywanie awk i sed zastêpowaæ u¿yewaniem sh lub
   przynajmeniej zastêpowaæ awka sedem
-
-- dodaæ mo¿liwo¶æ ustawiania statycznej tablicy arp (patrz: man ethers arp
-  opcja -f). Najpawdopodobniej najlepszym miescem bêdzie punkt miê
-  podnoszeniem lo a nastepnych interfejsów.

@@ -8,6 +8,8 @@
 #              divided  into  4 different categories: the IP input chain, \
 #              the IP output chain, the IP  forwarding  chain,  and  user \
 #	       defined chains
+#
+# $Id: ipchains,v 1.2 1999/07/31 11:24:19 misiek Exp $
 
 # Source function library.
 . /etc/rc.d/init.d/functions

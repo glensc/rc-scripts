@@ -1,5 +1,5 @@
-
 #!/bin/sh
+# $Id: autogen.sh,v 1.3 1999/07/31 11:24:17 misiek Exp $
 # Run this to generate all the initial makefiles, etc.
 
 srcdir=`dirname $0`
