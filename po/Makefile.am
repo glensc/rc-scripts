@@ -50,7 +50,7 @@ install-data-hook: all
 	if test -r "$(MKINSTALLDIRS)"; then \
 	  $(MKINSTALLDIRS) $(DESTDIR)$(datadir); \
 	else \
-	  $(install_sh) -d $(DESTDIR)$(datadir); \
+	  $(mkinstalldirs) $(DESTDIR)$(datadir); \
 	fi
 	@catalogs='$(CATALOGS)'; \
 	for cat in $$catalogs; do \
@@ -64,7 +64,7 @@ install-data-hook: all
 	  if test -r "$(MKINSTALLDIRS)"; then \
 	    $(MKINSTALLDIRS) $$dir; \
 	  else \
-	    $(install_sh) -d $$dir; \
+	    $(mkinstalldirs) $$dir; \
 	  fi; \
 	  if test -r $$cat; then \
 	    $(INSTALL_DATA) $$cat $$dir/$(PACKAGE)$(INSTOBJEXT); \
