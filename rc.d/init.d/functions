@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.38 2000/03/08 16:29:10 misiek Exp $
+# $Id: functions,v 1.39 2000/03/09 10:57:07 zagrodzki Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -95,39 +95,40 @@ fi
 show() 
 {	
 	what="`nls --nls-domain rc-scripts "DONE"`"; typeset -i offset=${#what}
-	text="`nls "$*"`.................................................................................."
-	awk "BEGIN {printf \"%.$((75 - $offset))s\", \"$text\";}"
-	# move to column number 67
-	termput hpa 67
+	text="`nls "$*"`"
+	echo -n "$text"
+	awk "BEGIN { for (j=length(\"$text\"); j<$INIT_COL; j++) printf \".\" }"
+	# move to column number $INIT_COL
+	# termput hpa $INIT_COL
 }
 
 busy() 
 {
-	termput hpa 67
+	termput hpa $INIT_COL
 	echo -n "`termput setaf 6`[`termput setaf 5` `nls --nls-domain rc-scripts "BUSY"` `termput setaf 6`]`termput setaf 7`"
 }
 
 ok() 
 {
-	termput hpa 67
+	termput hpa $INIT_COL
 	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "DONE"` `termput setaf 6`]`termput setaf 7`"
 }
 
 started()
 {
-	termput hpa 67
+	termput hpa $INIT_COL
 	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "WORK"` `termput setaf 6`]`termput setaf 7`"
 }
 
 fail() 
 {
-	termput hpa 67
+	termput hpa $INIT_COL
 	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "FAIL"` `termput setaf 6`]`termput setaf 7`"
 }
 
 died() 
 {
-	termput hpa 67
+	termput hpa $INIT_COL
 	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "DIED"` `termput setaf 6`]`termput setaf 7`"
 }
 
