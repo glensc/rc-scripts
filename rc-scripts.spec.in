@@ -19,6 +19,8 @@ Requires:	sh-utils
 Requires:	/bin/cut
 Requires:	/bin/nice
 Requires:	/bin/basename
+Requires:	procps
+Requires:	/bin/ps
 Requires:	SysVinit
 Requires:	sed
 Requires:	net-tools
