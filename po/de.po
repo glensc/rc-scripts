@@ -1,6 +1,6 @@
 # German translation of rc-scripts.
 # Pawel Sakowski <pawel@sakowski.eu.org>, 2000.
-# $Id: de.po,v 1.1 2000/09/18 22:32:03 saq Exp $
+# $Id: de.po,v 1.2 2000/09/19 12:46:44 saq Exp $
 #
 
 msgid ""
@@ -98,12 +98,8 @@ msgid "%s dead but pid file exists"
 msgstr "%s tot, aber pid-Datei existiert"
 
 #: ../rc.d/init.d/functions:382
-msgid "Start service"
-msgstr "Den Dienst starten"
-
-#: ../rc.d/init.d/functions:382
-msgid "(Y)es/(N)o/(C)ontinue? [Y] "
-msgstr "(J)a/(N)ein/(W)eiterführen? [J] "
+msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
+msgstr "Den %s-Dienst starten (J)a/(N)ein/(W)eiterführen? [J] "
 
 #: ../rc.d/init.d/functions:470
 msgid "Loading %s kernel module(s)"
@@ -194,8 +190,8 @@ msgid "Users cannot control this device."
 msgstr "Die Benutzer dürfen dieses Gerät nicht kontrollieren."
 
 #: ../sysconfig/network-scripts/ifup:135
-msgid "Determining IP information for"
-msgstr "Erforscht wird die IP-Information für"
+msgid "Determining IP information for %s"
+msgstr "Die IP-Information für %s wird erforscht"
 
 #: ../sysconfig/network-scripts/ifup:138 ../sysconfig/network-scripts/ifup:145
 msgid " done."
@@ -210,8 +206,8 @@ msgid "/usr/sbin/dip does not exist or is not executable"
 msgstr "/usr/sbin/dip existiert nicht oder ist nicht ausführbar"
 
 #: ../sysconfig/network-scripts/ifup-sl:44
-msgid "/usr/sbin/dip does not exist or is not executable for"
-msgstr "/usr/sbin/dip existiert nicht oder ist nicht ausführbar für"
+msgid "/usr/sbin/dip does not exist or is not executable for %s"
+msgstr "/usr/sbin/dip für %s existiert nicht oder ist nicht ausführbar"
 
 #: ../sysconfig/network-scripts/ifup-sl:42
 msgid "ifup-sl for $DEVICE exiting"
@@ -222,34 +218,24 @@ msgid "does not exist"
 msgstr "existiert nicht"
 
 #: ../sysconfig/network-scripts/ifup-sl:56
-msgid "does not exist"
-msgstr "existiert nicht für"
+msgid "does not exist for %s"
+msgstr "existiert für %s nicht"
 
 #: ../sysconfig/network-scripts/ifup-sl:63
-msgid "dip started for"
-msgstr "dir gestartet für"
+msgid "dip started for %s on %s at %s"
+msgstr "dir gestartet für %s auf %s mit %s"
 
 #: ../sysconfig/network-scripts/ifup-sl:93
-msgid "slattach started for"
-msgstr "slattach gestartet für"
-
-#: ../sysconfig/network-scripts/ifup-sl:63
-#: ../sysconfig/network-scripts/ifup-sl:93
-msgid "on"
-msgstr "auf"
-
-#: ../sysconfig/network-scripts/ifup-sl:63
-#: ../sysconfig/network-scripts/ifup-sl:93
-msgid "at"
-msgstr "mit"
+msgid "slattach started for %s on %s at %s"
+msgstr "slattach gestartet für %s auf %s mit %s"
 
 #: ../sysconfig/network-scripts/ifup-sl:84
 msgid "/sbin/slattach does not exist or is not executable"
 msgstr "/sbin/slattach existiert nicht oder ist nicht ausführbar"
 
 #: ../sysconfig/network-scripts/ifup-sl:87
-msgid "/sbin/slattach does not exist or is not executable for"
-msgstr "/sbin/slattach existiert nicht oder ist nicht ausführbar für"
+msgid "/sbin/slattach does not exist or is not executable for %s"
+msgstr "/sbin/slattach für %s existiert nicht oder ist nicht ausführbar"
 
 #: ../sysconfig/network-scripts/ifup-sl:85
 msgid "exiting"
@@ -327,7 +313,7 @@ msgstr "Drücke"
 
 #: ../rc.d/rc.sysinit:57
 msgid "to enter interactive startup."
-msgstr "um in die interaktive Startetappe zu wechseln."
+msgstr "um interaktiv hochzufahren."
 
 #: ../rc.d/rc.sysinit:67
 msgid "Mounting Device Filesystem"
@@ -379,8 +365,8 @@ msgid "Loading sound module"
 msgstr "Das Laut-Modul wird geladen"
 
 #: ../rc.d/rc.sysinit:233
-msgid "Loading midi module"
-msgstr "Das MIDI-Modul wird geladen"
+#msgid "Loading midi module"
+#msgstr "Das MIDI-Modul wird geladen"
 
 #: ../rc.d/rc.sysinit:292
 msgid "Loading synthesiser module"
@@ -468,7 +454,7 @@ msgstr "Automatischer Neustart wird ausgeführt."
 
 #: ../rc.d/rc.sysinit:281
 msgid "Finding module dependencies"
-msgstr "Modul-Abhängigkeiten werden gesucht"
+msgstr "Die Modul-Abhängigkeiten werden gesucht"
 
 ##### TIMEZONE #####
 

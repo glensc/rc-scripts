@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-sl,v 1.16 2000/06/12 08:38:15 waszi Exp $
+#	$Id: ifup-sl,v 1.17 2000/09/19 12:46:45 saq Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -41,7 +41,7 @@ if is_no "$DIRECT_CONNECT"; then
   nls "/usr/sbin/dip does not exist or is not executable"
   nls "ifup-sl for $DEVICE exiting"
   logger -p daemon.info -t ifup-sl \
-    "`nls '/usr/sbin/dip does not exist or is not executable for'` $DEVICE"
+    "`nls '/usr/sbin/dip does not exist or is not executable for %s' $DEVICE`"
   exit 1
 }
 
@@ -53,14 +53,14 @@ DIPSCRIPT=/etc/sysconfig/interfaces/data/dip-$DEVNAME
   echo "/etc/sysconfig/interfaces/data/dip-$DEVICE `nls 'does not exist'`"
   echo "ifup-sl for $DEVICE exiting"
   logger -p daemon.info -t ifup-sl \
-    "/etc/sysconfig/interfaces/data/dip-$DEVICE `nls 'does not exist for'` $DEVICE"
+    "/etc/sysconfig/interfaces/data/dip-$DEVICE `nls 'does not exist for %s' $DEVICE`"
   exit 1
 }
 
 while : ; do
   echo > /var/run/sl-$DEVICE.dev
   (logger -p daemon.info -t ifup-sl \
-    "`nls 'dip started for'` $DEVICE `nls 'on'` $MODEMPORT `nls 'at'` $LINESPEED" &)&
+    "`nls 'dip started for %s on %s at %s' $DEVICE $MODEMPORT $LINESPEED`" &)&
   doexec /usr/sbin/dip dip-$DEVICE $DIPSCRIPT
   if is_no "$PERSIST" || [ ! -f /var/run/sl-$DEVICE.dev ] ; then
     exit 0
@@ -84,13 +84,13 @@ else
 	nls "/sbin/slattach does not exist or is not executable"
         echo "ifup-sl - $DEVICE `nls exiting`"
         logger -p daemon.info -t ifup-sl \
-        "`nls '/sbin/slattach does not exist or is not executable for'` $DEVICE"
+        "`nls '/sbin/slattach does not exist or is not executable for %s' $DEVICE`"
         exit 1
 }
 
         echo > /var/run/sl-$DEVICE.dev
         (logger -p daemon.info -t ifup-sl \
-        "`nls 'slattach started for'` $DEVICE `nls on` $MODEMPORT `nls at` $LINESPEED" &)&
+        "`nls 'slattach started for %s on %s at %s' $DEVICE $MODEMPORT $LINESPEED`" &)&
 
          slattach -p $PROTOCOL -s $LINESPEED $MODEMPORT &
          usleep 1500

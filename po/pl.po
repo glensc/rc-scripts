@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.30 2000/06/29 08:24:14 waszi Exp $
+# $Id: pl.po,v 1.31 2000/09/19 12:46:44 saq Exp $
 #
 # ,fuzzy
 msgid ""
@@ -275,8 +275,8 @@ msgid "%sResource Manager: %sEntering runlevel number"
 msgstr "%sZarzadca zasobow: %sWejscie na poziom"
 
 #: ../rc.d/init.d/functions:367
-msgid "Start service"
-msgstr "Uruchomiono usluge"
+msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
+msgstr "Uruchomic usluge %s (T)ak/(N)ie/(K)ontynuuj? [T] "
 
 #: ../rc.d/rc.shutdown:77
 msgid "Remounting remaining filesystems ro mode"
