@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.38 2002/01/17 20:47:06 gotar Exp $
+# $Id: pl.po,v 1.39 2002/01/17 20:56:02 gotar Exp $
 #
 msgid ""
 msgstr ""
@@ -217,7 +217,7 @@ msgstr "Nie moge znalezc klienta dhcp."
 
 #: ./rc.d/rc.sysinit:505
 msgid "Turning on quotas for local filesystems"
-msgstr "Wlaczam quote na lokalnych systemach plików"
+msgstr "Wlaczanie quoty na lokalnych systemach plików"
 
 #: ./sysconfig/network-scripts/ifup:35
 msgid "Users cannot control this device."
@@ -225,7 +225,7 @@ msgstr "Uzytkownicy nie moga kontrolowac tego urzadzenia."
 
 #: ./rc.d/rc.shutdown:36
 msgid "Turning off quotas for local filesystems"
-msgstr "Wylaczam quote na lokalnych systemach plików"
+msgstr "Wylaczanie quoty na lokalnych systemach plików"
 
 #: ./rc.d/init.d/functions.network:222
 msgid "Enabling IPv6 packet forwarding"
@@ -359,7 +359,7 @@ msgstr "Sprawdzanie glównego systemu plików"
 
 #: ./sysconfig/network-scripts/ifup:68
 msgid "Delaying %s initialization"
-msgstr "Opózniam inicjalizacje %s"
+msgstr "Opóznianie inicjalizacji %s"
 
 #: ./rc.d/rc.sysinit:183
 #: ./rc.d/rc.sysinit:375
@@ -496,7 +496,7 @@ msgstr "Domena NIS:"
 #: ./rc.d/rc.sysinit:410
 #: ./rc.d/rc.sysinit:471
 msgid "*** Dropping you to a shell; the system will reboot"
-msgstr "*** Uruchamiam powloke; system zostanie zrestartowany"
+msgstr "*** Uruchamianie powloki; system zostanie zrestartowany"
 
 #: ./rc.d/init.d/functions:166
 msgid "BUSY"
