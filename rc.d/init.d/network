@@ -121,7 +121,7 @@ set_down_loopback
 interfaces_boot=$((
 	. /etc/rc.d/init.d/functions; \
 	cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
-	egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br:)' | \
+	egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br)' | \
 	egrep 'ifcfg-[a-z0-9\.]+$' | \
 	for i in `cat`; do \
 	    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
