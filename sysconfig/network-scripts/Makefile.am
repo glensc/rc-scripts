@@ -12,6 +12,7 @@ networkscriptsdir = @networkscriptsdir@
 
 networkscripts_SCRIPTS = \
 	ifdown-ppp \
+	ifdown-post \
 	ifdown-sl \
 	ifup-aliases \
 	ifup-ipx \
