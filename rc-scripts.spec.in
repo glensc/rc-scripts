@@ -21,6 +21,8 @@ Requires:	/bin/nice
 Requires:	/bin/basename
 Requires:	SysVinit
 Requires:	sed
+Requires:	net-tools
+Requires:	iproute2
 Prereq:		/sbin/chkconfig
 Obsoletes:	initscripts
 Provides:	initscripts
