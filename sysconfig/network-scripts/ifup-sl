@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-sl,v 1.12 1999/08/14 13:18:23 misiek Exp $
+#	$Id: ifup-sl,v 1.13 1999/09/02 12:25:35 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -29,6 +29,11 @@ fi
 
 if [ -z "$RETRYTIMEOUT" ]; then
   RETRYTIMEOUT=30
+fi
+
+# Try to load slip module
+if [ "`ls -R /lib/modules/\`uname -r\`/ | grep slip.o`" != "" ]; then
+	/sbin/modprobe -s -k slip
 fi
 
 # we can use dip or direct slip connection via slattach
