@@ -10,8 +10,14 @@
 
 . /etc/rc.d/init.d/functions
 
+kernel=$(awk '{print $3}' /proc/version | awk -F. '{print sprintf("%d.%d",$1,$2)}')
+
 # Loop over every line in /etc/modules.
-(egrep -v "^(#|[[:blank:]]*#)" /etc/modules; echo) | # make sure there is a LF at the end
+( \
+	egrep -v "^(#|[[:blank:]]*#)" /etc/modules; \
+	[ -f "/etc/modules.${kernel}" ] && egrep -v "^(#|[[:blank:]]*#)" "/etc/modules.${kernel}"; \
+	echo \
+) | # make sure there is a LF at the end
 while read module args
 do
   [ -z "$module" ] && continue
