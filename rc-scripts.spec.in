@@ -16,6 +16,7 @@ URL:		http://svn.pld-linux.org/svn/rc-scripts/
 BuildRequires:	glib-devel
 %{!?_without_static:BuildRequires:	glib-static}
 BuildRequires:	popt-devel
+BuildRequires:	pkgconfig
 Requires(post):	fileutils
 Requires:	/bin/awk
 Requires:	/bin/basename
