@@ -30,51 +30,59 @@ fi
 
 source_config
 
-if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
-then
+if [ "foo$2" == "fooboot" -a "${ONBOOT}" == "no" ]; then
     exit
 fi
 
 IPSETUP=no
 
-# przyjmuje warto¶æ np: "dummy" czy "eth" itd.
-DEVICETYPE=`echo $DEVICE | sed "s/[0-9]*$//"`
-# przyjmuje eth0 przy eth0 lub eth0:1 lub eth0:alias
-REALDEVICE=`echo $DEVICE | sed 's/:.*//g'`
+# pelna nazwa dewajsa jaka podal user
+FULLDEVNAME="$DEVICE"
+# przyjmuje warto¶æ np: "dummy" czy "eth" itd. (do poprawki - teraz przyjmuje "dummy0:")
+DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
+# przyjmuje eth0 przy {eth0,eth0:1,eth0:alias}
+DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 
-if echo $DEVICE | grep -q ':' ; then
+if echo $FULLDEVNAME | grep -q ':' ; then
     ISALIAS=yes
 else
     ISALIAS=no
 fi
 
 # Old BOOTP variable
-if [ "$BOOTP" = "yes" ]; then
+if [ "$BOOTP" == "yes" ]; then
     BOOTPROTO=bootp
 fi
 
-if [ "$BOOTPROTO" = bootp -o "$BOOTPROTO" = dhcp ]; then
+if [ "$BOOTPROTO" = bootp -o "$BOOTPROTO" == "dhcp" ]; then
     PUMP=true
+fi
+
+if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
+    PREFIX="`calcprefix $NETMASK`"
+fi
+
+if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
+    NETMASK="`calcnetmask $PREFIX`"
 fi
 
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
-if [ -x $OTHERSCRIPT ]; then
+if [ -x "$OTHERSCRIPT" ]; then
     exec $OTHERSCRIPT $CONFIG $2
 fi
 
 # is this device available? (this catches PCMCIA devices for us)
-/sbin/ifconfig ${REALDEVICE} 2>&1 | grep -s "not found" > /dev/null
-if [ "$?" = "0" ]; then
-    echo "Delaying ${DEVICE} initialization."
+/sbin/ifconfig ${DEVICE} 2>&1 | grep -s "not found" > /dev/null
+if [ "$?" == "0" ]; then
+    echo "Delaying ${FULLDEVNAME} initialization."
     exit 0
 fi
 
-if [ "$SLAVE" = yes -a "$ISALIAS" = no -a "$MASTER" != "" -a \
-     -x /sbin/ifenslave ]; then
-    RFLAG="" ; [ "$RECIEVE-ONLY" = yes ] && RFLAG="-r"
+if [ "$SLAVE" == "yes" -a "$ISALIAS" == "no" -a "$MASTER" != "" -a -x /sbin/ifenslave ]; then
+    RFLAG="" ; [ "${RECIEVE-ONLY}" == "yes" ] && RFLAG="-r"
 
-    ifconfig ${DEVICE} down
+    ip link set ${DEVICE} down
     echo "Enslaving $DEVICE to $MASTER"
     ifenslave $RFLAG "$MASTER" "$DEVICE"
 
@@ -82,10 +90,11 @@ if [ "$SLAVE" = yes -a "$ISALIAS" = no -a "$MASTER" != "" -a \
 fi
 
 if [ -n "$MACADDR" ]; then
-   ifconfig ${DEVICE} hw ether ${MACADDR}
+   ifconfig ${FULLDEVNAME} hw ether ${MACADDR}
 fi
 
 if [ -n "$PUMP" ]; then
+
     echo -n "Determining IP information for $DEVICE..."
     if /sbin/pump -i $DEVICE ; then
        echo " done."
@@ -96,15 +105,6 @@ if [ -n "$PUMP" ]; then
 
 else
 
-if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
-    PREFIX="`calcprefix $NETMASK`"
-fi
-
-if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
-    NETMASK="`calcnetmask $PREFIX`"
-fi
-
-if [ "$IPSETUP" != yes ]; then
     if [ -z "$PREFIX" ]; then
 	eval `/bin/ipcalc --prefix ${IPADDR}`
     fi
@@ -117,23 +117,19 @@ if [ "$IPSETUP" != yes ]; then
 	eval `/bin/ipcalc --network ${IPADDR} ${NETMASK}`
     fi
 
-#    ifconfig ${DEVICE} ${IPADDR} netmask ${NETMASK} broadcast ${BROADCAST}
     ip link set ${DEVICE} up
-    ip addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST}
+    ip addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME}
 
-    if [ "${IP6VNETWORKING}" = "yes" ] ; then 
-      for ADDR in ${IP6VADDRS} ; do
-        ip addr add ${ADDR} dev ${DEVICE}
+    if [ "${IPV6NETWORKING}" == "yes" ] ; then 
+      for ADDR in ${IPV6ADDRS} ; do
+	   ip addr add ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
       done  
     fi
 
 # hack for 2.2 kernels
-    if [ "$ISALIAS" = no ] && [ -z "`route -n | sed "s/ .*//" | grep ${NETWORK}`" ]; then
-# potrzebna zamiana netmaski z postaci np. 255.255.255.255 -> 32
-#	route add -net ${NETWORK} netmask ${NETMASK} ${DEVICE}
-	ip route add ${NETWORK}/${PREFIX} ${DEVICE}
+    if [ "$ISALIAS" == "no" ] && [ -z "`route -n | sed "s/ .*//" | grep ${NETWORK}`" ]; then
+	ip route add ${NETWORK}/${PREFIX} dev ${DEVICE}
     else
-#	route add -host ${IPADDR} ${DEVICE}
 	ip route add ${IPADDR}/32 dev ${DEVICE}
     fi
 
@@ -142,8 +138,7 @@ if [ "$IPSETUP" != yes ]; then
     if [ "${GATEWAY}" != "" ]; then
 	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 	    # set up default gateway
-#	    route add default gw ${GATEWAY} ${DEVICE}
-	    ip route add 0.0.0.0/0 via ${GATEWAY} dev ${DEVICE}
+	    ip route add default via ${GATEWAY} dev ${DEVICE}
 	    DEFGW=${GATEWAY}
 	fi
     fi
@@ -151,9 +146,8 @@ if [ "$IPSETUP" != yes ]; then
     if [ "$BOOTPROTO" = bootp -a "$ISALIAS" = no ]; then
 	if [ -n "$GATEWAYS" ]; then
 	    for gw in $GATEWAYS; do
-		if [ $gw != "${DEFGW}" ]; then
-#		    route add default gw $gw ${DEVICE}
-		    ip route add 0.0.0.0/0 via $gw dev ${DEVICE}
+		if [ "$gw" != "${DEFGW}" ]; then
+		    ip route add default via $gw dev ${DEVICE}
 		fi
 	    done
 	fi

@@ -18,7 +18,7 @@ then
         exit
 fi
 
-[ -z "${TTL}" ] && TTL=inherit
+[ -z "${TTL}" ] && TTL=64
 [ -z "${TOS}" ] && TOS=inherit
 [ -z "${LOCALADDR}" ] && LOCALADDR=any
 [ -z "${REMOTEADDR}" ] && REMOTEADDR=any
@@ -58,12 +58,12 @@ fi
 
 if [ "${MODE}" == "ipip" ] || [ "${MODE}" == "sit" ]; then
 	
-	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos ${TOS} ${PMTUDISC} ${BIND_DEV}
+	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos ${TOS} ${PMTUDISC} $BIND_DEV
 
 elif [ "${MODE}" == "gre" ]; then
 
 	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ttl ${TTL} tos
-${TOS} ${PMTUDISC} ${BIND_DEV} ${CSUM} ${ISEQ} ${KEY} ${IKEY} ${OKEY}
+${TOS} ${PMTUDISC} $BIND_DEV $CSUM $ISEQ ${KEY} ${IKEY} ${OKEY}
 
 elif [ "${MODE}" == "ipxip" ] || [ "${MODE}" == "ipipx" ]; then
 

@@ -323,9 +323,13 @@ local OISF len olen bad prefix
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 #
 calcnetmask() {
-local prefix a
+local prefix a MASK
 MASK=""
-prefix=$[ $1 ]
+if [ "`echo "${1}" | grep "^[0-9]"`" == "" ]; then
+	prefix=32
+else
+	typeset -i prefix=$1
+fi
 for i in 1 2 3 4
  do
   case $prefix in
@@ -336,12 +340,13 @@ for i in 1 2 3 4
    3) a=224 ;;
    2) a=192 ;;
    1) a=128 ;;
-   *) if [ $prefix -ge 8 ]; then a=255; fi 
+   *)
+      if [ $prefix -ge 8 ]; then a=255; fi 
       if [ $prefix -le 0 ]; then a=0; fi
       ;;
   esac
-  prefix=`expr $prefix - 8`
-  if [ -z $MASK ]
+  prefix="`expr $prefix - 8`"
+  if [ -z "$MASK" ]
    then MASK=$a
    else MASK=$MASK.$a
   fi

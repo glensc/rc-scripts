@@ -27,7 +27,17 @@ fi
 
 source_config
 
-DEVICETYPE=`echo $DEVICE | sed "s/[0-9]*$//"`
+if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
+    PREFIX="`calcprefix $NETMASK`"
+fi
+
+if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
+    NETMASK="`calcnetmask $PREFIX`"
+fi
+
+FULLDEVNAME="$DEVICE"
+DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
+DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
 
 if [ -x $OTHERSCRIPT ]; then
@@ -41,8 +51,13 @@ else
     ISALIAS=no
 fi
 
-#ifconfig ${DEVICE} down
-ip link set ${DEVICE} down
+if [ "$ISALIAS" == "yes" ]; then
+    ip addr del ${IPADDR}/${PREFIX} dev ${DEVICE}
+else
+    ip link set ${DEVICE} down
+    ip addr flush dev ${DEVICE} 2> /dev/null
+fi
+
 
 exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
 
