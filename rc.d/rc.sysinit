@@ -376,6 +376,18 @@ if [ -n "$needusbstorage" ]; then
         modprobe usb-storage >/dev/null 2>&1
 fi
 
+# Load firewire devices
+if ! grep -iq "nofirewire" ; then
+	aliases=$(/sbin/modprobe -c | awk '/^alias ieee1394-controller/ { print	$3 }')
+	if [ -n "$aliases" -a "$aliases" != "off" ] ; then
+	    for alias in $aliases ; do
+		[ "$alias" = "off" ] && continue
+		run_cmd "$(nls 'Initializing firewire controller') ($alias)" /sbin/modprobe $alias
+	    done
+	    LC_ALL=C grep -E "SBP2" /proc/bus/ieee1394/devices 2> /dev/null && /sbin/modprobe -s sbp2 > /dev/null 2>&1 
+	fi
+fi    
+    
 # Load sound modules if they need persistent DMA buffers
 if grep -q "options sound dmabuf=1" /etc/modules.conf 2>/dev/null ; then
 	RETURN=0
