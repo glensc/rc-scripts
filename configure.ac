@@ -7,7 +7,7 @@ ALL_LINGUAS="pl de"
 
 echo -n "Finding shell scripts"
 SHSCRIPTS=""
-for shfile in $(find ${srcdir}/rc.d ${srcdir}/sysconfig -type f); do
+for shfile in $(find ${srcdir}/rc.d ${srcdir}/sysconfig ! -path "*/\.*/*" -type f); do
     echo -n "."
     if (LANG=C file ${shfile} | grep -q 'shell script'); then
 	SHSCRIPTS="${SHSCRIPTS} ${shfile}"
