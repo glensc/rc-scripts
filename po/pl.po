@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.11 1999/09/28 14:42:00 kloczek Exp $
+# $Id: pl.po,v 1.12 1999/11/15 23:17:20 wiget Exp $
 #
 msgid ""
 msgstr ""
@@ -13,17 +13,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso8850-2\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-# Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
-# must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
-# (4 + "\b" * count of letters) in one of five previous words
-# msgid "\b\b\b\b\b\b\b\b"
-# ../rc.d/init.d/functions.network:14
-msgid "Missing config file %s.\n"
-msgstr "Brak pliku konfiguracyjnego %s.\n"
-
-msgid "%sResource Manager: %sEntering runlevel number%s"
-msgstr "%sZarzadca zasobow: %sWejscie na poziom%s"
 
 msgid "Configured devices:"
 msgstr "Skonfigurowane urzadzenia sieciowe:"
@@ -37,9 +26,6 @@ msgstr "Wlaczenie swapa"
 msgid "Enabling Delay Login"
 msgstr "Wlaczenie opozniania logowania"
 
-msgid "Active SMB mountpoints:"
-msgstr "Aktywne punkty przylaczenia SMB:"
-
 # ../rc.d/init.d/functions.network:160
 msgid "Setting up IP spoofing protection"
 msgstr "Ustawienie zabezpieczenia przed IP spoofingiem"
@@ -47,46 +33,19 @@ msgstr "Ustawienie zabezpieczenia przed IP spoofingiem"
 msgid "Setting clock"
 msgstr "Ustawienie zegara systemowego"
 
-msgid "Mounting NCP filesystems"
-msgstr "Podlaczenia systemow plikow typu NCP"
-
-msgid "Mounting SMB filesystems"
-msgstr "Podlaczenie systemow plikow typu SMB"
-
 msgid "Automatic reboot in progress."
 msgstr "Automatyczny restart w toku."
-
-msgid "/proc filesystem unavailable"
-msgstr "System plikow /proc niedostepny"
 
 # ../rc.d/rc.sysinit:384
 msgid "Rebuilding /etc/psdevtab database"
 msgstr "Przebudowa bazy /etc/psdevtab"
 
-msgid "Active NFS mountpoints:"
-msgstr "Aktywne punkty przylaczenia NFS"
-
-msgid "Unmounting NCP filesystems"
-msgstr "Odlaczenie systemow plikow typu NCP"
-
-msgid "Unmounting SMB filesystems"
-msgstr "Odlaczenie systemow plikow typu SMB"
-
 # ../rc.d/init.d/functions:275
 msgid "%s dead but pid file exists"
 msgstr "%s zabity ale plik z numerem procesu istnieje"
 
-msgid "Configured SMB mountpoints:"
-msgstr "Skonfigurowane punkty przylaczenia SMB"
-
 msgid "%sResource Manager: %sRunlevel has been reached%s"
 msgstr "%sZarzadca zasobow: %sZostal osiagniety poziom%s"
-
-msgid "Mounting remote filesystems"
-msgstr "Podlaczam zdalne systemy plikow"
-
-msgid "Configured NFS mountpoints:"
-msgstr "Skonfigurowane punkty przylaczenia NFS"
 
 msgid "Automatic reboot in progress"
 msgstr "Automatyczny restart w toku"
@@ -157,9 +116,6 @@ msgstr "Prosze czekac - restart system"
 msgid "Host:"
 msgstr "Host:"
 
-msgid "Unmounting remote filesystems"
-msgstr "Odlaczanie zdalnych systemow plikow"
-
 # ../rc.d/rc.sysinit:95
 # ../rc.d/rc.sysinit:238
 msgid ""
@@ -171,13 +127,12 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"*** Podczas sprawdzania systemow plikow wykryto blad niemozliwy do usuniecia\n"
+"*** Podczas sprawdzania systemow plikow wykryto blad niemozliwy do "
+"usuniecia\n"
 "*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
-"*** naprawic uszkodzenie. Po wyjsciu z popwloki system zostanie automatycznie\n"
+"*** naprawic uszkodzenie. Po wyjsciu z popwloki system zostanie "
+"automatycznie\n"
 "*** zrestartowany.\n"
-
-msgid "Mounting remote filesystems, start nfsd"
-msgstr "Podlaczenie zdalnych systemow plikow, uruchomienie nfsd"
 
 # ../rc.d/rc.sysinit:214
 msgid ""
@@ -191,7 +146,8 @@ msgstr ""
 "\n"
 "*** Podczas inicjacji urzadzen RAID wykryto blad niemozliwy do usuniecia\n"
 "*** automatycznie. Zostaje uruchomiona powloka zeby mozna by³o recznie\n"
-"*** naprawic uszkodzenie. Po wyjsciu z powloki system zostanie automatycznie\n"
+"*** naprawic uszkodzenie. Po wyjsciu z powloki system zostanie "
+"automatycznie\n"
 "*** zrestartowany.\n"
 
 msgid "Initializing random number generator"
@@ -214,11 +170,11 @@ msgstr "Podlaczenie lokalnych systemow plikow."
 msgid "Checking filesystems."
 msgstr "Sprawdzenie systemow plikow."
 
-msgid "Starting up RAID devices."
-msgstr "Ustawianie urzadzen RAID"
-
 msgid "Checking root filesystem quotas"
 msgstr "Sprawdzanie quota na glownym systemie plikow"
+
+msgid "Starting up RAID devices."
+msgstr "Ustawianie urzadzen RAID"
 
 # ../rc.d/init.d/functions:109
 msgid "$MESSAGE"
@@ -227,12 +183,6 @@ msgstr "$MESSAGE"
 msgid "Allowing users to login"
 msgstr "Pozwalenie uzytkownikom na logowanie sie"
 
-msgid "Mounting other filesystems"
-msgstr "Podlaczenie innych systemow plikow"
-
-msgid "Finding module dependencies"
-msgstr "Wyszukiwanie powiazan pomiedzy modulami"
-
 # ../rc.d/init.d/functions:281
 msgid "%s dead but subsys locked"
 msgstr "%s zabity ale podsystem zablokowany"
@@ -240,11 +190,11 @@ msgstr "%s zabity ale podsystem zablokowany"
 msgid "Unmounting file systems"
 msgstr "Odlaczenie systemow plikow"
 
+msgid "Finding module dependencies"
+msgstr "Wyszukiwanie powiazan pomiedzy modulami"
+
 msgid "Date set to"
 msgstr "Data ustawiona na"
-
-msgid "Stopping NFS clients"
-msgstr "Zatrzymanie klientow NFS"
 
 # ../rc.d/init.d/functions:70
 msgid "$*"
@@ -263,12 +213,15 @@ msgstr "Aktywacja partycji swap"
 msgid "%s is stopped"
 msgstr "%s jest zatrzymany"
 
+msgid "System shutdown in progress \n"
+msgstr "Zamykanie systemu w toku \n"
+
+msgid "%sResource Manager: %sEntering runlevel number%s"
+msgstr "%sZarzadca zasobow: %sWejscie na poziom%s"
+
 # ../rc.d/rc.sysinit:224
 msgid "(RAID Repair) #"
 msgstr "(Naprawa RAID) #"
-
-msgid "System shutdown in progress \n"
-msgstr "Zamykanie systemu w toku \n"
 
 # ../rc.d/init.d/functions.network:145
 msgid "Setting local port range"
@@ -283,9 +236,6 @@ msgstr "AKTYWUJE"
 msgid "System bootup in progress  - please wait"
 msgstr "Start systemu w toku - prosze czekac"
 
-msgid "Active NCP mountpoints:"
-msgstr "Aktywne punkty przylaczenia NCP"
-
 msgid "Saving random seed"
 msgstr "Zapis ziarna losowego"
 
@@ -296,21 +246,12 @@ msgstr "Wlaczam quote na lokalnych systemach plikow"
 msgid "The random data source exists"
 msgstr "Zrodlo losowych danych istnieje"
 
-msgid "Mounting NFS filesystems"
-msgstr "Podlaczenie systemow plikow typu NFS"
-
 # (4 + "\b" * count of letters) in one of five previous words
 msgid "\b\b\b\b\b\b\b\b"
 msgstr "\b\b\b\b\b\b\b\b\b\b\b\b"
 
 msgid "Setting up ISA PNP devices"
 msgstr "Ustawienie urzadzen ISA PNP"
-
-msgid "Configured NCP mountpoints:"
-msgstr "Skonfigurowane punkty przylaczenia NCP"
-
-msgid "Unmounting NFS filesystems"
-msgstr "Odlaczenie systemow plikow typu NFS"
 
 msgid "On the next boot fsck will be skipped."
 msgstr "Przy nastepnym starcie systemu program fsck bedzie pominiety."
@@ -329,11 +270,11 @@ msgstr ""
 msgid "Turning off swap and accounting"
 msgstr "Wylaczemoe swap i zliczania"
 
-msgid "(Repair filesystem) #"
-msgstr "(Naprawa systemu plikow) #"
-
 msgid "NIS Domain:"
 msgstr "Domena NIS:"
+
+msgid "(Repair filesystem) #"
+msgstr "(Naprawa systemu plikow) #"
 
 # ../rc.d/init.d/network:132
 msgid "Currently active devices and tunnels:"
@@ -342,8 +283,70 @@ msgstr "Aktywne urzadzenia sieciowe i tunele:"
 msgid "Checking filesystem quotas"
 msgstr "Sprawdzenie quota w systemach plikow"
 
+msgid "Loading default system font"
+msgstr "Ladowanie podstawowy font systemowy"
+
 msgid "Setting up /etc/ld.so.cache"
 msgstr "Ustawienie /etc/ld.so.cache"
 
-msgid "Loading default system font"
-msgstr "Ladowanie podstawowy font systemowy"
+# Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
+# must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
+# (4 + "\b" * count of letters) in one of five previous words
+# msgid "\b\b\b\b\b\b\b\b"
+# ../rc.d/init.d/functions.network:14
+#~ msgid "Missing config file %s.\n"
+#~ msgstr "Brak pliku konfiguracyjnego %s.\n"
+
+#~ msgid "Active SMB mountpoints:"
+#~ msgstr "Aktywne punkty przylaczenia SMB:"
+
+#~ msgid "Mounting NCP filesystems"
+#~ msgstr "Podlaczenia systemow plikow typu NCP"
+
+#~ msgid "Mounting SMB filesystems"
+#~ msgstr "Podlaczenie systemow plikow typu SMB"
+
+#~ msgid "/proc filesystem unavailable"
+#~ msgstr "System plikow /proc niedostepny"
+
+#~ msgid "Active NFS mountpoints:"
+#~ msgstr "Aktywne punkty przylaczenia NFS"
+
+#~ msgid "Unmounting NCP filesystems"
+#~ msgstr "Odlaczenie systemow plikow typu NCP"
+
+#~ msgid "Unmounting SMB filesystems"
+#~ msgstr "Odlaczenie systemow plikow typu SMB"
+
+#~ msgid "Configured SMB mountpoints:"
+#~ msgstr "Skonfigurowane punkty przylaczenia SMB"
+
+#~ msgid "Mounting remote filesystems"
+#~ msgstr "Podlaczam zdalne systemy plikow"
+
+#~ msgid "Configured NFS mountpoints:"
+#~ msgstr "Skonfigurowane punkty przylaczenia NFS"
+
+#~ msgid "Unmounting remote filesystems"
+#~ msgstr "Odlaczanie zdalnych systemow plikow"
+
+#~ msgid "Mounting remote filesystems, start nfsd"
+#~ msgstr "Podlaczenie zdalnych systemow plikow, uruchomienie nfsd"
+
+#~ msgid "Mounting other filesystems"
+#~ msgstr "Podlaczenie innych systemow plikow"
+
+#~ msgid "Stopping NFS clients"
+#~ msgstr "Zatrzymanie klientow NFS"
+
+#~ msgid "Active NCP mountpoints:"
+#~ msgstr "Aktywne punkty przylaczenia NCP"
+
+#~ msgid "Mounting NFS filesystems"
+#~ msgstr "Podlaczenie systemow plikow typu NFS"
+
+#~ msgid "Configured NCP mountpoints:"
+#~ msgstr "Skonfigurowane punkty przylaczenia NCP"
+
+#~ msgid "Unmounting NFS filesystems"
+#~ msgstr "Odlaczenie systemow plikow typu NFS"
