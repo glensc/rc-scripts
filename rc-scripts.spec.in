@@ -1,5 +1,6 @@
 # $Revision: 1.124 $, $Date: 2003/09/03 20:12:46 $
 # $Id$
+%bcond_without  static          # link binaries with glib dynamically
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -13,8 +14,8 @@ Vendor:		PLD rc-scripts Team <pld-rc-scripts@pld-linux.org>
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://svn.pld-linux.org/svn/rc-scripts/
-BuildRequires:	glib-devel
-%{!?_without_static:BuildRequires:	glib-static}
+BuildRequires:	glib2-devel
+%{?with_static:BuildRequires:	glib2-static}
 BuildRequires:	popt-devel
 BuildRequires:	pkgconfig
 Requires(post):	fileutils
@@ -25,18 +26,19 @@ Requires:	/bin/nice
 Requires:	/bin/ps
 Requires:	FHS >= 2.2-6
 Requires:	SysVinit
-Requires:	e2fsprogs >= 1.15
 Requires:	fileutils
 Requires:	findutils
+Requires:	fsck
 Requires:	gettext
 Requires:	grep
 Requires:	iproute2
 Requires:	mingetty
 Requires:	mktemp
-Requires:	modutils >= 2.1.121
-Requires:	mount >= 2.10
+Requires:	module-init-tools
+Requires:	mount >= 2.12
 Requires:	net-tools
 Requires:	procps
+Requires:	psmisc
 Requires:	sh-utils
 Requires:	textutils
 Requires:	utempter
@@ -84,7 +86,7 @@ programcýklar içerir.
 %configure \
 	--with-localedir=%{localedir}
 %{__make} \
-	%{?_without_static:ppp_watch_LDADD="-lglib" ppp_watch_DEPENDENCIES=}
+	%{!?with_static:ppp_watch_LDADD="-lglib-2.0" ppp_watch_DEPENDENCIES=}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -92,7 +94,7 @@ install -d $RPM_BUILD_ROOT/var/{run/netreport,log}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
-	%{?_without_static:ppp_watch_LDADD="-lglib" ppp_watch_DEPENDENCIES=}
+	%{!?with_static:ppp_watch_LDADD="-lglib-2.0" ppp_watch_DEPENDENCIES=}
 
 for i in 0 1 2 3 4 5 6; do
 	install -d $RPM_BUILD_ROOT/etc/rc.d/rc$i.d
@@ -156,10 +158,12 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %doc sysconfig/interfaces/data/chat-ppp*
 %doc sysconfig/interfaces/ifc*
 %doc sysconfig/interfaces/tnl*
+%doc sysconfig/init-colors*
 
 %attr(755,root,root) %dir /etc/rc.d
 %attr(755,root,root) %dir /etc/rc.d/init.d
 %attr(755,root,root) %dir /etc/rc.d/rc?.d
+/etc/init.d
 
 /etc/rc.d/init.d/functions
 %attr(754,root,root) /etc/rc.d/init.d/allowlogin
@@ -167,6 +171,7 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %attr(754,root,root) /etc/rc.d/init.d/network
 %attr(754,root,root) /etc/rc.d/init.d/random
 %attr(754,root,root) /etc/rc.d/init.d/single
+%attr(754,root,root) /etc/rc.d/init.d/sys-chroots
 %attr(754,root,root) /etc/rc.d/init.d/timezone
 
 %attr(754,root,root) /etc/rc.d/rc
@@ -196,6 +201,8 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %attr(755,root,root) %{_bindir}/run-parts
 %attr(755,root,root) %{_bindir}/usleep
 
+%attr(755,root,root) %{_sbindir}/minilogd
+%attr(755,root,root) %{_sbindir}/start-stop-daemon
 %attr(755,root,root) %{_sbindir}/genhostid
 %attr(755,root,root) %{_sbindir}/hwprofile
 %attr(755,root,root) %{_sbindir}/service
@@ -215,8 +222,6 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %attr(755,root,root) %dir %{_sysconfdir}/ppp
 %attr(754,root,root) %{_sysconfdir}/ppp/*
 %attr(755,root,root) %dir /etc/sysconfig
-%attr(755,root,root) %dir /etc/sysconfig/hwprofiles
-%config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/hwprofiles/files
 %attr(755,root,root) %dir /etc/sysconfig/interfaces
 %attr(755,root,root) %dir /etc/sysconfig/interfaces/data
 %attr(755,root,root) %dir /etc/sysconfig/isapnp
@@ -239,6 +244,7 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/initlog.conf
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/sysctl.conf
 %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/clock
+%config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/init-colors
 %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/hwprof
 %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/i18n
 %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/network
@@ -249,7 +255,13 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/interfaces/ifcfg-eth0
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/system
 
-%{_mandir}/man1/*
+%{_mandir}/man?/*
+%lang(de) %{_mandir}/de/man?/*
+%lang(es) %{_mandir}/es/man?/*
+%lang(fr) %{_mandir}/fr/man?/*
+%lang(ja) %{_mandir}/ja/man?/*
+%lang(ru) %{_mandir}/ru/man?/*
+%lang(sv) %{_mandir}/sv/man?/*
 
 %dir %{localedir}
 %lang(de) %{localedir}/de
