@@ -10,7 +10,7 @@ if 	PROTOCOL=ipv4; then
 		[ BOOTPROTO={none|bootp|dhcp} ]
 	fi
 	ADDR=<IPv4 addres>
-	[ NETMASK= ]
+	[ PREFIX= ]
 	[ NETWORK= ]
 	[ BROADCAST= ]
 	[ ONBOOT={no|yes} ]

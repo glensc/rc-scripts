@@ -96,8 +96,16 @@ if [ -n "$PUMP" ]; then
 
 else
 
+if [ -z "$PREFIX" ] && [ -n "$NETMASK" ]; then
+    PREFIX="`calcprefix $NETMASK`"
+fi
+
+if [ -z "$NETMASK" ] && [ -n "$PREFIX" ]; then
+    NETMASK="`calcnetmask $PREFIX`"
+fi
+
 if [ "$IPSETUP" != yes ]; then
-    if [ -z "$NETMASK" ]; then
+    if [ -z "$PREFIX" ]; then
 	eval `/bin/ipcalc --short-netmask ${IPADDR}`
     fi
 
@@ -109,7 +117,9 @@ if [ "$IPSETUP" != yes ]; then
 	eval `/bin/ipcalc --network ${IPADDR} ${NETMASK}`
     fi
 
-    ifconfig ${DEVICE} ${IPADDR} netmask ${NETMASK} broadcast ${BROADCAST}
+#    ifconfig ${DEVICE} ${IPADDR} netmask ${NETMASK} broadcast ${BROADCAST}
+    ip link set ${DEVICE} up
+    ip addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST}
 
     if [ "${IP6VNETWORKING}" = "yes" ] ; then 
       for ADDR in ${IP6VADDRS} ; do
@@ -121,7 +131,7 @@ if [ "$IPSETUP" != yes ]; then
     if [ "$ISALIAS" = no ] && [ -z "`route -n | sed "s/ .*//" | grep ${NETWORK}`" ]; then
 # potrzebna zamiana netmaski z postaci np. 255.255.255.255 -> 32
 #	route add -net ${NETWORK} netmask ${NETMASK} ${DEVICE}
-	ip route add ${NETWORK}/${NETMASK} ${DEVICE}
+	ip route add ${NETWORK}/${PREFIX} ${DEVICE}
     else
 #	route add -host ${IPADDR} ${DEVICE}
 	ip route add ${IPADDR}/32 dev ${DEVICE}

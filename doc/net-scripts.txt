@@ -77,7 +77,7 @@ Files in /etc/sysconfig/interfaces/
       devices where it is the "logical name")
     IPADDR=
     IPV6ADDRS=<blank separated list of ipv6 addresses>
-    NETMASK=
+    PREFIX= 
     GATEWAY=
     ONBOOT=yes|no
     USERCTL=yes|no
