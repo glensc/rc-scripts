@@ -1,4 +1,4 @@
-# $Id: network,v 1.7 1999/09/27 10:02:43 misiek Exp $
+# $Id: network,v 1.8 2000/02/03 11:50:05 misiek Exp $
 ######################################################################
 # MAIN PART
 
@@ -141,3 +141,10 @@ IPV6_FORWARDING=no
 
 # Enable tunnel interfaces configuration ?
 IPV6_TUNNELCONFIG=no
+
+# Start Classic router discovery daemon ?
+# You need iputils package installed for this option.
+IPV6_RDISC=no
+
+# rdisc mode: "host" or "router". Default: "host".
+IPV6_RDISC_MODE=host

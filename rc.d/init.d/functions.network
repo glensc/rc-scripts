@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.35 2000/01/31 14:29:04 misiek Exp $
+# $Id: functions.network,v 1.36 2000/02/03 11:50:04 misiek Exp $
 # vi:syntax=sh
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -145,6 +145,29 @@ if [ -r /etc/sysconfig/static-nat ]; then
 fi
 }
 
+# network router discovery daemon
+rdisc()
+{
+if [ "$IPV6_NETWORKING" = "yes" ]; then
+  [ -z "$IPV6_RDISC_MODE" ] && IPV6_RDISC_MODE=host
+  if [ "$IPV6_RDISC" = "on" -o "$IPV6_RDISC" = "yes" ]; then
+  RDISC_OPTS="-fs"
+	case "$1" in
+	on|start)
+		[ "$IPV6_RDISC_MODE" = "router" ] && \
+		RDISC_OPTS="$RDISC_OPTS -r"
+		run_cmd "Starting network router discovery daemon" \
+			/usr/sbin/rdisc $RDISC_OPTS
+		;;
+	off|stop)
+		show "Shutting down network router discovery daemon"
+		killproc rdisc -HUP
+		;;
+	esac
+  fi
+fi
+}
+
 # proc_net <zmien> <start/stop> <co ustaw> <co default> <nazwa_zmiennej> [komunikat]
 # proc_net ipv4/ip_forward start 1         0            IPV4_FORWARDING  "IPv4 forwarding"
 #
@@ -282,7 +305,7 @@ fi
 setup_routes(){
 
 	if [ -f /etc/sysconfig/static-routes ]; then
-		if [ $1 = "on" ] ; then
+		if [ "$1" = "on" -o "$1" = "yes" ] ; then
 			egrep "^(none)|(any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
 				/sbin/ip route add $args
 			done

@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.30 1999/12/30 12:09:45 jajcus Exp $
+# $Id: network,v 1.31 2000/02/03 11:50:04 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -60,6 +60,8 @@ network_postinit()
 # Set static ARP table
 static_arp
 
+# Start rdisc daemon
+rdisc on
 }
 
 ######
@@ -68,8 +70,12 @@ static_arp
 network_deinit()
 {
 setup_routes off
+
 # Set down NAT rules
 setup_nat off
+
+# Shut down rdisc daemon
+rdisc off
 
 # Spoofing protection && dynamic IP && port range
 ipv4_anti_spoofing off
