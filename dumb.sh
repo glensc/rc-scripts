@@ -182,5 +182,7 @@ nls "Login password: "
 nls "Password again: "
 nls "ERROR: Passwords don't match"
 nls "Loading zebra configuration"
+nls "Starting Athlon Cooling"
+nls "Stoping Athlon Cooling"
 
 fi
