@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.40 2000/11/16 15:58:54 baggins Exp $
+# $Id: network,v 1.41 2000/11/17 06:25:52 kloczek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -138,17 +138,17 @@ proc_net ipv6/conf/default/autoconf_route $TODO 0 1 IPV6_AUTOCONF_ROUTE ""
 # find all the interfaces besides loopback.
 # ignore aliases, alternative configurations, and editor backup files
 
-interfaces=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
+interfaces=$( (cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
 	egrep -v '(ifcfg-lo|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
 	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-interfaces_boot=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
+interfaces_boot=$( (cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
 	egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|:)' | egrep 'ifcfg-[a-z0-9]+$' | \
 	xargs egrep -l "ONBOOT=[^n][^o]" | \
 	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-interfaces_sit_boot=$((cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
+interfaces_sit_boot=$( (cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
 	egrep 'ifcfg-[a-z0-9]+$' | xargs egrep -l "ONBOOT=[^n][^o]" | \
 	awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-tunnels=$((cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
+tunnels=$( (cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
 	xargs egrep -l "ONBOOT=[^n][^o]" | \
 	awk ' { gsub(/tnlcfg-/,NIL); print $0 } ') 2> /dev/null)
 
