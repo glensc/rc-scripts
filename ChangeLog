@@ -1,5 +1,9 @@
 2003-07-28  Pawe³ Go³aszewski  <blues@pld-linux.org>
 
+	* sysctl.conf: - added gc_thresh entries
+
+	* sysconfig/network: - oops - these were my experiments...
+
 	* sysconfig/network: - typo
 
 	* sysconfig/network: - GATEWAY setup is back - with comment
