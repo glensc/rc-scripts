@@ -1,0 +1,22 @@
+# $Id: rc.init,v 1.1 1999/09/02 12:13:32 misiek Exp $
+# This script is started by init ...
+
+if [ -r /etc/sysconfig/i18n ]; then
+. /etc/sysconfig/i18n
+fi
+
+if [ -n "$LANG" ]; then
+export LANG
+fi
+
+if [ -n "$LC_ALL" ]; then
+export LC_ALL
+fi
+
+if [ -n "$LINGUAS" ]; then
+export LINGUAS
+fi
+
+# Execute the program.
+eval exec "$4"
+		
