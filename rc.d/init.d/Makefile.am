@@ -8,6 +8,7 @@ init_SCRIPTS = \
 	network \
 	random \
 	single \
+	sys-chroots \
 	timezone
 	
 init_DATA = functions
