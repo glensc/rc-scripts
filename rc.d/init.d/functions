@@ -369,8 +369,8 @@ checkpid()
 	return 1
 }
 
-# outside chroot get only thsese processes which are outside chroot.
-# inside chroot get only these processes which are inside of chroot.
+# outside chroot get only those processes, which are outside chroot.
+# inside chroot get only those processes, which are inside chroot.
 # (note: some processes like named are chrooted but run outside chroot)
 filter_chroot()
 {
