@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.22 2000/05/09 18:58:35 baggins Exp $
+#	$Id: ifdown,v 1.23 2000/05/29 19:36:43 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -30,6 +30,14 @@ if [ `id -u` != 0 ]; then
 fi
 
 source_config
+
+if [ "$BOOTPROTO" = bootp ]; then
+    DYNIP=pump
+fi
+
+if [ "$BOOTPROTO" = "dhcp" ]; then
+    DYNIP=dhcpcd
+fi
 
 # IPv4, IPv6 or both ?
 [ -n "$IPV6_ADDR" ]             && IPv6=yes || IPv6=no
@@ -71,6 +79,9 @@ if [ "$ISALIAS" = "yes" ]; then
 			ip -family inet6 addr del ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
 		done
 else
+    if [ "$DYNIP" = "dhcpcd" ]; then
+       /sbin/dhcpcd -k $FULLDEVNAME ; then
+    fi
     ip link set ${DEVICE} down
     ip addr flush dev ${DEVICE} 2> /dev/null
 fi
