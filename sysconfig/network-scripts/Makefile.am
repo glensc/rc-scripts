@@ -3,7 +3,6 @@
 libdir = @libdir@
 
 sbin_SCRIPTS = \
-	ifdhcpc-done \
 	ifdown \
 	ifdown-ppp \
 	ifdown-sl \
@@ -14,13 +13,11 @@ sbin_SCRIPTS = \
 	ifup-post \
 	ifup-ppp \
 	ifup-routes \
-	ifup-sl 
+	ifup-sl \
+	tnldown \
+	tnlup
 
-#	ifdown-tunnel \
-#	ifup-tunnel \
-#	ifdown-post 
-
-lib_DATA = network-functions
+#lib_DATA = network-functions
 
 
 #SUBDIRS = data

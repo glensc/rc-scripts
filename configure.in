@@ -30,5 +30,7 @@ AC_OUTPUT(Makefile src/Makefile doc/Makefile \
 	ppp/Makefile ppp/ip-up.d/Makefile ppp/ip-down.d/Makefile \
 	sysconfig/Makefile \
 	sysconfig/network-scripts/Makefile \
+	sysconfig/interfaces/Makefile \
+	sysconfig/interfaces/data/Makefile \
 	rc.d/Makefile rc.d/init.d/Makefile
 	rc-scripts.spec)

@@ -1,10 +1,9 @@
 
-SUBDIRS = src ppp sysconfig rc.d
+SUBDIRS = src ppp sysconfig rc.d doc
 
 sysconf_DATA = \
 	adjtime \
-	inittab \
-	inputrc
+	inittab 
 
 profiledir = @sysconfdir@/profile.d
 

@@ -10,13 +10,18 @@ Copyright:	GPL
 Group:		Base
 Group(pl):	Bazowe	
 Source:		%{name}-%{version}.tar.gz
+BuildPrereq:	popt-devel
 Requires:	mingetty
 Requires:	mktemp
 Requires:	modutils >= 2.1.121
 Prereq:		/sbin/chkconfig
 Obsoletes:	initscripts
 Provides:	initscripts
-Buildroot:	/tmp/buildroot-%{name}-%{version}
+Buildroot:	/tmp/%{name}-%{version}-root
+
+%define		_prefix		/usr
+%define		_exec_prefix	/
+%define		_sysconfdir	/etc
 
 %description
 This package contains the scripts use to boot a system, change run
@@ -77,7 +82,7 @@ Skrypt u³atwiaj±cy konfigurowanie regu³ filtracji pakietów IP
 %setup -q
 
 %build
-%configure --prefix=/
+%configure 
 make
 
 %install
@@ -88,9 +93,6 @@ make install  \
 	DESTDIR=$RPM_BUILD_ROOT \
 	mandir=/usr/man \
 	
-ln -s network-scripts/ifup $RPM_BUILD_ROOT/sbin/ifup
-ln -s network-scripts/ifdown $RPM_BUILD_ROOT/sbin/ifdown
-
 gzip -9nf $RPM_BUILD_ROOT/usr/man/man*/* \
 	doc/*.txt 
 

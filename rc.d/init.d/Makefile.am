@@ -8,11 +8,13 @@ init_SCRIPTS = \
 	killall \
 	network \
 	nfsfs \
+	netfs \
 	random \
 	reboot \
 	shutdwn \
 	single
 
-init_DATA = functions
+init_DATA = functions functions.network
 	
 EXTRA_DIST = $(init_SCRIPTS) $(init_DATA)	
+
