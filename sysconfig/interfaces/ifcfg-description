@@ -1,4 +1,4 @@
-#	$Id: ifcfg-description,v 1.19 2003/01/15 22:34:06 ankry Exp $
+#	$Id: ifcfg-description,v 1.20 2003/06/06 09:02:59 blues Exp $
 DEVICE=<name>
 [ BOOTPROTO={none|bootp|dhcp|pump} ]
   You can specify which dhcp client to use with the DHCP_CLIENT, if
@@ -62,7 +62,7 @@ BANDWIDTH_OUT=[downstream limit in kilobites]
 if 	DEVICE=eth* ; then
 
 	[ MEDIA={auto|10baseT|10base2|AUI} ]
-	[ MAC=<hw addres> ]
+	[ MACADDR=<hw addres> ]
 
 	if 	DEVICE=wireless interface (man iwconfig(8))
 		WLAN_ESSID=<ESSID or Network Name (Domain ID)>|any|off
