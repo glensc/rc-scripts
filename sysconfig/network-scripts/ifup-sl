@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-sl,v 1.10 1999/08/14 12:57:49 misiek Exp $
+#	$Id: ifup-sl,v 1.11 1999/08/14 13:16:31 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -96,7 +96,7 @@ else
 	 echo "`nls 'some process is currently using'` $MODEMPORT - `nls aborting`..."
         else
          slattach -p $PROTOCOL -s $LINESPEED $MODEMPORT &
-         sleep 2
+         usleep 1500
 	 ip link set $DEVICE mtu $MTU up
 	 ip -family inet addr add $IPADDR peer $REMIP dev $DEVICE
 	 # Set defaultroute
