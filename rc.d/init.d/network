@@ -6,14 +6,14 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.26 1999/10/13 16:11:27 baggins Exp $
+# $Id: network,v 1.27 1999/10/23 08:13:00 waszi Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
 
 # Source function library.
 . /etc/rc.d/init.d/functions
-. /etc/rc.d/init.d/functions.network
+. /etc/sysconfig/network-scripts/.functions
 
 [ ! -f /etc/sysconfig/network ] && exit 0
 
