@@ -39,7 +39,7 @@ case "$1" in
         # Stop daemons.
         show "Stopping <service> service"
 	killproc <service>
-	rm -rf /var/lock/subsys/<service>
+	rm -f /var/lock/subsys/<service> >/dev/null 2&>1
         ;;
   restart)
         $0 stop
