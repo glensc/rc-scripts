@@ -12,6 +12,7 @@ interfaces_DATA = \
 	ifcfg-ppp0.leased1 \
 	ifcfg-ppp0.leased2 \
 	ifcfg-ppp0.tpsa \
+	ifcfg-ppp0.gprs-plusgsm \
 	ifcfg-sl0 \
 	tnlcfg-description \
 	tnlcfg-icm 
