@@ -31,7 +31,13 @@
 network_init()
 {
 [ -f /etc/sysconfig/interfaces/ifcfg-lo ] && /sbin/ifup lo boot
-modprobe ipv6 ipip ip_gre 2> /dev/null
+modprobe_net
+
+# Spoofing protection
+ipv4_anti_spoofing on
+
+# IPv4 forwarding
+proc_net ipv4/ip_forward start 1 0 IPV4_FORWARDING "IPv4 forwarding"
 
 }
 
@@ -40,6 +46,13 @@ modprobe ipv6 ipip ip_gre 2> /dev/null
 # - down lo interface.
 network_deinit()
 {
+
+# IPv4 forwarding
+proc_net ipv4/ip_forward stop 1 0 IPV4_FORWARDING "IPv4 forwarding"
+
+# Spoofing protection
+ipv4_anti_spoofing off
+
 [ -f /etc/sysconfig/interfaces/ifcfg-lo ] && /sbin/ifdown lo boot
 
 }

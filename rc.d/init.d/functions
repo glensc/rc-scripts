@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.14 1999/07/13 12:52:52 misiek Exp $
+# $Id: functions,v 1.15 1999/07/15 13:29:44 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -131,8 +131,6 @@ killproc()
 
 	busy
 	
-	TMPFILE=`mktemp /tmp/init-XXXXXX`
-	
 	notset=0
 	# check for second arg to be kill level
 	if [ "$2" != "" ] ; then
@@ -150,37 +148,39 @@ killproc()
 
         # Kill it.
         if [ "$pid" != "" ] ; then
-		if [ "$notset" = 1 ] ; then
-			# TERM first, then KILL if not dead
-			kill -TERM $pid >$TMPFILE 2>&1
-			usleep 100000
-			dead=`ps -o pid= $pid`
-			if [ "$dead" != "" ]; then
-				sleep 3
-				kill -KILL $pid >$TMPFILE 2>&1
+		if [ "$notset" == "1" ] ; then
+			if ps h $pid>/dev/null 2>&1; then
+				# TERM first, then KILL if not dead
+				kill -TERM $pid
+				usleep 100000
+				if ps h $pid >/dev/null 2>&1 ; then
+					sleep 1
+					if ps h $pid >/dev/null 2>&1 ; then
+						sleep 3
+						if ps h $pid >/dev/null 2>&1 ; then
+							kill -KILL $pid
+						fi
+					fi
+				fi
 			fi
+			ps h $pid >/dev/null 2>&1 && (deltext; fail) || (deltext; ok)
 		# use specified level only
 		else
-	                kill $killlevel $pid >$TMPFILE 2>&1
+			if ps h $pid >/dev/null 2>&1; then
+				kill $killlevel $pid && (deltext; ok) || (deltext; fail)
+			else
+				deltext; died
+			fi
 		fi
 	else
-		rm -f /var/run/$base.pid
 		deltext
 		fail
-		return
 	fi
 
         # Remove pid file if any.
-        rm -f /var/run/$base.pid
-	
-	if [ -z "`cat $TMPFILE`" ]; then
-		deltext
-		ok
-	else
-		deltext
-		died	
+	if [ "$notset" = "1" ]; then
+        	rm -f /var/run/$base.pid
 	fi
-	rm -f $TMPFILE
 }
 
 # A function to find the pid of a program.
@@ -202,24 +202,17 @@ pidofproc()
 	fi
 
 	# Next try "pidof"
-	#pid=`pidof $1`
+	pid=`pidof $1`
 	if [ "$pid" != "" ] ; then
 	        echo $pid
 	        return 0
 	fi
 
-	# Finally try to extract it from ps
-	pids=`ps -C $1 -o pid=`
-
-	# Return the first PID, which is not our
-	for pid in $pids ; do
-		if [ $pid != $$ ] ; then
-	  		echo $pid
-			return 0
-		fi
-	done  
-	
-	return 1
+        # Finally try to extract it from ps
+        ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
+                           { if ((prog == $5) || (("(" prog ")") == $5) ||
+                             (("[" prog "]") == $5) ||
+                           ((prog ":") == $5)) { print $1 ; exit 0 } }' $1
 }
 
 status() 
@@ -236,9 +229,12 @@ status()
 	        echo "$1 (pid $pid) is running..."
 	        return 0
         else
-                pid=`echo \`ps -C $1 -o pid= \``
+                pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
+                           { if ((prog == $5) || (("(" prog ")") == $5) ||
+                             (("[" prog "]") == $5) ||
+                           ((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
                 if [ "$pid" != "" ] ; then
-                        echo  "$1 (pid $pid) is running..."
+                        echo "$1 (pid $pid) is running..."
                         return 0
                 fi
 	fi

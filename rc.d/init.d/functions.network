@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.10 1999/07/13 12:49:36 misiek Exp $
+# $Id: functions.network,v 1.11 1999/07/15 13:29:44 misiek Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -57,169 +57,46 @@ set_hostname()
 #
 # All functions must be called "name_of_function on" or "name_of_function off"
 
-ipv4_forwarding()
+# proc_net <zmien> <start/stop> <co ustaw> <co default> <nazwa_zmiennej> [komunikat]
+# proc_net ipv4/ip_forward start 1         0            IPV4_FORWARDING  "IPv4 forwarding"
+#
+# wy¶wietli siê komunikat "Setting IPv4 forwarding to 1"
+# je¶li nie podano komunikatu nic nie jest wy¶wietlane
+
+proc_net()
 {
-if [ "$IPV4_FORWARDING" != "default" -a -n "$IPV4_FORWARDING" ] || [ ! -e /proc/sys/net/ipv4/ip_forward ]; then
+WHAT="$1"
+TODO="$2"
+SET="$3"
+DEF="$4"
+VAR="$5"
+MESSAGE="$6"
+eval VARD=\$${VAR}
 
-if [ "$IPV4_FORWARDING" == "yes" ] && [ "$1" == "on" ]; then
-show Enabling IPv4 forwarding; busy
-if echo 1 > /proc/sys/net/ipv4/ip_forward; then deltext; ok; else deltext; fail; fi
-else
-show Disabling IPv4 forwarding ; busy
-if echo 0 > /proc/sys/net/ipv4/ip_forward; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-ipv4_ign_all_icmp()
-{
-if [ "$IPV4_IGN_ALL_ICMP" != "default" -a -n "$IPV4_IGN_ALL_ICMP" ] || [ ! -e /proc/sys/net/ipv4/icmp_echo_ignore_all ]; then
-
-if [ "$IPV4_IGN_ALL_ICMP" == "yes" ] && [ "$1" == "on" ]; then
-show Ignoring ICMP echo to any addresses; busy
-if echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all; then deltext; ok; else deltext; fail; fi
-else
-show Allowing ICMP echo to any addresses; busy
-if echo 0 > /proc/sys/net/ipv4/icmp_echo_ignore_all; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-ipv4_ign_bmcast_icmp()
-{
-if [ "$IPV4_IGN_BMCAST_ICMP" != "default" -a -n "$IPV4_IGN_BMCAST_ICMP" -a "$IPV4_IGN_ALL_ICMP" != "yes" ] || [ ! -e /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts ]; then
-
-if [ "$IPV4_IGN_BMCAST_ICMP" == "yes" ] && [ "$1" == "on" ]; then
-show Ignoring ICMP echo to multi and broadcast; busy
-if echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts; then deltext; ok; else deltext; fail; fi
-else
-show Allowing ICMP echo to multi and broadcast; busy
-if echo 0 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-
-ipv4_no_mtu_discovery()
-{
-if [ "$IPV4_NO_MTU_DISCOVERY" != "default" -a -n "$IPV4_NO_MTU_DISCOVERY" ] || [ ! -e /proc/sys/net/ipv4/ip_no_pmtu_disc ]; then
-
-if [ "$IPV4_NO_MTU_DISCOVERY" == "yes" ] && [ "$1" == "on" ]; then
-show Disabling MTU Discovery Path; busy
-if echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc; then deltext; ok; else deltext; fail; fi
-else
-show Enabling MTU Discovery Path; busy
-if echo 0 > /proc/sys/net/ipv4/ip_no_pmtu_disc; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-ipv4_masq_debugging()
-{
-if [ "$IPV4_MASQ_DEBUGGING" != "default" -a -n "$IPV4_MASQ_DEBUGGING" ] || [ ! -e /proc/sys/net/ipv4/ip_masq_debug ]; then
-
-if [ "$IPV4_MASQ_DEBUGGING" == "yes" ] && [ "$1" == "on" ]; then
-show Enabling Masquerade Debug Mode; busy
-if echo 1 > /proc/sys/net/ipv4/ip_masq_debug; then deltext; ok; else deltext; fail; fi
-else
-show Disabling Masquerade Debug Mode; busy
-if echo 0 > /proc/sys/net/ipv4/ip_masq_debug; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-ipv4_no_retrans_collapse()
-{
-if [ "$IPV4_NO_RETRANS_COLLAPSE" != "default" -a -n "$IPV4_NO_RETRANS_COLLAPSE" ] || [ ! -e /proc/sys/net/ipv4/tcp_retrans_collapse ]; then
-
-if [ "$IPV4_NO_RETRANS_COLLAPSE" == "yes" ] && [ "$1" == "on" ]; then
-show Turning off retrans collapse; busy
-if echo 0 > /proc/sys/net/ipv4/tcp_retrans_collapse; then deltext; ok; else deltext; fail; fi
-else
-show Turning on retrans collapse; busy
-if echo 1 > /proc/sys/net/ipv4/tcp_retrans_collapse; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-ipv4_no_select_ack()
-{
-if [ "$IPV4_NO_SELECT_ACK" != "default" -a -n "$IPV4_NO_SELECT_ACK" ] || [ ! -e /proc/sys/net/ipv4/tcp_sack ]; then
-
-if [ "$IPV4_NO_SELECT_ACK" == "yes" ] && [ "$1" == "on" ]; then
-show Disabling select acknowledgments \(RFC2018\); busy
-if echo 0 > /proc/sys/net/ipv4/tcp_sack; then deltext; ok; else deltext; fail; fi
-else
-show Enabling select acknowledgments \(RFC2018\); busy
-if echo 1 > /proc/sys/net/ipv4/tcp_sack; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-ipv4_no_timestamps()
-{
-if [ "$IPV4_NO_TIMESTAMPS" != "default" -a -n "$IPV4_NO_TIMESTAMPS" ] || [ ! -e /proc/sys/net/ipv4/tcp_timestamps ]; then
-
-if [ "$IPV4_NO_TIMESTAMPS" == "yes" ] && [ "$1" == "on" ]; then
-show Disabling timestamps \(RFC1323\); busy
-if echo 0 > /proc/sys/net/ipv4/tcp_timestamps; then deltext; ok; else deltext; fail; fi
-else
-show Enabling timestamps \(RFC1323\); busy
-if echo 1 > /proc/sys/net/ipv4/tcp_timestamps; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-ipv4_rfc793()
-{
-if [ "$IPV4_RFC793" != "default" -a -n "$IPV4_RFC793" ] || [ ! -e /proc/sys/net/ipv4/tcp_stdurg ]; then
-
-if [ "$IPV4_RFC793" == "yes" ] && [ "$1" == "on" ]; then
-show Enabling strict interpretation of RFC793; busy
-if echo 1 > /proc/sys/net/ipv4/tcp_stdurg; then deltext; ok; else deltext; fail; fi
-else
-show Disabling strict interpretation of RFC793; busy
-if echo 0 > /proc/sys/net/ipv4/tcp_stdurg; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-ipv4_syn_cookies()
-{
-if [ "$IPV4_SYN_COOKIES" != "default" -a -n "$IPV4_SYN_COOKIES" ] || [ ! -e /proc/sys/net/ipv4/tcp_syncookies ]; then
-
-if [ "$IPV4_SYN_COOKIES" == "yes" ] && [ "$1" == "on" ]; then
-show Enabling SYN Cookies; busy
-if echo 1 > /proc/sys/net/ipv4/tcp_syncookies; then deltext; ok; else deltext; fail; fi
-else
-show Disabling SYN Cookies; busy
-if echo 0 > /proc/sys/net/ipv4/tcp_syncookies; then deltext; ok; else deltext; fail; fi
-fi
-
-fi
-}
-
-ipv4_no_window_scaling()
-{
-if [ "$IPV4_NO_WINDOW_SCALING" != "default" -a -n "$IPV4_NO_WINDOW_SCALING" ] || [ ! -e /proc/sys/net/ipv4/tcp_window_scaling ]; then
-
-if [ "$IPV4_NO_WINDOW_SCALING" == "yes" ] && [ "$1" == "on" ]; then
-show Disabling window scaling \(RFC1323\); busy
-if echo 0 > /proc/sys/net/ipv4/tcp_window_scaling; then deltext; ok; else deltext; fail; fi
-else
-show Enabling window scaling \(RFC1323\); busy
-if echo 1 > /proc/sys/net/ipv4/tcp_window_scaling; then deltext; ok; else deltext; fail; fi
-fi
-
+if [ -n "$VARD" ] && [ -e /proc/sys/net/$WHAT ]; then
+	if [ "$TODO" == "start" ]; then
+	        [ "$VARD" == "no" -a "$SET" == "1" ] && SET="(($SET - 1))"
+		[ "$VARD" == "yes" -a "$SET" == "0" ] && SET="(($SET + 1))"
+		if [ -n "$MESSAGE" ]; then
+			show "Setting $MESSAGE to $SET"; busy
+			if (echo "$SET" > /proc/sys/net/$WHAT) 2> /dev/null; then
+				deltext; ok
+			else
+				deltext; fail
+			fi
+		else
+			echo "$SET" > /proc/sys/net/$WHAT
+		fi
+	elif [ "$TODO" == "stop" ]; then
+		if [ -n "$MESSAGE" ]; then
+			show "Setting $MESSAGE to $DEF"; busy
+			if (echo "$DEF" > /proc/sys/net/$WHAT) 2> /dev/null; then
+				deltext; ok
+			else
+				deltext; fail
+			fi
+		fi
+	fi
 fi
 }
 
@@ -273,16 +150,12 @@ fi
 fi
 }
 
-
-# FUNCTIONS TO IMPLEMENT
-#ipv4_forwarding()
-#ipv4_accept_icmp_redir()
-#ipv4_accept_source_route()
-#ipv4_log_martians()
-#ipv4_multicast()
-#ipv4_proxy_arp()
-#ipv4_accept_icmp_redir_gate()
-#ipv4_send_icmp_redir()
+# Koniecznie trzeba to usprawnic
+modprobe_net()
+{
+[ "$IPV6_NETWORKING" == "yes" ] && modprobe net-pf-10 2> /dev/null
+modprobe ipip ip_gre 2> /dev/null
+}
 
 #
 # folowing function calculates network prefix from given network mask
