@@ -1,3 +1,57 @@
+2004-01-10 15:57 [r3153]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* configure.ac: - 0.4.0.8 release
+
+2004-01-10 15:27 [r3152]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: Outside chroot always add all possible
+	  pids unless some has /proc/XXX/root inside of known chroot.
+
+2004-01-10 14:07 [r3151]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: filter_chroot(): add pid only once.
+
+2004-01-10 13:58 [r3150]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: Fix ulimits in one more case (ssh vs squid
+	  case).
+
+2004-01-10 13:42 [r3149]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* sysconfig/system, rc.d/init.d/functions: Support for handling
+	  processes inside and outside of chrooted systems based on
+	  rc-scripts-chroot_safe.patch.
+
+2004-01-09 21:59 [r3148]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: Rework ulimit support so it works again.
+
+2004-01-09 01:40 [r3141]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Sencond part of ppp
+	  DEVNAME fixes.
+
+2004-01-09 01:24 [r3140]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-ppp: ifup-ppp instructs pppd to
+	  create pppd-$DEVNAME.pid file, so in ifdown-ppp we also use
+	  $DEVNAME.
+
+2004-01-09 00:39 [r3139]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* run-parts: If in -u mode and user cannot be found then skip that
+	  file and display warning.
+
+2004-01-09 00:29 [r3138]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* run-parts: Added -u option which means: run as owner of file not
+	  as current user (usable mainly from root).
+
+2004-01-08 22:42 [r3137]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* src/Makefile.am, configure.ac: Try to find glib-2.0, glib in that
+	  order - link with first found.
+
 2004-01-08 22:01 [r3134]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
 
 	* configure.ac: - 0.4.0.7 release
