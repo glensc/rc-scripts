@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.42 2000/03/09 11:43:07 zagrodzki Exp $
+# $Id: functions,v 1.43 2000/03/09 11:50:24 zagrodzki Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -95,11 +95,9 @@ fi
 show() 
 {	
 	what="`nls --nls-domain rc-scripts "DONE"`"; typeset -i offset=${#what}
-	text="`nls "$*"`"
+	text="`nls "$@"`"
 	echo -n "$text"
 	awk "BEGIN { for (j=length(\"$text\"); j<$INIT_COL; j++) printf \".\" }"
-	# move to column number $INIT_COL
-	# termput hpa $INIT_COL
 }
 
 busy() 
