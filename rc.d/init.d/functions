@@ -66,18 +66,21 @@ if is_yes "$FASTRC"; then
 	INIT_DOTS=$(awk "BEGIN{for(\$i=0;\$i<$INIT_COL;\$i++)printf(\".\");}")
 	initlog()
 	{
+		RESULT=0
 		while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
 			case $1 in
 				-c)
 					shift
 					$1
-					return
+					RESULT=$?
+					break
 					;;
 				 *)
 					shift
 					;;
 			esac
 		done
+		return $RESULT
 	}
 fi
 
