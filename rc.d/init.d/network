@@ -60,7 +60,7 @@ modprobe_net
 [ -x /sbin/nameif -a -f /etc/mactab ] && run_cmd "Setting interfaces names (nameif)" /sbin/nameif
 
 # Kernel network parameters
-run_cmd "Setting network parameters" sysctl -e -p /etc/sysctl.conf
+sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 
 # Set UP loopback interface
 set_up_loopback

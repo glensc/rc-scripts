@@ -720,7 +720,7 @@ if [ -f /proc/sys/kernel/panic -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
 fi
 
 # ... and here finish configuring parameters
-run_cmd "Configuring kernel parameters" /sbin/sysctl -e -p /etc/sysctl.conf
+/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 
 # Clean up /etc.
 rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
