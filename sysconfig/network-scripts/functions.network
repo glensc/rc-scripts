@@ -450,7 +450,7 @@ wireless_param () {
     # wlan mode needs to be first
     [ -n "$(eval echo \$${prefix}WLAN_MODE)" ] && iwconfig ${device} \
    	 mode "$(eval echo \$${prefix}WLAN_MODE)"
-    iwconfig ${device} nickname WLAN_NICKNAME
+    iwconfig ${device} nickname ${WLAN_NICKNAME}
     [ -n "$(eval echo \$${prefix}WLAN_ESSID)" ] && iwconfig ${device} \
    	 essid "$(eval echo \$${prefix}WLAN_ESSID)"
     [ -n "$(eval echo \$${prefix}WLAN_NWID)" ] && iwconfig ${device} \
