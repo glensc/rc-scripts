@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.71 2002/04/09 11:05:09 jajcus Exp $
+# $Id: functions.network,v 1.72 2002/05/11 08:41:30 misiek Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -196,9 +196,6 @@ if [ -n "${IP6_SRC_IF}" ] ; then
 	IP6SRCADDR="src $IP6SRCADDR"
 fi
 
-# If tunnel device then add onlink option in routing
-[ -n "$MODE" ] && TNLOPTS="onlink"
-
 # new rc-scripts 0.4.x option
 if [ -z "$HANDLING" ]; then
 	HANDLING=0
@@ -252,10 +249,10 @@ if is_yes "$IPV4_NETWORKING"; then
 	if [ -z "${GATEWAYDEV}" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 	    # set up default gateway
 	    if [ -n "${GATEWAY}" ]; then
-	  	ip -4 route add default via ${GATEWAY} dev ${DEVICE} ${IP4SRCADDR} ${TNLOPTS}
+	  	ip -4 route add default via ${GATEWAY} dev ${DEVICE} ${IP4SRCADDR} onlink
 	    	DEFGW=${GATEWAY}
 	    elif [ "${GATEWAYDEV}" = "${DEVICE}" ]; then
-	 	ip -4 route add default dev ${DEVICE} ${IP4SRCADDR} ${TNLOPTS}
+	 	ip -4 route add default dev ${DEVICE} ${IP4SRCADDR}
 	    fi
 	fi
 fi
@@ -266,7 +263,7 @@ if is_yes "$IPV6_NETWORKING"; then
     	    if [ -z "${GATEWAY6DEV}" -o "${GATEWAY6DEV}" = "${DEVICE}" ]; then
 	    	# set up default gateway
 	    	if [ -n "${GATEWAY6}" ]; then
-	    		ip -6 route add default via ${GATEWAY6} dev ${DEVICE} ${IP6SRCADDR}
+	    		ip -6 route add default via ${GATEWAY6} dev ${DEVICE} ${IP6SRCADDR} onlink
 			DEFGW6=${GATEWAY6}
 	    	elif [ "${GATEWAY6DEV}" = "${DEVICE}" ]; then
 	    		ip -6 route add default dev ${DEVICE} ${IP6SRCADDR}
@@ -276,7 +273,7 @@ if is_yes "$IPV6_NETWORKING"; then
             if [ -z "${IPV6_GLOBALROUTEDEV}" -o "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
 	    	# set up default route
 	    	if [ -n "${IPV6_GLOBALROUTEGW}" ]; then
-	    	    ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR}
+	    	    ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR} onlink
 	    	elif [ "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
 	            ip -6 route add 2000::/3 via dev ${DEVICE} ${IP6SRCADDR}
 		fi
