@@ -1,8 +1,8 @@
-dnl $Id: configure.in,v 1.17 1999/10/12 14:09:29 baggins Exp $
+dnl $Id: configure.in,v 1.18 1999/10/13 16:32:59 baggins Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
-VERSION=0.0.12
+VERSION=0.1.0
 ALL_LINGUAS="pl"
 
 SHSCRIPTS="rc.d/rc 			\
@@ -10,9 +10,7 @@ SHSCRIPTS="rc.d/rc 			\
 	rc.d/init.d/functions 		\
 	rc.d/init.d/functions.network 	\
 	rc.d/init.d/killall 		\
-	rc.d/init.d/netfs 		\
 	rc.d/init.d/network 		\
-	rc.d/init.d/nfsfs 		\
 	rc.d/init.d/random 		\
 	rc.d/init.d/single 		\
 	rc.d/rc 			\
