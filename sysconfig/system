@@ -1,4 +1,4 @@
-# $Id: system,v 1.23 2002/09/14 19:54:12 orzech Exp $
+# $Id: system,v 1.24 2002/10/10 15:07:48 baggins Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -50,6 +50,25 @@ RUN_LDCONFIG=no
 
 # Mount /dev (Device Filesystem)
 MOUNT_DEVFS=no
+
+# EVMS/LVM options
+# Eextensible Firmware Interface GUID Partition Table segment manager
+EVMS_GUID_PTABLE=no
+
+# Use EVMS for Linux LVM volumes
+EVMS_LVM=no
+
+# Create symlinks for LVM vulumes (/dev/evms/lvm/* -> /dev/*)
+EVMS_LVM_COMPAT_NODES=yes
+
+# Use EVMS for Linux MD (RAID 0/1/5) valumes
+EVMS_MD=no
+
+# EVMS AIX LVM volumes
+EVMS_AIX=no
+
+# EVMS OS/2 LVM volumes
+EVMS_OS2=no
 
 # Set to anything other than 'no' to allow hotkey interactive startup...
 PROMPT=yes
