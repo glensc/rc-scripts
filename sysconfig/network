@@ -1,4 +1,4 @@
-# $Id: network,v 1.19 2002/12/17 13:43:14 baggins Exp $
+# $Id: network,v 1.20 2002/12/17 13:54:17 baggins Exp $
 ######################################################################
 # MAIN PART
 
@@ -7,6 +7,9 @@ NETWORKING=yes
 
 # Do you need IPv4 networking ?
 IPV4_NETWORKING=yes
+
+# Do you want IPv4 forwarding ?
+# then set it in /etc/sysctl.conf
 
 # Set hostname here (only hostname)
 HOSTNAME=pldmachine
@@ -28,6 +31,9 @@ IPXINTERNALNODENUM=
 
 # Do you need IPv6 networking ?
 IPV6_NETWORKING=no
+
+# Do you want IPv6 forwarding ?
+# then set it in /etc/sysctl.conf
 
 # Enable tunnel interfaces configuration ?
 IPV6_TUNNELCONFIG=no
