@@ -6,7 +6,7 @@
 #               Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: shutdwn,v 1.9 1999/09/04 19:49:41 waszi Exp $
+# $Id: shutdwn,v 1.10 1999/09/27 15:12:26 wiget Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -51,7 +51,8 @@ if [ -x /sbin/raidstop -a -f /etc/raidtab ]; then
 	if [ -f /proc/mdstat ] ; then
 		mddevs=$(grep ^md /proc/mdstat | awk '{ print $1 }')
 		for mddev in $mddevs ; do
-			run_cmd "Turning off RAID for $mddev" raidstop /dev/$mddev
+			MESSAGE="`nls "Turning off RAID for %s" "$mddev"`"
+			run_cmd "$MESSAGE" raidstop /dev/$mddev
 		done
 		unset mddev mddevs
 	fi
