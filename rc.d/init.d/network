@@ -43,7 +43,7 @@ network_deinit()
 
 }
 
-interfaces="`cd /etc/sysconfig/interfaces && ls -1 ifcfg-* | grep -v ifcfg-lo | xargs 2> /dev/null`"
+interfaces="`cd /etc/sysconfig/interfaces && ls -1 ifcfg-* | grep -v ifcfg-lo | xargs 2> /dev/null`"tunnels="`cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | xargs 2> /dev/null`"
 
 # See how we were called.
 case "$1" in
