@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.13.2.2 2001/03/24 16:34:47 misiek Exp $
+#	$Id: ifup-ppp,v 1.13.2.3 2001/04/16 14:50:01 dobrek Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -129,7 +129,7 @@ if [ -n "${CHATSCRIPT}"  ] ; then
   	export $DATAFORCHAT
   fi
   /usr/sbin/pppd $opts $MODEMPORT $LINESPEED \
-    connect 'eval /usr/sbin/chat $chatdbg $chatrpt \
+    connect 'eval /usr/sbin/chat -E $chatdbg $chatrpt \
     $(grep -v ^# ${CHATSCRIPT})' \
     linkname "${DEVICE}" ipparam "${CONFIG}" \
     ${PPPOPTIONS}
