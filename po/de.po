@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rc-scripts 0.2.6\n"
 "POT-Creation-Date: 1999-07-30 18:45+0200\n"
-"PO-Revision-Date: 2004-12-13 21:15+0100\n"
+"PO-Revision-Date: 2004-12-13 22:57+0100\n"
 "Last-Translator: Pawel Sakowski <saq@pld-linux.org>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -118,7 +118,7 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit~:278 .././rc.d/rc.sysinit:278
 msgid "*** Filesystem was repaired but system needs to be"
-msgstr ""
+msgstr "*** Das Dateisystem wurde repariert aber man muss das System"
 
 # #### TIMEZONE #####
 #: .././rc.d/init.d/timezone:40
@@ -207,11 +207,11 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit~:280 .././rc.d/rc.sysinit:280
 msgid "*** REBOOTING ***"
-msgstr ""
+msgstr "*** NEUSTART ***"
 
 #: .././rc.d/rc.sysinit~:279 .././rc.d/rc.sysinit:279
 msgid "*** rebooted before mounting it."
-msgstr ""
+msgstr "*** neustarten bevor es gemountet werden kann."
 
 #: .././rc.d/init.d/random:53
 msgid "The random data source exists"
@@ -231,7 +231,7 @@ msgstr "Die USB-Maus wird initialisiert"
 
 #: .././sysconfig/network-scripts/ifup-irda:59
 msgid "problems with setting %s %s"
-msgstr ""
+msgstr "Probleme beim Einstellen von %s %s"
 
 #: .././rc.d/rc.sysinit~:263 .././rc.d/rc.sysinit~:607
 #: .././rc.d/rc.sysinit~:662 .././rc.d/rc.sysinit:263 .././rc.d/rc.sysinit:607
@@ -240,14 +240,12 @@ msgid "(Repair filesystem)# "
 msgstr "(Dateisystem-Reparieren)# "
 
 #: .././rc.d/rc.sysinit~:92 .././rc.d/rc.sysinit:92
-#, fuzzy
 msgid "Setting default font"
-msgstr "Der standarde Lokalportbereich wird eingestellt"
+msgstr ""
 
 #: .././rc.d/rc.sysinit~:560 .././rc.d/rc.sysinit:560
-#, fuzzy
 msgid "*** An error occurred during the RAID startup."
-msgstr "*** Während des RAID-Startens ist ein Fehler passiert"
+msgstr "*** Während des RAID-Startens ist ein Fehler passiert."
 
 #: .././rc.d/init.d/allowlogin:28
 msgid "System shutdown in progress \n"
@@ -282,18 +280,16 @@ msgid "Starting %s service"
 msgstr "Der %s-Dienst wird gestartet"
 
 #: .././rc.d/rc.shutdown:75
-#, fuzzy
 msgid "Turning off RAID devices"
-msgstr "RAID-Geräte werden ausgeschaltet"
+msgstr "Die RAID-Geräte werden ausgeschaltet"
 
 #: .././rc.d/rc.sysinit~:493 .././rc.d/rc.sysinit:493
 msgid "Scanning for LVM volume groups"
 msgstr ""
 
 #: .././sysconfig/network-scripts/functions.network:130
-#, fuzzy
 msgid "Setting static RARP entries"
-msgstr "Die ISA-PNP-Geräte werden eingestellt"
+msgstr "Die statischen RARP-Einträge werden eingestellt"
 
 #: .././rc.d/init.d/network:216
 msgid "Configured tunnels:"
@@ -304,9 +300,8 @@ msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
 msgstr "Den %s-Dienst starten? (J)a/(N)ein/(W)eiterführen [J] "
 
 #: .././sysconfig/network-scripts/ifup-sl:59
-#, fuzzy
 msgid "does not exist for"
-msgstr "existiert für %s nicht"
+msgstr ""
 
 #: .././sysconfig/network-scripts/ifup:126
 msgid "Can't find a dhcp client."
@@ -357,9 +352,8 @@ msgid "Bringing up interface"
 msgstr ""
 
 #: .././rc.d/rc.sysinit~:98 .././rc.d/rc.sysinit:98
-#, fuzzy
 msgid "\t\t  Press %sI%s to enter interactive startup"
-msgstr "um interaktiv hochzufahren."
+msgstr "\t\tDrücken sie %sI%s um interaktiv hochzufahren"
 
 #: .././rc.d/rc.sysinit~:96 .././rc.d/rc.sysinit:96
 msgid "\t\t\t%sPowered by %sPLD Linux Distribution%s"
@@ -372,9 +366,8 @@ msgid "DONE"
 msgstr "GETAN"
 
 #: .././rc.d/rc.sysinit~:634 .././rc.d/rc.sysinit:634
-#, fuzzy
 msgid "Checking encrypted filesystems"
-msgstr "Die Root-Dateisysteme werden nachgesehen."
+msgstr "Die verschlüsselten Dateisysteme werden nachgesehen"
 
 #: .././rc.d/rc.sysinit~:394 .././rc.d/rc.sysinit~:396
 #: .././rc.d/rc.sysinit:394 .././rc.d/rc.sysinit:396
@@ -436,25 +429,21 @@ msgid "Mounting Device Filesystem"
 msgstr "Das Device-Dateisystem wird gemountet"
 
 #: .././rc.d/rc.sysinit~:522 .././rc.d/rc.sysinit:522
-#, fuzzy
 msgid "Starting up RAID device %s"
-msgstr "Die RAID-Geräte werden gestartet."
+msgstr "Das RAID-Gerät %s wird gestartet"
 
 #: .././sysconfig/network-scripts/ifup:154
-#, fuzzy
 msgid "Determining IP information for"
-msgstr "Die IP-Information für %s wird erforscht"
+msgstr ""
 
 #: .././sysconfig/network-scripts/ifup-ppp:237
-#, fuzzy
 msgid "pppd started for %s on device %s at speed %s"
-msgstr "dip gestartet für %s auf %s mit %s"
+msgstr "pppd gestartet für %s auf %s mit %s"
 
 # #### NETWORK #####
 #: .././rc.d/init.d/network:62
-#, fuzzy
 msgid "Setting network parameters"
-msgstr "Der Netzwerkrouter-Erforschung-Server wird gestartet"
+msgstr "Die Netzwerkparameter werden eingestellt"
 
 #: .././rc.d/init.d/network:182
 msgid "Unmounting NFS filesystems"
@@ -463,18 +452,16 @@ msgstr "Die NFS-Dateisysteme werden unmountet"
 #: .././sysconfig/network-scripts/ifup-sl:47
 #: .././sysconfig/network-scripts/ifup-sl:90
 #: .././sysconfig/network-scripts/ifup-ppp:37
-#, fuzzy
 msgid "%s does not exist or is not executable for %s"
-msgstr "/usr/sbin/dip für %s existiert nicht oder ist nicht ausführbar"
+msgstr "%s für %s existiert nicht oder ist nicht ausführbar"
 
 #: .././rc.d/init.d/template.init:56 .././rc.d/init.d/functions:268
 msgid "Stopping %s service"
 msgstr "Der %s-Dienst wird gestoppt"
 
 #: .././rc.d/rc.sysinit~:310 .././rc.d/rc.sysinit:310
-#, fuzzy
 msgid "Setting up ISA PNP devices (userspace pnp)"
-msgstr "Die ISA-PNP-Geräte werden eingestellt"
+msgstr "Die ISA-PNP-Geräte werden eingestellt (userspace pnp)"
 
 #: .././rc.d/rc.sysinit~:468 .././rc.d/rc.sysinit:468
 msgid "Discovering EVMS volumes"
@@ -491,13 +478,12 @@ msgid "*** An error occurred during the file system check."
 msgstr "*** Während des Dateisystem-Prüfens ist ein Fehler passiert."
 
 #: .././rc.d/rc.sysinit~:676 .././rc.d/rc.sysinit:676
-#, fuzzy
 msgid "Remounting encrypted filesystems back in rw mode"
-msgstr "Das Root-Dateisystem wird ohne Schreibschütz erneut gemountet"
+msgstr "Das verschlüsselten Dateisysteme werden ohne Schreibschütz erneut gemountet"
 
 #: .././rc.d/rc.sysinit~:722 .././rc.d/rc.sysinit:722
 msgid "Configuring kernel parameters"
-msgstr ""
+msgstr "Die Kernparameter werden konfiguriert"
 
 #: .././sysconfig/network-scripts/ifup-sl:96
 msgid "slattach started for %s on %s at %s"
@@ -508,9 +494,8 @@ msgid "Activating swap partitions"
 msgstr "Die Auslagerungspartitionen werden aktiviert"
 
 #: .././sysconfig/network-scripts/ifup:81
-#, fuzzy
 msgid "Enslaving %s to %s"
-msgstr "%s wird auf %s eingestellt"
+msgstr ""
 
 #: .././rc.d/init.d/functions:664
 msgid "%s dead but subsys locked"
@@ -526,18 +511,16 @@ msgstr ""
 
 # #### RANDOM #####
 #: .././rc.d/rc.sysinit~:423 .././rc.d/rc.sysinit:423
-#, fuzzy
 msgid "Initializing firewire controller"
-msgstr "Der Zufallszahlgenerator wird initialisiert"
+msgstr ""
 
 #: .././rc.d/init.d/functions:322
 msgid "$1"
 msgstr ""
 
 #: .././rc.d/init.d/network:161
-#, fuzzy
 msgid "Setting tunnel"
-msgstr "%s wird auf %s eingestellt"
+msgstr ""
 
 #: .././sysconfig/network-scripts/ifup-ppp:108
 msgid "Setting up a new %s config file"
@@ -566,14 +549,12 @@ msgid "Allowing users to login"
 msgstr "Die Benutzer werden erlaubt anzumelden"
 
 #: .././rc.d/rc.sysinit~:247 .././rc.d/rc.sysinit:247
-#, fuzzy
 msgid "Checking root filesystem"
-msgstr "Die Root-Dateisysteme werden nachgesehen."
+msgstr "Das Root-Dateisystem wird nachgesehen"
 
 #: .././rc.d/rc.sysinit~:356 .././rc.d/rc.sysinit:356
-#, fuzzy
 msgid "System bootup in progress - please wait"
-msgstr "Das System wird bereits gestartet  - bitte warten"
+msgstr "Das System wird bereits gestartet - bitte warten"
 
 #: .././rc.d/rc.sysinit~:510 .././rc.d/rc.sysinit~:557
 #: .././rc.d/rc.sysinit~:584 .././rc.d/rc.sysinit:510 .././rc.d/rc.sysinit:557
@@ -590,9 +571,8 @@ msgid "Enabling swap space"
 msgstr "Der Auslagerungsbereich wird eingeschaltet"
 
 #: .././rc.d/rc.sysinit~:315 .././rc.d/rc.sysinit:315
-#, fuzzy
 msgid "Setting up ISA PNP devices (kernelspace pnp)"
-msgstr "Die ISA-PNP-Geräte werden eingestellt"
+msgstr "Die ISA-PNP-Geräte werden eingestellt (kernelspace pnp)"
 
 #: .././rc.d/init.d/functions:749
 msgid "Could not load %s kernel module(s)"
@@ -629,7 +609,7 @@ msgstr "Verzögerte Anmeldung wird aktiviert"
 
 #: .././sysconfig/network-scripts/ifdown-irda:69
 msgid "ifdown-%s unable to kill %s for %s"
-msgstr ""
+msgstr "ifdown-%s kann %s nicht für %s töten"
 
 #: .././rc.d/init.d/functions:327
 msgid "BUSY"
@@ -642,12 +622,11 @@ msgstr "%s existiert für %s nicht"
 #: .././rc.d/rc.sysinit~:166 .././rc.d/rc.sysinit~:707
 #: .././rc.d/rc.sysinit:166 .././rc.d/rc.sysinit:707
 msgid "Today`s date:"
-msgstr ""
+msgstr "Das heutige Datum:"
 
 #: .././rc.d/init.d/network:219
-#, fuzzy
 msgid "Currently inactive devices and tunnels:"
-msgstr "Bereits aktive Geräte und Tunnel:"
+msgstr "Bereits inaktive Geräte und Tunnel:"
 
 #: .././rc.d/rc:147 .././rc.d/rc:148
 msgid "%sResource Manager: %sEntering runlevel number"
@@ -665,9 +644,8 @@ msgstr "Warnung: die Option --check wird ignoriert!"
 
 #: .././sysconfig/network-scripts/functions.network:92
 #: .././sysconfig/network-scripts/functions.network:94
-#, fuzzy
 msgid "Setting static ARP entries"
-msgstr "Die ISA-PNP-Geräte werden eingestellt"
+msgstr "Die statischen ARP-Einträge werden eingestellt"
 
 #: .././rc.d/init.d/functions:344
 msgid "FAIL"
