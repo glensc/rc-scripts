@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.57 2003/05/02 23:39:29 ankry Exp $
+# $Id: rc-scripts.spec.in,v 1.58 2003/06/16 20:20:21 blues Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -12,32 +12,33 @@ Group:		Base
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://cvs.pld.org.pl/index.cgi/rc-scripts/
 Vendor:		PLD rc-scripts Team <pld-rc-scripts@pld.org.pl>
-BuildRequires:	popt-devel
+BuildRequires:	gettext-devel
 BuildRequires:	glib-devel
 BuildRequires:	glib-static
-BuildRequires:	gettext-devel
+BuildRequires:	popt-devel
+Requires:	/bin/awk
+Requires:	/bin/basename
+Requires:	/bin/gettext
+Requires:	/bin/nice
+Requires:	/bin/ps
+Requires:	FHS >= 2.2-6
+Requires:	SysVinit
+Requires:	bdflush
+Requires:	e2fsprogs >= 1.15
+Requires:	fileutils
 Requires:	grep
+Requires:	iproute2
 Requires:	mingetty
 Requires:	mktemp
 Requires:	modutils >= 2.1.121
-Requires:	fileutils
-Requires:	textutils
-Requires:	sh-utils
-Requires:	/bin/nice
-Requires:	/bin/basename
-Requires:	/bin/awk
-Requires:	procps
-Requires:	/bin/ps
-Requires:	SysVinit
-Requires:	iproute2
-Requires:	/bin/gettext
-Requires:	e2fsprogs >= 1.15
 Requires:	mount >= 2.10
-Requires:	bdflush
-Requires:	utempter
 Requires:	net-tools
-Obsoletes:	initscripts
+Requires:	procps
+Requires:	sh-utils
+Requires:	textutils
+Requires:	utempter
 Provides:	initscripts
+Obsoletes:	initscripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_prefix		/usr
