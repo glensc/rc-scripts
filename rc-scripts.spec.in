@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.38 2000/01/31 14:30:11 misiek Exp $
+# $Id: rc-scripts.spec.in,v 1.39 2000/02/08 15:49:31 baggins Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -130,7 +130,6 @@ fi
 %doc sysconfig/interfaces/tnl*
 %doc sysconfig/interfaces/data/chat-ppp*
 %doc doc/net-scripts.txt.gz
-%defattr(644,root,root,754)
 
 %attr(755,root,root) %dir %{_sysconfdir}/rc.d/rc?.d
 
