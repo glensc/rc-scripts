@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.34 1999/12/15 18:41:09 misiek Exp $
+#	$Id: ifup,v 1.35 1999/12/19 16:06:02 jajcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -18,8 +18,8 @@ DEV=$1
 }
 
 if [ `id -u` != 0 ]; then
-    if [ -x /usr/sbin/usernetctl ]; then
-	exec /usr/sbin/usernetctl $DEV up
+    if [ -x /sbin/usernetctl ]; then
+	exec /sbin/usernetctl $DEV up
     fi
     echo "Users cannot control this device." >&2
     exit 1
@@ -92,6 +92,7 @@ fi
 
 [ "$MULTICAST" = "yes" ] && MULTICAST=on               || MULTICAST=off
 [ -n "$SRC_ADDR" ]        && SRC_ADDR="src ${SRC_ADDR}" || SRC_ADDR=""
+[ -n "$SCOPE" ]        && SCOPE="scope ${SCOPE}" || SCOPE=""
 [ -z "$PROTOCOL" ]        && PROTOCOL=ip
 
 if [ "$ARP" ]; then
@@ -104,7 +105,7 @@ fi
 
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
-if [ -x "$OTHERSCRIPT" -a "$IPv4" = "yes" ]; then
+if [ -x "$OTHERSCRIPT" ]; then
     if [ "$DEFAULTHANDLING" = "yes" ]; then
         $OTHERSCRIPT $CONFIG $2
     else
@@ -144,63 +145,40 @@ if [ -n "$PUMP" -a "$ISALIAS" = "no" ]; then
 
 else
 
-if [ "$IPv4" = "yes" ]; then
-    if [ -z "$PREFIX" ]; then
-	eval `/bin/ipcalc --prefix ${IPADDR}`
-    fi
+    if [ "$IPv4" = "yes" ]; then
+        if [ -z "$PREFIX" ]; then
+	    eval `/bin/ipcalc --prefix ${IPADDR}`
+        fi
 
-    if [ -z "$BROADCAST" ]; then
-	eval `/bin/ipcalc --broadcast ${IPADDR} ${NETMASK}`
-    fi
+        if [ -z "$BROADCAST" ]; then
+	    eval `/bin/ipcalc --broadcast ${IPADDR} ${NETMASK}`
+        fi
 
-    if [ -z "$NETWORK" ]; then
-	eval `/bin/ipcalc --network ${IPADDR} ${NETMASK}`
+        if [ -z "$NETWORK" ]; then
+	    eval `/bin/ipcalc --network ${IPADDR} ${NETMASK}`
+        fi
     fi
-fi
 
     ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
 
-if [ "$IPv4" = "yes" ]; then
-    ip -family inet addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME}
+    if [ "$IPv4" = "yes" ]; then
+        ip -family inet addr add ${IPADDR}/${PREFIX} broadcast ${BROADCAST} dev ${DEVICE} label ${FULLDEVNAME} ${SCOPE}
 
-    # Another IPv4 aliases support
-    for ADDR4 in ${IPADDR_ALIASES} ; do
-	ip -family inet addr add ${ADDR4} dev ${DEVICE} label ${FULLDEVNAME} broadcast \+
-    done
-fi
+        # Another IPv4 aliases support
+        for ADDR4 in ${IPADDR_ALIASES} ; do
+	    ip -family inet addr add ${ADDR4} dev ${DEVICE} label ${FULLDEVNAME} broadcast \+
+        done
+    fi
 
 
-# IPv6 rules
+    # IPv6 rules
     if [ "${IPV6_NETWORKING}" = "yes" ] ; then
 
       for ADDR6 in ${IPV6_ADDR} ; do
 	ip -family inet6 addr add ${ADDR6} dev ${DEVICE} label ${FULLDEVNAME}
-	ip -family inet6 route add ${ADDR6} dev ${DEVICE} ${TNLOPTS}
       done  
 
-      # only for sit tunnel device
-      if (ip tunnel show ${FULLDEVNAME} 2>&1 | grep -q "ipv6/ip") && [ "$TNL" = "yes" ]; then
-
-	for ADDR4 in `ip -4 addr | grep inet | grep -v "127\..*\..*\..*" | \
-		      sed -e "s#.*inet ##" | sed -e "s#/.*##" | xargs`; do
-	ip -family inet6 addr add fe80::${ADDR4}/10 dev ${DEVICE} \
-	label ${FULLDEVNAME} scope link 2> /dev/null
-	done
-
-      fi
-
     fi
-
-# hack for 2.2 kernels
-if [ "$IPv4" = "yes" ]; then
-    if [ "$ISALIAS" = "no" -a -z "`ip -f inet route | sed "s/ .*//" | grep ${NETWORK}`" ]; then
-	ip -family inet route add ${NETWORK}/${PREFIX} dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}
-    else
-	ip -family inet route add ${IPADDR}/32 dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}
-    fi
-fi
-
-#    . /etc/sysconfig/network
 
     if [ "${GATEWAY}" != "" ]; then
 	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${FULLDEVNAME}" ]; then
