@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.17 2000/03/27 16:07:52 misiek Exp $
+#	$Id: ifup-post,v 1.18 2000/04/18 08:30:58 jajcus Exp $
 #
 
 run_up() { :; }
@@ -34,7 +34,7 @@ fi
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICE}" != lo -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
 	IPADDR=`ip -f inet addr show dev ${DEVICE} label ${FULLDEVNAME} | 
-		awk '{ print $2 }' |awk -F"/" '{ print $1 }'`
+		awk '/inet/ { print $2 }' |awk -F"/" '{ print $1 }'`
 	eval `/bin/ipcalc --silent --hostname ${IPADDR}` && set_hostname $HOSTNAME
 fi
 
