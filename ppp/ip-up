@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: ip-up,v 1.4 2000/04/21 17:36:42 jajcus Exp $
+# $Id: ip-up,v 1.5 2000/05/07 19:00:00 siefca Exp $
 # This file should not be modified
 #
 # This script is run by the pppd after the link is established.
@@ -42,7 +42,7 @@ PPP_TTYNAME=`basename "$PPP_TTY"`
 export PPP_TTYNAME
 
 # Main Script starts here
-run-parts /etc/ppp/ip-up.d
+run-parts /etc/sysconfig/interfaces/up.d/ppp
 
 /etc/sysconfig/network-scripts/ifup-post "$CONFIG"
 

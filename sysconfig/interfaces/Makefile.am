@@ -1,6 +1,6 @@
 @SET_MAKE@
 
-SUBDIRS = data
+SUBDIRS = data up.d down.d
 
 interfacesdir = @sysconfigdir@/interfaces
 

@@ -1,7 +1,5 @@
 @SET_MAKE@
 
-SUBDIRS = ip-up.d ip-down.d
-
 pppdir = @pppdir@
 
 ppp_SCRIPTS = \

@@ -1,5 +1,5 @@
 #
-#	$Id: Makefile.am,v 1.5 1999/08/07 10:16:13 wiget Exp $
+#	$Id: Makefile.am,v 1.6 2000/05/07 18:59:59 siefca Exp $
 #
 
 SUBDIRS = src ppp sysconfig rc.d doc po
@@ -14,12 +14,14 @@ profile_DATA = \
 	lang.sh	\
 	lang.csh
 	
+bin_SCRIPTS = run-parts
 sbin_SCRIPTS = setsysfont
 
 EXTRA_DIST = \
 	$(sysconf_DATA) \
 	$(profile_DATA) \
 	$(sbin_SCRIPTS) \
+	$(bin_SCRIPTS) \
 	rc-scripts.spec
 
 # make rpms

@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.26 2000/04/03 14:50:00 baggins Exp $
+dnl $Id: configure.in,v 1.27 2000/05/07 18:59:59 siefca Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
@@ -31,6 +31,8 @@ AC_PROG_MAKE_SET
 
 pppdir='${sysconfdir}/ppp'
 sysconfigdir='${sysconfdir}/sysconfig'
+updir='${sysconfigdir}/interfaces/up.d'
+downdir='${sysconfigdir}/interfaces/down.d'
 networkscriptsdir='${sysconfigdir}/network-scripts'
 rcdir='${sysconfdir}/rc.d'
 docdir="${prefix}/doc/$PACKAGE-$VERSION"
@@ -82,16 +84,30 @@ AC_SUBST(gnulocaledir)
 AC_SUBST(pppdir)
 AC_SUBST(networkscriptsdir)
 AC_SUBST(sysconfigdir)
+AC_SUBST(updir)
+AC_SUBST(downdir)
 AC_SUBST(rcdir)
 AC_SUBST(docdir)
 AC_SUBST(libdir)
 
 AC_OUTPUT(Makefile src/Makefile doc/Makefile \
-	ppp/Makefile ppp/ip-up.d/Makefile ppp/ip-down.d/Makefile \
+	ppp/Makefile \
 	sysconfig/Makefile \
 	sysconfig/network-scripts/Makefile \
 	sysconfig/interfaces/Makefile \
 	sysconfig/interfaces/data/Makefile \
+	sysconfig/interfaces/up.d/Makefile \
+	sysconfig/interfaces/up.d/all/Makefile \
+	sysconfig/interfaces/up.d/ip/Makefile \
+	sysconfig/interfaces/up.d/ipx/Makefile \
+	sysconfig/interfaces/up.d/ppp/Makefile \
+	sysconfig/interfaces/up.d/tnl/Makefile \
+	sysconfig/interfaces/down.d/Makefile \
+	sysconfig/interfaces/down.d/all/Makefile \
+	sysconfig/interfaces/down.d/ip/Makefile \
+	sysconfig/interfaces/down.d/ipx/Makefile \
+	sysconfig/interfaces/down.d/ppp/Makefile \
+	sysconfig/interfaces/down.d/tnl/Makefile \
 	rc.d/Makefile rc.d/init.d/Makefile \
 	po/Makefile \
 	rc-scripts.spec)
