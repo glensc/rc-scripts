@@ -1,4 +1,4 @@
-$Id: TODO,v 1.12.2.6 2001/02/23 21:10:08 misiek Exp $
+$Id: TODO,v 1.12.2.7 2001/03/19 13:29:24 dobrek Exp $
 
 Features missing:
 - IPSec (freeswan) support
@@ -11,6 +11,12 @@ Important:
 - merge baggins changes in atm-rc (added support for RFC1483/2684 Bridged
   protocol)
 
+Not realy important but mayby nice:
+- Add checing for preveliges during restarting 
+  and if thay are not enought say fuck off in a 
+  nice way.
+
+  
 Other:
 
 We are waiting for suggestions.
