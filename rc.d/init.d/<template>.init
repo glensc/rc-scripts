@@ -2,7 +2,7 @@
 #
 # <service>	<service> short service description
 #
-# chkconfig:    345  85 15
+# chkconfig:    345  <startr_level> <stop_level>
 #
 # description:	<service> long service description
 
@@ -38,7 +38,8 @@ case "$1" in
 		# show "Starting %s service." <service>
 		msg_starting <service>
 		daemon <service>
-		touch /var/lock/subsys/<service>
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/<service>
 	else
 		# show "%s service is already running." <service>
 		msg_Already_Running <service>
@@ -99,5 +100,5 @@ case "$1" in
 	msg_Usage_noreload $0
         exit 1
 esac
-exit 0
 
+exit $RETVAL
