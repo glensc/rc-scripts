@@ -50,26 +50,26 @@ fi
 source_config
 
 if [ "foo$2" = "fooboot" -a -n "${ONBOOT}" ] && is_no "${ONBOOT}"; then
-        exit
+    exit
 fi
 
 case "${MODE}" in
-	sit|four)
-		is_no "${IPV6_NETWORKING}" && exit 0
-		is_no "${IPV6_TUNNELCONFIG}" && exit 0
-		[ "${MODE}" = "four" ] && is_module "fourtun" && modprobe -s -k fourtun
-		;;
-	ipip)
-		is_no "${IPV4_NETWORKING}" && exit 0
-		is_module "ipip" && modprobe -s -k ipip
-		;;
-	gre)
-		is_no "${IPV4_NETWORKING}" && exit 0
-		is_module "ip_gre" && modprobe -s -k ip_gre
-		;;
-	ipxip|ipipx)
-		is_no "${IPX}" && exit 0
-		;;
+    sit|four)
+	is_no "${IPV6_NETWORKING}" && exit 0
+	is_no "${IPV6_TUNNELCONFIG}" && exit 0
+	[ "${MODE}" = "four" ] && is_module "fourtun" && modprobe -s -k fourtun
+	;;
+    ipip)
+	is_no "${IPV4_NETWORKING}" && exit 0
+	is_module "ipip" && modprobe -s -k ipip
+	;;
+    gre)
+	is_no "${IPV4_NETWORKING}" && exit 0
+	is_module "ip_gre" && modprobe -s -k ip_gre
+	;;
+    ipxip|ipipx)
+	is_no "${IPX}" && exit 0
+	;;
 esac
 
 RESULT=0
@@ -83,17 +83,17 @@ RESULT=0
 [ -n "${ENCAPLIMIT}" ] && ENCAPLIMIT="encaplimit ${ENCAPLIMIT}"
 
 if is_yes "${SEQ}"; then
-	SEQ=seq
+    SEQ=seq
 else
-	is_yes "${ISEQ}" && SEQ=iseq
-	is_yes "${OSEQ}" && SEQ="${SEQ} oseq"
+    is_yes "${ISEQ}" && SEQ=iseq
+    is_yes "${OSEQ}" && SEQ="${SEQ} oseq"
 fi
 
 if is_yes "${CSUM}"; then
-	CSUM=csum
+    CSUM=csum
 else
-        is_yes "${ICSUM}" && CSUM=icsum
-        is_yes "${ICSUM}" && CSUM="${SEQ} ocsum"
+    is_yes "${ICSUM}" && CSUM=icsum
+    is_yes "${ICSUM}" && CSUM="${SEQ} ocsum"
 fi
 
 is_yes "${ISEQ}" && ISEQ=iseq
@@ -101,31 +101,35 @@ is_yes "${ISEQ}" && ISEQ=iseq
 [ -z "${PMTUDISC}" -a "${TTL}" != "0" -a "${TTL}" != "inherit" ] && PMTUDISC=yes
 
 if is_yes "${PMTUDISC}"; then
-	PMTUDISC=pmtudisc
+    PMTUDISC=pmtudisc
 elif is_no "${PMTUDISC}"; then
-	PMTUDISC=nopmtudisc
+    PMTUDISC=nopmtudisc
 fi
 
 if [ -n "${KEY}" ]; then
-IKEY=""
-OKEY=""
+    IKEY=""
+    OKEY=""
 fi
 
 case "${MODE}" in
-	ipip|sit)
-		ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV}
-		RESULT=$?
-		;;
-	gre)
-		ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV} ${CSUM} ${ISEQ} ${KEY} ${IKEY} ${OKEY}
-		RESULT=$?
-		;;
-	fourtun)
-		fourcfg add ${DEVICE} saddr ${LOCALADDR} daddr ${REMOTEADDR} ${PRIORITY} ${HOPLIMIT} ${ENCAPLIMIT}
-		RESULT=$?
-		;;
-	ipxip|ipipx)
-		;;
+    ipip|sit)
+	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} \
+	    remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV}
+	RESULT=$?
+	;;
+    gre)
+	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} \
+	    remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV} \
+	    ${CSUM} ${ISEQ} ${KEY} ${IKEY} ${OKEY}
+	RESULT=$?
+	;;
+    fourtun)
+	fourcfg add ${DEVICE} saddr ${LOCALADDR} daddr ${REMOTEADDR} \
+	    ${PRIORITY} ${HOPLIMIT} ${ENCAPLIMIT}
+	RESULT=$?
+	;;
+    ipxip|ipipx)
+	;;
 esac
 
 exit $RESULT

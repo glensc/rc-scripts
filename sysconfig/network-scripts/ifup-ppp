@@ -29,13 +29,14 @@ source_config
 setup_ip_param
 
 if [ "$2" = "boot" ] && is_no "${ONBOOT}"; then
-  exit
+    exit
 fi
 if [ ! -x /usr/sbin/pppd ]; then
-  nls "%s does not exist or is not executable" "/usr/sbin/pppd"
-  nls "%s for %s exiting" "ifup-ppp" "$DEVICE"
+    nls "%s does not exist or is not executable" "/usr/sbin/pppd"
+    nls "%s for %s exiting" "ifup-ppp" "$DEVICE"
     logger -p daemon.info -t ifup-ppp \
-    "$(nls '%s does not exist or is not executable for %s' "/usr/sbin/pppd" "$DEVICE")"
+	"$(nls '%s does not exist or is not executable for %s' \
+	"/usr/sbin/pppd" "$DEVICE")"
   exit 1
 fi
 
@@ -123,60 +124,60 @@ else
 		echo "connect \"/usr/sbin/chat $chatreadenv -f ${CHATSCRIPT} -r ${REPORTFILE} ${chatdbg}\"" >> ${PEERCONF}
 	    fi
 	fi
-	
+
 	opts="$opts call ${DEVNAME}"
     fi
 fi
 
 if [ -z "$HOLDOFF" ]; then
-  HOLDOFF=30
+    HOLDOFF=30
 fi
 if is_yes "${PERSIST}"; then
-  if [ -z "${MAXFAIL}" ]; then 
-  MAXFAIL="0"
-  fi
-  opts="$opts persist holdoff $HOLDOFF maxfail $MAXFAIL"
+    if [ -z "${MAXFAIL}" ]; then 
+    MAXFAIL="0"
+    fi
+    opts="$opts persist holdoff $HOLDOFF maxfail $MAXFAIL"
 fi
 if is_yes "${DEMAND}"; then
-  if [ -z "${IDLE}" ]; then
-  IDLE="0"
-  fi
-  opts="$opts demand ktune idle ${IDLE}"
+    if [ -z "${IDLE}" ]; then
+	IDLE="0"
+    fi
+    opts="$opts demand ktune idle ${IDLE}"
 fi
 if ! is_no "${HARDFLOWCTL}"; then
-  opts="$opts crtscts"
+    opts="$opts crtscts"
 fi
 if is_yes "${MODEMCTL}"; then
     opts="$opts modem"
 fi
 if is_yes "${ESCAPECHARS}"; then
-  opts="$opts asyncmap FFFFFFFF"
+    opts="$opts asyncmap FFFFFFFF"
 else
-  opts="$opts asyncmap 00000000"
+    opts="$opts asyncmap 00000000"
 fi
 if is_yes "${DEFROUTE}"; then
-  # pppd will no longer delete an existing default route
-  # so we have to help it out a little here.
-  ip route del 0/0 > /dev/null 2>&1
-  opts="$opts defaultroute"
+    # pppd will no longer delete an existing default route
+    # so we have to help it out a little here.
+    ip route del 0/0 > /dev/null 2>&1
+    opts="$opts defaultroute"
 elif ! is_no "${DEFROUTE}"; then
-  opts="$opts defaultroute"
+    opts="$opts defaultroute"
 fi
 if ! is_no "${PEERDNS}"; then
-  opts="$opts usepeerdns"
+    opts="$opts usepeerdns"
 fi
 if [ -n "${MRU}" ] ; then
-  opts="$opts mru ${MRU}"
+    opts="$opts mru ${MRU}"
 fi
 if [ -n "${MTU}" ] ; then
-  opts="$opts mtu ${MTU}"
+    opts="$opts mtu ${MTU}"
 fi
 if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}${REMIP}" ] ; then
-  # if either IP address is set, the following will work.
-  opts="$opts ${IP4ADDR}:${REMIP}"
+    # if either IP address is set, the following will work.
+    opts="$opts ${IP4ADDR}:${REMIP}"
 fi
 if is_yes "$IPV6_NETWORKING"; then
- if is_yes "$IPV6_PPP"; then
+    if is_yes "$IPV6_PPP"; then
 	if [ -n "${IP6ADDR}${REMIP6}" ] ; then
 	  opts="$opts ipv6 ${IP6ADDR},${REMIP6}"
 	elif is_yes "$IPV6_CP_USEV4"; then
@@ -184,9 +185,9 @@ if is_yes "$IPV6_NETWORKING"; then
 	elif is_yes "$IPV6_CP_PERSISTENT"; then
 	  opts="$opts ipv6cp-use-persistent"
 	fi
- elif is_no "$IPV6_PPP"; then
-    opts="$opts noipv6"
- fi
+    elif is_no "$IPV6_PPP"; then
+	opts="$opts noipv6"
+    fi
 elif is_no "$IPV6_NETWORKING"; then
     opts="$opts noipv6"
 fi
@@ -204,26 +205,26 @@ if is_yes "${IPX_PPP}"; then
 fi
 
 if [ -n "${PAPNAME}" ] ; then
-  opts="$opts user ${PAPNAME}"
+    opts="$opts user ${PAPNAME}"
 fi
 if [ -n "${REMOTENAME}" ] ; then
-  opts="$opts remotename ${REMOTENAME}"
+    opts="$opts remotename ${REMOTENAME}"
 fi
 if is_yes "${DEBUG}"; then
-  opts="$opts debug"
+    opts="$opts debug"
 fi
 if is_yes "${AUTH}"; then
-  opts="$opts auth"
+    opts="$opts auth"
 elif is_no "${AUTH}"; then
-  opts="$opts noauth"
+    opts="$opts noauth"
 fi
 if is_yes "$PLUGIN_IFCFG_PASSWORD" && [ -n "$PASSWORD" ]; then
-  if [ -f "$CONFIG" ]; then
-      ifcfg_password_config="$CONFIG"
-  else
-      ifcfg_password_config="/etc/sysconfig/interfaces/$CONFIG"
-  fi
-  opts="$opts plugin ifcfg-password.so ifcfg $ifcfg_password_config"
+    if [ -f "$CONFIG" ]; then
+	ifcfg_password_config="$CONFIG"
+    else
+	ifcfg_password_config="/etc/sysconfig/interfaces/$CONFIG"
+    fi
+    opts="$opts plugin ifcfg-password.so ifcfg $ifcfg_password_config"
 fi
 
 if ! is_no "${UNIT}"; then
@@ -234,15 +235,15 @@ fi
 MODEM="${MODEMPORT}"; export MODEM
 
 (logger -p daemon.info -t ifup-ppp \
-    "$(nls 'pppd started for %s on device %s at speed %s' "$DEVICE" "$MODEMPORT" "${LINESPEED:-(unspecified)} on unit ${UNIT}")" &)&
+    "$(nls 'pppd started for %s on device %s at speed %s' "$DEVICE" \
+	"$MODEMPORT" "${LINESPEED:-(unspecified)} on unit ${UNIT}")" &)&
 
 if [ -n "${DATAFORCHAT}" ]; then
-	export $DATAFORCHAT
+    export $DATAFORCHAT
 fi
 /usr/sbin/pppd $opts ${MODEMMODE} "${MODEMPORT}" ${LINESPEED} \
-	ipparam ${DEVNAME} linkname ${DEVNAME} \
-	${PPPOPTIONS}
+    ipparam ${DEVNAME} linkname ${DEVNAME} \
+    ${PPPOPTIONS}
 	
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4
-

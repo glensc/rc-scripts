@@ -10,12 +10,12 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 # Will be removed in the future
 if is_yes "$NETWORKING" ; then
-	if [ -z "$IPV4_NETWORKING" ] ; then
-		echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
-		echo "Please upgrade your config"
-		echo "Assuming you want IPv4 networking"
-		IPV4_NETWORKING=yes
-	fi
+    if [ -z "$IPV4_NETWORKING" ] ; then
+	echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
+	echo "Please upgrade your config"
+	echo "Assuming you want IPv4 networking"
+	IPV4_NETWORKING=yes
+    fi
 fi
 
 DEV=$1
@@ -26,9 +26,9 @@ DEV=$1
 }
 
 if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
-	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
+    CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
 else
-	CONFIG="$DEV"
+    CONFIG="$DEV"
 fi
 
 if [ "$(id -u)" != "0" ]; then
@@ -48,9 +48,9 @@ OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
 
 # shutdown tleds software
 if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
-	/usr/bin/tleds -qk "$DEVICE"
+    /usr/bin/tleds -qk "$DEVICE"
 fi
-	
+
 if [ -x $OTHERSCRIPT ]; then
     if [ "$HANDLING" = "0" ]; then
     	exec $OTHERSCRIPT $CONFIG $2
@@ -114,7 +114,7 @@ else
 fi    
 
 if [ "$HANDLING" = "4" ]; then
-	exit 0
+    exit 0
 fi
 
 if [ -n "$RESULT" ] ; then

@@ -29,12 +29,12 @@ CONFIG=$1
 source_config
 
 if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
-	exit
+    exit
 fi
 
 if [ ! -x /sbin/brctl ]; then
-	nls "%s is missing. Can't continue." "/sbin/brctl"
-	exit 1
+    nls "%s is missing. Can't continue." "/sbin/brctl"
+    exit 1
 fi
 
 # set all major variables
@@ -42,9 +42,9 @@ setup_ip_param
 
 # set device down and forget all addresses
 for device in ${BRIDGE_DEVS}; do
-	ip addr flush dev ${device} 2>&1 | grep -v "Nothing to flush"
-	ip link set ${device} down
-	brctl delif ${DEVICE} ${device}
+    ip addr flush dev ${device} 2>&1 | grep -v "Nothing to flush"
+    ip link set ${device} down
+    brctl delif ${DEVICE} ${device}
 done
 
 ip link set ${DEVICE} down

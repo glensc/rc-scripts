@@ -58,14 +58,14 @@ fi
 
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
-	IPADDR=$(ip -f inet addr show dev ${DEVICE} | 
-		awk '/inet/ { print $2 }' |awk -F"/" '{ print $1 }')
-	eval $(/bin/ipcalc --silent --hostname ${IPADDR}) && set_hostname $HOSTNAME
+    IPADDR=$(ip -f inet addr show dev ${DEVICE} | 
+	    awk '/inet/ { print $2 }' |awk -F"/" '{ print $1 }')
+    eval $(/bin/ipcalc --silent --hostname ${IPADDR}) && set_hostname $HOSTNAME
 fi
 
 # run tleds software
 if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
-	/usr/bin/tleds -qc "$DEVICE"
+    /usr/bin/tleds -qc "$DEVICE"
 fi
 
 # execute run_up() function (if available in device configuration file)

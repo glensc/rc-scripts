@@ -10,13 +10,13 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 # Will be removed in the future
 if is_yes "$NETWORKING" ; then
-	if [ -z "$IPV4_NETWORKING" ] ; then
-		echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
-		echo "Please upgrade your config"
-		echo "Assuming you want IPv4 networking"
-		IPV4_NETWORKING=yes
-		export IPV4_NETWORKING
-	fi
+    if [ -z "$IPV4_NETWORKING" ] ; then
+	echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
+	echo "Please upgrade your config"
+	echo "Assuming you want IPv4 networking"
+	IPV4_NETWORKING=yes
+	export IPV4_NETWORKING
+    fi
 fi
 
 need_hostname
@@ -38,9 +38,9 @@ if [ `id -u` != 0 ]; then
 fi
 
 if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
-	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
+    CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
 else
-	CONFIG="$DEV"
+    CONFIG="$DEV"
 fi
 
 source_config
@@ -104,62 +104,62 @@ if is_wireless_device "${DEVICE}"; then
 fi
 	
 if [ "$HANDLING" = "2" ]; then
-	exit 0
+    exit 0
 fi
 
 if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" ]; then
 
     if is_yes "$IPV4_NETWORKING"; then
 	if [ "$BOOTPROTO" = "bootp" -o "$BOOTPROTO" = "pump" ]; then
-		DHCP_CLIENT=/sbin/pump
+	    DHCP_CLIENT=/sbin/pump
 	fi
     
 	if [ -z "$DHCP_CLIENT" ]; then
-		if [ -x /sbin/dhcpcd ]; then
-	       		DHCP_CLIENT=/sbin/dhcpcd
-		elif [ -x /sbin/dhclient ]; then
-			DHCP_CLIENT=/sbin/dhclient
-		elif [ -x /sbin/dhcpxd ]; then
-			DHCP_CLIENT=/sbin/dhcpxd
-		elif [ -x /sbin/pump ]; then
-			DHCP_CLIENT=/sbin/pump
-		else
-			nls "Can't find a dhcp client."
-			exit 1
-		fi
+	    if [ -x /sbin/dhcpcd ]; then
+		DHCP_CLIENT=/sbin/dhcpcd
+	    elif [ -x /sbin/dhclient ]; then
+		DHCP_CLIENT=/sbin/dhclient
+	    elif [ -x /sbin/dhcpxd ]; then
+		DHCP_CLIENT=/sbin/dhcpxd
+	    elif [ -x /sbin/pump ]; then
+		DHCP_CLIENT=/sbin/pump
+	    else
+		nls "Can't find a dhcp client."
+		exit 1
+	    fi
 	fi
-	
+
 	DHCP_ARGS=
 	if [ -n "$DHCP_CLIENT" ]; then
-		case $(basename $DHCP_CLIENT) in
-			pump)
-			[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
-			DHCP_ARGS="$DHCP_ARGS -i $DEVICE"
-			;;
-			dhcpcd)
-			[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
-			DHCP_ARGS="$DHCP_ARGS $DEVICE"
-			;;
-			dhcpxd)
-			[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-H $DHCP_HOSTNAME"
-			DHCP_ARGS="$DHCP_ARGS $DEVICE"
-			;;
-			dhclient)
-			# Can't specify a host with dhclient ?
-			DHCP_ARGS="$DEVICE"
-			;;
-		esac
+	    case $(basename $DHCP_CLIENT) in
+		pump)
+		[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
+		DHCP_ARGS="$DHCP_ARGS -i $DEVICE"
+		;;
+		dhcpcd)
+		[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
+		DHCP_ARGS="$DHCP_ARGS $DEVICE"
+		;;
+		dhcpxd)
+		[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-H $DHCP_HOSTNAME"
+		DHCP_ARGS="$DHCP_ARGS $DEVICE"
+		;;
+		dhclient)
+		# Can't specify a host with dhclient ?
+		DHCP_ARGS="$DEVICE"
+		;;
+	    esac
 	fi
 	DHCP_ARGS="$DHCP_OPTIONS $DHCP_ARGS"
 
 	if check_link_down ${DEVICE}; then
-		run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "$(basename $DHCP_CLIENT)")" /bin/false
-		nls '%s: Check cable?' "$DEVICE"
-		exit 1
+	    run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "$(basename $DHCP_CLIENT)")" /bin/false
+	    nls '%s: Check cable?' "$DEVICE"
+	    exit 1
 	fi
-	
+
 	if ! run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "$(basename $DHCP_CLIENT)")" $DHCP_CLIENT $DHCP_ARGS ; then
-		exit 1
+	    exit 1
 	fi
 
 	# give time for determining IP information
@@ -201,15 +201,15 @@ if is_yes "$PROXYARP"; then
 fi
 
 if [ "$HANDLING" = "3" ]; then
-	exit 0
+    exit 0
 fi
 
 if is_yes "$IPX"; then
-	/etc/sysconfig/network-scripts/ifup-ipx $DEVICE
+    /etc/sysconfig/network-scripts/ifup-ipx $DEVICE
 fi
 
 if [ "$HANDLING" = "4" ]; then
-	exit 0
+    exit 0
 fi
 
 exec /etc/sysconfig/network-scripts/ifup-post $CONFIG

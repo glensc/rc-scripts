@@ -50,36 +50,36 @@ fi
 source_config
 
 case "${MODE}" in
-        sit|four)
-                is_no "${IPV6_NETWORKING}" && exit 0
-                is_no "${IPV6_TUNNELCONFIG}" && exit 0
-		;;
-        ipip)
-                is_no "${IPV4_NETWORKING}" && exit 0
-                ;;
-        gre)
-                is_no "${IPV4_NETWORKING}" && exit 0
-                ;;
-	ipxip|ipipx)
-		is_no "${IPX}" && exit 0
-		;;
+    sit|four)
+	is_no "${IPV6_NETWORKING}" && exit 0
+	is_no "${IPV6_TUNNELCONFIG}" && exit 0
+	;;
+    ipip)
+	is_no "${IPV4_NETWORKING}" && exit 0
+	;;
+    gre)
+	is_no "${IPV4_NETWORKING}" && exit 0
+	;;
+    ipxip|ipipx)
+	is_no "${IPX}" && exit 0
+	;;
 esac
 
 RESULT=0
 
 case "${MODE}" in
-	ipip|sit|gre)
-		ip link set ${DEVICE} down
-		ip tunnel del ${DEVICE}
-		RESULT=$?
-		;;
-	four)
-		ip link set ${DEVICE} down
-		fourcfg del ${DEVICE}
-		RESULT=$?
-		;;
-	ipxip|ipipx)
-		;;
+    ipip|sit|gre)
+	ip link set ${DEVICE} down
+	ip tunnel del ${DEVICE}
+	RESULT=$?
+	;;
+    four)
+	ip link set ${DEVICE} down
+	fourcfg del ${DEVICE}
+	RESULT=$?
+	;;
+    ipxip|ipipx)
+	;;
 esac
 
 exit $RESULT
