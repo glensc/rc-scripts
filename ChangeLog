@@ -1,3 +1,54 @@
+2004-02-06 22:33 [r3306]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* po/Makefile.am: Use install_sh instead of mkinstalldirs.
+
+2004-02-06 22:24 [r3305]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* configure.ac: Preparation for 0.4.0.9.
+
+2004-02-03 21:55 [r3271]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: Set bafile earlier.
+
+2004-02-03 21:37 [r3269]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* rc.d/rc.sysinit: Do not delete hwprofile configuration (Tomasz
+	  Witek <tiwek@tiwek.com>).
+
+2004-01-27 11:55 [r3222]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: daemon(): when using --user run su with -s
+	  /bin/sh option.
+
+2004-01-25 12:27 [r3221]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* rc.d/rc.shutdown: Run kexec before rebooting (kexec support).
+
+2004-01-24 01:06 [r3220]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown: Wait for second after shutting
+	  down dhcp daemon/interface (for example dhcpcd needs some time).
+
+2004-01-16 23:12 [r3195]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* rc.d/init.d/functions: filter_chroot(): Return unfiltered pids
+	  when /proc is not mounted.
+
+2004-01-16 15:43 [r3194]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* src/Makefile.am, src/usernetctl.c: Use proper path when executing
+	  ifup/ifdown scripts in sernetctl.
+
+2004-01-15 22:12 [r3193]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* src/Makefile.am, configure.ac: Use --cflags-only-I from glib or
+	  glib-2.0 configuration when building ppp-watch.
+
+2004-01-10 16:13 [r3156]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Set wireless nick to
+	  $WLAN_NICKNAME (variable) not WLAN_NICKNAME (string).
+
 2004-01-10 15:57 [r3153]  Arkadiusz Mi턪iewicz <arekm@pld-linux.org>
 
 	* configure.ac: - 0.4.0.8 release
