@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.46 2000/02/18 08:34:44 waszi Exp $
+# $Id: rc.sysinit,v 1.47 2000/02/18 09:13:26 wiget Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -54,6 +54,13 @@ fi
 
 # Print welcome message
 echo -e "\t\t\t`termput setaf 6` Powered by `termput setaf 2`PLD/Linux`termput setaf 7`"
+
+# set up devfsd
+if [ -x /sbin/devfsd -a -f /etc/devfsd.conf ]; then
+	if [ "$RUN_DEVFSD" = "yes" ]; then
+		run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
+	fi
+fi
 
 # Set console loglevel
 /bin/dmesg -n $CONSOLE_LOGLEVEL
@@ -132,12 +139,6 @@ if [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
 	fi
 fi
 
-# set up devfsd
-if [ -x /sbin/devfsd -a -f /etc/devfsd.conf ]; then
-	if [ "$RUN_DEVFSD" = "yes" ]; then
-		run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
-	fi
-fi
 
 # Remount the root filesystem read-write.
 run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
