@@ -5,7 +5,7 @@
 #
 # Copyright (c) 1999 Free Software Fundation, Inc.
 # Artur Frysiak <wiget@pld.org.pl>
-# $Id: makepot.pl,v 1.6 2001/05/15 17:28:02 baggins Exp $
+# $Id$
 # Changes:
 # 2000-08-25 Arkadiusz Miskiewicz <misiek@pld.org.pl>
 # - support for $(nls "xyz"), progress "xyz" and '' instead of "".
