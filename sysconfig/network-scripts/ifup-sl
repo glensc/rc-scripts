@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-sl,v 1.15 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: ifup-sl,v 1.16 2000/06/12 08:38:15 waszi Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -21,8 +21,7 @@ shift
 CONFIG=$1
 source_config
 
-if [ "foo$2" = "fooboot" -a ${ONBOOT} = "no" ]
-then
+if [ "foo$2" = "fooboot" ] && is_no ${ONBOOT}; then
   exit
 fi
 
@@ -36,7 +35,7 @@ if [ "`ls -R /lib/modules/\`uname -r\`/ | grep slip.o`" != "" ]; then
 fi
 
 # we can use dip or direct slip connection via slattach
-if [ "$DIRECT_CONNECT" != "yes" ]; then
+if is_no "$DIRECT_CONNECT"; then
 
 [ -x /usr/sbin/dip ] || {
   nls "/usr/sbin/dip does not exist or is not executable"
@@ -63,7 +62,7 @@ while : ; do
   (logger -p daemon.info -t ifup-sl \
     "`nls 'dip started for'` $DEVICE `nls 'on'` $MODEMPORT `nls 'at'` $LINESPEED" &)&
   doexec /usr/sbin/dip dip-$DEVICE $DIPSCRIPT
-  if [ "$PERSIST" != "yes" -o ! -f /var/run/sl-$DEVICE.dev ] ; then
+  if is_no "$PERSIST" || [ ! -f /var/run/sl-$DEVICE.dev ] ; then
     exit 0
   fi
   rm -f /var/run/sl-$DEVICE.dev
@@ -99,7 +98,7 @@ else
 	 ip -family inet addr add $IPADDR peer $REMIP dev $DEVICE
 
 	 # Set defaultroute
-	 if [ "$DEFROUTE" = "yes" ]; then
+	 if is_yes "$DEFROUTE"; then
 		ip -family inet route add default dev $DEVICE
          fi
 

@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.42 2000/04/21 17:43:01 jajcus Exp $
+# $Id: functions.network,v 1.43 2000/06/12 08:38:15 waszi Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -7,7 +7,7 @@
 # This will work only after starting interface to which LDAP server is connected
 find_ldap_interfaces()
 {
-[ "$USE_LDAP" = "yes" -a -x /usr/bin/ldapsearch ] || exit 1
+is_yes "$USE_LDAP" && [ -x /usr/bin/ldapsearch ] || exit 1
 if [ -n "$LDAP_BASE_DN" ] ; then
 	BSWITCH="-b$LDAP_BASE_DN" 
 else
@@ -22,7 +22,7 @@ ldapsearch "$BSWITCH" "$QUERY" if_device | \
 # find aliases for device
 find_ldap_aliases()
 {
-[ "$USE_LDAP" = "yes" -a -x /usr/bin/ldapsearch ] || exit 1
+is_yes "$USE_LDAP" && [ -x /usr/bin/ldapsearch ] || exit 1
 if [ -n "$LDAP_BASE_DN" ] ; then
 	BSWITCH="-b$LDAP_BASE_DN" 
 else
@@ -36,7 +36,7 @@ ldapsearch "$BSWITCH" "$QUERY" if_device | \
 
 get_ldap_config ()
 {
-if [ "$USE_LDAP" = "yes" -a -x /usr/bin/ldapsearch ]; then
+if is_yes "$USE_LDAP" && [ -x /usr/bin/ldapsearch ]; then
 	exit 1
 fi
 
@@ -87,7 +87,7 @@ if echo "$CONFIG"|egrep "^/" >/dev/null 2>&1 ; then
 	fi
 elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
 	. "/etc/sysconfig/interfaces/$CONFIG"
-elif [ "$USE_LDAP" = "yes" ] ; then
+elif is_yes "$USE_LDAP"; then
 	eval `get_ldap_config $DEVNAME`
 fi
 }
@@ -159,9 +159,9 @@ fi
 # network router discovery daemon
 rdisc()
 {
-if [ "$IPV6_NETWORKING" = "yes" ]; then
+if is_yes "$IPV6_NETWORKING"; then
   [ -z "$IPV6_RDISC_MODE" ] && IPV6_RDISC_MODE=host
-  if [ "$IPV6_RDISC" = "on" -o "$IPV6_RDISC" = "yes" ]; then
+  if is_yes "$IPV6_RDISC"; then
   RDISC_OPTS="-fs"
 	case "$1" in
 	on|start)
@@ -197,8 +197,8 @@ eval VARD=\$${VAR}
 
 if [ -n "$VARD" -a -e /proc/sys/net/$WHAT ]; then
 	if [ "$TODO" = "start" ]; then
-	        [ "$VARD" = "no" -a "$SET" = "1" ] && SET="$(($SET - 1))"
-		[ "$VARD" = "yes" -a "$SET" = "0" ] && SET="$(($SET + 1))"
+	        is_no "$VARD" && [ "$SET" = "1" ] && SET="$(($SET - 1))"
+		is_yes "$VARD" && [ "$SET" = "0" ] && SET="$(($SET + 1))"
 		if [ -n "$MESSAGE" ]; then
 			show "`nls "Setting %s to %s" "$MESSAGE" "$SET"`"; busy
 			if (echo "$SET" > /proc/sys/net/$WHAT) 2> /dev/null; then
@@ -232,7 +232,7 @@ if [ "$IPV4_DYNAMIC_IP_PATCH" != "default" -a -n "$IPV4_DYNAMIC_IP_PATCH" ] ||
 		*)	IPV4_DYNAMIC_IP_PATCH_VALUE=7 ;;
 	esac
 
-	if [ "$IPV4_DYNAMIC_IP_PATCH" = "yes" -a "$1" = "on" ]; then
+	if is_yes "$IPV4_DYNAMIC_IP_PATCH" && [ "$1" = "on" ]; then
 		show "Enabling dynamic IP patch"
 		busy
 		if echo $IPV4_DYNAMIC_IP_PATCH_VALUE > /proc/sys/net/ipv4/ip_dynaddr; then
@@ -260,7 +260,7 @@ ipv4_local_port_range()
 {
 if [ "$IPV4_LOCAL_PORT_RANGE" != "default" -a -n "$IPV4_LOCAL_PORT_RANGE" ] || \
    [ ! -e /proc/sys/net/ipv4/ip_local_port_range ]; then
-	if [ "$IPV4_LOCAL_PORT_RANGE" = "yes" -a "$1" = "on" ]; then
+	if is_yes "$IPV4_LOCAL_PORT_RANGE" && [ "$1" = "on" ]; then
 		show "Setting local port range"; busy
 		if echo "$IPV4_LOCAL_PORT_RANGE" > /proc/sys/net/ipv4/ip_local_port_range; then
 			deltext
@@ -286,7 +286,7 @@ ipv4_anti_spoofing()
 {
 if [ "$IPV4_ANTI_SPOOFING" != "default" -a -n "$IPV4_ANTI_SPOOFING" ] || \
    [ ! -e /proc/sys/net/ipv4/conf/all/rp_filter ]; then
-	if [ "$IPV4_ANTI_SPOOFING" = "yes" -a "$1" = "on" ]; then
+	if is_yes "$IPV4_ANTI_SPOOFING" && [ "$1" = "on" ]; then
 		show "Setting up IP spoofing protection"; busy
 		if (for f in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 1 > $f; done); then
 			deltext
@@ -343,7 +343,7 @@ ip link set dev lo down
 
 static_arp()
 {
-if [ "$STATIC_ARP" = "yes" ]; then
+if is_yes "$STATIC_ARP"; then
 	if [ -r /etc/ethers -a -x /sbin/arp ]; then
 		/sbin/arp -f /etc/ethers
 	fi
@@ -352,8 +352,7 @@ fi
 
 modprobe_net()
 {
-if [ "$IPV6_NETWORKING" = "yes" -a  \
-     "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ]; then
+if is_yes "$IPV6_NETWORKING" && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipv6.o`" != "" ]; then
 	modprobe -s -k net-pf-10
 fi
 }

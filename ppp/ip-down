@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: ip-down,v 1.5 2000/05/07 19:00:00 siefca Exp $
+# $Id: ip-down,v 1.6 2000/06/12 08:38:14 waszi Exp $
 # This file should not be modified
 #
 # This script is run by the pppd _after_ the link is brought down.
@@ -43,7 +43,7 @@ export PPP_TTYNAME
 
 # Main Script starts here
 
-run-parts /etc/sysconfig/interfaces/down.d
+run-parts /etc/sysconfig/interfaces/down.d/ppp
 
 /etc/sysconfig/network-scripts/ifdown-post "${CONFIG}"
 

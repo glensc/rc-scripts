@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.12 2000/04/23 11:46:04 marcus Exp $
+#	$Id: ifup-ppp,v 1.13 2000/06/12 08:38:15 waszi Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -27,7 +27,7 @@ CONFIG=$1
 source_config
 [ -z "$HOLDOFF" ] && HOLDOFF=30
 
-if [ "$2" = "boot" -a "${ONBOOT}" = "no" ]; then
+if [ "$2" = "boot" ] && is_no "${ONBOOT}"; then
   exit
 fi
 [ -x /usr/sbin/pppd ] || {
@@ -39,27 +39,27 @@ fi
 }
 
 opts="lock"
-if [ "${PERSIST}" = "yes" ]; then
+if is_yes "${PERSIST}"; then
   if [ -z "${MAXFAIL}" ]; then 
   MAXFAIL="0"
   fi
   opts="$opts persist holdoff $HOLDOFF maxfail $MAXFAIL"
 fi
-if [ "${DEMAND}" = "yes" ]; then
+if is_yes "${DEMAND}"; then
   if [ -z "${IDLE}" ]; then
   IDLE="0"
   fi
   opts="$opts demand idle ${IDLE}"
 fi
-if [ "${HARDFLOWCTL}" = yes ] ; then
+if is_yes "${HARDFLOWCTL}"; then
   opts="$opts modem crtscts"
 fi
-if [ "${ESCAPECHARS}" = yes ] ; then
+if is_yes "${ESCAPECHARS}"; then
   opts="$opts asyncmap FFFFFFFF"
 elif [ "${ESCAPECHARS}" = no ] ; then
   opts="$opts asyncmap 00000000"
 fi
-if [ "${DEFROUTE}" = yes ] ; then
+if is_yes "${DEFROUTE}" = yes; then
   opts="$opts defaultroute"
 fi
 if [ -n "${MRU}" ] ; then
@@ -78,7 +78,7 @@ fi
 if [ -n "${REMOTENAME}" ] ; then
   opts="$opts remotename ${REMOTENAME}"
 fi
-if [ "${DEBUG}" = yes ] ; then
+if is_yes "${DEBUG}"; then
   opts="$opts debug"
   chatdbg="-v"
 fi

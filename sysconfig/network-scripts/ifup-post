@@ -1,10 +1,11 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.20 2000/04/21 17:45:24 jajcus Exp $
+#	$Id: ifup-post,v 1.21 2000/06/12 08:38:15 waszi Exp $
 #
 
 run_up() { :; }
 
+. /etc/rc.d/init.d/functions
 . /etc/sysconfig/network
 . /etc/sysconfig/network-scripts/.functions
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-plip,v 1.9 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: ifup-plip,v 1.10 2000/06/12 08:38:15 waszi Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -10,8 +10,7 @@ cd /etc/sysconfig/network-scripts
 CONFIG=$1
 source_config
 
-if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
-then
+if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
 	exit
 fi
 

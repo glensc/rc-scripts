@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.17 2000/03/31 13:10:22 misiek Exp $
+#	$Id: tnlup,v 1.18 2000/06/12 08:38:15 waszi Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -33,14 +33,13 @@ fi
 
 source_config
 
-if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
-then
+if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
         exit
 fi
 
-[ "${IPV6_TUNNELCONFIG}" != "yes" -a "${MODE}" = "sit" ] && exit 0
-[ "${IPX}" != "yes" -a "${MODE}" = "ipxip" ] && exit 0
-[ "${IPX}" != "yes" -a "${MODE}" = "ipipx" ] && exit 0
+is_no "${IPV6_TUNNELCONFIG}" && [ "${MODE}" = "sit" ] && exit 0
+is_no "${IPX}" && [ "${MODE}" = "ipxip" ] && exit 0
+is_no "${IPX}" && [ "${MODE}" = "ipipx" ] && exit 0
 
 if [ "${MODE}" = "gre" -a "`ls -R /lib/modules/\`uname -r\`/ | grep ip_gre.o`" != "" ]; then
 	modprobe -s -k ip_gre
@@ -54,30 +53,30 @@ fi
 [ -n "${TOS}" ] && TOS="tos ${TOS}"
 [ -n "${BIND_DEV}" ] && BIND_DEV="dev ${BIND_DEV}"
 
-if [ "${SEQ}" = "yes" ]; then
+if is_yes "${SEQ}"; then
 	SEQ=seq
 else
-	[ "${ISEQ}" = "yes" ] && SEQ=iseq
-	[ "${OSEQ}" = "yes" ] && SEQ="${SEQ} oseq"
+	is_yes "${ISEQ}" && SEQ=iseq
+	is_yes "${OSEQ}" && SEQ="${SEQ} oseq"
 fi
 
-if [ "${CSUM}" = "yes" ]; then
+if is_yes "${CSUM}"; then
 	CSUM=csum
 else
-        [ "${ICSUM}" = "yes" ] && CSUM=icsum
-        [ "${ICSUM}" = "yes" ] && CSUM="${SEQ} ocsum"
+        is_yes "${ICSUM}" && CSUM=icsum
+        is_yes "${ICSUM}" && CSUM="${SEQ} ocsum"
 fi
 
-[ "${ISEQ}" = "yes" ] && ISEQ=iseq
-[ "${ISEQ}" = "yes" ] && ISEQ=iseq
-[ "${ISEQ}" = "yes" ] && ISEQ=iseq
-[ "${ISEQ}" = "yes" ] && ISEQ=iseq
+is_yes "${ISEQ}" && ISEQ=iseq
+is_yes "${ISEQ}" && ISEQ=iseq
+is_yes "${ISEQ}" && ISEQ=iseq
+is_yes "${ISEQ}" && ISEQ=iseq
 
 [ "${TTL}" != "0" -a "${TTL}" != "inherit" ] && PMTUDISC=yes
 
-if [ "${PMTUDISC}" = "yes" ]; then
+if is_yes "${PMTUDISC}"; then
 	PMTUDISC=pmtudisc
-elif [ "${PMTUDISC}" = "no" ]; then
+elif is_no "${PMTUDISC}"; then
 	PMTUDISC=nopmtudisc
 fi
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-sl,v 1.9 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: ifdown-sl,v 1.10 2000/06/12 08:38:15 waszi Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -15,7 +15,7 @@ source_config
 rm -f /var/run/sl-$DEVICE.dev
 
 # we can use dip or direct slip connection via slattach
-if [ "$DIRECT_CONNECT" != "yes" ]; then
+if is_no "$DIRECT_CONNECT"; then
 PID=`pidof dip-$DEVICE`
 else
 PID=`pidof slattach`

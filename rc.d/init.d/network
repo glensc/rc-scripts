@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.33 2000/04/03 14:50:46 baggins Exp $
+# $Id: network,v 1.34 2000/06/12 08:38:15 waszi Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -22,7 +22,7 @@ NLS_DOMAIN="rc-scripts"
 . /etc/sysconfig/network
 
 # Check that networking is up.
-[ "${NETWORKING}" = "no" -o "${NETWORKING}" = "" ] && exit 0
+is_no "${NETWORKING}" && exit 0
 
 [ -x /sbin/ip ] || exit 0
 
@@ -55,21 +55,17 @@ setup_nat on
 setup_routes on
 
 # Setup IPX
-case "$IPX" in
-    yes|true)
+if is_yes "$IPX"; then
 	if [ ! -z $IPXAUTOPRIMARY ] ; then
-	    /usr/bin/ipx_configure --auto_primary=$IPXAUTOPRIMARY
+		/usr/bin/ipx_configure --auto_primary=$IPXAUTOPRIMARY
 	fi
 	if [ ! -z $IPXAUTOFRAME ] ; then
-	    /usr/bin/ipx_configure --auto_interface=$IPXAUTOFRAME
+		/usr/bin/ipx_configure --auto_interface=$IPXAUTOFRAME
 	fi
 	if [ ! -z "$IPXINTERNALNETNUM" -a "$IPXINTERNALNETNUM" != "0" ]; then
-	    /usr/bin/ipx_internal_net add $IPXINTERNALNETNUM $IPXINTERNALNODENUM
+		/usr/bin/ipx_internal_net add $IPXINTERNALNETNUM $IPXINTERNALNODENUM
 	fi
-    ;;
-    *)
-    ;;
-esac
+fi
 }
 
 network_postinit()
@@ -113,7 +109,7 @@ TODO="$1"
 # IPv4 forwarding
 proc_net ipv4/ip_forward $TODO 1 0 IPV4_FORWARDING "IPv4 forwarding"
 # IPv6 forwarding
-if [ "$IPV6_NETWORKING" = "yes" ]; then
+if is_yes "$IPV6_NETWORKING"; then
    proc_net ipv6/conf/all/forwarding $TODO 1 0 IPV6_FORWARDING "IPv6 forwarding"
 fi
 # Others proc/net
