@@ -13,11 +13,11 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 
 pppdir='${sysconfdir}/ppp'
-networkscriptsdir='${sbindir}/network-scripts'
+networkscriptsdir='${sbindir}'
 sysconfigdir='${sysconfdir}/sysconfig'
 rcdir='${sysconfdir}/rc.d'
 docdir="${prefix}/doc/$PACKAGE-$VERSION"
-libdir="${prefix}/lib"
+libdir="${exec_prefix}/lib"
 
 AC_SUBST(pppdir)
 AC_SUBST(networkscriptsdir)

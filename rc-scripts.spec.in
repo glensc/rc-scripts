@@ -90,14 +90,14 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/var/run/netreport
 
 make install  \
-	DESTDIR=$RPM_BUILD_ROOT \
-	mandir=/usr/man \
+	DESTDIR=$RPM_BUILD_ROOT 
 	
-gzip -9nf $RPM_BUILD_ROOT/usr/man/man*/* \
+	
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/*.txt 
 
 %post
-for i in  halt nfsfs random reboot single  
+for i in  halt random reboot single  
 	do /sbin/chkconfig --add $i
 done 
 if [ -f /etc/inittab.rpmsave ]; then
@@ -116,6 +116,7 @@ fi
 
 %post -n net-scripts
 /sbin/chkconfig --add network
+/sbin/chkconfig --add nfsfs
 for l in /etc/sysconfig/network-scripts/ifcfg-* ; do 
   if [ -f "$l" ] ; then
     NEWNAME=`basename $l | sed -e 's /^ifcfg-//'`
@@ -140,70 +141,69 @@ fi
 %defattr(644,root,root,754)
 %doc doc/sysconfig.txt.gz
 
-%config(noreplace) %verify(not md5 mtime size) /etc/adjtime
-%config(noreplace) %verify(not md5 mtime size) /etc/inittab
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/adjtime
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inittab
 
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/system
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/system
 
-%attr(644,root,root) /etc/rc.d/init.d/functions
-%attr(754,root,root) /etc/rc.d/init.d/halt
-%attr(754,root,root) /etc/rc.d/init.d/killall
-%attr(754,root,root) /etc/rc.d/init.d/nfsfs
-%attr(754,root,root) /etc/rc.d/init.d/random
-%attr(754,root,root) /etc/rc.d/init.d/reboot
-%attr(754,root,root) /etc/rc.d/init.d/shutdwn
-%attr(754,root,root) /etc/rc.d/init.d/single
+%attr(644,root,root) %{_sysconfdir}/rc.d/init.d/functions
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/halt
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/killall
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/random
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/reboot
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/shutdwn
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/single
 
-%attr(754,root,root) /etc/rc.d/rc.sysinit
-%attr(754,root,root) /etc/rc.d/rc.serial
-%attr(754,root,root) /etc/rc.d/rc
-%attr(754,root,root) /etc/rc.d/rc.local
-%attr(755,root,root) /etc/profile.d/lang.sh
-%attr(755,root,root) /bin/doexec
-%attr(755,root,root) /bin/usleep
-%attr(755,root,root) /sbin/setsysfont
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc.sysinit
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc.serial
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc
+%attr(754,root,root) %{_sysconfdir}/rc.d/rc.local
+%attr(755,root,root) %{_sysconfdir}/profile.d/lang.sh
+%attr(755,root,root) %{_bindir}/doexec
+%attr(755,root,root) %{_bindir}/usleep
+%attr(755,root,root) %{_sbindir}/setsysfont
 
-/usr/man/man1/usleep.1.gz
-/usr/man/man1/doexec.1.gz
+%{_mandir}/man1/usleep.1.gz
+%{_mandir}/man1/doexec.1.gz
 
 %files -n net-scripts
 %defattr(644,root,root,754)
-%doc sysconfig/interfaces/*-template!
+%doc sysconfig/interfaces/ifc*
+%doc sysconfig/interfaces/tun*
 %doc sysconfig/interfaces/data/chat-ppp*
 %doc doc/net-scripts.txt.gz
-%attr(754,root,root) /etc/rc.d/init.d/network
+%attr(644,root,root) %{_sysconfdir}/rc.d/init.d/functions.network
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/network
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/nfsfs
 %attr(750,root,root) %dir /var/run/netreport
-%attr(755,root,root) %dir /etc/sysconfig/interfaces
-%attr(755,root,root) %dir /etc/sysconfig/interfaces/data
-%attr(755,root,root) %dir /etc/ppp
-%attr(755,root,root) /etc/ppp/*
+%attr(755,root,root) %dir %{_sysconfdir}/sysconfig/interfaces
+%attr(755,root,root) %dir %{_sysconfdir}/sysconfig/interfaces/data
+%attr(755,root,root) %dir %{_sysconfdir}/ppp
+%attr(755,root,root) %{_sysconfdir}/ppp/*
 
-%attr(755,root,root) %dir /sbin/network-scripts
-%attr(755,root,root) /sbin/network-scripts/if*
-%attr(644,root,root) /sbin/network-scripts/network-functions
-%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/interfaces/lo
+%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/network
+%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/static-routes
+%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/static-nat
 
-%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/network
-%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/static-routes
+%attr(755,root,root) %{_bindir}/ipcalc
+%attr(755,root,root) %{_sbindir}/usernetctl
+%attr(755,root,root) %{_sbindir}/netreport
 
-%attr(755,root,root) /sbin/usernetctl
-%attr(755,root,root) /bin/ipcalc
-%attr(755,root,root) /sbin/netreport
-%attr(755,root,root) /sbin/ifup
-%attr(755,root,root) /sbin/ifdown
+%attr(755,root,root) %{_sbindir}/if*
+%attr(755,root,root) %{_sbindir}/tnl*
 
-/usr/man/man1/netreport.1.gz
-/usr/man/man1/usernetctl.1.gz
-/usr/man/man1/ipcalc.1.gz
+%{_mandir}/man1/netreport.1.gz
+%{_mandir}/man1/usernetctl.1.gz
+%{_mandir}/man1/ipcalc.1.gz
 
 %files -n ipchains-setup
 %defattr(644,root,root,754)
 %doc doc/ipchains-setup.txt.gz
-%attr(754,root,root) /etc/rc.d/init.d/ipchains
-%attr(755,root,root) %dir /etc/sysconfig/ipchains.d/
-%attr(755,root,root) %dir /etc/sysconfig/interfaces/data
-%attr(750,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ipchains.d/*
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ipchains
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/ipchains
+#%attr(755,root,root) %dir %{_sysconfdir}/sysconfig/ipchains.d/
+#%attr(755,root,root) %dir %{_sysconfdir}/sysconfig/interfaces/data
+#%attr(750,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/ipchains.d/*
+#%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/ipchains
 
 %changelog
 * Thu Apr 29 1999 PLD Team <bugs@pld.org.pl>

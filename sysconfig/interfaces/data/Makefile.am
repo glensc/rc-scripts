@@ -1,5 +1,10 @@
 @SET_MAKE@
 
-#data_DATA = \
+interfacesdatadir = @sysconfigdir@/interfaces/data
 
-#EXTRA_DIST = $(data_DATA)
+interfacesdata_DATA = \
+	chat-ppp0.callback \
+	chat-ppp0.leased1 \
+	chat-ppp0.tpsa
+
+EXTRA_DIST = $(interfacesdata_DATA)
