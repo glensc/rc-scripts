@@ -1,4 +1,4 @@
-#	$Id: ifcfg-description,v 1.4 2000/04/03 14:50:46 baggins Exp $
+#	$Id: ifcfg-description,v 1.5 2000/04/21 17:39:12 jajcus Exp $
 	DEVICE=<real device name>:<aliasnumber>
 or
 	DEVICE=<name>
@@ -20,6 +20,8 @@ IPV6_ADDR="<IPv6 addres1>/<prefix len> <IPv6 addres2>/<prefix len> <...>"
 	
 [ MTU= ]
 [ METRIC= ]
+
+[ QDISC= ]
 
 if 	DEVICE=eth* ; then
 
