@@ -2,7 +2,7 @@
 # inittab	This file describes how the INIT process should set up
 #		the system in a certain run-level.
 #
-#		$Id: inittab,v 1.6 2002/01/17 21:14:42 gotar Exp $
+#		$Id: inittab,v 1.7 2003/05/31 11:59:02 arekm Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 #		Modified for RHS Linux by Marc Ewing and Donnie Barnes
@@ -29,9 +29,6 @@ l3:3:wait:/etc/rc.d/rc 3
 l4:4:wait:/etc/rc.d/rc 4
 l5:5:wait:/etc/rc.d/rc 5
 l6:6:wait:/etc/rc.d/rc 6
-
-# Things to run in every runlevel.
-ud::once:/sbin/update
 
 # Trap CTRL-ALT-DELETE
 ca::ctrlaltdel:/sbin/shutdown -t3 -r now
