@@ -263,7 +263,7 @@ if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ];
 
 		PS1="$(nls '(Repair filesystem)# ')"; export PS1
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
-			sulogin
+			/sbin/sulogin
 		else
 			/bin/sh
 		fi
@@ -565,7 +565,7 @@ if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
 
 		PS1="$(nls '(RAID Repair)# ')"; export PS1
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
-			sulogin
+			/sbin/sulogin
 		else
 			/bin/sh
 		fi
@@ -607,7 +607,7 @@ if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline; then
 
 		PS1="$(nls '(Repair filesystem)# ')"; export PS1
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
-			sulogin
+			/sbin/sulogin
 		else
 			/bin/sh
 		fi
@@ -662,7 +662,7 @@ if [ -z "$fastboot" ] && grep "^[^#].*encryption=" /etc/fstab | grep -v -q "noau
 
 		PS1="`nls '(Repair filesystem)# '`"; export PS1
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
-			sulogin
+			/sbin/sulogin
 		else
 			/bin/sh
 		fi
