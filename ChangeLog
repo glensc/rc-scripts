@@ -1,3 +1,7 @@
+2003-09-10  Jan Rêkorajski  <baggins@pld-linux.org>
+
+	* rc.d/init.d/functions: - fixed is_module - modules may be gzipped
+
 2003-09-09  Arkadiusz Mi¶kiewicz  <arekm@pld-linux.org>
 
 	* rc.d/rc.sysinit: - add sysfs to mtab
