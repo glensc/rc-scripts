@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.40 2000/03/04 13:59:16 siefca Exp $
+# $Id: rc-scripts.spec.in,v 1.41 2000/03/04 22:40:06 siefca Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -164,6 +164,7 @@ fi
 %attr(755,root,root) %{_bindir}/doexec
 %attr(755,root,root) %{_bindir}/usleep
 %attr(755,root,root) %{_bindir}/ipcalc
+%attr(755,root,root) %{_bindir}/resolvesymlink
 
 %attr(755,root,root) %{_sbindir}/setsysfont
 %attr(755,root,root) %{_sbindir}/initlog

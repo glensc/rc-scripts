@@ -3,7 +3,8 @@
 bin_PROGRAMS = \
 	doexec \
 	ipcalc \
-	usleep 	
+	usleep \
+	resolvesymlink
 	
 sbin_PROGRAMS =	\
 	netreport \
@@ -18,6 +19,8 @@ EXTRA_PROGRAMS = \
 	testd 
 	
 doexec_SOURCES = doexec.c
+
+resolvesymlink_SOURCE = resolvesymlink.c
 
 ipcalc_SOURCES = ipcalc.c
 ipcalc_LDADD = -lpopt
