@@ -1,0 +1,18 @@
+DEVICE=ppp0
+ONBOOT=yes
+PPPOA_SPEEDTOUCH=yes
+PPPOA_KERNEL=yes
+PPPOA_VPI=0
+PPPOA_VCI=35
+PPPOA_FIRMWARE="/usr/share/speedtouch/mgmt.o"
+AUTH=no
+MTU=1480
+PERSIST=yes
+DEFROUTE=yes
+USEPEERDNS=yes
+#PAPNAME="rejestracja@neostrada.pl"
+PAPNAME="XXX@neostrada.pl"
+# put password in /etc/ppp/pap-secrets or install
+# ppp-plugin-ifcfg-password and uncommend following lines
+# PLUGIN_IFCFG_PASSWORD=yes
+# PASSWORD="YYYY"
