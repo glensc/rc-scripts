@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.59 2003/07/10 12:26:08 baggins Exp $
+# $Id: network,v 1.60 2003/07/10 12:30:34 baggins Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -159,7 +159,7 @@ case "$1" in
 	done
 	
 	for i in $interfaces_br_boot ; do
-		run_cmd -a "$(nls 'Bringing up interface') $i" /sbin/ifup $i boot
+		run_cmd -a "$(nls 'Bringing up bridge interface') $i" /sbin/ifup $i boot
 	done
 
 	network_postinit
@@ -185,6 +185,10 @@ case "$1" in
 			fi
 		fi
 	fi
+
+	for i in $interfaces_br_boot ; do
+		run_cmd -a "$(nls 'Shutting down bridge interface') $i" /sbin/ifdown $i boot
+	done
 
 	for i in $tunnels; do
 		run_cmd -a "$(nls 'Shutting down tunnel interface') $i" /sbin/ifdown tnlcfg-$i boot
