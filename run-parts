@@ -44,7 +44,7 @@ export RUNPARTS_ADIR RUNPARTS_DIR
 shift
 
 # Ignore *~ and *, scripts
-for i in $1/*[^~,] ; do
+for i in $RUNPARTS_DIR/*[^~,] ; do
         [ -d $i ] && continue
         # Don't run *.{rpmsave,rpmorig,rpmnew,swp} scripts
         [ "${i%.rpmsave}" != "${i}" ] && continue
