@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.8 1999/08/14 12:01:18 misiek Exp $
+#	$Id: tnlup,v 1.9 1999/09/02 12:26:31 misiek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -38,10 +38,10 @@ then
 	exit
 fi
 
-if [ "$MODE" == "gre" ]; then
-	modprobe ip_gre 2> /dev/null
-elif [ "$MODE" == "ipip" ]; then
-	modprobe ipip 2> /dev/null
+if [ "$MODE" == "gre" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ip_gre.o`" != "" ]; then
+	modprobe -s -k ip_gre
+elif [ "$MODE" == "ipip" ] && [ "`ls -R /lib/modules/\`uname -r\`/ | grep ipip.o`" != "" ]; then
+	modprobe -s -k ipip
 fi
 
 [ -z "${TTL}" ] && TTL=64
