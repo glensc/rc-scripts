@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.42.2.9 2001/05/13 19:15:29 misiek Exp $
+#	$Id: ifup,v 1.42.2.10 2001/06/09 12:24:24 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -74,6 +74,10 @@ if [ "$DEVICETYPE" = "eth" -a -n "$MACADDR" ]; then
 fi
 
 ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} down
+
+if [ -n "$MTU" ]; then
+    ip link set ${DEVICE} mtu ${MTU}
+fi
 
 if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
 	run_cmd "Disabling IPv6 autoconfiguration" sysctl -w net.ipv6.conf.${DEVICE}=0
