@@ -263,14 +263,15 @@ fi
 # Remove stale backups
 rm -f /etc/mtab~ /etc/mtab~~
 
-# Enter root, /proc, /sys and devfs into mtab.
+# Enter root, /proc, /sys, devfs and other into mtab.
 mount -f /
 mount -f /proc
+mount -f /dev/pts
+[ -f /proc/bus/usb/devices ] && mount -f -t usbdevfs usbdevfs /proc/bus/usb
+[ -e /dev/.devfsd ] && mount -f -t devfs devfs /dev
+
 if grep -q sysfs /proc/filesystems ; then
     	mount -f /sys
-fi
-if is_yes "$MOUNT_DEVFS"; then
-	mount -f -t devfs devfs /dev
 fi
 
 # Remove /etc/nologin when starting system
