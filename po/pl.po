@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.30.2.1 2000/10/18 20:10:47 misiek Exp $
+# $Id: pl.po,v 1.30.2.2 2001/02/23 21:05:15 misiek Exp $
 #
 # ,fuzzy
 msgid ""
@@ -380,7 +380,7 @@ msgstr "Deaktywowanie interfejsu tunelu"
 
 #: ../rc.d/rc:184
 msgid "Please stand by while rebooting the system"
-msgstr "Prosze czekac - restart system"
+msgstr "Prosze czekac - restart systemu"
 
 #: ../rc.d/rc.sysinit:151
 msgid "Host:"
