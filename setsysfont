@@ -6,6 +6,14 @@
 [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
 [ -f /etc/sysconfig/console ] && . /etc/sysconfig/console
 
+case "$LANG" in
+    *.utf8|*.UTF-8)
+    if [ -x /bin/unicode_start ] && /sbin/consoletype fg ; then
+	exec unicode_start $SYSFONT $SYSFONTACM
+    fi
+    ;;
+esac
+
 if [ -x /usr/bin/consolechars -o -x /bin/consolechars ]; then
 	if [ -n "$SYSFONT" ]; then
 		consolechars -f $SYSFONT
