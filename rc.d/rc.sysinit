@@ -85,9 +85,9 @@ fi
 [ -e /proc/splash ] && is_no "$BOOT_SPLASH" && echo "0" > /proc/splash
 				    
 # Print welcome message
-nls "\t\t\t%sPowered by %sPLD Linux Distribution%s" "$(termput setaf 6)" "$(termput setaf 2)" "$(termput setaf 7)"
+nls "\t\t\t%sPowered by %sPLD Linux Distribution%s" "$(termput setaf $CPOWEREDBY)" "$(termput setaf $CPLD)" "$(termput op)"
 if is_yes "$PROMPT"; then
-	nls -n "\t\t  Press %sI%s to enter interactive startup" "$(termput setaf 1)" "$(termput setaf 7)"
+	nls -n "\t\t  Press %sI%s to enter interactive startup" "$(termput setaf $CI)" "$(termput op)"
 	echo
 	sleep 1
 fi

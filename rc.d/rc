@@ -142,9 +142,9 @@ stty onlcr -ixon 0>&1
 
 
 # Say something ;)
-af2=$(termput setaf 2)
-af6=$(termput setaf 6)
-af7=$(termput setaf 7)
+af2=$(termput setaf $CRESMAN)
+af6=$(termput setaf $CBRACKETS)
+af7=$(termput op)
 text="$(termput op)$(nls '%sResource Manager: %sEntering runlevel number' "$af2" "$af7")"
 text_size="$(nls '%sResource Manager: %sEntering runlevel number' "" "")"
 resp_size="$(nls 'DONE')"

@@ -6,6 +6,8 @@ sysconfigdir = @sysconfigdir@
 
 sysconfig_DATA = \
 	clock \
+	init-colors \
+	init-colors.plddefault \
 	hwprof \
 	system \
 	network \

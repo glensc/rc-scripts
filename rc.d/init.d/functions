@@ -9,6 +9,7 @@
 #		Marek Obuchowicz <elephant@pld-linux.org>
 #		Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #		Micha³ Kochanowicz <mkochano@pld-linux.org>
+#		£ukasz Pawelczyk <havner@pld-linux.org>
 
 # First set up a default search path.
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
@@ -16,7 +17,32 @@ export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 # Set defaults
 INIT_COL=67
 
+# Set colors
+RED=1
+GREEN=2
+YELLOW=3
+BLUE=4
+MAGENTA=5
+CYAN=6
+WHITE=7
+NORMAL=9
+# Bold definition (second parameter to termput setaf)
+BOLD=1
+NOBOLD=0
+# Default colors
+CBRACKETS="$CYAN"	# brackets [ ] color
+CDONE="$GREEN"		# DONE and WORK color
+CBUSY="$MAGENTA"	# BUSY color
+CFAIL="$RED"		# FAIL and DIED color
+CPOWEREDBY="$CYAN"	# "Powered by" color
+CPLD="$GREEN"		# "PLD Linux Distribution" color
+CI="$RED"		# Capital I color (press I to enter interactive startup)
+CRESMAN="$GREEN"	# "Resource Manager" color
+CHARS=""		# Characters displayed on the begining of show line
+CCHARS="$NORMAL"	# Color of these characters (look at /etc/sysconfig/init-colors.gentoo example)
+
 # Source configuration if available - may override default values
+[ -r /etc/sysconfig/init-colors ] && . /etc/sysconfig/init-colors
 [ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
 [ -r /etc/sysconfig/bootsplash ] && . /etc/sysconfig/bootsplash
 
@@ -116,10 +142,16 @@ termput()
 			echo -ne "\033[0K"
 			;;
 		  setaf)
-			is_yes "$COLOR_INIT" && echo -ne "\033[0;3${2}m"
+			typeset ISBOLD
+			if [ -n "$3" ]; then
+				ISBOLD="$3"
+			else
+				ISBOLD="$NOBOLD";
+			fi
+			is_yes "$COLOR_INIT" && echo -ne "\033[${ISBOLD};3${2}m"
 			;;
 		  op)
-			termput setaf 9
+			termput setaf $NORMAL
 			;;
 		esac
 	else
@@ -131,10 +163,11 @@ termput()
 			tput "$@"
 			;;
 		  setaf)
-			is_yes "$COLOR_INIT" && tput "$@"
+			if [ "$3" == "1" ]; then tput bold; else tput sgr0; fi
+			is_yes "$COLOR_INIT" && tput setaf "$2"
 			;;
 		  op)
-			tput setaf 9
+			termput setaf $NORMAL
 			;;
 		esac
 	fi
@@ -256,10 +289,20 @@ show()
 	if is_yes "$FASTRC"; then
 		echo -n "$INIT_DOTS"
 		termput hpa 0
+		if [ -n "$CHARS" ]; then
+	                termput setaf $CCHARS
+			echo -n "$CHARS"
+			termput op
+		fi
 		printf "$@"
 		termput hpa $INIT_COL
 	else
 		text=$(nls "$@")
+		if [ -n "$CHARS" ]; then
+	                termput setaf $CCHARS
+			echo -n "$CHARS"
+			termput op
+		fi
 		echo -n "$text"
 		awk "BEGIN { for (j=length(\"$text\"); j<$INIT_COL; j++) printf \".\" }"
 	fi
@@ -272,14 +315,14 @@ show()
 progress()
 {
 	typeset COLOR
-	if [ -n "$2" ]; then COLOR="$2"; else COLOR="2"; fi
+	if [ -n "$2" ]; then COLOR="$2"; else COLOR="$CDONE"; fi
 	deltext
-	echo -n "$(termput setaf 6)[$(termput setaf "$COLOR") $(nls --nls-domain rc-scripts "$1") $(termput setaf 6)]$(termput op)"
+	echo -n "$(termput setaf $CBRACKETS)[$(termput setaf $COLOR) $(nls --nls-domain rc-scripts "$1") $(termput setaf $CBRACKETS)]$(termput op)"
 }
 
 busy()
 {
-	progress "BUSY" 5
+	progress "BUSY" "$CBUSY"
 }
 
 ok()
@@ -296,14 +339,14 @@ started()
 
 fail()
 {
-	progress "FAIL" 1
+	progress "FAIL" "$CFAIL"
 	echo
 	return 1
 }
 
 died()
 {
-	progress "DIED" 1
+	progress "DIED" "$CFAIL"
 	echo
 	return 1
 }
