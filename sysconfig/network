@@ -1,4 +1,4 @@
-# $Id: network,v 1.18 2002/06/19 18:04:07 klakier Exp $
+# $Id: network,v 1.19 2002/12/17 13:43:14 baggins Exp $
 ######################################################################
 # MAIN PART
 
@@ -7,9 +7,6 @@ NETWORKING=yes
 
 # Do you need IPv4 networking ?
 IPV4_NETWORKING=yes
-
-# Do you want IPv4 forwarding ?
-IPV4_FORWARDING=no
 
 # Set hostname here (only hostname)
 HOSTNAME=pldmachine
@@ -31,9 +28,6 @@ IPXINTERNALNODENUM=
 
 # Do you need IPv6 networking ?
 IPV6_NETWORKING=no
-
-# Do you want IPv6 forwarding ?
-IPV6_FORWARDING=no
 
 # Enable tunnel interfaces configuration ?
 IPV6_TUNNELCONFIG=no
