@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.38 2000/03/22 01:08:00 kloczek Exp $
+# $Id: functions.network,v 1.39 2000/03/27 16:07:50 misiek Exp $
 # vi:syntax=sh
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -125,27 +125,7 @@ fi
 }
 
 # PLD/Linux network functions
-# (C) 1999 Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
-#
-
-# same as shell script run-parts from *cron* daemons
-rparts()
-{
-if [ -d "$1" -a "$ISALIAS" = "no" ]; then
-	if [ "$2" = "start" ]; then
-		FLIST="`ls $1/*.up | xargs 2>/dev/null`"
-	else if [ "$2" = "stop" ]; then
-		FLIST="`ls $1/*.down | xargs 2>/dev/null`"
-	     fi
-	fi
-	for i in $FLIST ; do
-		[ -d $i ] && continue
-		if [ -x $i ]; then
-			$i
-		fi
-	done
-fi
-}
+# Copyright (C) 1999, 2000 Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 
 # All functions must be called "name_of_function on" or "name_of_function off"
 

@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
-# Copyright (C) 1999 Free Software Foundation, Inc.
-# Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.25 2000/03/24 08:48:54 misiek Exp $
+# Copyright (C) 1999, 2000 Free Software Foundation, Inc.
+# Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
+# $Id: pl.po,v 1.26 2000/03/27 16:07:49 misiek Exp $
 #
 msgid ""
 msgstr ""
@@ -121,8 +121,8 @@ msgid "Enabling dynamic IP patch"
 msgstr ""
 
 #: ../rc.d/rc.sysinit:453
-msgid "Sending val. %s to /proc/sys/kernel/panic"
-msgstr "Przesylanie wartosci %s do /proc/sys/kernel/panic"
+msgid "Setting %s seconds for kernel reboot after panic."
+msgstr "Restartuj system po %s sekundach od zawieszenia siê j±dra."
 
 #: ../rc.d/init.d/functions:340 ../rc.d/init.d/functions:348
 msgid "%s (pid %s) is running...\n"

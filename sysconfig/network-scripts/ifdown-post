@@ -1,9 +1,11 @@
 #!/bin/sh
 #
-#	$Id: ifdown-post,v 1.9 2000/03/08 16:30:14 misiek Exp $
+#	$Id: ifdown-post,v 1.10 2000/03/27 16:07:52 misiek Exp $
 #
 # This should be called whenever an interface goes down, not just when
 # it is brought down explicitly.
+
+run_down() { :; }
 
 CONFIG=$1
 . /etc/sysconfig/network
@@ -25,9 +27,8 @@ else
         ISALIAS=no
 fi
 
-# run scripts in /etc/sysconfig/interfaces/scripts/$DEVICE/
-# named somename.up
-rparts "/etc/sysconfig/interfaces/scripts/$DEVICE" stop
+# execute run_up() function (if available in device configuration file)
+[ "$ISALIAS" = "no" ] && run_down
 
 # Notify programs that have requested notification
 do_netreport

@@ -1,5 +1,8 @@
 @SET_MAKE@
 
+sysconf_DATA = \
+	initlog.conf
+
 bin_PROGRAMS = \
 	doexec \
 	ipcalc \

@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.18 2000/03/24 08:48:55 misiek Exp $
+# $Id: rc,v 1.19 2000/03/27 16:07:50 misiek Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -56,7 +56,7 @@ export runlevel previous
 # virtual console, and send messages to /dev/console 
 # (it can be serial console too) 
 if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
-	[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo
+	[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > /dev/console
 	exec 0<> /dev/console 1>&0 2>&0
 else
 # if previous runlevel = current runlevel do nothing
