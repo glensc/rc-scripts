@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.66 2001/11/19 13:00:56 zagrodzki Exp $
+# $Id: functions.network,v 1.67 2002/02/02 17:13:01 adasi Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -160,6 +160,20 @@ if [ -r /etc/sysconfig/static-nat ]; then
 fi
 }
 
+# Setup Masquerade
+setup_masq()
+{
+typeset src by iface to dst
+if [ -r /etc/sysconfig/masquerade ]; then
+        grep "^[0-9]" /etc/sysconfig/masquerade | while read src by iface to dst; do
+                if [ "$1" = "on" ]; then
+                        /sbin/ipchains -A forward -i $iface -j MASQ -s $src -d $dst
+                elif [ "$1" = "off"]; then
+                        /sbin/ipchains -D forward -i $iface -j MASQ -s $src -d $dst
+        fi
+        done
+fi
+}
 # Setup static ARP
 static_arp()
 {
