@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.66 2001/07/23 11:01:25 mkochano Exp $
+# $Id: functions,v 1.67 2001/09/19 08:09:56 orzech Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -348,10 +348,10 @@ killproc()
 			if ps h $pid >/dev/null 2>&1; then
 				if (kill $killlevel $pid); then
 				   ok
-				   log_success "$1 shutdown"
+				   log_success "$1 got $killlevel"
 				else
 				   fail
-				   log_failed "$1 shutdown"
+				   log_failed "$1 didn't get $killlevel"
 				fi
 			else
 				died
