@@ -336,7 +336,7 @@ bail:
     goto end;
 }
 
-/* Write the current contents iff modified.  Returns -1 on error
+/* Write the current contents if modified.  Returns -1 on error
  * and 0 on success.  Do not write if no values have been modified.
  * The mode argument is only used if creating the file, not if
  * re-writing an existing file, and is passed unchanged to the

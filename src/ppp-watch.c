@@ -433,7 +433,7 @@ interfaceIsUp(char *device) {
     strncpy(ifr.ifr_name, device, sizeof(ifr.ifr_name) - 1);
     ifr.ifr_name[sizeof(ifr.ifr_name) - 1] = '\0';
 
-    /* We return TRUE iff the ioctl succeeded and the interface is UP. */
+    /* We return TRUE if the ioctl succeeded and the interface is UP. */
     if (ioctl(sock, SIOCGIFFLAGS, &ifr) == -1) {
         retcode = FALSE;
     } else if (ifr.ifr_flags & IFF_UP) {
