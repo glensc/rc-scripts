@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: tnldown,v 1.15 2000/06/12 08:38:15 waszi Exp $
+#	$Id: tnldown,v 1.16 2000/07/28 15:03:10 zagrodzki Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
@@ -12,8 +12,9 @@ DEV=$1
     exit 1
 }
 
-. /etc/sysconfig/network-scripts/.functions
 . /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/.functions
 
 TNLCONFIGS="`ls /etc/sysconfig/interfaces/tnlcfg-*|egrep -v '~$'`"
 TNLCONFIGS="`egrep -L '^#!' $TNLCONFIGS`"
