@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.34.2.3 2000/10/23 22:10:59 misiek Exp $
+# $Id: network,v 1.34.2.4 2000/10/28 09:33:56 misiek Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -177,7 +177,7 @@ case "$1" in
 		run_cmd -a "$(nls "Shutting down interface") $i" /sbin/ifdown $i boot
 	done
 
-	for i in $(ip link show | awk -F":" ' (/UP/) && ($2 !~ "lo") { print $2; } ') ; do
+	for i in $(ip link show | awk -F":" ' (/UP/) && ($2 !~ "lo") { gsub(/@.*/,NIL); print $2; } ') ; do
 		show "Shutting down unconfigured interface %s" "$i"
 		ip addr flush dev $i 2>&1 | grep -v "Nothing to flush"
 		if (ip link set $i down); then ok; else fail; fi
