@@ -61,7 +61,11 @@ if [ -n "${PPPOE_DEV}" ]; then
 elif is_yes "${PPPOA_EAGLE}"; then
     adictrl -w
     PPPOA_IFACE=$(adictrl -i 2>/dev/null)
-    [ -z "$PPPOA_IFACE" ] && PPPOA_IFACE="(unknown)"
+    if [ -z "$PPPOA_IFACE" ]; then
+       PPPOA_IFACE="(unknown)"
+    else
+       ip link set "$PPPOA_IFACE" up
+    fi
     MODEMMODE="pty"
     MODEMPORT="pppoa -I ${PPPOA_IFACE} ${PPPOA_OPT}"
 else
@@ -200,7 +204,7 @@ fi
 MODEM="${MODEMPORT}"; export MODEM
 
 (logger -p daemon.info -t ifup-ppp \
-    $(nls 'pppd started for %s on device %s at speed %s' "$DEVICE" "$MODEMPORT" "${LINESPEED:-(unspecified)} on unit ${UNIT}") &)&
+    $(nls 'pppd started for %s on device "%s" at speed %s' "$DEVICE" "$MODEMPORT" "${LINESPEED:-(unspecified)} on unit ${UNIT}") &)&
 
 /usr/sbin/pppd $opts ${MODEMMODE} "${MODEMPORT}" ${LINESPEED} \
 	ipparam ${DEVNAME} linkname ${DEVNAME} \
