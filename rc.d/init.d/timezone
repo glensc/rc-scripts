@@ -5,7 +5,7 @@
 # description:	This script is setting time zone information for your machine.
 # Author:	Pawel Wilk <siefca@pld.org.pl>
 #
-# $Id: timezone,v 1.8 2001/05/13 17:10:17 baggins Exp $
+# $Id: timezone,v 1.9 2003/06/17 14:02:35 qboosh Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -18,7 +18,7 @@ NLS_DOMAIN="rc-scripts"
 
 ZONE_FILE="$ZONE_INFO_DIR"
 
-if [ -n "$ZONE_INFO_SCHEME" ]; then
+if [ -n "$ZONE_INFO_SCHEME" -a "$ZONE_INFO_SCHEME" != "posix" ]; then
     ZONE_FILE="$ZONE_FILE/$ZONE_INFO_SCHEME"
 fi
 
