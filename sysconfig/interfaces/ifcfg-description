@@ -1,4 +1,4 @@
-#	$Id: ifcfg-description,v 1.11 2000/09/03 02:29:02 baggins Exp $
+#	$Id: ifcfg-description,v 1.12 2000/11/17 12:11:34 misiek Exp $
 	DEVICE=<real device name>:<aliasnumber>
 or
 	DEVICE=<name>
@@ -7,7 +7,7 @@ if BOOTPROTO = dhcp ; then
 	[ DHCPOPTIONS={-D|-H|-R}
 fi
 IPADDR=<IPv4 addres>
-[ IPADDR_ALIASES="<IPv4 addres1> <IPv4 addres2> <...>" ]
+[ IPADDR_ALIASES="<IPv4 addres1>/<prefix len> <IPv4 addres2>/<prefix len> <...>/<..>" ]
 IPV6_ADDR="<IPv6 addres1>/<prefix len> <IPv6 addres2>/<prefix len> <...>"
 [ PREFIX= ]
 [ NETWORK= ]
