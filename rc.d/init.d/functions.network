@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.51 2001/05/15 16:41:26 baggins Exp $
+# $Id: functions.network,v 1.52 2001/05/15 16:44:38 baggins Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -211,9 +211,9 @@ setup_forwarding ()
 if is_yes "$IPV4_NETWORKING" && is_yes "$IPV4_FORWARDING" && [ -f /proc/sys/net/ipv4/ip_forward ];
 then
 	if [ "$1" = "on" ]; then
-		run_cmd "Enabling IPv4 packed forwarding" sysctl -w net.ipv4.ip_forward=1
+		run_cmd "Enabling IPv4 packet forwarding" sysctl -w net.ipv4.ip_forward=1
 	else
-		run_cmd "Disabling IPv4 packed forwarding" sysctl -w net.ipv4.ip_forward=0
+		run_cmd "Disabling IPv4 packet forwarding" sysctl -w net.ipv4.ip_forward=0
 	fi
 fi
 
@@ -222,7 +222,7 @@ then
 	if [ "$1" = "on" ]; then
 		run_cmd "Enabling IPv6 packet forwarding" sysctl -w net.ipv6.conf.all.forwarding=1
 	else
-		run_cmd "Disabling IPv6 packed forwarding" sysctl -w net.ipv6.conf.all.forwarding=0
+		run_cmd "Disabling IPv6 packet forwarding" sysctl -w net.ipv6.conf.all.forwarding=0
 	fi
 fi
 }
