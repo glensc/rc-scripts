@@ -1,5 +1,0 @@
-# default policies for input, output and forward chains
-
-INPUT_POLICY=ACCEPT
-OUTPUT_POLICY=ACCEPT
-FORWARD_POLICY=ACCEPT
