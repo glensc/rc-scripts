@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.21 1999/08/09 19:58:00 kloczek Exp $
+# $Id: rc-scripts.spec.in,v 1.22 1999/08/09 20:44:03 wiget Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -25,6 +25,7 @@ Requires:	/bin/ps
 Requires:	SysVinit
 Requires:	sed
 Requires:	iproute2
+Requires:	/bin/gettext
 Prereq:		/sbin/chkconfig
 Obsoletes:	initscripts
 Provides:	initscripts
