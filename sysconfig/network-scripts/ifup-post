@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.23 2001/05/15 16:03:44 baggins Exp $
+#	$Id: ifup-post,v 1.24 2001/12/03 17:50:33 jajcus Exp $
 #
 
 run_up() { :; }
@@ -25,8 +25,8 @@ if [ -n "$QDISC" ]; then
 	tc qdisc add dev "$REALDEVICE" root $QDISC
 fi
 
-/etc/sysconfig/network-scripts/ifup-aliases ${DEVICE}
-/etc/sysconfig/network-scripts/ifup-routes ${DEVICE}
+/etc/sysconfig/network-scripts/ifup-aliases ${CONFIG}
+/etc/sysconfig/network-scripts/ifup-routes ${CONFIG}
 
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
