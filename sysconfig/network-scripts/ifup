@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.31 1999/11/06 00:25:31 wiget Exp $
+#	$Id: ifup,v 1.32 1999/11/14 07:54:53 kloczek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -41,9 +41,9 @@ fi
 
 IPSETUP=no
 
-# pelna nazwa dewajsa jaka podal user
+# full network device name
 FULLDEVNAME="$DEVICE"
-# przyjmuje warto¶æ np: "dummy" czy "eth"
+# detect network device type (dummy, eth ..)
 DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
 # przyjmuje eth0 przy {eth0,eth0:1,eth0:alias}
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
@@ -126,8 +126,8 @@ fi
 
 if [ -n "$PUMP" ] && [ "$ISALIAS" = "no" ]; then
 
-    echo -n "Determining IP information for $DEVICEFULLNAME..."
-    if /sbin/pump -i $DEVICEFULLNAME ; then
+    echo -n "Determining IP information for $FULLDEVNAME..."
+    if /sbin/pump -i $FULLDEVNAME ; then
        echo " done."
     else
        echo " failed."
@@ -195,7 +195,7 @@ fi
 #    . /etc/sysconfig/network
 
     if [ "${GATEWAY}" != "" ]; then
-	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${FULLDEVICENAME}" ]; then
+	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${FULLDEVNAME}" ]; then
 	    # set up default gateway
 	    ip -family inet route add default via ${GATEWAY} dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}
 	    DEFGW=${GATEWAY}
