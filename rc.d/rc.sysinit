@@ -19,7 +19,12 @@ mount -n -o gid=17 -t proc /proc /proc
 
 # sysfs is also needed before any other things (under kernel > 2.5)
 if grep -q sysfs /proc/filesystems ; then
-    run_cmd "Mounting sysfs filesystem" mount -n -o gid=17 -t sysfs sysfs /sys
+    mount -n -o gid=17 -t sysfs sysfs /sys
+fi
+
+# selinux
+if grep -q selinuxfs /proc/filesystems ; then
+    mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
 fi
 
 # Choose Hardware profile
@@ -305,7 +310,11 @@ mount -f /proc
 [ -e /dev/.devfsd ] && mount -f -t devfs devfs /dev
 
 if grep -q sysfs /proc/filesystems ; then
-    	mount -f /sys
+	mount -f -t sysfs sysfs /sys
+fi
+
+if grep -q selinuxfs /proc/filesystems ; then
+    	mount -f -t selinuxfs selinuxfs /selinux
 fi
 
 # Remove /etc/nologin when starting system
