@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.13 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: ifup-post,v 1.14 1999/11/16 11:28:50 kloczek Exp $
 #
 
 . /etc/sysconfig/network
@@ -18,22 +18,22 @@ DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 
 if echo "$FULLDEVNAME" | grep -q ':' ; then
-    ISALIAS=yes
+	ISALIAS=yes
 else
-    ISALIAS=no
+	ISALIAS=no
 fi
 
 /etc/sysconfig/network-scripts/ifup-routes ${FULLDEVNAME}
 
 if [ "$ISALIAS" = "no" ] ; then
-    /etc/sysconfig/network-scripts/ifup-aliases ${DEVICE}
+	/etc/sysconfig/network-scripts/ifup-aliases ${DEVICE}
 fi
 
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICE}" != lo -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
-     IPADDR=`ip addr show dev ${DEVICE} label ${FULLDEVNAME} | 
-	    awk '{ print $2 }' |awk -F"/" '{ print $1 }'`
-    eval `/bin/ipcalc --silent --hostname ${IPADDR}` && set_hostname $HOSTNAME
+	IPADDR=`ip addr show dev ${DEVICE} label ${FULLDEVNAME} | 
+		awk '{ print $2 }' |awk -F"/" '{ print $1 }'`
+	eval `/bin/ipcalc --silent --hostname ${IPADDR}` && set_hostname $HOSTNAME
 fi
 
 # Notify programs that have requested notification
