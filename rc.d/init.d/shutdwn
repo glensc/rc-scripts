@@ -6,7 +6,7 @@
 #               Modified for PLD Linux by Grzegorz Stanislawski
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: shutdwn,v 1.8 1999/09/03 07:54:22 wiget Exp $
+# $Id: shutdwn,v 1.9 1999/09/04 19:49:41 waszi Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -31,11 +31,16 @@ halt -w
 # Turn off swap, then unmount file systems.
 run_cmd "Turning off swap and accounting" swapoff -a
 [ -x /sbin/accton ] && /sbin/accton
-$MSG="`nls "Unmounting file systems"`"
-LC_ALL_OLD=$LC_ALL
-LC_ALL=C
-run_cmd "$MSG" umount -a
-LC_ALL=$LC_ALL_OLD
+
+_ERRORS=""
+show "Unmounting file systems"; busy
+if _ERRORS="`LANG_OLD=$LANG;LANG=C;initlog -c \"umount -a\" 2>&1;LANG=$LANG_OLD`"; then
+    deltext; ok
+else
+    deltext; fail; echo $_ERRORS
+fi
+unset _ERRORS
+
 run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
 
 # turn off raid
