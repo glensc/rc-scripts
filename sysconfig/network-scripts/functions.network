@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.7 2002/12/17 14:01:11 baggins Exp $
+# $Id: functions.network,v 1.8 2003/06/19 15:57:07 arekm Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -411,13 +411,13 @@ fi
 # Olgierd Pieczul <wojrus@pld.org.pl>
 setup_ip_rules () {
 typeset args
-if [ -f /etc/sysconfig/ip-rules ] ; then
-        if [ "$1" = "on" -o "$1" = "yes" ] ; then
-                egrep "^(from|to|iif|tos|fwmark|dev|pref)[[:blank:]]" /etc/sysconfig/ip-rules | while read args; do
+if [ -f /etc/sysconfig/static-routes ] ; then
+	if is_yes "$1"; then
+                egrep "^(from|to|iif|tos|fwmark|dev|pref)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
                         /sbin/ip rule add $args
                 done
-        else
-                egrep "^(from|to|iif|tos|fwmark|dev|pref)[[:blank:]]" /etc/sysconfig/ip-rules | while read args; do
+        elif is_no "$1"; then
+                egrep "^(from|to|iif|tos|fwmark|dev|pref)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
                         /sbin/ip rule del $args
                 done
         fi

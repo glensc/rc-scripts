@@ -1,5 +1,10 @@
-# Entry format:
+# Entry format for ip rule:
+# <rule>
+# Entry format for static route:
 # <device>	<network_ip>/<network_mask_length>	<other arguments>
 #
-# example:
-#eth0	192.168.1.0/24	via	192.168.100.1
+# Combined example:
+
+#from 192.168.2.0/24 table 10
+#eth0 default via 192.168.2.1 table 10
+
