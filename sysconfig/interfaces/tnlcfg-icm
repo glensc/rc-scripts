@@ -1,10 +1,12 @@
-ONBOOT=yes
 MODE=sit
 DEVICE=icm
 REMOTEADDR=193.219.28.246
 LOCALADDR=156.17.210.110
+IPADDR1="3ffe:8010:70::2/126"
+IP6_PRIM_IF=1
 BIND_DEV=eth0
 TTL=64 
+ONBOOT=yes
 #TOS=
 #SEQ={no|yes} ]
 #ISEQ={no|yes} ]
@@ -16,4 +18,3 @@ TTL=64
 #ICSUM={no|yes} ]
 #OCSUM={no|yes} ]
 #PMTUDISC={no|yes} ]
-	
