@@ -1,11 +1,8 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.10 1999/09/13 13:25:54 misiek Exp $
+#	$Id: tnlup,v 1.11 1999/09/27 10:01:33 misiek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
-#
-# Uwagi:
-# - przy dodawaniu routingu w ifup pamiêtac o "onlink" (patrz dokumentacja do iproute)
 #
 
 cd /etc/sysconfig/network-scripts
@@ -74,7 +71,7 @@ fi
 
 if [ "${PMTUDISC}" == "yes" ]; then
 	PMTUDISC=pmtudisc
-else
+elif [ "${PMTUDISC}" == "no" ]; then
 	PMTUDISC=nopmtudisc
 fi
 

@@ -1,11 +1,8 @@
 #!/bin/sh
 #
-#	$Id: tnldown,v 1.6 1999/09/13 13:25:54 misiek Exp $
+#	$Id: tnldown,v 1.7 1999/09/27 10:01:33 misiek Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
-#
-# Uwagi:
-# - przy dodawaniu routingu w ifup pamiêtac o "onlink" (patrz dokumentacja do iproute)
 #
 
 cd /etc/sysconfig/network-scripts
