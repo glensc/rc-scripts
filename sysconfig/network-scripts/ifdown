@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.30 2001/07/05 15:56:34 baggins Exp $
+#	$Id: ifdown,v 1.31 2001/07/13 17:47:44 marcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -88,13 +88,29 @@ if [ "$BOOTPROTO" = "dhcp" ]; then
     fi
 fi
 
-ip link set ${DEVICE} down
-ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
-
 vlan_setup
-if is_yes $ETH_VLANS && echo "$DEVICE" | grep -q '\.' ; then
-	/sbin/vconfig rem $DEVICE 2>&1 > /dev/null
-fi
+if is_yes $ETH_VLANS && `echo $DEVICE | grep -q ^eth` then
+    if echo "${DEVICE}" | grep -q '\.' ; then
+    # downujemy vlan
+    ip link set ${DEVICE} down
+    ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+    /sbin/vconfig rem ${DEVICE} 2>&1 > /dev/null
+    else
+    # downujemy interfejs nadrzedny do vlanow
+    for VLANDEVICE in `ls /proc/net/vlan | grep ^${DEVICE}`
+	do
+	# najpierw wszystkie vlany po kolei
+	ip link set ${VLANDEVICE} down
+	ip addr flush dev ${VLANDEVICE} 2>&1 | grep -v "Nothing to flush"
+	/sbin/vconfig rem ${VLANDEVICE} 2>&1 > /dev/null
+    done 
+    # a potem dopiero interfejs nadrzedny
+    ip link set ${DEVICE} down
+    ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+else
+    ip link set ${DEVICE} down
+    ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+fi    
 
 if [ "$HANDLING" = "4" ]; then
     exit 0

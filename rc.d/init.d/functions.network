@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.60 2001/07/05 15:56:33 baggins Exp $
+# $Id: functions.network,v 1.61 2001/07/13 17:47:43 marcus Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -211,7 +211,7 @@ fi
 
 vlan_setup()
 {
-if [ -x /sbin/vconfig -a -e /proc/net/vlan/config ]; then
+if [ -x /sbin/vconfig -a -e /proc/net/vlan/config ] && `echo $DEVICE | grep -q ^eth`; then
 	/sbin/vconfig set_name_type DEV_PLUS_VID_NO_PAD 2>&1 > /dev/null
 	ETH_VLANS="yes"
 else
