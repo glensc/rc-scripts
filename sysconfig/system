@@ -1,4 +1,4 @@
-# $Id: system,v 1.14 2000/03/26 06:51:45 kloczek Exp $
+# $Id: system,v 1.15 2000/04/14 11:12:42 mkochano Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -31,7 +31,10 @@ DELAY_LOGIN=yes
 # Clean /tmp at startup ?
 CLEAN_TMP=yes
 
-# Load kernel sound modules at startup ? (say no if you are using ALSA drivers)
+# Load kernel sound modules at startup ? (say no if you are using ALSA
+# drivers). If you choice to load sound modules, you may also want sound
+# volume to be saved on system shutdown and restored on system startup. In
+# that case install "aumix-OSS-preserve-settings".
 LOAD_SOUND=no
 
 # Try to setup proper symlinks in /boot (based on kernel version) ?
