@@ -29,7 +29,6 @@ downdir='${sysconfigdir}/interfaces/down.d'
 networkscriptsdir='${sysconfigdir}/network-scripts'
 rcdir='${sysconfdir}/rc.d'
 docdir="${prefix}/doc/$PACKAGE-$VERSION"
-libdir="${exec_prefix}/lib"
 
 dnl i18n support
 AC_PATH_PROGS(MSGMERGE, msgmerge)
@@ -81,7 +80,6 @@ AC_SUBST(updir)
 AC_SUBST(downdir)
 AC_SUBST(rcdir)
 AC_SUBST(docdir)
-AC_SUBST(libdir)
 
 AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile \
 	ppp/Makefile \

@@ -1,7 +1,5 @@
 @SET_MAKE@
 
-libdir = @libdir@
-
 sbin_SCRIPTS = \
 	ifdown \
 	ifup \
