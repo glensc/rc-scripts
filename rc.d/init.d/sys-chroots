@@ -30,6 +30,11 @@ RETVAL=0
 case "$CMD" in
   start)
 	# Start daemons.
+	if [ "$previous" = "N" ]; then
+	   runlevel=5
+	   export runlevel
+        fi
+	
 	if [ ! -f /var/lock/subsys/sys-chroots ]; then
 		msg_starting "System chroots services"; started
 
@@ -99,9 +104,14 @@ case "$CMD" in
 		    fi
 		    set -x
 		    chroot $dir mount -a
+		    # network
 		    chroot $dir /sbin/chkconfig network off
-		    is_yes "${NETWORKING}" && touch $dir/var/lock/subsys/network
+		    rm -f $dir/etc/rc.d/rc*.d/K*network
+		    [ -f /var/lock/subsys/network ] && touch $dir/var/lock/subsys/network
+		    # other
 		    chroot $dir /sbin/chkconfig single off
+		    rm -f $dir/etc/rc.d/rc*.d/K*single
+		    # run it
 		    chroot $dir /etc/rc.d/rc $runlevel chroot
 		done
 		
@@ -112,13 +122,18 @@ case "$CMD" in
 	;;
   stop)
 	# Stop daemons.
+	if [ "$previous" = "N" ]; then
+	    runlevel=0
+	    export runlevel
+	fi
+	
 	if [ -f /var/lock/subsys/sys-chroots ]; then
 		msg_stopping "System chroots services"; started
 		for dir in $SYSTEM_CHROOTS; do
 		    [ ! -x "$dir/etc/rc.d/rc" ] && continue
 		    msg_stopping "System chroots services for $dir"; started
-		    is_yes "${NETWORKING}" && rm -f $dir/var/lock/subsys/network
 		    chroot $dir /etc/rc.d/rc $runlevel chroot
+		    rm -f $dir/var/lock/subsys/network
 		done
 		rm -f /var/lock/subsys/sys-chroots >/dev/null 2>&1
 	else
