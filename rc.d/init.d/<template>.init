@@ -1,0 +1,67 @@
+#!/bin/sh
+#
+# <service>	<service> short service description
+#
+# chkconfig:	
+#
+# description:	<service> long service description
+
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Get service config
+[ -f /etc/sysconfig/<service> ] && . /etc/sysconfig/<service>
+
+# Check that networking is up.
+if [ "${NETWORKING}" = "no" ]; then
+	echo "WARNING: Networking is down. <service> can't be runed."
+	exit 1
+fi
+
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/<service> ]; then
+		show "Starting <service> service"
+		daemon <service>
+		touch /var/lock/subsys/<service>
+	else
+		echo "<service> service is already running."
+	fi
+        ;;
+  stop)
+        # Stop daemons.
+        show "Stopping <service> service"
+	killproc <service>
+        ;;
+  restart)
+        $0 stop
+	$0 start
+        ;;
+  reload)
+	if [ -f /var/lock/subsys/<service> ]; then
+		show "Reload <service> service"
+		busy
+		killproc <service> -HUP
+		deltext
+		ok		
+	else
+		echo "<service> service is not running."
+	fi
+	;;
+  status)
+	status <service>
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|status|restart|reload}"
+        exit 1
+esac
+
+exit 0
+
