@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.3 2002/07/13 16:25:07 misiek Exp $
+# $Id: functions.network,v 1.4 2002/08/21 21:30:42 misiek Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -194,11 +194,11 @@ if [ -n "${IP6_PRIM_IF}" ] ; then
 fi
 if [ -n "${IP4_SRC_IF}" ] ; then
 	eval IP4SRCADDR="\$IPADDR${IP4_SRC_IF}"
-	IP4SRCADDR="src $IP4SRCADDR"
+	IP4SRCADDR=$(echo ${IP4SRCADDR} | awk ' { gsub(/\/.*/,NIL); print "src " $0; } ')
 fi
 if [ -n "${IP6_SRC_IF}" ] ; then
 	eval IP6SRCADDR="\$IPADDR${IP6_SRC_IF}"
-	IP6SRCADDR="src $IP6SRCADDR"
+	IP6SRCADDR=$(echo ${IP6SRCADDR} | awk ' { gsub(/\/.*/,NIL); print "src " $0; } ')
 fi
 
 # new rc-scripts 0.4.x option
