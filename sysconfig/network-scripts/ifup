@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.49 2000/10/17 20:42:13 saq Exp $
+#	$Id: ifup,v 1.50 2000/11/04 04:44:55 baggins Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -165,8 +165,6 @@ else
         fi
     fi
 
-    ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
-
     # IPv4 rules
     if [ "$IPv4" = "yes" ]; then
 	if [ -n "$REMIP" ]; then
@@ -203,6 +201,8 @@ else
 	fi
       fi
     fi
+
+    ip link set ${DEVICE} multicast ${MULTICAST} arp ${ARP} up
 
     if [ "${GATEWAY}" != "" ]; then
 	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${FULLDEVNAME}" ]; then
