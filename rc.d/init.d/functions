@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.19 1999/08/09 20:00:08 wiget Exp $
+# $Id: functions,v 1.20 1999/08/09 21:05:27 wiget Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -54,7 +54,7 @@ show()
 {	
 	what="`nls "DONE"`"; typeset -i offset=${#what}
 	text="`nls "$*"`"..................................................................................
-	printf "%.$((69 - $offset))s" "$text"
+	awk "BEGIN {printf \"%.$((69 - $offset))s\", \"$text\";}"
 }
 
 busy() 
