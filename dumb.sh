@@ -184,5 +184,7 @@ nls "ERROR: Passwords don't match"
 nls "Loading zebra configuration"
 nls "Starting Athlon Cooling"
 nls "Stoping Athlon Cooling"
+nls "Error: /etc/nessus/nessusd.conf not found"
+nls " Nessus daemon can't be run."
 
 fi
