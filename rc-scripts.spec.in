@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.13 1999/07/15 13:16:34 misiek Exp $
+# $Id: rc-scripts.spec.in,v 1.14 1999/07/20 09:03:43 wiget Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -168,7 +168,6 @@ fi
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/single
 
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc.sysinit
-%attr(754,root,root) %{_sysconfdir}/rc.d/rc.serial
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc
 %attr(754,root,root) %{_sysconfdir}/rc.d/rc.local
 %attr(755,root,root) %{_sysconfdir}/profile.d/lang.sh
