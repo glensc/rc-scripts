@@ -1,0 +1,23 @@
+# example config for first ethernet card
+
+# name of the device
+DEVICE=eth0
+
+# activate on boot? yes|no
+ONBOOT=yes
+
+# 
+USERCTL=no
+
+# dhcp|pump|none
+BOOTPROTO=none
+
+# IP address
+IPADDR=192.168.0.1
+
+# address prefix
+# 16 - resembles netmask 255.255.255.0
+# 24 - resembles netmask 255.255.0.0
+# etc.
+PREFIX=24
+
