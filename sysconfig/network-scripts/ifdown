@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.18 1999/12/15 18:41:09 misiek Exp $
+#	$Id: ifdown,v 1.19 1999/12/19 16:04:29 jajcus Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -16,8 +16,8 @@ DEV=$1
 . /etc/sysconfig/network-scripts/.functions
 
 if [ `id -u` != 0 ]; then
-    if [ -x /usr/sbin/usernetctl ]; then
-        exec /usr/sbin/usernetctl $CONFIG down
+    if [ -x /sbin/usernetctl ]; then
+        exec /sbin/usernetctl $CONFIG down
     fi
     echo "Users cannot control this device." >&2
     exit 1
@@ -54,7 +54,7 @@ DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
 
-if [ -x $OTHERSCRIPT -a "$IPv4" = "yes" ]; then
+if [ -x $OTHERSCRIPT ]; then
     if [ "$DEFAULTHANDLING" = "yes" ]; then
         $OTHERSCRIPT $CONFIG $2
     else
