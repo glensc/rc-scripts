@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.41 2000/03/09 11:30:54 zagrodzki Exp $
+# $Id: functions,v 1.42 2000/03/09 11:43:07 zagrodzki Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -404,7 +404,7 @@ msg_Network_Down()
 
 msg_starting()
 {
-	nls "Starting %s service" "$1"
+	show "Starting %s service" "$1"
 }
 
 msg_Already_Running()
@@ -414,7 +414,7 @@ msg_Already_Running()
 
 msg_stopping()
 {
-	nls "Stopping %s service" "$1"
+	show "Stopping %s service" "$1"
 }
 
 msg_Not_Running()
@@ -424,7 +424,7 @@ msg_Not_Running()
 
 msg_reloading()
 {
-	nls "Reloading %s service" "$1"
+	show "Reloading %s service" "$1"
 }
 
 msg_Usage_reload()
