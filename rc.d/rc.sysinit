@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.59 2000/05/03 11:55:08 waszi Exp $
+# $Id: rc.sysinit,v 1.60 2000/05/16 15:08:25 zagrodzki Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -54,7 +54,7 @@ fi
 
 # Print welcome message
 echo -e "\t\t\t`termput setaf 6`Powered by `termput setaf 2`PLD GNU/Linux`termput setaf 7`"
-if [ "$PROMPT" != "no" ]; then
+if is_yes "$PROMPT"; then
 	echo -en "\t\t`nls "Press"` '`termput setaf 1`I`termput setaf 7`' `nls "to enter interactive startup."`"
 	echo
 	sleep 1
@@ -79,13 +79,13 @@ fi
 /bin/dmesg -n $CONSOLE_LOGLEVEL
 
 # Turn off sysrq
-if [ -f /proc/sys/kernel/sysrq -a "$MAGIC_SYSRQ" = "no" ]; then
+if [ -f /proc/sys/kernel/sysrq ] && is_no "$MAGIC_SYSRQ"; then
         echo "0" > /proc/sys/kernel/sysrq
 	run_cmd "Turning off Magic SysRq key" /bin/true
 fi
 
 # Turn off Stop-A
-if [ -f /proc/sys/kernel/stop-a -a "$STOP_A" = "no" ]; then
+if [ -f /proc/sys/kernel/stop-a ] && is_no "$STOP_A"; then
 	echo "0" > /proc/sys/kernel/stop-a
 	run_cmd "Turning off Stop-A/Break-A" /bin/true
 fi
@@ -253,7 +253,7 @@ fi
 rm -f /lib/modules/preferred
 rm -f /lib/modules/default
 if [ -x /sbin/depmod -a -n "$USEMODULES" ]; then
-	if [ "$SET_SLINKS" != "no" ]; then
+	if is_yes "$SET_SLINKS"; then
 	# Get ready for kmod if module support in the kernel
 		if [ -z `uname -r | grep "-"` ]; then
 		# we're using a new kernel, no preferred needed
@@ -275,10 +275,16 @@ if [ -x /sbin/depmod -a -n "$USEMODULES" ]; then
 	[ -n "$mver" -a -f "/boot/System.map-$mver" ] && \
 		ln -sf /boot/System.map-$mver /boot/System.map
 
-	# Run depmod if: a) user requested; b) modules.dep is missing
-	# c) modules.dep is older than /etc/modules.conf
-	if [ "$RUN_DEPMOD" != "no" ]; then
-		if [ "$RUN_DEPMOD" = "ifmissing" -a ! -r /lib/modules/$mver/modules.dep ] || (find /lib/modules/$mver/ -name modules.dep ! -newer /etc/modules.conf -print 2>&1 | grep -q "modules.dep"); then
+	# Run depmod if:
+	# a) user requested or RUN_DEPMOD="";
+	# b) modules.dep is missing
+	# c) modules.dep is older than /etc/modules.conf or /lib/modules/$mver
+	if ! is_no "$RUN_DEPMOD" || [ -z "$RUN_DEPMOD" ]; then
+		if [ "$RUN_DEPMOD" = "ifmissing" -a ! -r /lib/modules/$mver/modules.dep ] ||\
+		is_yes "$RUN_DEPMOD" || -z "$RUN_DEPMOD" ] ||\
+		[ /lib/modules/$mver/modules.dep -ot /etc/modules.conf ] ||\
+		[ /lib/modules/$mver/modules.dep -ot /lib/modules/$mver ]
+		then
 			run_cmd "Finding module dependencies" depmod -a
 		fi
 	fi
@@ -495,7 +501,7 @@ chmod 640 /var/log/dmesg
 # let's dump the syslog ring somewhere so we can find it later
 kill -TERM `/sbin/pidof getkey` >/dev/null 2>&1
 } &
-if [ "$PROMPT" != "no" ]; then
+if is_yes "$PROMPT"; then
    /sbin/getkey i && touch /var/run/confirm
 fi
 wait
