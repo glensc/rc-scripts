@@ -15,15 +15,20 @@
 # keep going when something fails
 set +e
 
+if [ "$1" = "-u" ]; then
+	workasuser=yes
+	shift
+fi	
+
 # std checks
 if [ $# -lt 1 ]; then
-	echo "Usage: run-parts <dir> <args...>"
+	echo "Usage: run-parts [-u] <dir> <args...>"
 	exit 1
 fi
 
 if [ ! -d $1 ]; then
 	echo "Is not a directory: $1"
-	echo "Usage: run-parts <dir> <args...>"
+	echo "Usage: run-parts [-u] <dir> <args...>"
 	exit 1
 fi
 
@@ -45,7 +50,7 @@ shift
 
 # Ignore *~ and *, scripts
 for i in $RUNPARTS_DIR/*[!~,] ; do
-        [ -d $i ] && continue
+        [ -d "$i" ] && continue
         # Don't run *.{rpmsave,rpmorig,rpmnew,swp} scripts
         [ "${i%.rpmsave}" != "${i}" ] && continue
         [ "${i%.rpmorig}" != "${i}" ] && continue
@@ -53,8 +58,13 @@ for i in $RUNPARTS_DIR/*[!~,] ; do
         [ "${i%.swp}" != "${i}" ] && continue
         [ "${i%,v}" != "${i}" ] && continue
 
-        if [ -x $i ]; then
-                $i $* 2>&1 | awk -v "progname=$i" \
+        if [ -x "$i" ]; then
+	    	runprog="$i $@"
+	    	if [ "$workasuser" = "yes" ]; then
+		    runuser="$(/bin/ls -l "$i"  | awk ' { print $3 } ' 2> /dev/null)"
+      		    runprog="/bin/su $runuser -s /bin/sh -c $runprog"
+	   	fi
+                $runprog 2>&1 | awk -v "progname=$i" \
                               'progname {
                                    print progname ":\n"
                                    progname="";
