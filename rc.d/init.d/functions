@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.54.2.2 2000/10/23 22:09:10 misiek Exp $
+# $Id: functions,v 1.54.2.3 2000/12/10 23:38:28 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -461,13 +461,16 @@ is_no()
 		return 2
 	fi
 
-	# It's important that is_no() should always return logical
-	# negation of is_yes(). Really ALWAYS. --misiek
-	if is_yes "$1" ; then
-		return 1
-	else
-		return 0
-	fi
+	case "$1" in
+		no|No|NO|false|False|FALSE|off|Off|OFF|N|n|0)
+			# true returns zero
+			return 0
+			;;
+		*)
+			# false returns one
+			return 1
+		;;
+	esac
 }
 
 # module is needed (ie. is requested, is available and isn't loaded already)
