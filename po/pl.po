@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999.
-# $Id: pl.po,v 1.24 2000/03/22 21:30:31 wiget Exp $
+# $Id: pl.po,v 1.25 2000/03/24 08:48:54 misiek Exp $
 #
 msgid ""
 msgstr ""
@@ -51,8 +51,8 @@ msgid "Setting time zone information ($TIME_ZONE)"
 msgstr "Ustawianie informacji o strefi czasowej ($TIME_ZONE)"
 
 #: ../rc.d/rc:179
-msgid "%sResource Manager: %sRunlevel has been reached%s"
-msgstr "%sZarzadca zasobow: %sZostal osiagniety poziom%s"
+msgid "%sResource Manager: %sRunlevel has been reached"
+msgstr "%sZarzadca zasobow: %sZostal osiagniety poziom"
 
 #: ../rc.d/rc.sysinit:65
 msgid "Starting Device Filesystem Daemon"
@@ -237,7 +237,7 @@ msgstr "Zamykanie systemu w toku \n"
 
 #: ../rc.d/rc:92
 msgid "%sResource Manager: %sEntering runlevel number%s"
-msgstr "%sZarzadca zasobow: %sWejscie na poziom%s"
+msgstr "%sZarzadca zasobow: %sWejscie na poziom"
 
 #: ../rc.d/init.d/functions:357
 msgid "%s dead but pid file exists\n"

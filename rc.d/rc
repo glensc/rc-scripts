@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.17 2000/03/08 16:29:09 misiek Exp $
+# $Id: rc,v 1.18 2000/03/24 08:48:55 misiek Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -89,10 +89,11 @@ stty onlcr -ixon 0>&1
 # Say something ;)
 af2="`termput setaf 2`"
 af7="`termput setaf 7`"
-line="............................................................................"
-text="`nls "%sResource Manager: %sEntering runlevel number%s" $af2 $af7 $line`"
-unset af2 af7 line
-awk "BEGIN {printf \"%.78s\", \"$text\";}"
+text="`nls "%sResource Manager: %sEntering runlevel number" $af2 $af7`"
+text_size="`nls "%sResource Manager: %sEntering runlevel number" 0 0`"
+unset af2 af7
+echo -n "$text"
+awk "BEGIN { for (j=length(\"$text_size\")-9; j<$INIT_COL; j++) printf \".\" }"
 echo "`termput setaf 6`[`termput setaf 2` $runlevel `termput setaf 6`]`termput setaf 7`"
 
 # Is there an rc directory for this new runlevel?
@@ -166,7 +167,7 @@ if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
 		eval reboot -d
 	fi
 else
-	if [ "$RUN_LDCONFIG" = "yes" ] ; then
+	if [ "$RUN_LDCONFIG" = "yes" -o ! -f /etc/ld.so.cache ] ; then
 		if [ -x /sbin/ldconfig ]; then
 			run_cmd "Setting up /etc/ld.so.cache" /sbin/ldconfig -X
 		fi
@@ -176,9 +177,10 @@ fi
 # Say something ;)
 af2="`termput setaf 2`"
 af7="`termput setaf 7`"
-line="............................................................................"
-text="`nls "%sResource Manager: %sRunlevel has been reached%s" $af2 $af7 $line`"
-unset af2 af7 line
-awk "BEGIN {printf \"%.78s\", \"$text\";}"
+text="`nls "%sResource Manager: %sRunlevel has been reached" $af2 $af7`"
+text_size="`nls "%sResource Manager: %sRunlevel has been reached" 0 0`"
+unset af2 af7
+echo -n "$text"
+awk "BEGIN { for (j=length(\"$text_size\")-9; j<$INIT_COL; j++) printf \".\" }"
 echo "`termput setaf 6`[`termput setaf 2` $runlevel `termput setaf 6`]`termput setaf 7`"
 
