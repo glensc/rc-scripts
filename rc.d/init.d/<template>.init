@@ -14,9 +14,10 @@
 . /etc/sysconfig/network
 
 # Set defaults
-OPTION1=""
-OPTION2="-q"
-OPTION3="5"
+OPTION1=""	# Strings
+OPTION2="-q"	#
+OPTION3=	# Values
+OPTION4=5	#
 
 # Get service config - may override defaults
 [ -f /etc/sysconfig/<service> ] && . /etc/sysconfig/<service>
