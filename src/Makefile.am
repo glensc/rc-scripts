@@ -38,7 +38,7 @@ initlog_LDADD = -lpopt
 
 getkey_SOURCES = getkey.c
 
-ppp_watch_SOURCES = ppp-watch.c shvar.c
+ppp_watch_SOURCES = ppp-watch.c shvar.c shvar.h
 ppp_watch_LDADD = /usr/lib/libglib.a
 INCLUDES = `glib-config --cflags`
 
