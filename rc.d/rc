@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.19 2000/03/27 16:07:50 misiek Exp $
+# $Id: rc,v 1.20 2000/04/24 16:56:04 zagrodzki Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -89,8 +89,8 @@ stty onlcr -ixon 0>&1
 # Say something ;)
 af2="`termput setaf 2`"
 af7="`termput setaf 7`"
-text="`nls "%sResource Manager: %sEntering runlevel number" $af2 $af7`"
-text_size="`nls "%sResource Manager: %sEntering runlevel number" 0 0`"
+text="`nls "%sResource Manager: %sEntering runlevel number" "$af2" "$af7"`"
+text_size="`nls "%sResource Manager: %sEntering runlevel number" "" ""`"
 unset af2 af7
 echo -n "$text"
 awk "BEGIN { for (j=length(\"$text_size\")-9; j<$INIT_COL; j++) printf \".\" }"
@@ -177,8 +177,8 @@ fi
 # Say something ;)
 af2="`termput setaf 2`"
 af7="`termput setaf 7`"
-text="`nls "%sResource Manager: %sRunlevel has been reached" $af2 $af7`"
-text_size="`nls "%sResource Manager: %sRunlevel has been reached" 0 0`"
+text="`nls "%sResource Manager: %sRunlevel has been reached" "$af2" "$af7"`"
+text_size="`nls "%sResource Manager: %sRunlevel has been reached" "" ""`"
 unset af2 af7
 echo -n "$text"
 awk "BEGIN { for (j=length(\"$text_size\")-9; j<$INIT_COL; j++) printf \".\" }"
