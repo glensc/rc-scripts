@@ -392,15 +392,15 @@ daemon()
 	fi
 
 	if [ -n "$KSH_VERSION" ]; then
-		limits="`echo ${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS} | awk '/-Su/ {sub(/-Su/,"-Sp");} /-Hu/ {sub(/-Hu/,"-Hp");} /-u/ {sub(/-u/,"-p");} {print;}'`"
+		limits="`echo "${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}" | awk '/-Su/ {sub(/-Su/,"-Sp");} /-Hu/ {sub(/-Hu/,"-Hp");} /-u/ {sub(/-u/,"-p");} {print;}'`"
 	elif [ -n "$ZSH_VERSION" ]; then
 		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
 	elif [ -n "$BASH_VERSION" ]; then
 		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
 #	elif [ -n "`$SH -c 'echo ${.sh.version}' 2>/dev/null`" ]; then
 	fi
-	
-	echo $limits|awk 'BEGIN {RS="[-\n]";} !/^$/ {system ("ulimit -" $0);}'
+
+	[ -n "$limits" ] && eval `echo "$limits" | awk 'BEGIN {RS="[-\n]";} !/^ *$/ { print "ulimit -" $0; }'`
 
 	# And start it up.
 	busy
