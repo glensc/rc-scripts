@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.23 1999/08/14 10:53:35 misiek Exp $
+# $Id: rc-scripts.spec.in,v 1.24 1999/08/14 11:56:41 misiek Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -93,7 +93,7 @@ if [ -f /etc/inittab.rpmsave ]; then
 fi
 for l in /etc/sysconfig/network-scripts/ifcfg-* ; do 
   if [ -f "$l" ] ; then
-    NEWNAME=`basename $l | sed -e 's/^ifcfg-//'`
+    NEWNAME=`basename $l`
     [ -f /etc/sysconfig/interfaces/$NEWNAME ] || cp $l /etc/sysconfig/interfaces/$NEWNAME
   fi
 done
