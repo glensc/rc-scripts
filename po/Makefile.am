@@ -16,7 +16,7 @@ SUFFIXES = .po .mo .gmo
 	$(MSGFMT) -o $@ $<
 
 .po.gmo: $(PACKAGE).pot
-	file=$(srcdir)/`echo $* | awk ' { gsub(/.*\//,NIL); print $0; } '`.gmo \
+	file=`echo $* | awk ' { gsub(/.*\//,NIL); print $0; } '`.gmo \
 	  && rm -f $$file && $(GMSGFMT) -o $$file $<
 
 $(PACKAGE).pot: Makefile $(POTSRC)
@@ -104,4 +104,4 @@ uninstall-hook:
 	done
 
 clean-generic:
-	rm -f $(srcdir)/*.gmo $(scrdir)/*.mo $(PACKAGE).pot
+	rm -f *.gmo *.mo $(PACKAGE).pot
