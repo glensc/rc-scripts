@@ -70,6 +70,16 @@ done
 
 run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
 
+if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
+        lvmversion=$(/sbin/vgchange --version 2>/dev/null | awk '{gsub("vgchange: Logical Volume Manager ",""); gsub("LVM version:     ",""); gsub(/\..*/,"");print $1; exit}')
+	if [ "$lvmversion" = "2" ] ; then
+		lvmignorelock="--ignorelockingfailure"
+	else
+		lvmignorelock=""
+	fi
+	run_cmd "Stopping LVM volume groups" /sbin/vgchange -a n $lvmignorelock
+fi
+
 goraidtab=1
 if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
 	if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf); then
