@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.22 2000/11/16 15:58:55 baggins Exp $
+#	$Id: ifup-post,v 1.23 2001/05/15 16:03:44 baggins Exp $
 #
 
 run_up() { :; }
@@ -13,44 +13,40 @@ need_hostname
 CONFIG=$1
 source_config
 
-# full device name as specified by user
-FULLDEVNAME="$DEVICE"
-# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
-DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*$/,NUL); print $0 } ')
-# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
-DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
+# set all major variables
+setup_ip_param
 
+# set REALDEVICE
 get_ppp_device_and_pid
 
-if echo "$FULLDEVNAME" | grep -q ':' ; then
-	ISALIAS=yes
-else
-	ISALIAS=no
-fi
-
+if [ -n "$QDISC" ]; then
 # Set the queuing discipline
 #    eg: sfq for better link sharing or teql0 for link equalizer
-if [ -n "$QDISC" ] ; then
 	tc qdisc add dev "$REALDEVICE" root $QDISC
 fi
 
-/etc/sysconfig/network-scripts/ifup-routes ${CONFIG}
-
-if [ "$ISALIAS" = "no" ] ; then
-	/etc/sysconfig/network-scripts/ifup-aliases ${DEVICE}
-fi
+/etc/sysconfig/network-scripts/ifup-aliases ${DEVICE}
+/etc/sysconfig/network-scripts/ifup-routes ${DEVICE}
 
 # don't set hostname on ppp/slip connections
-if [ -n "$NEEDHOSTNAME" -a "${DEVICE}" != lo -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
-	IPADDR=`ip -f inet addr show dev ${DEVICE} label ${FULLDEVNAME} | 
-		awk '/inet/ { print $2 }' |awk -F"/" '{ print $1 }'`
-	eval `/bin/ipcalc --silent --hostname ${IPADDR}` && set_hostname $HOSTNAME
+if [ -n "$NEEDHOSTNAME" -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
+	IPADDR=$(ip -f inet addr show dev ${DEVICE} | 
+		awk '/inet/ { print $2 }' |awk -F"/" '{ print $1 }')
+	eval $(/bin/ipcalc --silent --hostname ${IPADDR}) && set_hostname $HOSTNAME
+fi
+
+# run tleds software
+if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
+	/usr/bin/tleds -qc "$DEVICE"
 fi
 
 # execute run_up() function (if available in device configuration file)
-[ "$ISALIAS" = "no" ] && run_up
+run_up
 
 # Notify programs that have requested notification
 do_netreport
 
 exit 0
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4

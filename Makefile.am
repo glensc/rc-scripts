@@ -1,12 +1,14 @@
 #
-#	$Id: Makefile.am,v 1.6 2000/05/07 18:59:59 siefca Exp $
+#	$Id: Makefile.am,v 1.7 2001/05/15 16:03:33 baggins Exp $
 #
 
 SUBDIRS = src ppp sysconfig rc.d doc po
 
 sysconf_DATA = \
 	adjtime \
-	inittab 
+	inittab \
+	modules \
+	sysctl.conf
 
 profiledir = @sysconfdir@/profile.d
 

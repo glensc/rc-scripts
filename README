@@ -1,16 +1,40 @@
+	$Id: README,v 1.7 2001/05/15 16:03:33 baggins Exp $
 
-	$Id: README,v 1.6 2000/03/15 15:07:46 misiek Exp $
+rc-scripts is a derivative of the initscripts 3.78 release by
+RedHat Software, but with bugs removed and newer features added.
 
-CRITICAL THINGS
-If you want use this rc-scripts remember to compile:
-- Kernel/User netlink socket
-- Routing messages
-support into your kernel. This is very important ! Without
-this network scripts will fail.
+You need packages such as: mktemp, modutils (at least 2.1.121),
+textutils, sh-utils, mawk (at least 1.3.3; other awk
+implementations are not tested), procps, sed, e2fsprogs,
+gettext to use rc-scripts.
 
-STANDARD THINGS
-If you want use IPv6 networking remember to compile:
-- The IPv6 protocol (EXPERIMENTAL) 
-- IPv6: enable EUI-64 token format
-- IPv6: disable provider based addresses
-into your kernel (last two options are optional) !
+If you want to use networking with rc-scripts you need
+compile few features such as:
+
+Networking options  --->
+	 [*] Kernel/User netlink socket
+	 [*]   Routing messages
+
+into your kernel and install Alexey Kuznetsov iproute2 package.
+To use IPv6 networking you should compile:
+
+Networking options  --->
+	<*/M>   The IPv6 protocol (EXPERIMENTAL)
+	 [*]      IPv6: enable EUI-64 token format     
+	 [*]        IPv6: disable provider based addresses 
+
+too. IPX support require ncpfs package; fourtun (v4 over v6
+tunneling) support require fourtun package and fourtun kernel
+module; bridge support require bridge-utils.
+
+Also you should know that format of interface configuration
+files is totally different from these used in RedHat/Mandrake
+initscripts.
+
+If you have some bug reports or suggestions please send email
+to rc-scripts maintainers at <pld-rc-scripts@pld.org.pl> or
+use our Bug Tracking System ( http://bugs.pld.org.pl/ ).
+
+-- 
+PLD GNU/Linux rc-scripts Team,
+

@@ -1,4 +1,3 @@
-/* copied from rp3 -- DO NOT EDIT HERE, ONLY COPY FROM rp3 */
 /*
  * shvar.c
  *
@@ -11,7 +10,7 @@
  * Furthermore, they are only intended for one level of inheritance;
  * the value setting algorithm assumes this.
  *
- * Copyright 1999 Red Hat, Inc.
+ * Copyright 1999,2000 Red Hat, Inc.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -29,7 +28,6 @@
  *
  */
 
-#include <assert.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,54 +38,74 @@
 
 #include "shvar.h"
 
-/* Open the file <name>, return shvarFile on success, NULL on failure */
-shvarFile *
-svNewFile(char *name)
+/* Open the file <name>, returning a shvarFile on success and NULL on failure.
+   Add a wrinkle to let the caller specify whether or not to create the file
+   (actually, return a structure anyway) if it doesn't exist. */
+static shvarFile *
+svOpenFile(const char *name, gboolean create)
 {
     shvarFile *s = NULL;
     int closefd = 0;
 
-    s = calloc(sizeof(shvarFile), 1);
-    if (!s) return NULL;
+    s = g_malloc0(sizeof(shvarFile));
 
     s->fd = open(name, O_RDWR); /* NOT O_CREAT */
     if (s->fd == -1) {
 	/* try read-only */
 	s->fd = open(name, O_RDONLY); /* NOT O_CREAT */
-	if (s->fd) closefd = 1;
+	if (s->fd != -1) closefd = 1;
     }
-    s->fileName = strdup(name);
+    s->fileName = g_strdup(name);
 
     if (s->fd != -1) {
 	struct stat buf;
-	char *tmp;
+	char *p, *q;
 
 	if (fstat(s->fd, &buf) < 0) goto bail;
-	s->arena = calloc(buf.st_size, 1);
-	if (!s->arena) goto bail;
+	s->arena = g_malloc0(buf.st_size + 1);
+
 	if (read(s->fd, s->arena, buf.st_size) < 0) goto bail;
-	/* Yes, I know that strtok is evil, except that this is
-	 * precisely what it was intended for in the first place...
-	 */
-	tmp = strtok(s->arena, "\n");
-	while (tmp) {
-	    s->lineList = g_list_append(s->lineList, tmp);
-	    tmp = strtok(NULL, "\n");
+
+	/* we'd use g_strsplit() here, but we want a list, not an array */
+	for(p = s->arena; (q = strchr(p, '\n')) != NULL; p = q + 1) {
+		s->lineList = g_list_append(s->lineList, g_strndup(p, q - p));
 	}
+
+	/* closefd is set if we opened the file read-only, so go ahead and
+	   close it, because we can't write to it anyway */
 	if (closefd) {
 	    close(s->fd);
 	    s->fd = -1;
 	}
+
+        return s;
     }
 
-    return s;
+    if (create) {
+        return s;
+    }
 
 bail:
     if (s->fd != -1) close(s->fd);
-    if (s->arena) free (s->arena);
-    if (s->fileName) free (s->fileName);
-    free (s);
+    if (s->arena) g_free (s->arena);
+    if (s->fileName) g_free (s->fileName);
+    g_free (s);
     return NULL;
+}
+
+/* Open the file <name>, return shvarFile on success, NULL on failure */
+shvarFile *
+svNewFile(const char *name)
+{
+    return svOpenFile(name, FALSE);
+}
+
+/* Create a new file structure, returning actual data if the file exists,
+ * and a suitable starting point if it doesn't. */
+shvarFile *
+svCreateFile(const char *name)
+{
+    return svOpenFile(name, TRUE);
 }
 
 /* remove escaped characters in place */
@@ -115,10 +133,10 @@ unescape(char *s) {
 /* create a new string with all necessary characters escaped.
  * caller must free returned string
  */
-static const char escapees[] = "\"'\\$~`";	/* must be escaped */
-static const char spaces[] = " \t";		/* only require "" */
+static const char escapees[] = "\"'\\$~`";		/* must be escaped */
+static const char spaces[] = " \t|&;()<>";		/* only require "" */
 static char *
-escape(char *s) {
+escape(const char *s) {
     char *new;
     int i, j, mangle = 0, space = 0;
     int newlen, slen;
@@ -126,27 +144,28 @@ escape(char *s) {
 
     if (!esclen) esclen = strlen(escapees);
     if (!splen) splen = strlen(spaces);
-    for (i = 0; i < esclen; i++) {
-	if (strchr(s, escapees[i])) mangle++;
-    }
-    for (i = 0; i < splen; i++) {
-	if (strchr(s, spaces[i])) space++;
+    slen = strlen(s);
+
+    for (i = 0; i < slen; i++) {
+	if (strchr(escapees, s[i])) mangle++;
+	if (strchr(spaces, s[i])) space++;
     }
     if (!mangle && !space) return strdup(s);
 
-    slen = strlen(s);
     newlen = slen + mangle + 3;	/* 3 is extra ""\0 */
-    new = calloc(newlen, 1);
+    new = g_malloc0(newlen);
     if (!new) return NULL;
 
-    new[0] = '"';
-    for (i = 0, j = 1; i < slen; i++, j++) {
+    j = 0;
+    new[j++] = '"';
+    for (i = 0; i < slen; i++) {
 	if (strchr(escapees, s[i])) {
 	    new[j++] = '\\';
 	}
-	new[j] = s[i];
+	new[j++] = s[i];
     }
-    new[j] = '"';
+    new[j++] = '"';
+    g_assert(j == slen + mangle + 2); /* j is the index of the '\0' */
 
     return new;
 }
@@ -156,18 +175,17 @@ escape(char *s) {
  * be freed by the caller.
  */
 char *
-svGetValue(shvarFile *s, char *key)
+svGetValue(shvarFile *s, const char *key)
 {
     char *value = NULL;
     char *line;
     char *keyString;
     int len;
 
-    assert(s);
-    assert(key);
+    g_assert(s);
+    g_assert(key);
 
-    keyString = calloc (strlen(key) + 2, 1);
-    if (!keyString) return NULL;
+    keyString = g_malloc0(strlen(key) + 2);
     strcpy(keyString, key);
     keyString[strlen(key)] = '=';
     len = strlen(keyString);
@@ -175,18 +193,18 @@ svGetValue(shvarFile *s, char *key)
     for (s->current = s->lineList; s->current; s->current = s->current->next) {
 	line = s->current->data;
 	if (!strncmp(keyString, line, len)) {
-	    value = strdup(line + len);
+	    value = g_strdup(line + len);
 	    unescape(value);
 	    break;
 	}
     }
-    free(keyString);
+    g_free(keyString);
 
     if (value) {
 	if (value[0]) {
 	    return value;
 	} else {
-	    free (value);
+	    g_free(value);
 	    return NULL;
 	}
     }
@@ -199,7 +217,7 @@ svGetValue(shvarFile *s, char *key)
  * return <default> otherwise
  */
 int
-svTrueValue(shvarFile *s, char *key, int def)
+svTrueValue(shvarFile *s, const char *key, int def)
 {
     char *tmp;
     int returnValue = def;
@@ -217,7 +235,7 @@ svTrueValue(shvarFile *s, char *key, int def)
 	 (!strcasecmp("f", tmp)) ||
 	 (!strcasecmp("n", tmp)) ) returnValue = 0;
 
-    free (tmp);
+    g_free (tmp);
     return returnValue;
 }
 
@@ -246,25 +264,23 @@ svTrueValue(shvarFile *s, char *key, int def)
  *
  */
 void
-svSetValue(shvarFile *s, char *key, char *value)
+svSetValue(shvarFile *s, const char *key, const char *value)
 {
-    char *val1 = NULL, *val2 = NULL;
+    char *newval = NULL, *val1 = NULL, *val2 = NULL;
     char *keyValue;
 
-    assert(s);
-    assert(key);
+    g_assert(s);
+    g_assert(key);
     /* value may be NULL */
 
-    if (value) value = escape(value);
-    keyValue = malloc (strlen(key) + (value?strlen(value):0) + 2);
-    if (!keyValue) return;
-    sprintf(keyValue, "%s=%s", key, value?value:"");
+    if (value) newval = escape(value);
+    keyValue = g_strdup_printf("%s=%s", key, newval ? newval : "");
 
     val1 = svGetValue(s, key);
-    if (val1 && value && !strcmp(val1, value)) goto bail;
+    if (val1 && newval && !strcmp(val1, newval)) goto bail;
     if (s->parent) val2 = svGetValue(s->parent, key);
 
-    if (!value) {
+    if (!newval || !newval[0]) {
 	/* delete value somehow */
 	if (val2) {
 	    /* change/append line to get key= */
@@ -283,7 +299,7 @@ svSetValue(shvarFile *s, char *key, char *value)
     }
 
     if (!val1) {
-	if (val2 && !strcmp(val2, value)) goto end;
+	if (val2 && !strcmp(val2, newval)) goto end;
 	/* append line */
 	s->lineList = g_list_append(s->lineList, keyValue);
 	s->freeList = g_list_append(s->freeList, keyValue);
@@ -292,10 +308,10 @@ svSetValue(shvarFile *s, char *key, char *value)
     }
 
     /* deal with a whole line of noops */
-    if (val1 && !strcmp(val1, value)) goto end;
+    if (val1 && !strcmp(val1, newval)) goto end;
 
     /* At this point, val1 && val1 != value */
-    if (val2 && !strcmp(val2, value)) {
+    if (val2 && !strcmp(val2, newval)) {
 	/* delete line */
 	s->lineList = g_list_remove_link(s->lineList, s->current);
 	g_list_free_1(s->current);
@@ -310,7 +326,7 @@ svSetValue(shvarFile *s, char *key, char *value)
     }
 
 end:
-    if (value) free(value);
+    if (newval) free(newval);
     if (val1) free(val1);
     if (val2) free(val2);
     return;
@@ -361,17 +377,17 @@ int
 svCloseFile(shvarFile *s)
 {
 
-    assert(s);
+    g_assert(s);
 
     if (s->fd != -1) close(s->fd);
 
-    free(s->arena);
+    g_free(s->arena);
     for (s->current = s->freeList; s->current; s->current = s->current->next) {
-        free(s->current->data);
+        g_free(s->current->data);
     }
-    free(s->fileName);
+    g_free(s->fileName);
     g_list_free(s->freeList);
     g_list_free(s->lineList); /* implicitly frees s->current */
-    free(s);
+    g_free(s);
     return 0;
 }

@@ -1,0 +1,7 @@
+#	$Id: ifcfg-br0,v 1.2 2001/05/15 16:05:07 baggins Exp $
+#
+DEVICE=br0
+IPADDR=195.164.211.2
+ONBOOT=yes
+BRIDGE_DEVS="eth0 eth1"
+SPANNING_TREE=yes

@@ -1,11 +1,24 @@
 
-	$Id: NEWS,v 1.6 2000/03/27 16:07:48 misiek Exp $
+	$Id: NEWS,v 1.7 2001/05/15 16:03:33 baggins Exp $
+
+Features of rc-scripts:
 
 - National Language Support; currently only english and polish
   supported. Translators needed.
-  
-- PREFIX support (instead of NETMASK) - CIDR specification.
-
-- LDAP support (for interfaces database).
-
+- LDAP support (for interfaces database). NYF.
 - Full IPv6 support (including PPP).
+
+New in 0.3.0:
+
+- fourtun (v4 over v6) tunneling support.
+- support for more dhcp clients (dhcpcd, dhclient, dhcpxd, pump)
+- Logical Volume Manager (LVM) support.
+- /etc/sysctl.conf support.
+- queueing discipline support.
+- IPv6 boot method (v4compat).
+- bridge configuration support.
+- rc.modules scipt and /etc/modules config
+- new ifcfg- config syntax
+
+Note:
+NYF - not yet finished.

@@ -5,8 +5,8 @@ SUBDIRS = network-scripts interfaces
 sysconfigdir = @sysconfigdir@
 
 sysconfig_DATA = \
-	system \
 	clock \
+	system \
 	network \
 	static-routes \
 	static-nat \

@@ -1,3 +1,4 @@
+# $Id: clock,v 1.2 2001/05/15 16:03:42 baggins Exp $
 # Should the hardware clock be kept in Coordinated Universal Time 
 # (instead of local time).
 UTC=false

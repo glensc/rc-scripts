@@ -5,13 +5,26 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.27 2001/05/13 17:10:16 baggins Exp $
+# $Id: rc,v 1.28 2001/05/15 16:03:36 baggins Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 
+# avoid being interrupted by child or keyboard
+trap ":" INT QUIT TSTP
+
+# Save argument
+argv1="$1"
+
+# Get terminal size of standard input of the system console
+[ -z "$CONSOLE" ] && CONSOLE=/dev/console
+set -- $(stty size < $CONSOLE)
+  LINES=$1
+COLUMNS=$2
+export LINES COLUMNS CONSOLE
+  
 # NLS
 if [ -f /etc/sysconfig/i18n ]; then
         . /etc/sysconfig/i18n
@@ -46,21 +59,27 @@ else
 fi
 
 # Now find out what the current and what the previous runlevel are.
-argv1="$1"
-set `/sbin/runlevel`
+set $(/sbin/runlevel)
 runlevel=$2
 previous=$1
 export runlevel previous
 
+# if previous runlevel = current runlevel do nothing
+[ "$runlevel" = "$previous" ] && exit 0
+
 # if runlevel is 0 (halt) or 6 (reboot) change to first
 # virtual console, and send messages to /dev/console 
 # (it can be serial console too) 
-if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
-	[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > /dev/console
-	exec 0<> /dev/console 1>&0 2>&0
+if [ "$COLUMNS" -gt 0 ]; then
+	if [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
+		CONSOLE=/dev/tty1
+		[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > $CONSOLE
+		exec 0<> /dev/console 1>&0 2>&0
+	fi
 else
-# if previous runlevel = current runlevel do nothing
-	[ "$runlevel" = "$previous" ] && exit 0
+	# Serial: columns and lines are not defined
+	  LINES=24
+	COLUMNS=80
 fi
 
 # See if we want to be in user confirmation mode
@@ -80,19 +99,19 @@ fi
 stty onlcr -ixon 0>&1
 
 # Get first argument. Set new runlevel to this argument.
-[ "$1" != "" ] && runlevel="$argv1"
+[ -n "$1" ] && runlevel="$argv1"
 
 # Tell linuxconf what runlevel we are in
 [ -d /var/run -a -w /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
 
 
 # Say something ;)
-af2="`termput setaf 2`"
-af6="`termput setaf 6`"
-af7="`termput setaf 7`"
-text="`nls '%sResource Manager: %sEntering runlevel number' "$af2" "$af7"`"
-text_size="`nls '%sResource Manager: %sEntering runlevel number' "" ""`"
-resp_size="`nls 'DONE'`"
+af2=$(termput setaf 2)
+af6=$(termput setaf 6)
+af7=$(termput setaf 7)
+text="$(termput op)$(nls '%sResource Manager: %sEntering runlevel number' "$af2" "$af7")"
+text_size="$(nls '%sResource Manager: %sEntering runlevel number' "" "")"
+resp_size="$(nls 'DONE')"
 echo -n "$text"
 awk "BEGIN { for (j=length(\"$text_size\"); j<$INIT_COL+${#resp_size}-${#runlevel}; j++) printf \".\" }"
 echo "${af6}[${af2} $runlevel ${af6}]${af7}"
@@ -176,12 +195,14 @@ else
 fi
 
 # Say something ;)
-text="`nls '%sResource Manager: %sRunlevel has been reached' "$af2" "$af7"`"
-text_size="`nls '%sResource Manager: %sRunlevel has been reached' "" ""`"
+text="$(nls '%sResource Manager: %sRunlevel has been reached' "$af2" "$af7")"
+text_size="$(nls '%sResource Manager: %sRunlevel has been reached' "" "")"
 echo -n "$text"
 awk "BEGIN { for (j=length(\"$text_size\"); j<$INIT_COL+${#resp_size}-${#runlevel}; j++) printf \".\" }"
 echo "${af6}[${af2} $runlevel ${af6}]${af7}"
 unset af2 af6 af7
+
+exit 0
 
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4

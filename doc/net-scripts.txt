@@ -1,4 +1,4 @@
-$Id: net-scripts.txt,v 1.4 1999/10/07 00:49:51 kloczek Exp $
+$Id: net-scripts.txt,v 1.5 2001/05/15 16:03:36 baggins Exp $
 
 rc-scripts files:
 ========================================
@@ -25,7 +25,7 @@ rc-scripts files:
 
 /etc/sysconfig/network-scripts/ifup-post
 
-  Called when any network device EXCEPT a SLIP device comes
+  Called when any network device EXCEPT a SLIP (with dip) device comes
   up.  Calls /etc/sysconfig/network-scripts/ifup-routes to
   bring up static routes that depend on that device.  Calls
   /sbin/network-scripts/ifup-aliases to bring up
@@ -73,21 +73,19 @@ Files in /etc/sysconfig/interfaces/
   Base items:
     DEVICE=<name of physical device (except dynamically-allocated PPP
       devices where it is the "logical name")
-    IPADDR=
-    IPV6ADDRS=<blank separated list of ipv6 addresses>
-    PREFIX= 
+    IPADDR=		IP_AOPTS=	IP_ROPTS=
+    IPADDR1=		IP_AOPTS1=	IP_ROPTS1=
+    IP_ADDRx=		IP_AOPTSx=	IP_ROPTSx=
+    IP4_PRIM_IF=	IP4_SRC_IF=
+    IP6_PRIM_IF=	IP6_SRC_IF=
     GATEWAY=
     ONBOOT=yes|no
     USERCTL=yes|no
-    BOOTPROTO=none|bootp|dhcp
+    BOOTMETHOD=none|bootp|dhcp|pump
 
-  If BOOTPROTO is not "none", then the only other item that
+  If BOOTMETHOD is not "none", then the only other item that
   must be set is the DEVICE item; all the rest will be determined
   by the boot protocol.  No "dummy" entries need to be created.
-
-  Base items being deprecated:
-    NETWORK=<will be calculated automatically with ifcalc>
-    BROADCAST=<will be calculated automatically with ifcalc>
 
   Ethernet-only items:
     {IPXNETNUM,IPXPRIMARY,IPXACTIVE}_{802_2,802_3,ETHERII,SNAP}
@@ -124,7 +122,8 @@ Files in /etc/sysconfig/interfaces/
       In principal, I'm not aware of anything that would keep
       the logical PPP device names from being "worldnet" or
       "myISP" instead of ppp0-pppN)
-    REMIP=<remote ip address, normally unspecified>
+    REMIP=<remote ip4 address, normally unspecified>
+    REMIP6=<remote ip6 address, normally unspecified>
     MTU=
     MRU=
     DISCONNECTTIMEOUT=<number of seconds, default currently 5>
@@ -142,6 +141,14 @@ Files in /etc/sysconfig/interfaces/
       List of variables which should be exported to chat script.
       Used mostly for passing USERNAME and PASSWORD into it. (see below)
       (PLD rc-scripts specific option)
+    PEERDNS=yes|no
+    IPV6_PPP=yes|no
+      use IPv6 for ppp
+       IPV6_CP_USEV4=yes|no
+         use local IPv4 mapped addresses as IPv6 addresses
+       IPV6_CP_PERSISTENT=yes|no
+         use EUI-48 addresses as IPv6 addresses
+       or by default use address specified by IP6_PRIM_IF and REMIP6
     <anything>=<anything>
       Variable name and it's value for use by chat script.
       Note: You don't have to define variables here, if they are defined 

@@ -1,0 +1,20 @@
+#!/bin/sh
+# (c) MandrakeSoft, Chmouel Boudjnah <chmouel@mandrakesoft.com>
+# Modified:
+#	Arkadiusz Miskiewicz <misiek@pld.org.pl>
+#
+# rc.modules: launch modules specified in /etc/modules
+# $Id: rc.modules,v 1.2 2001/05/15 16:05:06 baggins Exp $
+
+[ -f /etc/modules ] || exit 0
+
+. /etc/rc.d/init.d/functions
+
+# Loop over every line in /etc/modules.
+(egrep -v "^(#|[[:blank:]]*#)" /etc/modules; echo) | # make sure there is a LF at the end
+while read module args
+do
+  [ -z "$module" ] && continue
+  _modprobe single -k $module
+done
+

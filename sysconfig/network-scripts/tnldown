@@ -1,24 +1,39 @@
 #!/bin/sh
 #
-#	$Id: tnldown,v 1.16 2000/07/28 15:03:10 zagrodzki Exp $
+#    tnldown - tunnel configuration script
+#    Copyright (C) 1999, 2000  Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
 #
-
-DEV=$1
-
-[ -z "$DEV" ] && {
-    echo "usage: tnlup <device name>" >&2
-    exit 1
-}
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#    $Id: tnldown,v 1.17 2001/05/15 16:03:44 baggins Exp $
+#
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/.functions
 
-TNLCONFIGS="`ls /etc/sysconfig/interfaces/tnlcfg-*|egrep -v '~$'`"
-TNLCONFIGS="`egrep -L '^#!' $TNLCONFIGS`"
-CONFIG="`egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS`"
+DEV=$1
+
+[ -z "$DEV" ] && {
+    nls "usage: %s <device name>" "tnldown" >&2
+    exit 1
+}
+
+TNLCONFIGS=$(ls /etc/sysconfig/interfaces/tnlcfg-*|egrep -v '~$')
+TNLCONFIGS=$(egrep -L '^#!' $TNLCONFIGS)
+CONFIG=$(egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS)
 
 if [ -z "$CONFIG" ]; then
     CONFIG="$DEV"
@@ -27,23 +42,47 @@ fi
 if false; then
 [ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=tnlcfg-$CONFIG
 [ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
-    echo "usage: tnlup <device name>" >&2
+    echo "usage: tnldown <device name>" >&2
     exit 1
 }
 fi
 
 source_config
 
-is_no "${IPV6_TUNNELCONFIG}" && [ "${MODE}" = "sit" ] && exit 0
-is_no "${IPX}" && [ "${MODE}" = "ipxip" ] && exit 0
-is_no "${IPX}" && [ "${MODE}" = "ipipx" ] && exit 0
+case "${MODE}" in
+        sit|four)
+                is_no "${IPV6_NETWORKING}" && exit 0
+                is_no "${IPV6_TUNNELCONFIG}" && exit 0
+		;;
+        ipip)
+                is_no "${IPV4_NETWORKING}" && exit 0
+                ;;
+        gre)
+                is_no "${IPV4_NETWORKING}" && exit 0
+                ;;
+	ipxip|ipipx)
+		is_no "${IPX}" && exit 0
+		;;
+esac
 
-if [ "${MODE}" = "ipip" ] || [ "${MODE}" = "sit" ] || [ "${MODE}" = "gre" ]; then
+RESULT=0
 
-	ip tunnel del ${DEVICE}
+case "${MODE}" in
+	ipip|sit|gre)
+		ip link set ${DEVICE} down
+		ip tunnel del ${DEVICE}
+		RESULT=$?
+		;;
+	four)
+		ip link set ${DEVICE} down
+		fourcfg del ${DEVICE}
+		RESULT=$?
+		;;
+	ipxip|ipipx)
+		;;
+esac
 
-elif [ "${MODE}" = "ipxip" ] || [ "${MODE}" = "ipipx" ]; then
+exit $RESULT
 
-echo "obs³uga ipxip jeszcze nie zrobiona"
-
-fi
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4

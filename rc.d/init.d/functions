@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.63 2001/05/13 17:10:17 baggins Exp $
+# $Id: functions,v 1.64 2001/05/15 16:03:38 baggins Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -17,7 +17,7 @@ export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 INIT_COL=67
 
 # Source configuration if available - may override default values
-[ -f /etc/sysconfig/system ] && . /etc/sysconfig/system
+[ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
 
 [ -z "$COLUMNS" ] && COLUMNS=80
 
@@ -228,8 +228,7 @@ run_cmd()
 # A function to start a program (now it's usefull on read-only filesystem too)
 daemon() 
 {
-	typeset nicelevel exit_code errors prog
-	typeset -i nicelevel=0
+	typeset errors="" prog=""
 	typeset -i exit_code=0
 	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 	# Test syntax. Don't use -o instead || here - this will broke ksh --misiek
@@ -571,7 +570,7 @@ action () { STRING=$1; shift; run_cmd "$STRING" "$*"; }
 success () { return 0; }
 failure () { return 1; }
 
-# Will be removed in the future
+# TO BE REMOVED SOON. --misiek
 msg_Network_Down () { msg_network_down "$*"; }
 msg_Already_Running () { msg_already_running "$*"; }
 msg_Not_Running () { msg_not_running "$*"; }

@@ -1,0 +1,40 @@
+	   READ THIS BEFORE CHANGEING SOMETHING IN RC-SCRIPTS PACKAGE
+		    Arkadiusz Miskiewicz <misiek@pld.org.pl>
+	    $Id: DEVELOPMENT,v 1.2 2001/05/15 16:05:05 baggins Exp $
+
+1)
+	consult all major changes with people on pld-rc-scripts@pld.org.pl
+mailing list. This is very important.
+
+2)
+	use 'typeset' for local variables in functions for example:
+
+function_ble ()
+{
+typeset qw er
+qw=$(tty)
+er=/dev/console
+echo "$qw $er"
+}
+
+3)
+	use $() instead `` for command execution for example
+
+something=$(whoami)
+instead of
+something="`whoami`"
+
+4)
+	consider using typeset -i variable for integer variables
+
+5)	don't use sed ! It only causes one more Requires.
+	Use awk ' { gsub(/pattern/,"replaced"); print $0; } ' for that.
+	Also try replase grep calls with awk calls.
+	
+5)
+	(PL) Tlumaczac komunikaty na PL nalezy uzywac formy bezosobowej np:
+
+uruchamianie uslugi
+zamiast
+uruchamiam usluge
+

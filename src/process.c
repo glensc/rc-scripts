@@ -1,4 +1,3 @@
-/* $Id: process.c,v 1.3 1999/12/15 18:41:08 misiek Exp $ */
 
 #include <errno.h>
 #include <fcntl.h>
@@ -23,7 +22,7 @@ extern regex_t **regList;
 int forkCommand(char **args, int *outfd, int *errfd, int *cmdfd, int quiet) {
    /* Fork command 'cmd', returning pid, and optionally pointer
     * to open file descriptor fd */
-    int fdin, fdout, fderr, fdcmd, pid;
+    int fdout, fderr, fdcmd, pid;
     int outpipe[2], errpipe[2], fdpipe[2];
     int ourpid;
     
@@ -46,9 +45,13 @@ int forkCommand(char **args, int *outfd, int *errfd, int *cmdfd, int quiet) {
        if (!quiet)
 	 fderr=dup(2);
     }
-    fdcmd = fdpipe[1];
-    if (cmdfd)
-      *cmdfd = fdpipe[0];
+    
+    if (cmdfd) {
+	*cmdfd = fdpipe[0];
+	fdcmd = fdpipe[1];
+    } else {
+        fdcmd = open("/dev/null",O_WRONLY);
+    }
     ourpid = getpid();
     if ((pid = fork())==-1) {
 	perror("fork");
@@ -59,7 +62,6 @@ int forkCommand(char **args, int *outfd, int *errfd, int *cmdfd, int quiet) {
      * fucks up and we segfault or something, we don't kill rc.sysinit. */
     if ( (cmdfd&&!pid) || (pid &&!cmdfd)) {
 	/* parent */
-	close(fdin);
 	close(fdout);
 	close(fderr);
 	close(fdcmd);
@@ -69,6 +71,8 @@ int forkCommand(char **args, int *outfd, int *errfd, int *cmdfd, int quiet) {
 	  return pid;
     } else {
 	/* kid */
+       int sc_open_max;
+
        if (outfd) { 
 	 if ( (dup2(fdout,1)==-1) ) {
 	    perror("dup2");
@@ -105,6 +109,17 @@ int forkCommand(char **args, int *outfd, int *errfd, int *cmdfd, int quiet) {
 	  close(*errfd);
 	if (cmdfd)
 	  close(*cmdfd);
+
+        /* close up extra fds, and hope this doesn't break anything */
+	sc_open_max = sysconf(_SC_OPEN_MAX);
+	if(sc_open_max > 1) {
+	    int fd;
+	    for(fd = 3; fd < sc_open_max; fd++) {
+		    if (!(cmdfd && fd == CMD_FD))
+		      close(fd);
+	    }
+	}
+
 	execvp(args[0],args);
 	perror("execvp");
 	exit(-1);
@@ -248,9 +263,9 @@ int runCommand(char *cmd, int reexec, int quiet, int debug) {
     }
     args[pid] = NULL;
     if (strcmp(args[0],"sh") && strcmp(args[0],"/bin/sh")) 
-      cmdname = (char *)basename(args[0]);
+      cmdname = basename(args[0]);
     else
-      cmdname = (char *)basename(args[1]);
+      cmdname = basename(args[1]);
     if ((cmdname[0] =='K' || cmdname[0] == 'S') && ( '0' <= cmdname[1] <= '9' )
        && ( '0' <= cmdname[2] <= '9' ) )
       cmdname+=3;

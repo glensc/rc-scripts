@@ -1,9 +1,9 @@
-dnl $Id: configure.in,v 1.38 2001/05/13 17:10:14 baggins Exp $
+dnl $Id: configure.in,v 1.39 2001/05/15 16:03:33 baggins Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
-VERSION=0.2.11
-ALL_LINGUAS="pl de"
+VERSION=0.3.0
+ALL_LINGUAS="pl"
 
 SHSCRIPTS="rc.d/rc 			\
 	rc.d/init.d/allowlogin 		\
@@ -18,7 +18,24 @@ SHSCRIPTS="rc.d/rc 			\
 	rc.d/rc.init 			\
 	rc.d/rc.local 			\
 	rc.d/rc.shutdown		\
-	rc.d/rc.sysinit"
+	rc.d/rc.sysinit			\
+	sysconfig/network-scripts/ifdown	\
+	sysconfig/network-scripts/ifdown-br	\
+	sysconfig/network-scripts/ifdown-post	\
+	sysconfig/network-scripts/ifdown-ppp	\
+	sysconfig/network-scripts/ifdown-sl	\
+	sysconfig/network-scripts/ifup		\
+	sysconfig/network-scripts/ifup-aliases	\
+	sysconfig/network-scripts/ifup-br	\
+	sysconfig/network-scripts/ifup-ipx	\
+	sysconfig/network-scripts/ifup-plip	\
+	sysconfig/network-scripts/ifup-post	\
+	sysconfig/network-scripts/ifup-ppp	\
+	sysconfig/network-scripts/ifup-routes	\
+	sysconfig/network-scripts/ifup-sl	\
+	sysconfig/network-scripts/tnldown	\
+	sysconfig/network-scripts/tnlup		\
+	"
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
