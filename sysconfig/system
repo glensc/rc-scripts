@@ -6,6 +6,10 @@ COLOR_INIT=yes
 # Print status at which column
 INIT_COL=67
 
+# Do you want fast boot? (without NLS, excessive logging and fancy
+# terminals support)
+FASTRC=no
+
 # Messages with a higher priority than this will be printed
 # to the console (default 1)
 CONSOLE_LOGLEVEL=1

@@ -21,6 +21,22 @@ INIT_COL=67
 
 [ -z "$COLUMNS" ] && COLUMNS=80
 
+if is_yes "$FASTRC"; then
+	INIT_DOTS=$(awk "BEGIN{for(\$i=0;\$i<$INIT_COL;\$i++)printf(\".\");}")
+	initlog()
+	{
+		while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+			case $1 in
+				-c)
+					shift
+					$1
+					return
+					;;
+			esac
+		done
+	}
+fi
+
 kernelver()
 {
 	awk '{print $3}' /proc/version | awk -F. '{print sprintf("%03d%03d%03d",$1,$2,$3)}'
@@ -39,7 +55,7 @@ kernelvermser()
 # Colors workaround
 termput()
 {
-	if [ ! -d /usr/share/terminfo ] || \
+	if is_yes "$FASTRC" || [ ! -d /usr/share/terminfo ] || \
 	   [ ! -x /usr/bin/tput -a ! -x /bin/tput ]; then
 		case "$1" in
 		  hpa)
@@ -123,7 +139,9 @@ nls()
 		return
 	fi
 
-	if [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
+	if is_yes "$FASTRC"; then
+		printf "$message" "$@"
+	elif [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
 		text=$(TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="${NLS_DOMAIN:-rc-scripts}" "$message")
 		printf_ "$text" "$@"
 	else
@@ -173,9 +191,17 @@ msg_usage()
 show()
 {
 	typeset text
-	text=$(nls "$@")
-	echo -n "$text"
-	awk "BEGIN { for (j=length(\"$text\"); j<$INIT_COL; j++) printf \".\" }"
+
+	if is_yes "$FASTRC"; then
+		echo -n "$INIT_DOTS"
+		termput hpa 0
+		printf "$@"
+		termput hpa $INIT_COL
+	else
+		text=$(nls "$@")
+		echo -n "$text"
+		awk "BEGIN { for (j=length(\"$text\"); j<$INIT_COL; j++) printf \".\" }"
+	fi
 }
 
 # Displays message in square brackests ("[ DONE ]"). Takes two arguments.
@@ -644,5 +670,5 @@ msg_Usage () { msg_usage "$*"; }
 # * indent-tabs-mode: notnil
 # * End:
 # *
-# * vim: shiftwidth=8:
 # */
+# vi: syntax=sh:shiftwidth=8:
