@@ -2,3 +2,5 @@
   wzglêdu, ¿e interfejsy s± podnoszone _po_ starcie tuneli.
   Trzeba bêdzie przenie¶æ konfiguracjê interfejsów tuneli
   z np. ifcfg-icm do tnlcfg-icm. Nie ma innego wyj¶cia :-(
+- interfejs sit0 _musi_ byæ podnoszony na samym koñcu tak
+  by wszystkie IPv4 zosta³y dodane
