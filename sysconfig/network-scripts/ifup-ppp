@@ -39,9 +39,8 @@ if [ ! -x /usr/sbin/pppd ]; then
   exit 1
 fi
 
-# modprobe ppp in case of kernel with devfs
-# (/dev/ppp is missing and ppp fails without this) --misiek
-[ -c /dev/.devfsd ] && modprobe -s -k char-major-108
+# modprobe ppp modules (udev and devfsd case)
+[ ! -e /dev/ppp ] && modprobe -s -k char-major-108
 
 opts="lock"
 
