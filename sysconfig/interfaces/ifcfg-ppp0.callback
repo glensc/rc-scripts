@@ -1,3 +1,4 @@
+#	$Id: ifcfg-ppp0.callback,v 1.2 1999/07/13 12:49:36 misiek Exp $
 DEVICE=ppp0
 CHATSCRIPT=/etc/sysconfig/network-scripts/chat-ppp0.callback
 ONBOOT=no

@@ -1,5 +1,7 @@
 #!/bin/sh
-
+#
+#	$Id: ifup-ppp,v 1.6 1999/07/13 12:49:37 misiek Exp $
+#
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
 # Features:

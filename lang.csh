@@ -1,4 +1,7 @@
 #!/bin/csh
+#
+#	$Id: lang.csh,v 1.2 1999/07/13 12:49:34 misiek Exp $
+#
 
 if [ -f /etc/sysconfig/i18n ]; then
     . /etc/sysconfig/i18n

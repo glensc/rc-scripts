@@ -5,6 +5,8 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
+# $Id: rc,v 1.6 1999/07/13 12:49:35 misiek Exp $
+#
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>

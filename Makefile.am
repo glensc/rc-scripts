@@ -1,3 +1,6 @@
+#
+#	$Id: Makefile.am,v 1.4 1999/07/13 12:49:34 misiek Exp $
+#
 
 SUBDIRS = src ppp sysconfig rc.d doc
 

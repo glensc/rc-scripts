@@ -1,3 +1,6 @@
+#
+# $Id: functions.network,v 1.10 1999/07/13 12:49:36 misiek Exp $
+#
 # This is not a shell script; it provides functions to network scripts
 # that source it.
 

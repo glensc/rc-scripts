@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# Version:	@(#) /etc/init.d/functions $Revision: 1.12 $ $Date: 1999/07/05 10:23:06 $
+# $Id: functions,v 1.13 1999/07/13 12:49:36 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing

@@ -1,5 +1,7 @@
 #!/bin/sh
 #
+#	$Id: tnldown,v 1.3 1999/07/13 12:49:37 misiek Exp $
+#
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 # Uwagi:
