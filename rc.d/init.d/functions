@@ -18,6 +18,7 @@ INIT_COL=67
 
 # Source configuration if available - may override default values
 [ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
+[ -r /etc/sysconfig/bootsplash ] && . /etc/sysconfig/bootsplash
 
 [ -z "$COLUMNS" ] && COLUMNS=80
 
