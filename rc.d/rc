@@ -5,7 +5,7 @@
 #               responsible for the very first setup of basic
 #               things, such as setting the hostname.
 #
-# $Id: rc,v 1.9 1999/08/31 23:12:44 wiget Exp $
+# $Id: rc,v 1.10 1999/09/13 13:37:04 misiek Exp $
 #
 # Original Author:       
 #               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
@@ -54,7 +54,7 @@ stty onlcr -ixon 0>&1
 [ "$1" != "" ] && runlevel="$argv1"
 
 # Tell linuxconf what runlevel we are in
-[ -d /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
+[ -d /var/run -a -w /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
 
 
 # Say something ;)
