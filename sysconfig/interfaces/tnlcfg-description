@@ -1,13 +1,12 @@
-#	$Id: tnlcfg-description,v 1.2 1999/09/15 10:15:35 misiek Exp $
+#	$Id: tnlcfg-description,v 1.2.2.1 2000/10/18 20:10:54 misiek Exp $
 #
 # In this file you can also put all configuration data instead
 # of using second file named ifcfg-tunnel_name.
 
-MODE={ipip|gre|sit|ipxip}
+MODE={ipip|gre|sit}
+ONBOOT=yes|no
 DEVICE=<device name>
-if 	MODE=ipxip ; then
-	?
-else	MODE=ipip || MODE=gre || MODE=sit ; then
+if	MODE=ipip || MODE=gre || MODE=sit ; then
 
 	REMOTEADDR=<IPv4 addres>
 	[ LOCALADDR=<IPv4 addres> ]
@@ -15,15 +14,31 @@ else	MODE=ipip || MODE=gre || MODE=sit ; then
 
 	[ TTL= ]
 	[ TOS= ]
-	[ SEQ={no|yes} ]
-	[ ISEQ={no|yes} ]
-	[ OSEQ={no|yes} ]
-	[ KEY= ]
-	[ IKEY= ]
-	[ OKEY= ]
-	[ CSUM={no|yes} ]
-	[ ICSUM={no|yes} ]
-	[ OCSUM={no|yes} ]
 	[ PMTUDISC={no|yes} ]
+
+	if	MODE=gre ; then
+	
+		[ KEY= ]
+		[ IKEY= ]
+		[ OKEY= ]
+		[ ISEQ={no|yes} ]
+		[ ISEQ={no|yes} ]
+		[ OSEQ={no|yes} ]
+		[ CSUM={no|yes} ]
+		[ ICSUM={no|yes} ]
+		[ OCSUM={no|yes} ]
+
+	fi
+
+		
+else	MODE=four ; then
+
+        REMOTEADDR=<IPv6 addres>
+	LOCALADDR=<IPv6 addres>
+	
+	[ PRIORITY= ]
+	[ HOPLIMIT= ]
+	[ ENCAPLIMIT= ]
+	
 fi
 	

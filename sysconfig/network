@@ -1,12 +1,15 @@
-# $Id: network,v 1.8 2000/02/03 11:50:05 misiek Exp $
+# $Id: network,v 1.8.2.1 2000/10/18 20:10:51 misiek Exp $
 ######################################################################
 # MAIN PART
 
-# Do you need networking ?
+# Do you need IPv4 or IPv6 networking ?
 NETWORKING=yes
 
-# Do you need IPv6 networking, too ?
-IPV6_NETWORKING=no
+# Do you need IPv4 networking ?
+IPV4_NETWORKING=yes
+
+# Do you want IPv4 forwarding ?
+IPV4_FORWARDING=no
 
 # Set hostname here (only hostname)
 HOSTNAME=pldmachine
@@ -14,6 +17,7 @@ HOSTNAME=pldmachine
 # Set domainname here
 NISDOMAIN=
 
+# IPv4 gateway
 GATEWAY=
 GATEWAYDEV=
 
@@ -23,6 +27,23 @@ IPXAUTOPRIMARY=
 IPXAUTOFRAME=
 IPXINTERNALNETNUM=
 IPXINTERNALNODENUM=
+
+# Do you need IPv6 networking ?
+IPV6_NETWORKING=no
+
+# Do you want IPv6 forwarding ?
+IPV6_FORWARDING=no
+
+# Enable tunnel interfaces configuration ?
+IPV6_TUNNELCONFIG=no
+
+# IPv6 gateway
+GATEWAY6=
+GATEWAY6DEV=
+
+# Global route for IPv6 host with IPv6 forwarding
+IPV6_GLOBALROUTEGW=
+IPV6_GLOBALROUTEDEV=
 
 # Reading configuration from LDAP
 
@@ -37,114 +58,10 @@ LDAP_BASE_DN=
 # Do you want set static arp table (based on /etc/ethers config file) ?
 STATIC_ARP=no
 
-######################################################################
-# IPv4 goodies
+# Specify interface on which you want to enable tleds software
+# (also you need tleds package installed) -- default set to no
+TLEDS_DEV=no
 
-# Do you want enable IPv4 forwarding ?
-IPV4_FORWARDING=no
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
 
-# Do you want to enable IPv4 anti spoofing ?
-IPV4_ANTI_SPOOFING=
-
-# Kernel should accept ICMP redirect messages ?
-# The default is 'yes', if the kernel is configured for
-# a regular host; and 'no' for a router configuration.
-IPV4_ACCEPT_ICMP_REDIR=
-
-# Kernel should accept source routed packets ?
-# The default Is 'yes' for routers and 'no' for hosts.
-IPV4_ACCEPT_SOURCE_ROUTE=
-
-# Log packets with source addresses with no known route to kernel log ?
-IPV4_LOG_MARTIANS=
-
-# Do multicast routing ? The kernel needs to be compiled with
-# CONFIG_MROUTE and a multicast routing daemon is required.
-IPV4_MULTICAST=
-
-# Do proxy ARP ?
-IPV4_PROXY_ARP=
-
-# Accept ICMP redirect messages only for gateways, listed in
-# default gateway list ?
-IPV4_ACCEPT_ICMP_REDIR_GATE=
-
-# Send ICMP redirects to other hosts ?
-IPV4_SEND_ICMP_REDIR=
-
-# Ignore all ICMP echo requests ? 
-IPV4_IGN_ALL_ICMP=
-
-# Ignore ICMP echo requests to broadcast and multicast addresses ?
-IPV4_IGN_CAST_ICMP=
-
-# Enable MTU discovery patch ? (KERNEL MUST SUPPORT THIS)
-# MTU (maximal transfer unit) is the size of the chunks we send out
-# over the net. "Path MTU Discovery" means that, instead of always
-# sending very small chunks, we start out sending big ones and if we
-# then discover that some host along the way likes its chunks smaller,
-# we adjust to a smaller size.
-IPV4_MTU_DISCOVERY=
-
-# Enable debugging of IP masquerading ?
-IPV4_MASQ_DEBUGGING=
-
-# Bug-to-bug compatibility with some broken printers. On retransmit
-# try to send bigger packets to work around bugs in certain TCP
-# stacks. Can be turned off by setting IPV4_RETRANS_COLLAPSE to ,,yes''. 
-IPV4_RETRANS_COLLAPSE=
-	 
-# Disable select acknowledgments after RFC2018 ?
-# TCP may experience poor performance when multiple packets are lost
-# from one window of data. With the limited information available
-# from cumulative acknowledgments, a TCP sender can only learn about a
-# single lost packet per round trip time. An aggressive sender could
-# choose to retransmit packets early, but such retransmitted segments
-# may have already been successfully received.
-IPV4_NO_SELECT_ACK=
-
-# Disable timestamps as defined in RFC1323 ?
-# Timestamps are designed to provide compatible interworking with
-# TCP's that do not implement the TCP Extensions for High Performance
-IPV4_NO_TIMESTAMPS=
-
-# Enable the strict RFC793 interpretation of the TCP urgent pointer field.
-IPV4_RFC793=
-
-# Enable SYN flood protection ?
-IPV4_SYN_COOKIES=
-
-# Disable window scaling as defined in RFC1323 ?
-# The window scale extension expands the definition of the TCP
-# window to 32 bits and then uses a scale factor to carry this
-# 32-bit value in the 16-bit Window field of the TCP header.
-IPV4_NO_WINDOW_SCALING=
-
-# Enable dynamic socket address rewriting on interface address change.
-# This is useful for dialup interface with changing IP addresses.
-# (default no)
-# IPV4_DYNAMIC_IP_PATCH_VALUE - value from 1 to 9
-IPV4_DYNAMIC_IP_PATCH=
-IPV4_DYNAMIC_IP_PATCH_VALUE=
-
-# Range of ports used by TCP and UDP to choose the local
-# port. Contains two numbers, the first number is the lowest port,
-# the second number the highest local port. Default is "1024 4999".
-# Should be changed to "32768 61000" for high-usage systems.
-IPV4_LOCAL_PORT_RANGE="1024 4999"
-
-######################################################################
-# IPv6 goodies
-
-# Do you want enable IPv6 forwarding ?
-IPV6_FORWARDING=no
-
-# Enable tunnel interfaces configuration ?
-IPV6_TUNNELCONFIG=no
-
-# Start Classic router discovery daemon ?
-# You need iputils package installed for this option.
-IPV6_RDISC=no
-
-# rdisc mode: "host" or "router". Default: "host".
-IPV6_RDISC_MODE=host

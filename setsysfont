@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: setsysfont,v 1.5 1999/08/02 13:04:45 kloczek Exp $
+#	$Id: setsysfont,v 1.5.2.1 2000/10/18 20:10:45 misiek Exp $
 #
 
 [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
@@ -10,13 +10,10 @@ if [ -x /usr/bin/consolechars -o -x /bin/consolechars ]; then
 	if [ -n "$SYSFONT" ]; then
 		consolechars -f $SYSFONT
 	elif [ -n "$CONSOLEFONT" ]; then
-		consolechars -f $CONSOLEFONT
+		consolechars -m ${CONSOLEMAP:-trivial.trans} -f $CONSOLEFONT
 	fi
-	if [ "$CONSOLEMAP" != "" ]; then
-		consolechars -m $CONSOLEMAP
-	fi
-	if [ "$KEYTABLE" != "" ]; then
-		loadkeys $KEYTABLE
+	if [ -n "$KEYTABLE" ]; then
+		loadkeys $KEYTABLE < /dev/tty0 > /dev/tty0
 	fi
 
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-ppp,v 1.9 2000/04/21 17:44:22 jajcus Exp $
+#	$Id: ifdown-ppp,v 1.9.2.1 2000/10/18 20:10:55 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -16,6 +16,9 @@ if [ ! -f /var/run/ppp-$DEVICE.pid ]; then
     exit 0
 fi
 
+# set all major variables
+setup_ip_param
+
 get_ppp_device_and_pid
 
 if [ -z "$PID" ]; then
@@ -27,7 +30,7 @@ rm -f /var/run/ppp-$DEVICE.pid
 # pppd might have chat as a child; remember chat's pid to kill after pppd.
 # (After, not before, so that pppd doesn't just restart it).
 
-CHATPID=`ps axl | awk '$4 ~ /^'"$PID"'$/ {print $3}' 2>/dev/null`
+CHATPID=$(ps axl | awk '$4 ~ /^'"$PID"'$/ {print $3}' 2>/dev/null)
 
 kill $PID > /dev/null 2>&1
 [ -n "$CHATPID" ] && kill $CHATPID > /dev/null 2>&1
@@ -49,3 +52,7 @@ else
 fi
 
 exit 1
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
+

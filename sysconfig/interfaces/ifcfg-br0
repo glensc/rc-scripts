@@ -1,0 +1,9 @@
+#	$Id: ifcfg-br0,v 1.1.2.1 2000/10/18 20:10:54 misiek Exp $
+#
+DEVICE=br0
+IP_1_ADDR=195.164.211.2
+IP4_PRIM_NR=1
+ONBOOT=yes
+BRIDGE_DEVS="eth0 eth1"
+SPANNING_TREE=yes
+

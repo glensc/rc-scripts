@@ -4,7 +4,7 @@
 #
 # description:   kill em all
 #
-# $Id: killall,v 1.6 1999/10/13 16:11:27 baggins Exp $
+# $Id: killall,v 1.6.2.1 2000/10/18 20:10:50 misiek Exp $
 # Bring down all unneeded services that are still running (there shouldn't 
 # be any, so this is just a sanity check)
 
@@ -29,3 +29,7 @@ case "$1" in
 	done
 	;;
 esac
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
+

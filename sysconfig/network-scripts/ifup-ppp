@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.13 2000/06/12 08:38:15 waszi Exp $
+#	$Id: ifup-ppp,v 1.13.2.1 2000/10/18 20:10:55 misiek Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -25,18 +25,28 @@ CONFIG=$1
 . /etc/sysconfig/network-scripts/.functions
 
 source_config
+
+# set all major variables
+setup_ip_param
+
 [ -z "$HOLDOFF" ] && HOLDOFF=30
 
 if [ "$2" = "boot" ] && is_no "${ONBOOT}"; then
   exit
 fi
 [ -x /usr/sbin/pppd ] || {
-  echo "/usr/sbin/pppd does not exist or is not executable"
-  echo "ifup-ppp for $DEVICE exiting"
+  nls "/usr/sbin/pppd does not exist or is not executable"
+  nls "ifup-ppp for %s exiting" "$DEVICE"
     logger -p daemon.info -t ifup-ppp \
-    "/usr/sbin/pppd does not exist or is not executable for $DEVICE"
+    "$(nls "/usr/sbin/pppd does not exist or is not executable for %s" "$DEVICE")"
   exit 1
 }
+
+# modprobe ppp in case of kernel with devfs
+# (/dev/ppp is missing and ppp fails without this) --misiek
+if [ -c /dev/.devfsd ]; then
+	modprobe -s -k char-major-108
+fi
 
 opts="lock"
 if is_yes "${PERSIST}"; then
@@ -60,7 +70,13 @@ elif [ "${ESCAPECHARS}" = no ] ; then
   opts="$opts asyncmap 00000000"
 fi
 if is_yes "${DEFROUTE}" = yes; then
+  # pppd will no longer delete an existing default route
+  # so we have to help it out a little here.
+  ip route del 0/0 > /dev/null 2>&1
   opts="$opts defaultroute"
+fi
+if is_yes "${PEERDNS}"; then
+  opts="$opts usepeerdns"
 fi
 if [ -n "${MRU}" ] ; then
   opts="$opts mru ${MRU}"
@@ -68,9 +84,20 @@ fi
 if [ -n "${MTU}" ] ; then
   opts="$opts mtu ${MTU}"
 fi
-if [ -n "${IPADDR}${REMIP}" ] ; then
+if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}${REMIP}" ] ; then
   # if either IP address is set, the following will work.
-  opts="$opts ${IPADDR}:${REMIP}"
+  opts="$opts ${IP4ADDR}:${REMIP}"
+fi
+if is_yes "$IPV6_NETWORKING" && is_yes "$IPV6_PPP"; then
+	if [ -n "${IP6ADDR}${REMIP6}" ] ; then
+	  opts="$opts ipv6 ${IP6ADDR},${REMIP6}"
+	elif is_yes "$IPV6_CP_USEV4"; then
+	  opts="$opts ipv6cp-use-ipaddr"
+	elif is_yes "$IPV6_CP_PERSISTENT"; then
+	  opts="$opts ipv6cp-use-persistent"
+	fi
+else
+	opts="$opts noipv6"
 fi
 if [ -n "${PAPNAME}" ] ; then
   opts="$opts name ${PAPNAME}"
@@ -101,7 +128,7 @@ if [ -n "${CHATSCRIPT}"  ] ; then
   export $DATAFORCHAT
   /usr/sbin/pppd $opts $MODEMPORT $LINESPEED \
     connect 'eval /usr/sbin/chat $chatdbg $chatrpt \
-    `grep -v ^# ${CHATSCRIPT}`' \
+    $(grep -v ^# ${CHATSCRIPT})' \
     linkname "${DEVICE}" ipparam "${CONFIG}" \
     ${PPPOPTIONS}
 else
@@ -109,4 +136,8 @@ else
     linkname "${DEVICE}" ipparam "${CONFIG}" \
     ${PPPOPTIONS}
 fi
+
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
 

@@ -1,4 +1,4 @@
-# $Id: system,v 1.17 2000/07/13 14:51:46 baggins Exp $
+# $Id: system,v 1.17.2.1 2000/10/18 20:10:51 misiek Exp $
 
 # Do you want colorized starting scripts ?
 COLOR_INIT=yes
@@ -55,23 +55,9 @@ RUN_LDCONFIG=no
 # Mount /dev (Device Filesystem)
 MOUNT_DEVFS=no
 
-# Start DevFS daemon to preserve compatibility with old "style" device names
-RUN_DEVFSD=no
- 
-# Adjust number of inodes and file handles available in the system.
-# If you have a havily loaded system and kernel complains about
-# file/inode limit reached in VFS, increase this 2x. The default
-# value is 4096 (file) and 8192 (inode). The inode number should be
-# always 2-3 times the file number. For most systems this should not
-# be changed
-#VFS_FILE_MAX=4096
-#VFS_INODE_MAX=8192
-
 # Set to anything other than 'no' to allow hotkey interactive startup...
 PROMPT=yes
 
-# Setting this to something other than 'no' will turn on magic sysrq keys
-MAGIC_SYSRQ=yes
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
 
-# Setting this to something other than 'no' will turn on stop-a (Sparc only)
-STOP_A=no

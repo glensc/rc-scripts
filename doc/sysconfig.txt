@@ -1,4 +1,4 @@
-$Id: sysconfig.txt,v 1.3 1999/07/13 12:49:35 misiek Exp $
+$Id: sysconfig.txt,v 1.3.2.1 2000/10/18 20:10:46 misiek Exp $
 
 Files in /etc/sysconfig
 =======================
@@ -37,7 +37,8 @@ Files in /etc/sysconfig
 /etc/sysconfig/network:
 
   NETWORKING=yes|no
-  IPV6NETWORKING=yes|no
+  IPV4_NETWORKING=yes|no
+  IPV6_NETWORKING=yes|no
   HOSTNAME=<fqdn by default, but whatever hostname you want>
     Note: for compatibility with some old software people might
     install (like trn), the /etc/HOSTNAME file should contain the

@@ -15,3 +15,7 @@ ZONE_INFO_AREA="Europe"
 # Name of the time zone 
 # for your system.
 TIME_ZONE="Warsaw"
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
+

@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.54 2000/07/28 18:37:00 baggins Exp $
+# $Id: functions,v 1.54.2.1 2000/10/18 20:10:50 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -17,7 +17,7 @@ export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 INIT_COL=67
 
 # Source configuration if available - may override default values
-[ -f /etc/sysconfig/system ] && . /etc/sysconfig/system
+[ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
 
 [ -z "$COLUMNS" ] && COLUMNS=80
 
@@ -39,6 +39,9 @@ termput()
 		  setaf)
 		  	is_yes "$COLOR_INIT" && echo -ne "\033[0;3${2}m"
 		  	;;
+		  op)
+		  	termput setaf 9
+			;;
 		  esac
 	else
 		tput "$@"
@@ -48,6 +51,7 @@ termput()
 # printf equivalent
 printf_()
 {
+	local text m
 	text="$1" ;
 	shift ;
 	if [ $# -gt 0 ]; then
@@ -64,33 +68,45 @@ printf_()
 # National language support function
 nls()
 {
-if [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
-	OLD_NLS_DOMAIN="$NLS_DOMAIN"
-	if [ "$1" = "--nls-domain" ]; then
-		shift
-		NLS_DOMAIN="$1"
-		shift
-	fi
-	if [ -z "$NLS_DOMAIN" ]; then
-		NLS_DOMAIN="rc-scripts"
-	fi
-	MESSAGE="$1"
-	# avoid translating empty text. --misiek
-	if [ -n "$MESSAGE" ]; then
-		text="`TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="$NLS_DOMAIN" "$MESSAGE"`"
-	else
-		text="$MESSAGE"
-	fi
+	local msg_echo old_nls_domain text message
+	msg_echo='\n'
+	old_nls_domain="$NLS_DOMAIN"
+	# parse command line
+	# don't use -o instead || here - this will broke ksh --misiek
+	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+		case "$1" in
+			--nls-domain)
+				shift
+				NLS_DOMAIN="$1"
+				shift
+				;;
+			-n)
+				msg_echo=''
+				shift
+				;;
+		esac
+	done
+	message="$1"
 	shift
-	printf_ "$text" "$@"
-	echo
-	NLS_DOMAIN="$OLD_NLS_DOMAIN"
-else
-	echo "$@"
-fi
+	# empty message, so we return --misiek
+	if [ -z "$message" ]; then
+		NLS_DOMAIN="$old_nls_domain"
+		echo -en "$msg_echo"
+		return
+	fi
+			
+	if [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
+		text=$(TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="${NLS_DOMAIN:-rc-scripts}" "$message")
+		printf_ "$text" "$@"
+	else
+		printf_ "$message" "$@"
+	fi
+	
+	echo -en "$msg_echo"
+	NLS_DOMAIN="$old_nls_domain"
 }
 
-msg_Network_Down()
+msg_network_down()
 {
 	nls "ERROR: Networking is down. %s can't be run." "$1"
 }
@@ -100,7 +116,7 @@ msg_starting()
 	show "Starting %s service" "$1"
 }
 
-msg_Already_Running()
+msg_already_running()
 {
 	nls "%s service is already running." "$1"
 }
@@ -110,7 +126,7 @@ msg_stopping()
 	show "Stopping %s service" "$1"
 }
 
-msg_Not_Running()
+msg_not_running()
 {
 	nls "%s service is not running." "$1"
 }
@@ -120,16 +136,15 @@ msg_reloading()
 	show "Reloading %s service" "$1"
 }
 
-msg_Usage()
+msg_usage()
 {
 	nls "Usage: %s" "$*"
 }
 
 # Some functions to handle PLD-style messages
 show() 
-{	
-	what="`nls --nls-domain rc-scripts "DONE"`"; typeset -i offset=${#what}
-	text="`nls "$@"`"
+{	local text
+	text=$(nls "$@")
 	echo -n "$text"
 	awk "BEGIN { for (j=length(\"$text\"); j<$INIT_COL; j++) printf \".\" }"
 }
@@ -140,9 +155,10 @@ show()
 # used).
 progress()
 {
+	local COLOR
 	if [ -n "$2" ]; then COLOR="$2"; else COLOR="2"; fi
 	deltext
-	echo -n "`termput setaf 6`[`termput setaf "$COLOR"` `nls --nls-domain rc-scripts "$1"` `termput setaf 6`]`termput op`"
+	echo -n "$(termput setaf 6)[$(termput setaf "$COLOR") $(nls --nls-domain rc-scripts "$1") $(termput setaf 6)]$(termput op)"
 }
 
 busy() 
@@ -166,12 +182,14 @@ fail()
 {
 	progress "FAIL" 1
 	echo
+	return 1
 }
 
 died() 
 {
 	progress "DIED" 1
 	echo
+	return 1
 }
 
 deltext() 
@@ -182,43 +200,59 @@ deltext()
 # Usage run_cmd Message command_to_run
 run_cmd()
 {
-	exit_code=0
-	_ERRORS=""
-	MESSAGE=$1
-	show "$MESSAGE"; busy
+	local exit_code errors message force_err
+	typeset -i force_err=0
+	typeset -i exit_code=0
+	case "$1" in
+		-a)
+			force_err=1
+			shift
+			;;
+	esac
+	message=$1
+	show "$message"; busy
 	shift
-	if _ERRORS="`initlog -c \"$*\" 2>&1`"; then
+	if errors=$(HOME=/tmp TMPDIR=/tmp initlog -c "$*" 2>&1); then
 		ok
+		log_success "$1 $message"
 	else
-		fail;  [ -n "$_ERRORS" ] && echo $_ERRORS
+		fail
+		log_failed "$1 $message"
 		exit_code=1
 	fi
-	unset _ERRORS
+	[ -n "$errors" ] && [ $exit_code -eq 1 -o $force_err -eq 1 ] && echo $errors
 	return $exit_code
 }
 
-# compatibility functions
-action()
-{
-        STRING=$1
-	shift
-	run_cmd "$STRING" "$*"
-}
-			
 # A function to start a program (now it's usefull on read-only filesystem too)
 daemon() 
 {
-	nicelevel=0
-	exit_code=0
-	_ERRORS=""
+	local nicelevel exit_code errors prog
+	typeset -i nicelevel=0
+	typeset -i exit_code=0
 	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
-	# Test syntax.
-	case $1 in
-	'')	msg_Usage " daemon [+/-nicelevel] {program}"
-		return 1;;
-	-*|+*) SERVICE_RUN_NICE_LEVEL=$1
-		shift;;
-	esac
+	# Test syntax. Don't use -o instead || here - this will broke ksh --misiek
+	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+		case $1 in
+		'')	msg_usage " daemon [--user user] [+/-nicelevel] {program}"
+			return 1
+			;;
+		--check)
+			# for compatibility with redhat/mandrake
+			nls "warning: --check option is ignored!"
+			shift
+			shift
+			;;
+		--user)
+			shift
+			prog="/bin/su $1 -c"
+			shift
+			;;
+		-*|+*) SERVICE_RUN_NICE_LEVEL=$1
+			shift;;
+		esac
+	done
+	prog="$prog "$*""
 
 	# make sure it doesn't core dump anywhere; while this could mask
 	# problems with the daemon, it also closes some security problems
@@ -226,31 +260,33 @@ daemon()
 
 	# And start it up.
 	busy
-	if _ERRORS="`nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$*" 2>&1`"; then
+	if errors=$(HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
+		log_success "$1 startup"
 		ok
 	else
 		exit_code=1
 		fail
-		[ -n "$_ERRORS" ] && echo $_ERRORS
+		log_failed "$1 startup"
+		[ -n "$errors" ] && echo $errors
 	fi
-	unset _ERRORS
 	return $exit_code
 }
 
 # A function to stop a program.
 killproc() 
 {
+	local notset killlevel base pid
 	# Test syntax.
 	if [ $# = 0 ]; then
-		msg_Usage " killproc {program} [signal]"
+		msg_usage " killproc {program} [signal]"
 		return 1
 	fi
 
 	busy
 	
-	notset=0
+	typeset -i notset=0
 	# check for second arg to be kill level
-	if [ "$2" != "" ] ; then
+	if [ -n "$2" ] ; then
 		killlevel=$2
 	else
 		notset=1
@@ -258,13 +294,13 @@ killproc()
 	fi
 
         # Save basename.
-        base=`basename $1`
+        base=$(basename $1)
 
         # Find pid.
-        pid=`pidofproc $base`
+        pid=$(pidofproc $base)
 
         # Kill it.
-        if [ "$pid" != "" ] ; then
+        if [ -n "$pid" ] ; then
 		if [ "$notset" = "1" ] ; then
 			if ps h $pid>/dev/null 2>&1; then
 				# TERM first, then KILL if not dead
@@ -279,20 +315,35 @@ killproc()
 						fi
 					fi
 				fi
-				ps h $pid >/dev/null 2>&1 && fail || ok
+				if (ps h $pid >/dev/null 2>&1); then
+				   fail
+				   log_failed "$1 shutdown"
+				else
+				   ok
+				   log_success "$1 shutdown"
+				fi
 			else
 				died
+				log_failed "$1 shutdown"
 			fi
 		# use specified level only
 		else
 			if ps h $pid >/dev/null 2>&1; then
-				kill $killlevel $pid && ok || fail
+				if (kill $killlevel $pid); then
+				   ok
+				   log_success "$1 shutdown"
+				else
+				   fail
+				   log_failed "$1 shutdown"
+				fi
 			else
 				died
+				log_failed "$1 shutdown"
 			fi
 		fi
 	else
 		died
+		log_failed "$1 shutdown"
 	fi
 
         # Remove pid file if any.
@@ -304,63 +355,49 @@ killproc()
 # A function to find the pid of a program.
 pidofproc() 
 {
+	local pid
 	# Test syntax.
 	if [ $# = 0 ] ; then
-		msg_Usage " pidofproc {program}"
+		msg_usage " pidofproc {program}"
 		return 1
 	fi
 
 	# First try "/var/run/*.pid" files
 	if [ -f /var/run/$1.pid ] ; then
-	        pid=`head -1 /var/run/$1.pid`
-	        if [ "$pid" != "" ] ; then
+	        pid=$(head -1 /var/run/$1.pid)
+	        if [ -n "$pid" ] ; then
 	                echo $pid
 	                return 0
 	        fi
 	fi
 
 	# Next try "pidof"
-	pid=`pidof $1`
-	if [ "$pid" != "" ] ; then
+	pid=$(pidof -o $$ -o $PPID -o %PPID -x $1)
+	if [ -n "$pid" ] ; then
 	        echo $pid
 	        return 0
 	fi
-
-        # Finally try to extract it from ps
-        ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
-                           { if ((prog == $5) || (("(" prog ")") == $5) ||
-                             (("[" prog "]") == $5) ||
-                           ((prog ":") == $5)) { print $1 ; exit 0 } }' $1
 }
 
 status() 
 {
 	# Test syntax.
 	if [ $# = 0 ] ; then
-		msg_Usage " status {program}"
+		msg_usage " status {program}"
 		return 1
 	fi
 
 	# First try "pidof"
-	pid=`pidof $1`
-	if [ "$pid" != "" ] ; then
+	pid=$(pidof -o $$ -o $PPID -o %PPID -x $1)
+	if [ -n "$pid" ] ; then
 	        nls "%s (pid %s) is running..." "$1" "$pid"
 	        return 0
-        else
-                pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
-                           { if ((prog == $5) || (("(" prog ")") == $5) ||
-                             (("[" prog "]") == $5) ||
-                           ((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
-                if [ "$pid" != "" ] ; then
-                        nls "%s (pid %s) is running..." "$1" "$pid"
-                        return 0
-                fi
 	fi
 
 	# Next try "/var/run/*.pid" files
 	if [ -f /var/run/$1.pid ] ; then
-	        pid=`head -1 /var/run/$1.pid`
-	        if [ "$pid" != "" ] ; then
+	        pid=$(head -1 /var/run/$1.pid)
+	        if [ -n "$pid" ] ; then
 	                nls "%s dead but pid file exists" "$1"
 	                return 1
 	        fi
@@ -376,7 +413,8 @@ status()
 
 # Confirm whether we really want to run this service
 confirm() {
-	echo -n "`nls "Start service"` $1 `nls "(Y)es/(N)o/(C)ontinue? [Y] "`"
+	local answer
+	nls -n "Start service %s (Y)es/(N)o/(C)ontinue? [Y] " "$1"
 	read answer
 	case $answer in
 		y|Y|t|T|"")
@@ -399,51 +437,58 @@ is_yes()
 {
 	# Test syntax	
 	if [ $# = 0 ] ; then
-		msg_Usage " is_yes {value}"
+		msg_usage " is_yes {value}"
 		return 2
 	fi
 
-	# Check value
-	[ "$1" = "yes" ] ||\
-	[ "$1" = "Yes" ] ||\
-	[ "$1" = "YES" ] ||\
-	[ "$1" = "true" ] ||\
-	[ "$1" = "True" ] ||\
-	[ "$1" = "TRUE" ] ||\
-	[ "$1" = "Y" ]||\
-	[ "$1" = "y" ]||\
-	[ "$1" = "1" ] ||\
-		return 1
-	return 0
+	case "$1" in
+		yes|Yes|YES|true|True|TRUE|on|On|ON|Y|y|1)
+			# true returns zero
+			return 0
+		;;
+		*)
+			# false returns one
+			return 1
+		;;
+	esac
 }
 
 is_no()
 {
 	# Test syntax
-	if [ $# = 0 ] ; then
-		msg_Usage " is_no {value}"
+	if [ $# = "0" ] ; then
+		msg_usage " is_no {value}"
 		return 2
 	fi
-	
-	# Check value
-	[ "$1" = "no" ] ||\
-	[ "$1" = "No" ] ||\
-	[ "$1" = "NO" ] ||\
-	[ "$1" = "false" ] ||\
-	[ "$1" = "False" ] ||\
-	[ "$1" = "FALSE" ] ||\
-	[ "$1" = "N" ] ||\
-	[ "$1" = "n" ] ||\
-	[ "$1" = "0" ] ||\
-	[ "$1" = "" ] ||\
+
+	# It's important that is_no() should always return logical
+	# negation of is_yes(). Really ALWAYS. --misiek
+	if is_yes "$1" ; then
 		return 1
-	return 0
+	else
+		return 0
+	fi
+}
+
+# module is needed (ie. is requested, is available and isn't loaded already)
+is_module()
+{
+	# module name without .o at end
+	if ! (lsmod | grep -q "$1"); then
+		if (ls -R /lib/modules/$(uname -r)/ 2> /dev/null | grep -q "${1}.o"); then
+			# true
+			return 0
+		fi
+	fi
+	# false
+	return 1
 }
 
 _modprobe()
 {
+	local parsed single die args foo result
 	parsed=no
-	while is_no $parsed ; do
+	while is_no "$parsed" ; do
 		case "$1" in
 			"single")
 				single=yes
@@ -465,7 +510,6 @@ _modprobe()
 	if is_yes "${single}" ; then
 		foo="$@"
 		show "Loading %s kernel module(s)" "$foo"
-		unset foo
 		busy
 	fi
 	if [ -x /sbin/modprobe ] ; then
@@ -478,7 +522,7 @@ _modprobe()
 	if is_yes "${single}" ; then
 		deltext
 		if [ $result == "0" ] ; then
-			is_yes "${single}" && ok
+			is_yes "$single" && ok
 		else
 			fail
 			if is_yes "$die" ; then
@@ -487,5 +531,29 @@ _modprobe()
 			fi
 		fi
 	fi
-	unset single die args result
 }
+
+log_success ()
+{
+	initlog -n $0 -s "$1 $2" -e 1
+}
+
+log_failed ()
+{
+	initlog -n $0 -s "$1 $2" -e 2
+}
+
+# RedHat/Mandrake specific functions
+action () { STRING=$1; shift; run_cmd "$STRING" "$*"; }
+success () { return 0; }
+failure () { return 1; }
+
+# TO BE REMOVED SOON. --misiek
+msg_Network_Down () { msg_network_down "$*"; }
+msg_Already_Running () { msg_already_running "$*"; }
+msg_Not_Running () { msg_not_running "$*"; }
+msg_Usage () { msg_usage "$*"; }
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
+

@@ -3,10 +3,10 @@
 # shutdwn       Common script for system halt/reboot.
 #
 # Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
-#               Modified for PLD Linux by Grzegorz Stanislawski
-# Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+# Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
+#		Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
-# $Id: rc.shutdown,v 1.12 2000/06/25 14:40:36 waszi Exp $
+# $Id: rc.shutdown,v 1.12.2.1 2000/10/18 20:10:49 misiek Exp $
 
 # Set the path.
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -31,7 +31,7 @@ halt -w
 
 # Turn off swap, then unmount file systems.
 run_cmd "Turning off swap and accounting" swapoff -a
-[ -x /sbin/accton ] && /sbin/accton
+[ -x /sbin/accton ] && LC_ALL=C /sbin/accton 2>&1 | grep -v "not implemented"
 
 if [ -x /sbin/quotaoff ]; then
 	run_cmd "Turning off quotas for local filesystems" /sbin/quotaoff -a
@@ -41,11 +41,11 @@ fi
 sig=-15
 retry=3
 force=
-remaining=`awk '!/(^#| proc | loopfs | devfs | devpts | shm |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts`
+remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
 while [ -n "$remaining" -a "$retry" -gt 0 ]
 do	
 	show "Unmounting file systems" ; busy
-	if ERRORS=`LC_ALL=C exec umount -a $FORCE -t noproc 2>&1` ; then
+	if ERRORS=$(LC_ALL=C exec umount -a $FORCE -t noproc 2>&1) ; then
 		ok
 	else
 		fail
@@ -53,7 +53,7 @@ do
 	fi
 	
 	sleep 2
-	remaining=`awk '!/(^#| proc | loopfs | devfs | devpts | shm |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts`
+	remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
 	[ -z "$remaining" ] && break
 	/sbin/fuser -k -m $sig $remaining > /dev/null
 	sleep 5
@@ -72,7 +72,7 @@ if [ -x /sbin/raidstop -a -f /etc/raidtab ]; then
 	if [ -f /proc/mdstat ] ; then
 		mddevs=$(awk '/^md.* active/ {print $1}' /proc/mdstat)
 		for mddev in $mddevs ; do
-			MESSAGE="`nls "Turning off RAID for %s" "$mddev"`"
+			MESSAGE="$(nls "Turning off RAID for %s" "$mddev")"
 			run_cmd "$MESSAGE" raidstop /dev/$mddev
 		done
 		unset mddev mddevs
@@ -81,10 +81,14 @@ if [ -x /sbin/raidstop -a -f /etc/raidtab ]; then
 fi
 
 show "Remounting remaining filesystems ro mode"; busy
-if ( mount | awk '/ext2/ { print $3 }' | \
+if ( mount | awk '/ext2|ext3|reiserfs/ { print $3 }' | \
 	while read line; do 
 	mount -n -o ro,remount $line; done ); then
 	ok
 else
 	fail
 fi
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
+

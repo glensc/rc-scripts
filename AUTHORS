@@ -1,28 +1,49 @@
 
-	$Id: AUTHORS,v 1.5 1999/12/11 12:45:13 misiek Exp $
+	$Id: AUTHORS,v 1.5.2.1 2000/10/18 20:10:44 misiek Exp $
 
-In alphabetical order:
+MAINTAINERS
 
-Artur Frysiak		<wiget@pld.org.pl>
-	- automake/autoconf support
-	- rc-scripts.spec maintaning
+Maintainer of development version (so called ,,totalnew'')
+is Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 
-Tomasz K³oczko		<kloczek@wun.zie.pg.gda.pl>
-	- automake/autoconf updates
-	- rc-scripts.spec updates
+AUTHORS/CREDITS
 
-Jacek Konieczny		<jajcus@zeus.polsl.gliwice.pl>
-	- LDAP support
+Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+	networking functions, iproute2 support,
+	national language support, scripts for
+	controling tunnels and bridges
 
-Arkadiusz Mi¶kiewicz	<misiek@pld.org.pl>
-	- networking functions
-	- iproute2 support
-	- national language support
-	- scripts for controling tunnels
+Artur Frysiak <wiget@pld.org.pl>
+	automake/autoconf support, bug fixes
 
-Grzegorz Stanislawski	<stangrze@open.net.pl>
-	- great ppp scripts
-	- prefix/netmask converting functions
-	- bug fixes
+Bartosz Waszak <waszi@pld.org.pl>
+	fixes, devfsd support
 
-Other guys ....
+Grzegorz Stanislawski <stangrze@open.net.pl>
+	ppp scripts, prefix/netmask converting
+	functions, bug fixes
+
+Jacek Konieczny <jajcus@zeus.polsl.gliwice.pl>
+	LDAP support
+	
+Jan Rêkorajski <baggins@pld.org.pl>
+	general, ipv6 and dhcp fixes
+	
+Micha³ Kochanowicz <mkochano@pld.org.pl>
+	fixes, progress()
+	
+Pawe³ Wilk <siefca@pl.qmail.org>
+	executing scripts on iface up/down
+
+Robert ¦laski <robin@atm.com.pl>
+	ATM support
+
+Sebastian Zagrodzki <s.zagrodzki@mimuw.edu.pl>
+	many fixes
+
+Tomasz K³oczko <kloczek@wun.zie.pg.gda.pl>
+	automake/autoconf updates, bug fixes
+
+Mandrake Software
+RedHat Software, Inc.
+

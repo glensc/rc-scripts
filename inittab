@@ -2,7 +2,7 @@
 # inittab       This file describes how the INIT process should set up
 #               the system in a certain run-level.
 #
-#		$Id: inittab,v 1.4 1999/07/31 11:24:17 misiek Exp $
+#		$Id: inittab,v 1.4.2.1 2000/10/18 20:10:45 misiek Exp $
 #
 # Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 #               Modified for RHS Linux by Marc Ewing and Donnie Barnes
@@ -55,6 +55,10 @@ pr:12345:powerokwait:/sbin/shutdown -c "Power Restored; Shutdown Cancelled"
 6:2345:respawn:/sbin/mingetty tty6
 7:2345:respawn:/sbin/mingetty tty7
 8:2345:respawn:/sbin/mingetty tty8
+
+# Examples
+# 9:2345:respawn:/sbin/mingetty --mono tty9
+# 10:2345:respawn:/sbin/mingetty --remote-host=some.host.in.net.pl tty10
 
 # Run xdm in runlevel 5
 #x:5:respawn:/usr/bin/X11/xdm -nodaemon

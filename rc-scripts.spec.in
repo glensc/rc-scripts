@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.48 2000/05/07 18:59:59 siefca Exp $
+# $Id: rc-scripts.spec.in,v 1.48.2.1 2000/10/18 20:10:45 misiek Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -17,6 +17,7 @@ BuildRequires:	popt-devel
 BuildRequires:	glib-devel
 BuildRequires:	glib-static
 BuildRequires:	gettext-devel
+Requires:	grep
 Requires:	mingetty
 Requires:	mktemp
 Requires:	modutils >= 2.1.121
@@ -28,7 +29,6 @@ Requires:	/bin/awk
 Requires:	procps
 Requires:	/bin/ps
 Requires:	SysVinit
-Requires:	sed
 Requires:	iproute2
 Requires:	/bin/gettext
 Requires:	e2fsprogs >= 1.15
@@ -201,6 +201,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/adjtime
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inittab
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/initlog.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/modules
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/system
 
 %{_mandir}/man1/*

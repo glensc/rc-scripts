@@ -1,18 +1,23 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.69 2000/07/13 15:29:51 baggins Exp $
+# $Id: rc.sysinit,v 1.69.2.1 2000/10/18 20:10:49 misiek Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 
+# Rerun ourselves through initlog
+if [ -z "$IN_INITLOG" ]; then
+	[ -f /sbin/initlog ] && exec /sbin/initlog -r /etc/rc.d/rc.sysinit
+fi
+ 
 # Set the path
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
 
 # NLS
-if [ -f /etc/sysconfig/i18n ]; then
+if [ -r /etc/sysconfig/i18n ]; then
 	. /etc/sysconfig/i18n
 	[ -n "$LANG" ] && export LANG || unset LANG
 	[ -n "$LC_CTYPE" ] && export LC_CTYPE || unset LC_CTYPE
@@ -30,7 +35,7 @@ fi
 . /etc/rc.d/init.d/functions
 
 # Read network config data.
-if [ -f /etc/sysconfig/network ]; then
+if [ -r /etc/sysconfig/network ]; then
 	. /etc/sysconfig/network
 else
 	NETWORKING=no
@@ -38,7 +43,7 @@ else
 fi
 
 # Read system config data.
-if [ -f /etc/sysconfig/system ]; then
+if [ -r /etc/sysconfig/system ]; then
 	. /etc/sysconfig/system
 else
 	RUN_SULOGIN_ON_ERR=yes
@@ -53,15 +58,15 @@ else
 fi
 
 # Print welcome message
-echo -e "\t\t\t`termput setaf 6`Powered by `termput setaf 2`PLD GNU/Linux`termput setaf 7`"
+nls "\t\t\t%sPowered by %sPLD GNU/Linux%s" "$(termput setaf 6)" "$(termput setaf 2)" "$(termput setaf 7)"
 if is_yes "$PROMPT"; then
-	echo -en "\t\t`nls "Press"` '`termput setaf 1`I`termput setaf 7`' `nls "to enter interactive startup."`"
+	nls -n "\t\t     Press %sI%s to enter interactive startup." "$(termput setaf 1)" "$(termput setaf 7)"
 	echo
 	sleep 1
 fi
 
 # we need /proc mounted before everything
-mount -n -t proc /proc /proc
+mount -n -o gid=17 -t proc /proc /proc
 
 # /dev must be also mounted before everything but only if we want use them ;-)
 if is_yes "$MOUNT_DEVFS"; then
@@ -69,26 +74,24 @@ if is_yes "$MOUNT_DEVFS"; then
 fi
 
 # set up devfsd
-if is_yes "$RUN_DEVFSD"; then
-    if [ -x /sbin/devfsd -a -f /etc/devfsd.conf ]; then
-	    run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
-    fi
+if [ -c /dev/.devfsd -a -x /sbin/devfsd ]; then
+	run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
+	if [ -e /dev/cdroms/cdrom0 ]; then
+		ln -sf /dev/cdroms/cdrom0 /dev/cdrom
+	fi
+	if [ -f /etc/sysconfig/mouse ]; then
+		. /etc/sysconfig/mouse
+		if [ -n "$DEVICE" -a "$DEVICE" != "/dev/mouse" ]; then
+			ln -s $DEVICE /dev/mouse
+		fi
+	fi
 fi
 
 # Set console loglevel
 /bin/dmesg -n $CONSOLE_LOGLEVEL
 
-# Turn off sysrq
-if [ -f /proc/sys/kernel/sysrq ] && is_no "$MAGIC_SYSRQ"; then
-        echo "0" > /proc/sys/kernel/sysrq
-	run_cmd "Turning off Magic SysRq key" /bin/true
-fi
-
-# Turn off Stop-A
-if [ -f /proc/sys/kernel/stop-a ] && is_no "$STOP_A"; then
-	echo "0" > /proc/sys/kernel/stop-a
-	run_cmd "Turning off Stop-A/Break-A" /bin/true
-fi
+# Configure Linux kernel
+run_cmd "Configuring kernel parameters" /sbin/sysctl -p /etc/sysctl.conf
 
 # Set the system clock.
 ARC=0
@@ -135,31 +138,33 @@ esac
 
 # Check if timezone definition is available
 if [ -e /etc/localtime ] ; then
-	if run_cmd "Setting clock$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
-		show "Today's date: `LC_CTYPE=C date`"; ok
+	if run_cmd "$(nls "Setting clock")$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
+		show "$(nls "Today's date:") $(LC_CTYPE=C date)"; ok
 	fi
 else
 	TIME_SETUP_DELAYED=yes
 fi
 
 # Start up swapping.
-run_cmd "`nls "Activating swap partitions"`" swapon -a
+run_cmd "Activating swap partitions" swapon -a
 
 # Set the hostname.
-run_cmd "`nls "Host:"` ${HOSTNAME}" hostname ${HOSTNAME}
+run_cmd "$(nls "Host:") ${HOSTNAME}" hostname ${HOSTNAME}
 
 # Set the NIS domain name
 if [ -n "$NISDOMAIN" ]; then
-	run_cmd "`nls "NIS Domain:"` ${NISDOMAIN}" domainname $NISDOMAIN
+	run_cmd "$(nls "NIS Domain:") ${NISDOMAIN}" domainname $NISDOMAIN
 else
 	domainname ""
 fi
 
-# Setup hdparm thingy (if exists)
-[ -x /etc/rc.d/rc.hdparm ] && /etc/rc.d/rc.hdparm
+# Setup hdparm thing (if exists and is needed)
+if ! grep -iq nohdparm /proc/cmdline; then
+	[ -x /etc/rc.d/rc.hdparm ] && /etc/rc.d/rc.hdparm
+fi
 
 if [ -f /fsckoptions ]; then
-	fsckoptions=`cat /fsckoptions`
+	fsckoptions=$(cat /fsckoptions)
 else
 	fsckoptions=''
 fi
@@ -168,12 +173,18 @@ if [ -f /forcefsck ]; then
         fsckoptions="-f $fsckoptions"
 fi
 
+if is_yes "$COLOR_INIT"; then
+	fsckoptions="-C $fsckoptions"
+else
+	fsckoptions="-V $fsckoptions"
+fi
+
 _RUN_QUOTACHECK=0
 if awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 1 ; else exit 0}' /etc/fstab; then
 
     if [ ! -f /fastboot  ]; then
     	    show "Checking root filesystems."; started
-	    initlog -c "fsck -C -T -a $fsckoptions /"
+	    initlog -c "fsck -T -a $fsckoptions /"
 
 	    rc=$?
 
@@ -186,7 +197,7 @@ if awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 1 ; e
 		    nls "*** when you leave the shell."
 		    echo
 
-		    PS1="`nls "(Repair filesystem)# "`"; export PS1
+		    PS1="$(nls "(Repair filesystem)# ")"; export PS1
 		    if is_yes "$RUN_SULOGIN_ON_ERR"; then
 			    sulogin
 		    else
@@ -204,7 +215,7 @@ if awk '{ if ($2 ~ /^\/$/ && ( $3 ~ /^(nfs|romfs)$/ || $6 ~ /^0$/ ) ) exit 1 ; e
 fi
 
 # check for arguments 
-if grep -i nopnp /proc/cmdline >/dev/null ; then
+if grep -iq nopnp /proc/cmdline; then
 	PNP=
 else
 	PNP=yes
@@ -239,6 +250,12 @@ if is_yes "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
 	ok
 fi
 
+# The root filesystem is now read-write, so we can now log via
+# syslog() directly..
+if [ -n "$IN_INITLOG" ]; then
+    IN_INITLOG=""
+fi
+    
 echo ${HOSTNAME} > /etc/HOSTNAME
 
 # Clear mtab
@@ -250,7 +267,7 @@ mount -f /proc
 
 if [ ! -f /proc/modules ]; then
 	USEMODULES=
-elif ! grep -i nomodules /proc/cmdline >/dev/null ; then
+elif ! grep -iq nomodules /proc/cmdline; then
 	USEMODULES=y
 else
 	USEMODULES=
@@ -260,43 +277,57 @@ fi
 rm -f /lib/modules/preferred
 rm -f /lib/modules/default
 if [ -x /sbin/depmod -a -n "$USEMODULES" ]; then
-	if is_yes "$SET_SLINKS"; then
-	# Get ready for kmod if module support in the kernel
-		if [ -z `uname -r | grep "-"` ]; then
-		# we're using a new kernel, no preferred needed
-			mver=`uname -r`
-		else
-			ktag="`cat /proc/version`"
-			mtag=grep -l "$ktag" /lib/modules/*/.rhkmvtag 2> /dev/null
-			if [ -n "$mtag" ]; then
-				mver=echo $mtag | sed -e 's,/lib/modules/,,' -e 's, \
-					/.rhkmvtag,,' -e 's,[       ].*$,,'
-			fi
-			if [ -n "$mver" ]; then
-				ln -sf /lib/modules/$mver /lib/modules/default
-			fi
-		fi
+  if is_yes "$SET_SLINKS"; then
+    # Get ready for kmod if module support in the kernel
+    if [ -z $(uname -r | grep "-") ]; then
+	# we're using a new kernel, no preferred needed
+	mver=$(uname -r)
+    else
+	ktag="$(cat /proc/version)"
+	mtag=grep -l "$ktag" /lib/modules/*/.rhkmvtag 2> /dev/null
+	if [ -n "$mtag" ]; then
+	    mver=$(echo $mtag | awk ' { gsub(/\/lib\/modules\//,NIL); gsub(/.rhkmvtag/,NIL); gsub(/[     ].*$/,NIL); print $0 } ')
 	fi
-	[ -n "$mver" -a -f "/boot/module-info-$mver" ] && \
-		ln -sf /boot/module-info-$mver /boot/module-info
-	[ -n "$mver" -a -f "/boot/System.map-$mver" ] && \
-		ln -sf /boot/System.map-$mver /boot/System.map
+	if [ -n "$mver" ]; then
+	    ln -sf /lib/modules/$mver /lib/modules/default
+	fi
+    fi
+    
+    [ -n "$mver" -a -f "/boot/module-info-$mver" ] && \
+	ln -sf /boot/module-info-$mver /boot/module-info
+    [ -n "$mver" -a -f "/boot/System.map-$mver" ] && \
+	ln -sf /boot/System.map-$mver /boot/System.map
+  fi
+fi
 
-	# Run depmod if:
-	# a) user requested or RUN_DEPMOD="";
-	# b) modules.dep is missing
-	# c) modules.dep is older than /etc/modules.conf or /lib/modules/$mver
-	if ! is_no "$RUN_DEPMOD" || [ -z "$RUN_DEPMOD" ]; then
-		if [ "$RUN_DEPMOD" = "ifmissing" -a ! -r /lib/modules/$mver/modules.dep ] ||\
-		is_yes "$RUN_DEPMOD" || [ -z "$RUN_DEPMOD" ] ||\
-		[ /lib/modules/$mver/modules.dep -ot /etc/modules.conf ] ||\
-		[ /lib/modules/$mver/modules.dep -ot /lib/modules/$mver ]
-		then
-			run_cmd "Finding module dependencies" depmod -a
-		fi
+# Run depmod if RUN_DEPMOD != "no" and:
+# a) user requested or RUN_DEPMOD="";
+# b) modules.dep is missing
+# c) modules.dep is older than /etc/modules.conf or /lib/modules/$mver
+if ! is_no "$RUN_DEPMOD" && [ -n "$USEMODULES" ]; then
+  if is_yes "$RUN_DEPMOD" || [ -z "$RUN_DEPMOD" ] || \
+     [ "$RUN_DEPMOD" = "ifmissing" -a ! -r /lib/modules/$mver/modules.dep ] ||\
+     [ /lib/modules/$mver/modules.dep -ot /etc/modules.conf ] ||\
+     [ /lib/modules/$mver/modules.dep -ot /lib/modules/$mver ]; then
+	run_cmd "Finding module dependencies" depmod -a
+  fi
+fi
+
+if [ -f /proc/sys/kernel/modprobe ]; then
+	if [ -n "$USEMODULES" ]; then
+		sysctl -w kernel.modprobe="/sbin/modprobe" >/dev/null 2>&1
+	else
+		# We used to set this to NULL, but that causes
+		# 'failed to exec' messages"
+		sysctl -w kernel.modprobe="/bin/true" >/dev/null 2>&1
 	fi
 fi
 
+# Load modules
+if [ -x /etc/rc.d/rc.modules ]; then
+        /etc/rc.d/rc.modules
+fi
+	
 # load sound modules
 if [ -n "$USEMODULES" ] && is_yes "$LOAD_SOUND"; then
 	if grep -s -q "^alias sound-slot-0" /etc/modules.conf ; then
@@ -307,29 +338,21 @@ if [ -n "$USEMODULES" ] && is_yes "$LOAD_SOUND"; then
 	fi
 fi
 
-if [ -f /proc/sys/kernel/modprobe ]; then
-	# /proc/sys/kernel/modprobe indicates built-in kmod instead
-	echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
-fi
-
-# Load modules
-if [ -f /etc/rc.d/rc.modules ]; then
-	/etc/rc.d/rc.modules
-fi
-
 # Add raid devices
 if [ -f /proc/mdstat -a -f /etc/raidtab ]; then
-	show "Starting up RAID devices."; started
 
 	rc=0
 	
-	for i in `grep "raiddev" /etc/raidtab | awk '{print $2}'`
+	for i in $(grep "raiddev" /etc/raidtab | awk '{print $2}')
 	do
-		RAIDDEV=`basename $i`
-		RAIDSTAT=`grep "^$RAIDDEV : active" /proc/mdstat`
+		RAIDDEV=$(basename $i)
+		RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat)
+		show "Starting up RAID device %s" $RAIDDEV
+		busy
 		if [ -z "$RAIDSTAT" ]; then
 			# Try raidstart first...if that fails then
-			# fall back to raid0run.
+			# fall back to raid0run and if that fails, too
+			# fall back to raidadd, raidrun.
 			RESULT=1
 			if [ -x /sbin/raidstart ]; then
 				/sbin/raidstart $i
@@ -337,7 +360,21 @@ if [ -f /proc/mdstat -a -f /etc/raidtab ]; then
 			fi
 			if [ $RESULT -gt 0 -a -x /sbin/raid0run ]; then
 				/sbin/raid0run $i
+				RESULT=$?
 			fi
+			if [ $RESULT -gt 0 -a -x /sbin/raidadd -a -x /sbin/raidrun ]; then
+				/sbin/raidadd $i
+				/sbin/raidrun $i
+				RESULT=$?
+			fi
+			if [ $RESULT -gt 0 ]; then
+				rc=1
+				fail
+			else
+				ok
+			fi
+		else
+			ok
 		fi
 	done
 
@@ -350,7 +387,7 @@ if [ -f /proc/mdstat -a -f /etc/raidtab ]; then
 		nls "*** when you leave the shell."
 		echo
 
-		PS1="`nls "(RAID Repair)# "`"; export PS1
+		PS1="$(nls "(RAID Repair)# ")"; export PS1
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
 			sulogin
 		else
@@ -364,10 +401,24 @@ if [ -f /proc/mdstat -a -f /etc/raidtab ]; then
 	show "Starting up RAID devices."; ok
 fi
 
+# Find and activate volume groups
+if [ -s /etc/lvmtab -a -x /sbin/vgscan -a -x /sbin/vgchange ]; then
+	/sbin/vgscan > /dev/null 2>&1
+	RESULT=$?
+	# 3  - no volume group(s) found
+	# 95 - driver/module not in kernel
+	if [ "$RESULT" = "3" -o "$RESULT" = "95" ]; then
+		rm -rf /etc/lvmtab.d /etc/lvmtab
+	else
+		run_cmd "Scanning for LVM volume groups" /sbin/vgscan
+		run_cmd "Activating LVM volume groups" /sbin/vgchange -a y
+	fi
+fi
+
 # Check filesystems
 if [ ! -f /fastboot ]; then
 	show "Checking filesystems."; started
-	initlog -c "fsck -C -T -R -A -a $fsckoptions"
+	initlog -c "fsck -T -R -A -a $fsckoptions"
 
 	rc=$?
 
@@ -379,7 +430,7 @@ if [ ! -f /fastboot ]; then
 		nls "*** when you leave the shell."
 		echo
 
-		PS1="`nls "(Repair filesystem)# "`"; export PS1
+		PS1="$(nls "(Repair filesystem)# ")"; export PS1
 		if is_yes "$RUN_SULOGIN_ON_ERR"; then
 			sulogin
 		else
@@ -401,8 +452,8 @@ run_cmd "Mounting local filesystems." mount -a -t nonfs,smbfs,ncpfs,proc
 
 # Set the clock if timezone definition wasn't available (eg. /usr not mounted)
 if is_yes "$TIME_SETUP_DELAYED"; then
-	if run_cmd "Setting clock$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
-		show "Today's date: `LC_CTYPE=C date`"; ok
+	if run_cmd "$(nls "Setting clock")$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
+		show "$(nls "Today's date:") $(LC_CTYPE=C date)"; ok
 	fi
 fi
 
@@ -416,8 +467,8 @@ if [ -f /etc/rc.d/rc.serial ]; then
 fi
 
 if [ -f /proc/sys/kernel/panic -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
-	show "`nls "Setting %s seconds for kernel reboot after panic." "$PANIC_REBOOT_TIME"`"; busy
-	if (echo $PANIC_REBOOT_TIME > /proc/sys/kernel/panic); then ok; else fail; fi
+	show "Setting %s seconds for kernel reboot after panic." "$PANIC_REBOOT_TIME"; busy
+	if (sysctl -w kernel.panic=$PANIC_REBOOT_TIME 2> /dev/null); then ok; else fail; fi
 fi
 
 # Clean out /etc & /var/{run/*,log/{b,w}tmpx}}.
@@ -481,27 +532,6 @@ fi
 # there could be a new kernel version.  remove old psdevtab database
 rm -f /etc/psdevtab
 
-# If needed increase number of available system files
-# There are two versions of each setting, because file names
-# changed between Linux 2.0 and 2.2
-if [ -n "$VFS_FILE_MAX" ] ; then
-	if [ -f /proc/sys/kernel/file-max -a "$VFS_FILE_MAX" -gt 0 ]; then
-        	echo $VFS_FILE_MAX >/proc/sys/kernel/file-max
-	fi
-	if [ -f /proc/sys/fs/file-max -a "$VFS_FILE_MAX" -gt 0 ]; then
-        	echo $VFS_FILE_MAX >/proc/sys/fs/file-max
-	fi
-fi
-if [ -n "$VFS_INODE_MAX" ] ; then
-	if [ -f /proc/sys/kernel/inode-max -a "$VFS_INODE_MAX" -gt 0 ]; then
-        	echo $VFS_INODE_MAX >/proc/sys/kernel/inode-max
-	fi
-	if [ -f /proc/sys/fs/inode-max -a "$VFS_INODE_MAX" -gt 0 ]; then
-        	echo $VFS_INODE_MAX >/proc/sys/fs/inode-max
-	fi
-fi
-
-
 # Now that we have all of our basic modules loaded and the kernel going,
 # let's dump the syslog ring somewhere so we can find it later
 dmesg > /var/log/dmesg
@@ -509,9 +539,14 @@ chmod 640 /var/log/dmesg
 
 # Now that we have all of our basic modules loaded and the kernel going,
 # let's dump the syslog ring somewhere so we can find it later
-kill -TERM `/sbin/pidof getkey` >/dev/null 2>&1
+kill -TERM $(/sbin/pidof getkey) >/dev/null 2>&1
 } &
 if is_yes "$PROMPT"; then
    /sbin/getkey i && touch /var/run/confirm
 fi
 wait
+echo
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
+

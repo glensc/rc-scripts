@@ -1,11 +1,11 @@
 #!/bin/sh
-# $Id: autogen.sh,v 1.5 2000/01/31 14:30:11 misiek Exp $
+# $Id: autogen.sh,v 1.5.2.1 2000/10/18 20:10:45 misiek Exp $
 # Run this to generate all the initial makefiles, etc.
 
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
-PKG_NAME="PLD/Linux rc-scripts"
+PKG_NAME="PLD GNU/Linux rc-scripts"
 
 (test -f $srcdir/configure.in \
   && test -d $srcdir/src) || {

@@ -1,19 +1,19 @@
 #!/bin/sh
 #
-#	$Id: ifdown,v 1.24 2000/05/31 17:55:05 zagrodzki Exp $
+#	$Id: ifdown,v 1.24.2.1 2000/10/18 20:10:54 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-
-DEV=$1
-
-[ -z "$DEV" ] && {
-    echo "usage: ifdown <device name>" >&2
-    exit 1
-}
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/.functions
+
+DEV=$1
+
+[ -z "$DEV" ] && {
+    nls "usage: %s <device name>" "ifdown" >&2
+    exit 1
+}
 
 if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
 	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
@@ -21,7 +21,7 @@ else
 	CONFIG="$DEV"
 fi
 
-if [ `id -u` != 0 ]; then
+if [ "$(id -u)" != "0" ]; then
     if [ -x /sbin/usernetctl ]; then
         exec /sbin/usernetctl $CONFIG down
     fi
@@ -31,60 +31,58 @@ fi
 
 source_config
 
-if [ "$BOOTPROTO" = bootp ]; then
-    DYNIP=pump
-fi
+# set all major variables
+setup_ip_param
 
-if [ "$BOOTPROTO" = "dhcp" ]; then
-    DYNIP=dhcpcd
-fi
-
-# IPv4, IPv6 or both ?
-[ -n "$IPV6_ADDR" ]             && IPv6=yes || IPv6=no
-[ -n "$IPADDR" -o -n "$DYNIP" ] && IPv4=yes || IPv4=no
-
-if [ -z "$PREFIX" -a -n "$NETMASK" ]; then
-	PREFIX="`calcprefix $NETMASK`"
-fi
-
-if [ -z "$NETMASK" -a -n "$PREFIX" ]; then
-	NETMASK="`calcnetmask $PREFIX`"
-fi
-
-FULLDEVNAME="$DEVICE"
-DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
-DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
 
+# shutdown tleds software
+if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
+	/usr/bin/tleds -qk "$DEVICE"
+fi
+	
 if [ -x $OTHERSCRIPT ]; then
-    if [ "$DEFAULTHANDLING" = "yes" ]; then
-        $OTHERSCRIPT $CONFIG $2
-    else
-	$OTHERSCRIPT $CONFIG $2
-	exit $?
+    if [ "$HANDLING" -eq 0 ]; then
+    	exec $OTHERSCRIPT $CONFIG $2
+    elif [ "$HANDLING" -eq 1 ]; then
+    	$OTHERSCRIPT $CONFIG $2
     fi
 fi
 
-if echo "$FULLDEVNAME" | grep -q ':' ; then
-    ISALIAS=yes
-else
-    ISALIAS=no
+# Check to make sure the device is actually up
+check_device_down && exit 0
+
+if [ "$BOOTMETHOD" = "bootp" -o "$BOOTMETHOD" = "pump" ]; then
+	/sbin/pump -r -i ${DEVICE}
 fi
 
-if [ "$ISALIAS" = "yes" ]; then
-	if [ "$IPv4" = "yes" ]; then
-		ip -family inet addr del ${IPADDR}/${PREFIX} dev ${DEVICE} label ${FULLDEVNAME}
-	fi
-		for ADDR in ${IPV6_ADDR} ; do
-			ip -family inet6 addr del ${ADDR} dev ${DEVICE} label ${FULLDEVNAME}
-		done
-else
-    if [ "$DYNIP" = "dhcpcd" ]; then
-       /sbin/dhcpcd -k $FULLDEVNAME
+if [ "$BOOTMETHOD" = "dhcp" ]; then
+    if [ -x /sbin/dhcpcd ];then
+        /sbin/dhcpcd -k ${DEVICE}
+    elif [ -x /sbin/dhclient ];then
+        if [ -f /var/run/dhclient.pid ];then
+            PID=$(cat /var/run/dhclient.pid)
+            if ps ax --no-header|grep -q $PID;then
+                kill $PID
+            fi
+        fi
+    elif [ -x /sbin/dhcpxd ];then
+        /sbin/dhcpxd -k ${DEVICE}
+    elif [ -x /sbin/pump ];then
+        pump -r -i ${DEVICE}
     fi
-    ip link set ${DEVICE} down
-    ip addr flush dev ${DEVICE} 2> /dev/null
 fi
 
+ip link set ${DEVICE} down
+ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+
+if [ "$HANDLING" -eq 4 ]; then
+    exit 0
+fi
+	
 exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
+
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
 

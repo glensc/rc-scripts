@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-sl,v 1.10 2000/06/12 08:38:15 waszi Exp $
+#	$Id: ifdown-sl,v 1.10.2.1 2000/10/18 20:10:55 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -11,17 +11,20 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 CONFIG=$1
 source_config
 
+# set all major variables
+setup_ip_param
+
 # signals ifup-sl not to persist
 rm -f /var/run/sl-$DEVICE.dev
 
 # we can use dip or direct slip connection via slattach
 if is_no "$DIRECT_CONNECT"; then
-PID=`pidof dip-$DEVICE`
+PID=$(pidof dip-$DEVICE)
 else
-PID=`pidof slattach`
+PID=$(pidof slattach)
 for x in $PID; do
 	if grep -q "$MODEMPORT" /proc/$x/cmdline; then
-	logger -p daemon.info -t ifdown-sl "signal TERM send to \"`ps -o cmd= $x`\" - this should be slattach"
+	logger -p daemon.info -t ifdown-sl "signal TERM send to \"$(ps -o cmd= $x)\" - this should be slattach"
 	kill -TERM $x
 	PID=$x
 	fi
@@ -33,7 +36,7 @@ fi
 # Grab the PID of connected dial-out daemon.
 #
 if [ -z "$PID" ]; then
-  PID=`pidof -- -dip\ \($IPADDR\)`
+  PID=$(pidof -- -dip\ \($IPADDR\))
 fi
 if [ -z "$PID" ]; then
   exit 1
@@ -52,10 +55,14 @@ fi
 
 kill -KILL $PID > /dev/null 2>&1
 if [ -d /proc/$PID ]; then
-  logger -p daemon.info -t ifdown-ppp "ifdown-ppp unable to kill pppd-$DEVICE" &
+  logger -p daemon.info -t ifdown-sl "ifdown-sl unable to kill sl-$DEVICE" &
 else
   /etc/sysconfig/network-scripts/ifdown-post $1
 fi
 
 exit 1
+
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
 

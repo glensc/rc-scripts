@@ -11,11 +11,16 @@ sbin_SCRIPTS = \
 networkscriptsdir = @networkscriptsdir@
 
 networkscripts_SCRIPTS = \
+	ifdown-br \
+	ifdown-lec \
 	ifdown-ppp \
 	ifdown-post \
 	ifdown-sl \
 	ifup-aliases \
+	ifup-atm \
+	ifup-br \
 	ifup-ipx \
+	ifup-lec \
 	ifup-plip \
 	ifup-post \
 	ifup-ppp \

@@ -1,11 +1,9 @@
 #!/bin/sh
 #
-#	$Id: ifdown-post,v 1.10 2000/03/27 16:07:52 misiek Exp $
+#	$Id: ifdown-post,v 1.10.2.1 2000/10/18 20:10:55 misiek Exp $
 #
 # This should be called whenever an interface goes down, not just when
 # it is brought down explicitly.
-
-run_down() { :; }
 
 CONFIG=$1
 . /etc/sysconfig/network
@@ -14,23 +12,22 @@ CONFIG=$1
 
 source_config
 
-# full device name as specified by user
-FULLDEVNAME="$DEVICE"
-# type of device for example "dummy" or "eth"
-DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
-# name of real device ie. eth0 when eth0,eth0:1,eth0:alias
-DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
+# set all major variables
+setup_ip_param
 
-if echo "$FULLDEVNAME" | grep -q ':' ; then
-        ISALIAS=yes
-else
-        ISALIAS=no
+# set REALDEVICE
+get_ppp_device_and_pid
+
+# Delete root queueing discipline
+if [ -n "$QDISC" ]; then
+	tc qdisc del dev "$REALDEVICE" root $QDISC
 fi
-
-# execute run_up() function (if available in device configuration file)
-[ "$ISALIAS" = "no" ] && run_down
 
 # Notify programs that have requested notification
 do_netreport
 
 exit 0
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
+

@@ -1,0 +1,9 @@
+#
+# /etc/sysconfig/interfaces/ifcfg-lec*	- LANE interfaces
+#
+DEVICE=lec0
+IP_1_ADDR=10.1.1.1/24
+IP4_PRIM_NR=1
+VLAN_NAME=default
+VLAN_FORESWITCH_NAME="$HOSTNAME-$VLAN_NAME"
+ONBOOT=yes

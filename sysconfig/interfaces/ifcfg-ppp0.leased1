@@ -1,5 +1,5 @@
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
-# $Id: ifcfg-ppp0.leased1,v 1.4 2000/04/21 17:39:40 jajcus Exp $
+# $Id: ifcfg-ppp0.leased1,v 1.4.2.1 2000/10/18 20:10:54 misiek Exp $
 # config file for setting up hardwired (leased) serial line.
 #  This configuration uses chats with modem, so You have to have an inteligent
 # modem (AT commands compatible).
@@ -7,9 +7,9 @@
 DEVICE=ppp0
 CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.leased1
 ONBOOT=yes
-IPADDR=192.168.255.254
+IP_1_ADDR=192.168.255.254/30
+IP4_PRIM_NR=1
 REMIP=192.168.255.253
-PREFIX=30
 HARDFLOWCTL=yes
 MODEMPORT=/dev/ttyS1
 LINESPEED=115200

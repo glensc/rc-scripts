@@ -1,10 +1,14 @@
 #!/bin/sh
 #
-#	$Id: ifup-sl,v 1.16 2000/06/12 08:38:15 waszi Exp $
+#	$Id: ifup-sl,v 1.16.2.1 2000/10/18 20:10:55 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 # ifup-post can't be done for slip :-( Solution: use PPP
+
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/.functions
 
 # become a daemon in case we have to persist.
 if [ "$1" != daemon ] ; then
@@ -15,9 +19,6 @@ if [ "$1" != daemon ] ; then
 fi
 shift
 
-. /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/.functions
-
 CONFIG=$1
 source_config
 
@@ -25,12 +26,15 @@ if [ "foo$2" = "fooboot" ] && is_no ${ONBOOT}; then
   exit
 fi
 
+# set all major variables
+setup_ip_param
+
 if [ -z "$RETRYTIMEOUT" ]; then
   RETRYTIMEOUT=30
 fi
 
 # Try to load slip module
-if [ "`ls -R /lib/modules/\`uname -r\`/ | grep slip.o`" != "" ]; then
+if is_module "slip"; then
 	/sbin/modprobe -s -k slip
 fi
 
@@ -39,7 +43,7 @@ if is_no "$DIRECT_CONNECT"; then
 
 [ -x /usr/sbin/dip ] || {
   nls "/usr/sbin/dip does not exist or is not executable"
-  nls "ifup-sl for $DEVICE exiting"
+  nls "ifup-sl for %s exiting" "$DEVICE"
   logger -p daemon.info -t ifup-sl \
     "`nls '/usr/sbin/dip does not exist or is not executable for'` $DEVICE"
   exit 1
@@ -50,17 +54,17 @@ DIPSCRIPT=/etc/sysconfig/interfaces/data/dip-$DEVNAME
   DIPSCRIPT=/etc/sysconfig/interfaces/data/dip-$PARENTDEVNAME
 }
 [ -f $DIPSCRIPT ] || {
-  echo "/etc/sysconfig/interfaces/data/dip-$DEVICE `nls 'does not exist'`"
+  echo "/etc/sysconfig/interfaces/data/dip-$DEVICE $(nls 'does not exist')"
   echo "ifup-sl for $DEVICE exiting"
   logger -p daemon.info -t ifup-sl \
-    "/etc/sysconfig/interfaces/data/dip-$DEVICE `nls 'does not exist for'` $DEVICE"
+    "/etc/sysconfig/interfaces/data/dip-$DEVICE $(nls 'does not exist for') $DEVICE"
   exit 1
 }
 
 while : ; do
   echo > /var/run/sl-$DEVICE.dev
   (logger -p daemon.info -t ifup-sl \
-    "`nls 'dip started for'` $DEVICE `nls 'on'` $MODEMPORT `nls 'at'` $LINESPEED" &)&
+    "$(nls 'dip started for %s on %s at %s' "$DEVICE" "$MODEMPORT" "$LINESPEED")" &)&
   doexec /usr/sbin/dip dip-$DEVICE $DIPSCRIPT
   if is_no "$PERSIST" || [ ! -f /var/run/sl-$DEVICE.dev ] ; then
     exit 0
@@ -81,26 +85,43 @@ else
 [ -z "$PROTOCOL" ] && PROTOCOL=slip
 
 [ -x /sbin/slattach ] || {
-	nls "/sbin/slattach does not exist or is not executable"
-        echo "ifup-sl - $DEVICE `nls exiting`"
+	nls "%s is missing. Can't continue." "/sbin/slattach"
+        echo "ifup-sl - $DEVICE $(nls exiting)"
         logger -p daemon.info -t ifup-sl \
-        "`nls '/sbin/slattach does not exist or is not executable for'` $DEVICE"
+        "$(nls '/sbin/slattach does not exist or is not executable for %s' "$DEVICE")"
         exit 1
 }
 
         echo > /var/run/sl-$DEVICE.dev
         (logger -p daemon.info -t ifup-sl \
-        "`nls 'slattach started for'` $DEVICE `nls on` $MODEMPORT `nls at` $LINESPEED" &)&
+        "$(nls 'slattach started for %s on %s at %s' "$DEVICE" "$MODEMPORT" "$LINESPEED")" &)&
 
          slattach -p $PROTOCOL -s $LINESPEED $MODEMPORT &
          usleep 1500
-	 ip link set $DEVICE mtu $MTU up
-	 ip -family inet addr add $IPADDR peer $REMIP dev $DEVICE
+	 
+	 if is_yes "$IPV4_NETWORKING"; then
+	 	if [ -n "$IP4ADDR" -a -n "$REMIP" ]; then
+		 	# Peer is only for IPv4
+		 	ip -4 addr add $IP4ADDR peer $REMIP dev $DEVICE
+		fi
+	 fi
 
-	 # Set defaultroute
-	 if is_yes "$DEFROUTE"; then
-		ip -family inet route add default dev $DEVICE
-         fi
+	 if is_yes "$IPV6_NETWORKING"; then
+		 if [ -n "$IP6ADDR" ]; then
+			 ip -6 addr add $IP6ADDR dev $DEVICE
+		 fi
+	 fi
+	 
+	 ip link set $DEVICE mtu $MTU up
+
+	 # IPv4/6 gateways and default routes
+	 setup_ip_gw_ro
+		
+	 /etc/sysconfig/network-scripts/ifup-post $1
 
 fi
+
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
 

@@ -1,38 +1,72 @@
 #!/bin/sh
 #
-#	$Id: ifup-aliases,v 1.10 2000/06/12 08:38:15 waszi Exp $
+#	$Id: ifup-aliases,v 1.10.2.1 2000/10/18 20:10:55 misiek Exp $
 #
-# adds aliases of device $1
+# adds all addresses of device $1
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/.functions
 
-if [ "$1" = "" ]; then
-	echo "usage: $0 <net-device>"
-	exit 1
-fi
+# device name must be ifcfg-somename
+DEV=$1
 
-# bash 2 is so much fun.
-if [ "$BASH_VERSINFO" ]; then
-        shopt -s nullglob
+[ -z "$DEV" ] && {
+    nls "usage: %s <device name>" "ifup-aliases" >&2
+    exit 1
+}
+
+if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
+        CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
 else
-        allow_null_glob_expansion=foo
+        CONFIG="$DEV"
 fi
 
-cd /etc/sysconfig/interfaces/
+source_config
 
-for alias in ifcfg-$1:* ; do
-        [ -f $alias ] && /sbin/ifup $alias
+# set all major variables
+setup_ip_param
+		    
+# Add all addresses
+for nr in $(awk 'BEGIN { for (j=1; j<256; j++) print j}'); do
+	eval IP_ADDR="\$IP_${nr}_ADDR"
+	eval IP_ADDR_OPT="\$IP_${nr}_AOPTS"
+	eval IP_ROUTE_OPT="\$IP_${nr}_ROPTS"
+	
+	[ -z "$IP_ADDR" ] && continue
+	# Be sure that primary address is added
+	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
+		if (ip addr show dev $DEVICE | egrep -q "[[:space:]]${IP_ADDR}[[:space:]]"); then
+			continue
+		fi
+	fi
+	# Check for IPv6 address
+	if (echo $IP_ADDR | grep -q ":"); then
+		if is_yes "${IPV6_NETWORKING}"; then
+			ip -6 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
+		fi
+	elif is_yes "${IPV4_NETWORKING}"; then
+	        # If broadcast is missing then autocalculate it
+	        if ! (echo $IP_ADDR_OPT | egrep -q "brd|broadcast"); then
+	                IP_ADDR_OPT="brd + ${IP_ADDR_OPT}"
+	        fi
+		ip -4 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
+	fi
 done
 
-for alias in `find_ldap_aliases` ; do
-        /sbin/ifup $alias
-done
+# Setup IPv4-compatible addresses
+if is_yes "$IPV6_NETWORKING" && [ "$BOOTMETHOD6" = "v4compat" ]; then
+	# enable automatic tunnels
+	ip link set sit0 up
 
-if [ "$BASH_VERSINFO" ]; then
-        shopt -u nullglob
-else
-        unset allow_null_glob_expansion
+	# add v4compat addresses to device
+	for addr in $(ip -4 addr show scope global dev $DEVICE | \
+		awk '/inet/ { print $2 }' | awk -F"/" '{ print $1 }'); do
+		ip -6 addr add ::$addr dev $DEVICE
+	done
 fi
+
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
 
