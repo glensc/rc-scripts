@@ -1,3 +1,4 @@
 - brak jest mo¿liwo¶ci postawienia ifc tylko na ipv6
 - nie wszyscy maj± zainstalowan± quote
 - dlaczego nie mo¿na wykonaæ `tnlup cron` tylko trzeba `tnlup tnlcfg-cron` ?
+- przystosowaæ rc.sysinit do e2progs 1.15 (LABEL= UUID=)
