@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-ppp,v 1.8 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: ifup-ppp,v 1.9 2000/03/31 13:10:22 misiek Exp $
 #
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
@@ -32,9 +32,8 @@ CONFIG=$1
 . /etc/sysconfig/network-scripts/.functions
 
 source_config
-if [ -z "$HOLDOFF" ]; then
-  HOLDOFF=30
-fi
+[ -z "$HOLDOFF" ] && HOLDOFF=30
+
 if [ "$2" = "boot" -a "${ONBOOT}" = "no" ]; then
   exit
 fi
@@ -54,7 +53,8 @@ fi
 #}
 opts="lock"
 if [ "${PERSIST}" = "yes" ]; then
-  opts="$opts persist holdoff $HOLDOFF"
+  [ -z "${MAXFAIL}" ] && MAXFAIL=0
+  opts="$opts persist holdoff $HOLDOFF maxfail $MAXFAIL"
 fi
 if [ "${DEMAND}" = "yes" ]; then
 #opts="$opts demand active-filter $ACTIVEFILTER idle $IDLE"
