@@ -357,7 +357,7 @@ killproc()
 	[ -z "$pid" ] && pid=$(pidofproc "$base")
 
 	# Kill it.
-	if [ -n "$pid" -a "$pid" != "$PPID" ] && checkpid $pid 2>&1 ; then
+	if [ -n "$pid" -a "$pid" != "$$" ] && checkpid $pid 2>&1 ; then
 		if [ "$notset" = "1" ] ; then
 			if checkpid $pid 2>&1; then
 				# TERM first, then KILL if not dead
