@@ -91,25 +91,25 @@ fi
 vlan_setup
 if is_yes $ETH_VLANS && `echo $DEVICE | grep -q ^eth` ; then
     if echo "${DEVICE}" | grep -q '\.' ; then
-	# downujemy vlan
 	ip link set ${DEVICE} down
 	ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+	ip link set ${DEVICE} down
 	/sbin/vconfig rem ${DEVICE} 2>&1 > /dev/null
     else
 	# downujemy interfejs nadrzedny do vlanow
 	for VLANDEVICE in `ls /proc/net/vlan | grep ^${DEVICE}` ; do
 	    # najpierw wszystkie vlany po kolei
-	    ip link set ${VLANDEVICE} down
 	    ip addr flush dev ${VLANDEVICE} 2>&1 | grep -v "Nothing to flush"
+	    ip link set ${VLANDEVICE} down
 	    /sbin/vconfig rem ${VLANDEVICE} 2>&1 > /dev/null
 	done 
 	# a potem dopiero interfejs nadrzedny
-	ip link set ${DEVICE} down
 	ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+	ip link set ${DEVICE} down
     fi
 else
-    ip link set ${DEVICE} down
     ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+    ip link set ${DEVICE} down
 fi    
 
 if [ "$HANDLING" = "4" ]; then
