@@ -23,7 +23,7 @@ OPTION4=5	#
 [ -f /etc/sysconfig/<service> ] && . /etc/sysconfig/<service>
 
 # Check that networking is up.
-if [ "${NETWORKING}" = "no" ]; then
+if is_no "${NETWORKING}"; then
 	# nls "ERROR: Networking is down. %s can't be run." <service>
 	msg_Network_Down <service>
 	exit 1
