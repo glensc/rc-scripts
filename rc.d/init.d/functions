@@ -419,7 +419,7 @@ daemon()
 #	elif [ -n "`$SH -c 'echo ${.sh.version}' 2>/dev/null`" ]; then
 	fi
 
-	[ -n "$limits" ] && eval `echo "$limits" | awk 'BEGIN {RS="[-\n]";} !/^ *$/ { print "ulimit -" $0; }'`
+	[ -n "$limits" ] && eval `echo "$limits" | awk 'BEGIN {RS="[\n-]";} !/^ *$/ { printf("ulimit -%s ;", $0); }'`
 
 	# And start it up.
 	busy
