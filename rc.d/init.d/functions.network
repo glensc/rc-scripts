@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.62 2001/10/01 17:10:36 baggins Exp $
+# $Id: functions.network,v 1.63 2001/10/09 22:49:00 baggins Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -274,7 +274,7 @@ fi
 
 # new rc-scripts 0.4.x option
 if [ -z "$HANDLING" ]; then
-	typeset -i HANDLING=0
+	HANDLING=0
 fi
 
 # set handling for bridge
