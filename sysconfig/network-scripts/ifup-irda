@@ -55,7 +55,7 @@ fi
 
 /sbin/irattach ${IRDAPORT} ${IRDAOPTS}
 	
-ip link set dev ${DEVICE} multicast ${MULTICAST} arp ${ARP}
+ip link set dev ${DEVICE} multicast ${MULTICAST} ${ARP}
 if ! (ip link set dev ${DEVICE} up); then
 	nls "problems with setting %s %s" "IrDA" "${DEVICE}"
 	exit 1
