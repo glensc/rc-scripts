@@ -1,8 +1,9 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.28 2000/04/12 23:21:48 kloczek Exp $
+# $Id: pl.po,v 1.29 2000/05/13 07:11:55 wiget Exp $
 #
+# ,fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: rc-scripts 0.0.9\n"
@@ -14,63 +15,72 @@ msgstr ""
 "Content-Type: text/plain; charset=iso8850-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../rc.d/init.d/network:174
+#: ../rc.d/init.d/network:191
 msgid "Configured devices:"
 msgstr "Skonfigurowane urzadzenia sieciowe:"
 
-#: ../rc.d/rc.sysinit:112
+#: ../rc.d/rc.sysinit:136
+msgid "Today's date: `LC_CTYPE=C date`"
+msgstr ""
+
+#: ../rc.d/rc.sysinit:169
 msgid "Checking root filesystems."
 msgstr "Sprawdzanie glownego systemu plikow."
 
-#: ../rc.d/rc.sysinit:425 ../rc.d/rc.sysinit:426
+#: ../rc.d/rc.sysinit:67
+#, fuzzy
+msgid "Mounting Device Filesystem"
+msgstr "Podlaczenie lokalnych systemow plikow."
+
+#: ../rc.d/rc.sysinit:451
 msgid "Enabling swap space"
 msgstr "Wlaczenie swapa"
 
-#: ../rc.d/init.d/functions:125
+#: ../rc.d/init.d/functions:123
 msgid "Usage: %s"
 msgstr "Uzycie: %s"
 
-#: ../rc.d/rc.sysinit:168
+#: ../rc.d/rc.sysinit:227
 msgid "Enabling Delay Login"
 msgstr "Wlaczenie opozniania logowania"
 
-#: ../rc.d/init.d/functions.network:298
+#: ../rc.d/init.d/functions.network:289
 msgid "Setting up IP spoofing protection"
 msgstr "Ustawienie zabezpieczenia przed IP spoofingiem"
 
-#: ../rc.d/rc.sysinit:381
-msgid "Setting clock"
-msgstr "Ustawienie zegara systemowego"
-
-#: ../rc.d/rc.sysinit:135 ../rc.d/rc.sysinit:318
+#: ../rc.d/rc.sysinit:192 ../rc.d/rc.sysinit:377
 msgid "Automatic reboot in progress."
 msgstr "Automatyczny restart w toku."
 
-#: ../rc.d/init.d/timezone:40
-msgid "Setting time zone information ($TIME_ZONE)"
-msgstr "Ustawianie informacji o strefi czasowej ($TIME_ZONE)"
+#: ../rc.d/init.d/functions:352
+msgid "%s dead but pid file exists"
+msgstr "%s zabity ale plik z numerem procesu istnieje"
 
-#: ../rc.d/rc:179
-msgid "%sResource Manager: %sRunlevel has been reached"
-msgstr "%sZarzadca zasobow: %sZostal osiagniety poziom"
-
-#: ../rc.d/rc.sysinit:65
+#: ../rc.d/rc.sysinit:73
 msgid "Starting Device Filesystem Daemon"
-msgstr "Startuje Zarzadce Systemu Plikow Urzadzen (DevFsd)"
+msgstr "Startuje Zarzadce Systemu Plikow Urzadzen (devfsd)"
 
-#: ../rc.d/init.d/functions:363
-msgid "%s dead but subsys locked\n"
-msgstr "%s zabity ale podsystem zablokowany\n"
+#: ../rc.d/init.d/functions:103
+msgid "%s service is already running."
+msgstr "Usluga %s juz jest uruchomiona."
 
-#: ../rc.d/init.d/functions:195
+#: ../rc.d/init.d/timezone:41
+msgid "Setting time zone information (%s)"
+msgstr "Ustawianie informacji o strefi czasowej (%s)"
+
+#: ../rc.d/init.d/functions:193
 msgid "$STRING"
 msgstr "$STRING"
 
-#: ../rc.d/rc.sysinit:289
+#: ../rc.d/init.d/timezone:38
+msgid "Setting time zone information (%s, %s)"
+msgstr "Ustawianie informacji o strefi czasowej (%s, %s)"
+
+#: ../rc.d/rc.sysinit:348
 msgid "Automatic reboot in progress"
 msgstr "Automatyczny restart w toku"
 
-#: ../rc.d/rc.sysinit:123 ../rc.d/rc.sysinit:277 ../rc.d/rc.sysinit:306
+#: ../rc.d/rc.sysinit:180 ../rc.d/rc.sysinit:336 ../rc.d/rc.sysinit:365
 msgid "*** when you leave the shell."
 msgstr "*** po opuszczeniu powloki."
 
@@ -80,9 +90,9 @@ msgstr "Wysylanie do wszystkich procesow sygnalu KILL"
 
 #: ../rc.d/init.d/random:55
 msgid "The random data source is missing"
-msgstr "Oczekiwane zrodlo losowych danych"
+msgstr "Oczekiwane zrodlo danych losowych"
 
-#: ../rc.d/init.d/functions:140
+#: ../rc.d/init.d/functions:138
 msgid "BUSY"
 msgstr " ZAJETY "
 
@@ -94,61 +104,53 @@ msgstr "Przekazywanie procesowi INIT by przeszedl do trybu single"
 msgid "Entering non-interactive startup"
 msgstr "Wchodze w tryb nieinteraktywny"
 
+#: ../rc.d/init.d/functions:335 ../rc.d/init.d/functions:343
+msgid "%s (pid %s) is running..."
+msgstr "%s (pid %s) jest uruchomiony..."
+
 # Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
 # must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
-#: ../rc.d/init.d/functions:131 ../rc.d/init.d/functions:146
+#: ../rc.d/init.d/functions:129 ../rc.d/init.d/functions:144 ../rc.d/rc:94
 msgid "DONE"
 msgstr "ZROBIONE"
 
-#: ../rc.d/rc.sysinit:233
-msgid "Loading midi module"
-msgstr "Ladowanie modul obslugi midi"
-
-#: ../rc.d/init.d/network:176
+#: ../rc.d/init.d/network:193
 msgid "Configured tunnels:"
 msgstr "Skonfigurowane tunele:"
 
-#: ../rc.d/rc.sysinit:230
+#: ../rc.d/rc.sysinit:289
 msgid "Loading sound module"
 msgstr "Ladowanie modul obslugi dzwieku"
 
-#: ../rc.d/rc.shutdown:59 ../rc.d/rc.sysinit:288 ../rc.d/rc.sysinit:317
+#: ../rc.d/rc.shutdown:59 ../rc.d/rc.sysinit:347 ../rc.d/rc.sysinit:376
 msgid "Remounting root filesystem in ro mode"
 msgstr "Przelaczenie glownego systemu plikow w tryb tylko do odczytu"
 
-#: ../rc.d/init.d/functions.network:244
+#: ../rc.d/init.d/functions.network:235
 msgid "Enabling dynamic IP patch"
 msgstr ""
 
-#: ../rc.d/rc.sysinit:453
-msgid "Setting %s seconds for kernel reboot after panic."
-msgstr "Restartuj system po %s sekundach od zawieszenia siê j±dra."
-
-#: ../rc.d/init.d/functions:340 ../rc.d/init.d/functions:348
-msgid "%s (pid %s) is running...\n"
-msgstr "%s (pid %s) jest uruchomiony...\n"
-
-#: ../rc.d/rc:159
+#: ../rc.d/rc:161
 msgid "The system is halted"
 msgstr "Dzialanie systemu zatrzymane"
 
-#: ../rc.d/init.d/functions:100
+#: ../rc.d/init.d/functions:98
 msgid "Starting %s service"
-msgstr "Startowanie serwisu %s"
+msgstr "Uruchomienie uslugi %s"
 
-#: ../rc.d/rc.sysinit:157
+#: ../rc.d/rc.sysinit:216
 msgid "Remounting root filesystem in rw mode"
 msgstr "Przelaczenie glownego systemu plikow w tryb zapis/odczyt"
 
-#: ../rc.d/rc.sysinit:280
+#: ../rc.d/rc.sysinit:339
 msgid "(RAID Repair)# "
 msgstr "(Naprawa RAID)# "
 
-#: ../rc.d/rc:163
+#: ../rc.d/rc:165
 msgid "Please stand by while rebooting the system"
 msgstr "Prosze czekac - restart system"
 
-#: ../rc.d/rc.sysinit:91
+#: ../rc.d/rc.sysinit:143
 msgid "Host:"
 msgstr "Host:"
 
@@ -156,15 +158,11 @@ msgstr "Host:"
 msgid "Initializing random number generator"
 msgstr "Inicjalizacja generatora liczb losowych"
 
-#: ../rc.d/init.d/functions:158
+#: ../rc.d/init.d/functions:156
 msgid "FAIL"
 msgstr "PROBLEMY"
 
-#: ../rc.d/init.d/timezone:38
-msgid "Setting time zone information ($ZONE_INFO_AREA, $TIME_ZONE)"
-msgstr "Ustawianie informacji o sterfie czasowej ($ZONE_INFO_AREA, $TIME_ZONE)"
-
-#: ../rc.d/init.d/functions.network:281
+#: ../rc.d/init.d/functions.network:272
 msgid "Setting default local port range"
 msgstr "Ustawienie domyslnego zakresu portow lokalnych"
 
@@ -172,32 +170,37 @@ msgstr "Ustawienie domyslnego zakresu portow lokalnych"
 msgid "Turning off RAID for %s"
 msgstr "Wylaczenie obslugi RAID dla %s"
 
-#: ../rc.d/rc.sysinit:327
+#: ../rc.d/rc.sysinit:386
 msgid "Mounting local filesystems."
 msgstr "Podlaczenie lokalnych systemow plikow."
 
-#: ../rc.d/rc.sysinit:296
+#: ../rc.d/rc.sysinit:355
 msgid "Checking filesystems."
 msgstr "Sprawdzenie systemow plikow."
 
-#: ../rc.d/rc.sysinit:249 ../rc.d/rc.sysinit:273 ../rc.d/rc.sysinit:291
+#: ../rc.d/rc.sysinit:308 ../rc.d/rc.sysinit:332 ../rc.d/rc.sysinit:350
 msgid "Starting up RAID devices."
 msgstr "Ustawianie urzadzen RAID"
 
-#: ../rc.d/rc.sysinit:161
+#: ../rc.d/rc.sysinit:220
 msgid "Checking root filesystem quotas"
 msgstr "Sprawdzanie quota na glownym systemie plikow"
 
-#: ../rc.d/rc.sysinit:121 ../rc.d/rc.sysinit:304
+#: ../rc.d/rc.sysinit:404
+msgid "Setting %s seconds for kernel reboot after panic."
+msgstr "Restart system po %s sekundach od zawieszenia sie jadra."
+
+#: ../rc.d/rc.sysinit:178 ../rc.d/rc.sysinit:363
 msgid "*** An error occurred during the file system check."
 msgstr ""
 "*** Podczas sprawdzania systemow plikow wykryto blad niemozliwy do usuniecia."
 
-#: ../rc.d/init.d/functions:178 ../rc.d/rc.shutdown:70
+#: ../rc.d/init.d/functions:176 ../rc.d/init.d/timezone:39
+#: ../rc.d/init.d/timezone:42 ../rc.d/rc.shutdown:70
 msgid "$MESSAGE"
 msgstr "$MESSAGE"
 
-#: ../rc.d/rc.sysinit:275
+#: ../rc.d/rc.sysinit:334
 msgid "*** An error occurred during the RAID startup"
 msgstr ""
 "*** Podczas inicjacji urzadzen RAID wykryto blad niemozliwy do usuniecia."
@@ -206,104 +209,113 @@ msgstr ""
 msgid "Allowing users to login"
 msgstr "Pozwalenie uzytkownikom na logowanie sie"
 
-#: ../rc.d/rc.sysinit:222
+#: ../rc.d/rc.sysinit:281
 msgid "Finding module dependencies"
 msgstr "Wyszukiwanie powiazan pomiedzy modulami"
 
-#: ../rc.d/rc.shutdown:42 ../rc.d/rc.sysinit:133 ../rc.d/rc.sysinit:287
-#: ../rc.d/rc.sysinit:316
+#: ../rc.d/init.d/functions:358
+msgid "%s dead but subsys locked"
+msgstr "%s zabity ale podsystem zablokowany"
+
+#: ../rc.d/rc.shutdown:42 ../rc.d/rc.sysinit:190 ../rc.d/rc.sysinit:346
+#: ../rc.d/rc.sysinit:375
 msgid "Unmounting file systems"
 msgstr "Odlaczenie systemow plikow"
-
-#: ../rc.d/rc.sysinit:421
-msgid "Date set to"
-msgstr "Data ustawiona na"
 
 #: ../rc.d/init.d/single:32 ../rc.d/rc.shutdown:24
 msgid "Sending all processes the TERM signal"
 msgstr "Wysylanie do wszystkich procesow sygnalu TERM"
 
-#: ../rc.d/init.d/functions.network:211 ../rc.d/init.d/functions.network:222
+#: ../rc.d/init.d/functions.network:202 ../rc.d/init.d/functions.network:213
 msgid "Setting %s to %s"
 msgstr "Ustawienie %s na %s"
 
-#: ../rc.d/rc.sysinit:88
+#: ../rc.d/rc.sysinit:140
 msgid "Activating swap partitions"
 msgstr "Aktywacja partycji swap"
+
+#: ../rc.d/init.d/functions:361
+msgid "%s is stopped"
+msgstr "%s jest zatrzymany"
 
 #: ../rc.d/init.d/allowlogin:28
 msgid "System shutdown in progress \n"
 msgstr "Zamykanie systemu w toku \n"
 
-#: ../rc.d/rc:92
-msgid "%sResource Manager: %sEntering runlevel number%s"
-msgstr "%sZarzadca zasobow: %sWejscie na poziom"
-
-#: ../rc.d/init.d/functions:357
-msgid "%s dead but pid file exists\n"
-msgstr "%s zabity ale plik z numerem procesu istnieje\n"
-
-#: ../rc.d/rc.sysinit:81
+#: ../rc.d/rc.sysinit:89
 msgid "Turning off Stop-A/Break-A"
 msgstr "Wylaczam klawisz Stop-A/Break-A"
 
-#: ../rc.d/init.d/functions.network:272
+#: ../rc.d/init.d/functions.network:263
 msgid "Setting local port range"
 msgstr "Ustawienie zakresu portow lokalnych"
 
-#: ../rc.d/rc.sysinit:126 ../rc.d/rc.sysinit:309
+#: ../rc.d/rc.sysinit:183 ../rc.d/rc.sysinit:368
 msgid "(Repair filesystem)# "
 msgstr "(Naprawa systemu plikow)# "
 
-#: ../rc.d/init.d/functions:366
-msgid "%s is stopped\n"
-msgstr "%s jest zatrzymany\n"
+#: ../rc.d/rc:178 ../rc.d/rc:179
+msgid "%sResource Manager: %sRunlevel has been reached"
+msgstr "%sZarzadca zasobow: %sZostal osiagniety poziom"
 
-#: ../rc.d/rc.sysinit:122 ../rc.d/rc.sysinit:276 ../rc.d/rc.sysinit:305
+#: ../rc.d/init.d/functions:93
+msgid "ERROR: Networking is down. %s can't be run."
+msgstr "BLAD: Siec nie jest uruchomiona. %s nie moze zostac uruchomiony."
+
+#: ../rc.d/rc.sysinit:179 ../rc.d/rc.sysinit:335 ../rc.d/rc.sysinit:364
 msgid "*** Dropping you to a shell; the system will reboot"
 msgstr "*** Uruchamiam powloke; system zostanie zrestartowany"
 
-#: ../rc.d/init.d/functions:120
+#: ../rc.d/init.d/functions:118
 msgid "Reloading %s service"
-msgstr ""
+msgstr "Przeladowanie uslugi %s"
 
-#: ../rc.d/init.d/functions:372
+#: ../rc.d/rc:92 ../rc.d/rc:93
+msgid "%sResource Manager: %sEntering runlevel number"
+msgstr "%sZarzadca zasobow: %sWejscie na poziom"
+
+#: ../rc.d/init.d/functions:367
 msgid "Start service"
-msgstr "Wystartowaæ serwis"
-
-#: ../rc.d/init.d/functions:105
-msgid "%s service is already running.\n"
-msgstr "Serwis %s juz jest uruchomiony.\n"
+msgstr "Uruchomiono usluge"
 
 #: ../rc.d/rc.shutdown:77
 msgid "Remounting remaining filesystems ro mode"
 msgstr "Przelaczenie pozostalych systemow plikow w tryb tylko do odczytu"
 
-#: ../rc.d/init.d/functions.network:178
+#: ../rc.d/init.d/functions.network:169
 msgid "Starting network router discovery daemon"
 msgstr ""
 
-#: ../rc.d/init.d/functions:152
+#: ../rc.d/init.d/functions:150
 msgid "WORK"
 msgstr "AKTYWUJE"
 
-#: ../rc.d/init.d/functions:132
+#: ../rc.d/init.d/functions:130
 msgid "$@"
 msgstr "$@"
 
-#: ../rc.d/rc.sysinit:170
+#: ../rc.d/rc.sysinit:292
+msgid "Loading synthesiser module"
+msgstr "Ladowanie modul syntetyzera"
+
+#: ../rc.d/init.d/functions:113
+msgid "%s service is not running."
+msgstr "Usluga %s nie jest uruchomiona."
+
+#: ../rc.d/rc.sysinit:229
 msgid "System bootup in progress  - please wait"
 msgstr "Start systemu w toku - prosze czekac"
 
-#: ../rc.d/init.d/functions:95
-msgid "ERROR: Networking is down. %s can't be run.\n"
-msgstr ""
+#: ../rc.d/rc.sysinit:135
+#, fuzzy
+msgid "Setting clock$CLOCKDEF"
+msgstr "Ustawienie zegara systemowego"
 
 #: ../rc.d/init.d/random:40
 msgid "Saving random seed"
 msgstr "Zapisanie podstawy generatora losowego"
 
-#: ../rc.d/rc.sysinit:336
+#: ../rc.d/rc.sysinit:395
 msgid "Turning on quotas for local filesystems"
 msgstr "Wlaczam quote na lokalnych systemach plikow"
 
@@ -319,43 +331,31 @@ msgstr "Zrodlo losowych danych istnieje"
 msgid "Press"
 msgstr "Prosze wcisnac"
 
-#: ../rc.d/rc.sysinit:57
-msgid "to enter interactive startup."
-msgstr "zeby wejsc w tryb nieinteraktywny"
-#: ../rc.d/rc.sysinit:75
+#: ../rc.d/rc.sysinit:83
 msgid "Turning off Magic SysRq key"
-msgstr "Wylaczam klawisz Magic SysRq"
+msgstr "Wylaczenie klawisza Magic SysRq"
 
-#: ../rc.d/init.d/functions:115
-msgid "%s service is not running.\n"
-msgstr "Serwis %s nie jest uruchomiony.\n"
-
-# (4 + "\b" * count of letters) in one of five previous words
-#: ../rc.d/init.d/functions:169
-msgid "\b\b\b\b\b\b\b\b"
-msgstr "\b\b\b\b\b\b\b\b\b\b\b\b"
-
-#: ../rc.d/rc.sysinit:151
+#: ../rc.d/rc.sysinit:210
 msgid "Setting up ISA PNP devices"
 msgstr "Ustawienie urzadzen ISA PNP"
 
-#: ../rc.d/init.d/timezone:45
+#: ../rc.d/init.d/timezone:47
 msgid "Unsetting time zone information"
 msgstr ""
 
-#: ../rc.d/rc:160 ../rc.d/rc:164
+#: ../rc.d/rc:162 ../rc.d/rc:166
 msgid "On the next boot fsck will be skipped."
 msgstr "Przy nastepnym starcie systemu program fsck bedzie pominiety."
 
-#: ../rc.d/init.d/functions:164
+#: ../rc.d/init.d/functions:162
 msgid "DIED"
 msgstr " ZGINAL "
 
-#: ../rc.d/init.d/functions.network:254
+#: ../rc.d/init.d/functions.network:245
 msgid "Disabling dynamic IP patch"
 msgstr ""
 
-#: ../rc.d/init.d/functions.network:307
+#: ../rc.d/init.d/functions.network:298
 msgid "Setting down IP spoofing protection"
 msgstr ""
 
@@ -363,26 +363,40 @@ msgstr ""
 msgid "Turning off swap and accounting"
 msgstr "Wylaczemoe swap i zliczania"
 
-#: ../rc.d/rc.sysinit:95
+#: ../rc.d/rc.sysinit:147
 msgid "NIS Domain:"
 msgstr "Domena NIS:"
 
-#: ../rc.d/init.d/functions:110
+#: ../rc.d/init.d/functions:108
 msgid "Stopping %s service"
-msgstr "Zatrzymywanie serwisu %s"
+msgstr "Zatrzymywanie uslugi %s"
 
-#: ../rc.d/init.d/network:179
+#: ../rc.d/init.d/network:196
 msgid "Currently active devices and tunnels:"
 msgstr "Aktywne urzadzenia sieciowe i tunele:"
 
-#: ../rc.d/rc.sysinit:320
+#: ../rc.d/rc.sysinit:379
 msgid "Checking filesystem quotas"
 msgstr "Sprawdzenie quota w systemach plikow"
 
-#: ../rc.d/rc.sysinit:331
+#: ../rc.d/rc.sysinit:390
 msgid "Loading default system font"
-msgstr "Ladowanie podstawowy font systemowy"
+msgstr "Ladowanie podstawowej czcionki systemowej"
 
-#: ../rc.d/rc:170
+#: ../rc.d/rc:172
 msgid "Setting up /etc/ld.so.cache"
 msgstr "Ustawienie /etc/ld.so.cache"
+
+#~ msgid "Loading midi module"
+#~ msgstr "Ladowanie modul obslugi midi"
+
+
+#~ msgid "Date set to"
+#~ msgstr "Data ustawiona na"
+
+#~ msgid "to enter interactive startup."
+#~ msgstr "zeby wejsc w tryb interaktywny"
+
+# (4 + "\b" * count of letters) in one of five previous words
+#~ msgid "\b\b\b\b\b\b\b\b"
+#~ msgstr "\b\b\b\b\b\b\b\b\b\b\b\b"
