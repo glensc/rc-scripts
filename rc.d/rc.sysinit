@@ -421,9 +421,9 @@ if [ -x /sbin/evms_activate ]; then
 fi
 # LVM
 if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-	modprobe -s lvm-mod >/dev/null 2>&1
+	modprobe -s -k lvm-mod >/dev/null 2>&1
 	# device mapper (2.5+ and patched 2.4)
-	modprobe -s dm-mod >/dev/null 2>&1
+	modprobe -s -k dm-mod >/dev/null 2>&1
 	run_cmd "Scanning for LVM volume groups" /sbin/vgscan && \
 	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y
 fi
