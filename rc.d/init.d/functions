@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.35 2000/02/03 11:49:04 misiek Exp $
+# $Id: functions,v 1.36 2000/02/18 17:59:19 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -65,7 +65,13 @@ printf_()
 # National language support function
 nls()
 {
-if [ -x /bin/gettext ] || [ -x /usr/bin/gettext ]; then
+if [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
+	OLD_NLS_DOMAIN="$NLS_DOMAIN"
+	if [ "$1" = "--nls-domain" ]; then
+		shift
+		NLS_DOMAIN="$1"
+		shift
+	fi
 	if [ -z "$NLS_DOMAIN" ]; then
 		NLS_DOMAIN="rc-scripts"
 	fi
@@ -79,6 +85,7 @@ if [ -x /bin/gettext ] || [ -x /usr/bin/gettext ]; then
 	shift
 	printf_ "$text" "$@"
 	echo
+	NLS_DOMAIN="$OLD_NLS_DOMAIN"
 else
 	echo "$@"
 fi
@@ -87,7 +94,7 @@ fi
 # Some functions to handle PLD-style messages
 show() 
 {	
-	what="`nls "DONE"`"; typeset -i offset=${#what}
+	what="`nls --nls-domain rc-scripts "DONE"`"; typeset -i offset=${#what}
 	text="`nls "$*"`.................................................................................."
 	awk "BEGIN {printf \"%.$((75 - $offset))s\", \"$text\";}"
 	# move to column number 67
@@ -96,32 +103,32 @@ show()
 
 busy() 
 {
-	echo -n "`termput setaf 6`[`termput setaf 5` `nls "BUSY"` `termput setaf 6`]`termput setaf 7`"
+	echo -n "`termput setaf 6`[`termput setaf 5` `nls --nls-domain rc-scripts "BUSY"` `termput setaf 6`]`termput setaf 7`"
 }
 
 ok() 
 {
-	echo  "`termput setaf 6`[`termput setaf 2` `nls "DONE"` `termput setaf 6`]`termput setaf 7`"
+	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "DONE"` `termput setaf 6`]`termput setaf 7`"
 }
 
 started()
 {
-	echo  "`termput setaf 6`[`termput setaf 2` `nls "WORK"` `termput setaf 6`]`termput setaf 7`"
+	echo  "`termput setaf 6`[`termput setaf 2` `nls --nls-domain rc-scripts "WORK"` `termput setaf 6`]`termput setaf 7`"
 }
 
 fail() 
 {
-	echo  "`termput setaf 6`[`termput setaf 1` `nls "FAIL"` `termput setaf 6`]`termput setaf 7`"
+	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "FAIL"` `termput setaf 6`]`termput setaf 7`"
 }
 
 died() 
 {
-	echo  "`termput setaf 6`[`termput setaf 1` `nls "DIED"` `termput setaf 6`]`termput setaf 7`"
+	echo  "`termput setaf 6`[`termput setaf 1` `nls --nls-domain rc-scripts "DIED"` `termput setaf 6`]`termput setaf 7`"
 }
 
 deltext() 
 {
-	echo -ne "`nls "\b\b\b\b\b\b\b\b"`"	
+	echo -ne "`nls --nls-domain rc-scripts "\b\b\b\b\b\b\b\b"`"	
 }
 
 # Usage run_cmd Message command_to_run
