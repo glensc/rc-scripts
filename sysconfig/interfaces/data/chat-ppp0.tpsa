@@ -1,5 +1,5 @@
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
-#  $Id: chat-ppp0.tpsa,v 1.2 1999/07/13 12:49:37 misiek Exp $
+#  $Id: chat-ppp0.tpsa,v 1.3 2001/02/02 18:22:46 roman Exp $
 # Script for dialing in to Public Internet Access by TPSA (0202122)
   
 ABORT		BUSY
@@ -12,3 +12,5 @@ OK		atdt $PHONE
 CONNECT		\\c
 ame:		$USER
 ord:		$PASSWORD	
+ppp:		''
+starting:	''
