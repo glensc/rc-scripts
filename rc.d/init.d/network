@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network,v 1.48 2001/07/05 15:56:33 baggins Exp $
+# $Id: network,v 1.49 2001/11/09 18:34:41 baggins Exp $
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -54,14 +54,14 @@ fi
 # - setup lo interface
 network_init()
 {
+# Modprobe needed devices
+modprobe_net
+
 # Kernel network parameters
 run_cmd "Setting network parameters" sysctl -p /etc/sysctl.conf
 
 # Set UP loopback interface
 set_up_loopback
-
-# Modprobe needed devices
-modprobe_net
 
 # Setup configuration
 setup_forwarding on
