@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.14 1999/11/16 11:28:50 kloczek Exp $
+#	$Id: ifup-post,v 1.15 1999/12/19 16:07:02 jajcus Exp $
 #
 
 . /etc/sysconfig/network
@@ -31,7 +31,7 @@ fi
 
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICE}" != lo -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
-	IPADDR=`ip addr show dev ${DEVICE} label ${FULLDEVNAME} | 
+	IPADDR=`ip -f inet addr show dev ${DEVICE} label ${FULLDEVNAME} | 
 		awk '{ print $2 }' |awk -F"/" '{ print $1 }'`
 	eval `/bin/ipcalc --silent --hostname ${IPADDR}` && set_hostname $HOSTNAME
 fi
