@@ -8,8 +8,8 @@
 
 . /etc/rc.d/init.d/functions
 
-kernel=$(awk '{print $3}' /proc/version | awk -F. '{print sprintf("%d.%d",$1,$2)}')
-kerneleq=$(awk '{print $3}' /proc/version | awk -F. '{print sprintf("%d.%d.%d",$1,$2,$3)}')
+kernel=$(awk '{split($3,v,".");OFS=".";printf("%d.%d",v[1],v[2]);}' /proc/version)
+kerneleq=$(awk '{split($3,v,".");OFS=".";printf("%d.%d.%d",v[1],v[2],v[3]);}' /proc/version)
 
 # Loop over every line in /etc/modules.
 ( \
