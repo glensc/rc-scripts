@@ -1,3 +1,4 @@
+#!/bin/sh - keep it for file(1) to get bourne shell script result
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
