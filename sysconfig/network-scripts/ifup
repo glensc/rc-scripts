@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.35 1999/12/19 16:06:02 jajcus Exp $
+#	$Id: ifup,v 1.36 2000/03/08 16:30:14 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -13,7 +13,7 @@ need_hostname
 DEV=$1
 
 [ -z "$DEV" ] && {
-    echo "usage: ifup <device name>" >&2
+    nls "usage: ifup <device name>" >&2
     exit 1
 }
 
@@ -21,7 +21,7 @@ if [ `id -u` != 0 ]; then
     if [ -x /sbin/usernetctl ]; then
 	exec /sbin/usernetctl $DEV up
     fi
-    echo "Users cannot control this device." >&2
+    nls "Users cannot control this device." >&2
     exit 1
 fi
 
@@ -49,7 +49,7 @@ IPSETUP=no
 FULLDEVNAME="$DEVICE"
 # detect network device type (dummy, eth ..)
 DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
-# przyjmuje eth0 przy {eth0,eth0:1,eth0:alias}
+# real name of device (is eth0 for eth0,eth0:1,eth0:alias)
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 
 if echo "$FULLDEVNAME" | grep -q ':' ; then
@@ -69,7 +69,7 @@ fi
 
 # IPv4, IPv6 or both ?
 [ -n "$IPV6_ADDR" ]                  && IPv6=yes || IPv6=no
-[ -n "$IPADDR" -o "$PUMP" = "true" ] && IPv4=yes || IPv4=no
+[ -n "$IPADDR" -o "$PUMP" = "true" ] && IPv4=yes || IPv6=no
 
 # Tunnel device ?
 [ -f /etc/sysconfig/interfaces/tnlcfg-${FULLDEVNAME} ] && TNL=yes || TNL=no
@@ -91,9 +91,9 @@ if [ -z "$NETMASK" -a -n "$PREFIX" ]; then
 fi
 
 [ "$MULTICAST" = "yes" ] && MULTICAST=on               || MULTICAST=off
-[ -n "$SRC_ADDR" ]        && SRC_ADDR="src ${SRC_ADDR}" || SRC_ADDR=""
-[ -n "$SCOPE" ]        && SCOPE="scope ${SCOPE}" || SCOPE=""
-[ -z "$PROTOCOL" ]        && PROTOCOL=ip
+[ -n "$SRC_ADDR" ]       && SRC_ADDR="src ${SRC_ADDR}" || SRC_ADDR=""
+[ -n "$SCOPE" ]          && SCOPE="scope ${SCOPE}"     || SCOPE=""
+[ -z "$PROTOCOL" ]       && PROTOCOL=ip
 
 if [ "$ARP" ]; then
 	[ "$ARP" = "yes" ]	&& ARP=on	|| ARP=off
@@ -135,11 +135,11 @@ fi
 
 if [ -n "$PUMP" -a "$ISALIAS" = "no" ]; then
 
-    echo -n "Determining IP information for $FULLDEVNAME..."
+    echo -n "`nls "Determining IP information for"` $FULLDEVNAME..."
     if /sbin/pump -i $FULLDEVNAME ; then
-       echo " done."
+       nls " done."
     else
-       echo " failed."
+       nls " failed."
        exit 1
     fi
 

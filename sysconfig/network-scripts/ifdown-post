@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifdown-post,v 1.8 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: ifdown-post,v 1.9 2000/03/08 16:30:14 misiek Exp $
 #
 # This should be called whenever an interface goes down, not just when
 # it is brought down explicitly.
@@ -11,6 +11,23 @@ CONFIG=$1
 . /etc/sysconfig/network-scripts/.functions
 
 source_config
+
+# full device name as specified by user
+FULLDEVNAME="$DEVICE"
+# type of device for example "dummy" or "eth"
+DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
+# name of real device ie. eth0 when eth0,eth0:1,eth0:alias
+DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
+
+if echo "$FULLDEVNAME" | grep -q ':' ; then
+        ISALIAS=yes
+else
+        ISALIAS=no
+fi
+
+# run scripts in /etc/sysconfig/interfaces/scripts/$DEVICE/
+# named somename.up
+rparts "/etc/sysconfig/interfaces/scripts/$DEVICE" stop
 
 # Notify programs that have requested notification
 do_netreport

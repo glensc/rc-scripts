@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup-post,v 1.15 1999/12/19 16:07:02 jajcus Exp $
+#	$Id: ifup-post,v 1.16 2000/03/08 16:30:14 misiek Exp $
 #
 
 . /etc/sysconfig/network
@@ -10,11 +10,11 @@ need_hostname
 CONFIG=$1
 source_config
 
-# pelna nazwa dewajsa jaka podal user
+# full device name as specified by user
 FULLDEVNAME="$DEVICE"
-# przyjmuje warto¶æ np: "dummy" czy "eth" itd.
+# type of device for example "dummy" or "eth"
 DEVICETYPE=`echo $FULLDEVNAME | sed "s/[0-9]*$//"`
-# przyjmuje eth0 przy {eth0,eth0:1,eth0:alias}
+# name of real device ie. eth0 when eth0,eth0:1,eth0:alias
 DEVICE=`echo $FULLDEVNAME | sed 's/:.*//g'`
 
 if echo "$FULLDEVNAME" | grep -q ':' ; then
@@ -35,6 +35,10 @@ if [ -n "$NEEDHOSTNAME" -a "${DEVICE}" != lo -a "${DEVICETYPE}" != "ppp" -a "${D
 		awk '{ print $2 }' |awk -F"/" '{ print $1 }'`
 	eval `/bin/ipcalc --silent --hostname ${IPADDR}` && set_hostname $HOSTNAME
 fi
+
+# run scripts in /etc/sysconfig/interfaces/scripts/$DEVICE/
+# named somename.up
+rparts "/etc/sysconfig/interfaces/scripts/$DEVICE" start
 
 # Notify programs that have requested notification
 do_netreport
