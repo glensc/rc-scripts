@@ -7,7 +7,7 @@
 #              start at boot time.
 # probe: true
 
-# $Id: network,v 1.22 1999/09/15 10:35:07 misiek Exp $
+# $Id: network,v 1.23 1999/09/27 09:58:00 misiek Exp $
 
 # NLS
 NLS_DOMAIN="rc-scripts"
@@ -41,14 +41,13 @@ set_up_loopback
 # Modprobe needed devices
 modprobe_net
 
-# Spoofing protection
+# Spoofing protection && dynamic IP && port range
 ipv4_anti_spoofing on
+ipv4_dynamic_ip_patch on
+ipv4_local_port_range on
 
-# IPv4 forwarding
-proc_net ipv4/ip_forward start 1 0 IPV4_FORWARDING "IPv4 forwarding"
-
-# IPv6 forwarding
-proc_net ipv6/conf/all/forwarding start 1 0 IPV6_FORWARDING "IPv6 forwarding"
+# Others proc/sys/net
+proc_networking start
 
 # Setup NAT rules
 setup_nat on
@@ -69,17 +68,44 @@ network_deinit()
 # Set down NAT rules
 setup_nat off
 
-# IPv6 forwarding
-proc_net ipv6/conf/all/forwarding stop 1 0 IPV6_FORWARDING "IPv6 forwarding"
-
-# IPv4 forwarding
-proc_net ipv4/ip_forward stop 1 0 IPV4_FORWARDING "IPv4 forwarding"
-
-# Spoofing protection
+# Spoofing protection && dynamic IP && port range
 ipv4_anti_spoofing off
+ipv4_dynamic_ip_patch off
+ipv4_local_port_range off
+
+# Others proc/sys/net
+proc_networking stop
 
 # Set DOWN loopback interface
 set_down_loopback
+}
+
+proc_networking()
+{
+TODO="$1"
+
+# IPv4 forwarding
+proc_net ipv4/ip_forward $TODO 1 0 IPV4_FORWARDING "IPv4 forwarding"
+# IPv6 forwarding
+proc_net ipv6/conf/all/forwarding $TODO 1 0 IPV6_FORWARDING "IPv6 forwarding"
+# Others proc/net
+proc_net ipv4/conf/all/accept_redirects $TODO 1 0 IPV4_ACCEPT_ICMP_REDIR ""
+proc_net ipv4/conf/all/accept_source_route $TODO 1 1 IPV4_ACCEPT_SOURCE_ROUTE ""
+proc_net ipv4/conf/all/log_martians $TODO 1 0 IPV4_LOG_MARTIANS ""
+proc_net ipv4/conf/all/mc_forwarding $TODO 1 0 IPV4_MULTICAST ""
+proc_net ipv4/conf/all/proxy_arp $TODO 1 0 IPV4_PROXY_ARP ""
+proc_net ipv4/conf/all/secure_redirects $TODO 1 1 IPV4_ACCEPT_ICMP_REDIR_GATE ""
+proc_net ipv4/conf/all/send_redirects $TODO 1 1 IPV4_SEND_ICMP_REDIR ""
+proc_net ipv4/icmp_echo_ignore_all $TODO 1 0 IPV4_IGN_ALL_ICMP ""
+proc_net ipv4/icmp_echo_ignore_broadcasts $TODO 1 1 IPV4_IGN_CAST_ICMP ""
+proc_net ipv4/ip_no_pmtu_disc $TODO 1 0 IPV4_MTU_DISCOVERY ""
+proc_net ipv4/ip_masq_debug $TODO 1 0 IPV4_MASQ_DEBUGGING ""
+proc_net ipv4/tcp_retrans_collapse $TODO 0 1 IPV4_RETRANS_COLLAPSE ""
+proc_net ipv4/tcp_sack $TODO 0 1 IPV4_NO_SELECT_ACK ""
+proc_net ipv4/tcp_timestamps $TODO 0 1 IPV4_NO_TIMESTAMPS ""
+proc_net ipv4/tcp_stdurg $TODO 1 0 IPV4_RFC793 ""
+proc_net ipv4/tcp_syncookies $TODO 1 0 IPV4_SYN_COOKIES ""
+proc_net ipv4/tcp_window_scaling $TODO 1 0 IPV4_NO_WINDOW_SCALING ""
 }
 
 # find all the interfaces besides loopback.
@@ -98,6 +124,7 @@ xargs egrep -l "ONBOOT=[^n][^o]" | sed 's/^tnlcfg-//g') 2> /dev/null`"
 case "$1" in
   start)
 	network_init
+
 	for i in $interfaces_boot $interfaces_sit_boot; do
 		/sbin/ifup $i boot
 	done
@@ -122,6 +149,7 @@ case "$1" in
 	done
 
 	network_deinit
+
         rm -f /var/lock/subsys/network
         ;;
   status)
