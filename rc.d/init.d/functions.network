@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.41 2000/04/21 17:37:53 jajcus Exp $
+# $Id: functions.network,v 1.42 2000/04/21 17:43:01 jajcus Exp $
 # 
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -447,4 +447,8 @@ get_ppp_device_and_pid () {
 			 read REALDEVICE ; echo "REALDEVICE=$REALDEVICE"
 		      } < "/var/run/ppp-$DEVICE.pid"`
 	fi
+	if [ -z "$REALDEVICE" ] ; then
+		REALDEVICE=$DEVICE
+	fi
 }
+
