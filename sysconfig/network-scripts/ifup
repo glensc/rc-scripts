@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.29 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: ifup,v 1.30 1999/11/06 00:23:54 wiget Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -10,19 +10,27 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 need_hostname
 
-CONFIG=$1
+DEV=$1
 
-[ -z "$CONFIG" ] && {
+[ -z "$DEV" ] && {
     echo "usage: ifup <device name>" >&2
     exit 1
 }
 
 if [ `id -u` != 0 ]; then
     if [ -x /usr/sbin/usernetctl ]; then
-	exec /usr/sbin/usernetctl $CONFIG up
+	exec /usr/sbin/usernetctl $DEV up
     fi
     echo "Users cannot control this device." >&2
     exit 1
+fi
+
+IFCONFIGS="`ls /etc/sysconfig/interfaces/ifcfg-*|egrep -v '~$'`"
+IFCONFIGS="`egrep -L '^#!' $IFCONFIGS`"
+CONFIG="`egrep -l "DEVICE=[\"\']*$DEV[\"\']*\$" $IFCONFIGS`"
+
+if [ -z "$CONFIG" ]; then
+    CONFIG="$DEV"
 fi
 
 source_config
@@ -184,10 +192,10 @@ if [ "$IPv4" = "yes" ]; then
     fi
 fi
 
-    . /etc/sysconfig/network
+#    . /etc/sysconfig/network
 
     if [ "${GATEWAY}" != "" ]; then
-	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
+	if [ "${GATEWAYDEV}" = "" -o "${GATEWAYDEV}" = "${FULLDEVICENAME}" ]; then
 	    # set up default gateway
 	    ip -family inet route add default via ${GATEWAY} dev ${DEVICE} ${SRC_ADDR} ${TNLOPTS}
 	    DEFGW=${GATEWAY}

@@ -1,33 +1,37 @@
 #!/bin/sh
 #
-#	$Id: tnldown,v 1.9 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: tnldown,v 1.10 1999/11/06 00:23:54 wiget Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 
-cd /etc/sysconfig/network-scripts
+DEV=$1
+
+[ -z "$DEV" ] && {
+    echo "usage: tnlup <device name>" >&2
+    exit 1
+}
+
 . /etc/sysconfig/network-scripts/.functions
 . /etc/sysconfig/network
 
-CONFIG=$1
+TNLCONFIGS="`ls /etc/sysconfig/interfaces/tnlcfg-*|egrep -v '~$'`"
+TNLCONFIGS="`egrep -L '^#!' $TNLCONFIGS`"
+CONFIG="`egrep -l "DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS`"
 
-[ -z "$CONFIG" ] && {
-    echo "usage: tnldown <device name>" >&2
-    exit 1
-}
+if [ -z "$CONFIG" ]; then
+    CONFIG="$DEV"
+fi
 
+if false; then
 [ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=tnlcfg-$CONFIG
 [ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
-    echo "usage: tnldown <device name>" >&2
+    echo "usage: tnlup <device name>" >&2
     exit 1
 }
+fi
 
 source_config
-
-if [ "foo$2" = "fooboot" -a "${ONBOOT}" = "no" ]
-then
-        exit
-fi
 
 if [ "${IPV6_TUNNELCONFIG}" != "yes" ] && [ "${MODE}" = "sit" ] || \
    [ "${IPX}" != "yes" ] && [ "${MODE}" = "ipxip" ] || \

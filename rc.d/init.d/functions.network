@@ -1,5 +1,5 @@
 #
-# $Id: functions.network,v 1.29 1999/10/22 11:43:15 kloczek Exp $
+# $Id: functions.network,v 1.30 1999/11/06 00:23:53 wiget Exp $
 #
 # This is not a shell script; it provides functions to network scripts
 # that source it.
@@ -73,10 +73,14 @@ get_ldap_config ()
 
 source_config ()
 {
-	DEVNAME=`basename $CONFIG | sed 's/^ifcfg-//g'`
-
-	if [ -f /etc/sysconfig/interfaces/ifcfg-$CONFIG ] ; then
-		. /etc/sysconfig/interfaces/ifcfg-$CONFIG
+	DEVNAME="`basename "$CONFIG" | sed 's/^ifcfg-//g'`"
+        
+	if echo "$CONFIG"|egrep "^/" >/dev/null 2>&1 ; then
+	  if [ -f "$CONFIG" ] ; then
+	    . "$CONFIG"
+	  fi
+	elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
+		. "/etc/sysconfig/interfaces/$CONFIG"
 	elif [ "$USE_LDAP" = "yes" ] ; then
 		eval `get_ldap_config $DEVNAME`
 	fi

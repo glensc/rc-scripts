@@ -1,25 +1,35 @@
 #!/bin/sh
 #
-#	$Id: tnlup,v 1.13 1999/10/13 21:28:40 kloczek Exp $
+#	$Id: tnlup,v 1.14 1999/11/06 00:23:54 wiget Exp $
 #
 # Author: Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
 #
 
-. /etc/sysconfig/network-scripts/.functions
-. /etc/sysconfig/network
+DEV=$1
 
-CONFIG=$1
-
-[ -z "$CONFIG" ] && {
+[ -z "$DEV" ] && {
     echo "usage: tnlup <device name>" >&2
     exit 1
 }
 
+. /etc/sysconfig/network-scripts/.functions
+. /etc/sysconfig/network
+
+TNLCONFIGS="`ls /etc/sysconfig/interfaces/tnlcfg-*|egrep -v '~$'`"
+TNLCONFIGS="`egrep -L '^#!' $TNLCONFIGS`"
+CONFIG="`egrep -l "DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS`"
+
+if [ -z "$CONFIG" ]; then
+    CONFIG="$DEV"
+fi
+
+if false; then
 [ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=tnlcfg-$CONFIG
 [ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
     echo "usage: tnlup <device name>" >&2
     exit 1
 }
+fi
 
 source_config
 
