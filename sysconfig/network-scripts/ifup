@@ -95,8 +95,8 @@ if [ "$SLAVE" == "yes" -a "$ISALIAS" == "no" -a "$MASTER" != "" -a -x /sbin/ifen
     exit 0
 fi
 
-if [ -n "$MACADDR" ] && [ -x /sbin/ifconfig ]; then
-   ifconfig ${FULLDEVNAME} hw ether ${MACADDR}
+if [ -n "$MACADDR" ]; then
+   ip link set ${DEVICE} address ${MACADDR}
 fi
 
 if [ -n "$PUMP" ] && [ "$ISALIAS" == "no" ]; then
