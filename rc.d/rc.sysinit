@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # /etc/rc.d/rc.sysinit - run once at boot time
-# $Id: rc.sysinit,v 1.24 1999/09/02 12:16:15 misiek Exp $
+# $Id: rc.sysinit,v 1.25 1999/09/04 19:48:47 waszi Exp $
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 # Changes:      Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
@@ -81,8 +81,11 @@ fi
 # we need /proc mounted before starting fsck
 mount -t proc /proc /proc
 
+# Test for NFS Root
+NFSROOT=`cat /proc/mounts | awk '{ if ($2 ~ /^\/$/ && $3 ~ /^nfs$/) print $3 }'`
+
 _RUN_QUOTACHECK=0
-if [ ! -f /fastboot ]; then
+if [ ! -f /fastboot ] && [ ! -n "$NFSROOT" ]; then
 	show "Checking root filesystems."; started
 	initlog -c "fsck -T -a $fsckoptions /"
 
@@ -129,7 +132,7 @@ fi
 run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
 
 # Update quotas if fsck was run on /.
-if [ X"$_RUN_QUOTACHECK" == "X1" -a -x /sbin/quotacheck ]; then
+if [ X"$_RUN_QUOTACHECK" == "X1" -a -x /sbin/quotacheck ] && [ ! -n "$NFSROOT" ]; then
         run_cmd "Checking root filesystem quotas" /sbin/quotacheck -v /
 fi
 
@@ -268,10 +271,10 @@ fi
 run_cmd "Mounting local filesystems." mount -a -t nonfs,smbfs,ncpfs,proc
 
 # set the console font
-if [ -x /sbin/setsysfont ]; then
-	show "Loading default system font"; busy
-	if (/sbin/setsysfont > /dev/null 2>&1); then deltext; ok; else deltext; fail; fi
-fi
+#if [ -x /sbin/setsysfont ]; then
+#	show "Loading default system font"; busy
+#	if (/sbin/setsysfont > /dev/null 2>&1); then deltext; ok; else deltext; fail; fi
+#fi
 
 if [ -x /sbin/quotaon ]; then
 	run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -a
