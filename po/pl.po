@@ -1,7 +1,7 @@
 # Polish translation of rc-scripts.
 # Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 # Arkadiusz Miskiewicz <misiek@pld.org.pl>, 1999, 2000.
-# $Id: pl.po,v 1.27 2000/04/11 14:27:03 zagrodzki Exp $
+# $Id: pl.po,v 1.28 2000/04/12 23:21:48 kloczek Exp $
 #
 msgid ""
 msgstr ""
@@ -273,7 +273,7 @@ msgstr "Wystartowaæ serwis"
 
 #: ../rc.d/init.d/functions:105
 msgid "%s service is already running.\n"
-msgstr "Serwis % juz jest uruchomiony.\n"
+msgstr "Serwis %s juz jest uruchomiony.\n"
 
 #: ../rc.d/rc.shutdown:77
 msgid "Remounting remaining filesystems ro mode"
