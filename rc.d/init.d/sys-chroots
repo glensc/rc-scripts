@@ -9,9 +9,13 @@
 . /etc/rc.d/init.d/functions
 
 # Source networking configuration.
+. /etc/sysconfig/system
+
+# Source networking configuration.
 . /etc/sysconfig/network
 
 [ -z "$SYSTEM_CHROOTS" ] && exit 0
+[ -n "$1" ] && CMD="$1"
 [ -n "$2" ] && SYSTEM_CHROOTS="$2"
 
 set $(/sbin/runlevel)
@@ -19,9 +23,11 @@ runlevel=$2
 previous=$1
 export runlevel previous
 
+[ -z "$runlevel" -o -z "$previous" -o "$runlevel" = "$previous" ] && exit 0
+
 RETVAL=0
 # See how we were called.
-case "$1" in
+case "$CMD" in
   start)
 	# Start daemons.
 	if [ ! -f /var/lock/subsys/sys-chroots ]; then
@@ -33,6 +39,10 @@ case "$1" in
 
 		    # Cleaning part, keep in sync with rc.sysinit
 
+		    chroot $dir /bin/sh -c '
+		    . /etc/rc.d/init.d/functions
+		    . /etc/sysconfig/system
+
 		    # Clear mtab
 		    :>/etc/mtab
 		    [ -f /etc/cryptomtab ] && :>/etc/cryptomtab
@@ -41,7 +51,7 @@ case "$1" in
 		    rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
 		    
 		    # Clean up /var
-    		    # I'd use find, but /usr may not be mounted.
+    		    # I would d use find, but /usr may not be mounted.
 		    for afile in /var/lock/* /var/run/*; do
 			bafile=$(basename $afile)
 			if [ -d "$afile" ]; then
@@ -73,6 +83,7 @@ case "$1" in
 		    if is_yes "$CLEAN_TMP"; then
 			rm -rf /tmp/* /tmp/.[a-zA-Z0-9]*
 		    fi
+		    '
 
 		    # Do our things
 		    
@@ -86,17 +97,17 @@ case "$1" in
 		    if grep -q selinuxfs /proc/filesystems ; then
 			chroot $dir mount -o gid=17 -t selinuxfs selinuxfs /selinux
 		    fi
+		    set -x
 		    chroot $dir mount -a
 		    chroot $dir /sbin/chkconfig network off
+		    is_yes "${NETWORKING}" && touch $dir/var/lock/subsys/network
 		    chroot $dir /sbin/chkconfig single off
-		    $dir/etc/rc.d/rc $runlevel
+		    chroot $dir /etc/rc.d/rc $runlevel chroot
 		done
-		    
 		
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/sys-chroots
+		touch /var/lock/subsys/sys-chroots
 	else
-		msg_already_running Exim
+		msg_already_running "System chroots services"
 	fi
 	;;
   stop)
@@ -106,7 +117,8 @@ case "$1" in
 		for dir in $SYSTEM_CHROOTS; do
 		    [ ! -x "$dir/etc/rc.d/rc" ] && continue
 		    msg_stopping "System chroots services for $dir"; started
-		    $dir/etc/rc.d/rc $runlevel
+		    is_yes "${NETWORKING}" && rm -f $dir/var/lock/subsys/network
+		    chroot $dir /etc/rc.d/rc $runlevel chroot
 		done
 		rm -f /var/lock/subsys/sys-chroots >/dev/null 2>&1
 	else

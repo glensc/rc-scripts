@@ -17,6 +17,7 @@ trap ":" INT QUIT TSTP
 
 # Save argument
 argv1="$1"
+argv2="$2"
 
 # Get terminal size of standard input of the system console
 [ -z "$CONSOLE" ] && CONSOLE=/dev/console
@@ -57,11 +58,13 @@ else
 	RUN_LDCONFIG=yes
 fi
 
-# Now find out what the current and what the previous runlevel are.
-set $(/sbin/runlevel)
-runlevel=$2
-previous=$1
-export runlevel previous
+if [ "$argv2" != "chroot" ]; then
+    # Now find out what the current and what the previous runlevel are.
+    set $(/sbin/runlevel)
+    runlevel=$2
+    previous=$1
+    export runlevel previous
+fi
 
 # if previous runlevel = current runlevel do nothing
 [ "$runlevel" = "$previous" ] && exit 0
@@ -231,7 +234,11 @@ if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
 	unset LC_ALL
 	TMPDIR=/dev/null
 	export TMPDIR
-	exec /etc/rc.d/rc.shutdown $runlevel
+	if [ "$argv2" != "chroot" ]; then
+    	    exec /etc/rc.d/rc.shutdown $runlevel
+	else
+	    exit 0
+	fi
 else
 	if is_yes "$RUN_LDCONFIG" || [ ! -f /etc/ld.so.cache ] ; then
 		if [ -x /sbin/ldconfig ]; then
