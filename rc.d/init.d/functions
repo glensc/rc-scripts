@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# $Id: functions,v 1.34 2000/01/31 14:30:11 misiek Exp $
+# $Id: functions,v 1.35 2000/02/03 11:49:04 misiek Exp $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -127,6 +127,7 @@ deltext()
 # Usage run_cmd Message command_to_run
 run_cmd()
 {
+	exit_code=0
 	_ERRORS=""
 	MESSAGE=$1
 	show "$MESSAGE"; busy
@@ -135,8 +136,8 @@ run_cmd()
 		deltext; ok
 	else
 		deltext; fail;  [ -n "$_ERRORS" ] && echo $_ERRORS
+		exit_code=1
 	fi
-	exit_code=$?
 	unset _ERRORS
 	return $exit_code
 }
@@ -153,6 +154,7 @@ action()
 daemon() 
 {
 	nicelevel=0
+	exit_code=0
 	_ERRORS=""
 	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 	# Test syntax.
@@ -173,11 +175,13 @@ daemon()
 		deltext
 		ok
 	else
+		exit_code=1
 		deltext
 		fail
 		[ -n "$_ERRORS" ] && echo $_ERRORS
 	fi
 	unset _ERRORS
+	return $exit_code
 }
 
 # A function to stop a program.
