@@ -1,7 +1,7 @@
 # functions	This file contains functions to be used by most or all
 #		shell scripts in the /etc/init.d directory.
 #
-# Version:	@(#) /etc/init.d/functions $Revision: 1.8 $ $Date: 1999/06/18 19:23:51 $
+# Version:	@(#) /etc/init.d/functions $Revision: 1.9 $ $Date: 1999/06/19 11:29:04 $
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:    Greg Galloway and Marc Ewing
@@ -38,55 +38,55 @@ fi
 # Some functions to handle PLD-style messages
 show() 
 {
-  text="$*".............................................
-  echo -ne `echo $text | cut -c1-45`
+	text="$*".............................................
+	echo -ne `echo $text | cut -c1-45`
 }
 
 busy() 
 {
-  echo -n "`tput setaf 6`[`tput setaf 5` BUSY `tput setaf 6`]`tput setaf 7`"
+	echo -n "`tput setaf 6`[`tput setaf 5` BUSY `tput setaf 6`]`tput setaf 7`"
 }
 
 ok() 
 {
-  echo  "`tput setaf 6`[`tput setaf 2` DONE `tput setaf 6`]`tput setaf 7`"
+	echo  "`tput setaf 6`[`tput setaf 2` DONE `tput setaf 6`]`tput setaf 7`"
 }
 
 started()
 {
-  echo  "`tput setaf 6`[`tput setaf 2` WORK `tput setaf 6`]`tput setaf 7`"
+	echo  "`tput setaf 6`[`tput setaf 2` WORK `tput setaf 6`]`tput setaf 7`"
 }
 
 fail() 
 {
-  echo  "`tput setaf 6`[`tput setaf 1` FAIL `tput setaf 6`]`tput setaf 7`"
+	echo  "`tput setaf 6`[`tput setaf 1` FAIL `tput setaf 6`]`tput setaf 7`"
 }
 
 died() 
 {
-  echo  "`tput setaf 6`[`tput setaf 1` DIED `tput setaf 6`]`tput setaf 7`"
+	echo  "`tput setaf 6`[`tput setaf 1` DIED `tput setaf 6`]`tput setaf 7`"
 }
 
 deltext() 
 {
-  echo -ne '\b\b\b\b\b\b\b\b'
+	echo -ne '\b\b\b\b\b\b\b\b'
 }
 
 # Usage run_cmd Message command_to_run
 run_cmd()
 {
-_ERRORS=""
-MESSAGE=$1
-show "$MESSAGE"; busy
-shift
-if _ERRORS="`initlog -c \"$*\"`"; then
-deltext; ok
-else
-deltext; fail; echo $_ERRORS
-fi
-exit_code=$?
-unset _ERRORS
-return $exit_code
+	_ERRORS=""
+	MESSAGE=$1
+	show "$MESSAGE"; busy
+	shift
+	if _ERRORS="`initlog -c \"$*\"`"; then
+		deltext; ok
+	else
+		deltext; fail; echo $_ERRORS
+	fi
+	exit_code=$?
+	unset _ERRORS
+	return $exit_code
 }
 
 # A function to start a program (now it's usefull on read-only filesystem too)
@@ -97,10 +97,10 @@ daemon()
 	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 	# Test syntax.
 	case $1 in
-	    '')    echo '$0: Usage: daemon [+/-nicelevel] {program}'
-	           return 1;;
-	    -*|+*) SERVICE_RUN_NICE_LEVEL=$1
-	           shift;;
+	'')	echo '$0: Usage: daemon [+/-nicelevel] {program}'
+		return 1;;
+	-*|+*) SERVICE_RUN_NICE_LEVEL=$1
+		shift;;
 	esac
 
 	# make sure it doesn't core dump anywhere; while this could mask
@@ -110,14 +110,14 @@ daemon()
 	# And start it up.
 	busy
 	if _ERRORS="`nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$*" 2>&1`"; then
-	  deltext
-	  ok
+		deltext
+		ok
 	else
-	  deltext
-	  fail
-	  echo $_ERRORS
+		deltext
+		fail
+		echo $_ERRORS
 	fi
-       unset _ERRORS
+	unset _ERRORS
 }
 
 # A function to stop a program.
@@ -164,10 +164,10 @@ killproc()
 	                kill $killlevel $pid >$TMPFILE 2>&1
 		fi
 	else
-	  rm -f /var/run/$base.pid
-	  deltext
-	  fail
-	  return
+		rm -f /var/run/$base.pid
+		deltext
+		fail
+		return
 	fi
 
         # Remove pid file if any.

@@ -8,7 +8,6 @@ test -z "$srcdir" && srcdir=.
 PKG_NAME="PLD rc-scripts"
 
 (test -f $srcdir/configure.in \
-  && test -d $srcdir/doc \
   && test -d $srcdir/src) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
     echo " top-level rc-scripts directory"

@@ -39,7 +39,7 @@ case "$1" in
 
 # make sure modprobe is working
 if [ -f /proc/sys/kernel/modprobe ]; then
-   echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
+	echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
 fi
 
 # If they want to run something in single user mode, might as well run it...

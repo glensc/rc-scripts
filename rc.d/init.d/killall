@@ -12,9 +12,9 @@ for i in /var/lock/subsys/*; do
 
 	# Bring the subsystem down.
 	if [ -f /etc/rc.d/init.d/$subsys.init ]; then
-	    /etc/rc.d/init.d/$subsys.init stop
+		/etc/rc.d/init.d/$subsys.init stop
 	else
-	    /etc/rc.d/init.d/$subsys stop
+		/etc/rc.d/init.d/$subsys stop
 	fi
 done
 

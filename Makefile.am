@@ -1,5 +1,5 @@
 
-SUBDIRS = src doc ppp sysconfig rc.d
+SUBDIRS = src ppp sysconfig rc.d
 
 sysconf_DATA = \
 	adjtime \
