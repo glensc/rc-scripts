@@ -22,16 +22,16 @@ msgstr ""
 
 #: ./rc.d/rc:91
 msgid "Entering interactive startup"
-msgstr "Wchodze w tryb interaktywny"
+msgstr "Wchodzê w tryb interaktywny"
 
 #: ./rc.d/rc:94
 msgid "Entering non-interactive startup"
-msgstr "Wchodze w tryb nieinteraktywny"
+msgstr "Wchodzê w tryb nieinteraktywny"
 
 #: ./rc.d/rc:112
 #: ./rc.d/rc:113
 msgid "%sResource Manager: %sEntering runlevel number"
-msgstr "%sZarzadca zasobów: %sWejscie na poziom"
+msgstr "%sZarz±dca zasobów: %sWejscie na poziom"
 
 #: ./rc.d/rc:114
 #: ./rc.d/init.d/functions:185
@@ -45,25 +45,25 @@ msgstr "Ustawianie /etc/ld.so.cache"
 #: ./rc.d/rc:205
 #: ./rc.d/rc:206
 msgid "%sResource Manager: %sRunlevel has been reached"
-msgstr "%sZarzadca zasobów: %sOsiagnieto poziom"
+msgstr "%sZarz±dca zasobów: %sOsi±gnieto poziom"
 
 #: ./rc.d/rc.shutdown:24
 #: ./rc.d/init.d/single:33
 msgid "Sending all processes the TERM signal"
-msgstr "Wysylanie do wszystkich procesów sygnalu TERM"
+msgstr "Wysy³anie do wszystkich procesów sygna³u TERM"
 
 #: ./rc.d/rc.shutdown:26
 #: ./rc.d/init.d/single:35
 msgid "Sending all processes the KILL signal"
-msgstr "Wysylanie do wszystkich procesów sygnalu KILL"
+msgstr "Wysy³anie do wszystkich procesów sygna³u KILL"
 
 #: ./rc.d/rc.shutdown:32
 msgid "Turning off swap"
-msgstr "Wylaczanie swapa"
+msgstr "Wy³±czanie swapa"
 
 #: ./rc.d/rc.shutdown:36
 msgid "Turning off quotas for local filesystems"
-msgstr "Wylaczanie quot na lokalnych systemach plików"
+msgstr "Wy³±czanie quot na lokalnych systemach plików"
 
 #: ./rc.d/rc.shutdown:46
 #: ./rc.d/rc.sysinit:194
@@ -71,22 +71,22 @@ msgstr "Wylaczanie quot na lokalnych systemach plików"
 #: ./rc.d/rc.sysinit:455
 #: ./rc.d/rc.sysinit:514
 msgid "Unmounting file systems"
-msgstr "Odlaczanie systemów plików"
+msgstr "Od³±czanie systemów plików"
 
 #: ./rc.d/rc.shutdown:64
 #: ./rc.d/rc.sysinit:424
 #: ./rc.d/rc.sysinit:456
 #: ./rc.d/rc.sysinit:515
 msgid "Remounting root filesystem in ro mode"
-msgstr "Przelaczanie glównego systemu plików w tryb tylko do odczytu"
+msgstr "Prze³±czanie g³ównego systemu plików w tryb tylko do odczytu"
 
 #: ./rc.d/rc.shutdown:74
 msgid "Turning off RAID for %s"
-msgstr "Wylaczanie obslugi RAID dla %s"
+msgstr "Wy³±czanie obs³ugi RAID dla %s"
 
 #: ./rc.d/rc.shutdown:81
 msgid "Remounting remaining filesystems ro mode"
-msgstr "Przelaczanie pozostalych systemów plików w tryb tylko do odczytu"
+msgstr "Prze³±czanie pozosta³ych systemów plików w tryb tylko do odczytu"
 
 #: ./rc.d/rc.shutdown:91
 msgid "The system is halted"
@@ -95,31 +95,31 @@ msgstr "System zatrzymany"
 #: ./rc.d/rc.shutdown:92
 #: ./rc.d/rc.shutdown:96
 msgid "On the next boot fsck will be skipped."
-msgstr "Przy nastepnym starcie systemu program fsck bedzie pominiety."
+msgstr "Przy nastêpnym starcie systemu program fsck bêdzie pominiêty."
 
 #: ./rc.d/rc.shutdown:95
 msgid "Please stand by while rebooting the system"
-msgstr "Prosze czekac - restart systemu"
+msgstr "Proszê czekaæ - restart systemu"
 
 #: ./rc.d/rc.sysinit:56
 msgid "\t\t\t%sPowered by %sPLD Linux Distribution%s"
-msgstr "\t\t\t%sNapedzane przez %sPLD Linux Distribution%s"
+msgstr "\t\t\t%sNapêdzane przez %sPLD Linux Distribution%s"
 
 #: ./rc.d/rc.sysinit:58
 msgid "\t\t     Press %sI%s to enter interactive startup"
-msgstr "\t      Prosze wcisnac %sI%s zeby wejsc w tryb interaktywny"
+msgstr "\t      Proszê wcisn±æ %sI%s ¿eby wej¶æ w tryb interaktywny"
 
 #: ./rc.d/rc.sysinit:71
 msgid "Mounting Device Filesystem"
-msgstr "Podlaczanie systemów plików urzadzen (DEVfs)"
+msgstr "Pod³±czanie systemów plików urz±dzeñ (DEVfs)"
 
 #: ./rc.d/rc.sysinit:77
 msgid "Starting Device Filesystem Daemon"
-msgstr "Uruchamianie Zarzadcy Systemu Plików Urzadzen (devfsd)"
+msgstr "Uruchamianie Zarz±dcy Systemu Plików Urz±dzeñ (devfsd)"
 
 #: ./rc.d/rc.sysinit:82
 msgid "Configuring kernel parameters"
-msgstr "Ustawianie parametrów jadra"
+msgstr "Ustawianie parametrów j±dra"
 
 #: ./rc.d/rc.sysinit:127
 #: ./rc.d/rc.sysinit:547
@@ -145,27 +145,27 @@ msgstr "Domena NIS:"
 
 #: ./rc.d/rc.sysinit:172
 msgid "Checking root filesystem"
-msgstr "Sprawdzanie glównego systemu plików"
+msgstr "Sprawdzanie g³ównego systemu plików"
 
 #: ./rc.d/rc.sysinit:182
 #: ./rc.d/rc.sysinit:443
 #: ./rc.d/rc.sysinit:502
 msgid "*** An error occurred during the file system check."
-msgstr "*** Podczas sprawdzania systemów plików wykryto blad niemozliwy do usuniecia."
+msgstr "*** Podczas sprawdzania systemów plików wykryto b³ad niemo¿liwy do usuniêcia."
 
 #: ./rc.d/rc.sysinit:183
 #: ./rc.d/rc.sysinit:412
 #: ./rc.d/rc.sysinit:444
 #: ./rc.d/rc.sysinit:503
 msgid "*** Dropping you to a shell; the system will reboot"
-msgstr "*** Uruchamianie powloki; system zostanie zrestartowany"
+msgstr "*** Uruchamianie pow³oki; system zostanie zrestartowany"
 
 #: ./rc.d/rc.sysinit:184
 #: ./rc.d/rc.sysinit:413
 #: ./rc.d/rc.sysinit:445
 #: ./rc.d/rc.sysinit:504
 msgid "*** when you leave the shell."
-msgstr "*** po opuszczeniu powloki."
+msgstr "*** po opuszczeniu pow³oki."
 
 #: ./rc.d/rc.sysinit:196
 #: ./rc.d/rc.sysinit:425
@@ -176,19 +176,19 @@ msgstr "Automatyczny restart w toku"
 
 #: ./rc.d/rc.sysinit:212
 msgid "Setting up ISA PNP devices (userspace pnp)"
-msgstr "Ustawianie urzadzen ISA PNP (userspace pnp)"
+msgstr "Ustawianie urz±dzen ISA PNP (userspace pnp)"
 
 #: ./rc.d/rc.sysinit:215
 msgid "Setting up ISA PNP devices (kernelspace pnp)"
-msgstr "Ustawianie urzadzen ISA PNP (kernelspace pnp)"
+msgstr "Ustawianie urz±dzen ISA PNP (kernelspace pnp)"
 
 #: ./rc.d/rc.sysinit:221
 msgid "Remounting root filesystem in rw mode"
-msgstr "Przelaczanie glównego systemu plików w tryb zapis/odczyt"
+msgstr "Prze³±czanie g³ównego systemu plików w tryb zapis/odczyt"
 
 #: ./rc.d/rc.sysinit:225
 msgid "Checking root filesystem quotas"
-msgstr "Sprawdzanie quot na glównym systemie plików"
+msgstr "Sprawdzanie quot na g³ównym systemie plików"
 
 #: ./rc.d/rc.sysinit:245
 msgid "Enabling Delay Login"
@@ -196,12 +196,12 @@ msgstr "Wlaczanie opózniania logowania"
 
 #: ./rc.d/rc.sysinit:247
 msgid "System bootup in progress - please wait"
-msgstr "Uruchamianie systemu w toku - prosze czekac"
+msgstr "Uruchamianie systemu w toku - proszê czekaæ"
 
 #: ./rc.d/rc.sysinit:285
 #: ./rc.d/rc.sysinit:287
 msgid "Finding module dependencies"
-msgstr "Wyszukiwanie powiazan pomiedzy modulami"
+msgstr "Wyszukiwanie powi±zañ pomiêdzy modu³ami"
 
 #: ./rc.d/rc.sysinit:309
 msgid "Mounting USB filesystem"
@@ -226,7 +226,7 @@ msgstr "Inicjalizacja myszy USB"
 #: ./rc.d/rc.sysinit:343
 #: ./rc.d/rc.sysinit:348
 msgid "Loading sound module"
-msgstr "Ladowanie modulu obslugi dzwieku"
+msgstr "£adowanie modu³u obs³ugi d¼wiêku"
 
 #: ./rc.d/rc.sysinit:361
 msgid "Scanning for LVM volume groups"
@@ -238,16 +238,16 @@ msgstr "Aktywacja grup woluminów LVM"
 
 #: ./rc.d/rc.sysinit:375
 msgid "Starting up RAID device %s"
-msgstr "Wlaczanie urzadzenia RAID %s"
+msgstr "W³±czanie urz±dzenia RAID %s"
 
 #: ./rc.d/rc.sysinit:408
 #: ./rc.d/rc.sysinit:427
 msgid "Starting up RAID devices"
-msgstr "Ustawianie urzadzen RAID"
+msgstr "Ustawianie urz±dzeñ RAID"
 
 #: ./rc.d/rc.sysinit:411
 msgid "*** An error occurred during the RAID startup."
-msgstr "*** Podczas inicjacji urzadzen RAID wykryto blad niemozliwy do usuniecia."
+msgstr "*** Podczas inicjacji urz±dzeñ RAID wykryto b³±d niemo¿liwy do usuniêcia."
 
 #: ./rc.d/rc.sysinit:416
 msgid "(RAID Repair)# "
@@ -265,7 +265,7 @@ msgstr "(Naprawa systemu plików)# "
 #: ./rc.d/rc.sysinit:469
 #: ./rc.d/rc.sysinit:471
 msgid "Mounting local filesystems"
-msgstr "Podlaczanie lokalnych systemów plików"
+msgstr "Pod³±czanie lokalnych systemów plików"
 
 #: ./rc.d/rc.sysinit:479
 msgid "Checking encrypted filesystems"
@@ -273,7 +273,7 @@ msgstr "Sprawdzanie zaszyfrowanych systemów plików"
 
 #: ./rc.d/rc.sysinit:521
 msgid "Remounting encrypted filesystems back in rw mode"
-msgstr "Przelaczanie zaszyfrowanych systemów plików w tryb zapis/odczyt"
+msgstr "Prze³±czanie zaszyfrowanych systemów plików w tryb zapis/odczyt"
 
 #: ./rc.d/rc.sysinit:532
 msgid "Checking filesystem quotas"
@@ -281,43 +281,43 @@ msgstr "Sprawdzanie quot w systemach plików"
 
 #: ./rc.d/rc.sysinit:537
 msgid "Turning on quotas for local filesystems"
-msgstr "Wlaczanie quot na lokalnych systemach plików"
+msgstr "W³±czanie quot na lokalnych systemach plików"
 
 #: ./rc.d/rc.sysinit:558
 msgid "Setting %s seconds for kernel reboot after panic"
-msgstr "Restart systemu po %s sekundach od zawieszenia sie jadra"
+msgstr "Restart systemu po %s sekundach od zawieszenia sie j±dra"
 
 #: ./rc.d/rc.sysinit:601
 msgid "Enabling swap space"
-msgstr "Wlaczanie swapa"
+msgstr "W³±czanie swapa"
 
 #: ./rc.d/init.d/functions:124
 msgid "ERROR: Networking is down. %s can't be run."
-msgstr "BLAD: Siec nie jest uruchomiona. %s nie moze zostac uruchomiony."
+msgstr "BLAD: Sieæ nie jest uruchomiona. %s nie mo¿e zostaæ uruchomiony."
 
 #: ./rc.d/init.d/functions:129
 msgid "Starting %s service"
-msgstr "Uruchamianie uslugi %s"
+msgstr "Uruchamianie us³ugi %s"
 
 #: ./rc.d/init.d/functions:134
 msgid "%s service is already running."
-msgstr "Usluga %s jest juz uruchomiona."
+msgstr "Us³uga %s jest ju¿ uruchomiona."
 
 #: ./rc.d/init.d/functions:139
 msgid "Stopping %s service"
-msgstr "Zatrzymywanie uslugi %s"
+msgstr "Zatrzymywanie us³ugi %s"
 
 #: ./rc.d/init.d/functions:144
 msgid "%s service is not running."
-msgstr "Usluga %s nie jest uruchomiona."
+msgstr "Us³uga %s nie jest uruchomiona."
 
 #: ./rc.d/init.d/functions:149
 msgid "Reloading %s service"
-msgstr "Przeladowanie uslugi %s"
+msgstr "Prze³adowanie us³ugi %s"
 
 #: ./rc.d/init.d/functions:154
 msgid "Usage: %s"
-msgstr "Uzycie: %s"
+msgstr "U¿ycie: %s"
 
 #: ./rc.d/init.d/functions:180
 msgid "BUSY"
@@ -333,7 +333,7 @@ msgstr "PROBLEMY"
 
 #: ./rc.d/init.d/functions:204
 msgid "DIED"
-msgstr " ZGINAL "
+msgstr " ZGIN¡£ "
 
 #: ./rc.d/init.d/functions:255
 msgid "warning: --check option is ignored!"
@@ -358,15 +358,15 @@ msgstr "%s jest zatrzymany"
 
 #: ./rc.d/init.d/functions:465
 msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
-msgstr "Uruchomic usluge %s (T)ak/(N)ie/(K)ontynuuj? [T] "
+msgstr "Uruchomic us³ugê %s (T)ak/(N)ie/(K)ontynuuj? [T] "
 
 #: ./rc.d/init.d/functions:564
 msgid "Loading %s kernel module(s)"
-msgstr "Ladowanie modulu(ów) %s"
+msgstr "£adowanie modu³u(ów) %s"
 
 #: ./rc.d/init.d/functions:581
 msgid "Could not load %s kernel module(s)"
-msgstr "Nie mozna zaladowac modulu(ów) %s"
+msgstr "Nie mo¿na za³adowaæ modu³u(ów) %s"
 
 #: ./rc.d/init.d/functions.network:170
 #: ./rc.d/init.d/functions.network:172
@@ -384,7 +384,7 @@ msgstr "Ustawianie statycznych wpisów RARP"
 #: ./sysconfig/network-scripts/ifup-ipx:23
 #: ./sysconfig/network-scripts/ifup-sl:88
 msgid "%s is missing. Can't continue."
-msgstr "%s nie jest obecny. Nie moge kontynuowac."
+msgstr "%s nie jest obecny. Nie mogê kontynuowaæ."
 
 #: ./rc.d/init.d/network:35
 #: ./sysconfig/network-scripts/ifdown:14
@@ -402,7 +402,7 @@ msgstr "Zaktualizuj swój plik konfiguracyjny"
 #: ./sysconfig/network-scripts/ifdown:16
 #: ./sysconfig/network-scripts/ifup:16
 msgid "Assuming you want IPv4 networking"
-msgstr "Przyjecie IPv4"
+msgstr "Przyjêcie IPv4"
 
 #: ./rc.d/init.d/network:61
 msgid "Setting network parameters"
@@ -422,19 +422,19 @@ msgstr "Podnoszenie tunelu"
 
 #: ./rc.d/init.d/network:164
 msgid "Unmounting NFS filesystems"
-msgstr "Odlaczanie systemów plików NFS"
+msgstr "Od³±czanie systemów plików NFS"
 
 #: ./rc.d/init.d/network:167
 msgid "Unmounting SMB filesystems"
-msgstr "Odlaczanie systemów plików SMB"
+msgstr "Od³±czanie systemów plików SMB"
 
 #: ./rc.d/init.d/network:170
 msgid "Unmounting NCP filesystems"
-msgstr "Odlaczanie systemów plików NCP"
+msgstr "Od³±czanie systemów plików NCP"
 
 #: ./rc.d/init.d/network:176
 msgid "Shutting down tunnel interface"
-msgstr "Wylaczanie tunelu"
+msgstr "Wy³±czanie tunelu"
 
 #: ./rc.d/init.d/network:177
 msgid "Removing tunnel"
@@ -442,11 +442,11 @@ msgstr "Usuwanie tunelu"
 
 #: ./rc.d/init.d/network:185
 msgid "Shutting down interface"
-msgstr "Wylaczanie interfejsu"
+msgstr "Wy³±czanie interfejsu"
 
 #: ./rc.d/init.d/network:193
 msgid "Configured devices:"
-msgstr "Skonfigurowane urzadzenia sieciowe:"
+msgstr "Skonfigurowane urz±dzenia sieciowe:"
 
 #: ./rc.d/init.d/network:195
 msgid "Configured tunnels:"
@@ -454,11 +454,11 @@ msgstr "Skonfigurowane tunele:"
 
 #: ./rc.d/init.d/network:198
 msgid "Currently inactive devices and tunnels:"
-msgstr "Nieaktywne urzadzenia sieciowe i tunele:"
+msgstr "Nieaktywne urz±dzenia sieciowe i tunele:"
 
 #: ./rc.d/init.d/network:200
 msgid "Currently active devices and tunnels:"
-msgstr "Aktywne urzadzenia sieciowe i tunele:"
+msgstr "Aktywne urz±dzenia sieciowe i tunele:"
 
 #: ./rc.d/init.d/random:23
 msgid "Initializing random number generator"
@@ -470,15 +470,15 @@ msgstr "Zapisanie podstawy generatora losowego"
 
 #: ./rc.d/init.d/random:54
 msgid "The random data source exists"
-msgstr "Zródlo losowych danych istnieje"
+msgstr "Zród³o losowych danych istnieje"
 
 #: ./rc.d/init.d/random:56
 msgid "The random data source is missing"
-msgstr "Oczekiwane zródlo danych losowych"
+msgstr "Brak ¼ród³a losowych danych"
 
 #: ./rc.d/init.d/single:61
 msgid "Telling INIT to go to single user mode"
-msgstr "Nakazywanie procesowi INIT przejscia do trybu pojedynczego uzytkownika"
+msgstr "Nakazywanie procesowi INIT przej¶cia do trybu pojedyñczego u¿ytkownika"
 
 #: ./rc.d/init.d/timezone:39
 msgid "Setting time zone information (%s, %s)"
@@ -494,7 +494,7 @@ msgstr "Usuwanie informacji o strefie czasowej"
 
 #: ./rc.d/init.d/allowlogin:23
 msgid "Allowing users to login"
-msgstr "Pozwolenie uzytkownikom na logowanie sie"
+msgstr "Zezwolenie u¿ytkownikom na logowanie"
 
 #: ./rc.d/init.d/allowlogin:29
 msgid "System shutdown in progress \n"
@@ -508,16 +508,16 @@ msgstr "Zamykanie systemu w toku \n"
 #: ./sysconfig/network-scripts/tnldown:30
 #: ./sysconfig/network-scripts/tnlup:30
 msgid "Usage: %s <device name>"
-msgstr "Uzycie: %s <nazwa urzadzenia>"
+msgstr "U¿ycie: %s <nazwa urz±dzenia>"
 
 #: ./sysconfig/network-scripts/ifdown:38
 #: ./sysconfig/network-scripts/ifup:36
 msgid "Users cannot control this device."
-msgstr "Uzytkownicy nie moga kontrolowac tego urzadzenia."
+msgstr "U¿ytkownicy nie mog± kontrolowaæ tego urz±dzenia."
 
 #: ./sysconfig/network-scripts/ifup:80
 msgid "Delaying %s initialization"
-msgstr "Opóznianie inicjalizacji %s"
+msgstr "Opó¼nianie inicjalizacji %s"
 
 #: ./sysconfig/network-scripts/ifup:88
 msgid "Enslaving %s to %s"
@@ -525,11 +525,11 @@ msgstr "Ustawianie %s na %s"
 
 #: ./sysconfig/network-scripts/ifup:105
 msgid "Disabling IPv6 autoconfiguration"
-msgstr "Wylaczanie autokonfiguracji IPv6"
+msgstr "Wy³±czanie autokonfiguracji IPv6"
 
 #: ./sysconfig/network-scripts/ifup:129
 msgid "Can't find a dhcp client."
-msgstr "Nie moge znalezc klienta dhcp."
+msgstr "Nie mogê znale¼æ klienta dhcp."
 
 #: ./sysconfig/network-scripts/ifup:157
 msgid "Determining IP information for"
@@ -543,7 +543,7 @@ msgstr "%s nie istnieje lub nie jest wykonywalny"
 #: ./sysconfig/network-scripts/ifup-sl:46
 #: ./sysconfig/network-scripts/ifup-ppp:39
 msgid "%s for %s exiting"
-msgstr "%s dla %s konczy"
+msgstr "%s dla %s koñczy"
 
 #: ./sysconfig/network-scripts/ifup-sl:48
 #: ./sysconfig/network-scripts/ifup-sl:91
@@ -558,7 +558,7 @@ msgstr "nie istnieje"
 #: ./sysconfig/network-scripts/ifup-sl:58
 #: ./sysconfig/network-scripts/ifup-sl:89
 msgid "exiting"
-msgstr "wyjscie"
+msgstr "wyj¶cie"
 
 #: ./sysconfig/network-scripts/ifup-sl:60
 msgid "does not exist for"
@@ -570,8 +570,8 @@ msgstr "dip wystartowal dla %s na %s przy %s"
 
 #: ./sysconfig/network-scripts/ifup-sl:97
 msgid "slattach started for %s on %s at %s"
-msgstr "slattach wystartowal dla %s na %s przy %s"
+msgstr "slattach wystartowa³ dla %s na %s przy %s"
 
 #: ./sysconfig/network-scripts/ifup-br:81
 msgid "problems with setting bridge %s"
-msgstr "wystapily problemy przy ustawianiu bridge'a %s"
+msgstr "wyst±pi³y problemy przy ustawianiu bridge'a %s"
