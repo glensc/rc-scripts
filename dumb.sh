@@ -3,7 +3,6 @@
 
 if /bin/false; then
 
-nls "Zope (pid %s) is running"				"$1"
 nls "alarmwatch not configured (CHIPS not set), cannot start."
 nls "No kernel APM support"
 nls "(backgrounded)"
