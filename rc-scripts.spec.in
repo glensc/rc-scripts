@@ -1,4 +1,4 @@
-# $Id: rc-scripts.spec.in,v 1.48 2000/05/07 18:59:59 siefca Exp $
+# $Id: rc-scripts.spec.in,v 1.49 2000/09/18 22:32:03 saq Exp $
 Summary:	inittab and /etc/rc.d scripts
 Summary(de):	inittab und /etc/rc.d Scripts
 Summary(fr):	inittab et scripts /etc/rc.d
@@ -206,6 +206,7 @@ fi
 %{_mandir}/man1/*
 
 %lang(pl) %{localedir}/pl/LC_MESSAGES/*.mo
+%lang(de) %{localedir}/de/LC_MESSAGES/*.mo
 
 %changelog
 * Fri Mar 19 1999 PLD Team <bugs@pld.org.pl>

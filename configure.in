@@ -1,9 +1,9 @@
-dnl $Id: configure.in,v 1.32 2000/08/28 15:43:44 zagrodzki Exp $
+dnl $Id: configure.in,v 1.33 2000/09/18 22:32:03 saq Exp $
 AC_INIT()
 
 PACKAGE=rc-scripts
 VERSION=0.2.6
-ALL_LINGUAS="pl"
+ALL_LINGUAS="pl de"
 
 SHSCRIPTS="rc.d/rc 			\
 	rc.d/init.d/allowlogin 		\

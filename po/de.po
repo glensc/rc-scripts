@@ -1,0 +1,485 @@
+# German translation of rc-scripts.
+# Pawel Sakowski <pawel@sakowski.eu.org>, 2000.
+# $Id: de.po,v 1.1 2000/09/18 22:32:03 saq Exp $
+#
+
+msgid ""
+msgstr ""
+"Project-Id-Version: rc-scripts 0.2.6\n"
+"POT-Creation-Date: 1999-07-30 18:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Pawel Sakowski <pawel@sakowski.eu.org>\n"
+"Language-Team: German <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso8850-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+##### ALLOWLOGIN #####
+
+#: ../rc.d/init.d/allowlogin:22
+msgid "Allowing users to login"
+msgstr "Die Benützer werden erlaubt anzumelden"
+
+#: ../rc.d/init.d/allowlogin:29
+msgid "System shutdown in progress \n"
+msgstr "System-Herunterfahren wird ausgeführt \n"
+
+##### FUNCTIONS #####
+
+#: ../rc.d/init.d/functions:98
+msgid "ERROR: Networking is down. %s can't be run."
+msgstr "FEHLER: Das Netzwerkwesen läuft nicht. %s kann nicht gestartet werden."
+
+#: ../rc.d/init.d/functions:98
+msgid "Starting %s service"
+msgstr "Der %s-Dienst wird gestartet"
+
+#: ../rc.d/init.d/functions:103
+msgid "%s service is already running."
+msgstr "Der %s-Dienst läuft bereits."
+
+#: ../rc.d/init.d/functions:108
+msgid "Stopping %s service"
+msgstr "Der %s-Dienst wird gestoppt"
+
+#: ../rc.d/init.d/functions:113
+msgid "%s service is not running."
+msgstr "Der %s-Dienst läuft nicht."
+
+#: ../rc.d/init.d/functions:118
+msgid "Reloading %s service"
+msgstr "Der %s-Dienst wird umgeladen"
+
+#: ../rc.d/init.d/functions:123
+msgid "Usage: %s"
+msgstr "Verwendung: %s"
+
+# Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
+# must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
+#: ../rc.d/init.d/functions:129 ../rc.d/init.d/functions:144 ../rc.d/rc:94
+msgid "DONE"
+msgstr "GETAN"
+
+#: ../rc.d/init.d/functions:150
+msgid "WORK"
+msgstr "LÄUFT"
+
+#: ../rc.d/init.d/functions:138
+msgid "BUSY"
+msgstr "WIRKE"
+
+#: ../rc.d/init.d/functions:156
+msgid "FAIL"
+msgstr "UNGUT"
+
+#: ../rc.d/init.d/functions:162
+msgid "DIED"
+msgstr "STARB"
+
+# (4 + "\b" * count of letters) in one of five previous words
+#: ../rc.d/init.d/functions:169
+msgid "\b\b\b\b\b\b\b\b"
+msgstr "\b\b\b\b\b\b\b\b\b"
+
+#: ../rc.d/init.d/functions:335 ../rc.d/init.d/functions:343
+msgid "%s (pid %s) is running..."
+msgstr "%s (pid %s) läuft..."
+
+#: ../rc.d/init.d/functions:361
+msgid "%s is stopped"
+msgstr "%s ist gestoppt"
+
+#: ../rc.d/init.d/functions:358
+msgid "%s dead but subsys locked"
+msgstr "%s tot, aber das Subsystem gesperrt"
+
+#: ../rc.d/init.d/functions:352
+msgid "%s dead but pid file exists"
+msgstr "%s tot, aber pid-Datei existiert"
+
+#: ../rc.d/init.d/functions:382
+msgid "Start service"
+msgstr "Den Dienst starten"
+
+#: ../rc.d/init.d/functions:382
+msgid "(Y)es/(N)o/(C)ontinue? [Y] "
+msgstr "(J)a/(N)ein/(W)eiterführen? [J] "
+
+#: ../rc.d/init.d/functions:470
+msgid "Loading %s kernel module(s)"
+msgstr "%s-Kernmodul(e) wird/werden geladen"
+
+#: ../rc.d/init.d/functions:488
+msgid "Could not load %s kernel module(s)"
+msgstr "%s-Kernmodul(e) konnte(n) nicht geladen werden"
+
+##### INIT #####
+
+#: ../rc.d/init.d/single:32 ../rc.d/rc.shutdown:24
+msgid "Sending all processes the TERM signal"
+msgstr "Das TERM-Signal wird an alle Prozesse geschickt"
+
+#: ../rc.d/init.d/single:34 ../rc.d/rc.shutdown:26
+msgid "Sending all processes the KILL signal"
+msgstr "Das KILL-Signal wird an alle Prozesse geschickt"
+
+#: ../rc.d/init.d/single:60
+msgid "Telling INIT to go to single user mode"
+msgstr "INIT wird befehlt, in den Single-Modus zu gehen"
+
+#: ../rc.d/rc.shutdown:32
+msgid "Turning off swap and accounting"
+msgstr "Die Auslagerung und Das Protokollieren werden ausgeschaltet"
+
+#: ../rc.d/rc.shutdown:42 ../rc.d/rc.sysinit:190 ../rc.d/rc.sysinit:346
+#: ../rc.d/rc.sysinit:375
+msgid "Unmounting file systems"
+msgstr "Die Dateisysteme werden unmountet"
+
+#: ../rc.d/rc.shutdown:69
+msgid "Turning off RAID for %s"
+msgstr "RAID wird für %s ausgeschaltet"
+
+#: ../rc.d/rc:71
+msgid "Entering interactive startup"
+msgstr "Anfang der interaktiven Startetappe"
+
+#: ../rc.d/rc:74
+msgid "Entering non-interactive startup"
+msgstr "Anfang der uninteraktiven Startetappe"
+
+#: ../rc.d/rc:172
+msgid "Setting up /etc/ld.so.cache"
+msgstr "/etc/ld.so.cache wird eingestellt"
+
+#: ../rc.d/rc.sysinit:216
+msgid "Remounting root filesystem in rw mode"
+msgstr "Das Root-Dateisystem wird ohne Schreibschütz erneut gemountet"
+
+#: ../rc.d/rc.shutdown:59 ../rc.d/rc.sysinit:347 ../rc.d/rc.sysinit:376
+msgid "Remounting root filesystem in ro mode"
+msgstr "Das Root-Dateisystem wird mit Schreibschütz erneut gemountet"
+
+#: ../rc.d/rc.shutdown:77
+msgid "Remounting remaining filesystems ro mode"
+msgstr "Übrige Dateisysteme werden mit Schreibschütz erneut gemountet"
+
+#: ../rc.d/rc:92 ../rc.d/rc:93
+msgid "%sResource Manager: %sEntering runlevel number"
+msgstr "%sRessourcenmanager: %sWechsel in die Betriebsebene Nummer"
+
+#: ../rc.d/rc:178 ../rc.d/rc:179
+msgid "%sResource Manager: %sRunlevel has been reached"
+msgstr "%sRessourcenmanager: %sDie Betriebsebene ist erreicht worden"
+
+#: ../rc.d/rc:161
+msgid "The system is halted"
+msgstr "Das System ist untergangen"
+
+#: ../rc.d/rc:162 ../rc.d/rc:166
+msgid "On the next boot fsck will be skipped."
+msgstr "Bei dem nächsten Start wird fsck ausgelassen."
+
+#: ../rc.d/rc:165
+msgid "Please stand by while rebooting the system"
+msgstr "Bitte warten auf den Neustart des Systems"
+
+##### INTERFACE #####
+#: ../sysconfig/network-scripts/ifup:16
+msgid "usage: ifup <device name>"
+msgstr "Verwendung: ifup <Gerätname>"
+
+#: ../sysconfig/network-scripts/ifup:24
+msgid "Users cannot control this device."
+msgstr "Die Benutzer dürfen dieses Gerät nicht kontrollieren."
+
+#: ../sysconfig/network-scripts/ifup:135
+msgid "Determining IP information for"
+msgstr "Erforscht wird die IP-Information für"
+
+#: ../sysconfig/network-scripts/ifup:138 ../sysconfig/network-scripts/ifup:145
+msgid " done."
+msgstr " getan."
+
+#: ../sysconfig/network-scripts/ifup:140 ../sysconfig/network-scripts/ifup:147
+msgid " failed."
+msgstr " gescheitert."
+
+#: ../sysconfig/network-scripts/ifup-sl:41
+msgid "/usr/sbin/dip does not exist or is not executable"
+msgstr "/usr/sbin/dip existiert nicht oder ist nicht ausführbar"
+
+#: ../sysconfig/network-scripts/ifup-sl:44
+msgid "/usr/sbin/dip does not exist or is not executable for"
+msgstr "/usr/sbin/dip existiert nicht oder ist nicht ausführbar für"
+
+#: ../sysconfig/network-scripts/ifup-sl:42
+msgid "ifup-sl for $DEVICE exiting"
+msgstr "ifup-sl für $DEVICE wird beendet"
+
+#: ../sysconfig/network-scripts/ifup-sl:53
+msgid "does not exist"
+msgstr "existiert nicht"
+
+#: ../sysconfig/network-scripts/ifup-sl:56
+msgid "does not exist"
+msgstr "existiert nicht für"
+
+#: ../sysconfig/network-scripts/ifup-sl:63
+msgid "dip started for"
+msgstr "dir gestartet für"
+
+#: ../sysconfig/network-scripts/ifup-sl:93
+msgid "slattach started for"
+msgstr "slattach gestartet für"
+
+#: ../sysconfig/network-scripts/ifup-sl:63
+#: ../sysconfig/network-scripts/ifup-sl:93
+msgid "on"
+msgstr "auf"
+
+#: ../sysconfig/network-scripts/ifup-sl:63
+#: ../sysconfig/network-scripts/ifup-sl:93
+msgid "at"
+msgstr "mit"
+
+#: ../sysconfig/network-scripts/ifup-sl:84
+msgid "/sbin/slattach does not exist or is not executable"
+msgstr "/sbin/slattach existiert nicht oder ist nicht ausführbar"
+
+#: ../sysconfig/network-scripts/ifup-sl:87
+msgid "/sbin/slattach does not exist or is not executable for"
+msgstr "/sbin/slattach existiert nicht oder ist nicht ausführbar für"
+
+#: ../sysconfig/network-scripts/ifup-sl:85
+msgid "exiting"
+msgstr "wird beendet"
+
+##### NETWORK #####
+
+#: ../rc.d/init.d/functions.network:169
+msgid "Starting network router discovery daemon"
+msgstr "Netzwerkrouter-Erforschung-Server wird gestartet"
+
+#: ../rc.d/init.d/network:191
+msgid "Configured devices:"
+msgstr "Konfigurierte Geräte:"
+
+#: ../rc.d/init.d/network:193
+msgid "Configured tunnels:"
+msgstr "Konfigurierte Tunnel:"
+
+#: ../rc.d/init.d/network:196
+msgid "Currently active devices and tunnels:"
+msgstr "Bereits aktive Geräte und Tunnel:"
+
+#: ../rc.d/init.d/functions.network:202 ../rc.d/init.d/functions.network:213
+msgid "Setting %s to %s"
+msgstr "%s wird auf %s eingestellt"
+
+#: ../rc.d/init.d/functions.network:235
+msgid "Enabling dynamic IP patch"
+msgstr "Der Dynamisch-IP-Fleck wird eingeschaltet"
+
+#: ../rc.d/init.d/functions.network:245
+msgid "Disabling dynamic IP patch"
+msgstr "Der Dynamisch-IP-Fleck wird ausgeschaltet"
+
+#: ../rc.d/init.d/functions.network:263
+msgid "Setting local port range"
+msgstr "Der Lokalportbereich wird eingestellt"
+
+#: ../rc.d/init.d/functions.network:272
+msgid "Setting default local port range"
+msgstr "Der standarde Lokalportbereich wird eingestellt"
+
+#: ../rc.d/init.d/functions.network:289
+msgid "Setting up IP spoofing protection"
+msgstr "Der IP-Spoofing-Schutz wird eingeschaltet"
+
+#: ../rc.d/init.d/functions.network:298
+msgid "Setting down IP spoofing protection"
+msgstr "Der IP-Spoofing-Schutz wird ausgeschaltet"
+
+##### RANDOM #####
+
+#: ../rc.d/init.d/random:22
+msgid "Initializing random number generator"
+msgstr "Der Zufallszahlgenerator wird initialisiert"
+
+#: ../rc.d/init.d/random:40
+msgid "Saving random seed"
+msgstr "Das Zufallskorn wird gespeichert"
+
+#: ../rc.d/init.d/random:53
+msgid "The random data source exists"
+msgstr "Die Zufallsdatenquelle existiert"
+
+#: ../rc.d/init.d/random:55
+msgid "The random data source is missing"
+msgstr "Die Zufallsdatenquelle fehlt"
+
+##### SYSINIT #####
+
+#: ../rc.d/rc.sysinit:57
+msgid "Press"
+msgstr "Drücke"
+
+#: ../rc.d/rc.sysinit:57
+msgid "to enter interactive startup."
+msgstr "um in die interaktive Startetappe zu wechseln."
+
+#: ../rc.d/rc.sysinit:67
+msgid "Mounting Device Filesystem"
+msgstr "Das Device-Dateisystem wird gemountet"
+
+#: ../rc.d/rc.sysinit:73
+msgid "Starting Device Filesystem Daemon"
+msgstr "Device-Dateisystem-Server wird gestartet"
+
+#: ../rc.d/rc.sysinit:83
+msgid "Turning off Magic SysRq key"
+msgstr "Die Magic-SysRq-Taste wird ausgeschaltet"
+
+#: ../rc.d/rc.sysinit:89
+msgid "Turning off Stop-A/Break-A"
+msgstr "Stop-A/Break-A wird ausgeschaltet"
+
+#: ../rc.d/rc.sysinit:135
+#, fuzzy
+msgid "Setting clock$CLOCKDEF"
+msgstr "Die Systemuhr$CLOCKDEF wird eingestellt"
+
+#: ../rc.d/rc.sysinit:136
+msgid "Today's date: `LC_CTYPE=C date`"
+msgstr "Das heutige Datum: `LC_CTYPE=C date`"
+
+#: ../rc.d/rc.sysinit:421
+#~ msgid "Date set to"
+#~ msgstr "Das Datum eingestellt auf"
+
+#: ../rc.d/rc.sysinit:143
+msgid "Host:"
+msgstr "Rechnername:"
+
+#: ../rc.d/rc.sysinit:147
+msgid "NIS Domain:"
+msgstr "NIS-Domäne:"
+
+#: ../rc.d/rc.sysinit:169
+msgid "Checking root filesystems."
+msgstr "Die Root-Dateisysteme wird nachgesehen."
+
+#: ../rc.d/rc.sysinit:210
+msgid "Setting up ISA PNP devices"
+msgstr "Die ISA-PNP-Geräte werden eingestellt"
+
+#: ../rc.d/rc.sysinit:289
+msgid "Loading sound module"
+msgstr "Das Laut-Modul wird geladen"
+
+#: ../rc.d/rc.sysinit:233
+msgid "Loading midi module"
+msgstr "Das MIDI-Modul wird geladen"
+
+#: ../rc.d/rc.sysinit:292
+msgid "Loading synthesiser module"
+msgstr "Das Synthesizer-Modul wird geladen"
+
+#: ../rc.d/rc.sysinit:334
+msgid "*** An error occurred during the RAID startup"
+msgstr "*** Während des RAID-Startens ist ein Fehler passiert"
+
+#: ../rc.d/rc.sysinit:178 ../rc.d/rc.sysinit:363
+msgid "*** An error occurred during the file system check."
+msgstr "*** Während des Dateisystem-Prüfens ist ein Fehler passiert."
+
+#: ../rc.d/rc.sysinit:179 ../rc.d/rc.sysinit:335 ../rc.d/rc.sysinit:364
+msgid "*** Dropping you to a shell; the system will reboot"
+msgstr "*** Lasse Sie in der Shell; das System wird neustarten"
+
+#: ../rc.d/rc.sysinit:180 ../rc.d/rc.sysinit:336 ../rc.d/rc.sysinit:365
+msgid "*** when you leave the shell."
+msgstr "*** nachdem sie Sie die Shell verlassen haben."
+
+#: ../rc.d/rc.sysinit:183 ../rc.d/rc.sysinit:368
+msgid "(Repair filesystem)# "
+msgstr "(Dateisystem-Reparieren)# "
+
+#: ../rc.d/rc.sysinit:339
+msgid "(RAID Repair)# "
+msgstr "(RAID-Reparieren)# "
+
+#: ../rc.d/rc.sysinit:227
+msgid "Enabling Delay Login"
+msgstr "Verzögerte Anmeldung wird aktiviert"
+
+#: ../rc.d/rc.sysinit:229
+msgid "System bootup in progress  - please wait"
+msgstr "Das System wird bereits gestartet  - bitte warten"
+
+#: ../rc.d/rc.sysinit:308 ../rc.d/rc.sysinit:332 ../rc.d/rc.sysinit:350
+msgid "Starting up RAID devices."
+msgstr "Die RAID-Geräte werden gestartet."
+
+#: ../rc.d/rc.sysinit:355
+msgid "Checking filesystems."
+msgstr "Dateisysteme werden nachgesehen."
+
+#: ../rc.d/rc.sysinit:220
+msgid "Checking root filesystem quotas"
+msgstr "Die Quotas des Root-Dateisystems werden nachgesehen"
+
+#: ../rc.d/rc.sysinit:379
+msgid "Checking filesystem quotas"
+msgstr "Die Dateisystem-Quotas werden geprüft"
+
+#: ../rc.d/rc.sysinit:395
+msgid "Turning on quotas for local filesystems"
+msgstr "Die Quotas für lokale Dateisysteme werden eingeschaltet"
+
+#: ../rc.d/rc.sysinit:386
+msgid "Mounting local filesystems."
+msgstr "Lokale Dateisysteme werden gemountet."
+
+#: ../rc.d/rc.sysinit:390
+msgid "Loading default system font"
+msgstr "Der standarde Zeichensatz wird geladen"
+
+#: ../rc.d/rc.sysinit:404
+msgid "Setting %s seconds for kernel reboot after panic."
+msgstr "%s Sekunden werden für Kern-Neustart nach der Panik eingestellt."
+
+#: ../rc.d/rc.sysinit:140
+msgid "Activating swap partitions"
+msgstr "Die Auslagerungspartitionen werden aktiviert"
+
+#: ../rc.d/rc.sysinit:451
+msgid "Enabling swap space"
+msgstr "Der Auslagerungsbereich wird eingeschaltet"
+
+#: ../rc.d/rc.sysinit:348
+msgid "Automatic reboot in progress"
+msgstr "Automatischer Neustart wird ausgeführt"
+
+#: ../rc.d/rc.sysinit:192 ../rc.d/rc.sysinit:377
+msgid "Automatic reboot in progress."
+msgstr "Automatischer Neustart wird ausgeführt."
+
+#: ../rc.d/rc.sysinit:281
+msgid "Finding module dependencies"
+msgstr "Modul-Abhängigkeiten werden gesucht"
+
+##### TIMEZONE #####
+
+#: ../rc.d/init.d/timezone:41
+msgid "Setting time zone information (%s)"
+msgstr "Information über die Zeitzone (%s) wird eingestellt"
+
+#: ../rc.d/init.d/timezone:38
+msgid "Setting time zone information (%s, %s)"
+msgstr "Information über die Zeitzone (%s, %s) wird eingestellt"
+
+#: ../rc.d/init.d/timezone:47
+msgid "Unsetting time zone information"
+msgstr "Information über die Zeitzone wird gelöscht"
