@@ -95,6 +95,10 @@ case "$CMD" in
 		    
 		    # proc
 		    chroot $dir mount -o gid=17 -t proc proc /proc
+		    # usbfs, if available
+		    if [ -f /proc/bus/usb/devices ]; then
+			chroot $dir mount -t usbfs usbfs /proc/bus/usb
+		    fi
 		    # sysfs is also needed before any other things (under kernel > 2.5)
 		    if grep -q sysfs /proc/filesystems ; then
 			chroot $dir mount -o gid=17 -t sysfs sysfs /sys
