@@ -38,7 +38,7 @@ swapon -a
 
 # Set the hostname.
 hostname ${HOSTNAME}
-echo "Setting hostname: `tput bold``hostname``tput sgr0`"
+echo "Setting hostname: `hostname`"
 
 # Set the NIS domain name
 if [ -n "$NISDOMAIN" ]; then
