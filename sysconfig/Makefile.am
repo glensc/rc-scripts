@@ -15,7 +15,6 @@ sysconfig_DATA = \
 	static-nat \
 	static-arp \
 	i18n \
-	timezone \
-	ip-rules
+	timezone
 
 EXTRA_DIST = $(sysconfig_DATA)
