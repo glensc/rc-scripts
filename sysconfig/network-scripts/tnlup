@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    $Id: tnlup,v 1.19.2.2 2000/10/22 08:48:37 misiek Exp $
+#    $Id: tnlup,v 1.19.2.3 2000/11/05 14:01:24 misiek Exp $
 #
 
 . /etc/sysconfig/network
@@ -49,7 +49,7 @@ fi
 
 source_config
 
-if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
+if [ "foo$2" = "fooboot" -a -n "${ONBOOT}" ] && is_no "${ONBOOT}"; then
         exit
 fi
 

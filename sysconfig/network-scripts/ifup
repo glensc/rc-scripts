@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: ifup,v 1.42.2.4 2000/10/23 22:12:47 misiek Exp $
+#	$Id: ifup,v 1.42.2.5 2000/11/05 14:01:24 misiek Exp $
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -34,7 +34,7 @@ fi
 
 source_config
 
-if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
+if [ "foo$2" = "fooboot" -n "${ONBOOT}" ] && is_no "${ONBOOT}"; then
     exit
 fi
 
@@ -139,9 +139,6 @@ if [ -n "$BOOTMETHOD" -a "$BOOTMETHOD" != "none" ]; then
 
 else
 
-    # Set device up
-    ip link set ${DEVICE} up
-	
     # IPv4 in use ?
     if is_yes "$IPV4_NETWORKING" && [ -n "$IP4_PRIM_NR" ]; then
     	# If broadcast is missing then autocalculate it
@@ -155,6 +152,9 @@ else
 		ip addr add ${IP4ADDR} dev ${DEVICE} ${IP4ADDROPT}
 	fi
     fi
+
+    # Set device up
+    ip link set ${DEVICE} up
 
     # IPv6 in use ?
     if is_yes "$IPV6_NETWORKING" && [ -n "$IP6_PRIM_NR" ]; then
