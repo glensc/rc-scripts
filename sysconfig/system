@@ -73,7 +73,7 @@ EVMS_GUID_PTABLE=no
 # Use EVMS for Linux LVM volumes
 EVMS_LVM=no
 
-# Create symlinks for LVM vulumes (/dev/evms/lvm/* -> /dev/*)
+# Create symlinks for LVM volumes (/dev/evms/lvm/* -> /dev/*)
 EVMS_LVM_COMPAT_NODES=yes
 
 # Use EVMS for Linux MD (RAID 0/1/5) valumes
