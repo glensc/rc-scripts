@@ -4,6 +4,7 @@ ONBOOT=no
 HARDFLOWCTL=no
 # ircomm0 for IRDA, rfcomm0 for BlueTooth
 MODEMPORT=/dev/ircomm0
+# MODEMPORT=/dev/bluetooth/rfcomm/0
 LINESPEED=115200
 AUTH=no
 DEBUG=yes
