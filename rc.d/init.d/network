@@ -121,6 +121,7 @@ set_down_loopback
 if [ -n "$(grep "^BOOTPRIO=" /etc/sysconfig/interfaces/ifcfg* 2> /dev/null)" ]; then
 	interfaces_boot=$(( \
 		. /etc/rc.d/init.d/functions; \
+		cd /etc/sysconfig/interfaces; \
 		egrep 'BOOTPRIO' ifcfg* | sort -t= -n -k2,2 | \
 		awk ' { gsub(/:BOOTPRIO.*/,NIL); print $0 } '| egrep -v 'ifcfg-lo' | \
 		for i in `cat`; do \
