@@ -617,6 +617,11 @@ killproc()
 	fi
 	
 	if [ -n "$waitname" -a -n "$waittime" ]; then
+		# Save basename.
+		base=$(basename "$waitname")
+		# Find pid.
+		pid=$(pidofproc "$waitname" "$pidfile")
+		[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
 		i=0
 		while [ "$i" -lt "$waittime" ]; do
 			i=$(( i + 1 ))
