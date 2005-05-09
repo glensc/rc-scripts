@@ -5,6 +5,7 @@ initdir = @rcdir@/init.d
 init_SCRIPTS = \
 	allowlogin \
 	killall \
+	network \
 	single \
 	timezone
 	
