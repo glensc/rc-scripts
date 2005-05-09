@@ -9,8 +9,6 @@ man_MANS = \
 	initlog.1 \
 	ipcalc.1 \
 	netreport.1 \
-	ppp-watch.8 \
-	usernetctl.8 \
 	usleep.1 \
 	start-stop-daemon.8
 
