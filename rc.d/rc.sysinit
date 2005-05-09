@@ -11,50 +11,8 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
 
-# reasonable start values for bootsplash progress.
-export progress=0
-export sscripts=45
-export kscripts=45
-
 # Read functions
 . /etc/rc.d/init.d/functions
-
-# we need /proc mounted before everything
-mount -n -o gid=17 -t proc /proc /proc
-
-# sysfs is also needed before any other things (under kernel > 2.5)
-if grep -q sysfs /proc/filesystems ; then
-    mount -n -o gid=17 -t sysfs sysfs /sys
-fi
-
-# selinux
-if grep -q selinuxfs /proc/filesystems && ! grep -q selinuxfs /proc/mounts; then
-    mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
-fi
-
-if [ $(kernelverser) = "002006" ]; then
-	MODULES_CONF=/etc/modprobe.conf
-elif [ -r /etc/modules.conf ]; then
-	MODULES_CONF=/etc/modules.conf
-else
-	MODULES_CONF=/etc/conf.modules
-fi
-
-# PLD LiveCD support
-if [ -x /etc/rc.d/rc.live ]; then
-	/etc/rc.d/rc.live
-fi
-
-# Choose Hardware profile
-rm -f /var/run/hwprofile 2> /dev/null
-if [ -f /etc/sysconfig/hwprof ]; then
-    . /etc/sysconfig/hwprof
-    if is_yes "${HWPROFILES}" && [ -x /sbin/hwprofile -a -d /etc/sysconfig/hwprofiles/data ]; then
-       mount -n / -o rw,remount
-       /sbin/hwprofile -qf
-       mount -n / -o ro,remount
-    fi
-fi
 
 # NLS
 if [ -r /etc/sysconfig/i18n ]; then
@@ -84,18 +42,11 @@ if [ -r /etc/sysconfig/system ]; then
 	. /etc/sysconfig/system
 else
 	RUN_SULOGIN_ON_ERR=yes
-        RUN_USERPNP=yes
-        RUN_KERNELPNP=yes
-	PANIC_REBOOT_TIME=0
 	DELAY_LOGIN=yes
 	CLEAN_TMP=no
 	CONSOLE_LOGLEVEL=1
-	SET_SLINKS=yes
 	RUN_LDCONFIG=yes
 fi
-
-# Disable splash when requested
-[ -e /proc/splash ] && is_no "$BOOT_SPLASH" && echo "0" > /proc/splash
 
 # Check SELinux status
 selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
@@ -114,10 +65,6 @@ if [ -x /sbin/restorecon ] && LC_ALL=C fgrep -q " /dev " /proc/mounts ; then
 fi
 
 
-if [ "$CONSOLETYPE" = "vt" -a -x /sbin/setsysfont ]; then
-    run_cmd "Setting default font" /sbin/setsysfont
-fi
-
 # Print welcome message
 nls "\t\t\t%sPowered by %sPLD Linux Distribution%s" "$(termput setaf $CPOWEREDBY)" "$(termput setaf $CPLD)" "$(termput op)"
 if is_yes "$PROMPT"; then
@@ -131,79 +78,6 @@ if [ -n "$CONSOLE_LOGLEVEL" ]; then
 	/bin/dmesg -n $CONSOLE_LOGLEVEL
 fi
 
-if [ -f /etc/udev/udev.conf ];then
-	. /etc/udev/udev.conf
-fi
-
-[ -x /sbin/start_udev ] && run_cmd "Starting udev" /sbin/start_udev
-	
-# /dev must be also mounted before everything but only if we want use them ;-)
-if is_yes "$MOUNT_DEVFS"; then
-	run_cmd "Mounting Device Filesystem" mount -n -t devfs /dev /dev
-fi
-
-# set up devfsd
-if [ -e /dev/.devfsd -a -x /sbin/devfsd ]; then
-        run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
-fi
-
-# Configure Linux kernel (initial configuration, some required modules still
-# may be missing).
-/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
-
-# Set the system clock.
-ARC=0
-SRM=0
-UTC=0
-
-if [ -f /etc/sysconfig/clock ]; then
-	. /etc/sysconfig/clock
-
-	# convert old style clock config to new values
-	if [ "${CLOCKMODE}" = "GMT" ]; then
-		UTC=true
-	elif [ "${CLOCKMODE}" = "ARC" ]; then
-		ARC=true
-	fi
-fi
-
-if grep "system serial" /proc/cpuinfo | grep -q MILO ; then
-	ARC=true
-fi
-
-CLOCKDEF=""
-CLOCKFLAGS="--hctosys"
-
-if is_yes "$UTC" ; then
-	CLOCKFLAGS="$CLOCKFLAGS --utc"
-	CLOCKDEF="$CLOCKDEF (utc)"
-else
-	CLOCKFLAGS="$CLOCKFLAGS --localtime"
-	CLOCKDEF="$CLOCKDEF (local)"
-fi
-
-if is_yes "$ARC" ; then
-	CLOCKFLAGS="$CLOCKFLAGS -A"
-	CLOCKDEF="$CLOCKDEF (arc)"
-fi
-
-if is_yes "$SRM" ; then
-	CLOCKFLAGS="$CLOCKFLAGS -S"
-	CLOCKDEF="$CLOCKDEF (srm)"
-fi
-
-# Check if timezone definition is available
-if [ -e /etc/localtime ] ; then
-	if run_cmd "$(nls 'Setting clock')$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
-		show "$(nls 'Today`s date:') $(LC_CTYPE=C date)"; ok
-	fi
-else
-	TIME_SETUP_DELAYED=yes
-fi
-
-# Start up swapping
-run_cmd "Activating swap partitions" swapon -a -e
-
 # Set the hostname
 run_cmd "$(nls 'Host:') ${HOSTNAME}" hostname ${HOSTNAME}
 
@@ -214,149 +88,10 @@ else
 	domainname ""
 fi
 
-# Initialize USB controllers
-usb=0
-if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "usb" /proc/devices 2>/dev/null ; then
-        aliases=$(/sbin/modprobe -c | awk '/^alias usb-controller/ { print $3 }')
-        if [ -n "$aliases" -a "$aliases" != "off" ] ; then
-                /sbin/modprobe -k usbcore
-                for alias in $aliases ; do
-                        [ "$alias" = "off" ] && continue
-                        run_cmd "$(nls 'Initializing USB controller') ($alias)" /sbin/modprobe $alias
-                done
-                [ $? -eq 0 -a -n "$aliases" ] && usb=1
-        fi
-	if grep -iq "usb" /proc/devices 2>/dev/null ; then
-		usb=1
-	fi
-fi
-
-if [ "$usb" = "1" -a ! -f /proc/bus/usb/devices ]; then
-	run_cmd "Mounting USB filesystem" mount -t usbfs usbfs /proc/bus/usb
-fi
-
-needusbstorage=
-if [ "$usb" = "1" ]; then
-	needusbstorage=$(LC_ALL=C cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08")
-	if [ "$(kernelverser)" -lt "002006" ]; then
-    	    LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2> /dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
-    	    mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02")
-    	    kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01")
-    	    if [ -n "$kbdoutput" ]; then
-		run_cmd "Initializing USB keyboard" modprobe keybdev
-    	    fi
-    	    if [ -n "$mouseoutput" ]; then
-		run_cmd "Initializing USB mouse" modprobe mousedev
-    	    fi
-	fi
-fi
-
-# Setup hdparm thing (if exists and is needed)
-if ! grep -iq nohdparm /proc/cmdline; then
-	[ -x /etc/rc.d/rc.hdparm ] && /etc/rc.d/rc.hdparm
-fi
-
 if [ -f /fastboot ] || grep -iq "fastboot" /proc/cmdline 2> /dev/null ; then
 	fastboot=yes
 else
 	fastboot=
-fi
-
-if [ -f /fsckoptions ]; then
-	fsckoptions=$(cat /fsckoptions)
-else
-	fsckoptions=''
-fi
-
-if [ -f /forcefsck ]; then
-        fsckoptions="-f $fsckoptions"
-fi
-
-_RUN_QUOTACHECK=0
-_ROOTFS_TYPE=$(grep " / " /proc/mounts | awk '{ print $3 }')
-
-if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ]; then 
-	show "Checking root filesystem"; started
-	initlog -c "fsck -C -T -a $fsckoptions /"
-
-	rc=$?
-
-	# A return of 4 or higher means there were serious problems.
-	if [ $rc -gt 3 ]; then
-	    	[ -e /proc/splash ] && echo "verbose" > /proc/splash
-		# don't use '\n' in nls macro !
-		echo
-		echo
-		nls "*** An error occurred during the file system check."
-		nls "*** Dropping you to a shell; the system will reboot"
-		nls "*** when you leave the shell."
-		echo
-
-		PS1="$(nls '(Repair filesystem)# ')"; export PS1
-		[ "$SELINUX" = "1" ] && disable_selinux
-		if is_yes "$RUN_SULOGIN_ON_ERR"; then
-			/sbin/sulogin
-		else
-			/bin/sh
-		fi
-
-		run_cmd "Unmounting file systems" umount -a
-		mount -n -o remount,ro /
-		run_cmd "Automatic reboot in progress" reboot
-	# A return of 2 or 3 means that filesystem was repaired but we need
-	# to reboot.
-	elif [ "$rc" = "2" -o "$rc" = "3" ]; then
-	    	[ -e /proc/splash ] && echo "verbose" > /proc/splash
-		echo
-		nls "*** Filesystem was repaired but system needs to be"
-		nls "*** rebooted before mounting it."
-		nls "*** REBOOTING ***"
-		echo
-
-		run_cmd "Unmounting file systems" umount -a
-		mount -n -o remount,ro /
-		run_cmd "Automatic reboot in progress" reboot
-	elif [ "$rc" = "1" ]; then
-		_RUN_QUOTACHECK=1
-	fi
-fi
-
-# Unmount the initrd, if necessary
-if LC_ALL=C grep -q /initrd /proc/mounts && ! LC_ALL=C grep -q /initrd/loopfs /proc/mounts ; then
-    if [ -e /initrd/dev/.devfsd ]; then
-	umount /initrd/dev
-    fi
-    umount /initrd
-    /sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
-fi
-		      
-# Check for arguments 
-if grep -iq nopnp /proc/cmdline; then
-	PNP=
-else
-	PNP=yes
-fi
-
-# set up pnp and kernel pnp
-if [ -n "$PNP" ]; then
-    if is_yes "$RUN_USERPNP" && [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
-	run_cmd "Setting up ISA PNP devices (userspace pnp)" /sbin/isapnp /etc/isapnp/isapnp.conf
-    fi
-    if is_yes "$RUN_KERNELPNP"; then
-	/sbin/modprobe -k isa-pnp 2> /dev/null
-	if [ -e /proc/isapnp -a -f /etc/isapnp/isapnp-kernel.conf ]; then
-	    show "Setting up ISA PNP devices (kernelspace pnp)"; busy
-	    grep -v "^#" /etc/isapnp/isapnp-kernel.conf > /proc/isapnp && (deltext; ok) || (deltext; fail)
-	fi
-    fi
-fi
-
-# Remount the root filesystem read-write
-run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
-
-# Update quotas if fsck was run on /
-if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
-	run_cmd "Checking root filesystem quotas" /sbin/quotacheck -vnug /
 fi
 
 # Clean up SELinux labels
@@ -372,20 +107,6 @@ fi
 
 # Remove stale backups
 rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
-
-# Enter root, /proc, /sys, devfs and other into mtab.
-mount -f /
-mount -f /proc
-[ -f /proc/bus/usb/devices ] && mount -f -t usbfs usbfs /proc/bus/usb
-[ -e /dev/.devfsd ] && mount -f -t devfs devfs /dev
-
-if grep -q sysfs /proc/filesystems ; then
-	mount -f -t sysfs sysfs /sys
-fi
-
-if grep -q selinuxfs /proc/filesystems ; then
-    	mount -f -t selinuxfs selinuxfs /selinux
-fi
 
 # Remove /etc/nologin when starting system
 [ -f /etc/nologin.boot ] && rm -f /etc/nologin /etc/nologin.boot
@@ -406,365 +127,12 @@ if [ -n "$IN_INITLOG" ]; then
 	IN_INITLOG=""
 fi
 
-if [ ! -f /proc/modules ]; then
-	USEMODULES=
-elif ! grep -iq nomodules /proc/cmdline; then
-	USEMODULES=y
-else
-	USEMODULES=
-fi
-
-# Adjust symlinks as necessary in /boot to keep system services from
-# spewing messages about mismatched System maps and so on.
-if is_yes "$SET_SLINKS"; then
-	if [ -L /boot/System.map -a -r /boot/System.map-`uname -r` ] ; then
-	        ln -s -f System.map-`uname -r` /boot/System.map
-	fi
-	if [ ! -e /boot/System.map -a -r /boot/System.map-`uname -r` ] ; then
-	        ln -s -f System.map-`uname -r` /boot/System.map
-	fi
-fi
-
-# Run depmod if RUN_DEPMOD != "no" and:
-# a) user requested or RUN_DEPMOD="";
-# b) modules.dep is missing
-# c) modules.dep is older than /etc/modules.conf or /lib/modules/`uname -r`
-if ! is_no "$RUN_DEPMOD" && [ -n "$USEMODULES" ]; then
-    	if is_yes "$RUN_DEPMOD" || [ -z "$RUN_DEPMOD" ]; then
-		run_cmd "Finding module dependencies" depmod -a
-	elif [ "$RUN_DEPMOD" = "ifmissing" ]; then
-		run_cmd "Finding module dependencies" depmod -A
-	fi
-fi
-
-if [ -f /proc/sys/kernel/modprobe ]; then
-	if [ -n "$USEMODULES" ]; then
-		sysctl -w kernel.modprobe="/sbin/modprobe" >/dev/null 2>&1
-		sysctl -w kernel.hotplug="/sbin/hotplug" >/dev/null 2>&1
-	else
-		# We used to set this to NULL, but that causes
-		# 'failed to exec' messages"
-		sysctl -w kernel.modprobe="/bin/true" >/dev/null 2>&1
-		sysctl -w kernel.hotplug="/bin/true" >/dev/null 2>&1
-	fi
-fi
-
-# Load usb storage here, to match most other things
-if [ -n "$needusbstorage" ]; then
-        modprobe -k usb-storage >/dev/null 2>&1
-fi
-
-# Load firewire devices
-if ! grep -iq "nofirewire" /proc/cmdline 2>/dev/null ; then
-	aliases=$(/sbin/modprobe -c | awk '/^alias ieee1394-controller/ { print	$3 }')
-	if [ -n "$aliases" -a "$aliases" != "off" ] ; then
-	    for alias in $aliases ; do
-		[ "$alias" = "off" ] && continue
-		run_cmd "$(nls 'Initializing firewire controller') ($alias)" /sbin/modprobe $alias
-	    done
-	    LC_ALL=C grep -E "SBP2" /proc/bus/ieee1394/devices 2> /dev/null && /sbin/modprobe -s sbp2 > /dev/null 2>&1 
-	fi
-fi    
-    
-# Load sound modules if they need persistent DMA buffers
-if grep -q "^options sound dmabuf=1" "$MODULES_CONF" 2>/dev/null ; then
-	RETURN=0
-	alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound[[:space:]]+" | awk '{ print $3 }')
-	if [ -n "$alias" -a "$alias" != "off" ] ; then
-		run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
-		RETURN=$?
-	fi
-	alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound-slot-0[[:space:]]+" | awk '{ print $3 }')
-	if [ -n "$alias" -a "$alias" != "off" ] ; then
-		run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
-		RETURN=$?
-	fi
-fi
-
-# Load modules
-if [ -x /etc/rc.d/rc.modules ]; then
-	/etc/rc.d/rc.modules
-fi
-
-# Find and activate volume groups:
-# EVMS
-if [ -x /sbin/evms_activate ]; then
-    
-    	if [ "$(kernelverser)" -lt "002006" ]; then
-    	    # Linux 2.4 core modules
-    	    modprobe -s -k evms > /dev/null 2>&1
-    	    modprobe -s -k evms_passthru > /dev/null 2>&1
-    	    modprobe -s -k ldev_mgr > /dev/null 2>&1
-    	    modprobe -s -k dos_part > /dev/null 2>&1
-    	else
-    	    # Linux 2.6 core module
-    	    modprobe -s -k evmscore > /dev/null 2>&1
-	fi
-	
-	is_yes "$EVMS_GUID_PTABLE" && modprobe -s -k gpt_part >/dev/null 2>&1
-	is_yes "$EVMS_LVM" && modprobe -s -k lvm_vge >/dev/null 2>&1
-	is_yes "$EVMS_AIX" && modprobe -s -k AIXlvm_vge >/dev/null 2>&1
-	is_yes "$EVMS_OS2" && modprobe -s -k os2lvm_vge >/dev/null 2>&1
-        run_cmd "Discovering EVMS volumes" /sbin/evms_activate
-	if is_yes "$EVMS_LVM" && is_yes "$EVMS_LVM_COMPAT_NODES" ; then
-		# Link nodes for compatibility with LVM
-		if [ "echo /dev/evms/lvm/*" != '/dev/evms/lvm/*' ] ; then
-			ln -s /dev/evms/lvm/* /dev/
-		fi
-	fi
-fi
-# LVM (keep in sync with LVM starting after RAID run!)
-if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-	lvmversion=$(/sbin/vgchange --version 2>/dev/null | awk '{gsub("vgchange: Logical Volume Manager ",""); gsub("LVM version:     ",""); gsub(/\..*/,"");print $1; exit}')
-   	if [ "$lvmversion" = "1" ] ; then
-		modprobe -s -k lvm-mod >/dev/null 2>&1
-		lvmignorelock=""
-	elif [ "$lvmversion" = "2" ] ; then
-		modprobe -s -k dm-mod >/dev/null 2>&1
-		lvmignorelock="--ignorelockingfailure"
-	else
-	    modprobe -s -k lvm-mod >/dev/null 2>&1
-	    # device mapper (2.5+ and patched 2.4)
-	    modprobe -s -k dm-mod >/dev/null 2>&1
-	    lvmignorelock=""
-	fi
-			
-    
-	run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelock && \
-	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmignorelock
-	[ "$lvmversion" = "2" ] && /sbin/vgscan --mknodes $lvmignorelock > /dev/null 2>&1
-
-fi
-
-# Add raid devices
-if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
-
-	modprobe -s md >/dev/null 2>&1
-	if [ -f /proc/mdstat ]; then
-	    goraidtab=1
-	    golvm=0
-	    rc=0
-	    
-	    if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
-		if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf); then
-		    run_cmd "Starting up RAID devices" /sbin/mdadm --assemble --scan
-		    rc=$?
-		    [ "$rc" -eq 0 ] && goraidtab=0 && golvm=1
-		fi
-	    fi
-	    
-	    if [ -f /etc/raidtab -a "$goraidtab" -eq 1 ]; then
-		
-		for i in $(grep -v "^#" /etc/raidtab | grep "raiddev" | awk '{print $2}') ; do
-		    golvm=1
-		    RAIDDEV=$(basename $i)
-		    RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat)
-		    show "Starting up RAID device %s" $RAIDDEV
-		    busy
-		    if [ -z "$RAIDSTAT" ]; then
-			# Try raidstart first...if that fails then
-			# fall back to raid0run and if that fails too
-			# fall back to raidadd, raidrun.
-			RESULT=1
-			if [ -x /sbin/raidstart ]; then
-				/sbin/raidstart $i
-				RESULT=$?
-			fi
-			if [ $RESULT -gt 0 -a -x /sbin/raid0run ]; then
-				/sbin/raid0run $i
-				RESULT=$?
-			fi
-			if [ $RESULT -gt 0 -a -x /sbin/raidadd -a -x /sbin/raidrun ]; then
-				/sbin/raidadd $i
-				/sbin/raidrun $i
-				RESULT=$?
-			fi
-			if [ $RESULT -gt 0 ]; then
-				rc=1
-				fail
-			else
-				ok
-			fi
-		    else
-			ok
-		    fi
-		done
-	    fi
-
-	    # A non-zero return means there were problems
-	    if [ $rc -gt 0 ]; then
-		[ -e /proc/splash ] && echo "verbose" > /proc/splash
-		show "Starting up RAID devices"; fail
-		echo
-		echo
-		nls "*** An error occurred during the RAID startup."
-		nls "*** Dropping you to a shell; the system will reboot"
-		nls "*** when you leave the shell."
-		echo
-
-		PS1="$(nls '(RAID Repair)# ')"; export PS1
-		[ "$SELINUX" = "1" ] && disable_selinux
-		if is_yes "$RUN_SULOGIN_ON_ERR"; then
-			/sbin/sulogin
-		else
-			/bin/sh
-		fi
-
-		run_cmd "Unmounting file systems" umount -a
-		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
-		run_cmd "Automatic reboot in progress" reboot
-	    fi
-	    # LVM on RAID (keep in sync with LVM setting few lines above)
-	    if [ "$golvm" -eq "1" ]; then
-		if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-    		    run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelock && \
-			    run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmignorelock
-	    	    [ "$lvmversion" = "2" ] && /sbin/vgscan --mknodes $lvmignorelock > /dev/null 2>&1
-		fi
-	    fi
-	    show "Starting up RAID devices"; ok
-	fi
-fi
-
-_RUN_QUOTACHECK=0
-# Check filesystems
-if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline; then
-    	rc_splash "fsck start"
-	show "Checking filesystems"; started
-	initlog -c "fsck -C -T -R -A -a $fsckoptions"
-
-	rc=$?
-
-	# A return of 2 or higher means there were serious problems
-	if [ $rc -gt 1 ]; then
-	    	[ -e /proc/splash ] && echo "verbose" > /proc/splash
-		echo
-		echo
-		nls "*** An error occurred during the file system check."
-		nls "*** Dropping you to a shell; the system will reboot"
-		nls "*** when you leave the shell."
-		echo
-
-		PS1="$(nls '(Repair filesystem)# ')"; export PS1
-		[ "$SELINUX" = "1" ] && disable_selinux
-		if is_yes "$RUN_SULOGIN_ON_ERR"; then
-			/sbin/sulogin
-		else
-			/bin/sh
-		fi
-
-		run_cmd "Unmounting file systems" umount -a
-		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
-		run_cmd "Automatic reboot in progress" reboot
-	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
-		_RUN_QUOTACHECK=1
-	fi
-	rc_splash "fsck stop"
-fi
-
-# Mount all other filesystems (except for NFS and /proc, which is already
-# mounted). Contrary to standard usage,
-# filesystems are NOT unmounted in single user mode.
-
-run_cmd "Mounting local filesystems" mount -a -t nonfs,smbfs,ncpfs,proc,cifs -O no_netdev
-
-# Now do some workaround - encrypted filesystems couldn't have been fsck-ed
-# before mount - that's where the password is entered.
-# mount is buggy - when remounting loopback filesystem, loop=XXX
-# option is removed from /etc/mtab
-if [ -z "$fastboot" ] && grep "^[^#].*encryption=" /etc/fstab | grep -v -q "noauto"; then
-	show "Checking encrypted filesystems"; started
-	LOOPLIST="$(awk '
-	FILENAME=="/proc/mounts" {
-		TAB[$2]=$1;
-	}
-	FILENAME=="/etc/fstab" && /encryption=/ && ! /noauto/ && /[^a-zA-Z_]ro[^a-zA-Z_]/ {
-		if ($2 in TAB){print TAB[$2];}
-	}
-	FILENAME=="/etc/fstab" && /encryption=/ && ! /noauto/ && ! /[^a-zA-Z_]ro[^a-zA-Z_]/ {
-		if ($2 in TAB){print TAB[$2];}
-		sub("loop(=[^,]*)?","loop=" TAB[$2] ",ro",$4);
-		cmd="mount " $2 " -o remount," $4;
-		system(cmd);
-	}
-	' /proc/mounts /etc/fstab)"
-	initlog -c "fsck -T -C -a $fsckoptions $LOOPLIST"
-	rc=$?
-
-	# A return of 2 or higher means there were serious problems.
-	if [ $rc -gt 1 ]; then
-	    	[ -e /proc/splash ] && echo "verbose" > /proc/splash
-		echo
-		echo
-		nls "*** An error occurred during the file system check."
-		nls "*** Dropping you to a shell; the system will reboot"
-		nls "*** when you leave the shell."
-		echo
-
-		PS1="`nls '(Repair filesystem)# '`"; export PS1
-		[ "$SELINUX" = "1" ] && disable_selinux
-		if is_yes "$RUN_SULOGIN_ON_ERR"; then
-			/sbin/sulogin
-		else
-			/bin/sh
-		fi
-
-		run_cmd "Unmounting file systems" umount -a
-		run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
-		run_cmd "Automatic reboot in progress" reboot
-	elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
-		_RUN_QUOTACHECK=1
-	fi
-	
-	show "Remounting encrypted filesystems back in rw mode"; busy
-	awk '
-	FILENAME=="/proc/mounts" {
-		TAB[$2]=$1;
-	}
-	FILENAME=="/etc/fstab" && /encryption=/ && ! /noauto/ && ! /[^a-zA-Z_]ro[^a-zA-Z_]/ {
-		sub("loop(=[^,]*)?","loop=" TAB[$2] ",rw",$4);
-		cmd="mount " $2 " -o remount," $4;
-		system(cmd);
-	}
-	' /proc/mounts /etc/fstab
-	ok
-fi
-
-if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
-	run_cmd "Checking filesystem quotas"  /sbin/quotacheck -vnugRa
-fi
-
-# Turn on quota
-if [ -x /sbin/quotaon ]; then
-	run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -aug
-fi
-
 [ -n "$SELINUX" ] && [ -f /.autorelabel ] && relabel_selinux
 
 # Turn on process accounting
 if [ -x /etc/rc.d/rc.acct ]; then
 	/etc/rc.d/rc.acct start
 fi
-
-# Set the clock if timezone definition wasn't available (eg. /usr not mounted)
-if is_yes "$TIME_SETUP_DELAYED"; then
-	if run_cmd "$(nls 'Setting clock')$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
-		show "$(nls 'Today`s date:') $(LC_CTYPE=C date)"; ok
-	fi
-fi
-
-# Initialize the serial ports
-if [ -f /etc/rc.d/rc.serial ]; then
-	. /etc/rc.d/rc.serial
-fi
-
-if [ -f /proc/sys/kernel/panic -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
-	show 'Setting %s seconds for kernel reboot after panic' "$PANIC_REBOOT_TIME"; busy
-	if (sysctl -w kernel.panic=$PANIC_REBOOT_TIME >/dev/null 2>&1); then ok; else fail; fi
-fi
-
-# ... and here finish configuring parameters
-/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 
 # Clean up /.
 rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
@@ -809,21 +177,6 @@ fi
 mkdir -m 1777 -p /tmp/.ICE-unix > /dev/null 2>&1
 chown root:root /tmp/.ICE-unix
 [ -n "$SELINUX" ] && restorecon /tmp/.ICE-unix >/dev/null 2>&1
-
-# Right, now turn on swap in case we swap to files
-swapon -a >/dev/null 2>&1
-run_cmd "Enabling swap space" /bin/true
-
-# If a SCSI tape has been detected, load the st module unconditionally
-# since many SCSI tapes don't deal well with st being loaded and unloaded
-if [ -f /proc/scsi/scsi ] && grep -q 'Type:   Sequential-Access' /proc/scsi/scsi 2>/dev/null ; then
-	if grep -qv ' 9 st' /proc/devices; then
-		if [ -n "$USEMODULES" ] ; then
-			# Try to load the module. If it fails, ignore it...
-			insmod -p st >/dev/null 2>&1 && modprobe -s st >/dev/null 2>&1
-		fi
-	fi
-fi
 
 # There could be a new kernel version. Remove old psdevtab database
 rm -f /etc/psdevtab

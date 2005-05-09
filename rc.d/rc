@@ -49,22 +49,17 @@ if [ -f /etc/sysconfig/system ]; then
 	. /etc/sysconfig/system
 else
 	RUN_SULOGIN_ON_ERR=yes
-	RUN_ISAPNP=yes
-	PANIC_REBOOT_TIME=0
 	DELAY_LOGIN=yes
 	CLEAN_TMP=no
 	CONSOLE_LOGLEVEL=1
-	SET_SLINKS=yes
 	RUN_LDCONFIG=yes
 fi
 
-if [ "$argv2" != "chroot" ]; then
-    # Now find out what the current and what the previous runlevel are.
-    set $(/sbin/runlevel)
-    runlevel=$2
-    previous=$1
-    export runlevel previous
-fi
+# Now find out what the current and what the previous runlevel are.
+set $(/sbin/runlevel)
+runlevel=$2
+previous=$1
+export runlevel previous
 
 # if previous runlevel = current runlevel do nothing
 [ "$runlevel" = "$previous" ] && exit 0
@@ -73,7 +68,7 @@ fi
 # virtual console, and send messages to /dev/console 
 # (it can be serial console too) 
 if [ "$COLUMNS" -gt 0 ]; then
-	if [ "$argv2" != "chroot" ] && [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
+	if [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
 		CONSOLE=/dev/tty1
 		[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > $CONSOLE
 		exec 0<> /dev/console 1>&0 2>&0
@@ -96,43 +91,6 @@ if [ "$previous" = "N" ]; then
 		nls "Entering non-interactive startup"
 	fi
 fi
-
-# calculate bootsplash variables
-sscripts=0
-for i in /etc/rc.d/rc$runlevel.d/S*; do
-	[ ! -f $i ] && continue
-	[ "${1%.rpmsave}" != "${1}" ] && continue
-        [ "${1%.rpmorig}" != "${1}" ] && continue
-        [ "${1%.rpmnew}" != "${1}" ] && continue
-	subsys=${i#/etc/rc.d/rc$runlevel.d/S??}
-	[ -f /var/lock/subsys/$subsys ] && \
-		[ ! -f /var/lock/subsys/${subsys}.init ] && continue
-	sscripts=$(( sscripts + 1 ))
-done
-export sscripts
-
-if test "$previous" != "N" ; then
-	kscripts=0
-    	for i in /etc/rc.d/rc$runlevel.d/K*; do
-	        [ ! -f $i ] && continue
-        	[ "${1%.rpmsave}" != "${1}" ] && continue
-        	[ "${1%.rpmorig}" != "${1}" ] && continue
-        	[ "${1%.rpmnew}" != "${1}" ] && continue
-		subsys=${i#/etc/rc.d/rc$runlevel.d/K??}
-                [ ! -f /var/lock/subsys/$subsys ] && \
-                    [ ! -f /var/lock/subsys/${subsys}.init ] && continue
-		kscripts=$(( kscripts + 1 ))
-	done
-	export kscripts
-fi
-
-if test "$previous" == "N" -a "$runlevel" == "5" ; then
-	export progress=16
-	sscripts=$(( $sscripts + 15 ))
-else
-	export progress=0
-fi
-
 
 # set onlcr to avoid staircase effect and do not lock scrolling
 stty onlcr -ixon 0>&1
@@ -172,8 +130,6 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		[ ! -f /var/lock/subsys/$subsys ] && \
 		    [ ! -f /var/lock/subsys/${subsys}.init ] && continue
 
-		rc_splash "$i stop"
-		
 		# Bring the subsystem down.
 		$i stop
 	done
@@ -210,7 +166,6 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 			esac
 		}
 
-		rc_splash "$i start"
 		# Bring the subsystem up.
 		$i start
 	done
@@ -234,11 +189,7 @@ if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
 	unset LC_ALL
 	TMPDIR=/dev/null
 	export TMPDIR
-	if [ "$argv2" != "chroot" ]; then
-    	    exec /etc/rc.d/rc.shutdown $runlevel
-	else
-	    exit 0
-	fi
+	exec /etc/rc.d/rc.shutdown $runlevel
 else
 	if is_yes "$RUN_LDCONFIG" || [ ! -f /etc/ld.so.cache ] ; then
 		if [ -x /sbin/ldconfig ]; then
@@ -246,8 +197,6 @@ else
 		fi
 	fi
 fi
-
-rc_splash "master"
 
 # Say something ;)
 text="$(nls '%sResource Manager: %sRunlevel has been reached' "$af2" "$af7")"
