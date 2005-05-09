@@ -23,9 +23,7 @@ sbin_PROGRAMS =	\
 	loglevel \
 	minilogd \
 	netreport \
-	ppp-watch \
-	start-stop-daemon \
-	usernetctl
+	start-stop-daemon
 	
 EXTRA_PROGRAMS = \
 	testd 
@@ -45,8 +43,6 @@ netreport_SOURCES = netreport.c
 
 testd_SOURCES = testd.c
 
-usernetctl_SOURCES = usernetctl.c
-
 usleep_SOURCES = usleep.c
 usleep_LDADD = -lpopt
 
@@ -57,10 +53,6 @@ initlog_LDADD = -lpopt
 
 getkey_SOURCES = getkey.c
 getkey_LDADD = -lpopt
-
-ppp_watch_SOURCES = ppp-watch.c shvar.c shvar.h
-ppp_watch_LDADD = $(GLIBDIR)/$(GLIBNAME)
-INCLUDES = $(GCFLAGS)
 
 consoletype_SOURCES = consoletype.c
 
