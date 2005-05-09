@@ -88,12 +88,6 @@ else
 	domainname ""
 fi
 
-if [ -f /fastboot ] || grep -iq "fastboot" /proc/cmdline 2> /dev/null ; then
-	fastboot=yes
-else
-	fastboot=
-fi
-
 # Clean up SELinux labels
 if [ -n "$SELINUX" ]; then
     for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache ; do

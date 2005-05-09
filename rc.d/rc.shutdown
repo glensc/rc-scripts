@@ -35,7 +35,6 @@ halt -w
 [ -x /etc/rc.d/rc.acct ] && /etc/rc.d/rc.acct stop
 
 show "The system is halted"; ok
-[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
 eval halt -d -p
 
 # This must be last line !
