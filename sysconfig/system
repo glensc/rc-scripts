@@ -30,7 +30,8 @@ DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 # "-c 0" to make sure it doesn't core dump anywhere; while this could mask
 # problems with the daemon, it also closes some security problems;
 # users' limits are set via pam_limits.
-DEFAULT_SERVICE_LIMITS="-u unlimited -c 0"
+#DEFAULT_SERVICE_LIMITS="-u unlimited -c 0"
+DEFAULT_SERVICE_LIMITS="-c 0"
 
 # Do not allow users to login when system is starting
 # (but allow when it end "starting" process) ?
