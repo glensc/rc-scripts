@@ -1,19 +1,14 @@
 @SET_MAKE@
 
-SUBDIRS = network-scripts interfaces hwprofiles
+SUBDIRS = network-scripts
 
 sysconfigdir = @sysconfigdir@
 
 sysconfig_DATA = \
-	clock \
 	init-colors \
 	init-colors.gentoo \
-	hwprof \
 	system \
 	network \
-	static-routes \
-	static-nat \
-	static-arp \
 	i18n \
 	timezone
 

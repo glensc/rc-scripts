@@ -2,13 +2,11 @@
 #	$Id$
 #
 
-SUBDIRS = src ppp isapnp sysconfig rc.d doc man po
+SUBDIRS = src sysconfig rc.d doc man po
 
 sysconf_DATA = \
 	adjtime \
-	inittab \
-	modules \
-	sysctl.conf
+	inittab
 
 profiledir = @sysconfdir@/profile.d
 
@@ -18,16 +16,13 @@ profile_DATA = \
 
 bin_SCRIPTS = run-parts
 sbin_SCRIPTS = \
-	setsysfont \
-	hwprofile \
 	service
 
 EXTRA_DIST = \
 	$(sysconf_DATA) \
 	$(profile_DATA) \
 	$(sbin_SCRIPTS) \
-	$(bin_SCRIPTS) \
-	rc-scripts.spec
+	$(bin_SCRIPTS)
 
 # make rpms
 rpm: $(PACKAGE).spec

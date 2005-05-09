@@ -5,10 +5,7 @@ initdir = @rcdir@/init.d
 init_SCRIPTS = \
 	allowlogin \
 	killall \
-	network \
-	random \
 	single \
-	sys-chroots \
 	timezone
 	
 init_DATA = functions

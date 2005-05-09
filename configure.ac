@@ -22,7 +22,6 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 
-pppdir='${sysconfdir}/ppp'
 sysconfigdir='${sysconfdir}/sysconfig'
 updir='${sysconfigdir}/interfaces/up.d'
 downdir='${sysconfigdir}/interfaces/down.d'
@@ -100,7 +99,6 @@ AC_SUBST(POTSRC)
 AC_SUBST(localedir)
 AC_SUBST(gnulocaledir)
 			
-AC_SUBST(pppdir)
 AC_SUBST(networkscriptsdir)
 AC_SUBST(sysconfigdir)
 AC_SUBST(updir)
@@ -200,26 +198,8 @@ AC_CONFIG_FILES([Makefile \
 	man/ja/Makefile \
 	man/ru/Makefile \
 	man/sv/Makefile \
-	ppp/Makefile \
-	isapnp/Makefile \
 	sysconfig/Makefile \
-	sysconfig/hwprofiles/Makefile \
 	sysconfig/network-scripts/Makefile \
-	sysconfig/interfaces/Makefile \
-	sysconfig/interfaces/data/Makefile \
-	sysconfig/interfaces/up.d/Makefile \
-	sysconfig/interfaces/up.d/all/Makefile \
-	sysconfig/interfaces/up.d/ip/Makefile \
-	sysconfig/interfaces/up.d/ipx/Makefile \
-	sysconfig/interfaces/up.d/ppp/Makefile \
-	sysconfig/interfaces/up.d/tnl/Makefile \
-	sysconfig/interfaces/down.d/Makefile \
-	sysconfig/interfaces/down.d/all/Makefile \
-	sysconfig/interfaces/down.d/ip/Makefile \
-	sysconfig/interfaces/down.d/ipx/Makefile \
-	sysconfig/interfaces/down.d/ppp/Makefile \
-	sysconfig/interfaces/down.d/tnl/Makefile \
 	rc.d/Makefile rc.d/init.d/Makefile \
-	po/Makefile \
-	rc-scripts.spec])
+	po/Makefile])
 AC_OUTPUT
