@@ -8,52 +8,15 @@ NETWORKING=yes
 # Do you need IPv4 networking ?
 IPV4_NETWORKING=yes
 
-# Do you want IPv4 forwarding ?
-# then set it in /etc/sysctl.conf
-
 # Set hostname here (only hostname)
-HOSTNAME=pldmachine
+HOSTNAME=pldvserver
 
 # Set NIS domain name here if you use NIS
 # Note: DNS domain name should be set in /etc/resolv.conf, not here
 NISDOMAIN=
 
-# Traditional setup of gateway. This is obsolete, consider using static-routes
-# instead. However this is really enough for most users.
-GATEWAY=
-GATEWAYDEV=
-
-# Do you want to use IPX networking ?
-IPX=no
-IPXAUTOPRIMARY=
-IPXAUTOFRAME=
-IPXINTERNALNETNUM=
-IPXINTERNALNODENUM=
-
 # Do you need IPv6 networking ?
 IPV6_NETWORKING=no
-
-# Do you want IPv6 forwarding ?
-# then set it in /etc/sysctl.conf
-
-# Enable tunnel interfaces configuration ?
-IPV6_TUNNELCONFIG=no
-
-# Global route for IPv6 host with IPv6 forwarding
-IPV6_GLOBALROUTEGW=
-IPV6_GLOBALROUTEDEV=
-
-# Other
-
-# Do you want set static ARP table (based on /etc/ethers config file) ?
-STATIC_ARP=no
-
-# Do you want set static RARP table (based on /etc/ethers config file) ?
-STATIC_RARP=no
-
-# Specify interface on which you want to enable tleds software
-# (also you need tleds package installed) -- default set to no
-TLEDS_DEV=no
 
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4

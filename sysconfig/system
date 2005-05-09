@@ -32,15 +32,6 @@ DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 # users' limits are set via pam_limits.
 DEFAULT_SERVICE_LIMITS="-u unlimited -c 0"
 
-# Setup PNP using userspace tools?
-RUN_USERPNP=yes
-# Setup kernel space PNP (2.4.x)
-RUN_KERNELPNP=yes
-
-# After how many seconds reboot system after kernel panic ?
-# 0 - never reboot system (suggested 60)
-PANIC_REBOOT_TIME=0
-
 # Do not allow users to login when system is starting
 # (but allow when it end "starting" process) ?
 DELAY_LOGIN=yes
@@ -51,46 +42,11 @@ CLEAN_TMP=yes
 # We want utmpx/wtmpx
 NEED_XFILES=yes
 
-# Try to setup proper symlinks in /boot (based on kernel version) ?
-SET_SLINKS=yes
-
-# Run depmod at startup ?
-# Values:
-# yes/no	- as usually
-# ifmissing	- if modules.dep is missing
-RUN_DEPMOD=ifmissing
-
 # Run /sbin/ldconfig at startup ?
 RUN_LDCONFIG=no
 
-# Mount /dev (Device Filesystem)
-MOUNT_DEVFS=no
-
-# EVMS/LVM options
-# Eextensible Firmware Interface GUID Partition Table segment manager
-EVMS_GUID_PTABLE=no
-
-# Use EVMS for Linux LVM volumes
-EVMS_LVM=no
-
-# Create symlinks for LVM volumes (/dev/evms/lvm/* -> /dev/*)
-EVMS_LVM_COMPAT_NODES=yes
-
-# Use EVMS for Linux MD (RAID 0/1/5) valumes
-EVMS_MD=no
-
-# EVMS AIX LVM volumes
-EVMS_AIX=no
-
-# EVMS OS/2 LVM volumes
-EVMS_OS2=no
-
 # Set to anything other than 'no' to allow hotkey interactive startup...
 PROMPT=yes
-
-# List of chroots separated by space (to handle processes inside/outside
-# chroot properly)
-#SYSTEM_CHROOTS=
 
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4
