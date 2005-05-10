@@ -29,13 +29,10 @@ run_cmd "Sending all processes the TERM signal" killall5 -15
 sleep 5
 run_cmd "Sending all processes the KILL signal" killall5 -9
 
-# Write to wtmp file before unmounting /var
-halt -w
-
 [ -x /etc/rc.d/rc.acct ] && /etc/rc.d/rc.acct stop
 
+halt -w
 show "The system is halted"; ok
-eval halt -d -p
 
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4
