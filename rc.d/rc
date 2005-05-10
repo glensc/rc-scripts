@@ -64,20 +64,8 @@ export runlevel previous
 # if previous runlevel = current runlevel do nothing
 [ "$runlevel" = "$previous" ] && exit 0
 
-# if runlevel is 0 (halt) or 6 (reboot) change to first
-# virtual console, and send messages to /dev/console 
-# (it can be serial console too) 
-if [ "$COLUMNS" -gt 0 ]; then
-	if [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
-		CONSOLE=/dev/tty1
-		[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > $CONSOLE
-		exec 0<> /dev/console 1>&0 2>&0
-	fi
-else
-	# Serial: columns and lines are not defined
-	  LINES=24
-	COLUMNS=80
-fi
+LINES=24
+COLUMNS=80
 
 # See if we want to be in user confirmation mode
 if [ "$previous" = "N" ]; then
