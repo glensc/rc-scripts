@@ -31,7 +31,6 @@ run_cmd "Sending all processes the KILL signal" killall5 -9
 
 [ -x /etc/rc.d/rc.acct ] && /etc/rc.d/rc.acct stop
 
-halt -w
 show "The system is halted"; ok
 
 # This must be last line !
