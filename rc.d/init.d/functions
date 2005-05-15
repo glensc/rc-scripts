@@ -47,7 +47,6 @@ CCHARS="$NORMAL"	# Color of these characters (look at /etc/sysconfig/init-colors
 # Source configuration if available - may override default values
 [ -r /etc/sysconfig/init-colors ] && . /etc/sysconfig/init-colors
 [ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
-[ -r /etc/sysconfig/bootsplash ] && . /etc/sysconfig/bootsplash
 
 [ -z "$COLUMNS" ] && COLUMNS=80
 
@@ -132,8 +131,16 @@ kernelvermser()
 # Colors workaround
 termput()
 {
-	if is_yes "$FASTRC" || [ ! -d /usr/share/terminfo ] || \
-	   [ ! -x /usr/bin/tput -a ! -x /bin/tput ]; then
+	typeset tputavail
+
+	if [ -d /usr/share/terminfo ] && [ -x /usr/bin/tput -o -x /bin/tput ] ; then
+		tputavail=yes
+		# check if we are on proper terminal
+		tput longname > /dev/null 2>&1 || tputavail=no
+	else
+		tputavail=no
+	fi
+	if is_yes "$FASTRC" || is_no "$tputavail" ; then
 		case "$1" in
 		  hpa)
 			echo -ne "\033[$(($2+1))G"
@@ -158,9 +165,6 @@ termput()
 			;;
 		esac
 	else
-		# check if we are on proper terminal
-		tput longname > /dev/null 2>&1 || return
-
 		case "$1" in
 		  hpa | cuu* | el)
 			tput "$@"
@@ -238,15 +242,7 @@ nls()
 
 rc_splash()
 {
-	typeset action
-
-	action="$1"
-
-	if ! is_no "$BOOT_SPLASH"; then
-		[ -x /bin/splash ] && /bin/splash "$action"
-	fi
-
-	: $((progress++))
+	return
 }
 
 msg_network_down()
