@@ -17,14 +17,10 @@ trap ":" INT QUIT TSTP
 
 # Save argument
 argv1="$1"
-argv2="$2"
 
-# Get terminal size of standard input of the system console
-[ -z "$CONSOLE" ] && CONSOLE=/dev/console
-set -- $(stty size < $CONSOLE)
-  LINES=$1
-COLUMNS=$2
-export LINES COLUMNS CONSOLE
+LINES=24
+COLUMNS=80
+export LINES COLUMNS
   
 # NLS
 if [ -f /etc/sysconfig/i18n ]; then
@@ -63,9 +59,6 @@ export runlevel previous
 
 # if previous runlevel = current runlevel do nothing
 [ "$runlevel" = "$previous" ] && exit 0
-
-LINES=24
-COLUMNS=80
 
 # See if we want to be in user confirmation mode
 if [ "$previous" = "N" ]; then
