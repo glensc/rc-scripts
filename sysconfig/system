@@ -10,10 +10,6 @@ INIT_COL=67
 # terminals support)
 FASTRC=no
 
-# Messages with a higher priority than this will be printed
-# to the console (default 1)
-CONSOLE_LOGLEVEL=1
-
 # On errors (when system is starting) run sulogin instead of shell ?
 RUN_SULOGIN_ON_ERR=yes
 
@@ -45,9 +41,6 @@ NEED_XFILES=yes
 
 # Run /sbin/ldconfig at startup ?
 RUN_LDCONFIG=no
-
-# Set to anything other than 'no' to allow hotkey interactive startup...
-PROMPT=yes
 
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4
