@@ -47,7 +47,6 @@ else
 	RUN_SULOGIN_ON_ERR=yes
 	DELAY_LOGIN=yes
 	CLEAN_TMP=no
-	CONSOLE_LOGLEVEL=1
 	RUN_LDCONFIG=yes
 fi
 
@@ -60,24 +59,16 @@ export runlevel previous
 # if previous runlevel = current runlevel do nothing
 [ "$runlevel" = "$previous" ] && exit 0
 
-# See if we want to be in user confirmation mode
-if [ "$previous" = "N" ]; then
-	if grep -qi confirm /proc/cmdline >/dev/null \
-		|| [ -f /var/run/confirm ]; then
-		rm -f /var/run/confirm
-		CONFIRM="yes"
-		nls "Entering interactive startup"
-	else
-		CONFIRM=
-		nls "Entering non-interactive startup"
-	fi
+# Get first argument. Set new runlevel to this argument.
+[ -n "$1" ] && runlevel="$argv1"
+
+# if runlevel is not 0 (halt) or 6 (reboot) run rc.sysinit
+if [ "$runlevel" != "0" ] && [ "$runlevel" != "6" ]; then
+    /etc/rc.d/rc.sysinit $runlevel
 fi
 
 # set onlcr to avoid staircase effect and do not lock scrolling
 stty onlcr -ixon 0>&1
-
-# Get first argument. Set new runlevel to this argument.
-[ -n "$1" ] && runlevel="$argv1"
 
 # Tell linuxconf what runlevel we are in
 [ -d /var/run -a -w /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
@@ -129,23 +120,6 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		subsys=${i#/etc/rc.d/rc$runlevel.d/S??}
 		[ -f /var/lock/subsys/$subsys ] || \
 		    [ -f /var/lock/subsys/${subsys}.init ] && continue
-
-		# If we're in confirmation mode, get user confirmation
-		[ -n "$CONFIRM" ]  &&
-		{
-			confirm $subsys
-			case $? in
-			  0)
-				:
-			  ;;
-			  2)
-				CONFIRM=
-			  ;;
-			  *)
-				continue
-			  ;;
-			esac
-		}
 
 		# Bring the subsystem up.
 		$i start
