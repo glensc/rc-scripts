@@ -44,12 +44,11 @@ else
 	RUN_SULOGIN_ON_ERR=yes
 	DELAY_LOGIN=yes
 	CLEAN_TMP=no
-	CONSOLE_LOGLEVEL=1
 	RUN_LDCONFIG=yes
 fi
 
 # Check SELinux status
-selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
+selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts 2>/dev/null)
 SELINUX=
 if [ -n "$selinuxfs" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
         if [ -r $selinuxfs/enforce ] ; then
@@ -67,16 +66,6 @@ fi
 
 # Print welcome message
 nls "\t\t\t%sPowered by %sPLD Linux Distribution%s" "$(termput setaf $CPOWEREDBY)" "$(termput setaf $CPLD)" "$(termput op)"
-if is_yes "$PROMPT"; then
-	nls -n "\t\t  Press %sI%s to enter interactive startup" "$(termput setaf $CI)" "$(termput op)"
-	echo
-	sleep 1
-fi
-
-# Set console loglevel
-if [ -n "$CONSOLE_LOGLEVEL" ]; then
-	/bin/dmesg -n $CONSOLE_LOGLEVEL
-fi
 
 # Set the hostname
 run_cmd "$(nls 'Host:') ${HOSTNAME}" hostname ${HOSTNAME}
@@ -96,7 +85,6 @@ if [ -n "$SELINUX" ]; then
 fi
 		  
 # Clear mtab
-:>/etc/mtab
 [ -f /etc/cryptomtab ] && :>/etc/cryptomtab
 
 # Remove stale backups
@@ -148,7 +136,6 @@ rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
 	/tmp/kde-* /tmp/ksocket-* /tmp/mc-* /tmp/mcop-* /tmp/orbit-*  \
 	/tmp/scrollkeeper-*  /tmp/ssh-*
 
-{
 # Clean up utmp/wtmp
 if ! is_no "$NEED_XFILES" ; then
 	:>/var/run/utmpx
@@ -175,26 +162,6 @@ chown root:root /tmp/.ICE-unix
 # There could be a new kernel version. Remove old psdevtab database
 rm -f /etc/psdevtab
 
-# Now that we have all of our basic modules loaded and the kernel going,
-# let's dump the syslog ring somewhere so we can find it later
-dmesg -s 131072 > /var/log/dmesg
-i=5
-while [ $i -ge 0 ]; do
-        if [ -f /var/log/dmesg.$i ]; then
-            chmod 0600 /var/log/dmesg.$i
-            mv -f /var/log/dmesg.$i /var/log/dmesg.$(($i+1))
-        fi
-        i=$(($i-1))
-done
-cp -f /var/log/dmesg /var/log/dmesg.0
-chmod 0600 /var/log/dmesg /var/log/dmesg.0
-
-kill -TERM $(/sbin/pidof getkey) >/dev/null 2>&1
-} &
-if is_yes "$PROMPT"; then
-	/sbin/getkey i && touch /var/run/confirm
-fi
-wait
 echo
 
 # This must be last line !
