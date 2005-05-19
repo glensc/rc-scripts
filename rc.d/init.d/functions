@@ -715,24 +715,7 @@ status()
 
 # Confirm whether we really want to run this service
 confirm() {
-	typeset answer
-	nls -n "Start service %s (Y)es/(N)o/(C)ontinue? [Y] " "$1"
-	read answer
-	case $answer in
-	  y|Y|t|T|j|J|"")
-		return 0
-		;;
-	  c|C|k|K|w|W)
-		return 2
-		;;
-	  n|N)
-		return 1
-		;;
-	  *)
-		confirm $1
-		return $?
-		;;
-	esac
+	return 0
 }
 
 # module is needed (ie. is requested, is available and isn't loaded already)
