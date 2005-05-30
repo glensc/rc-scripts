@@ -31,7 +31,7 @@ if [ -n "${BANDWIDTH_OUT}" ]; then
     fi
 else
     if [ -n "${QDISC}" ]; then
-	tc qdisc add dev ${REALDEVICE} root
+	tc qdisc del dev ${REALDEVICE} root
     fi
 fi
 
