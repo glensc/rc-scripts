@@ -107,7 +107,7 @@ if [ "$HANDLING" = "2" ]; then
     exit 0
 fi
 
-if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" ]; then
+if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; then
 
     if is_yes "$IPV4_NETWORKING"; then
 	if [ "$BOOTPROTO" = "bootp" -o "$BOOTPROTO" = "pump" ]; then
