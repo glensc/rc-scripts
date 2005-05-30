@@ -1,46 +1,82 @@
-2005-03-25 19:00 +0000 [r5631]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2005-05-30 18:47 +0000 [r6027]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: Understand BOOTPROTO=static
+	  properly (Elan Ruusamäe <glen/at/pld-linux.org>).
+
+2005-05-30 18:42 +0000 [r6026]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-post: When stopping delete root
+	  queueing discipline instead of trying to add it.
+
+2005-05-25 08:26 +0000 [r6013]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysctl.conf: grsec is available for 2.6 kernels too.
+
+2005-05-03 17:50 +0000 [r5915]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/sys-chroots: Typo.
+
+2005-04-30 20:53 +0000 [r5896]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/functions: killproc(): fill base and pid variables
+	  based on waitname.
+
+2005-04-25 16:01 +0000 [r5884]  Adam Go³êbiowski <adamg/at/pld-linux.org>
+
+	* rc.d/init.d/network: - when using BOOTPRIO, cd to /etc/sysconfig
+	  to get list of interfaces
+
+2005-04-15 21:48 +0000 [r5770]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-ppp0.gprs-idea: Add BT example.
+
+2005-04-08 17:34 +0000 [r5744]  Pawe³ Sakowski <saq/at/pld-linux.org>
+
+	* sysconfig/system: - typo
+
+2005-03-25 19:00 +0000 [r5631]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc-scripts.spec.in: Updated to match needs.
 
-2005-03-25 18:50 +0000 [r5629-5630]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2005-03-25 18:50 +0000 [r5629-5630]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Fix sound dmabuf handling in rc.sysinit. Use
 	  different modules config file for 2.4/2.6 kernel.
-	  (havner@pld-linux.org)
+	  (havner/at/pld-linux.org)
 
 	* rc.d/init.d/functions: Fix displaing show() function when $CHARS
-	  variable is set. (tommat@pld-linux.org).
+	  variable is set. (tommat/at/pld-linux.org).
 
-2005-03-25 18:37 +0000 [r5625]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2005-03-25 18:37 +0000 [r5625]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Prepare for 0.4.0.18.
 
-2005-03-22 16:54 +0000 [r5615]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2005-03-22 16:54 +0000 [r5615]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Increment counter when waiting specified
 	  time for daemon to start/terminate.
 
-2005-03-06 00:11 +0000 [r5570]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2005-03-06 00:11 +0000 [r5570]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* src/Makefile.am: Place minilogd in sbin.
 
-2005-03-05 23:46 +0000 [r5569]  Elan Ruusamäe <glen@pld-linux.org>
+2005-03-05 23:46 +0000 [r5569]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* man/Makefile.am, man/ru/Makefile.am (added), man/es/Makefile.am
 	  (added), man/fr/Makefile.am (added), man/de/Makefile.am (added),
 	  man/sv/Makefile.am (added), man/ja/Makefile.am (added),
 	  configure.ac: - Finished manuals to subdirs. (Thanks arekm).
 
-2005-01-24 14:15 +0000 [r5479]  Elan Ruusamäe <glen@pld-linux.org>
+2005-01-24 14:15 +0000 [r5479]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: Use AM_CONFIG_HEADER, rather AC_CONFIG_HEADER for
 	  autogen.sh to call autoheader.
 
-2005-01-24 14:05 +0000 [r5478]  Elan Ruusamäe <glen@pld-linux.org>
+2005-01-24 14:05 +0000 [r5478]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* src/config.h.in (removed): removed
 
-2005-01-24 13:47 +0000 [r5477]  Elan Ruusamäe <glen@pld-linux.org>
+2005-01-24 13:47 +0000 [r5477]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* acinclude.m4 (added), src/config.h.in (added),
 	  src/start-stop-daemon.c (added), src/Makefile.am, configure.ac:
@@ -48,7 +84,7 @@
 	  support now (as such conditional defines impossible on
 	  commandline) and m4 macros needed for start-stop-daemon.c
 
-2005-01-24 13:38 +0000 [r5476]  Elan Ruusamäe <glen@pld-linux.org>
+2005-01-24 13:38 +0000 [r5476]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* man/ipcalc.1 (added), man/usleep.1 (added), doc/consoletype.1
 	  (removed), Makefile.am, man/usernetctl.8 (added), doc/initlog.1
@@ -61,7 +97,7 @@
 	  (removed), doc/usernetctl.8 (removed): - moved manuals to man/
 	  subdir
 
-2005-01-24 13:32 +0000 [r5475]  Elan Ruusamäe <glen@pld-linux.org>
+2005-01-24 13:32 +0000 [r5475]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* man/Makefile.am (added), man/ja (added),
 	  man/ru/start-stop-daemon.8 (added), man/es/start-stop-daemon.8
@@ -72,24 +108,24 @@
 	  (added), man/de (added), man/sv (added): - created tree for
 	  manuals - imported start-stop-daemon manuals from dpkg-1.10.23
 
-2005-01-24 00:33 +0000 [r5474]  Elan Ruusamäe <glen@pld-linux.org>
+2005-01-24 00:33 +0000 [r5474]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* doc/Makefile.am: - fix typo which prevented packaging rest of the
 	  manuals to distrib
 
-2005-01-23 23:56 +0000 [r5473]  Elan Ruusamäe <glen@pld-linux.org>
+2005-01-23 23:56 +0000 [r5473]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - typo, english
 
-2005-01-23 19:11 +0000 [r5472]  Pawe³ Sakowski <saq@pld-linux.org>
+2005-01-23 19:11 +0000 [r5472]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* rc.d/init.d/sys-chroots: - mount usbfs if available
 
-2005-01-17 21:15 +0000 [r5461]  Elan Ruusamäe <glen@pld-linux.org>
+2005-01-17 21:15 +0000 [r5461]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - indent to same level
 
-2005-01-02 22:53 +0000 [r5418]  Radek Zieliñski <radek@pld-linux.org>
+2005-01-02 22:53 +0000 [r5418]  Rados³aw Zieliñski <radek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/ifup-routes,
@@ -116,19 +152,19 @@
 	  sysconfig/network-scripts/ifup-irda: - unified indentation (ts=8
 	  sw=4, as vi modeline says)
 
-2005-01-02 21:49 +0000 [r5417]  Radek Zieliñski <radek@pld-linux.org>
+2005-01-02 21:49 +0000 [r5417]  Rados³aw Zieliñski <radek/at/pld-linux.org>
 
 	* sysctl.conf: - added net.ipv4.conf.default.rp_filter=1 -- *.all.*
 	  has no real effect: when sysctl -p is run, interfaces are not up
 	  yet
 
-2004-12-13 22:31 +0000 [r5382-5383]  Pawe³ Sakowski <saq@pld-linux.org>
+2004-12-13 22:31 +0000 [r5382-5383]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* po/pl.po, po/de.po: - updated for current source tree
 
 	* rc.d/init.d/network: - missed one
 
-2004-12-13 22:01 +0000 [r5379-5380]  Pawe³ Sakowski <saq@pld-linux.org>
+2004-12-13 22:01 +0000 [r5379-5380]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifup-sl: - make nls invocations
@@ -136,133 +172,133 @@
 
 	* po/de.po: - fixed remaining fuzzy entries
 
-2004-12-13 20:16 +0000 [r5378]  Pawe³ Sakowski <saq@pld-linux.org>
+2004-12-13 20:16 +0000 [r5378]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* po/de.po: - updated my email address - fixed some fuzzy entries
 	  (the easiest ones)
 
-2004-12-08 22:46 +0000 [r5368]  Elan Ruusamäe <glen@pld-linux.org>
+2004-12-08 22:46 +0000 [r5368]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - typo
 
-2004-12-02 17:43 +0000 [r5362]  Jarek Koszuk <heretyk@pld-linux.org>
+2004-12-02 17:43 +0000 [r5362]  Jarek Koszuk <heretyk/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Support for per service umask settings.
 	  This solves the problem with possibly different umask settings
 	  when starting services at boot time, and by hand.
 
-2004-11-29 20:10 +0000 [r5357]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-11-29 20:10 +0000 [r5357]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/interfaces/data/chat-ppp0.gprs-idea (added),
 	  sysconfig/interfaces/ifcfg-ppp0.gprs-idea (added): Add IDEA GPRS
 	  examples.
 
-2004-11-26 22:49 +0000 [r5351]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-11-26 22:49 +0000 [r5351]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Version 0.4.0.17.
 
-2004-11-13 21:43 +0000 [r5320]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-11-13 21:43 +0000 [r5320]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: Drop condition when checking
 	  cable - not needed.
 
-2004-11-13 21:37 +0000 [r5319]  Bartosz Taudul <wolf@pld-linux.org>
+2004-11-13 21:37 +0000 [r5319]  Bartosz Taudul <wolf/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - fix typo
 
-2004-11-13 21:31 +0000 [r5318]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-11-13 21:31 +0000 [r5318]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/functions.network: Link status checking
 	  for ifup dhcp iface (from FC3).
 
-2004-11-13 20:31 +0000 [r5315]  Adam Go³êbiowski <adamg@pld-linux.org>
+2004-11-13 20:31 +0000 [r5315]  Adam Go³êbiowski <adamg/at/pld-linux.org>
 
 	* sysconfig/system: - s/outsite/outside/
 
-2004-11-13 11:36 +0000 [r5312-5313]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-11-13 11:36 +0000 [r5312-5313]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Drop obsolete msg_() functions.
 
 	* rc.d/rc.sysinit, rc.d/init.d/functions: More SELinux support from
 	  FC initscripts.
 
-2004-10-25 19:27 +0000 [r4863]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-10-25 19:27 +0000 [r4863]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Use usbfs as USB filesystem name (not sure about
 	  2.4?).
 
-2004-10-01 21:28 +0000 [r4677]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-10-01 21:28 +0000 [r4677]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: Modprobe ppp modules when
 	  /dev/ppp doesn't exists (udev and devfs case).
 
-2004-09-25 22:22 +0000 [r4656]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-09-25 22:22 +0000 [r4656]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Move .ICE-unix creation a bit lower in case of
 	  CLEAN_TMP usage.
 
-2004-09-25 13:22 +0000 [r4649]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-09-25 13:22 +0000 [r4649]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Added udev support.
 
-2004-09-25 12:30 +0000 [r4647]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-09-25 12:30 +0000 [r4647]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: Fix typo (numer->number).
 
-2004-09-24 21:04 +0000 [r4639]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-09-24 21:04 +0000 [r4639]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Version 0.4.0.16.
 
-2004-09-22 16:32 +0000 [r4636]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-09-22 16:32 +0000 [r4636]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/interfaces/ifcfg-description:
 	  BOOTPRIO for changing interfaces starting order.
 
-2004-09-22 15:38 +0000 [r4635]  Witek Krêcicki <adasi@pld-linux.org>
+2004-09-22 15:38 +0000 [r4635]  Witek Krêcicki <adasi/at/pld-linux.org>
 
 	* rc.d/init.d/network: - Start VLAN's after all physical interfaces
 
-2004-09-19 13:32 +0000 [r4615]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-09-19 13:32 +0000 [r4615]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Create /tmp/.ICE-unix directory for X11.
 
-2004-08-25 20:58 +0000 [r4436]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-08-25 20:58 +0000 [r4436]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/ip-rules (removed), sysconfig/Makefile.am: Drop
 	  sysconfig/ip-rules, it's not used.
 
-2004-08-25 20:36 +0000 [r4434]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-08-25 20:36 +0000 [r4434]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Release 0.4.0.15.
 
-2004-08-25 20:33 +0000 [r4433]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-08-25 20:33 +0000 [r4433]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am: Add sys-chroots.
 
-2004-08-25 20:15 +0000 [r4432]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-08-25 20:15 +0000 [r4432]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/tnldown: Don't display ls errors when
 	  there is no tunnel configs.
 
-2004-08-25 17:30 +0000 [r4431]  Jan Rêkorajski <baggins@pld-linux.org>
+2004-08-25 17:30 +0000 [r4431]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/i18n: - it's much too early for unicode by default, so
 	  add some comments
 
-2004-08-22 18:06 +0000 [r4430]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-08-22 18:06 +0000 [r4430]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: When shutting down try to stop LVM devices,
 	  too.
 
-2004-08-20 10:16 +0000 [r4429]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-08-20 10:16 +0000 [r4429]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/network, rc.d/rc.sysinit: Set sysctl parameters
 	  quietly (needed to avoid bunch of errors when grsec_lock is
 	  turned on).
 
-2004-08-14 23:16 +0000 [r4428]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-08-14 23:16 +0000 [r4428]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Add support for waiting for process to
 	  finish to daemon() and killproc(). Example usage: daemon
@@ -271,137 +307,137 @@
 	  --waitforname is name of process to wait and --waitfortime is how
 	  many seconds to wait at max.
 
-2004-08-09 00:31 +0000 [r4424]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-08-09 00:31 +0000 [r4424]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Pass complete path to sulogin (/sbin/sulogin).
 
-2004-07-23 23:08 +0000 [r4389]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-23 23:08 +0000 [r4389]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/sys-chroots: chroot: umount /proc, /selinux and /sys
 	  at stopping.
 
-2004-07-23 23:04 +0000 [r4387-4388]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-23 23:04 +0000 [r4387-4388]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/sys-chroots: chroot: umount all when stopping.
 
 	* rc.d/init.d/sys-chroots, rc.d/rc: chroot: Process stopping
 	  properly.
 
-2004-07-23 22:56 +0000 [r4386]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-23 22:56 +0000 [r4386]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/sys-chroots: chroot: Do not run network but lock
 	  subsys to pretend that network was run.
 
-2004-07-23 22:27 +0000 [r4385]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-23 22:27 +0000 [r4385]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/sys-chroots, rc.d/rc: rc: When shutting down to not
 	  call rc.shutdown when in chroot. sys-chroots: Run some commands
 	  really in chroot.
 
-2004-07-23 21:58 +0000 [r4384]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-23 21:58 +0000 [r4384]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada,
 	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada: Set MTU to
 	  1452 for neostrada (from neostrada.info FAQ).
 
-2004-07-23 21:24 +0000 [r4383]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-23 21:24 +0000 [r4383]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/sys-chroots: chroot: clean up mtabs, mount proc,
 	  sysfs and selinuxfs.
 
-2004-07-23 21:14 +0000 [r4382]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-23 21:14 +0000 [r4382]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/sys-chroots (added): Started implementing multiple
 	  systems in chroots idea.
 
-2004-07-04 17:50 +0000 [r4316]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 17:50 +0000 [r4316]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: s/path/name/
 
-2004-07-04 17:46 +0000 [r4315]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 17:46 +0000 [r4315]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Avoid backup files when searching for shell
 	  scripts, too.
 
-2004-07-04 16:23 +0000 [r4312]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 16:23 +0000 [r4312]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* po/pl.po, po/de.po: Make update-po + few manual fixes to pl.po.
 
-2004-07-04 16:14 +0000 [r4311]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 16:14 +0000 [r4311]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network,
 	  rc.d/init.d/functions: Add #!/bin/sh to fool file(1).
 
-2004-07-04 15:57 +0000 [r4310]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 15:57 +0000 [r4310]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Don't search for shell scripts in directories with
 	  names starting with dot.
 
-2004-07-04 15:45 +0000 [r4309]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 15:45 +0000 [r4309]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: Turn off RAID devices using mdadm first,
 	  fallback to raidutils. Make raidutils stopping gettext friendly.
 
-2004-07-04 15:35 +0000 [r4308]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 15:35 +0000 [r4308]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* makepot.pl: Put empty CHARSET instead of iso8859-2 in .pot file.
 
-2004-07-04 15:26 +0000 [r4307]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 15:26 +0000 [r4307]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: - 0.4.0.14
 
-2004-07-04 14:41 +0000 [r4306]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 14:41 +0000 [r4306]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Last one sysctl called with -e option to avoid
 	  errors on unknown keys.
 
-2004-07-04 14:34 +0000 [r4305]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 14:34 +0000 [r4305]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Run LVM tools for RAID case only if some RAID
 	  volume was there.
 
-2004-07-04 14:11 +0000 [r4304]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 14:11 +0000 [r4304]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* TODO: Some are done.
 
-2004-07-04 09:40 +0000 [r4303]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-04 09:40 +0000 [r4303]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: Quote whole message passed to
 	  logger.
 
-2004-07-03 12:03 +0000 [r4302]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-03 12:03 +0000 [r4302]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: s/speedtouch/speedtch/. Drop
 	  quoting from nls call.
 
-2004-07-03 11:27 +0000 [r4301]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-03 11:27 +0000 [r4301]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/interfaces/Makefile.am,
 	  sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada (added),
 	  sysconfig/network-scripts/ifup-ppp: Speedtouch modem support
 	  (arekm && qboosh).
 
-2004-07-02 21:56 +0000 [r4299]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-02 21:56 +0000 [r4299]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-ppp: Set interface used by EAGLE
 	  driver to down when downing ppp interface.
 
-2004-07-02 21:51 +0000 [r4298]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-02 21:51 +0000 [r4298]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-ppp: Always call ifdwon-post
 	  even if pppd was killed using -KILL.
 
-2004-07-02 21:42 +0000 [r4297]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-02 21:42 +0000 [r4297]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp,
 	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada: Use PAPNAME
 	  for neo example. Fix ifcfg-password.so plugin usage.
 
-2004-07-02 20:45 +0000 [r4296]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-02 20:45 +0000 [r4296]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* hwprofile: Nicer profile number choose message.
 
-2004-07-02 15:30 +0000 [r4290-4291]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-07-02 15:30 +0000 [r4290-4291]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/interfaces/Makefile.am,
 	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada (added): Add
@@ -412,152 +448,152 @@
 	  longer send ppp string). ifcfg-password.so is choosen only if
 	  PLUGIN_IFCFG_PASSWORD is set to yes.
 
-2004-06-29 22:06 +0000 [r4273]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-29 22:06 +0000 [r4273]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/i18n: UTF-8 pl_PL is pl_PL.UTF-8/UTF-8 in
 	  SUPPORTED_LOCALES (qboosh).
 
-2004-06-29 19:43 +0000 [r4269]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-29 19:43 +0000 [r4269]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Relase 0.4.0.13.
 
-2004-06-29 19:33 +0000 [r4268]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-29 19:33 +0000 [r4268]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Run rc.live for PLD LiveCD.
 
-2004-06-29 19:28 +0000 [r4267]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-29 19:28 +0000 [r4267]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Use fastboot also for encrypted FS.
 
-2004-06-29 19:08 +0000 [r4266]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-29 19:08 +0000 [r4266]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: Sync remaining variable in fs umounting. Add
 	  squashfs there.
 
-2004-06-28 21:23 +0000 [r4264]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-28 21:23 +0000 [r4264]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* po/pl.po, po/Makefile.am, po/de.po: Fix fields spoted by msgfmt
 	  -c and print translation statistics.
 
-2004-06-28 21:19 +0000 [r4263]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-28 21:19 +0000 [r4263]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* po/Makefile.am: msgfmt now does po file validation.
 
-2004-06-28 19:22 +0000 [r4258]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-28 19:22 +0000 [r4258]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* setsysfont: Minimalize code to support SYSFONT, fix UTF-8
 	  handling.
 
-2004-06-27 14:54 +0000 [r4253]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-27 14:54 +0000 [r4253]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* setsysfont: Drop debugging stuff.
 
-2004-06-27 14:43 +0000 [r4252]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-27 14:43 +0000 [r4252]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* setsysfont: Enhance font setting (use CONSOLEMAP and
 	  CONSOLEFONTMAP options).
 
-2004-06-27 14:30 +0000 [r4251]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-27 14:30 +0000 [r4251]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/i18n: Promote unicode settings.
 
-2004-06-24 01:51 +0000 [r4236]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-24 01:51 +0000 [r4236]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Always try to sync /dev entries for LVM2.
 
-2004-06-23 23:10 +0000 [r4235]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-23 23:10 +0000 [r4235]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Synchronize LVM2 devices.
 
-2004-06-20 12:19 +0000 [r4225]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-20 12:19 +0000 [r4225]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Version 0.4.0.12.
 
-2004-06-20 11:33 +0000 [r4224]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-20 11:33 +0000 [r4224]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/network, rc.d/rc.sysinit: (sysctl): Ignore unknown
 	  keys in sysctl.conf since kernels can have too different
 	  settings.
 
-2004-06-18 23:40 +0000 [r4215]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-18 23:40 +0000 [r4215]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: killproc(): Add --pidfile <file> support.
 
-2004-06-16 20:31 +0000 [r4211]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-16 20:31 +0000 [r4211]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: daemon(), run_cmd(): cd / before running
 	  any program
 
-2004-06-04 12:49 +0000 [r4140]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-06-04 12:49 +0000 [r4140]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysctl.conf: Added exec-shield example.
 
-2004-05-24 00:49 +0000 [r4121]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-24 00:49 +0000 [r4121]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: 2.4.x kernel EVMS modules are loaded only when
 	  really running on 2.4 kernels.
 
-2004-05-24 00:44 +0000 [r4120]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-24 00:44 +0000 [r4120]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: Default route is forced only
 	  if DEFROUTE=yes (Witek Krêcicki <adasi/at/pld-linux.org).
 
-2004-05-23 19:19 +0000 [r4119]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-23 19:19 +0000 [r4119]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* po/pl.po: More Polish characters used (Robert 'dzeus' Grau¿enis
 	  <dzeus/at/zatorze.slupsk.pl>)
 
-2004-05-19 22:43 +0000 [r4099]  Marcin Chojnowski <martii@pld-linux.org>
+2004-05-19 22:43 +0000 [r4099]  Marcin Chojnowski <martii/at/pld-linux.org>
 
 	* po/pl.po: all strings are with Polish chars now
 
-2004-05-18 22:58 +0000 [r4086]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-18 22:58 +0000 [r4086]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* src/usleep.c, src/process.c, src/minilogd.c, src/testd.c,
 	  src/initlog.c, src/doexec.c, src/usernetctl.c, src/ipcalc.c:
 	  Update helpers from Fedora initscripts.
 
-2004-05-18 22:46 +0000 [r4084]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-18 22:46 +0000 [r4084]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Prepare for 0.4.0.11.
 
-2004-05-18 22:27 +0000 [r4083]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-18 22:27 +0000 [r4083]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* setsysfont: Don't depend on bin paths.
 
-2004-05-18 22:24 +0000 [r4082]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-18 22:24 +0000 [r4082]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit, rc.d/init.d/functions: Set system font as soon
 	  as possible.
 
-2004-05-18 21:29 +0000 [r4081]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-18 21:29 +0000 [r4081]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* setsysfont: Run unicode_start for UTF-8 console.
 
-2004-05-18 21:16 +0000 [r4080]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-18 21:16 +0000 [r4080]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Always delete some /tmp files on boot.
 
-2004-05-18 10:33 +0000 [r4074]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-18 10:33 +0000 [r4074]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Load hid, keybdev and mousedev only for kernels
 	  older than 2.6. For newer kernels use hotplug.
 
-2004-05-18 10:13 +0000 [r4073]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-18 10:13 +0000 [r4073]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Support for unmounting /initrd.
 
-2004-05-16 16:14 +0000 [r4065]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-16 16:14 +0000 [r4065]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: (lvm detection): Remove head command usage - do
 	  it with awk only.
 
-2004-05-15 02:29 +0000 [r4055]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-15 02:29 +0000 [r4055]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/Makefile.am: Example gentoo colors configuration
 	  included.
 
-2004-05-15 02:23 +0000 [r4053-4054]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-05-15 02:23 +0000 [r4053-4054]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Release 0.4.0.10.
 
@@ -566,336 +602,336 @@
 	  rc.d/init.d/functions: Merge color customization support created
 	  by £ukasz Pawelczyk <havner/at/pld-linux.org>.
 
-2004-04-06 12:11 +0000 [r3903]  Artur Frysiak <wiget@pld-linux.org>
+2004-04-06 12:11 +0000 [r3903]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/network: - umount CIFS on network stop
 
-2004-04-03 21:39 +0000 [r3881]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-04-03 21:39 +0000 [r3881]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Fix LVM1 tools detection.
 
-2004-04-02 14:39 +0000 [r3855]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-04-02 14:39 +0000 [r3855]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/interfaces/Makefile.am,
 	  sysconfig/interfaces/ifcfg-eth0.1 (added): VLAN example
 	  configuration.
 
-2004-03-29 20:42 +0000 [r3843]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-03-29 20:42 +0000 [r3843]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: --fork support in daemon() by Aredridel
-	  <aredridel@nbtsc.org>.
+	  <aredridel/at/nbtsc.org>.
 
-2004-03-08 14:04 +0000 [r3424]  Artur Frysiak <wiget@pld-linux.org>
+2004-03-08 14:04 +0000 [r3424]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - check for LVM tools version and load only
 	  needed modules - fix case when /var is RO and LVM2 is activated
 
-2004-03-08 13:37 +0000 [r3423]  Artur Frysiak <wiget@pld-linux.org>
+2004-03-08 13:37 +0000 [r3423]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - cifs is networked fs
 
-2004-02-26 22:14 +0000 [r3384]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-02-26 22:14 +0000 [r3384]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am: Create $(sysconfdir)/init.d ->
 	  $(sysconfdir)/rc.d/init.d symlink for compatiblity.
 
-2004-02-07 21:37 +0000 [r3312]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-02-07 21:37 +0000 [r3312]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* po/Makefile.am: Use $(mkinstalldirs) as suggested by Artur
 	  Frysiak.
 
-2004-02-06 22:33 +0000 [r3306]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-02-06 22:33 +0000 [r3306]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* po/Makefile.am: Use install_sh instead of mkinstalldirs.
 
-2004-02-06 22:24 +0000 [r3305]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-02-06 22:24 +0000 [r3305]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Preparation for 0.4.0.9.
 
-2004-02-03 21:55 +0000 [r3271]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-02-03 21:55 +0000 [r3271]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Set bafile earlier.
 
-2004-02-03 21:37 +0000 [r3269]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-02-03 21:37 +0000 [r3269]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Do not delete hwprofile configuration (Tomasz
-	  Witek <tiwek@tiwek.com>).
+	  Witek <tiwek/at/tiwek.com>).
 
-2004-01-27 11:55 +0000 [r3222]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-27 11:55 +0000 [r3222]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: daemon(): when using --user run su with -s
 	  /bin/sh option.
 
-2004-01-25 12:27 +0000 [r3221]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-25 12:27 +0000 [r3221]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: Run kexec before rebooting (kexec support).
 
-2004-01-24 01:06 +0000 [r3220]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-24 01:06 +0000 [r3220]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown: Wait for second after shutting
 	  down dhcp daemon/interface (for example dhcpcd needs some time).
 
-2004-01-16 23:12 +0000 [r3195]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-16 23:12 +0000 [r3195]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: filter_chroot(): Return unfiltered pids
 	  when /proc is not mounted.
 
-2004-01-16 15:43 +0000 [r3194]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-16 15:43 +0000 [r3194]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* src/Makefile.am, src/usernetctl.c: Use proper path when executing
 	  ifup/ifdown scripts in sernetctl.
 
-2004-01-15 22:12 +0000 [r3193]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-15 22:12 +0000 [r3193]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* src/Makefile.am, configure.ac: Use --cflags-only-I from glib or
 	  glib-2.0 configuration when building ppp-watch.
 
-2004-01-10 16:13 +0000 [r3156]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-10 16:13 +0000 [r3156]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network: Set wireless nick to
 	  $WLAN_NICKNAME (variable) not WLAN_NICKNAME (string).
 
-2004-01-10 15:57 +0000 [r3153]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-10 15:57 +0000 [r3153]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: - 0.4.0.8 release
 
-2004-01-10 15:27 +0000 [r3152]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-10 15:27 +0000 [r3152]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Outside chroot always add all possible
 	  pids unless some has /proc/XXX/root inside of known chroot.
 
-2004-01-10 14:07 +0000 [r3151]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-10 14:07 +0000 [r3151]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: filter_chroot(): add pid only once.
 
-2004-01-10 13:58 +0000 [r3150]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-10 13:58 +0000 [r3150]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Fix ulimits in one more case (ssh vs squid
 	  case).
 
-2004-01-10 13:42 +0000 [r3149]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-10 13:42 +0000 [r3149]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/init.d/functions: Support for handling
 	  processes inside and outside of chrooted systems based on
 	  rc-scripts-chroot_safe.patch.
 
-2004-01-09 21:59 +0000 [r3148]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-09 21:59 +0000 [r3148]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Rework ulimit support so it works again.
 
-2004-01-09 01:40 +0000 [r3141]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-09 01:40 +0000 [r3141]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network: Sencond part of ppp
 	  DEVNAME fixes.
 
-2004-01-09 01:24 +0000 [r3140]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-09 01:24 +0000 [r3140]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-ppp: ifup-ppp instructs pppd to
 	  create pppd-$DEVNAME.pid file, so in ifdown-ppp we also use
 	  $DEVNAME.
 
-2004-01-09 00:39 +0000 [r3139]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-09 00:39 +0000 [r3139]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* run-parts: If in -u mode and user cannot be found then skip that
 	  file and display warning.
 
-2004-01-09 00:29 +0000 [r3138]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-09 00:29 +0000 [r3138]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* run-parts: Added -u option which means: run as owner of file not
 	  as current user (usable mainly from root).
 
-2004-01-08 22:42 +0000 [r3137]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-08 22:42 +0000 [r3137]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* src/Makefile.am, configure.ac: Try to find glib-2.0, glib in that
 	  order - link with first found.
 
-2004-01-08 22:01 +0000 [r3134]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-08 22:01 +0000 [r3134]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: - 0.4.0.7 release
 
-2004-01-08 02:43 +0000 [r3133]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-08 02:43 +0000 [r3133]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network: When shutting down
 	  ip rule and ip route, clear rules using current kernel tables
 	  configuration not data stored in configuration files so we always
-	  end in clean state (by Arkadiusz Chomicki <duch@wla.pl>).
+	  end in clean state (by Arkadiusz Chomicki <duch/at/wla.pl>).
 
-2004-01-07 08:37 +0000 [r3132]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-07 08:37 +0000 [r3132]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc: Typo fixed (revious->previous) in bootsplash code.
-	  Arkadiusz Chomicki <duch@wla.pl>
+	  Arkadiusz Chomicki <duch/at/wla.pl>
 
-2004-01-02 16:44 +0000 [r3109-3110]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2004-01-02 16:44 +0000 [r3109-3110]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* autogen.sh: Second option when doing changelog is directory name
 	  like rc-scripts.
 
 	* rc.d/rc.sysinit: Zero /etc/cryptomtab if such file exists.
 
-2003-12-28 19:23 +0000 [r3090]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-28 19:23 +0000 [r3090]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Don't mount selinuxfs if it's already mounted
 	  (by init for example).
 
-2003-12-27 14:43 +0000 [r3081]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-27 14:43 +0000 [r3081]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network: Fix static routes
-	  conf parsing. (Arkadiusz Chomicki <chomar@wla.pl>)
+	  conf parsing. (Arkadiusz Chomicki <chomar/at/wla.pl>)
 
-2003-12-25 18:43 +0000 [r3076]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-25 18:43 +0000 [r3076]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* autogen.sh: changelog generation part can be now used in other
 	  modules.
 
-2003-12-25 13:20 +0000 [r3073]  £ukasz Jerna¶ <deejay1@pld-linux.org>
+2003-12-25 13:20 +0000 [r3073]  £ukasz Jerna¶ <deejay1/at/pld-linux.org>
 
 	* rc.d/init.d/template.init: - typo
 
-2003-12-23 17:15 +0000 [r3065]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+2003-12-23 17:15 +0000 [r3065]  Pawe³ ¯urowski <pzurowski/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - fixed bug when $limits is empty
 
-2003-12-23 00:37 +0000 [r3064]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-23 00:37 +0000 [r3064]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/network: When starting execute rc_splash 'bootnetwork
 	  start'.
 
-2003-12-23 00:31 +0000 [r3063]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-23 00:31 +0000 [r3063]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Read sysconfig/bootsplash, too.
 
-2003-12-22 17:43 +0000 [r3062]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+2003-12-22 17:43 +0000 [r3062]  Pawe³ ¯urowski <pzurowski/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - removed sed (I'm sorry I done buggy
 	  change last time, now it is good one - tested and working)
 
-2003-12-22 00:59 +0000 [r3061]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-22 00:59 +0000 [r3061]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc: Much more accurate calculations of start/stop scripts
 	  required in new runlevel.
 
-2003-12-21 22:55 +0000 [r3060]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-21 22:55 +0000 [r3060]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Revert few pzurowski changes since they
 	  are broken even after fixing syntax.
 
-2003-12-21 22:31 +0000 [r3059]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-21 22:31 +0000 [r3059]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Pawe³ ¯urowski optimizations were broken
 	  (missing quotation marks). Fixed now.
 
-2003-12-21 21:25 +0000 [r3056]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-21 21:25 +0000 [r3056]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc-scripts.spec.in: Add pkgconfig to BuildRequires.
 
-2003-12-21 21:11 +0000 [r3055]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-21 21:11 +0000 [r3055]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* src/Makefile.am, configure.ac: Find libglib.a location using
-	  pkg-config and use it (Artur Frysiak <wiget@pld-linux.org>).
+	  pkg-config and use it (Artur Frysiak <wiget/at/pld-linux.org>).
 
-2003-12-21 17:30 +0000 [r3054]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-21 17:30 +0000 [r3054]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/Makefile.am, configure.ac: Don't set
 	  libdir - use value from configure script.
 
-2003-12-21 17:05 +0000 [r3053]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-21 17:05 +0000 [r3053]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: - release 0.4.0.6 is comming
 
-2003-12-21 16:43 +0000 [r3052]  £ukasz Jerna¶ <deejay1@pld-linux.org>
+2003-12-21 16:43 +0000 [r3052]  £ukasz Jerna¶ <deejay1/at/pld-linux.org>
 
 	* po/pl.po: - typo
 
-2003-12-21 14:33 +0000 [r3051]  Adam Gorzkiewicz <adgor@pld-linux.org>
+2003-12-21 14:33 +0000 [r3051]  Adam Gorzkiewicz <adgor/at/pld-linux.org>
 
 	* rc.d/rc.modules: - Typo
 
-2003-12-21 13:43 +0000 [r3050]  Marcin Krzy¿anowski <krzak@pld-linux.org>
+2003-12-21 13:43 +0000 [r3050]  Marcin Krzy¿anowski <krzak/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - fix ${PPPOA_EAGLE} check if
 	  there isn't executable adictrl try use eaglectrl
 
-2003-12-21 13:28 +0000 [r3049]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+2003-12-21 13:28 +0000 [r3049]  Pawe³ ¯urowski <pzurowski/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - small revert: we do not use sed in
 	  rc-scripts - other sed -> awk changes
 
-2003-12-21 13:08 +0000 [r3048]  Marcin Krzy¿anowski <krzak@pld-linux.org>
+2003-12-21 13:08 +0000 [r3048]  Marcin Krzy¿anowski <krzak/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - corrected nls message when
 	  pppd does not exist - support for PPPOA_EAGLE start with kernel
 	  2.6 and 2.4
 
-2003-12-21 12:14 +0000 [r3047]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+2003-12-21 12:14 +0000 [r3047]  Pawe³ ¯urowski <pzurowski/at/pld-linux.org>
 
 	* rc.d/rc.sysinit, rc.d/rc.modules, rc.d/init.d/functions: -
 	  simplified (use less tools, one-time file reading)
 
-2003-12-21 10:46 +0000 [r3046]  Pawe³ ¯urowski <pzurowski@pld-linux.org>
+2003-12-21 10:46 +0000 [r3046]  Pawe³ ¯urowski <pzurowski/at/pld-linux.org>
 
 	* rc.d/rc.modules: - simplified (double awk->single one)
 
-2003-12-21 10:18 +0000 [r3045]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-21 10:18 +0000 [r3045]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.modules: Added support for /etc/modules file exactly for
 	  one kernel (like /etc/modules.2.6.0).
 
-2003-12-21 10:14 +0000 [r3044]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-21 10:14 +0000 [r3044]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.modules: Do not require existence of /etc/modules (Marcin
-	  Krzyzanowski <krzak@linux.net.pl>).
+	  Krzyzanowski <krzak/at/linux.net.pl>).
 
-2003-12-21 00:58 +0000 [r3043]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-21 00:58 +0000 [r3043]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.shutdown, rc.d/rc, rc.d/rc.sysinit,
 	  rc.d/init.d/functions: More progress bar support (bootsplash): it
 	  moves now!
 
-2003-12-20 21:21 +0000 [r3042]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-20 21:21 +0000 [r3042]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* hwprofile: Reindented whole script. checkprofdir(): New. Use it
 	  when required (now help is shown when needed). When executed
 	  without arguments show help.
 
-2003-12-19 14:40 +0000 [r3039]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-19 14:40 +0000 [r3039]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc-scripts.spec.in: bdflush is not required.
 
-2003-12-19 13:59 +0000 [r3038]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-19 13:59 +0000 [r3038]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
-	* src/Makefile.am: Use @libdir@ instead of hardcoded /usr/lib path
+	* src/Makefile.am: Use /at/libdir/at/ instead of hardcoded /usr/lib path
 	  when linking ppp-watch with glib.
 
-2003-12-15 13:29 +0000 [r1739]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-15 13:29 +0000 [r1739]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: Set action variable to proper value in
-	  rc_splash(). Found by Michal Moskal <malekith@pld-linux.org>.
+	  rc_splash(). Found by Michal Moskal <malekith/at/pld-linux.org>.
 
-2003-12-14 21:20 +0000 [r1733]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-14 21:20 +0000 [r1733]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Fix mounting sysfs - be consistent with mounting
 	  proc + do not require entry in fstab (qboosh). Add support for
 	  mounting selinuxfs (me).
 
-2003-12-14 18:23 +0000 [r1732]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-14 18:23 +0000 [r1732]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* src/usernetctl.c: - fix path to ifcfg- files (wrobell)
 
-2003-12-12 16:43 +0000 [r1731]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-12 16:43 +0000 [r1731]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc, rc.d/rc.sysinit, rc.d/init.d/functions: - initial
 	  support for bootsplash.org
 
-2003-12-07 15:54 +0000 [r1723]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-07 15:54 +0000 [r1723]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: - release 0.4.0.5
 
-2003-12-05 20:41 +0000 [r1722]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-05 20:41 +0000 [r1722]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/network: Fix interfaces_boot for bridge devices.
-	  (found by Rados³aw Kintzi <radek@pop.e-wro.pl>)
+	  (found by Rados³aw Kintzi <radek/at/pop.e-wro.pl>)
 
-2003-12-05 20:30 +0000 [r1721]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-12-05 20:30 +0000 [r1721]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifup-br,
@@ -903,31 +939,31 @@
 	  wireless specific settings into separate wireless_param()
 	  function and use it in ifup. Set wireless parameters for each
 	  wireless device being part of bridge. (patch by Rados³aw Kintzi
-	  <radek@pop.e-wro.pl>)
+	  <radek/at/pop.e-wro.pl>)
 
-2003-11-15 14:38 +0000 [r1698]  Marcin Krzy¿anowski <krzak@pld-linux.org>
+2003-11-15 14:38 +0000 [r1698]  Marcin Krzy¿anowski <krzak/at/pld-linux.org>
 
 	* sysconfig/i18n: - add #SUPPORTED_LOCALES="pl_PL/ISO-8859-2
 	  de_DE/ISO-8859-2 en_GB/ISO-8859-1 en_US/ISO-8859-1"
 
-2003-11-14 14:05 +0000 [r1697]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-11-14 14:05 +0000 [r1697]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.modules: Also load modules from
 	  /etc/modules.${kernel_major}.${kernel_minior} if exists. Allows
 	  for example to specify modules only to be loaded on 2.6 kernels.
 	  (idea by cieciwa)
 
-2003-11-01 20:18 +0000 [r1484]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-11-01 20:18 +0000 [r1484]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Redirect grep stderr output when checking for
 	  HID to /dev/null.
 
-2003-11-01 19:34 +0000 [r1483]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-11-01 19:34 +0000 [r1483]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Delete rpm locks when starting
 	  (/var/lib/rpm/__db*).
 
-2003-11-01 19:31 +0000 [r1480-1482]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-11-01 19:31 +0000 [r1480-1482]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Explicitly turn on user and group quota.
 
@@ -937,37 +973,37 @@
 	* rc.d/rc.sysinit: Rescan for LVM devices again after turning on
 	  RAID devices in lvm-on-top-of-raid case.
 
-2003-11-01 19:20 +0000 [r1479]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-11-01 19:20 +0000 [r1479]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: quotacheck could in some cases if quota files
 	  were corrupted ask for user input - avoid this.
 
-2003-11-01 19:16 +0000 [r1478]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-11-01 19:16 +0000 [r1478]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Initialize USB as fast as it's possible.
 	  Properly mount usb filesystem even if it is not specified in
 	  /etc/fstab.
 
-2003-11-01 14:54 +0000 [r1477]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-11-01 14:54 +0000 [r1477]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* autogen.sh: Generate nice ChangeLog if requested and if needed
 	  utilities are available.
 
-2003-10-31 17:49 +0000 [r1476]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-31 17:49 +0000 [r1476]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Revert part which was pretending that /dev/pts
 	  is always mounted (havner).
 
-2003-10-31 09:00 +0000 [r1475]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-31 09:00 +0000 [r1475]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown: Fix double link down (qboosh).
 
-2003-10-31 01:12 +0000 [r1474]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-31 01:12 +0000 [r1474]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Check for nofirewire in /proc/cmdline not in
 	  stdin.
 
-2003-10-31 00:49 +0000 [r1469-1471]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-31 00:49 +0000 [r1469-1471]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Prepare release 0.4.0.4.
 
@@ -976,12 +1012,12 @@
 	* po/Makefile.am: Fix handling custom builddir (until now objects
 	  were created in $(srcdir) not in builddir).
 
-2003-10-31 00:24 +0000 [r1468]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-31 00:24 +0000 [r1468]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Fix finding shell scripts procedure when building
 	  with builddir different than place where configure file resides.
 
-2003-10-31 00:08 +0000 [r1466-1467]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-31 00:08 +0000 [r1466-1467]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* doc/netreport.1, doc/consoletype.1, doc/initlog.1,
 	  doc/ppp-watch.8, doc/ipcalc.1: Update manual pages for each
@@ -990,14 +1026,14 @@
 	* doc/genhostid.1 (added), doc/Makefile.am: Include genhostid man
 	  page.
 
-2003-10-31 00:03 +0000 [r1464-1465]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-31 00:03 +0000 [r1464-1465]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* adjtime: - One more zero to reflect real format of this file.
 
 	* service: Set default PATH and use it along with TERM when
 	  starting services.
 
-2003-10-30 23:58 +0000 [r1463]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-30 23:58 +0000 [r1463]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* src/process.c, src/netreport.c, src/ppp-watch.c,
 	  src/consoletype.c, src/genhostid.c (added), src/initlog.c,
@@ -1006,17 +1042,17 @@
 	  enhanced PREFIX support. getkey has been rewrited to use popt
 	  (rh).
 
-2003-10-30 23:43 +0000 [r1462]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-30 23:43 +0000 [r1462]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Try to query 131072 bytes kernel buffer for
 	  dmesg and keep dmesg file from last five runs.
 
-2003-10-30 23:33 +0000 [r1461]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-30 23:33 +0000 [r1461]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Plase usbdevfs and devfs filesystems into
 	  /etc/mtab, too.
 
-2003-10-30 23:30 +0000 [r1459-1460]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-30 23:30 +0000 [r1459-1460]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Handle situation where multiple usb-controller
 	  aliases were defined and some of them were "off".
@@ -1024,13 +1060,13 @@
 	* rc.d/rc.sysinit: Firewire modules are now loaded if proper
 	  modprobe aliases were found (from mdk).
 
-2003-10-30 23:21 +0000 [r1458]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-30 23:21 +0000 [r1458]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Use -e option for first swapon call. Now swapon
 	  will silently skip swap devices it they are not available at this
 	  time (like for example swap files on some partitions).
 
-2003-10-30 21:41 +0000 [r1456]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-30 21:41 +0000 [r1456]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown,
 	  sysconfig/network-scripts/ifdown-br: - first flush addresses and
@@ -1039,30 +1075,30 @@
 	  hanging). Additionaly things are now done in sync with how it's
 	  done in set_down_loopback().
 
-2003-10-28 01:09 +0000 [r1455]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-28 01:09 +0000 [r1455]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fix /sys mount and simplify check if usbfs is
 	  already mounted
 
-2003-10-25 23:32 +0000 [r1451]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-25 23:32 +0000 [r1451]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: - 0.4.0.3 release
 
-2003-10-18 22:26 +0000 [r1445]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-18 22:26 +0000 [r1445]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fix typo in accounting script path (qboosh)
 
-2003-10-17 18:55 +0000 [r1444]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-17 18:55 +0000 [r1444]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/timezone: - copy timezone file instead of symlinking
 	  it (idea by ankry)
 
-2003-10-13 07:41 +0000 [r1437]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-13 07:41 +0000 [r1437]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - don't ignore data specified
-	  at DATAFORCHAT option (Szymon Siwek <sls@poczta.wp.pl>)
+	  at DATAFORCHAT option (Szymon Siwek <sls/at/poczta.wp.pl>)
 
-2003-10-12 19:12 +0000 [r1434-1436]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-12 19:12 +0000 [r1434-1436]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/init.d/functions: - support for per
 	  service ulimits configuration (qboosh)
@@ -1074,140 +1110,140 @@
 	  /etc/rc.d/rc.acct for accouting; updated accouting related parts
 	  of translations (qboosh)
 
-2003-10-11 11:03 +0000 [r1433]  Artur Frysiak <wiget@pld-linux.org>
+2003-10-11 11:03 +0000 [r1433]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: - describe HOTPLUG
 
-2003-10-11 10:59 +0000 [r1432]  Artur Frysiak <wiget@pld-linux.org>
+2003-10-11 10:59 +0000 [r1432]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - if invoced from hotplug bring
 	  up only interface with HOTPLUG=yes
 
-2003-10-11 09:15 +0000 [r1431]  Artur Frysiak <wiget@pld-linux.org>
+2003-10-11 09:15 +0000 [r1431]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - ifup exit if invoked from
 	  hotplug and ONBOOT=yes
 
-2003-10-08 15:03 +0000 [r1430]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-08 15:03 +0000 [r1430]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - sysfs added to remaining list in rc.shutdown
 	  (by havner)
 
-2003-10-07 15:44 +0000 [r1425]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-07 15:44 +0000 [r1425]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - bring PPPOA_IFACE up before
 	  starting pppoa; small fix in logged message (both by adasi)
 
-2003-10-07 09:41 +0000 [r1424]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-07 09:41 +0000 [r1424]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - initial eagle (pppoa)
-	  support by Witold Krecicki <adasi@grubno.da.ru>)
+	  support by Witold Krecicki <adasi/at/grubno.da.ru>)
 
-2003-10-06 09:19 +0000 [r1413]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-06 09:19 +0000 [r1413]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* hwprofile: - fix typo in available word (qboosh)
 
-2003-10-04 13:02 +0000 [r1412]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-04 13:02 +0000 [r1412]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - return with some retval
 
-2003-10-04 12:06 +0000 [r1411]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-04 12:06 +0000 [r1411]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - allow unknown options to be passed to
 	  initlog()
 
-2003-10-04 11:57 +0000 [r1410]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-04 11:57 +0000 [r1410]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - move is_yes and is_not at beginning
 
-2003-10-04 11:41 +0000 [r1409]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-04 11:41 +0000 [r1409]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* Makefile.am: - use rpm or rpmbuild depending on which rpm version
 	  is installed
 
-2003-10-04 11:30 +0000 [r1408]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-04 11:30 +0000 [r1408]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - include hwprofiles/files
 
-2003-10-04 11:08 +0000 [r1407]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-04 11:08 +0000 [r1407]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/init.d/functions: Fast boot support
 	  (disables NLS, fancy logging and thus is much faster). Useful on
 	  workstations. Based on idea and patch by Wojtek Kaniewski
-	  <wojtekka@bydg.pdi.net>.
+	  <wojtekka/at/bydg.pdi.net>.
 
-2003-10-04 09:55 +0000 [r1405-1406]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-04 09:55 +0000 [r1405-1406]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* setsysfont: - use CONSOLEFONT when SYSFONT is empty (Wojtek
-	  Kaniewski <wojtekka@bydg.pdi.net>)
+	  Kaniewski <wojtekka/at/bydg.pdi.net>)
 
 	* sysconfig/network-scripts/ifup-ppp: Support for
 	  ppp-plugin-ifcfg-password.spec by Wojtek Kaniewski
-	  <wojtekka@bydg.pdi.net>.
+	  <wojtekka/at/bydg.pdi.net>.
 
-2003-10-04 09:46 +0000 [r1404]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-04 09:46 +0000 [r1404]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/hwprofiles/files (added), sysconfig/hwprof, hwprofile,
 	  sysconfig/hwprofiles/Makefile.am: Merged patch by Tomasz Witek
-	  <tiwek@manta.univ.gda.pl>: - ignore Latency in /proc/pci -
+	  <tiwek/at/manta.univ.gda.pl>: - ignore Latency in /proc/pci -
 	  ability to choose profile while booting - example profile file -
 	  misc fixes and cleanups
 
-2003-10-02 18:43 +0000 [r1399-1400]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-02 18:43 +0000 [r1399-1400]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: - 0.4.0.2 release
 
 	* rc.d/init.d/functions: - check own pid, not parents one
 
-2003-10-02 18:33 +0000 [r1398]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-02 18:33 +0000 [r1398]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - sleep 5 is not needed when starting usb; more
 	  protection again double mounting usbfs
 
-2003-10-02 18:23 +0000 [r1397]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-10-02 18:23 +0000 [r1397]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - do even try to kill itself
 
-2003-09-30 09:44 +0000 [r1393]  Jan Rêkorajski <baggins@pld-linux.org>
+2003-09-30 09:44 +0000 [r1393]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - load lvm and dm modules with "autoclean"
 
-2003-09-30 09:40 +0000 [r1392]  Jan Rêkorajski <baggins@pld-linux.org>
+2003-09-30 09:40 +0000 [r1392]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - usb-storage must be loaded before LVM
 	  detection (disks on USB are real)
 
-2003-09-28 16:33 +0000 [r1383]  Artur Frysiak <wiget@pld-linux.org>
+2003-09-28 16:33 +0000 [r1383]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - fix error message
 
-2003-09-28 16:03 +0000 [r1382]  Artur Frysiak <wiget@pld-linux.org>
+2003-09-28 16:03 +0000 [r1382]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-irda: - fix setting arp for irdaX
 
-2003-09-28 14:53 +0000 [r1381]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-28 14:53 +0000 [r1381]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - fix power/txpower/retry wlan
 	  parameters handling
 
-2003-09-22 19:55 +0000 [r1371]  Artur Frysiak <wiget@pld-linux.org>
+2003-09-22 19:55 +0000 [r1371]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* run-parts: - use syntax described in SUSv2
 
-2003-09-22 17:46 +0000 [r1370]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-22 17:46 +0000 [r1370]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* run-parts: - oh, use RUNPARTS_DIR
 
-2003-09-22 17:20 +0000 [r1369]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-22 17:20 +0000 [r1369]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* run-parts: - run mainly safe named scripts and protect against
 	  some bad files
 
-2003-09-22 01:35 +0000 [r1365]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-22 01:35 +0000 [r1365]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - include more docs
 
-2003-09-22 01:28 +0000 [r1364]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-22 01:28 +0000 [r1364]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/network, rc.d/init.d/timezone,
 	  sysconfig/network-scripts/ifdown-vlan,
@@ -1258,17 +1294,17 @@
 	  (pld-linux.org) - added missing files (networking scripts mainly)
 	  - updated spec file - updated changelog
 
-2003-09-22 00:55 +0000 [r1363]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-22 00:55 +0000 [r1363]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/Makefile.am,
 	  sysconfig/interfaces/Makefile.am: - added missing files
 
-2003-09-19 20:29 +0000 [r1361]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-19 20:29 +0000 [r1361]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: - description of
 	  DIRECT_CONNECT for ppp, too
 
-2003-09-14 11:47 +0000 [r1331]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-14 11:47 +0000 [r1331]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/ip-rules, TODO, sysconfig/interfaces/up.d/Makefile.am,
 	  ppp/ip-down.d/Makefile.am, sysconfig/hwprof, doc/initlog.1,
@@ -1365,73 +1401,73 @@
 	  sysconfig/network-scripts/ifup-sl, rc.d/.cvsignore: - propset Id
 	  everywhere
 
-2003-09-14 10:48 +0000 [r1328]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-14 10:48 +0000 [r1328]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* makepot.pl: - propset test
 
-2003-09-09 22:45 +0000 [r1128]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-09 22:45 +0000 [r1128]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - also be able to find 2.6 modules (.ko)
 
-2003-09-09 22:05 +0000 [r1126]  Jan Rêkorajski <baggins@pld-linux.org>
+2003-09-09 22:05 +0000 [r1126]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - fixed is_module - modules may be gzipped
 
-2003-09-09 16:14 +0000 [r1124]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-09 16:14 +0000 [r1124]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - add sysfs to mtab
 
-2003-09-08 09:29 +0000 [r1122]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-08 09:29 +0000 [r1122]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - mount sysfs in the same way as proc is
 
-2003-09-05 14:53 +0000 [r1120]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-09-05 14:53 +0000 [r1120]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - if there is no process then it already
 	  died
 
-2003-08-19 14:07 +0000 [r1118]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-08-19 14:07 +0000 [r1118]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: - for nessusd.init
 
-2003-08-10 20:54 +0000 [r1116]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-08-10 20:54 +0000 [r1116]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - simplified mdadm support
 
-2003-08-10 20:49 +0000 [r1115]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-08-10 20:49 +0000 [r1115]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - functions for kernel version checking
 
-2003-08-07 10:20 +0000 [r1113]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-08-07 10:20 +0000 [r1113]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - add support for mdadm when trying to start
 	  RAID devices
 
-2003-08-06 19:23 +0000 [r1111]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-08-06 19:23 +0000 [r1111]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: - from athcool.init
 
-2003-07-28 12:16 +0000 [r1109]  Pawe³ Go³aszewski <blues@pld-linux.org>
+2003-07-28 12:16 +0000 [r1109]  Pawe³ Go³aszewski <blues/at/pld-linux.org>
 
 	* sysctl.conf: - added gc_thresh entries
 
-2003-07-28 12:11 +0000 [r1108]  Pawe³ Go³aszewski <blues@pld-linux.org>
+2003-07-28 12:11 +0000 [r1108]  Pawe³ Go³aszewski <blues/at/pld-linux.org>
 
 	* sysconfig/network: - oops - these were my experiments...
 
-2003-07-28 12:02 +0000 [r1106]  Pawe³ Go³aszewski <blues@pld-linux.org>
+2003-07-28 12:02 +0000 [r1106]  Pawe³ Go³aszewski <blues/at/pld-linux.org>
 
 	* sysconfig/network: - typo
 
-2003-07-28 11:33 +0000 [r1105]  Pawe³ Go³aszewski <blues@pld-linux.org>
+2003-07-28 11:33 +0000 [r1105]  Pawe³ Go³aszewski <blues/at/pld-linux.org>
 
 	* sysconfig/network: - GATEWAY setup is back - with comment
 
-2003-07-11 23:08 +0000 [r1103]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-07-11 23:08 +0000 [r1103]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/network: - added nameif support
 
-2003-07-10 18:39 +0000 [r1100-1101]  Jan Rêkorajski <baggins@pld-linux.org>
+2003-07-10 18:39 +0000 [r1100-1101]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: - description for
 	  VLAN_REORDER_HDR
@@ -1439,26 +1475,26 @@
 	* sysconfig/network-scripts/ifup-vlan: - seems like API changed,
 	  allow REORDER_HDR on VLANs
 
-2003-07-10 12:30 +0000 [r1098]  Jan Rêkorajski <baggins@pld-linux.org>
+2003-07-10 12:30 +0000 [r1098]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network: - we should stop bridges first if we are
 	  staring them last
 
-2003-07-10 12:26 +0000 [r1097]  Jan Rêkorajski <baggins@pld-linux.org>
+2003-07-10 12:26 +0000 [r1097]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network: - special case bridge interfaces (br*), they
 	  *must* be handled last as we are not able to know what will be
 	  bridged
 
-2003-07-05 11:59 +0000 [r1095]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-07-05 11:59 +0000 [r1095]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - mount devpts, too
 
-2003-06-30 15:36 +0000 [r1094]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-06-30 15:36 +0000 [r1094]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - keep old dmesg, too
 
-2003-06-24 10:34 +0000 [r1092-1093]  Jakub Bogusz <qboosh@pld-linux.org>
+2003-06-24 10:34 +0000 [r1092-1093]  Jakub Bogusz <qboosh/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm: - added note about
 	  bluez
@@ -1466,111 +1502,111 @@
 	* sysconfig/interfaces/data/Makefile.am,
 	  sysconfig/interfaces/Makefile.am: - added *-ppp0.gprs-plusgsm
 
-2003-06-24 10:26 +0000 [r1091]  Jakub Bogusz <qboosh@pld-linux.org>
+2003-06-24 10:26 +0000 [r1091]  Jakub Bogusz <qboosh/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm (added),
 	  sysconfig/interfaces/data/chat-ppp0.gprs-plusgsm (added): - ppp
 	  examples for GPRS/PlusGSM taken from BTS#694
 
-2003-06-20 15:32 +0000 [r1090]  Pawe³ Go³aszewski <blues@pld-linux.org>
+2003-06-20 15:32 +0000 [r1090]  Pawe³ Go³aszewski <blues/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - stupid missing thing
 
-2003-06-19 15:57 +0000 [r1089]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-06-19 15:57 +0000 [r1089]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/static-routes, sysconfig/network,
 	  sysconfig/network-scripts/functions.network: - use static-routes
 	  for ip rule configuration; drop GATRWAY from network
 	  configuration
 
-2003-06-17 14:02 +0000 [r1088]  Jakub Bogusz <qboosh@pld-linux.org>
+2003-06-17 14:02 +0000 [r1088]  Jakub Bogusz <qboosh/at/pld-linux.org>
 
 	* rc.d/init.d/timezone: - posix zoneinfo files are in top level,
 	  not "posix" subdir now
 
-2003-06-16 21:28 +0000 [r1087]  Witek Krêcicki <adasi@pld-linux.org>
+2003-06-16 21:28 +0000 [r1087]  Witek Krêcicki <adasi/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - future is now...
 
-2003-06-16 20:20 +0000 [r1086]  Pawe³ Go³aszewski <blues@pld-linux.org>
+2003-06-16 20:20 +0000 [r1086]  Pawe³ Go³aszewski <blues/at/pld-linux.org>
 
 	* rc-scripts.spec.in, rc.d/rc.sysinit: - early mounting of sysfs
 	  under kernel 2.5
 
-2003-06-16 18:05 +0000 [r1085]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-06-16 18:05 +0000 [r1085]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - usbdevfs is usbfs in 2.5
 
-2003-06-06 09:02 +0000 [r1083]  Pawe³ Go³aszewski <blues@pld-linux.org>
+2003-06-06 09:02 +0000 [r1083]  Pawe³ Go³aszewski <blues/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: - fixed typo in
 	  description
 
-2003-05-31 11:59 +0000 [r1082]  Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>
+2003-05-31 11:59 +0000 [r1082]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* inittab: - calling update is obsolete starting from 2.2.9 kernel
 
-2003-05-22 14:11 +0000 [r1080]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-22 14:11 +0000 [r1080]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: - updated
 
-2003-05-15 22:39 +0000 [r1078-1079]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-15 22:39 +0000 [r1078-1079]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - formatting - fixed second argument of
 	  "status"
 
 	* dumb.sh: - updated
 
-2003-05-15 21:37 +0000 [r1077]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-15 21:37 +0000 [r1077]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* rc.d/init.d/template.init, rc.d/init.d/functions: - LSB
 	  conformance changes
 
-2003-05-11 21:09 +0000 [r1076]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-11 21:09 +0000 [r1076]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: - updated
 
-2003-05-11 15:26 +0000 [r1075]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-11 15:26 +0000 [r1075]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: removed duplicates; %s fixes
 
-2003-05-11 15:13 +0000 [r1074]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-11 15:13 +0000 [r1074]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: updated
 
-2003-05-11 12:42 +0000 [r1073]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-11 12:42 +0000 [r1073]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: updated
 
-2003-05-09 21:08 +0000 [r1072]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-09 21:08 +0000 [r1072]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: - updated
 
-2003-05-08 17:18 +0000 [r1071]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-08 17:18 +0000 [r1071]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* rc.d/init.d/template.init: - reversed bogus change
 
-2003-05-07 23:35 +0000 [r1070]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-07 23:35 +0000 [r1070]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: - updated
 
-2003-05-06 21:54 +0000 [r1069]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-06 21:54 +0000 [r1069]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: updated
 
-2003-05-05 00:07 +0000 [r1068]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-05 00:07 +0000 [r1068]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* rc.d/init.d/template.init, dumb.sh: updated
 
-2003-05-04 19:48 +0000 [r1067]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-04 19:48 +0000 [r1067]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: updated
 
-2003-05-03 23:16 +0000 [r1066]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-03 23:16 +0000 [r1066]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh: updated
 
-2003-05-02 23:41 +0000 [r1064-1065]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-05-02 23:41 +0000 [r1064-1065]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* dumb.sh (added): - dump script with various messages
 
@@ -1580,33 +1616,33 @@
 
 	* po/de.po: - corrected charset s/iso8850-1/iso-8850-1/.
 
-2003-04-17 18:21 +0000 [r1062]  Jan Rêkorajski <baggins@pld-linux.org>
+2003-04-17 18:21 +0000 [r1062]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - added support for device-mapper
 
-2003-04-10 07:37 +0000 [r1061]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2003-04-10 07:37 +0000 [r1061]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - use new evms_activate utility; drop support
 	  for evms < 2.0.0
 
-2003-04-07 19:59 +0000 [r1060]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2003-04-07 19:59 +0000 [r1060]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - split sysctl call into two pieces
 
-2003-04-07 19:54 +0000 [r1059]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2003-04-07 19:54 +0000 [r1059]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - fix Andrzej's proxy arp support
 
-2003-03-06 13:31 +0000 [r1058]  Wojciech Ciêciwa <cieciwa@pld-linux.org>
+2003-03-06 13:31 +0000 [r1058]  Wojciech Ciêciwa <cieciwa/at/pld-linux.org>
 
 	* sysctl.conf: - corecting URL of grsecurity.
 
-2003-01-25 00:37 +0000 [r1057]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2003-01-25 00:37 +0000 [r1057]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - more generic ups support via
 	  /sbin/poweroff-ups
 
-2003-01-15 22:34 +0000 [r1056]  Andrzej M. Krzysztofowicz <ankry@pld-linux.org>
+2003-01-15 22:34 +0000 [r1056]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
 	* TODO, sysconfig/network-scripts/ifup,
 	  sysconfig/interfaces/ifcfg-description: - support for proxy ARP
@@ -1619,22 +1655,22 @@
 	* rc.d/init.d/functions: s/broke/break/ (fixed
 	  http://bugs.pld.org.pl/?bug=520).
 
-2002-12-30 23:39 +0000 [r1054]  Pawe³ Wilk <siefca@pld-linux.org>
+2002-12-30 23:39 +0000 [r1054]  Pawe³ Wilk <siefca/at/pld-linux.org>
 
 	* run-parts: - run-parts: current directory now in an environment
 	  variable - run-parts: args shifted - run-parts: cosmetics
 
-2002-12-17 14:01 +0000 [r1053]  Jan Rêkorajski <baggins@pld-linux.org>
+2002-12-17 14:01 +0000 [r1053]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network, po/pl.po, doc/sysconfig.txt,
 	  doc/sysconfig.docb, sysconfig/network-scripts/functions.network:
 	  - removed references to IPV*_FORWARDING
 
-2002-12-17 13:54 +0000 [r1052]  Jan Rêkorajski <baggins@pld-linux.org>
+2002-12-17 13:54 +0000 [r1052]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network: - better solution to IPV*_FORWARDING
 
-2002-12-17 13:43 +0000 [r1051]  Jan Rêkorajski <baggins@pld-linux.org>
+2002-12-17 13:43 +0000 [r1051]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network: - removed IPV*_FORWARDING - use
 	  /etc/sysctl.conf to set this
@@ -1648,7 +1684,7 @@
 	* rc.d/rc.sysinit: - system will reboot if is instructed by fsck to
 	  do so
 
-2002-11-27 23:41 +0000 [r1048]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-11-27 23:41 +0000 [r1048]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - support for UPS powerdown before halt
 
@@ -1664,25 +1700,25 @@
 	  (reversed parameters) so it works now as intended (as described
 	  in docs)
 
-2002-10-10 15:07 +0000 [r1045]  Jan Rêkorajski <baggins@pld-linux.org>
+2002-10-10 15:07 +0000 [r1045]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/rc.sysinit: - better support fo EVMS
 
-2002-09-28 23:05 +0000 [r1044]  Arkadiusz Patyk <areq@pld-linux.org>
+2002-09-28 23:05 +0000 [r1044]  Arkadiusz Patyk <areq/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - don't force umount iso9660 ramfs tmpfs
 
-2002-09-14 19:54 +0000 [r1043]  Tomasz Orzechowski <orzech@pld-linux.org>
+2002-09-14 19:54 +0000 [r1043]  Tomasz Orzechowski <orzech/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/rc, rc.d/rc.sysinit: - LOAD_SOUND is
 	  obsolete
 
-2002-08-24 17:04 +0000 [r1042]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-08-24 17:04 +0000 [r1042]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - fix wvdial support; chat
 	  support still broken
 
-2002-08-24 16:05 +0000 [r1041]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-08-24 16:05 +0000 [r1041]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description, README,
 	  sysconfig/network-scripts/functions.network,
@@ -1691,12 +1727,12 @@
 	  ifcfg-ppp5 with DEVICE=ppp5 will _always_ create ppp5 interface
 	  when it's not used yet)
 
-2002-08-23 22:13 +0000 [r1040]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2002-08-23 22:13 +0000 [r1040]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/network: - check ONBOOT by evaluating ifcfg-* file,
 	  not by egrep
 
-2002-08-22 13:21 +0000 [r1039]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-08-22 13:21 +0000 [r1039]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description,
 	  sysconfig/network-scripts/ifup-post,
@@ -1704,19 +1740,19 @@
 	  downstream and upstream traffic on whole interface (cbq, htb,
 	  tbf)
 
-2002-08-21 21:30 +0000 [r1038]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-08-21 21:30 +0000 [r1038]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network: - fix support for
 	  src addresses option
 
-2002-08-13 20:31 +0000 [r1037]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2002-08-13 20:31 +0000 [r1037]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - /proc/bus/usb should be described in fstab -
 	  mounting manually bogus device "usbdevfs" causes mount -a to fail
 	  when fstab contains something like "none /proc/bus/usb usbdevfs
 	  ..."
 
-2002-08-11 17:05 +0000 [r1036]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-08-11 17:05 +0000 [r1036]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-routes,
 	  sysconfig/network-scripts/ifup-post,
@@ -1725,21 +1761,21 @@
 	  sysconfig/network-scripts/ifup-neigh (added): - static arp per
 	  interface support - any device support is back
 
-2002-08-09 06:30 +0000 [r1035]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2002-08-09 06:30 +0000 [r1035]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fix for checking encrypted filesystems - if
 	  all have "noauto" in options, don't try to mount or fsck anything
 
-2002-07-14 21:11 +0000 [r1034]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-07-14 21:11 +0000 [r1034]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* service, rc.d/init.d/functions: - some code from RH (nicer than
 	  old code)
 
-2002-07-13 23:04 +0000 [r1033]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-07-13 23:04 +0000 [r1033]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - fix WLAN encryption setting
 
-2002-07-13 16:25 +0000 [r1032]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-07-13 16:25 +0000 [r1032]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-ppp,
 	  sysconfig/network-scripts/ifdown-vlan (added),
@@ -1756,43 +1792,43 @@
 	  (added), sysconfig/network-scripts/ifup-irda (added): - more
 	  TOTALNEW merge (ppp, irda, other vlan, wireless). ALPHA
 
-2002-07-06 12:22 +0000 [r1031]  Olgierd Pieczul <wojrus@pld-linux.org>
+2002-07-06 12:22 +0000 [r1031]  Olgierd Pieczul <wojrus/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fixed: removing directories in /var/run/app/ -
 	  fixed: unneeded lines (deleting not-existing files) removed
 
-2002-06-19 18:13 +0000 [r1030]  Rafa³ Kleger-Rudomin <klakier@pld-linux.org>
+2002-06-19 18:13 +0000 [r1030]  Rafa³ Kleger-Rudomin <klakier/at/pld-linux.org>
 
 	* doc/sysconfig.txt: - forgotten
 
-2002-06-19 18:04 +0000 [r1029]  Rafa³ Kleger-Rudomin <klakier@pld-linux.org>
+2002-06-19 18:04 +0000 [r1029]  Rafa³ Kleger-Rudomin <klakier/at/pld-linux.org>
 
 	* sysconfig/network: - hopefully fixed explanation about NISDOMAIN
 
-2002-06-18 22:06 +0000 [r1028]  Rafa³ Kleger-Rudomin <klakier@pld-linux.org>
+2002-06-18 22:06 +0000 [r1028]  Rafa³ Kleger-Rudomin <klakier/at/pld-linux.org>
 
 	* doc/sysconfig.txt, sysconfig/network: - more clear explanation of
 	  HOSTNAME and NISDOMAIN
 
-2002-06-13 13:06 +0000 [r1027]  Robert Grabowski <grabba@pld-linux.org>
+2002-06-13 13:06 +0000 [r1027]  Robert Grabowski <grabba/at/pld-linux.org>
 
 	* rc.d/init.d/functions: daemon function: dont't use su when user
 	  is root
 
-2002-05-21 12:23 +0000 [r1026]  Olgierd Pieczul <wojrus@pld-linux.org>
+2002-05-21 12:23 +0000 [r1026]  Olgierd Pieczul <wojrus/at/pld-linux.org>
 
 	* sysconfig/ip-rules: - typo
 
-2002-05-11 21:51 +0000 [r1025]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-05-11 21:51 +0000 [r1025]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - process functions a bit earlier - don't mount
 	  proc twice
 
-2002-05-11 10:26 +0000 [r1024]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-05-11 10:26 +0000 [r1024]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - updated spec file
 
-2002-05-11 09:50 +0000 [r1023]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-05-11 09:50 +0000 [r1023]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-routes, rc.d/init.d/network,
 	  sysconfig/network-scripts/ifup-aliases,
@@ -1815,27 +1851,27 @@
 	  sysconfig/network-scripts/ifup-sl: - functions.network back in
 	  old place
 
-2002-05-11 09:44 +0000 [r1022]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-05-11 09:44 +0000 [r1022]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* ppp/Makefile.am: - force symlink
 
-2002-05-11 09:36 +0000 [r1020-1021]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-05-11 09:36 +0000 [r1020-1021]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* autogen.sh: - configure.in -> configure.ac
 
 	* po/pl.po, configure.ac: - fix iso charset name - add de to
 	  supported languages
 
-2002-05-11 09:30 +0000 [r1019]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-05-11 09:30 +0000 [r1019]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* configure.in (removed), configure.ac (added): - renamed + updated
 
-2002-05-11 08:48 +0000 [r1018]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-05-11 08:48 +0000 [r1018]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - removed via (it shouldn't be
 	  here)
 
-2002-05-11 08:41 +0000 [r1017]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-05-11 08:41 +0000 [r1017]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - use onlink option when adding
 	  default routing (in case when gw isn't in our subnetwork) -
@@ -1846,19 +1882,19 @@
 	* sysconfig/interfaces/data/chat-ppp0.tpsa: - Update for current
 	  TPSA login screen.
 
-2002-04-20 13:57 +0000 [r1015]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-04-20 13:57 +0000 [r1015]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - don't mount usbdevfs again if it's already
 	  mounted (for example by modules.conf post-install directive).
-	  Patch by Wojtek Kaniewski <wojtekka@bydg.pdi.net>.
+	  Patch by Wojtek Kaniewski <wojtekka/at/bydg.pdi.net>.
 
-2002-04-10 19:02 +0000 [r1014]  Witek Krêcicki <adasi@pld-linux.org>
+2002-04-10 19:02 +0000 [r1014]  Witek Krêcicki <adasi/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - added USER... dunno why it
 	  wasn't included, but it is in sample files and it should be added
 	  to pppd cmdline (user ${USER}). If it's wrong, roll it back
 
-2002-04-09 11:10 +0000 [r1009-1013]  Jacek Konieczny <jajcus@pld-linux.org>
+2002-04-09 11:10 +0000 [r1009-1013]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* rc.d/init.d/network, AUTHORS, sysconfig/network: - more LDAP
 	  garbage removed
@@ -1873,15 +1909,15 @@
 	* rc.d/init.d/functions.network: - delete '}' left after some
 	  function removal
 
-2002-03-29 17:18 +0000 [r1008]  Rafa³ Kleger-Rudomin <klakier@pld-linux.org>
+2002-03-29 17:18 +0000 [r1008]  Rafa³ Kleger-Rudomin <klakier/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - added deleting lock files
 
-2002-03-29 08:52 +0000 [r1007]  Olgierd Pieczul <wojrus@pld-linux.org>
+2002-03-29 08:52 +0000 [r1007]  Olgierd Pieczul <wojrus/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - added removed by mistake 'timezone'
 
-2002-03-29 08:46 +0000 [r1005-1006]  Olgierd Pieczul <wojrus@pld-linux.org>
+2002-03-29 08:46 +0000 [r1005-1006]  Olgierd Pieczul <wojrus/at/pld-linux.org>
 
 	* sysconfig/ip-rules (added): - example config file
 
@@ -1889,16 +1925,16 @@
 	  rc.d/init.d/functions.network, sysconfig/Makefile.am: - policy
 	  routing support
 
-2002-03-24 03:59 +0000 [r1004]  Pawe³ Go³aszewski <blues@pld-linux.org>
+2002-03-24 03:59 +0000 [r1004]  Pawe³ Go³aszewski <blues/at/pld-linux.org>
 
 	* po/pl.po, autogen.sh, rc.d/rc.sysinit, README: - GNU/Linux is
 	  gone.
 
-2002-03-19 18:35 +0000 [r1003]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-03-19 18:35 +0000 [r1003]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/rc.sysinit: - user and kernelspace PNP
 
-2002-03-19 18:19 +0000 [r1002]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-03-19 18:19 +0000 [r1002]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* ppp/ipx-down (added), ppp/auth-down (added), isapnp/.cvsignore
 	  (added), ppp/Makefile.am, sysconfig/hwprof (added), Makefile.am,
@@ -1910,67 +1946,67 @@
 	  isapnp/Makefile.am (added), sysconfig/hwprofiles/.cvsignore
 	  (added): - started merging TOTALNEW
 
-2002-03-19 17:46 +0000 [r1001]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-03-19 17:46 +0000 [r1001]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - support for EVMS volumes
 
-2002-03-19 17:42 +0000 [r1000]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-03-19 17:42 +0000 [r1000]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/rc.sysinit: - if devfs is mounted and
 	  devfsd is available then start is unconditionally
 
-2002-03-07 11:16 +0000 [r999]  Pawe³ Go³aszewski <blues@pld-linux.org>
+2002-03-07 11:16 +0000 [r999]  Pawe³ Go³aszewski <blues/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifup-ipx: - ipx
 	  paths fixed (ipx is usable now...)
 
-2002-03-07 09:48 +0000 [r998]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2002-03-07 09:48 +0000 [r998]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - protect dmesg
 
-2002-02-21 00:31 +0000 [r997]  Tomasz Pala <gotar@pld-linux.org>
+2002-02-21 00:31 +0000 [r997]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* po/pl.po: - more typos
 
-2002-02-21 00:08 +0000 [r996]  Tomasz Pala <gotar@pld-linux.org>
+2002-02-21 00:08 +0000 [r996]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* po/pl.po, rc.d/rc.sysinit: - typos
 
-2002-02-20 23:43 +0000 [r995]  Tomasz Pala <gotar@pld-linux.org>
+2002-02-20 23:43 +0000 [r995]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* po/pl.po, rc.d/rc.sysinit, sysconfig/network-scripts/ifup-sl: -
 	  updated.
 
-2002-02-18 13:24 +0000 [r994]  Tomasz Pala <gotar@pld-linux.org>
+2002-02-18 13:24 +0000 [r994]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* doc/sysconfig.txt, doc/sysconfig.docb: - hostname != FQDN
 
-2002-02-03 16:40 +0000 [r993]  Witek Krêcicki <adasi@pld-linux.org>
+2002-02-03 16:40 +0000 [r993]  Witek Krêcicki <adasi/at/pld-linux.org>
 
 	* rc-scripts-sysconfig_masq.patch (removed): - moved away
 
-2002-02-03 16:22 +0000 [r992]  Witek Krêcicki <adasi@pld-linux.org>
+2002-02-03 16:22 +0000 [r992]  Witek Krêcicki <adasi/at/pld-linux.org>
 
 	* rc-scripts-sysconfig_masq.patch (added): - sysconfig/masquerade
 	  support patch - not for use in official rc-scripts releases
 
-2002-02-03 16:17 +0000 [r991]  Witek Krêcicki <adasi@pld-linux.org>
+2002-02-03 16:17 +0000 [r991]  Witek Krêcicki <adasi/at/pld-linux.org>
 
 	* rc.d/init.d/network, doc/sysconfig.txt,
 	  rc.d/init.d/functions.network, doc/sysconfig.docb: - reverted
 	  last change
 
-2002-02-02 17:30 +0000 [r990]  Witek Krêcicki <adasi@pld-linux.org>
+2002-02-02 17:30 +0000 [r990]  Witek Krêcicki <adasi/at/pld-linux.org>
 
 	* doc/sysconfig.txt, doc/sysconfig.docb: - added masquerade
 	  description
 
-2002-02-02 17:13 +0000 [r989]  Witek Krêcicki <adasi@pld-linux.org>
+2002-02-02 17:13 +0000 [r989]  Witek Krêcicki <adasi/at/pld-linux.org>
 
 	* rc.d/init.d/network, rc.d/init.d/functions.network: - added
 	  support for sysconfig/masquerade (NEW)
 
-2002-01-27 02:14 +0000 [r986-988]  Jan Rêkorajski <baggins@pld-linux.org>
+2002-01-27 02:14 +0000 [r986-988]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* src/ppp-watch.c, src/usernetctl.c: - rc-scripts-interfaces.patch:
 	  ifcfg-* are in /etc/sysconfig/interfaces, not
@@ -1981,45 +2017,45 @@
 
 	* rc.d/rc.shutdown: - don't try to umount devfs - it's pointelss
 
-2002-01-22 23:46 +0000 [r984-985]  Tomasz Pala <gotar@pld-linux.org>
+2002-01-22 23:46 +0000 [r984-985]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* po/pl.po: - more fixes
 
 	* TODO, DEVELOPMENT: - typos
 
-2002-01-17 21:14 +0000 [r983]  Tomasz Pala <gotar@pld-linux.org>
+2002-01-17 21:14 +0000 [r983]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* inittab: - added KeyboardSignal entry.
 
-2002-01-17 20:56 +0000 [r982]  Tomasz Pala <gotar@pld-linux.org>
+2002-01-17 20:56 +0000 [r982]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* po/pl.po: - changed personal forms to impersonal.
 
-2002-01-17 20:47 +0000 [r981]  Tomasz Pala <gotar@pld-linux.org>
+2002-01-17 20:47 +0000 [r981]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* po/pl.po: - iso8859-1 got 'ó' - why don't use it? - other
 	  cosmetics.
 
-2002-01-08 17:42 +0000 [r980]  Jan Rêkorajski <baggins@pld-linux.org>
+2002-01-08 17:42 +0000 [r980]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - reverted is_no() behaviour to return
 	  true only on explicit "no"
 
-2002-01-08 17:16 +0000 [r979]  Jan Rêkorajski <baggins@pld-linux.org>
+2002-01-08 17:16 +0000 [r979]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - reorganized stuff so modprobe is not called
 	  before depmod
 
-2002-01-08 16:48 +0000 [r978]  Jan Rêkorajski <baggins@pld-linux.org>
+2002-01-08 16:48 +0000 [r978]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* configure.in: - version 0.3.1
 
-2001-12-24 12:22 +0000 [r977]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2001-12-24 12:22 +0000 [r977]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - if RUN_DEPMOD is set to "ifmissing", run
 	  simply "depmod -A"
 
-2001-12-21 15:49 +0000 [r976]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2001-12-21 15:49 +0000 [r976]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fixed depmod problem (s/$mver/`uname -r`/)
 
@@ -2035,31 +2071,31 @@
 	* rc.d/init.d/functions: - Properly escape quotation marks inside
 	  quotation marks.
 
-2001-12-03 17:50 +0000 [r973]  Jacek Konieczny <jajcus@pld-linux.org>
+2001-12-03 17:50 +0000 [r973]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-post: - pass $CONFIG instead of
 	  $DEVICE to ifup-post, ifup-aliases (BTS id 20)
 
-2001-11-30 15:11 +0000 [r972]  Wojciech Ciêciwa <cieciwa@pld-linux.org>
+2001-11-30 15:11 +0000 [r972]  Wojciech Ciêciwa <cieciwa/at/pld-linux.org>
 
 	* sysctl.conf: - s/getrewted/grsecurity/
 
-2001-11-23 14:33 +0000 [r971]  Tomasz Pala <gotar@pld-linux.org>
+2001-11-23 14:33 +0000 [r971]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* rc.d/rc.sysinit, src/ppp-watch.c, src/shvar.c, src/shvar.h: -
 	  fixed typos.
 
-2001-11-19 13:00 +0000 [r970]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2001-11-19 13:00 +0000 [r970]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - don't try to detect devicetype
 	  if it's specified
 
-2001-11-12 18:47 +0000 [r969]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-11-12 18:47 +0000 [r969]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown: - RESULT variable can be empty,
 	  check for it
 
-2001-11-09 18:34 +0000 [r968]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-11-09 18:34 +0000 [r968]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network: - run modprobe at the start of
 	  network_init()
@@ -2069,11 +2105,11 @@
 	* sysconfig/network: - chenged comment s/Set domainname here/Set
 	  NIS domain name here/
 
-2001-10-30 17:03 +0000 [r966]  Tomasz Pala <gotar@pld-linux.org>
+2001-10-30 17:03 +0000 [r966]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - last change: perms to 664.
 
-2001-10-30 09:02 +0000 [r965]  Tomasz Pala <gotar@pld-linux.org>
+2001-10-30 09:02 +0000 [r965]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - changed /var/run/utmp(x) and /var/log/wtmp(x)
 	  permissions to 660 in order to assure compatibility with SysVinit
@@ -2084,7 +2120,7 @@
 	* sysconfig/network-scripts/ifup-routes: back ..
 	  s/DEVICE/REALDEVICE/
 
-2001-10-24 22:27 +0000 [r962]  Tomasz Orzechowski <orzech@pld-linux.org>
+2001-10-24 22:27 +0000 [r962]  Tomasz Orzechowski <orzech/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - small fixes
 
@@ -2101,49 +2137,49 @@
 	* sysconfig/network-scripts/ifdown-br: - Do not try to delete
 	  bridge from itself.
 
-2001-10-11 18:49 +0000 [r955]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-10-11 18:49 +0000 [r955]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifup-br, rc.d/init.d/functions.network:
 	  - let kernel maintain if ARP should be turned on/off if not
 	  explicitly specified
 
-2001-10-10 02:03 +0000 [r954]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-10-10 02:03 +0000 [r954]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - fixed regexp in DEVICETYPE
 	  detection
 
-2001-10-09 22:49 +0000 [r952-953]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-10-09 22:49 +0000 [r952-953]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - HANDLING cannot be 'typeset'
 	  it's mot local (thanks qboosh)
 
 	* sysconfig/network-scripts/ifup-ppp: - typo (thanks qboosh)
 
-2001-10-08 11:16 +0000 [r951]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-10-08 11:16 +0000 [r951]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fix for modular LVM
 
-2001-10-05 18:21 +0000 [r950]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-10-05 18:21 +0000 [r950]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysctl.conf: - comment out all IPv6 stuff by default
 
-2001-10-05 18:17 +0000 [r949]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-10-05 18:17 +0000 [r949]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - proper (shell dependant) ulimit use
 
-2001-10-04 07:41 +0000 [r948]  Jakub Bogusz <qboosh@pld-linux.org>
+2001-10-04 07:41 +0000 [r948]  Jakub Bogusz <qboosh/at/pld-linux.org>
 
 	* po/pl.po: - applied SOURCES/rc-scripts-typo.patch (by aflinta)
 
-2001-10-01 17:10 +0000 [r946-947]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-10-01 17:10 +0000 [r946-947]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - allow ipv6 only interface
 
 	* sysctl.conf: - added grsec stuff - really, really disable ipv6
 	  autoconf if one wants it
 
-2001-09-19 08:09 +0000 [r944]  Tomasz Orzechowski <orzech@pld-linux.org>
+2001-09-19 08:09 +0000 [r944]  Tomasz Orzechowski <orzech/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - fixed misleading message after killproc
 	  with specified signal type
@@ -2152,12 +2188,12 @@
 
 	* po/pl.po: - charset=iso-8859-2.
 
-2001-08-15 20:32 +0000 [r942]  Roman Werpachowski <roman@pld-linux.org>
+2001-08-15 20:32 +0000 [r942]  Roman Werpachowski <roman/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.tpsa: - added AUTH=no ("noauth"
 	  is not a default option of pppd)
 
-2001-07-30 10:29 +0000 [r941]  Rafa³ Kleger-Rudomin <klakier@pld-linux.org>
+2001-07-30 10:29 +0000 [r941]  Rafa³ Kleger-Rudomin <klakier/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-eth0: - ONBOOT=no by default
 
@@ -2168,7 +2204,7 @@
 	  to fork no matter what limits are set. Limits for users are set
 	  via pam_limit. - Small optimalization (it's smaller now).
 
-2001-07-22 17:28 +0000 [r936-939]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-07-22 17:28 +0000 [r936-939]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown: - typos
 
@@ -2178,12 +2214,12 @@
 
 	* rc.d/rc.modules: - don't autoclean modules loaded here
 
-2001-07-21 19:26 +0000 [r935]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-07-21 19:26 +0000 [r935]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - more merging from TOTALNEW - mainly USB and
 	  lvm - fixed thinko with SET_SLINKS
 
-2001-07-21 19:21 +0000 [r933-934]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-07-21 19:21 +0000 [r933-934]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/interfaces/tnlcfg-icm, sysconfig/interfaces/ifcfg-eth0:
 	  - bring it up to date with the stuff ;>
@@ -2192,78 +2228,78 @@
 	  sysconfig/interfaces/ifcfg-description: -
 	  s/BOOTMETHOD/BOOTPROTO/g
 
-2001-07-19 20:55 +0000 [r932]  Rafa³ Kleger-Rudomin <klakier@pld-linux.org>
+2001-07-19 20:55 +0000 [r932]  Rafa³ Kleger-Rudomin <klakier/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-eth0 (added): - example config
 
-2001-07-17 18:21 +0000 [r931]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-07-17 18:21 +0000 [r931]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, rc.d/init.d/functions: - merge
 	  from TOTALNEW branch: - set MTU - don't use tput if we are not on
 	  a proper terminal
 
-2001-07-13 17:47 +0000 [r930]  Marcin Bohosiewicz <marcus@pld-linux.org>
+2001-07-13 17:47 +0000 [r930]  Marcin Bohosiewicz <marcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown, rc.d/init.d/functions.network:
 	  - added automatically vlan shutdown before shutdowing interface
 	  (eth)
 
-2001-07-05 22:21 +0000 [r929]  Marcin Bohosiewicz <marcus@pld-linux.org>
+2001-07-05 22:21 +0000 [r929]  Marcin Bohosiewicz <marcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - VLAN must be set _before_
 	  initialisation it's IP parameters
 
-2001-07-05 15:56 +0000 [r927]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-07-05 15:56 +0000 [r927]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifdown, rc.d/init.d/functions.network:
 	  - cleaned up accidental mess
 
-2001-07-05 15:47 +0000 [r925-926]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-07-05 15:47 +0000 [r925-926]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - don't mount devpts if devfs is already mounted
 
 	* rc.d/rc.sysinit: - backed up some obviously wrong changes -
 	  PLEASE do NOT make functional changes along with cosmetic ones
 
-2001-07-04 22:48 +0000 [r924]  Tomasz Pala <gotar@pld-linux.org>
+2001-07-04 22:48 +0000 [r924]  Tomasz Pala <gotar/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - removed /etc/HOSTNAME, - cosmetics.
 
-2001-06-26 14:53 +0000 [r923]  Marcin Bohosiewicz <marcus@pld-linux.org>
+2001-06-26 14:53 +0000 [r923]  Marcin Bohosiewicz <marcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - added vconfig set_flag $DEVICE
 	  1 - for dhcpd
 
-2001-06-25 20:54 +0000 [r922]  Marcin Bohosiewicz <marcus@pld-linux.org>
+2001-06-25 20:54 +0000 [r922]  Marcin Bohosiewicz <marcus/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - added vlan_setup function
 	  (setting proper 802.1q vlan's parameters)
 
-2001-06-25 20:44 +0000 [r921]  Marcin Bohosiewicz <marcus@pld-linux.org>
+2001-06-25 20:44 +0000 [r921]  Marcin Bohosiewicz <marcus/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifdown: - added support to 802.1Q
 	  VLANs. (ifcfg-eth0.<vlan>)
 
-2001-05-25 20:14 +0000 [r912]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-25 20:14 +0000 [r912]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - don't try to add ipv4 address
 	  if there is none
 
-2001-05-25 17:53 +0000 [r911]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-25 17:53 +0000 [r911]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - typo
 
-2001-05-25 17:48 +0000 [r910]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-25 17:48 +0000 [r910]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - compatibility fixes
 
-2001-05-25 17:34 +0000 [r909]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-25 17:34 +0000 [r909]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - cleanup
 
-2001-05-25 14:33 +0000 [r906-908]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-25 14:33 +0000 [r906-908]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network: - removed shutting down "unconfigured"
 	  interfaces - that was dumb idea misiek
@@ -2272,7 +2308,7 @@
 
 	* rc.d/init.d/functions.network: - consistency checks
 
-2001-05-24 20:20 +0000 [r903-905]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-24 20:20 +0000 [r903-905]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - reverted last change - not neded
 
@@ -2281,15 +2317,15 @@
 
 	* rc.d/init.d/functions.network: - compat stuff
 
-2001-05-24 20:14 +0000 [r902]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-24 20:14 +0000 [r902]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - more bad merge fixes
 
-2001-05-24 20:00 +0000 [r901]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-24 20:00 +0000 [r901]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - fixed very stupid typo
 
-2001-05-16 13:12 +0000 [r899-900]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-16 13:12 +0000 [r899-900]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* po/pl.po: - cleaned up, updated and translated
 
@@ -2302,51 +2338,51 @@
 	  sysconfig/network-scripts/ifup-ppp,
 	  sysconfig/network-scripts/ifup-ipx: - nls cleanups
 
-2001-05-16 02:14 +0000 [r898]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-16 02:14 +0000 [r898]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - do not 'exec' umount, $() is just fine (yes,
 	  it's yet another ksh93 fix)
 
-2001-05-16 01:54 +0000 [r897]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-16 01:54 +0000 [r897]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc: - set TMPDIR=/dev/null before exec rc.shutdown
 	  (workaround for the freaky weird ksh93 which tries to keep pipes
 	  in /tmp, and no, disabling this in source of ksh93 is not an
 	  option)
 
-2001-05-16 01:33 +0000 [r896]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-16 01:33 +0000 [r896]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.shutdown, rc.d/rc: - do not use locale in rc.shutdwon
 	  (there are shells that support them and you end up with
 	  unmountable /usr)
 
-2001-05-15 17:28 +0000 [r895]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-15 17:28 +0000 [r895]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* makepot.pl: - recognize "nls 'bla'"
 
-2001-05-15 16:54 +0000 [r893-894]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-15 16:54 +0000 [r893-894]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/template.init: - typo
 
 	* rc.d/rc.sysinit: - typos
 
-2001-05-15 16:44 +0000 [r892]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-15 16:44 +0000 [r892]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - typos
 
-2001-05-15 16:43 +0000 [r891]  Maciej 'Agaran' Pijanka <agaran@pld-linux.org>
+2001-05-15 16:43 +0000 [r891]  Maciej 'Agaran' Pijanka <agaran/at/pld-linux.org>
 
 	* po/pl.po: added some translations..may somebody look at that?
 
-2001-05-15 16:41 +0000 [r890]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-15 16:41 +0000 [r890]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - typo
 
-2001-05-15 16:36 +0000 [r889]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-15 16:36 +0000 [r889]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - rarp run via run_cmd
 
-2001-05-15 16:05 +0000 [r888]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-15 16:05 +0000 [r888]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network, TODO, sysconfig/network-scripts/tnldown,
 	  doc/initlog.1, sysconfig/interfaces/tnlcfg-icm, src/ppp-watch.c,
@@ -2391,12 +2427,12 @@
 	  checked /proc/net/rarp and if file don't exist "modprobe rarp" is
 	  performed before.
 
-2001-05-13 17:47 +0000 [r884]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2001-05-13 17:47 +0000 [r884]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: ksh93 support/fixes by Jan
-	  Rêkorajski <baggins@pld.org.pl> (from stable series)
+	  Rêkorajski <baggins/at/pld.org.pl> (from stable series)
 
-2001-05-13 17:10 +0000 [r883]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-05-13 17:10 +0000 [r883]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.shutdown, rc.d/init.d/timezone,
 	  sysconfig/network-scripts/ifup, configure.in, rc.d/rc,
@@ -2405,26 +2441,26 @@
 	  - fixed numerous instances of incorrect quoting ("" inside
 	  itself) - s/local/typeset/
 
-2001-04-20 23:28 +0000 [r878]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2001-04-20 23:28 +0000 [r878]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - few more updates - util-linux 2.10s is
 	  _slightly_ fixed :>>
 
-2001-04-20 21:15 +0000 [r877]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2001-04-20 21:15 +0000 [r877]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - patch to allow fsck'ing crypted filesystems
 
-2001-04-19 23:31 +0000 [r876]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2001-04-19 23:31 +0000 [r876]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: don't use quotation in
 	  DHCPOPTIONS
 
-2001-03-22 21:50 +0000 [r873]  Jakub Bogusz <qboosh@pld-linux.org>
+2001-03-22 21:50 +0000 [r873]  Jakub Bogusz <qboosh/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - check if DATAFORCHAT is not
 	  null before exporting it
 
-2001-03-05 17:35 +0000 [r867-868]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2001-03-05 17:35 +0000 [r867-868]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* TODO: removed IPX tunnels; these don't need rc-scripts support
 
@@ -2434,30 +2470,30 @@
 
 	* rc.d/init.d/timezone: typing error fixed
 
-2001-03-01 16:11 +0000 [r860]  Micha³ Moskal <malekith@pld-linux.org>
+2001-03-01 16:11 +0000 [r860]  Micha³ Moskal <malekith/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Fixed to pass --localtime option to hwclock.
 	  check hwclock manpage for details (it has changed, since i last
 	  read it)
 
-2001-02-23 18:06 +0000 [r857]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-02-23 18:06 +0000 [r857]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-plip: - bring link up at startup
 
-2001-02-12 20:30 +0000 [r856]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2001-02-12 20:30 +0000 [r856]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* po/pl.po: - uncommented "to enter interactive startup" transl.
 
-2001-02-02 21:18 +0000 [r855]  Roman Werpachowski <roman@pld-linux.org>
+2001-02-02 21:18 +0000 [r855]  Roman Werpachowski <roman/at/pld-linux.org>
 
 	* sysconfig/interfaces/data/chat-ppp0.tpsa: another small fix: atdt
 	  $PHONE -> atdt$PHONE
 
-2001-02-02 18:22 +0000 [r854]  Roman Werpachowski <roman@pld-linux.org>
+2001-02-02 18:22 +0000 [r854]  Roman Werpachowski <roman/at/pld-linux.org>
 
 	* sysconfig/interfaces/data/chat-ppp0.tpsa: - small fix
 
-2001-01-12 13:46 +0000 [r851]  Jan Rêkorajski <baggins@pld-linux.org>
+2001-01-12 13:46 +0000 [r851]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network: - exclude nas* interfaces on boot, they need
 	  to be started by ATM utils
@@ -2474,14 +2510,14 @@
 	* sysconfig/system: - Removed CONSOLELOG_LEVEL - has been moved to
 	  /etc/sysconfig/klogd.
 
-2000-12-14 09:49 +0000 [r847]  Jacek Konieczny <jajcus@pld-linux.org>
+2000-12-14 09:49 +0000 [r847]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - status() improved so it can accept now
 	  two argumens: the subsys name and (optional) the daemon name.
 	  status() checks if daemon is running or the subsys is locked.
 	  This way subsys name can differ from daemon name it is running
 
-2000-12-14 09:32 +0000 [r846]  Jacek Konieczny <jajcus@pld-linux.org>
+2000-12-14 09:32 +0000 [r846]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* sysconfig/Makefile.am, sysconfig/clock (added): -
 	  /etc/sysconfig/clock added (for hardware clock options)
@@ -2497,15 +2533,15 @@
 
 	* rc.d/rc.sysinit: - Fixed problem with $RUN_DEPMOD="ifmissing".
 
-2000-12-04 12:06 +0000 [r841]  Roman Werpachowski <roman@pld-linux.org>
+2000-12-04 12:06 +0000 [r841]  Roman Werpachowski <roman/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.tpsa: Added PHONE to DATAFORCHAT
 
-2000-11-17 14:47 +0000 [r839]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-11-17 14:47 +0000 [r839]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* configure.in: - version 0.2.9
 
-2000-11-17 12:11 +0000 [r838]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-11-17 12:11 +0000 [r838]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: information about
 	  specifing prefix for so called ,,aliases''
@@ -2515,7 +2551,7 @@
 	* rc.d/init.d/network: - replace "$((" by "$( (" to w use bash as
 	  /bin/sh.
 
-2000-11-16 16:04 +0000 [r831-836]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-11-16 16:04 +0000 [r831-836]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/timezone: - cleanup from TOTALNEW
 
@@ -2539,21 +2575,21 @@
 
 	* rc-scripts.spec.in: - synced with SPECS version
 
-2000-11-06 19:28 +0000 [r830]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-11-06 19:28 +0000 [r830]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - `ip -4 addr add` first `ip link
 	  set dev up` next - atm needs it
 
-2000-11-06 18:33 +0000 [r829]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-11-06 18:33 +0000 [r829]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* configure.in: - version 0.2.8
 
-2000-11-06 16:24 +0000 [r827]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-11-06 16:24 +0000 [r827]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network: - use awk instead of sed in interface
 	  selection
 
-2000-11-06 15:42 +0000 [r825-826]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-11-06 15:42 +0000 [r825-826]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network: - skip lec and atm interfaces on start|stop,
 	  they are set using separate script
@@ -2562,20 +2598,20 @@
 	  is broken and it's not possible to add an adress on DOWN
 	  interface :(
 
-2000-11-05 01:28 +0000 [r823]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-11-05 01:28 +0000 [r823]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network: - added global ipv6 autoconf setting
 
-2000-11-04 04:44 +0000 [r822]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-11-04 04:44 +0000 [r822]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - bring interface UP _after_
 	  setting up addresses (other way breaks ATM)
 
-2000-11-02 21:40 +0000 [r819]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-11-02 21:40 +0000 [r819]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network: - global setting for autoconf in proc_net()
 
-2000-10-22 20:55 +0000 [r808]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-10-22 20:55 +0000 [r808]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions: (run_cmd, daemon): set HOME and TMPDIR in
 	  nicer way (backport from totalnew)
@@ -2588,26 +2624,26 @@
 	  this directory if these variables are inherited from root's
 	  environment.
 
-2000-10-18 20:10 +0000 [r803]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-10-18 20:10 +0000 [r803]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: merged totalnew 3d patch as new
 	  TOTALNEW branch
 
-2000-10-17 20:42 +0000 [r802]  Pawe³ Sakowski <saq@pld-linux.org>
+2000-10-17 20:42 +0000 [r802]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - bugfix: avoid loops when a user
 	  calls ifup and usernetctl isn't suid
 
-2000-09-25 13:46 +0000 [r801]  Pawe³ Sakowski <saq@pld-linux.org>
+2000-09-25 13:46 +0000 [r801]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* configure.in: - version 0.2.7
 
-2000-09-23 20:43 +0000 [r800]  Pawe³ Sakowski <saq@pld-linux.org>
+2000-09-23 20:43 +0000 [r800]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
 	  - fixed DEVICETYPE determination for aliased devices
 
-2000-09-21 13:53 +0000 [r799]  Pawe³ Sakowski <saq@pld-linux.org>
+2000-09-21 13:53 +0000 [r799]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* po/de.po: - minor fixes
 
@@ -2615,25 +2651,25 @@
 
 	* sysconfig/static-routes: - commented entry description.
 
-2000-09-19 13:36 +0000 [r796-797]  Pawe³ Sakowski <saq@pld-linux.org>
+2000-09-19 13:36 +0000 [r796-797]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* po/pl.po: - translations for ifup and ifup-sl
 
 	* po/de.po: - s/dir/dip/
 
-2000-09-19 12:46 +0000 [r795]  Pawe³ Sakowski <saq@pld-linux.org>
+2000-09-19 12:46 +0000 [r795]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, po/pl.po,
 	  sysconfig/network-scripts/ifup-sl, po/de.po,
 	  rc.d/init.d/functions: - merged some %s into nls invocations -
 	  German translation finetuning
 
-2000-09-18 22:32 +0000 [r794]  Pawe³ Sakowski <saq@pld-linux.org>
+2000-09-18 22:32 +0000 [r794]  Pawe³ Sakowski <saq/at/pld-linux.org>
 
 	* configure.in, rc-scripts.spec.in, po/de.po (added),
 	  rc.d/init.d/functions: - introducing German translation
 
-2000-09-03 02:29 +0000 [r793]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-09-03 02:29 +0000 [r793]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup,
 	  sysconfig/interfaces/ifcfg-description: - added IPV6_AUTOCONF
@@ -2641,53 +2677,53 @@
 	  want kernel to autoconfigure IPv6 address on interfaces
 	  (prefix:MAC stuff)
 
-2000-08-28 15:43 +0000 [r792]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-08-28 15:43 +0000 [r792]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* configure.in: - version = 0.2.6
 
-2000-08-28 15:38 +0000 [r790-791]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-08-28 15:38 +0000 [r790-791]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/network: - substituted awk in place of /usr/bin/tr
 
 	* rc.d/init.d/network: - removed all "xargs" calls
 
-2000-08-08 23:06 +0000 [r789]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-08-08 23:06 +0000 [r789]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - added "termput op" definition -- it
 	  fixes the Blue Screen (tm) problem :) (if you don't know what's
 	  this about, try umounting /usr and running rc.sysinit -- the same
 	  effect was when /usr wasn't on root partition)
 
-2000-08-04 15:25 +0000 [r788]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-08-04 15:25 +0000 [r788]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - fixed setting up GATEWAY6* -
 	  added setting up global route for IPv6 routers
 
-2000-08-04 15:20 +0000 [r786-787]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-08-04 15:20 +0000 [r786-787]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network: -added IPV6_GLOBALROUTEDEV
 
 	* sysconfig/network: - added IPV6_GLOBALROUTE
 
-2000-08-04 15:06 +0000 [r785]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-08-04 15:06 +0000 [r785]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - set up GATEWAY6* only if
 	  IPV6_FORWARDING is disabled
 
-2000-08-04 14:08 +0000 [r784]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-08-04 14:08 +0000 [r784]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - added default route setup for
 	  IPv6
 
-2000-08-04 14:02 +0000 [r783]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-08-04 14:02 +0000 [r783]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network: - added GATEWAY6* for IPv6 routing
 
-2000-08-04 13:58 +0000 [r782]  Marcin Bohosiewicz <marcus@pld-linux.org>
+2000-08-04 13:58 +0000 [r782]  Marcin Bohosiewicz <marcus/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - cosmetics (in mount /proc command)
 
-2000-08-03 12:51 +0000 [r781]  Marcin Bohosiewicz <marcus@pld-linux.org>
+2000-08-03 12:51 +0000 [r781]  Marcin Bohosiewicz <marcus/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - added -o gid=17 while mounting /proc
 
@@ -2695,17 +2731,17 @@
 
 	* configure.in: - new version 0.2.5.
 
-2000-07-28 18:37 +0000 [r779]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-07-28 18:37 +0000 [r779]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - added _modprobe function
 
-2000-07-28 15:03 +0000 [r778]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-07-28 15:03 +0000 [r778]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/tnldown: - added .
 	  /etc/rc.d/init.d/functions
 
-2000-07-21 18:51 +0000 [r777]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-07-21 18:51 +0000 [r777]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - ls 2>/dev/null (avoid "ls: no
 	  such file or directory" when directory does not exist)
@@ -2719,53 +2755,53 @@
 
 	* sysconfig/interfaces/ifcfg-description: - fixed IPXFRAMETYPE
 
-2000-07-13 17:42 +0000 [r774]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-07-13 17:42 +0000 [r774]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* configure.in: - version 0.2.4
 
-2000-07-13 15:29 +0000 [r773]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-07-13 15:29 +0000 [r773]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - rm -f utmp? first
 
-2000-07-13 14:51 +0000 [r772]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-07-13 14:51 +0000 [r772]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/system: - added NEED_XFILES=yes (we want utmpx/wtmpx)
 
-2000-07-13 14:45 +0000 [r770-771]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-07-13 14:45 +0000 [r770-771]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - typo
 
 	* rc.d/rc.sysinit: - we _want_ utmpx and wtmpx, not utmp/wtmp
 
-2000-06-29 08:24 +0000 [r769]  Bartosz Waszak <waszi@pld-linux.org>
+2000-06-29 08:24 +0000 [r769]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* po/pl.po: - typo
 
-2000-06-27 20:22 +0000 [r768]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-06-27 20:22 +0000 [r768]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: - modprobe ipip if
 	  IPV6_TUNNELCONFIG == yes
 
-2000-06-27 09:50 +0000 [r767]  Bartosz Waszak <waszi@pld-linux.org>
+2000-06-27 09:50 +0000 [r767]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* lang.sh: - cleanups
 
-2000-06-25 14:40 +0000 [r766]  Bartosz Waszak <waszi@pld-linux.org>
+2000-06-25 14:40 +0000 [r766]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/rc.shutdown, sysconfig/interfaces/ifcfg-description,
 	  sysconfig/interfaces/ifcfg-ppp0.tpsa, makepot.pl,
 	  rc.d/rc.sysinit: - typos - cleanups
 
-2000-06-23 09:11 +0000 [r765]  Artur Frysiak <wiget@pld-linux.org>
+2000-06-23 09:11 +0000 [r765]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: added shmfs to noprocfs
 
-2000-06-22 14:52 +0000 [r764]  Jacek Konieczny <jajcus@pld-linux.org>
+2000-06-22 14:52 +0000 [r764]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - fixed file unmounting again, after kloczek
 	  broke it "borrowing" code from RH
 
-2000-06-21 15:23 +0000 [r763]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-06-21 15:23 +0000 [r763]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: - IPADDR, not ADDR :)
 
@@ -2778,7 +2814,7 @@
 	* rc.d/rc.shutdown: - new umounting file systems procedure (borowed
 	  from RH).
 
-2000-06-12 08:38 +0000 [r760]  Bartosz Waszak <waszi@pld-linux.org>
+2000-06-12 08:38 +0000 [r760]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifdown-sl,
 	  sysconfig/network-scripts/ifup-aliases,
@@ -2805,26 +2841,26 @@
 	  setting arbitrary color. - busy(), ok(), started(), fail() and
 	  died() modified to use progress().
 
-2000-06-02 10:00 +0000 [r757]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-06-02 10:00 +0000 [r757]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fixed some is_yes calls (argument can be
 	  empty)
 
-2000-06-01 19:33 +0000 [r756]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-06-01 19:33 +0000 [r756]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fixed setting up USEMODULES variable
 
-2000-05-31 18:01 +0000 [r754-755]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-05-31 18:01 +0000 [r754-755]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc: - one more typo
 
 	* rc.d/rc: - typo
 
-2000-05-31 17:55 +0000 [r753]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-05-31 17:55 +0000 [r753]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown: - typo
 
-2000-05-30 05:55 +0000 [r749-752]  Bartosz Waszak <waszi@pld-linux.org>
+2000-05-30 05:55 +0000 [r749-752]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/init.d/functions: -typo
 
@@ -2834,13 +2870,13 @@
 
 	* rc.d/rc.sysinit: -typo
 
-2000-05-29 19:37 +0000 [r747-748]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-05-29 19:37 +0000 [r747-748]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - pass $DHCPOPTIONS to dhcpcd
 
 	* sysconfig/network-scripts/ifdown: - kill dhcpcd if necessary
 
-2000-05-29 19:31 +0000 [r746]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-05-29 19:31 +0000 [r746]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: - added DHCPOPTIONS
 	  variable
@@ -2849,28 +2885,28 @@
 
 	* configure.in: - start prepare 0.2.2.
 
-2000-05-29 19:03 +0000 [r744]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-05-29 19:03 +0000 [r744]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - run quotaoff -a before unmounting filesystems
 	  - minor cosmetics
 
-2000-05-20 13:34 +0000 [r743]  Jacek Konieczny <jajcus@pld-linux.org>
+2000-05-20 13:34 +0000 [r743]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - Time setup changed, so it should work even if
 	  /usr is on separate partition
 
-2000-05-16 15:08 +0000 [r742]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-05-16 15:08 +0000 [r742]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - changed the way depmod was run - changed all
 	  "!=no" to "is_yes" or "! is_no" (from "functions")
 
-2000-05-13 07:11 +0000 [r741]  Artur Frysiak <wiget@pld-linux.org>
+2000-05-13 07:11 +0000 [r741]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/timezone, po/pl.po: - rc.d/init.d/timezone - poprawki
 	  zwi±zane z t³umaczeniem - po/pl.po - serwis -> usluga,
 	  startowanie -> uruchamianie i kilka kosmetycznych zmian
 
-2000-05-09 18:58 +0000 [r740]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-05-09 18:58 +0000 [r740]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
 	  - pump is b0rken - don't use pump for DHCP - use dhcpcd for DHCP
@@ -2880,7 +2916,7 @@
 
 	* rc.d/rc.shutdown: - "halt -p" instead "halt -w".
 
-2000-05-07 19:00 +0000 [r738]  Pawe³ Wilk <siefca@pld-linux.org>
+2000-05-07 19:00 +0000 [r738]  Pawe³ Wilk <siefca/at/pld-linux.org>
 
 	* sysconfig/interfaces/up.d/all (added),
 	  sysconfig/interfaces/down.d/ip/.cvsignore (added),
@@ -2926,37 +2962,37 @@
 	  ready to exec run-parts for each of interfaces going up/down, -
 	  run-parts is now by rc-scripts provided (as /bin/run-parts).
 
-2000-05-07 15:43 +0000 [r737]  Pawe³ Wilk <siefca@pld-linux.org>
+2000-05-07 15:43 +0000 [r737]  Pawe³ Wilk <siefca/at/pld-linux.org>
 
 	* rc-scripts.spec.in: run-parts script now belongs here
 
-2000-05-03 11:55 +0000 [r736]  Bartosz Waszak <waszi@pld-linux.org>
+2000-05-03 11:55 +0000 [r736]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - typos - in some places changed [ VARIABLE =
 	  "yes" ] ==> is_yes - devfsd may be used without DEVFS_MOUNT=yes
 
-2000-05-03 11:49 +0000 [r735]  Bartosz Waszak <waszi@pld-linux.org>
+2000-05-03 11:49 +0000 [r735]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/rc, rc.d/rc.sysinit: - typo
 
-2000-05-01 20:13 +0000 [r734]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-05-01 20:13 +0000 [r734]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - typo
 
-2000-05-01 18:57 +0000 [r733]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-05-01 18:57 +0000 [r733]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc: - line lengths are now evaluated properly - it's not
 	  necessary to set and unset af{2,6,7} every time we want to "say
 	  something" :)
 
-2000-05-01 18:53 +0000 [r732]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-05-01 18:53 +0000 [r732]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - \n after messages passed to nls aren't
 	  necessary (nls uses "echo" after every printf anyway: if you want
 	  to get a message without a trailing "\n", use echo -n "`nls
 	  ...`")
 
-2000-05-01 18:43 +0000 [r731]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-05-01 18:43 +0000 [r731]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - deltext is not necessary before ok,
 	  fail, others (it's called automatically) - [ $# -gt 0 ] instead
@@ -2966,29 +3002,29 @@
 	  doesn't mean that all other termcodes shouldn't work - COLOR_INIT
 	  is now checked only at case "setaf"
 
-2000-04-27 06:20 +0000 [r730]  Jacek Konieczny <jajcus@pld-linux.org>
+2000-04-27 06:20 +0000 [r730]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - missing space added (without
 	  this "peer" option was used to "ip addr add" even if no "$REMIP"
 	  was defined)
 
-2000-04-25 12:01 +0000 [r729]  Bartosz Waszak <waszi@pld-linux.org>
+2000-04-25 12:01 +0000 [r729]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/rc.sysinit: - added MOUNT_DEVFS option
 
-2000-04-24 16:56 +0000 [r728]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-04-24 16:56 +0000 [r728]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/rc: - removed two unnecessary 0s at every textlen counting -
 	  arguments for nls in "" (necessary, when COLOR_INIT=no)
 
-2000-04-23 11:46 +0000 [r727]  Marcin Bohosiewicz <marcus@pld-linux.org>
+2000-04-23 11:46 +0000 [r727]  Marcin Bohosiewicz <marcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifup-ppp: * In ifup file added suppoer
 	  for Point-to-Point IPv4 Ethernet (REMIP variable). * In ifup-ppp
 	  deleted some hashed lines.
 
-2000-04-21 17:47 +0000 [r716-726]  Jacek Konieczny <jajcus@pld-linux.org>
+2000-04-21 17:47 +0000 [r716-726]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-routes: - get REALDEVICE and use
 	  it for setting up the routes
@@ -3029,12 +3065,12 @@
 	  a config name instead of logical device - ifdown-post uses
 	  $CONFIG instead of ifcfg-$DEVICE
 
-2000-04-19 18:20 +0000 [r715]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-04-19 18:20 +0000 [r715]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-post: - ifup-routes should be run
 	  with $CONFIG as parameter, not $DEVNAME
 
-2000-04-18 08:30 +0000 [r713-714]  Jacek Konieczny <jajcus@pld-linux.org>
+2000-04-18 08:30 +0000 [r713-714]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-post: - better hostname detection
 	  (for DHCP clients)
@@ -3047,7 +3083,7 @@
 
 	* sysconfig/system: - Added note about aumix-OSS-preserve-settings.
 
-2000-04-13 08:25 +0000 [r710]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-04-13 08:25 +0000 [r710]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/template.init: - some changes in reload)
 
@@ -3055,12 +3091,12 @@
 
 	* po/pl.po: - typo.
 
-2000-04-11 14:27 +0000 [r708]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-04-11 14:27 +0000 [r708]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* po/pl.po: - typo - missing translation for "to enter interactive
 	  startup"
 
-2000-04-08 21:41 +0000 [r707]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-04-08 21:41 +0000 [r707]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - added single-letter-values to is_yes and
 	  is_no
@@ -3072,7 +3108,7 @@
 	  to 'modprobe -s sound-slot-0'. This causes sound card driver to
 	  be loaded.
 
-2000-04-07 19:16 +0000 [r705]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-04-07 19:16 +0000 [r705]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ipx: - don't try start IPX on
 	  unconfigured devices
@@ -3083,11 +3119,11 @@
 	  "$DEVNAME" is set by source_config() from .functions to the name
 	  of interface for which static routes should be set up.
 
-2000-04-05 10:33 +0000 [r703]  Bartek Szady <bszx@pld-linux.org>
+2000-04-05 10:33 +0000 [r703]  Bartek Szady <bszx/at/pld-linux.org>
 
 	* rc.d/init.d/timezone: - now it works under bash
 
-2000-04-03 14:50 +0000 [r700-702]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-04-03 14:50 +0000 [r700-702]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifup-routes,
 	  sysconfig/network-scripts/ifup,
@@ -3103,18 +3139,18 @@
 
 	* src/Makefile.am: - added initlog.conf to EXTRA_DIST
 
-2000-04-01 10:24 +0000 [r699]  Bartosz Waszak <waszi@pld-linux.org>
+2000-04-01 10:24 +0000 [r699]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - small termput() fixes
 
-2000-03-31 13:10 +0000 [r698]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-03-31 13:10 +0000 [r698]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/tnldown,
 	  sysconfig/network-scripts/ifup-ppp: - support for maxfail option
 	  in pppd - cleanups in tunnel scripts
 
-2000-03-27 16:07 +0000 [r697]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-03-27 16:07 +0000 [r697]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* INSTALL, po/pl.po, sysconfig/interfaces/ifcfg-description,
 	  rc-scripts.spec.in, sysconfig/network-scripts/ifup-post, rc.d/rc,
@@ -3133,34 +3169,34 @@
 
 	* sysconfig/system: - changed RUN_LDCONFIG to no.
 
-2000-03-24 08:48 +0000 [r695]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-03-24 08:48 +0000 [r695]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* po/pl.po, rc.d/rc: - fixed problem with Runlevel messages and
 	  INIT_COL variable
 
-2000-03-24 08:39 +0000 [r694]  Bartosz Waszak <waszi@pld-linux.org>
+2000-03-24 08:39 +0000 [r694]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fixed nfsroot support
 
-2000-03-22 22:00 +0000 [r693]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-22 22:00 +0000 [r693]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: use corect name
 
-2000-03-22 21:55 +0000 [r692]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-22 21:55 +0000 [r692]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am, rc.d/init.d/template.init (added),
 	  rc.d/init.d/<template>.init (removed): please don't use stupid
 	  names for files
 
-2000-03-22 21:44 +0000 [r691]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-22 21:44 +0000 [r691]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: typo
 
-2000-03-22 21:41 +0000 [r690]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-22 21:41 +0000 [r690]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - added <templete>.init to %doc
 
-2000-03-22 21:30 +0000 [r689]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-22 21:30 +0000 [r689]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* po/pl.po: cleanup
 
@@ -3179,17 +3215,17 @@
 	* po/pl.po: - added missing %s in pl translations (stopping,
 	  starting messages).
 
-2000-03-22 20:43 +0000 [r684]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-22 20:43 +0000 [r684]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/functions: fixed small typo
 
-2000-03-22 17:24 +0000 [r683]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-22 17:24 +0000 [r683]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/rc.sysinit: - Allow set
 	  /proc/sys/fs/file-max & inode-max (patch by Pawe³ Krawczyk
-	  <kravietz@alfa.ceti.pl>)
+	  <kravietz/at/alfa.ceti.pl>)
 
-2000-03-22 17:20 +0000 [r682]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-22 17:20 +0000 [r682]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: Added BuildRequires: gettext-devel
 
@@ -3202,14 +3238,14 @@
 	* rc.d/init.d/functions.network: - added using msg_stopping() in
 	  stop.
 
-2000-03-21 23:59 +0000 [r678-679]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-21 23:59 +0000 [r678-679]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* makepot.pl: use : instead . in file location
 
 	* po/pl.po, makepot.pl: updated makepot.pl and pl.po, pl.po need
 	  fixing
 
-2000-03-20 06:58 +0000 [r677]  Bartosz Waszak <waszi@pld-linux.org>
+2000-03-20 06:58 +0000 [r677]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - hacks for nfsroot, romfs
 
@@ -3221,7 +3257,7 @@
 
 	* configure.in: - VERSION=0.2.0 (prepare to release this version).
 
-2000-03-15 15:07 +0000 [r674]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-03-15 15:07 +0000 [r674]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* README: - added info aboout Routing messages
 
@@ -3236,30 +3272,30 @@
 	* rc.d/init.d/<template>.init: - added return in exit error code
 	  $RETVAL.
 
-2000-03-09 11:50 +0000 [r671]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-09 11:50 +0000 [r671]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - show() now substitutes %s properly
 
-2000-03-09 11:43 +0000 [r670]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-09 11:43 +0000 [r670]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - show instead of nls in some functions
 
-2000-03-09 11:30 +0000 [r669]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-09 11:30 +0000 [r669]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - more function
 
-2000-03-09 11:11 +0000 [r668]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-09 11:11 +0000 [r668]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - default value for INIT_COL
 
-2000-03-09 10:57 +0000 [r666-667]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-09 10:57 +0000 [r666-667]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* sysconfig/system: - added INIT_COL setting
 
 	* rc.d/init.d/functions: - slightly modified show() function -
 	  changed all "67" to "$INIT_COL"
 
-2000-03-08 16:30 +0000 [r664-665]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-03-08 16:30 +0000 [r664-665]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifup-post,
@@ -3271,46 +3307,46 @@
 	* po/pl.po, sysconfig/system, rc.d/rc, rc.d/rc.sysinit,
 	  rc.d/init.d/functions: - support for interactive starting
 
-2000-03-08 15:43 +0000 [r663]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-08 15:43 +0000 [r663]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/<template>.init, rc.d/init.d/functions: - added
 	  "is_yes" and "is_no" functions
 
-2000-03-08 15:26 +0000 [r662]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-08 15:26 +0000 [r662]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/<template>.init: - force-reload returns right status
 	  on exit
 
-2000-03-08 15:23 +0000 [r661]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-08 15:23 +0000 [r661]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/<template>.init: - added force-reload option - added
 	  exit code 1 at errors - checking for running service at stop
 
-2000-03-08 14:59 +0000 [r660]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-08 14:59 +0000 [r660]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/<template>.init: - was "2&>1" instead of "2>&1" -
 	  fixed
 
-2000-03-08 14:50 +0000 [r659]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-08 14:50 +0000 [r659]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/<template>.init: - unified syntax for setting
 	  numerical and nonnumerical variables
 
-2000-03-08 14:40 +0000 [r658]  Sebastian Zagrodzki <zagrodzki@pld-linux.org>
+2000-03-08 14:40 +0000 [r658]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
 	* rc.d/init.d/<template>.init: - default configuration support -
 	  typo
 
-2000-03-08 11:52 +0000 [r657]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-08 11:52 +0000 [r657]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/<template>.init: - support exit code defined in LSB
 	  spec (http://www.linuxbase.org/)
 
-2000-03-06 00:34 +0000 [r656]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-06 00:34 +0000 [r656]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/<template>.init: - nls()ed
 
-2000-03-06 00:23 +0000 [r655]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-06 00:23 +0000 [r655]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/<template>.init: rm -f /var/lock/subsys/<service>
 	  >/dev/null 2&>1 1. -r is not needed 2. silent
@@ -3328,18 +3364,18 @@
 	  would be good to change all other init scripts for compatybility
 	  with this skeleton script and/or keep this file as template.
 
-2000-03-04 22:40 +0000 [r652]  Pawe³ Wilk <siefca@pld-linux.org>
+2000-03-04 22:40 +0000 [r652]  Pawe³ Wilk <siefca/at/pld-linux.org>
 
 	* rc.d/init.d/timezone, rc-scripts.spec.in, src/resolvesymlink.c
 	  (added), src/Makefile.am: Time zone information will be updated
 	  only when needed.
 
-2000-03-04 13:59 +0000 [r651]  Pawe³ Wilk <siefca@pld-linux.org>
+2000-03-04 13:59 +0000 [r651]  Pawe³ Wilk <siefca/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am, configure.in, rc-scripts.spec.in,
 	  sysconfig/Makefile.am: added time zone setting
 
-2000-03-04 13:41 +0000 [r648-650]  Pawe³ Wilk <siefca@pld-linux.org>
+2000-03-04 13:41 +0000 [r648-650]  Pawe³ Wilk <siefca/at/pld-linux.org>
 
 	* sysconfig/timezone (added): configuration parameters for time
 	  zone setting
@@ -3349,60 +3385,60 @@
 	* rc.d/init.d/timezone (added): configuration profile (variables)
 	  for time zone setting
 
-2000-03-02 17:22 +0000 [r647]  Artur Frysiak <wiget@pld-linux.org>
+2000-03-02 17:22 +0000 [r647]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* configure.in: 0.1.5
 
-2000-02-28 12:50 +0000 [r646]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-02-28 12:50 +0000 [r646]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - run depmod if modules.dep is older that
 	  modules.conf, too
 
-2000-02-18 18:07 +0000 [r645]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-02-18 18:07 +0000 [r645]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/network: - set ipv6 forwarding only if ipv6 is
 	  enabled
 
-2000-02-18 17:59 +0000 [r644]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-02-18 17:59 +0000 [r644]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - translations for DONE etc are always
 	  taken from rc-scripts.mo
 
-2000-02-18 12:37 +0000 [r643]  Bartosz Waszak <waszi@pld-linux.org>
+2000-02-18 12:37 +0000 [r643]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - typo
 
-2000-02-18 10:42 +0000 [r642]  Artur Frysiak <wiget@pld-linux.org>
+2000-02-18 10:42 +0000 [r642]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: s/LANG/LC_ALL/ in umount
 
-2000-02-18 10:37 +0000 [r641]  Artur Frysiak <wiget@pld-linux.org>
+2000-02-18 10:37 +0000 [r641]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - fix ummounting -- locale & /usr problem --
 	  devfs ready
 
-2000-02-18 09:13 +0000 [r640]  Artur Frysiak <wiget@pld-linux.org>
+2000-02-18 09:13 +0000 [r640]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - run devfsd before all
 
-2000-02-18 08:35 +0000 [r639]  Bartosz Waszak <waszi@pld-linux.org>
+2000-02-18 08:35 +0000 [r639]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/rc.sysinit: - added devfsd support
 
-2000-02-17 10:59 +0000 [r638]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-02-17 10:59 +0000 [r638]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* po/pl.po, rc.d/rc.sysinit: - print space as last char in prompt
 
-2000-02-10 10:31 +0000 [r637]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-02-10 10:31 +0000 [r637]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/rc.sysinit: - running depmod is now
 	  configurable
 
-2000-02-08 15:49 +0000 [r636]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-02-08 15:49 +0000 [r636]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - removed bogus defattr
 
-2000-02-03 11:50 +0000 [r632-635]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-02-03 11:50 +0000 [r632-635]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/single: - cleanups
 
@@ -3415,7 +3451,7 @@
 	* rc.d/rc.shutdown: - new (better) unmounting procedure from
 	  initscripts - cleanups
 
-2000-01-31 14:30 +0000 [r628-631]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+2000-01-31 14:30 +0000 [r628-631]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc-scripts.spec.in, autogen.sh, rc.d/init.d/functions: - fixes
 	  and updates
@@ -3432,14 +3468,14 @@
 
 	* rc.d/rc.sysinit: - mout procsf before all.
 
-2000-01-04 17:23 +0000 [r626]  Jan Rêkorajski <baggins@pld-linux.org>
+2000-01-04 17:23 +0000 [r626]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* configure.in, sysconfig/system, rc.d/rc, rc.d/rc.sysinit: -
 	  version 0.1.4 - added RUN_LDCONFIG variable to
 	  /etc/sysconfig/system, now it's possible to turn off/on
 	  ld.so.cache regeneration upon startup
 
-1999-12-30 12:11 +0000 [r624-625]  Jacek Konieczny <jajcus@pld-linux.org>
+1999-12-30 12:11 +0000 [r624-625]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* rc.d/rc: - send messages to /dev/console (which can be serial
 	  console) instead of virtual terminal
@@ -3448,15 +3484,15 @@
 	  "any/none" routes in /etc/sysconfig/statig routes --- these may
 	  be used for unreachable or blackhole routes
 
-1999-12-30 12:01 +0000 [r623]  Jacek Konieczny <jajcus@pld-linux.org>
+1999-12-30 12:01 +0000 [r623]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* doc/sysconfig.docb: - updates in static-routes description
 
-1999-12-27 23:38 +0000 [r622]  Artur Frysiak <wiget@pld-linux.org>
+1999-12-27 23:38 +0000 [r622]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/network-scripts/tnldown: - fix typos
 
-1999-12-20 19:36 +0000 [r621]  Jacek Konieczny <jajcus@pld-linux.org>
+1999-12-20 19:36 +0000 [r621]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown: - ifdown should now work for
 	  user-controled interfaces
@@ -3465,7 +3501,7 @@
 
 	* rc.d/rc.sysinit: - reformated.
 
-1999-12-19 16:07 +0000 [r617-619]  Jacek Konieczny <jajcus@pld-linux.org>
+1999-12-19 16:07 +0000 [r617-619]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-post: - Use IPv4 address for
 	  setting hostname (or there will be no hostname on DHCP-configured
@@ -3479,12 +3515,12 @@
 	* sysconfig/network-scripts/ifdown: - usernetclt is now in /sbin -
 	  OTHERSCRIPT should be astarted even if no IPv4 address is given
 
-1999-12-19 15:58 +0000 [r616]  Jacek Konieczny <jajcus@pld-linux.org>
+1999-12-19 15:58 +0000 [r616]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* src/usernetctl.c: - search for ifcfg-* files in
 	  /etc/sysconfig/interfaces - ifup and ifdown are now only in /sbin
 
-1999-12-19 15:54 +0000 [r615]  Jacek Konieczny <jajcus@pld-linux.org>
+1999-12-19 15:54 +0000 [r615]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* src/.cvsignore: - more ignores
 
@@ -3507,7 +3543,7 @@
 	  specified interface. This allow place also tab character after
 	  interface name.
 
-1999-12-15 18:41 +0000 [r608-609]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-12-15 18:41 +0000 [r608-609]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* src/consoletype.c (added): - one more source file
 
@@ -3528,7 +3564,7 @@
 	  exist - write nice logo at startup - fixed problem with
 	  translated deltext() function
 
-1999-12-11 12:45 +0000 [r607]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-12-11 12:45 +0000 [r607]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* AUTHORS: - added Jacek Konieczny
 
@@ -3548,12 +3584,12 @@
 	  chkconfig field is back (without this upgrade from initscripts to
 	  rc-scripts fails).
 
-1999-11-26 16:31 +0000 [r603]  Artur Frysiak <wiget@pld-linux.org>
+1999-11-26 16:31 +0000 [r603]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - process /etc/sysconfig/system (fix
 	  BR#110)
 
-1999-11-16 14:54 +0000 [r602]  Artur Frysiak <wiget@pld-linux.org>
+1999-11-16 14:54 +0000 [r602]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
 	  - fixes
@@ -3569,7 +3605,7 @@
 	* po/pl.po: - s/Zapis ziarna losowego/Zapisanie podstawy generatora
 	  losoweg/ - other cleanups.
 
-1999-11-15 23:17 +0000 [r598]  Artur Frysiak <wiget@pld-linux.org>
+1999-11-15 23:17 +0000 [r598]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* po/pl.po: - updated
 
@@ -3592,7 +3628,7 @@
 
 	* rc.d/init.d/functions.network: - fixed BR#103 (s#==#=).
 
-1999-11-06 00:25 +0000 [r591-592]  Artur Frysiak <wiget@pld-linux.org>
+1999-11-06 00:25 +0000 [r591-592]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/tnldown,
@@ -3603,7 +3639,7 @@
 	  sysconfig/network-scripts/ifdown, rc.d/init.d/functions.network:
 	  - now realy handle ifup <dev>
 
-1999-10-27 12:09 +0000 [r590]  Artur Frysiak <wiget@pld-linux.org>
+1999-10-27 12:09 +0000 [r590]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - fix nls() function
 
@@ -3631,7 +3667,7 @@
 	  bar), - added support for new raidtools 0.90 utilities on
 	  ininitialize raid devices.
 
-1999-10-23 08:13 +0000 [r583]  Bartosz Waszak <waszi@pld-linux.org>
+1999-10-23 08:13 +0000 [r583]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/init.d/network: /etc/rc.d/init.d/functions.network ->
 	  /etc/sysconfig/network-scripts/.functions
@@ -3642,18 +3678,18 @@
 	  /etc/sysconfig/interfaces/ifcfg-$CONFIG instead
 	  /etc/sysconfig/interfaces/$CONFIG in source_config().
 
-1999-10-17 09:34 +0000 [r581]  Rafa³ Kleger-Rudomin <klakier@pld-linux.org>
+1999-10-17 09:34 +0000 [r581]  Rafa³ Kleger-Rudomin <klakier/at/pld-linux.org>
 
 	* doc/make-html (added), doc/rc-scripts.docb (added),
 	  doc/polski.dsl (added), doc/sysconfig.docb (added): Przyk³ad
 	  tworzenia pojedynczego reference entry z u¿yciem docbooka
 	  W³a¶ciwym plikiem jest sysconfig.docb
 
-1999-10-14 15:59 +0000 [r580]  Artur Frysiak <wiget@pld-linux.org>
+1999-10-14 15:59 +0000 [r580]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - fixed permision to %%doc
 
-1999-10-14 09:00 +0000 [r579]  Bartosz Waszak <waszi@pld-linux.org>
+1999-10-14 09:00 +0000 [r579]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am: - small fixes
 
@@ -3675,56 +3711,56 @@
 	  /etc/rc.d/init.d//network.functions moved to
 	  /etc/sysconfig/network-scripts/.functions.
 
-1999-10-13 17:35 +0000 [r577]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-13 17:35 +0000 [r577]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - added %config(noreplace) %verify(not size
 	  mtime md5) rc.local
 
-1999-10-13 16:56 +0000 [r576]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-13 16:56 +0000 [r576]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - typo
 
-1999-10-13 16:51 +0000 [r575]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-13 16:51 +0000 [r575]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am: - removed nfsfs and netfs
 
-1999-10-13 16:37 +0000 [r574]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-13 16:37 +0000 [r574]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.shutdown (added), rc.d/rc, rc.d/rc.sysinit,
 	  rc.d/Makefile.am: - merged halt,reboot and shutdwn into
 	  rc.shutdown - moved ldconfig to the end of system startup
 
-1999-10-13 16:32 +0000 [r573]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-13 16:32 +0000 [r573]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* configure.in: - 0.1.0
 
-1999-10-13 16:18 +0000 [r572]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-13 16:18 +0000 [r572]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - removed use of chkconfig - make rc?.d/{S,K}
 	  links by hand
 
-1999-10-13 16:11 +0000 [r571]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-13 16:11 +0000 [r571]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am, rc.d/init.d/network, rc.d/init.d/reboot
 	  (removed), rc.d/init.d/shutdwn (removed), rc.d/init.d/random,
 	  rc.d/init.d/single, rc.d/init.d/killall, rc.d/init.d/allowlogin,
 	  rc.d/init.d/halt (removed): - removed usage of chkconfig
 
-1999-10-13 16:04 +0000 [r570]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-13 16:04 +0000 [r570]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/netfs (removed): - these should be from appropriate
 	  *mount packages (or NFS daemons)
 
-1999-10-13 15:56 +0000 [r569]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-13 15:56 +0000 [r569]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/nfsfs (removed): - obsoleted by netfs
 
-1999-10-13 09:06 +0000 [r568]  Bartosz Waszak <waszi@pld-linux.org>
+1999-10-13 09:06 +0000 [r568]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - conf.modules -> modules.conf needed by new
 	  modutils
 
-1999-10-12 14:09 +0000 [r567]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-10-12 14:09 +0000 [r567]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* configure.in: - version 0.0.12 - halt, reboot and shutwdn merged
 	  into rc.shutdown - moved ldconfig at the end of rc system
@@ -3745,7 +3781,7 @@
 	  rc.d/init.d/functions: - remove bashizm in using test ("="
 	  instead "==").
 
-1999-09-28 16:17 +0000 [r562-564]  Jacek Konieczny <jajcus@pld-linux.org>
+1999-09-28 16:17 +0000 [r562-564]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-sl,
 	  sysconfig/network-scripts/ifup-aliases,
@@ -3799,19 +3835,19 @@
 	  with interface description exist, - removed getting dummy code
 	  $PARENTCONFIG (this afects net interfaces LDAP description).
 
-1999-09-27 20:02 +0000 [r552]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-27 20:02 +0000 [r552]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - arp on for eth by default
 
-1999-09-27 18:31 +0000 [r551]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-27 18:31 +0000 [r551]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - fixed typo
 
-1999-09-27 16:03 +0000 [r550]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-27 16:03 +0000 [r550]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* configure.in: - version 0.0.10
 
-1999-09-27 15:40 +0000 [r549]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-27 15:40 +0000 [r549]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* po/pl.po: - fixes
 
@@ -3821,13 +3857,13 @@
 
 	* po/pl.po: - more translations.
 
-1999-09-27 15:14 +0000 [r545-546]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-27 15:14 +0000 [r545-546]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* po/pl.po: - sync
 
 	* rc.d/init.d/shutdwn, rc.d/rc.sysinit: - nls fixes
 
-1999-09-27 15:00 +0000 [r544]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-27 15:00 +0000 [r544]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* po/pl.po: - small correction
 
@@ -3835,14 +3871,14 @@
 
 	* po/pl.po: - fixed some typos, more translations.
 
-1999-09-27 14:24 +0000 [r541-542]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-27 14:24 +0000 [r541-542]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* po/pl.po: - zmiana na formy bezosobowe - dodanie kilku nowych
 	  t³umaczeñ
 
 	* rc.d/rc.sysinit: - nls fixes
 
-1999-09-27 10:02 +0000 [r534-540]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-27 10:02 +0000 [r534-540]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network: - cleanups
 
@@ -3867,16 +3903,16 @@
 	  /etc/sysconfig/static-nat doesn't exist - flushing instead
 	  deleting routing and addresses when down lo interface
 
-1999-09-26 14:56 +0000 [r533]  Jacek Konieczny <jajcus@pld-linux.org>
+1999-09-26 14:56 +0000 [r533]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network, sysconfig/network: - first step to
 	  keeping interface information in LDAP
 
-1999-09-15 21:43 +0000 [r532]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-15 21:43 +0000 [r532]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - fixed typos
 
-1999-09-15 21:20 +0000 [r528-531]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-15 21:20 +0000 [r528-531]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/rc, po/.cvsignore, rc.d/rc.sysinit, rc.d/init.d/allowlogin,
 	  rc.d/init.d/functions: - fixed nls messages - ignore
@@ -3889,21 +3925,21 @@
 	* makepot.pl (added): - helper scripts: extract messages from
 	  scripts and make pot file
 
-1999-09-15 21:12 +0000 [r527]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-15 21:12 +0000 [r527]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* po/pl.po, po/Makefile.am: - fixed `make rc-scripts.pot` - updated
 	  polish translation
 
-1999-09-15 10:35 +0000 [r526]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-15 10:35 +0000 [r526]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/network: - errors from interfaces and tunnel checking
 	  > /dev/null
 
-1999-09-15 10:22 +0000 [r525]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-15 10:22 +0000 [r525]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* doc/Makefile.am: - removed ipchains-setup.txt
 
-1999-09-15 10:16 +0000 [r522-524]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-15 10:16 +0000 [r522-524]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - we are adding fe80::IPv4
 	  addresses to sit interfaces _only_
@@ -3913,12 +3949,12 @@
 
 	* po/pl.po: - fixed typo
 
-1999-09-13 13:37 +0000 [r521]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-13 13:37 +0000 [r521]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc: - added test if /var/run is writable to avoid errors if
 	  it is read-only
 
-1999-09-13 13:29 +0000 [r516-520]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-13 13:29 +0000 [r516-520]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/i18n: - added missing cvs keyword
 
@@ -3935,7 +3971,7 @@
 
 	* rc.d/init.d/network: - fixed status reporting
 
-1999-09-04 19:49 +0000 [r513-515]  Bartosz Waszak <waszi@pld-linux.org>
+1999-09-04 19:49 +0000 [r513-515]  Bartosz Waszak <waszi/at/pld-linux.org>
 
 	* rc.d/init.d/shutdwn: umount -a fixed
 
@@ -3943,33 +3979,33 @@
 
 	* rc.d/Makefile.am: small fixes
 
-1999-09-03 07:54 +0000 [r512]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-03 07:54 +0000 [r512]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/shutdwn: posible fix for umounting /usr
 
-1999-09-03 07:42 +0000 [r511]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-03 07:42 +0000 [r511]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/functions: fix in termput()
 
-1999-09-03 07:24 +0000 [r510]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-03 07:24 +0000 [r510]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/functions: termput() check for /usr/share/terminfo
 	  and tput everytime
 
-1999-09-02 12:42 +0000 [r509]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-02 12:42 +0000 [r509]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.init (added): - added proper rc.init version
 
-1999-09-02 12:38 +0000 [r508]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-02 12:38 +0000 [r508]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* TODO, rc-scripts.spec.in, autogen.sh, NEWS, README,
 	  rc.d/initscript (removed), rc.d/Makefile.am: - updated
 
-1999-09-02 12:38 +0000 [r507]  Artur Frysiak <wiget@pld-linux.org>
+1999-09-02 12:38 +0000 [r507]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/rc.init (removed): removed
 
-1999-09-02 12:30 +0000 [r502-506]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-02 12:30 +0000 [r502-506]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
 	  - another way do check if IPv4/6 is specified on interface -
@@ -3990,7 +4026,7 @@
 
 	* rc.d/init.d/network: - SIT tunnels are upped at the end
 
-1999-09-02 12:16 +0000 [r498-501]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-09-02 12:16 +0000 [r498-501]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - logging errors from depmod and modprobe via
 	  syslog
@@ -4003,15 +4039,15 @@
 	  src/usernetctl.c, src/ipcalc.c: - added casts to proper types and
 	  started NLSing
 
-1999-08-31 23:51 +0000 [r497]  Artur Frysiak <wiget@pld-linux.org>
+1999-08-31 23:51 +0000 [r497]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/network: - load /etc/ethers after interface ups.
 
-1999-08-31 23:30 +0000 [r496]  Artur Frysiak <wiget@pld-linux.org>
+1999-08-31 23:30 +0000 [r496]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - fix in make symlinks to rc.local
 
-1999-08-31 23:12 +0000 [r495]  Artur Frysiak <wiget@pld-linux.org>
+1999-08-31 23:12 +0000 [r495]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* configure.in, rc-scripts.spec.in, rc.d/rc,
 	  rc.d/init.d/functions.network, rc.d/rc.sysinit,
@@ -4021,11 +4057,11 @@
 	  show bla bla; to show "bla bla"; - added symlinks to
 	  /etc/rc.d/rc.local
 
-1999-08-31 13:59 +0000 [r494]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-31 13:59 +0000 [r494]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - fixed quotacheck calls
 
-1999-08-26 11:05 +0000 [r493]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-26 11:05 +0000 [r493]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* TODO: - interfejs sit0 musi byæ podnoszony na samym koñcu
 
@@ -4034,23 +4070,23 @@
 	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
 	  - added DEFAULTHANDLING variable (mainly for ATM startup scripts)
 
-1999-08-20 13:39 +0000 [r490-491]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-20 13:39 +0000 [r490-491]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: added two nls calls
 
 	* rc.d/init.d/functions.network: - ipv6 addresses arn't deleted
 	  when lo device is downing (some people doesn't use IPv6, yet)
 
-1999-08-18 13:28 +0000 [r489]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-18 13:28 +0000 [r489]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: fixed raid starting
 
-1999-08-16 09:38 +0000 [r488]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-16 09:38 +0000 [r488]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* TODO, rc-scripts.spec.in, rc.d/init.d/killall: killall is now
 	  chkconfig ready. updated TODO list.
 
-1999-08-14 13:18 +0000 [r485-487]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 13:18 +0000 [r485-487]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-sl: removed unnecesary check (via
 	  fuser)
@@ -4060,27 +4096,27 @@
 
 	* sysconfig/network-scripts/ifup-sl: typo
 
-1999-08-14 12:57 +0000 [r484]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 12:57 +0000 [r484]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-sl: increased sleep value after
 	  starting slattach to 2 seconds
 
-1999-08-14 12:39 +0000 [r483]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 12:39 +0000 [r483]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: "quotaon /" removed. quota is turned on later by
 	  quotaon -a
 
-1999-08-14 12:01 +0000 [r482]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 12:01 +0000 [r482]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/tnlup, rc.d/init.d/functions.network:
 	  modprobing ipip ip_gre modules moved temporary to tnlup
 
-1999-08-14 11:56 +0000 [r481]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 11:56 +0000 [r481]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc-scripts.spec.in: interfaces file names must starting from
 	  "ifcfg-"
 
-1999-08-14 11:41 +0000 [r479-480]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 11:41 +0000 [r479-480]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-sl: fixed DIRECT_CONNECT mode (ie.
 	  for using slattach)
@@ -4088,39 +4124,39 @@
 	* sysconfig/network-scripts/ifup-post: now $FULLDEVNAME is passed
 	  to ifup-routes (fixed problem with duplicate routes)
 
-1999-08-14 11:25 +0000 [r478]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 11:25 +0000 [r478]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-aliases: changed path to ifup (now
 	  it's /sbin/ifup)
 
-1999-08-14 11:01 +0000 [r477]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 11:01 +0000 [r477]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - \b\b\b\b... characters also are NLSed
 	  (this is needed when translating "DONE", "BUSY" etc.
 
-1999-08-14 10:56 +0000 [r476]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 10:56 +0000 [r476]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/system, rc.d/rc.sysinit: added new variable SET_SLINKS.
 	  If it set to "yes" then rc.sysinit is setting symlinks in /boot
 	  dependent on kernel version.
 
-1999-08-14 10:53 +0000 [r474-475]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-14 10:53 +0000 [r474-475]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc-scripts.spec.in: typo in locale path
 
 	* sysconfig/network-scripts/ifup: we are adding IPv4 based
 	  link-local addresses, too.
 
-1999-08-12 09:54 +0000 [r473]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-12 09:54 +0000 [r473]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifup-aliases: -
 	  aliasing are upped via ifup-aliases after main device is up
 
-1999-08-09 21:05 +0000 [r472]  Artur Frysiak <wiget@pld-linux.org>
+1999-08-09 21:05 +0000 [r472]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/rc, rc.d/init.d/functions: - changed ptintf to awk
 
-1999-08-09 20:44 +0000 [r470-471]  Artur Frysiak <wiget@pld-linux.org>
+1999-08-09 20:44 +0000 [r470-471]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - added Requires: /bin/gettext
 
@@ -4134,7 +4170,7 @@
 	* sysconfig/ipchains (removed): - not neccessary (ip chaninc is
 	  handled by firewal-init scripts package).
 
-1999-08-09 20:00 +0000 [r467]  Artur Frysiak <wiget@pld-linux.org>
+1999-08-09 20:00 +0000 [r467]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* configure.in, rc.d/init.d/functions: - more locale strings - fix
 	  locale support in configure.in
@@ -4148,7 +4184,7 @@
 
 	* configure.in: - release 0.0.8.
 
-1999-08-07 10:16 +0000 [r464]  Artur Frysiak <wiget@pld-linux.org>
+1999-08-07 10:16 +0000 [r464]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* configure.in, po/Makefile.am (added), rc-scripts.spec.in,
 	  po/rc-scripts.pot, Makefile.am, rc.d/init.d/ipchains,
@@ -4156,25 +4192,25 @@
 	  rc.d/init.d/functions: - expr -> $(( )) - wstêp automake/autoconf
 	  do locale
 
-1999-08-06 13:06 +0000 [r463]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-06 13:06 +0000 [r463]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: fixed bug with math
 
-1999-08-06 13:02 +0000 [r462]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-06 13:02 +0000 [r462]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: added return 0 to proc_net()
 	  function
 
-1999-08-06 10:25 +0000 [r461]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-06 10:25 +0000 [r461]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/network: removed last change
 
-1999-08-04 16:59 +0000 [r460]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-08-04 16:59 +0000 [r460]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/network: A BUG has been fixed! jak u¿ywacie zmiennych
 	  shella misiowie to tam _musi_ byæ $ na pocz±tku!
 
-1999-08-02 14:51 +0000 [r459]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-02 14:51 +0000 [r459]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/initscript (added): moved here from SysVinit package
 
@@ -4187,7 +4223,7 @@
 	* rc.d/rc.sysinit: - changed group to utmp on utmpx (to be
 	  compliant with RH).
 
-1999-08-02 10:08 +0000 [r456]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-08-02 10:08 +0000 [r456]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifup-post,
@@ -4200,7 +4236,7 @@
 
 	* po/.cvsignore (added): - shut files.
 
-1999-07-31 11:26 +0000 [r453-454]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-31 11:26 +0000 [r453-454]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* po/pl.po (added), po/rc-scripts.pot (added), po (added): - pot +
 	  pl t³umaczenie
@@ -4234,11 +4270,11 @@
 	  COPYING (GPL) oraz standardowy plik INSTALL - dodana mo¿liwo¶æ
 	  obs³ugi t³umaczeñ DONE, BUSY itp o dlugo¶ci ró¿nej od 4 liter
 
-1999-07-29 15:09 +0000 [r452]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-07-29 15:09 +0000 [r452]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* TODO: Zrobione. (to z ipv6)
 
-1999-07-29 13:59 +0000 [r451]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-29 13:59 +0000 [r451]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/tnlup, TODO,
 	  sysconfig/network-scripts/tnldown: now running tnlup/tnldown
@@ -4265,7 +4301,7 @@
 	  initialization RAID deveces, - added raidrun for activate md
 	  devices.
 
-1999-07-27 06:32 +0000 [r446]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-27 06:32 +0000 [r446]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* TODO: - rc.sysvinit dzia³a z e2fsprogs 1.15 (testowane z LABEL=,
 	  do przetestowania UUID=)
@@ -4293,11 +4329,11 @@
 
 	* ppp/ip-up, ppp/ip-down: - chnegd "#!/bin/bash" to "#!/bin/sh".
 
-1999-07-22 21:53 +0000 [r440]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-22 21:53 +0000 [r440]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* TODO: e2progs 1.15
 
-1999-07-22 21:51 +0000 [r439]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-07-22 21:51 +0000 [r439]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: Maly hack zeby dzialaly iface
 	  tylko na ipv6. Pomijane jest wyliczanie natmaski/prefixu jak
@@ -4307,56 +4343,56 @@
 
 	* configure.in: - version to 0.0.6.
 
-1999-07-22 11:11 +0000 [r437]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-22 11:11 +0000 [r437]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in, sysconfig/interfaces/Makefile.am: cleanup for
 	  release
 
-1999-07-22 10:44 +0000 [r436]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-22 10:44 +0000 [r436]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* TODO: uwaga do tnlup
 
-1999-07-22 10:40 +0000 [r435]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-22 10:40 +0000 [r435]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* TODO (added): TODO list
 
-1999-07-22 10:23 +0000 [r434]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-22 10:23 +0000 [r434]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/interfaces/tnlcfg-description (added),
 	  sysconfig/interfaces/ifcfg-description (added),
 	  sysconfig/interfaces/tnlcfg-icm,
 	  sysconfig/interfaces/ifcfg-eth0.wiget (removed): cleanup
 
-1999-07-22 10:19 +0000 [r433]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-22 10:19 +0000 [r433]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-lo: - added IPV6_ADDR - fixed PREFIX
 
-1999-07-22 09:09 +0000 [r432]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-22 09:09 +0000 [r432]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: - cleanup
 
-1999-07-22 08:46 +0000 [r431]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-22 08:46 +0000 [r431]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/shutdwn: typo
 
-1999-07-21 14:30 +0000 [r430]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-07-21 14:30 +0000 [r430]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* rc.d/init.d/network: Expresion with /usr/bin/cut replaced by one
 	  with sed ;-) now rc-scripts only need /bin to work properly.
 
-1999-07-21 13:52 +0000 [r429]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-21 13:52 +0000 [r429]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions-ip6 (removed): obsoletes
 
-1999-07-20 09:03 +0000 [r428]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-20 09:03 +0000 [r428]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: rc.serial moved to setserial
 
-1999-07-15 13:43 +0000 [r427]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-15 13:43 +0000 [r427]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - added >/dev/null 2>&1 to kill
 
-1999-07-15 13:29 +0000 [r426]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-15 13:29 +0000 [r426]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/network, rc.d/init.d/functions.network,
 	  rc.d/rc.sysinit, rc.d/init.d/functions: - we are using better
@@ -4365,7 +4401,7 @@
 	  functions.network - finished proc_net() function (interface to
 	  /proc/sys/net)
 
-1999-07-15 13:16 +0000 [r425]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-15 13:16 +0000 [r425]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc-scripts.spec.in: requires: /bin/awk
 
@@ -4377,17 +4413,17 @@
 
 	* rc.d/Makefile.am: - removed rc.derial.
 
-1999-07-13 13:27 +0000 [r422]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-13 13:27 +0000 [r422]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* AUTHORS: authors - based on ChangeLog
 
-1999-07-13 12:52 +0000 [r421]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-13 12:52 +0000 [r421]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit, rc.d/init.d/functions: - /proc is mounted before
 	  starting fsck (needed for working LABEL support is fsck) - fixed
 	  bug in show()
 
-1999-07-13 12:49 +0000 [r420]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-13 12:49 +0000 [r420]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* INSTALL, sysconfig/network-scripts/tnldown,
 	  sysconfig/network-scripts/ifdown,
@@ -4418,27 +4454,27 @@
 	  sysconfig/interfaces/ifcfg-sl0,
 	  sysconfig/network-scripts/ifup-sl: massive :$
 
-1999-07-05 10:27 +0000 [r419]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-05 10:27 +0000 [r419]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: Requires: procps
 
-1999-07-05 10:23 +0000 [r418]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-05 10:23 +0000 [r418]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions: we are using printf from sh-utils package
 	  instead of cut
 
-1999-07-05 09:12 +0000 [r417]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-05 09:12 +0000 [r417]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* configure.in, rc-scripts.spec.in: - network-scripts moved to
 	  /etc/sysconfig
 
-1999-07-05 08:47 +0000 [r415-416]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-05 08:47 +0000 [r415-416]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: Requires: net-tools, iproute2
 
 	* rc-scripts.spec.in: Requires: sed
 
-1999-07-05 08:39 +0000 [r414]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-05 08:39 +0000 [r414]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* configure.in, rc-scripts.spec.in,
 	  sysconfig/network-scripts/Makefile.am: - skrypty sieciowe w
@@ -4446,14 +4482,14 @@
 	  wsadzi w oddzielny modu³) - net-scripts i rc-scripts po³±czone w
 	  rc-scripts
 
-1999-07-05 08:08 +0000 [r413]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-05 08:08 +0000 [r413]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, rc.d/rc, rc.d/init.d/functions: -
 	  przesuniête inormacje `ok`, `busy` itp w nieco w prawo (wiêcej
 	  miejsca na komunikaty) - dodajemy takze routing IPv6 na okreslone
 	  interfejsy
 
-1999-07-03 15:09 +0000 [r410-412]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-03 15:09 +0000 [r410-412]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ChangeLog (removed): i po tescie
 
@@ -4461,19 +4497,19 @@
 
 	* sysconfig/network-scripts/ChangeLog (added): test
 
-1999-07-02 13:21 +0000 [r409]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-02 13:21 +0000 [r409]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: more Requires
 
-1999-07-02 11:49 +0000 [r408]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-02 11:49 +0000 [r408]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in: more Requires
 
-1999-07-02 11:31 +0000 [r407]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-02 11:31 +0000 [r407]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc-scripts.spec.in, src/Makefile.am: added missing files
 
-1999-07-02 11:14 +0000 [r404-406]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-02 11:14 +0000 [r404-406]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* doc/ipcalc.1: from src
 
@@ -4483,7 +4519,7 @@
 	  (removed), src/usernetctl.1 (removed), src/Makefile.am,
 	  src/ipcalc.1 (removed), src/usleep.1 (removed): manuals in doc
 
-1999-07-02 09:32 +0000 [r402-403]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-07-02 09:32 +0000 [r402-403]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am, sysconfig/network-scripts/ifup: -
 	  ARPable by default
@@ -4500,20 +4536,20 @@
 	  template ifcfg-eth0.wiget - tnlup && tnldown uwzglêdniaj±
 	  konfiguracjê w network - ustawianie defaulowo PROTOCOL=
 
-1999-07-01 21:10 +0000 [r401]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-01 21:10 +0000 [r401]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* configure.in, rc-scripts.spec.in,
 	  sysconfig/interfaces/data/Makefile.am,
 	  sysconfig/interfaces/Makefile.am: now rc-scripts compile, install
 	  and make rpm correct
 
-1999-07-01 14:37 +0000 [r400]  Artur Frysiak <wiget@pld-linux.org>
+1999-07-01 14:37 +0000 [r400]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* sysconfig/interfaces/.cvsignore (added),
 	  sysconfig/interfaces/data/.cvsignore (added): ignore
 	  autogenerated
 
-1999-06-29 16:38 +0000 [r399]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-29 16:38 +0000 [r399]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
@@ -4529,7 +4565,7 @@
 
 	* configure.in: - added missing "\".
 
-1999-06-28 15:39 +0000 [r395-396]  Artur Frysiak <wiget@pld-linux.org>
+1999-06-28 15:39 +0000 [r395-396]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* src/Makefile (removed): Autogenerated
 
@@ -4538,7 +4574,7 @@
 	  sysconfig/network-scripts/Makefile.am, sysconfig/Makefile.am:
 	  first try to sync Makefile.am
 
-1999-06-28 14:30 +0000 [r394]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-28 14:30 +0000 [r394]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/chat-ppp0.tpsa (removed),
 	  sysconfig/interfaces/data/chat-ppp0.callback (added),
@@ -4548,11 +4584,11 @@
 	  sysconfig/interfaces/data (added),
 	  sysconfig/interfaces/data/chat-ppp0.tpsa (added): moved chat*
 
-1999-06-28 13:12 +0000 [r393]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-28 13:12 +0000 [r393]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/tnlup: wszêdzie ${}
 
-1999-06-28 13:07 +0000 [r392]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-28 13:07 +0000 [r392]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifup-routes,
 	  sysconfig/network-scripts/tnlup (added),
@@ -4567,16 +4603,16 @@
 	  poprawki dotycz±ce PREFIX - tunnels-ip6.init, ifdhcpc-done -
 	  zbêdne (zast±pione przez inne narzêdzia)
 
-1999-06-27 18:48 +0000 [r391]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-06-27 18:48 +0000 [r391]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: Added function to calculate
 	  netmask from prefix
 
-1999-06-27 18:26 +0000 [r390]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-27 18:26 +0000 [r390]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* doc-devel/ogolnie: removed 2 config files
 
-1999-06-27 18:14 +0000 [r388-389]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-27 18:14 +0000 [r388-389]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/network: tunnels
 
@@ -4588,12 +4624,12 @@
 	  sysconfig/interfaces/ifcfg-eth0.wiget: NETMASK= is obsoletes
 	  (instead we use PREFIX=)
 
-1999-06-27 17:34 +0000 [r387]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-27 17:34 +0000 [r387]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* src/ipcalc.1, src/ipcalc.c: PREFIX instead NETMASK in --prefix
 	  option
 
-1999-06-27 17:25 +0000 [r384-386]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-27 17:25 +0000 [r384-386]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: poprawki
 
@@ -4601,29 +4637,29 @@
 
 	* rc.d/init.d/functions.network: poprawki
 
-1999-06-27 17:11 +0000 [r383]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-27 17:11 +0000 [r383]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: typo
 
-1999-06-27 17:00 +0000 [r382]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-06-27 17:00 +0000 [r382]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* rc.d/init.d/functions.network: Added function for calulating
 	  network prefix.
 
-1999-06-27 16:06 +0000 [r381]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-27 16:06 +0000 [r381]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: small poprawken
 
-1999-06-27 15:30 +0000 [r380]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-27 15:30 +0000 [r380]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* src/ipcalc.1, src/ipcalc.c: - added support for short netmask
 	  style (/24 etc)
 
-1999-06-27 14:42 +0000 [r379]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-27 14:42 +0000 [r379]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-eth0.wiget (added): readed
 
-1999-06-27 14:27 +0000 [r378]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-27 14:27 +0000 [r378]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-ppp,
 	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
@@ -4639,11 +4675,11 @@
 	  ipip, sit, gre (ipxip niezrobiona jeszcze) - tunnels-ip6.conf -
 	  zbêdne (tunele s± konfigurowane w stylu SySV) - drobne poprawki
 
-1999-06-23 17:14 +0000 [r377]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-23 17:14 +0000 [r377]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifcfg-lo (removed): removed
 
-1999-06-21 20:36 +0000 [r376]  Jan Rêkorajski <baggins@pld-linux.org>
+1999-06-21 20:36 +0000 [r376]  Jan Rêkorajski <baggins/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: usuwanie lockow po pam_console
 
@@ -4655,7 +4691,7 @@
 	  readline), - reformatings, - removed processing doc in
 	  Makefile.am and autogen.sh.
 
-1999-06-18 19:23 +0000 [r374]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-18 19:23 +0000 [r374]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/network, src/Makefile (added),
 	  sysconfig/network-scripts/tnlcfg-icm (removed),
@@ -4669,7 +4705,7 @@
 	  sysconfig/interfaces/ifcfg-sl0 (added), doc-devel (added): pare
 	  zmian
 
-1999-06-18 19:14 +0000 [r373]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-18 19:14 +0000 [r373]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifdown-sl,
 	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
@@ -4685,7 +4721,7 @@
 	  sysconfig/network-scripts/ifcfg-ppp0.tpsa (removed): *** empty
 	  log message ***
 
-1999-06-16 17:29 +0000 [r372]  Arkadiusz Mi¶kiewicz (alias) <misiek@pld-linux.org>
+1999-06-16 17:29 +0000 [r372]  Arkadiusz Mi¶kiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: fixed colors
 
@@ -4697,7 +4733,7 @@
 
 	* src/Makefile (removed): - autogenerated.
 
-1999-06-14 21:17 +0000 [r369]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-06-14 21:17 +0000 [r369]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* rc.d/init.d/network, INSTALL (added), ppp/ip-down.d/Makefile.am
 	  (added), doc/Makefile.am (added), doc/ipchains-setup.txt (added),
@@ -4733,7 +4769,7 @@
 	  sysconfig/network-scripts/ifup-sl: Synced with latest from old
 	  repo
 
-1999-06-14 21:06 +0000 [r367-368]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-06-14 21:06 +0000 [r367-368]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* ipchains-setup.txt (added): now synced. (one file was missed)
 
@@ -4744,18 +4780,18 @@
 	  rc-scripts.spec, sysconfig/ipchains (added),
 	  rc.d/init.d/functions: synced with 0.0.5
 
-1999-06-14 20:53 +0000 [r366]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-06-14 20:53 +0000 [r366]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, lang.sh, Makefile,
 	  sysconfig/network, src/testdinit, setsysfont, rc-scripts.spec,
 	  sysconfig.txt: Synced with 0.0.4
 
-1999-06-14 20:50 +0000 [r365]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-06-14 20:50 +0000 [r365]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* sysconfig/network (added), sysconfig/network-scripts/ifcfg-eth0
 	  (added): now is really synced with 0.0.3
 
-1999-06-14 20:44 +0000 [r364]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-06-14 20:44 +0000 [r364]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/ifdhcpc-done,
@@ -4775,14 +4811,14 @@
 	  sysconfig/network-scripts/ifup-sl, radvd.init (removed): Synced
 	  with rc-scripts-0.0.3 from old repo.
 
-1999-06-14 20:12 +0000 [r363]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-06-14 20:12 +0000 [r363]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* rc.d/init.d/network, src/Makefile, sysconfig/system,
 	  ppp/ip-up.d/logger, rc.d/rc.sysinit, .cvsignore, Makefile,
 	  ppp/ip-down.d/logger, rc-scripts.spec, rc.d/init.d/functions:
 	  Synced with rc-scripts-0.0.2 from old repo.
 
-1999-06-14 20:08 +0000 [r362]  Grzegorz Stanislawski <stangrze@pld-linux.org>
+1999-06-14 20:08 +0000 [r362]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* rc.d/init.d/network,
 	  sysconfig/network-scripts/ifcfg-ppp0.callback (added),
@@ -4834,7 +4870,7 @@
 	  sysconfig/.cvsignore (added), rc.d/.cvsignore (added): - added
 	  template .cvsignore.
 
-1999-06-14 19:22 +0000 [r357]  Artur Frysiak <wiget@pld-linux.org>
+1999-06-14 19:22 +0000 [r357]  Artur Frysiak <wiget/at/pld-linux.org>
 
 	* rc.d/init.d/network (added), rc.d/init.d/functions-ip6 (added),
 	  src/ipcalc.1 (added), sysconfig/network-scripts/ifup-ipx (added),
