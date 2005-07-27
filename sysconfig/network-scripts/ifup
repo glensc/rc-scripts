@@ -53,6 +53,10 @@ if [ "foo$2" = "foohotplug" ] && ! is_yes "${HOTPLUG}"; then
     exit
 fi
 
+if [ "foo$2" = "foopcmcia-hotplug" ] && ! is_yes "${PCMCIA_HOTPLUG}"; then
+    exit
+fi
+
 IPSETUP=no
 
 # set all major variables
