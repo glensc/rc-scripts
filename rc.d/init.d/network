@@ -167,6 +167,7 @@ else
 fi
 tunnels=$((cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
 	xargs egrep -l "ONBOOT=[^n][^o]" | \
+	egrep 'tnlcfg-[a-z0-9]+$' | \
 	awk ' { gsub(/tnlcfg-/,NIL); print $0 } ') 2> /dev/null)
 
 # See how we were called.
