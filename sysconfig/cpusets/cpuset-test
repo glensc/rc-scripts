@@ -1,0 +1,25 @@
+# Name of the cpuset
+NAME=test
+
+# list of CPUs in that cpuset
+CPUS=1-2
+
+# list of Memory Nodes in that cpuset
+MEMS=1-2
+
+# If a cpuset is cpu or mem exclusive, no other cpuset, other than a direct
+# ancestor or descendent, may share any of the same CPUs or Memory Nodes.
+
+# is cpu placement exclusive?
+CPU_EXCLUSIVE=1
+
+# is memory placement exclusive?
+MEM_EXCLUSIVE=1
+
+# 
+#NOTIFY_ON_RELEASE=0
+
+# PIDs of tasks in this cpuset
+#TASKS=
+
+ONBOOT=no

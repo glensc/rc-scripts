@@ -1,6 +1,6 @@
 @SET_MAKE@
 
-SUBDIRS = network-scripts interfaces hwprofiles
+SUBDIRS = network-scripts interfaces hwprofiles cpusets
 
 sysconfigdir = @sysconfigdir@
 

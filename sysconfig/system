@@ -92,5 +92,8 @@ PROMPT=yes
 # chroot properly)
 #SYSTEM_CHROOTS=
 
+# Enable cpusets support?
+CPUSETS=no
+
 # This must be last line !
 # vi:syntax=sh:tw=78:ts=8:sw=4

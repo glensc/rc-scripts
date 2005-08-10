@@ -1,0 +1,128 @@
+#!/bin/sh
+#
+# cpusets	Create/remove cpusets
+#
+# chkconfig:    12345 01 99
+# description:  Creates/Removes all cpu sets configured to \
+#		start at boot time.
+#
+# probe:	true
+
+# $Id: network 5884 2005-04-25 16:01:57Z adamg $
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+# NLS
+NLS_DOMAIN="rc-scripts"
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+if is_yes ${CPUSETS} ; then
+    if ! grep -q "/dev/cpuset" /proc/mounts ; then
+	nls "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted" >&2
+    fi
+else
+    exit 0
+fi
+
+cpuset_create()
+{
+    . /etc/sysconfig/cpusets/cpuset-$i
+
+    mkdir /dev/cpuset/"$NAME"
+    [ -n "$CPUS" ] && >echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
+    [ -n "$MEMS" ] && >echo "$MEMS" >/dev/cpuset/"$NAME"/mems
+    [ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
+    [ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
+    [ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
+    [ -n "$TASKS" ] && echo "$TASKS" >/dev/cpuset/"$NAME"/tasks
+}
+
+cpuset_remove()
+{
+    . /etc/sysconfig/cpusets/cpuset-$i
+
+    # This MUST be rmdir (not rm -rf)
+    rmdir /dev/cpuset/"$NAME"
+}
+
+cpuset_empty()
+{
+    if [ $(cat /dev/cpuset/$1/tasks | wc -c) -eq 0 ] ; then
+	# true returns zero
+	return 0
+    else
+	# false returns one
+	return 1
+    fi
+}
+
+# find all the interfaces besides loopback.
+# ignore aliases, alternative configurations, and editor backup files
+cpusets_boot=$((
+	. /etc/rc.d/init.d/functions; \
+	cd /etc/sysconfig/cpusets && ls -1 cpuset* | \
+	egrep 'cpuset-[a-z0-9\.:]+$' | \
+	for i in `cat`; do \
+	    ONBOOT=""; . /etc/sysconfig/cpusets/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+	done | \
+	awk ' { gsub(/cpuset-/,NIL); print $0 } ') 2> /dev/null)
+
+# See how we were called.
+case "$1" in
+  start)
+  	rc_splash "bootcpusets start"
+
+	for i in $cpusets_boot ; do
+		nls "Creating cpuset %s" "$i"
+		cpuset_create $i
+		ok
+	done
+
+        touch /var/lock/subsys/cpusets
+        ;;
+  stop)
+	for i in $cpusets_boot ; do
+		nls "Removing cpuset %s" "$i"
+		busy
+		if cpuset_empty $i ; then
+		    cpuset_remove $i
+		    ok
+		else
+		    fail
+		fi
+	done
+
+        rm -f /var/lock/subsys/cpusets
+        ;;
+  status)
+	nls "Configured cpusets:"
+	echo "$cpusets_boot"
+	echo
+	nls "Currently empty cpusets:"
+	for i in `ls -1 /dev/cpuset` ; do
+	    if [ -d $i ] ; then
+		cpuset_empty $i && echo $i
+	    fi
+	done
+	nls "Currently active cpusets:"
+	for i in `ls -1 /dev/cpuset` ; do
+	    if [ -d $i ] ; then
+		cpuset_empty $i || echo $i
+	    fi
+	done
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+esac
+
+exit 0
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
