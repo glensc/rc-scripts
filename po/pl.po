@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .././rc.d/init.d/functions:699
+#: .././rc.d/init.d/functions:699 .././rc.d/init.d/functions:715
 msgid "%s (pid %s) is running%s"
 msgstr "%s (pid %s) jest uruchomiony%s"
 
@@ -50,7 +50,7 @@ msgstr ""
 msgid "Unmounting file systems"
 msgstr "Od³±czanie systemów plików"
 
-#: .././rc.d/init.d/functions:727
+#: .././rc.d/init.d/functions:735
 msgid "%s is stopped"
 msgstr "%s jest zatrzymany"
 
@@ -75,7 +75,7 @@ msgstr "Host:"
 msgid "dip started for %s on %s at %s"
 msgstr "dip wystartowa³ dla %s na %s przy %s"
 
-#: .././rc.d/init.d/functions:717
+#: .././rc.d/init.d/functions:725
 msgid "%s dead but pid file exists"
 msgstr "%s zabity ale plik z numerem procesu istnieje"
 
@@ -104,10 +104,6 @@ msgstr "Podnoszenie interfejsu %s"
 msgid "Remounting root filesystem in rw mode"
 msgstr "Prze³±czanie g³ównego systemu plików w tryb zapis/odczyt"
 
-#: .././rc.d/init.d/functions:707
-msgid "%s (pid %s) is running..."
-msgstr "%s (pid %s) jest uruchomiony..."
-
 #: .././rc.d/rc.sysinit:137
 msgid "Starting udev"
 msgstr ""
@@ -128,7 +124,7 @@ msgstr "Puste cpusety:"
 msgid "Setting time zone information (%s)"
 msgstr "Ustawianie informacji o strefie czasowej (%s)"
 
-#: .././rc.d/init.d/functions:827
+#: .././rc.d/init.d/functions:835
 msgid "$STRING"
 msgstr ""
 
@@ -168,7 +164,7 @@ msgstr "Brak ¼ród³a losowych danych"
 msgid "%s is missing. Can't continue."
 msgstr "%s nie jest obecny. Nie mogê kontynuowaæ."
 
-#: .././rc.d/init.d/functions:792
+#: .././rc.d/init.d/functions:800
 msgid "Loading %s kernel module(s)"
 msgstr "£adowanie modu³u(ów) %s"
 
@@ -312,7 +308,7 @@ msgstr "Skonfigurowane tunele:"
 msgid "Removing tunnel %s"
 msgstr "Usuwanie tunelu %s"
 
-#: .././rc.d/init.d/functions:734
+#: .././rc.d/init.d/functions:742
 msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
 msgstr "Uruchomiæ us³ugê %s (T)ak/(N)ie/(K)ontynuuj? [T] "
 
@@ -366,7 +362,7 @@ msgstr "(Naprawa RAID)# "
 msgid "\t\t  Press %sI%s to enter interactive startup"
 msgstr "\t      Proszê wcisn±æ %sI%s ¿eby wej¶æ w tryb interaktywny"
 
-#: .././rc.d/init.d/functions:694
+#: .././rc.d/init.d/functions:694 .././rc.d/init.d/functions:710
 msgid " in cpuset %s..."
 msgstr " w cpusecie %s..."
 
@@ -420,13 +416,13 @@ msgstr "Automatyczny restart w toku"
 msgid "Mounting local filesystems"
 msgstr "Pod³±czanie lokalnych systemów plików"
 
-#: .././rc.d/rc.sysinit:733
-msgid "Checking filesystem quotas"
-msgstr "Sprawdzanie quot w systemach plików"
-
 #: .././rc.d/rc.shutdown:118 .././rc.d/rc.shutdown:127
 msgid "On the next boot fsck will be skipped."
 msgstr "Przy nastêpnym starcie systemu program fsck bêdzie pominiêty."
+
+#: .././rc.d/rc.sysinit:733
+msgid "Checking filesystem quotas"
+msgstr "Sprawdzanie quot w systemach plików"
 
 #: .././rc.d/rc.sysinit:224
 msgid "Initializing USB controller"
@@ -495,7 +491,7 @@ msgstr "Aktywacja partycji swap"
 msgid "Enslaving %s to %s"
 msgstr "Ustawianie %s na %s"
 
-#: .././rc.d/init.d/functions:724
+#: .././rc.d/init.d/functions:732
 msgid "%s dead but subsys locked"
 msgstr "%s zabity ale podsystem zablokowany"
 
@@ -568,7 +564,7 @@ msgstr ""
 msgid "Setting up ISA PNP devices (kernelspace pnp)"
 msgstr "Ustawianie urz±dzeñ ISA PNP (kernelspace pnp)"
 
-#: .././rc.d/init.d/functions:809
+#: .././rc.d/init.d/functions:817
 msgid "Could not load %s kernel module(s)"
 msgstr "Nie mo¿na za³adowaæ modu³u(ów) %s"
 
@@ -615,7 +611,9 @@ msgstr "%s nie istnieje dla %s"
 
 #: .././rc.d/init.d/cpusets:22
 msgid "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted"
-msgstr "B£¡D: Obs³uga CPUSET nie w³±czona w j±drze albo /dev/cpuset nie jest zamontowany"
+msgstr ""
+"B£¡D: Obs³uga CPUSET nie w³±czona w j±drze albo /dev/cpuset nie jest "
+"zamontowany"
 
 #: .././rc.d/rc.sysinit:197 .././rc.d/rc.sysinit:751
 msgid "Today`s date:"
@@ -643,7 +641,7 @@ msgstr "%sZarz±dca zasobów: %sWej¶cie na poziom"
 msgid "warning: --check option is ignored!"
 msgstr "uwaga: opcja --check jest ignorowana!"
 
-#: .././rc.d/init.d/functions:696
+#: .././rc.d/init.d/functions:696 .././rc.d/init.d/functions:712
 msgid " outside of configured cpuset %s..."
 msgstr " poza swoim cpusetem %s..."
 
@@ -685,6 +683,9 @@ msgstr "Ustalanie informacji IP dla %s (%s)"
 #: .././rc.d/init.d/timezone:47
 msgid "Unsetting time zone information"
 msgstr "Usuwanie informacji o strefie czasowej"
+
+#~ msgid "%s (pid %s) is running..."
+#~ msgstr "%s (pid %s) jest uruchomiony..."
 
 #~ msgid "Setting network parameters"
 #~ msgstr "Ustawianie parametrów sieci"
