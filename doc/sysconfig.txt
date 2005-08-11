@@ -192,3 +192,19 @@ Files in /etc/sysconfig
 
   The above is used by the /sbin/setsysfont command (which is run
   by rc.sysinit at boot time).
+
+/etc/sysconfig/<service>
+
+  The following are used when starting service.
+
+  SERVICE_LIMITS="-u unlimited -c 0"
+    System limits for this service.
+
+  SERVICE_CPUSET="name"
+    CPUSET to run this service in.
+
+  SERVICE_UMASK="022"
+    File creation mask for this service.
+
+  SERVICE_RUN_NICE_LEVEL="0"
+    Scheduling priority for this service.

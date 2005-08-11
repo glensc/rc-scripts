@@ -400,6 +400,47 @@
       by rc.sysinit at boot time).
     </para>
   </refsect1>
+
+  <refsect1>
+    <title><filename>/etc/sysconfig/\<service\></filename></title>
+    <para>
+      The following are used when starting service.
+    </para>
+      <variablelist>
+        <varlistentry>
+	  <term>SERVICE_LIMITS="-u unlimited -c 0"</term>
+	  <listitem>
+            <para>
+	      System limits for this service.
+            </para>
+	  </listitem>
+        </varlistentry>
+        <varlistentry>
+	  <term>SERVICE_CPUSET="name"</term>
+	  <listitem>
+            <para>
+	      CPUSET to run this service in.
+            </para>
+	  </listitem>
+        </varlistentry>
+        <varlistentry>
+	  <term>SERVICE_UMASK="022"</term>
+	  <listitem>
+            <para>
+	      File creation mask for this service.
+            </para>
+	  </listitem>
+        </varlistentry>
+        <varlistentry>
+	  <term>SERVICE_RUN_NICE_LEVEL="0"</term>
+	  <listitem>
+            <para>
+	      Scheduling priority for this service.
+            </para>
+	  </listitem>
+        </varlistentry>
+      </variablelist>
+  </refsect1>
 </refentry>
 
 
