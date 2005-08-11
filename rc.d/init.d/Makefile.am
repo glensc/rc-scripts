@@ -4,6 +4,7 @@ initdir = @rcdir@/init.d
 
 init_SCRIPTS = \
 	allowlogin \
+	cpusets \
 	killall \
 	network \
 	random \
