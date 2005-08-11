@@ -369,8 +369,9 @@ checkpid()
 	return 1
 }
 
-# outside chroot get only those processes, which are outside chroot.
-# inside chroot get only those processes, which are inside chroot.
+# - outside chroot get only those processes, which are outside chroot.
+# - inside chroot get only those processes, which are inside chroot.
+# - don't filter out pids which do not have corresponding running processes (process died etc)
 # (note: some processes like named are chrooted but run outside chroot)
 filter_chroot()
 {
@@ -389,6 +390,8 @@ filter_chroot()
 				done
 			fi
 			[ "$good_add_pid" -eq 1 ] && good_pids="$good_pids $root_pid"
+		elif [ ! -d "/proc/$root_pid" ]; then
+			good_pids="$good_pids $root_pid"
 		fi
 	done
 	echo $good_pids
