@@ -109,6 +109,7 @@ done
 
 for i in 1 2 3 4 5; do
 	ln -s ../init.d/killall $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/S00killall
+	ln -s ../init.d/cpusets $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/S01cpusets
 	ln -s ../init.d/random $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/S20random
 done
 
@@ -119,6 +120,7 @@ done
 ln -s ../init.d/single $RPM_BUILD_ROOT/etc/rc.d/rc1.d/S00single
 
 for i in 0 6; do
+	ln -s ../init.d/cpusets $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/K99cpusets
 	ln -s ../init.d/killall $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/K90killall
 	ln -s ../init.d/random $RPM_BUILD_ROOT/etc/rc.d/rc$i.d/K80random
 done
@@ -167,6 +169,7 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 
 /etc/rc.d/init.d/functions
 %attr(754,root,root) /etc/rc.d/init.d/allowlogin
+%attr(754,root,root) /etc/rc.d/init.d/cpusets
 %attr(754,root,root) /etc/rc.d/init.d/killall
 %attr(754,root,root) /etc/rc.d/init.d/network
 %attr(754,root,root) /etc/rc.d/init.d/random
@@ -181,6 +184,7 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %attr(754,root,root) /etc/rc.d/rc.sysinit
 %attr(754,root,root) /etc/rc.d/rc.shutdown
 %attr(754,root,root) /etc/rc.d/rc?.d/S??allowlogin
+%attr(754,root,root) /etc/rc.d/rc?.d/S??cpusets
 %attr(754,root,root) /etc/rc.d/rc?.d/S??killall
 %attr(754,root,root) /etc/rc.d/rc?.d/S??local
 %attr(754,root,root) /etc/rc.d/rc?.d/S??network
@@ -188,6 +192,7 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %attr(754,root,root) /etc/rc.d/rc?.d/S??single
 %attr(754,root,root) /etc/rc.d/rc?.d/S??timezone
 %attr(754,root,root) /etc/rc.d/rc?.d/K??allowlogin
+%attr(754,root,root) /etc/rc.d/rc?.d/K??cpusets
 %attr(754,root,root) /etc/rc.d/rc?.d/K??killall
 %attr(754,root,root) /etc/rc.d/rc?.d/K??network
 %attr(754,root,root) /etc/rc.d/rc?.d/K??random
@@ -222,6 +227,7 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %attr(755,root,root) %dir %{_sysconfdir}/ppp
 %attr(754,root,root) %{_sysconfdir}/ppp/*
 %attr(755,root,root) %dir /etc/sysconfig
+%attr(755,root,root) %dir /etc/sysconfig/cpusets
 %attr(755,root,root) %dir /etc/sysconfig/interfaces
 %attr(755,root,root) %dir /etc/sysconfig/interfaces/data
 %attr(755,root,root) %dir /etc/sysconfig/isapnp
@@ -253,6 +259,7 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/static-routes
 %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/timezone
 %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/interfaces/ifcfg-eth0
+%config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/cpusets/cpuset-test
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/system
 
 %{_mandir}/man?/*
