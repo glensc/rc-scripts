@@ -203,6 +203,7 @@ AC_CONFIG_FILES([Makefile \
 	ppp/Makefile \
 	isapnp/Makefile \
 	sysconfig/Makefile \
+	sysconfig/cpusets/Makefile \
 	sysconfig/hwprofiles/Makefile \
 	sysconfig/network-scripts/Makefile \
 	sysconfig/interfaces/Makefile \
