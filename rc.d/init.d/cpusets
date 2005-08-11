@@ -28,6 +28,8 @@ fi
 
 cpuset_create()
 {
+    local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
+
     . /etc/sysconfig/cpusets/cpuset-$i
 
     mkdir /dev/cpuset/"$NAME"
@@ -41,6 +43,8 @@ cpuset_create()
 
 cpuset_remove()
 {
+    local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
+
     . /etc/sysconfig/cpusets/cpuset-$i
 
     # This MUST be rmdir (not rm -rf)
