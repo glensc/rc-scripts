@@ -495,6 +495,7 @@ daemon()
 	# And start it up.
 	busy
 	cd /
+	[ -n "$SERVICE_CPUSET" ] && echo $$ >/dev/cpuset/${SERVICE_CPUSET}/tasks
 	if errors=$(umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK}; USER=root HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
 		if [ -n "$waitname" -a -n "$waittime" ]; then
 			# Save basename.
@@ -669,7 +670,7 @@ pidofproc()
 
 status()
 {
-	typeset base pid subsys daemon
+	typeset base pid subsys daemon cpuset_msg
 	subsys=$1
 	daemon=${2:-$subsys}
 	base=$(basename $daemon)
@@ -685,7 +686,15 @@ status()
 	pid=$(filter_chroot "$pid")
 
 	if [ "$pid" != "" ]; then
-		nls "%s (pid %s) is running..." "$daemon" "$pid"
+		cpuset_msg="..."
+		if [ -n "$SERVICE_CPUSET" ]; then
+			if $(grep -q "$pid" /dev/cpuset/${SERVICE_CPUSET}/tasks); then
+				cpuset_msg=$(nls " in cpuset %s..." "$SERVICE_CPUSET")
+			else
+				cpuset_msg=$(nls " outside of configured cpuset %s..." "$SERVICE_CPUSET")
+			fi
+		fi
+		nls "%s (pid %s) is running%s" "$daemon" "$pid" "$cpuset_msg"
 		return 0
 #	else
 #		pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
