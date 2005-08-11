@@ -705,7 +705,15 @@ status()
 #		          (("[" prog "]") == $5) ||
 #		          ((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
 #		if [ "$pid" != "" ]; then
-#			nls "%s (pid %s) is running..." "$daemon" "$pid"
+#			cpuset_msg="..."
+#			if [ -n "$SERVICE_CPUSET" ]; then
+#				if $(grep -q "$pid" /dev/cpuset/${SERVICE_CPUSET}/tasks); then
+#					cpuset_msg=$(nls " in cpuset %s..." "$SERVICE_CPUSET")
+#				else
+#					cpuset_msg=$(nls " outside of configured cpuset %s..." "$SERVICE_CPUSET")
+#				fi
+#			fi
+#			nls "%s (pid %s) is running%s" "$daemon" "$pid" "$cpuset_msg"
 #			return 0
 #		fi
 	fi
