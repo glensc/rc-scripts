@@ -147,6 +147,11 @@ if [ -e /dev/.devfsd -a -x /sbin/devfsd ]; then
         run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
 fi
 
+# cpuset support (mounted unconditionally, shouldn't be a problem)
+if grep -q cpuset /proc/filesystems ; then
+    mount -n -t cpuset none /dev/cpuset
+fi
+
 # Configure Linux kernel (initial configuration, some required modules still
 # may be missing).
 /sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
@@ -385,6 +390,10 @@ fi
 
 if grep -q selinuxfs /proc/filesystems ; then
     	mount -f -t selinuxfs selinuxfs /selinux
+fi
+
+if grep -q cpuset /proc/filesystems ; then
+    mount -n -t cpuset none /dev/cpuset
 fi
 
 # Remove /etc/nologin when starting system
