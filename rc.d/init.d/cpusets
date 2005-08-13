@@ -110,12 +110,14 @@ case "$1" in
 		cpuset_empty $i && echo $i
 	    fi
 	done
+	echo
 	nls "Currently active cpusets:"
 	for i in `ls -1 /dev/cpuset` ; do
 	    if [ -d /dev/cpuset/$i ] ; then
 		cpuset_empty $i || echo $i
 	    fi
 	done
+	echo
 	;;
   restart)
 	$0 stop
