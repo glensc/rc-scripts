@@ -106,13 +106,13 @@ case "$1" in
 	echo
 	nls "Currently empty cpusets:"
 	for i in `ls -1 /dev/cpuset` ; do
-	    if [ -d $i ] ; then
+	    if [ -d /dev/cpuset/$i ] ; then
 		cpuset_empty $i && echo $i
 	    fi
 	done
 	nls "Currently active cpusets:"
 	for i in `ls -1 /dev/cpuset` ; do
-	    if [ -d $i ] ; then
+	    if [ -d /dev/cpuset/$i ] ; then
 		cpuset_empty $i || echo $i
 	    fi
 	done
