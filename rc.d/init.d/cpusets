@@ -33,8 +33,8 @@ cpuset_create()
     . /etc/sysconfig/cpusets/cpuset-$i
 
     mkdir /dev/cpuset/"$NAME"
-    [ -n "$CPUS" ] && >echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
-    [ -n "$MEMS" ] && >echo "$MEMS" >/dev/cpuset/"$NAME"/mems
+    [ -n "$CPUS" ] && echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
+    [ -n "$MEMS" ] && echo "$MEMS" >/dev/cpuset/"$NAME"/mems
     [ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
     [ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
     [ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
