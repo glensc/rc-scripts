@@ -79,7 +79,7 @@ case "$1" in
   	rc_splash "bootcpusets start"
 
 	for i in $cpusets_boot ; do
-		nls "Creating cpuset %s" "$i"
+		show $(nls "Creating cpuset %s" "$i")
 		cpuset_create $i
 		ok
 	done
@@ -88,7 +88,7 @@ case "$1" in
         ;;
   stop)
 	for i in $cpusets_boot ; do
-		nls "Removing cpuset %s" "$i"
+		show $(nls "Removing cpuset %s" "$i")
 		busy
 		if cpuset_empty $i ; then
 		    cpuset_remove $i
