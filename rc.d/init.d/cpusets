@@ -32,13 +32,16 @@ cpuset_create()
 
     . /etc/sysconfig/cpusets/cpuset-$i
 
-    mkdir /dev/cpuset/"$NAME"
-    [ -n "$CPUS" ] && echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
-    [ -n "$MEMS" ] && echo "$MEMS" >/dev/cpuset/"$NAME"/mems
-    [ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
-    [ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
-    [ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
-    [ -n "$TASKS" ] && echo "$TASKS" >/dev/cpuset/"$NAME"/tasks
+    if mkdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
+	[ -n "$CPUS" ] && echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
+	[ -n "$MEMS" ] && echo "$MEMS" >/dev/cpuset/"$NAME"/mems
+	[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
+	[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
+	[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
+	[ -n "$TASKS" ] && echo "$TASKS" >/dev/cpuset/"$NAME"/tasks
+	return 0
+    fi
+    return 1
 }
 
 cpuset_remove()
@@ -48,12 +51,16 @@ cpuset_remove()
     . /etc/sysconfig/cpusets/cpuset-$i
 
     # This MUST be rmdir (not rm -rf)
-    rmdir /dev/cpuset/"$NAME"
+    if rmdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
+	return 0
+    else
+	return 1
+    fi
 }
 
 cpuset_empty()
 {
-    if [ $(cat /dev/cpuset/$1/tasks | wc -c) -eq 0 ] ; then
+    if [ $(cat /dev/cpuset/$1/tasks 2>/dev/null | wc -c) -eq 0 ] ; then
 	# true returns zero
 	return 0
     else
@@ -79,20 +86,26 @@ case "$1" in
   	rc_splash "bootcpusets start"
 
 	for i in $cpusets_boot ; do
-		show "$(nls "Creating cpuset %s" "$i")"
-		cpuset_create $i
-		ok
+		show "$(nls -n "Creating cpuset %s" "$i")"
+		if cpuset_create $i ; then
+		    ok
+		else
+		    fail
+		fi
 	done
 
         touch /var/lock/subsys/cpusets
         ;;
   stop)
 	for i in $cpusets_boot ; do
-		show "$(nls "Removing cpuset %s" "$i")"
+		show "$(nls -n "Removing cpuset %s" "$i")"
 		busy
 		if cpuset_empty $i ; then
-		    cpuset_remove $i
-		    ok
+		    if cpuset_remove $i ; then
+		        ok
+		    else
+			fail
+		    fi
 		else
 		    fail
 		fi
