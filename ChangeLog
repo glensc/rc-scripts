@@ -1,3 +1,115 @@
+2005-08-23 16:29 +0000 [r6327-6329]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm,
+	  sysconfig/interfaces/data/chat-ppp0.gprs-plusgsm: Fixed PlusGSM
+	  examples. (Patch by Pawe³ Go³aszewski)
+
+	* inittab: Example for agetty on serial port.
+
+	* rc.d/init.d/network: [a-z] doesn't always mean whole alphabet
+	  (for example et_EE locale). Use C locale when searching. (Patch
+	  by Elan Ruusamäe)
+
+2005-08-15 22:45 +0000 [r6315]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - don't spew errors on stdout - inform about
+	  failurse
+
+2005-08-14 18:32 +0000 [r6311]  Tomasz Wittner <twittner/at/pld-linux.org>
+
+	* DEVELOPMENT: - typo in enumeration
+
+2005-08-13 23:06 +0000 [r6307-6310]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - added echo for better status readability
+
+	* rc.d/init.d/cpusets: - properly test cpuset dir for status
+	  display
+
+	* rc.d/init.d/cpusets: - properly escape message
+
+	* rc.d/init.d/cpusets: - use show() when creating/removing cpusets
+
+2005-08-13 22:58 +0000 [r6306]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - typo
+
+2005-08-13 22:34 +0000 [r6305]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - take CPUSETS setting into account
+
+2005-08-13 22:00 +0000 [r6304]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - mount cpuset filesystem if kernel capable
+
+2005-08-11 17:43 +0000 [r6300]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* doc/sysconfig.txt, doc/sysconfig.docb: - added description for
+	  available per-service settings
+
+2005-08-11 17:11 +0000 [r6299]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* rc-scripts.spec.in: - cpusets added
+
+2005-08-11 17:04 +0000 [r6297-6298]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/Makefile.am: - cpusets script added
+
+	* configure.ac: - sysconfig/cpusets/Makefile added
+
+2005-08-11 16:58 +0000 [r6294-6296]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* po/pl.po: - final touch
+
+	* po/pl.po: - updated
+
+	* rc.d/init.d/functions: - added some code for completness
+
+2005-08-11 16:36 +0000 [r6293]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - defile cpuset settings as local in
+	  function
+
+2005-08-11 16:35 +0000 [r6292]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/functions: filter_chroot(): Do not filter pids for
+	  processes that no longer exists. We don't know whether these were
+	  from current (ch)root so we assume that they were.
+
+2005-08-11 16:23 +0000 [r6291]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - added cpuset support to daemon and
+	  status functions
+
+2005-08-10 20:10 +0000 [r6290]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/system, sysconfig/cpusets/cpuset-test (added),
+	  sysconfig/Makefile.am, rc.d/init.d/cpusets (added),
+	  sysconfig/cpusets/Makefile.am (added): - CPUSETS support (work in
+	  progress)
+
+2005-08-10 19:49 +0000 [r6289]  Jan Rêkorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/cpusets (added): - a place for cpusets config files
+
+2005-08-08 21:53 +0000 [r6288]  Andrzej Dopiera³a <undefine/at/pld-linux.org>
+
+	* rc.d/init.d/network: - get only tnlcfg-name, not tnlcfg-name~
+
+2005-07-27 09:09 +0000 [r6229]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: ifup: Handle special
+	  pcmcia-hotplug case.
+
+2005-07-21 22:35 +0000 [r6226]  Andrzej Dopiera³a <undefine/at/pld-linux.org>
+
+	* rc.d/init.d/network: - first up bridge, next tunnels (tunnels can
+	  be on bridges) - first down tunnels, next bridge ;)
+
+2005-05-30 18:54 +0000 [r6028]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Release 0.4.0.19.
+
 2005-05-30 18:47 +0000 [r6027]  Arkadiusz Mi¶kiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: Understand BOOTPROTO=static
