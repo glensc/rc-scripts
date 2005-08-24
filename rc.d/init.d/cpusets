@@ -18,7 +18,7 @@ NLS_DOMAIN="rc-scripts"
 # Source function library.
 . /etc/rc.d/init.d/functions
 
-if is_yes ${CPUSETS} ; then
+if is_yes "${CPUSETS}" ; then
     if ! grep -q "/dev/cpuset" /proc/mounts ; then
 	nls "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted" >&2
     fi
