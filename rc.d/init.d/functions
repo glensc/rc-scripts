@@ -656,10 +656,15 @@ pidofproc()
 	fi
 
 	# First try pidfile or "/var/run/*.pid"
-	if [ -f /var/run/${pidfile} ] ; then
+	if (echo "${pidfile}" | grep -Eq "^/"); then
+		pidfile="${pidfile}"
+	else
+		pidfile="/var/run/${pidfile}";
+	fi
+	if [ -f "${pidfile}" ] ; then
 		typeset line p pid
 		pid=
-		read line < /var/run/${pidfile}
+		read line < "${pidfile}"
 		for p in $line; do
 			[ -z "$(echo "$p" | awk '{gsub(/[0-9]/,"");print;}')" ] && pid="$pid $p"
 		done
