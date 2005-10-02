@@ -89,6 +89,13 @@ if [ "$BOOTPROTO" = "dhcp" ]; then
     sleep 1
 fi
 
+if is_wireless_device "${DEVICE}"; then
+    if is_yes "${WLAN_WPA}"; then
+	killall wpa_supplicant
+	rm -f /var/run/wpa_supplicant
+    fi
+fi
+    
 vlan_setup
 if is_yes $ETH_VLANS && `echo $DEVICE | grep -q ^eth` ; then
     if echo "${DEVICE}" | grep -q '\.' ; then

@@ -105,6 +105,9 @@ fi
 
 if is_wireless_device "${DEVICE}"; then
     wireless_param ${DEVICE}
+    if is_yes "${WLAN_WPA}"; then
+	/usr/sbin/wpa_supplicant -B -w -D ${WLAN_WPA_DRIVER} -c ${WLAN_WPA_CONFIG} -i ${DEVICE} ${WLAN_WPA_OPTIONS}
+    fi
 fi
 	
 if [ "$HANDLING" = "2" ]; then
