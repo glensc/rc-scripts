@@ -201,7 +201,7 @@ case "$1" in
 		then
 			/etc/rc.d/init.d/netfs stop
 		else
-			netmtab=$(awk '{ if ($3 ~ /^(nfs|smbfs|ncpfs)$/ ) print $3}' /proc/mounts)
+			netmtab=$(awk '{ if ($3 ~ /^(nfs|smbfs|ncpfs|cifs)$/ ) print $3}' /proc/mounts)
 			if (echo "$netmtab" | grep -q nfs); then
 			   run_cmd "Unmounting NFS filesystems" umount -fat nfs
 			fi
