@@ -34,4 +34,4 @@ run_cmd "Sending all processes the KILL signal" killall5 -9
 show "The system is halted"; ok
 
 # This must be last line !
-# vi:syntax=sh:tw=78:ts=8:sw=4
+# vi:syntax=sh:ts=8:sw=4
