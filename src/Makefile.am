@@ -6,9 +6,6 @@ GLIBNAME = @GLIBNAME@
 
 DEFS = @DEFS@ -D_GNU_SOURCE=1 -DSBINDIR=\""@sbindir@"\"
 
-sysconf_DATA = \
-	initlog.conf
-
 bin_PROGRAMS = \
 	doexec \
 	ipcalc \
@@ -19,9 +16,7 @@ sbin_PROGRAMS =	\
 	consoletype \
 	genhostid \
 	getkey \
-	initlog \
 	loglevel \
-	minilogd \
 	netreport \
 	start-stop-daemon
 	
@@ -47,9 +42,6 @@ usleep_SOURCES = usleep.c
 usleep_LDADD = -lpopt
 
 loglevel_SOURCES = loglevel.c
-
-initlog_SOURCES = initlog.c initlog.h process.c process.h
-initlog_LDADD = -lpopt
 
 getkey_SOURCES = getkey.c
 getkey_LDADD = -lpopt

@@ -103,12 +103,6 @@ if is_yes "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
 	ok
 fi
 
-# The root filesystem is now read-write, so we can now log via
-# syslog() directly...
-if [ -n "$IN_INITLOG" ]; then
-	IN_INITLOG=""
-fi
-
 [ -n "$SELINUX" ] && [ -f /.autorelabel ] && relabel_selinux
 
 # Turn on process accounting
