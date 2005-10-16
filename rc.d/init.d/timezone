@@ -65,4 +65,4 @@ unset ZONE_FILE ZONE_INFO_DIR ZONE_INFO_SCHEME ZONE_INFO_AREA TIME_ZONE MESSAGE
 exit $RETVAL
 
 # This must be last line !
-# vi:syntax=sh:tw=78:ts=8:sw=4
+# vi:syntax=sh:ts=8:sw=4

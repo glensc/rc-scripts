@@ -332,4 +332,4 @@ fi
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:tw=78:ts=2:sw=2
+# vi:syntax=sh:ts=2:sw=2

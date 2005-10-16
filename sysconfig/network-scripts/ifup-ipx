@@ -53,4 +53,4 @@ done
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:tw=78:ts=8:sw=4
+# vi:syntax=sh:ts=8:sw=4
