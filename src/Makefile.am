@@ -21,7 +21,6 @@ sbin_PROGRAMS =	\
 	getkey \
 	initlog \
 	loglevel \
-	minilogd \
 	netreport \
 	ppp-watch \
 	start-stop-daemon \
