@@ -93,6 +93,10 @@ is_no()
 
 if is_yes "$FASTRC"; then
 	INIT_DOTS=$(awk "BEGIN{for(\$i=0;\$i<$INIT_COL;\$i++)printf(\".\");}")
+	RC_LOGGING=no
+fi
+
+if is_yes "${IN_SHUTDOWN}" || is_no "${RC_LOGGING}" ; then
 	initlog()
 	{
 		RESULT=0

@@ -42,5 +42,8 @@ NEED_XFILES=yes
 # Run /sbin/ldconfig at startup ?
 RUN_LDCONFIG=no
 
+# Enable syslogging for rc-scripts
+RC_LOGGING=no
+
 # This must be last line !
 # vi:syntax=sh:ts=8:sw=4
