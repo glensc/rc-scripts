@@ -93,6 +93,24 @@ is_no()
 
 if is_yes "$FASTRC"; then
 	INIT_DOTS=$(awk "BEGIN{for(\$i=0;\$i<$INIT_COL;\$i++)printf(\".\");}")
+	initlog()
+	{
+		RESULT=0
+		while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+			case $1 in
+				-c)
+					shift
+					$1
+					RESULT=$?
+					break
+					;;
+				 *)
+					shift
+					;;
+			esac
+		done
+		return $RESULT
+	}
 fi
 
 kernelver()
@@ -388,10 +406,12 @@ run_cmd()
 	show "$message"; busy
 	shift
 	cd /
-	if errors=$(HOME=/tmp TMPDIR=/tmp $* 2>&1); then
+	if errors=$(HOME=/tmp TMPDIR=/tmp initlog -c "$*" 2>&1); then
 		ok
+		log_success "$1 $message"
 	else
 		fail
+		log_failed "$1 $message"
 		exit_code=1
 	fi
 	[ -n "$errors" ] && [ $exit_code -eq 1 -o $force_err -eq 1 ] && echo "$errors"
@@ -471,7 +491,7 @@ daemon()
 	# And start it up.
 	busy
 	cd /
-	if errors=$(umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK}; USER=root HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} $prog 2>&1); then
+	if errors=$(umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK}; USER=root HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
 		if [ -n "$waitname" -a -n "$waittime" ]; then
 			# Save basename.
 			base=$(basename "$waitname")
@@ -484,10 +504,12 @@ daemon()
 				checkpid $pid && sleep 1 || break
 			done
 		fi
+		log_success "$1 startup"
 		ok
 	else
 		exit_code=1
 		fail
+		log_failed "$1 startup"
 		[ -n "$errors" ] && echo "$errors"
 	fi
 	return $exit_code
@@ -559,8 +581,10 @@ killproc()
 			result=$?
 			if [ "$result" -eq 0 ]; then
 				fail
+				log_failed "$1 shutdown"
 			else
 				ok
+				log_success "$1 shutdown"
 			fi
 			result=$(( ! $result ))
 		else
@@ -570,17 +594,21 @@ killproc()
 				result=$?
 				if [ "$result" -eq 0 ]; then
 					ok
+					log_success "$1 got $killlevel"
 				else
 					result=7
 					fail
+					log_failed "$1 didn't get $killlevel"
 				fi
 			else
 				result=7
 				died
+				log_failed "$1 shutdown"
 			fi
 		fi
 	else
 		died
+		log_failed "$1 shutdown"
 		result=7
 	fi
 	
@@ -755,10 +783,12 @@ _modprobe()
 
 log_success ()
 {
+	initlog -n $0 -s "$1 $2" -e 1
 }
 
 log_failed ()
 {
+	initlog -n $0 -s "$1 $2" -e 2
 }
 
 # RedHat/Mandrake specific functions

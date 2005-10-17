@@ -6,6 +6,7 @@ man_MANS = \
 	consoletype.1 \
 	doexec.1 \
 	genhostid.1 \
+	initlog.1 \
 	ipcalc.1 \
 	netreport.1 \
 	usleep.1 \
