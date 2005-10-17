@@ -21,6 +21,7 @@ sbin_PROGRAMS =	\
 	getkey \
 	initlog \
 	loglevel \
+	minilogd \
 	netreport \
 	start-stop-daemon
 	

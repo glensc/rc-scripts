@@ -168,6 +168,38 @@ char **toArray(char *line, int *num) {
     return lines;
 }
 
+int startDaemon() {
+    int pid;
+    int rc;
+    
+    if ( (pid = fork()) == -1 ) {
+	perror("fork");
+	return -1;
+    }
+    if ( pid ) {
+	/* parent */
+	waitpid(pid,&rc,0);
+	if (WIFEXITED(rc)) {
+	  DDEBUG("minilogd returned %d!\n",WEXITSTATUS(rc));
+	  return WEXITSTATUS(rc);
+	}
+	else
+	  return -1;
+    } else {
+	int fd;
+	
+	fd=open("/dev/null",O_RDWR);
+	dup2(fd,0);
+	dup2(fd,1);
+	dup2(fd,2);
+        close(fd);
+	/* kid */
+	execlp("minilogd","minilogd",NULL);
+	perror("exec");
+	exit(-1);
+    }
+}
+
 int trySocket() {
 	int s;
 	struct sockaddr_un addr;
@@ -212,6 +244,7 @@ int logLine(struct logInfo *logEnt) {
     
 	
     if  ( ((stat(_PATH_LOG,&statbuf)==-1) || trySocket())
+	  && startDaemon()
 	) {
 	DDEBUG("starting daemon failed, pooling entry %d\n",logEntries);
 	logData=realloc(logData,(logEntries+1)*sizeof(struct logInfo));
