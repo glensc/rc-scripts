@@ -95,5 +95,8 @@ PROMPT=yes
 # Enable cpusets support?
 CPUSETS=no
 
+# Enable syslogging for rc-scripts
+RC_LOGGING=yes
+
 # This must be last line !
 # vi:syntax=sh:ts=8:sw=4
