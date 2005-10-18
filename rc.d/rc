@@ -145,7 +145,7 @@ if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
 	unset LC_ALL
 	TMPDIR=/dev/null
 	export TMPDIR
-	exec /etc/rc.d/rc.shutdown $runlevel
+	exec /etc/rc.d/rc.shutdown $runlevel $previous
 else
 	if is_yes "$RUN_LDCONFIG" || [ ! -f /etc/ld.so.cache ] ; then
 		if [ -x /sbin/ldconfig ]; then
