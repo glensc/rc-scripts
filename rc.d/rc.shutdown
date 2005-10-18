@@ -33,8 +33,6 @@ run_cmd "Sending all processes the KILL signal" killall5 -9
 
 [ -x /etc/rc.d/rc.acct ] && /etc/rc.d/rc.acct stop
 
-show "The system is halted"; ok
-
 if [ "$runlevel" = "0" ] ; then
 	show "The system is halted"; ok
 	eval halt -d -p
