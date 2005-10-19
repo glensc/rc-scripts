@@ -66,8 +66,14 @@ if [ "$argv2" != "chroot" ]; then
     export runlevel previous
 fi
 
+# Get first argument. Set new runlevel to this argument.
+[ -n "$argv1" ] && runlevel="$argv1"
+
 # if previous runlevel = current runlevel do nothing
 [ "$runlevel" = "$previous" ] && exit 0
+
+# Tell linuxconf what runlevel we are in
+[ -d /var/run -a -w /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
 
 # if runlevel is 0 (halt) or 6 (reboot) change to first
 # virtual console, and send messages to /dev/console 
@@ -133,16 +139,8 @@ else
 	export progress=0
 fi
 
-
 # set onlcr to avoid staircase effect and do not lock scrolling
 stty onlcr -ixon 0>&1
-
-# Get first argument. Set new runlevel to this argument.
-[ -n "$1" ] && runlevel="$argv1"
-
-# Tell linuxconf what runlevel we are in
-[ -d /var/run -a -w /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
-
 
 # Say something ;)
 af2=$(termput setaf $CRESMAN)
