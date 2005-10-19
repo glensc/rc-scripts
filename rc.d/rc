@@ -74,7 +74,6 @@ stty onlcr -ixon 0>&1
 # Tell linuxconf what runlevel we are in
 [ -d /var/run -a -w /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
 
-
 # Say something ;)
 af2=$(termput setaf $CRESMAN)
 af6=$(termput setaf $CBRACKETS)

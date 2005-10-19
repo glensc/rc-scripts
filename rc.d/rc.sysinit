@@ -63,7 +63,6 @@ if [ -x /sbin/restorecon ] && LC_ALL=C fgrep -q " /dev " /proc/mounts ; then
         /sbin/restorecon  -R /dev 2>/dev/null
 fi
 
-
 # Print welcome message
 nls "\t\t\t%sPowered by %sPLD Linux Distribution%s" "$(termput setaf $CPOWEREDBY)" "$(termput setaf $CPLD)" "$(termput op)"
 
