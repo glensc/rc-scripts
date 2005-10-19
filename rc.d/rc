@@ -56,11 +56,11 @@ runlevel=$2
 previous=$1
 export runlevel previous
 
+# Get first argument. Set new runlevel to this argument.
+[ -n "$argv1" ] && runlevel="$argv1"
+
 # if previous runlevel = current runlevel do nothing
 [ "$runlevel" = "$previous" ] && exit 0
-
-# Get first argument. Set new runlevel to this argument.
-[ -n "$1" ] && runlevel="$argv1"
 
 # if runlevel is not 0 (halt) or 6 (reboot) run rc.sysinit
 # BUT only if rc is run standalone (not run by init, as init will run rc.sysinit)
