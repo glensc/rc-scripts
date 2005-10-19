@@ -64,7 +64,7 @@ export runlevel previous
 
 # if runlevel is not 0 (halt) or 6 (reboot) run rc.sysinit
 # BUT only if rc is run standalone (not run by init, as init will run rc.sysinit)
-if [ "$previous" = "#" -a "$runlevel" != "0" -a "$runlevel" != "6" ]; then
+if [ "$previous" != "N" -a "$runlevel" != "0" -a "$runlevel" != "6" ]; then
     /etc/rc.d/rc.sysinit $runlevel
 fi
 
