@@ -317,15 +317,14 @@ fi
 calcprefix()
 {
 typeset OISF len olen bad prefix
-OISF=$IFS
-IFS="."
 prefix=0
 olen=8
 bad=0
 
-for i in $1; do
+for i in 1 2 3 4; do
     len=0
-    case $i in
+    j=$(echo "$1" | awk -F"." "{ print \$${i} }")
+    case "$j" in
 	255)	len=8 ;;
 	254)	len=7 ;;
 	252)	len=6 ;;
@@ -343,7 +342,6 @@ for i in $1; do
     olen=$len
 done
 
-IFS=$OIFS
 if [ "$bad" = "0" ]; then
     echo "$prefix"
 else
