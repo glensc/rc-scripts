@@ -19,43 +19,6 @@ export kscripts=45
 # we need /proc mounted before everything
 mount -n -o gid=17 -t proc /proc /proc
 
-# Read functions
-. /etc/rc.d/init.d/functions
-
-# sysfs is also needed before any other things (under kernel > 2.5)
-if grep -q sysfs /proc/filesystems 2>/dev/null ; then
-    mount -n -o gid=17 -t sysfs sysfs /sys
-fi
-
-# selinux
-if grep -q selinuxfs /proc/filesystems 2>/dev/null && ! grep -q selinuxfs /proc/mounts 2>/dev/null; then
-    mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
-fi
-
-if [ $(kernelverser) = "002006" ]; then
-	MODULES_CONF=/etc/modprobe.conf
-elif [ -r /etc/modules.conf ]; then
-	MODULES_CONF=/etc/modules.conf
-else
-	MODULES_CONF=/etc/conf.modules
-fi
-
-# PLD LiveCD support
-if [ -x /etc/rc.d/rc.live ]; then
-	/etc/rc.d/rc.live
-fi
-
-# Choose Hardware profile
-rm -f /var/run/hwprofile 2> /dev/null
-if [ -f /etc/sysconfig/hwprof ]; then
-    . /etc/sysconfig/hwprof
-    if is_yes "${HWPROFILES}" && [ -x /sbin/hwprofile -a -d /etc/sysconfig/hwprofiles/data ]; then
-       mount -n / -o rw,remount
-       /sbin/hwprofile -qf
-       mount -n / -o ro,remount
-    fi
-fi
-
 # NLS
 if [ -r /etc/sysconfig/i18n ]; then
 	. /etc/sysconfig/i18n
@@ -92,6 +55,43 @@ else
 	CONSOLE_LOGLEVEL=1
 	SET_SLINKS=yes
 	RUN_LDCONFIG=yes
+fi
+
+# Read functions
+. /etc/rc.d/init.d/functions
+
+# sysfs is also needed before any other things (under kernel > 2.5)
+if grep -q sysfs /proc/filesystems 2>/dev/null ; then
+    mount -n -o gid=17 -t sysfs sysfs /sys
+fi
+
+# selinux
+if grep -q selinuxfs /proc/filesystems 2>/dev/null && ! grep -q selinuxfs /proc/mounts 2>/dev/null; then
+    mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
+fi
+
+if [ $(kernelverser) = "002006" ]; then
+	MODULES_CONF=/etc/modprobe.conf
+elif [ -r /etc/modules.conf ]; then
+	MODULES_CONF=/etc/modules.conf
+else
+	MODULES_CONF=/etc/conf.modules
+fi
+
+# PLD LiveCD support
+if [ -x /etc/rc.d/rc.live ]; then
+	/etc/rc.d/rc.live
+fi
+
+# Choose Hardware profile
+rm -f /var/run/hwprofile 2> /dev/null
+if [ -f /etc/sysconfig/hwprof ]; then
+    . /etc/sysconfig/hwprof
+    if is_yes "${HWPROFILES}" && [ -x /sbin/hwprofile -a -d /etc/sysconfig/hwprofiles/data ]; then
+       mount -n / -o rw,remount
+       /sbin/hwprofile -qf
+       mount -n / -o ro,remount
+    fi
 fi
 
 # Disable splash when requested
