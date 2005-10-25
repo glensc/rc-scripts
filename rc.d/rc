@@ -21,9 +21,14 @@ argv2="$2"
 
 # Get terminal size of standard input of the system console
 [ -z "$CONSOLE" ] && CONSOLE=/dev/console
-set -- $(stty size < $CONSOLE 2>/dev/null)
-  LINES=$1
-COLUMNS=$2
+if [ -c $CONSOLE ]; then
+	set -- $(stty size < $CONSOLE 2>/dev/null)
+	  LINES=$1
+	COLUMNS=$2
+else
+	  LINES=
+	COLUMNS=
+fi
 export LINES COLUMNS CONSOLE
   
 # NLS
@@ -79,7 +84,8 @@ fi
 # virtual console, and send messages to /dev/console 
 # (it can be serial console too) 
 if [ "$COLUMNS" -gt 0 ]; then
-	if [ "$argv2" != "chroot" ] && [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
+	if [ "$argv2" != "chroot" ] && ! is_yes "$VSERVER" && \
+	   [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
 		CONSOLE=/dev/tty1
 		[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > $CONSOLE
 		exec 0<> /dev/console 1>&0 2>&0
@@ -93,7 +99,7 @@ fi
 # See if we want to be in user confirmation mode
 if [ "$previous" = "N" ]; then
 	if grep -qi confirm /proc/cmdline >/dev/null 2>/dev/null \
-		|| [ -f /var/run/confirm ]; then
+		|| [ -f /var/run/confirm ] || ! is_yes "$VSERVER"; then
 		rm -f /var/run/confirm
 		CONFIRM="yes"
 		nls "Entering interactive startup"
@@ -139,8 +145,16 @@ else
 	export progress=0
 fi
 
+if is_yes "$VSERVER"; then
+	# if runlevel is not 0 (halt) or 6 (reboot) run rc.sysinit
+	# BUT only if rc is run standalone (not run by init, as init will run rc.sysinit)
+	if [ "$previous" != "N" -a "$runlevel" != "0" -a "$runlevel" != "6" ]; then
+		/etc/rc.d/rc.sysinit $runlevel
+	fi
+fi
+
 # set onlcr to avoid staircase effect and do not lock scrolling
-stty onlcr -ixon 0>&1
+stty onlcr -ixon 0>&1 2>/dev/null
 
 # Say something ;)
 af2=$(termput setaf $CRESMAN)
@@ -233,7 +247,7 @@ if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
 	TMPDIR=/dev/null
 	export TMPDIR
 	if [ "$argv2" != "chroot" ]; then
-    	    exec /etc/rc.d/rc.shutdown $runlevel
+    	    exec /etc/rc.d/rc.shutdown $runlevel $previous
 	else
 	    exit 0
 	fi
@@ -258,4 +272,4 @@ unset af2 af6 af7
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh
