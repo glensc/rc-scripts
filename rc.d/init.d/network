@@ -175,6 +175,11 @@ case "$1" in
   start)
   	rc_splash "bootnetwork start"
 
+	if is_yes "$VSERVER"; then 
+		touch /var/lock/subsys/network
+		exit 0
+	fi
+						    
 	network_init
 
 	for i in $interfaces_boot $interfaces_vlan_boot $interfaces_sit_boot ; do
@@ -215,6 +220,11 @@ case "$1" in
 			   run_cmd "Unmounting CIFS filesystems" umount -at cifs
 			fi
 		fi
+	fi
+
+	if is_yes "$VSERVER"; then
+		rm -f /var/lock/subsys/network
+		exit 0
 	fi
 
 	for i in $tunnels; do
