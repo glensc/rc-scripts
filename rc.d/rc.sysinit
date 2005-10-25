@@ -16,11 +16,11 @@ export progress=0
 export sscripts=45
 export kscripts=45
 
-# Read functions
-. /etc/rc.d/init.d/functions
-
 # we need /proc mounted before everything
 mount -n -o gid=17 -t proc /proc /proc
+
+# Read functions
+. /etc/rc.d/init.d/functions
 
 # sysfs is also needed before any other things (under kernel > 2.5)
 if grep -q sysfs /proc/filesystems 2>/dev/null ; then
