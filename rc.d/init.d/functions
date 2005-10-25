@@ -155,7 +155,7 @@ termput()
 	else
 		tputavail=no
 	fi
-	if is_yes "$FASTRC" || is_no "$tputavail"
+	if is_yes "$FASTRC" || is_no "$tputavail"; then
 		case "$1" in
 		  hpa)
 			echo -ne "\033[$(($2+1))G"
