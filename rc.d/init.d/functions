@@ -136,8 +136,16 @@ kernelvermser()
 # Colors workaround
 termput()
 {
-	if is_yes "$FASTRC" || [ ! -d /usr/share/terminfo ] || \
-	   [ ! -x /usr/bin/tput -a ! -x /bin/tput ]; then
+	typeset tputavail
+
+	if [ -d /usr/share/terminfo ] && [ -x /usr/bin/tput -o -x /bin/tput ] ; then
+		tputavail=yes
+		# check if we are on proper terminal
+		tput longname >/dev/null 2>&1 || tputavail=no
+	else
+		tputavail=no
+	fi
+	if is_yes "$FASTRC" || is_no "$tputavail"
 		case "$1" in
 		  hpa)
 			echo -ne "\033[$(($2+1))G"
@@ -162,9 +170,6 @@ termput()
 			;;
 		esac
 	else
-		# check if we are on proper terminal
-		tput longname > /dev/null 2>&1 || return
-
 		case "$1" in
 		  hpa | cuu* | el)
 			tput "$@"
