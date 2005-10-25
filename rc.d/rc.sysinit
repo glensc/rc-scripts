@@ -23,12 +23,12 @@ export kscripts=45
 mount -n -o gid=17 -t proc /proc /proc
 
 # sysfs is also needed before any other things (under kernel > 2.5)
-if grep -q sysfs /proc/filesystems ; then
+if grep -q sysfs /proc/filesystems 2>/dev/null ; then
     mount -n -o gid=17 -t sysfs sysfs /sys
 fi
 
 # selinux
-if grep -q selinuxfs /proc/filesystems && ! grep -q selinuxfs /proc/mounts; then
+if grep -q selinuxfs /proc/filesystems 2>/dev/null && ! grep -q selinuxfs /proc/mounts 2>/dev/null; then
     mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
 fi
 
@@ -109,7 +109,7 @@ if [ -n "$selinuxfs" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
         fi
 fi
 
-if [ -x /sbin/restorecon ] && LC_ALL=C fgrep -q " /dev " /proc/mounts ; then
+if [ -x /sbin/restorecon ] && LC_ALL=C fgrep -q " /dev " /proc/mounts 2>/dev/null ; then
         /sbin/restorecon  -R /dev 2>/dev/null
 fi
 
@@ -148,7 +148,7 @@ if [ -e /dev/.devfsd -a -x /sbin/devfsd ]; then
 fi
 
 # cpuset support (mounted unconditionally, shouldn't be a problem)
-if grep -q cpuset /proc/filesystems ; then
+if grep -q cpuset /proc/filesystems 2>/dev/null ; then
     mount -n -t cpuset none /dev/cpuset
 fi
 
@@ -172,7 +172,7 @@ if [ -f /etc/sysconfig/clock ]; then
 	fi
 fi
 
-if grep "system serial" /proc/cpuinfo | grep -q MILO ; then
+if grep "system serial" /proc/cpuinfo 2>/dev/null | grep -q MILO 2>/dev/null ; then
 	ARC=true
 fi
 
@@ -242,11 +242,11 @@ fi
 
 needusbstorage=
 if [ "$usb" = "1" ]; then
-	needusbstorage=$(LC_ALL=C cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08")
+	needusbstorage=$(LC_ALL=C cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08" 2>/dev/null)
 	if [ "$(kernelverser)" -lt "002006" ]; then
-    	    LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2> /dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
-    	    mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02")
-    	    kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01")
+    	    LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
+    	    mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02" 2>/dev/null)
+    	    kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01" 2>/dev/null)
     	    if [ -n "$kbdoutput" ]; then
 		run_cmd "Initializing USB keyboard" modprobe keybdev
     	    fi
@@ -257,11 +257,11 @@ if [ "$usb" = "1" ]; then
 fi
 
 # Setup hdparm thing (if exists and is needed)
-if ! grep -iq nohdparm /proc/cmdline; then
+if ! grep -iq nohdparm /proc/cmdline 2>/dev/null; then
 	[ -x /etc/rc.d/rc.hdparm ] && /etc/rc.d/rc.hdparm
 fi
 
-if [ -f /fastboot ] || grep -iq "fastboot" /proc/cmdline 2> /dev/null ; then
+if [ -f /fastboot ] || grep -iq "fastboot" /proc/cmdline 2>/dev/null ; then
 	fastboot=yes
 else
 	fastboot=
@@ -278,7 +278,7 @@ if [ -f /forcefsck ]; then
 fi
 
 _RUN_QUOTACHECK=0
-_ROOTFS_TYPE=$(grep " / " /proc/mounts | awk '{ print $3 }')
+_ROOTFS_TYPE=$(grep " / " /proc/mounts 2>/dev/null | awk '{ print $3 }')
 
 if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ]; then 
 	show "Checking root filesystem"; started
@@ -327,7 +327,7 @@ if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ];
 fi
 
 # Unmount the initrd, if necessary
-if LC_ALL=C grep -q /initrd /proc/mounts && ! LC_ALL=C grep -q /initrd/loopfs /proc/mounts ; then
+if LC_ALL=C grep -q /initrd /proc/mounts 2>/dev/null && ! LC_ALL=C grep -q /initrd/loopfs /proc/mounts 2>/dev/null ; then
     if [ -e /initrd/dev/.devfsd ]; then
 	umount /initrd/dev
     fi
@@ -336,7 +336,7 @@ if LC_ALL=C grep -q /initrd /proc/mounts && ! LC_ALL=C grep -q /initrd/loopfs /p
 fi
 		      
 # Check for arguments 
-if grep -iq nopnp /proc/cmdline; then
+if grep -iq nopnp /proc/cmdline 2>/dev/null; then
 	PNP=
 else
 	PNP=yes
@@ -351,7 +351,7 @@ if [ -n "$PNP" ]; then
 	/sbin/modprobe -k isa-pnp 2> /dev/null
 	if [ -e /proc/isapnp -a -f /etc/isapnp/isapnp-kernel.conf ]; then
 	    show "Setting up ISA PNP devices (kernelspace pnp)"; busy
-	    grep -v "^#" /etc/isapnp/isapnp-kernel.conf > /proc/isapnp && (deltext; ok) || (deltext; fail)
+	    grep -v "^#" /etc/isapnp/isapnp-kernel.conf 2>/dev/null >/proc/isapnp && (deltext; ok) || (deltext; fail)
 	fi
     fi
 fi
@@ -384,15 +384,15 @@ mount -f /proc
 [ -f /proc/bus/usb/devices ] && mount -f -t usbfs usbfs /proc/bus/usb
 [ -e /dev/.devfsd ] && mount -f -t devfs devfs /dev
 
-if grep -q sysfs /proc/filesystems ; then
+if grep -q sysfs /proc/filesystems 2>/dev/null ; then
 	mount -f -t sysfs sysfs /sys
 fi
 
-if grep -q selinuxfs /proc/filesystems ; then
+if grep -q selinuxfs /proc/filesystems 2>/dev/null ; then
     	mount -f -t selinuxfs selinuxfs /selinux
 fi
 
-if grep -q cpuset /proc/filesystems ; then
+if grep -q cpuset /proc/filesystems 2>/dev/null ; then
     mount -n -t cpuset none /dev/cpuset
 fi
 
@@ -417,7 +417,7 @@ fi
 
 if [ ! -f /proc/modules ]; then
 	USEMODULES=
-elif ! grep -iq nomodules /proc/cmdline; then
+elif ! grep -iq nomodules /proc/cmdline 2>/dev/null; then
 	USEMODULES=y
 else
 	USEMODULES=
@@ -471,19 +471,19 @@ if ! grep -iq "nofirewire" /proc/cmdline 2>/dev/null ; then
 		[ "$alias" = "off" ] && continue
 		run_cmd "$(nls 'Initializing firewire controller') ($alias)" /sbin/modprobe $alias
 	    done
-	    LC_ALL=C grep -E "SBP2" /proc/bus/ieee1394/devices 2> /dev/null && /sbin/modprobe -s sbp2 > /dev/null 2>&1 
+	    LC_ALL=C grep -E "SBP2" /proc/bus/ieee1394/devices 2>/dev/null && /sbin/modprobe -s sbp2 > /dev/null 2>&1 
 	fi
 fi    
     
 # Load sound modules if they need persistent DMA buffers
 if grep -q "^options sound dmabuf=1" "$MODULES_CONF" 2>/dev/null ; then
 	RETURN=0
-	alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound[[:space:]]+" | awk '{ print $3 }')
+	alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
 	if [ -n "$alias" -a "$alias" != "off" ] ; then
 		run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
 		RETURN=$?
 	fi
-	alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound-slot-0[[:space:]]+" | awk '{ print $3 }')
+	alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound-slot-0[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
 	if [ -n "$alias" -a "$alias" != "off" ] ; then
 		run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
 		RETURN=$?
@@ -555,7 +555,7 @@ if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
 	    rc=0
 	    
 	    if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
-		if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf); then
+		if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null); then
 		    run_cmd "Starting up RAID devices" /sbin/mdadm --assemble --scan
 		    rc=$?
 		    [ "$rc" -eq 0 ] && goraidtab=0 && golvm=1
@@ -564,10 +564,10 @@ if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
 	    
 	    if [ -f /etc/raidtab -a "$goraidtab" -eq 1 ]; then
 		
-		for i in $(grep -v "^#" /etc/raidtab | grep "raiddev" | awk '{print $2}') ; do
+		for i in $(grep -v "^#" /etc/raidtab 2>/dev/null | grep "raiddev" 2>/dev/null | awk '{print $2}') ; do
 		    golvm=1
 		    RAIDDEV=$(basename $i)
-		    RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat)
+		    RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat 2>/dev/null)
 		    show "Starting up RAID device %s" $RAIDDEV
 		    busy
 		    if [ -z "$RAIDSTAT" ]; then
@@ -637,7 +637,7 @@ fi
 
 _RUN_QUOTACHECK=0
 # Check filesystems
-if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline; then
+if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline 2>/dev/null; then
     	rc_splash "fsck start"
 	show "Checking filesystems"; started
 	initlog -c "fsck -C -T -R -A -a $fsckoptions"
@@ -681,7 +681,7 @@ run_cmd "Mounting local filesystems" mount -a -t nonfs,smbfs,ncpfs,proc,cifs -O 
 # before mount - that's where the password is entered.
 # mount is buggy - when remounting loopback filesystem, loop=XXX
 # option is removed from /etc/mtab
-if [ -z "$fastboot" ] && grep "^[^#].*encryption=" /etc/fstab | grep -v -q "noauto"; then
+if [ -z "$fastboot" ] && grep "^[^#].*encryption=" /etc/fstab 2>/dev/null | grep -v -q "noauto" 2>/dev/null; then
 	show "Checking encrypted filesystems"; started
 	LOOPLIST="$(awk '
 	FILENAME=="/proc/mounts" {
@@ -826,7 +826,7 @@ run_cmd "Enabling swap space" /bin/true
 # If a SCSI tape has been detected, load the st module unconditionally
 # since many SCSI tapes don't deal well with st being loaded and unloaded
 if [ -f /proc/scsi/scsi ] && grep -q 'Type:   Sequential-Access' /proc/scsi/scsi 2>/dev/null ; then
-	if grep -qv ' 9 st' /proc/devices; then
+	if grep -qv ' 9 st' /proc/devices 2>/dev/null; then
 		if [ -n "$USEMODULES" ] ; then
 			# Try to load the module. If it fails, ignore it...
 			insmod -p st >/dev/null 2>&1 && modprobe -s st >/dev/null 2>&1

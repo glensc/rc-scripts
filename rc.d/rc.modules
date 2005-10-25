@@ -13,9 +13,9 @@ kerneleq=$(awk '{split($3,v,".");OFS=".";print(v[1],v[2],v[3]);}' /proc/version)
 
 # Loop over every line in /etc/modules.
 ( \
-	[ -f /etc/modules ] && egrep -v "^(#|[[:blank:]]*#)" /etc/modules; \
-	[ -f "/etc/modules.${kernel}" ] && egrep -v "^(#|[[:blank:]]*#)" "/etc/modules.${kernel}"; \
-	[ -f "/etc/modules.${kerneleq}" ] && egrep -v "^(#|[[:blank:]]*#)" "/etc/modules.${kerneleq}"; \
+	[ -f /etc/modules ] && egrep -v "^(#|[[:blank:]]*#)" /etc/modules 2>/dev/null; \
+	[ -f "/etc/modules.${kernel}" ] && egrep -v "^(#|[[:blank:]]*#)" "/etc/modules.${kernel}" 2>/dev/null; \
+	[ -f "/etc/modules.${kerneleq}" ] && egrep -v "^(#|[[:blank:]]*#)" "/etc/modules.${kerneleq}" 2>/dev/null; \
 	echo \
 ) | # make sure there is a LF at the end
 while read module args
