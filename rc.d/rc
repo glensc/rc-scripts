@@ -21,7 +21,7 @@ argv2="$2"
 
 # Get terminal size of standard input of the system console
 [ -z "$CONSOLE" ] && CONSOLE=/dev/console
-set -- $(stty size < $CONSOLE)
+set -- $(stty size < $CONSOLE 2>/dev/null)
   LINES=$1
 COLUMNS=$2
 export LINES COLUMNS CONSOLE
