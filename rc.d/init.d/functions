@@ -51,6 +51,16 @@ CCHARS="$NORMAL"	# Color of these characters (look at /etc/sysconfig/init-colors
 
 [ -z "$COLUMNS" ] && COLUMNS=80
 
+if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
+	_ctx="$(awk '/s_context:.*/ { print $2 }' /proc/self/status 2>/dev/null)"
+	if [ -z "$_ctx" -o "$_ctx" = "0" ]; then
+		VSERVER=no
+	else
+		VSERVER=yes
+	fi
+	unset _ctx
+fi
+
 is_yes()
 {
 	# Test syntax
@@ -251,7 +261,7 @@ rc_splash()
 
 	action="$1"
 
-	if ! is_no "$BOOT_SPLASH"; then
+	if ! is_no "$BOOT_SPLASH" && ! is_yes "$VSERVER"; then
 		[ -x /bin/splash ] && /bin/splash "$action"
 	fi
 
