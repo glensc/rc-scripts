@@ -11,7 +11,7 @@
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
-# 
+#
 # $Id$
 
 # Set the path.
@@ -23,10 +23,10 @@ NLS_DOMAIN="rc-scripts"
 . /etc/rc.d/init.d/functions
 
 case "$1" in
-   stop*)
+  stop*)
 	exit 0
 	;;
-   start*)
+  start*)
 # Kill all processes.
 	[ "${BASH+bash}" = bash ] && enable kill
 
@@ -46,15 +46,15 @@ fi
 
 # If they want to run something in single user mode, might as well run it...
 for i in /etc/rc.d/rc1.d/S[0-9][0-9]*; do
-        # Check if the script is there.
-        [ ! -f $i ] && continue
+	# Check if the script is there.
+	[ ! -f $i ] && continue
 
-       # Don't run [KS]??foo.{rpmsave,rpmorig} scripts
-       [ "${i%.rpmsave}" != "${i}" ] && continue
-       [ "${i%.rpmorig}" != "${i}" ] && continue
-       [ "${i%.rpmnew}" != "${i}" ] && continue
-       [ "$i" = "/etc/rc.d/rc1.d/S00single" ] && continue
-       $i start
+	# Don't run [KS]??foo.{rpmsave,rpmorig} scripts
+	[ "${i%.rpmsave}" != "${i}" ] && continue
+	[ "${i%.rpmorig}" != "${i}" ] && continue
+	[ "${i%.rpmnew}" != "${i}" ] && continue
+	[ "$i" = "/etc/rc.d/rc1.d/S00single" ] && continue
+	$i start
 done
 
 	# Now go to the single user level.
@@ -64,4 +64,4 @@ done
 esac
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

@@ -22,21 +22,21 @@ get_ppp_device_and_pid
 
 # (QoS) Delete root queueing discipline
 if [ -n "${BANDWIDTH_OUT}" ]; then
-    if [ "${QDISC_CLASS}" = "htb" -o "${QDISC_CLASS}" = "cbq" ]; then
-	tc qdisc del dev ${REALDEVICE} root
-    elif [ -z "${QDISC}" -o "${QDISC}" = "tbf" ]; then
-	tc qdisc del dev ${REALDEVICE} root
-    elif [ -n "${QDISC}" ]; then
-	tc qdisc del dev ${REALDEVICE} root
-    fi
+	if [ "${QDISC_CLASS}" = "htb" -o "${QDISC_CLASS}" = "cbq" ]; then
+		tc qdisc del dev ${REALDEVICE} root
+	elif [ -z "${QDISC}" -o "${QDISC}" = "tbf" ]; then
+		tc qdisc del dev ${REALDEVICE} root
+	elif [ -n "${QDISC}" ]; then
+		tc qdisc del dev ${REALDEVICE} root
+	fi
 else
-    if [ -n "${QDISC}" ]; then
-	tc qdisc del dev ${REALDEVICE} root
-    fi
+	if [ -n "${QDISC}" ]; then
+		tc qdisc del dev ${REALDEVICE} root
+	fi
 fi
 
 if [ -n "${BANDWIDTH_IN}" ]; then
-    tc qdisc del dev ${REALDEVICE} ingress
+	tc qdisc del dev ${REALDEVICE} ingress
 fi
 
 # execute run_down() function (if available in device configuration file)
@@ -48,4 +48,4 @@ do_netreport
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

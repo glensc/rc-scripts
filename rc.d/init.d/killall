@@ -1,25 +1,25 @@
 #!/bin/sh
-# 
-# killall        Script for system downing
 #
-# description:   kill em all
+# killall	Script for system downing
+#
+# description:	kill em all
 #
 # $Id$
-# Bring down all unneeded services that are still running (there shouldn't 
+# Bring down all unneeded services that are still running (there shouldn't
 # be any, so this is just a sanity check)
 
 case "$1" in
   start*)
-        exit 0
-        ;;
+	exit 0
+	;;
   stop*)
 	for i in /var/lock/subsys/*; do
 		# Check if the script is there.
 		[ ! -f $i ] && continue
-	
+
 		# Get the subsystem name.
 		subsys=${i#/var/lock/subsys/}
-	
+
 		# Bring the subsystem down.
 		if [ -f /etc/rc.d/init.d/$subsys.init ]; then
 			/etc/rc.d/init.d/$subsys.init stop
@@ -31,4 +31,4 @@ case "$1" in
 esac
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

@@ -22,21 +22,21 @@ case "$1" in
 	if is_yes "$DELAY_LOGIN" && [ -f /etc/nologin.boot ]; then
 		run_cmd "Allowing users to login" rm -f /etc/nologin /etc/nologin.boot
 	fi
-        ;;
+	;;
   stop)
 	# /etc/nologin when shutting down system
 	if is_yes "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
-	        nls "System shutdown in progress \n" > /etc/nologin
-	        chmod 644 /etc/nologin
-	        cp -fp /etc/nologin /etc/nologin.boot
+		nls "System shutdown in progress \n" > /etc/nologin
+		chmod 644 /etc/nologin
+		cp -fp /etc/nologin /etc/nologin.boot
 	fi
-        ;;
+	;;
   *)
-        echo "Usage: $0 {start|stop}"
-        exit 1
+	echo "Usage: $0 {start|stop}"
+	exit 1
 esac
 
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

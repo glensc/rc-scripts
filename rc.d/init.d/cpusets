@@ -2,8 +2,8 @@
 #
 # cpusets	Create/remove cpusets
 #
-# chkconfig:    12345 01 99
-# description:  Creates/Removes all cpu sets configured to \
+# chkconfig:	12345 01 99
+# description:	Creates/Removes all cpu sets configured to \
 #		start at boot time.
 #
 # probe:	true
@@ -19,54 +19,54 @@ NLS_DOMAIN="rc-scripts"
 . /etc/rc.d/init.d/functions
 
 if is_yes "${CPUSETS}" ; then
-    if ! grep -q "/dev/cpuset" /proc/mounts ; then
-	nls "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted" >&2
-    fi
+	if ! grep -q "/dev/cpuset" /proc/mounts ; then
+		nls "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted" >&2
+	fi
 else
-    exit 0
+	exit 0
 fi
 
 cpuset_create()
 {
-    local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
+	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
 
-    . /etc/sysconfig/cpusets/cpuset-$i
+	. /etc/sysconfig/cpusets/cpuset-$i
 
-    if mkdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
-	[ -n "$CPUS" ] && echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
-	[ -n "$MEMS" ] && echo "$MEMS" >/dev/cpuset/"$NAME"/mems
-	[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
-	[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
-	[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
-	[ -n "$TASKS" ] && echo "$TASKS" >/dev/cpuset/"$NAME"/tasks
-	return 0
-    fi
-    return 1
+	if mkdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
+		[ -n "$CPUS" ] && echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
+		[ -n "$MEMS" ] && echo "$MEMS" >/dev/cpuset/"$NAME"/mems
+		[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
+		[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
+		[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
+		[ -n "$TASKS" ] && echo "$TASKS" >/dev/cpuset/"$NAME"/tasks
+		return 0
+	fi
+	return 1
 }
 
 cpuset_remove()
 {
-    local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
+	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
 
-    . /etc/sysconfig/cpusets/cpuset-$i
+	. /etc/sysconfig/cpusets/cpuset-$i
 
-    # This MUST be rmdir (not rm -rf)
-    if rmdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
-	return 0
-    else
-	return 1
-    fi
+	# This MUST be rmdir (not rm -rf)
+	if rmdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
+		return 0
+	else
+		return 1
+	fi
 }
 
 cpuset_empty()
 {
-    if [ $(cat /dev/cpuset/$1/tasks 2>/dev/null | wc -c) -eq 0 ] ; then
-	# true returns zero
-	return 0
-    else
-	# false returns one
-	return 1
-    fi
+	if [ $(cat /dev/cpuset/$1/tasks 2>/dev/null | wc -c) -eq 0 ] ; then
+		# true returns zero
+		return 0
+	else
+		# false returns one
+		return 1
+	fi
 }
 
 # find all the interfaces besides loopback.
@@ -76,7 +76,7 @@ cpusets_boot=$((
 	cd /etc/sysconfig/cpusets && ls -1 cpuset* | \
 	egrep 'cpuset-[a-z0-9\.:]+$' | \
 	for i in `cat`; do \
-	    ONBOOT=""; . /etc/sysconfig/cpusets/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+		ONBOOT=""; . /etc/sysconfig/cpusets/"$i"; is_yes "$ONBOOT" && echo "$i"; \
 	done | \
 	awk ' { gsub(/cpuset-/,NIL); print $0 } ') 2> /dev/null)
 
@@ -88,47 +88,47 @@ case "$1" in
 	for i in $cpusets_boot ; do
 		show "$(nls -n "Creating cpuset %s" "$i")"
 		if cpuset_create $i ; then
-		    ok
+			ok
 		else
-		    fail
+			fail
 		fi
 	done
 
-        touch /var/lock/subsys/cpusets
-        ;;
+	touch /var/lock/subsys/cpusets
+	;;
   stop)
 	for i in $cpusets_boot ; do
 		show "$(nls -n "Removing cpuset %s" "$i")"
 		busy
 		if cpuset_empty $i ; then
-		    if cpuset_remove $i ; then
-		        ok
-		    else
-			fail
-		    fi
+			if cpuset_remove $i ; then
+				ok
+			else
+				fail
+			fi
 		else
-		    fail
+			fail
 		fi
 	done
 
-        rm -f /var/lock/subsys/cpusets
-        ;;
+	rm -f /var/lock/subsys/cpusets
+	;;
   status)
 	nls "Configured cpusets:"
 	echo "$cpusets_boot"
 	echo
 	nls "Currently empty cpusets:"
 	for i in `ls -1 /dev/cpuset` ; do
-	    if [ -d /dev/cpuset/$i ] ; then
-		cpuset_empty $i && echo $i
-	    fi
+		if [ -d /dev/cpuset/$i ] ; then
+			cpuset_empty $i && echo $i
+		fi
 	done
 	echo
 	nls "Currently active cpusets:"
 	for i in `ls -1 /dev/cpuset` ; do
-	    if [ -d /dev/cpuset/$i ] ; then
-		cpuset_empty $i || echo $i
-	    fi
+		if [ -d /dev/cpuset/$i ] ; then
+			cpuset_empty $i || echo $i
+		fi
 	done
 	echo
 	;;
@@ -137,11 +137,11 @@ case "$1" in
 	$0 start
 	;;
   *)
-        echo "Usage: $0 {start|stop|restart|status}"
-        exit 1
+	echo "Usage: $0 {start|stop|restart|status}"
+	exit 1
 esac
 
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #    tnlup - tunnel configuration script
-#    Copyright (C) 1999, 2000  Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+#    Copyright (C) 1999, 2000 Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@
 DEV=$1
 
 [ -z "$DEV" ] && {
-    nls "Usage: %s <device name>" "tnlup" >&2
-    exit 1
+	nls "Usage: %s <device name>" "tnlup" >&2
+	exit 1
 }
 
 TNLCONFIGS=$(ls /etc/sysconfig/interfaces/tnlcfg-* 2>/dev/null | egrep -v '~$')
@@ -36,38 +36,38 @@ TNLCONFIGS=$(egrep -L '^#!' $TNLCONFIGS)
 CONFIG=$(egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS)
 
 if [ -z "$CONFIG" ]; then
-    CONFIG="$DEV"
+	CONFIG="$DEV"
 fi
 
 if false; then
-[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=tnlcfg-$CONFIG
-[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
-    echo "usage: tnlup <device name>" >&2
-    exit 1
-}
+	[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=tnlcfg-$CONFIG
+	[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
+		echo "usage: tnlup <device name>" >&2
+		exit 1
+	}
 fi
 
 source_config
 
 if [ "foo$2" = "fooboot" -a -n "${ONBOOT}" ] && is_no "${ONBOOT}"; then
-    exit
+	exit
 fi
 
 case "${MODE}" in
-    sit|four)
+  sit|four)
 	is_no "${IPV6_NETWORKING}" && exit 0
 	is_no "${IPV6_TUNNELCONFIG}" && exit 0
 	[ "${MODE}" = "four" ] && is_module "fourtun" && modprobe -s -k fourtun
 	;;
-    ipip)
+  ipip)
 	is_no "${IPV4_NETWORKING}" && exit 0
 	is_module "ipip" && modprobe -s -k ipip
 	;;
-    gre)
+  gre)
 	is_no "${IPV4_NETWORKING}" && exit 0
 	is_module "ip_gre" && modprobe -s -k ip_gre
 	;;
-    ipxip|ipipx)
+  ipxip|ipipx)
 	is_no "${IPX}" && exit 0
 	;;
 esac
@@ -83,17 +83,17 @@ RESULT=0
 [ -n "${ENCAPLIMIT}" ] && ENCAPLIMIT="encaplimit ${ENCAPLIMIT}"
 
 if is_yes "${SEQ}"; then
-    SEQ=seq
+	SEQ=seq
 else
-    is_yes "${ISEQ}" && SEQ=iseq
-    is_yes "${OSEQ}" && SEQ="${SEQ} oseq"
+	is_yes "${ISEQ}" && SEQ=iseq
+	is_yes "${OSEQ}" && SEQ="${SEQ} oseq"
 fi
 
 if is_yes "${CSUM}"; then
-    CSUM=csum
+	CSUM=csum
 else
-    is_yes "${ICSUM}" && CSUM=icsum
-    is_yes "${ICSUM}" && CSUM="${SEQ} ocsum"
+	is_yes "${ICSUM}" && CSUM=icsum
+	is_yes "${ICSUM}" && CSUM="${SEQ} ocsum"
 fi
 
 is_yes "${ISEQ}" && ISEQ=iseq
@@ -101,38 +101,38 @@ is_yes "${ISEQ}" && ISEQ=iseq
 [ -z "${PMTUDISC}" -a "${TTL}" != "0" -a "${TTL}" != "inherit" ] && PMTUDISC=yes
 
 if is_yes "${PMTUDISC}"; then
-    PMTUDISC=pmtudisc
+	PMTUDISC=pmtudisc
 elif is_no "${PMTUDISC}"; then
-    PMTUDISC=nopmtudisc
+	PMTUDISC=nopmtudisc
 fi
 
 if [ -n "${KEY}" ]; then
-    IKEY=""
-    OKEY=""
+	IKEY=""
+	OKEY=""
 fi
 
 case "${MODE}" in
-    ipip|sit)
+  ipip|sit)
 	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} \
-	    remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV}
+		remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV}
 	RESULT=$?
 	;;
-    gre)
+  gre)
 	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} \
-	    remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV} \
-	    ${CSUM} ${ISEQ} ${KEY} ${IKEY} ${OKEY}
+		remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV} \
+		${CSUM} ${ISEQ} ${KEY} ${IKEY} ${OKEY}
 	RESULT=$?
 	;;
-    fourtun)
+  fourtun)
 	fourcfg add ${DEVICE} saddr ${LOCALADDR} daddr ${REMOTEADDR} \
-	    ${PRIORITY} ${HOPLIMIT} ${ENCAPLIMIT}
+		${PRIORITY} ${HOPLIMIT} ${ENCAPLIMIT}
 	RESULT=$?
 	;;
-    ipxip|ipipx)
+  ipxip|ipipx)
 	;;
 esac
 
 exit $RESULT
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

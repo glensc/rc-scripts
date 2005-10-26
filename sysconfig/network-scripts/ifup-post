@@ -21,35 +21,35 @@ get_ppp_device_and_pid
 
 # Simple QoS support (bandwidth limit)
 if [ -n "${BANDWIDTH_OUT}" ]; then
-    if [ "${QDISC_CLASS}" = "htb" -o "${QDISC_CLASS}" = "cbq" ]; then
-        case "${QDISC_CLASS}" in
-            htb)
-                tc qdisc add dev ${REALDEVICE} root handle 1: htb default 10
-                tc class add dev ${REALDEVICE} parent 1: classid 1:10 htb rate ${BANDWIDTH_OUT}kbit ceil ${BANDWIDTH_OUT}kbit
-                [ -n "${QDISC}" ] && tc qdisc add dev ${REALDEVICE} parent 1:10 ${QDISC}
-                ;;
-            cbq)
-		# FIXME: hardcoded ethernet speed (bandwidth)
-                tc qdisc add dev ${REALDEVICE} root handle 1: cbq bandwidth 100000kbit cell 8 avpkt 1000 mpu 64
-                tc class add dev ${REALDEVICE} parent 1: classid 1:10 cbq bandwidth 100000kbit rate ${BANDWIDTH_OUT}kbit maxburst 5 avpkt 1000 allot 1514 bounded
-                [ -n "${QDISC}" ] && tc qdisc add dev ${REALDEVICE} parent 1:10 ${QDISC}
-		tc filter add dev ${REALDEVICE} protocol ip parent 1: u32 match ip src 0.0.0.0/0 flowid 1:10
-                ;;
-        esac
-    elif [ -z "${QDISC}" -o "${QDISC}" = "tbf" ]; then
-	tc qdisc add dev ${REALDEVICE} root tbf rate ${BANDWIDTH_OUT}kbit latency 50ms burst 51200
-    elif [ -n "${QDISC}" ]; then
-	tc qdisc add dev ${REALDEVICE} root ${QDISC}
-    fi
+	if [ "${QDISC_CLASS}" = "htb" -o "${QDISC_CLASS}" = "cbq" ]; then
+		case "${QDISC_CLASS}" in
+		  htb)
+			tc qdisc add dev ${REALDEVICE} root handle 1: htb default 10
+			tc class add dev ${REALDEVICE} parent 1: classid 1:10 htb rate ${BANDWIDTH_OUT}kbit ceil ${BANDWIDTH_OUT}kbit
+			[ -n "${QDISC}" ] && tc qdisc add dev ${REALDEVICE} parent 1:10 ${QDISC}
+			;;
+		  cbq)
+			# FIXME: hardcoded ethernet speed (bandwidth)
+			tc qdisc add dev ${REALDEVICE} root handle 1: cbq bandwidth 100000kbit cell 8 avpkt 1000 mpu 64
+			tc class add dev ${REALDEVICE} parent 1: classid 1:10 cbq bandwidth 100000kbit rate ${BANDWIDTH_OUT}kbit maxburst 5 avpkt 1000 allot 1514 bounded
+			[ -n "${QDISC}" ] && tc qdisc add dev ${REALDEVICE} parent 1:10 ${QDISC}
+			tc filter add dev ${REALDEVICE} protocol ip parent 1: u32 match ip src 0.0.0.0/0 flowid 1:10
+			;;
+		esac
+	elif [ -z "${QDISC}" -o "${QDISC}" = "tbf" ]; then
+		tc qdisc add dev ${REALDEVICE} root tbf rate ${BANDWIDTH_OUT}kbit latency 50ms burst 51200
+	elif [ -n "${QDISC}" ]; then
+		tc qdisc add dev ${REALDEVICE} root ${QDISC}
+	fi
 else
-    if [ -n "${QDISC}" ]; then
-	tc qdisc add dev ${REALDEVICE} root ${QDISC}
-    fi
+	if [ -n "${QDISC}" ]; then
+		tc qdisc add dev ${REALDEVICE} root ${QDISC}
+	fi
 fi
 
 if [ -n "${BANDWIDTH_IN}" ]; then
-    tc qdisc add dev ${REALDEVICE} handle ffff: ingress
-    tc filter add dev ${REALDEVICE} parent ffff: protocol ip prio 50 u32 match ip src 0.0.0.0/0 police rate ${BANDWIDTH_IN}kbit burst 10k drop flowid :3
+	tc qdisc add dev ${REALDEVICE} handle ffff: ingress
+	tc filter add dev ${REALDEVICE} parent ffff: protocol ip prio 50 u32 match ip src 0.0.0.0/0 police rate ${BANDWIDTH_IN}kbit burst 10k drop flowid :3
 fi
 
 /etc/sysconfig/network-scripts/ifup-aliases ${CONFIG}
@@ -58,14 +58,14 @@ fi
 
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
-    IPADDR=$(ip -f inet addr show dev ${DEVICE} | 
-	    awk '/inet/ { print $2 }' |awk -F"/" '{ print $1 }')
-    eval $(/bin/ipcalc --silent --hostname ${IPADDR}) && set_hostname $HOSTNAME
+	IPADDR=$(ip -f inet addr show dev ${DEVICE} |
+		awk '/inet/ { print $2 }' |awk -F"/" '{ print $1 }')
+	eval $(/bin/ipcalc --silent --hostname ${IPADDR}) && set_hostname $HOSTNAME
 fi
 
 # run tleds software
 if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
-    /usr/bin/tleds -qc "$DEVICE"
+	/usr/bin/tleds -qc "$DEVICE"
 fi
 
 # execute run_up() function (if available in device configuration file)
@@ -77,4 +77,4 @@ do_netreport
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

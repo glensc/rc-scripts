@@ -2,8 +2,8 @@
 #
 # network	Bring up/down networking
 #
-# chkconfig:    2345 10 90
-# description:  Activates/Deactivates all network interfaces configured to \
+# chkconfig:	2345 10 90
+# description:	Activates/Deactivates all network interfaces configured to \
 #		start at boot time.
 #
 # probe:	true
@@ -125,8 +125,8 @@ if [ -n "$(grep "^BOOTPRIO=" /etc/sysconfig/interfaces/ifcfg* 2> /dev/null)" ]; 
 		egrep 'BOOTPRIO' ifcfg* | sort -t= -n -k2,2 | \
 		awk ' { gsub(/:BOOTPRIO.*/,NIL); print $0 } '| egrep -v 'ifcfg-lo' | \
 		for i in `cat`; do \
-		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" &&
-		    echo "$i"; \
+			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
+			is_yes "$ONBOOT" && echo "$i"; \
 		done | \
 		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
 else
@@ -136,7 +136,8 @@ else
 		egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br|ifcfg-(.*)\.(.*))' | \
 		LC_ALL=C egrep 'ifcfg-[a-z0-9\.]+$' | \
 		for i in `cat`; do \
-		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
+			is_yes "$ONBOOT" && echo "$i"; \
 		done | \
 		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
 	interfaces_vlan_boot=$((
@@ -145,7 +146,8 @@ else
 		egrep 'ifcfg-(.*)\.(.*)' | \
 		LC_ALL=C egrep 'ifcfg-[a-z0-9\.]+$' | \
 		for i in `cat`; do \
-		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
+			is_yes "$ONBOOT" && echo "$i"; \
 		done | \
 		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
 	interfaces_br_boot=$((
@@ -153,7 +155,8 @@ else
 		cd /etc/sysconfig/interfaces && ls -1 ifcfg-br* | \
 		LC_ALL=C egrep 'ifcfg-[a-z0-9\.]+$' | \
 		for i in `cat`; do \
-		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
+			is_yes "$ONBOOT" && echo "$i"; \
 		done | \
 		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
 	interfaces_sit_boot=$((
@@ -161,7 +164,8 @@ else
 		cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
 		LC_ALL=C egrep 'ifcfg-[a-z0-9]+$' | \
 		for i in `cat`; do \
-		    ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
+			is_yes "$ONBOOT" && echo "$i"; \
 		done | \
 		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
 fi
@@ -173,19 +177,19 @@ tunnels=$((cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
 # See how we were called.
 case "$1" in
   start)
-  	rc_splash "bootnetwork start"
+	rc_splash "bootnetwork start"
 
-	if is_yes "$VSERVER"; then 
+	if is_yes "$VSERVER"; then
 		touch /var/lock/subsys/network
 		exit 0
 	fi
-						    
+
 	network_init
 
 	for i in $interfaces_boot $interfaces_vlan_boot $interfaces_sit_boot ; do
 		run_cmd -a "$(nls 'Bringing up interface %s' "$i")" /sbin/ifup $i boot
 	done
-	
+
 	for i in $interfaces_br_boot ; do
 		run_cmd -a "$(nls 'Bringing up bridge interface %s' "$i")" /sbin/ifup $i boot
 	done
@@ -197,10 +201,10 @@ case "$1" in
 
 	network_postinit
 
-        touch /var/lock/subsys/network
-        ;;
+	touch /var/lock/subsys/network
+	;;
   stop)
-  	# If we go to runlevel 0, 1 or 6 then umount all network fs
+	# If we go to runlevel 0, 1 or 6 then umount all network fs
 	if [ "$RUNLEVEL" = "6" -o "$RUNLEVEL" = "0" -o "$RUNLEVEL" = "1" ]; then
 		if [ -x /etc/rc.d/init.d/netfs -a -f /var/lock/subsys/netfs ];
 		then
@@ -208,16 +212,16 @@ case "$1" in
 		else
 			netmtab=$(awk '{ if ($3 ~ /^(nfs|smbfs|ncpfs|cifs)$/ ) print $3}' /proc/mounts)
 			if (echo "$netmtab" | grep -q nfs); then
-			   run_cmd "Unmounting NFS filesystems" umount -fat nfs
+				run_cmd "Unmounting NFS filesystems" umount -fat nfs
 			fi
 			if (echo "$netmtab" | grep -q smbfs); then
-			   run_cmd "Unmounting SMB filesystems" umount -at smbfs
+				run_cmd "Unmounting SMB filesystems" umount -at smbfs
 			fi
 			if (echo "$netmtab" | grep -q ncpfs); then
-			   run_cmd "Unmounting NCP filesystems" umount -at ncpfs
+				run_cmd "Unmounting NCP filesystems" umount -at ncpfs
 			fi
 			if (echo "$netmtab" | grep -q cifs); then
-			   run_cmd "Unmounting CIFS filesystems" umount -at cifs
+				run_cmd "Unmounting CIFS filesystems" umount -at cifs
 			fi
 		fi
 	fi
@@ -242,8 +246,8 @@ case "$1" in
 
 	network_deinit
 
-        rm -f /var/lock/subsys/network
-        ;;
+	rm -f /var/lock/subsys/network
+	;;
   status)
 	nls "Configured devices:"
 	echo "lo $interfaces"
@@ -260,11 +264,11 @@ case "$1" in
 	$0 start
 	;;
   *)
-        echo "Usage: $0 {start|stop|restart|status}"
-        exit 1
+	echo "Usage: $0 {start|stop|restart|status}"
+	exit 1
 esac
 
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

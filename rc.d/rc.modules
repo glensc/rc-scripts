@@ -20,7 +20,9 @@ kerneleq=$(awk '{split($3,v,".");OFS=".";print(v[1],v[2],v[3]);}' /proc/version)
 ) | # make sure there is a LF at the end
 while read module args
 do
-  [ -z "$module" ] && continue
-  _modprobe single $module
+	[ -z "$module" ] && continue
+	_modprobe single $module
 done
 
+# This must be last line !
+# vi:syntax=sh

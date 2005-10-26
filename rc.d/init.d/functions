@@ -113,15 +113,15 @@ if is_yes "${IN_SHUTDOWN}" || is_no "${RC_LOGGING}" ; then
 		RESULT=0
 		while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
 			case $1 in
-				-c)
-					shift
-					$1
-					RESULT=$?
-					break
-					;;
-				 *)
-					shift
-					;;
+			  -c)
+				shift
+				$1
+				RESULT=$?
+				break
+				;;
+			   *)
+				shift
+				;;
 			esac
 		done
 		return $RESULT
@@ -312,7 +312,7 @@ show()
 		echo -n "$INIT_DOTS"
 		termput hpa 0
 		if [ -n "$CHARS" ]; then
-	                termput setaf $CCHARS
+			termput setaf $CCHARS
 			echo -n "$CHARS"
 			termput op
 		fi
@@ -321,7 +321,7 @@ show()
 	else
 		text=$(nls "$@")
 		if [ -n "$CHARS" ]; then
-	                termput setaf $CCHARS
+			termput setaf $CCHARS
 			echo -n "$CHARS"
 			termput op
 		fi
@@ -398,7 +398,7 @@ filter_chroot()
 		echo $@
 		return
 	fi
-        good_pids=""
+	good_pids=""
 	for root_pid in $@; do
 		root_dir=$(resolvesymlink /proc/${root_pid}/root)
 		if [ -n "$root_dir" ]; then
@@ -554,20 +554,20 @@ killproc()
 
 	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
 		case $1 in
-			--pidfile)
-				shift
-				pidfile="$1"
-				shift
+		  --pidfile)
+			shift
+			pidfile="$1"
+			shift
 			;;
-			--waitforname)
-                        	shift
-                        	waitname="$1"
-                        	shift
+		  --waitforname)
+			shift
+			waitname="$1"
+			shift
 			;;
-                  	--waitfortime)
-                        	shift
-                        	waittime="$1"
-                        	shift
+		  --waitfortime)
+			shift
+			waittime="$1"
+			shift
 			;;
 		esac
 	done
@@ -638,7 +638,7 @@ killproc()
 		log_failed "$1 shutdown"
 		result=7
 	fi
-	
+
 	if [ -n "$waitname" -a -n "$waittime" ]; then
 		# Save basename.
 		base=$(basename "$waitname")
@@ -726,8 +726,8 @@ status()
 #	else
 #		pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
 #		     { if ((prog == $5) || (("(" prog ")") == $5) ||
-#		          (("[" prog "]") == $5) ||
-#		          ((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
+#			(("[" prog "]") == $5) ||
+#			((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
 #		if [ "$pid" != "" ]; then
 #			cpuset_msg="..."
 #			if is_yes "$CPUSETS" && [ -n "$SERVICE_CPUSET" ]; then
@@ -877,11 +877,11 @@ relabel_selinux() {
          *** Relabeling could take a very long time, ***
          *** depending on file system size.          ***
          "
-    	echo "0" > $selinuxfs/enforce
-    	/sbin/fixfiles -F relabel > /dev/null 2>&1
-    	rm -f  /.autorelabel
-    	echo "*** Enabling security enforcement.         ***"
-    	echo $SELINUX > $selinuxfs/enforce
+	echo "0" > $selinuxfs/enforce
+	/sbin/fixfiles -F relabel > /dev/null 2>&1
+	rm -f /.autorelabel
+	echo "*** Enabling security enforcement.         ***"
+	echo $SELINUX > $selinuxfs/enforce
 }
 
 #/*
@@ -891,4 +891,4 @@ relabel_selinux() {
 # * End:
 # *
 # */
-# vi: syntax=sh:shiftwidth=8:
+# vi: syntax=sh

@@ -43,7 +43,7 @@ case "$1" in
 	touch $random_seed
 	chmod 600 $random_seed
 	dd if=/dev/urandom of=$random_seed count=1 bs=512 2>/dev/null
-	
+
 	rm -f /var/lock/subsys/random
 	deltext
 	ok
@@ -70,4 +70,4 @@ esac
 exit 0
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

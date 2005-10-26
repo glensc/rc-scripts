@@ -1,15 +1,15 @@
 #!/bin/sh
 #
-# rc            This file is responsible for starting/stopping
-#               services when the runlevel changes. It is also
-#               responsible for the very first setup of basic
-#               things, such as setting the hostname.
+# rc		This file is responsible for starting/stopping
+#		services when the runlevel changes. It is also
+#		responsible for the very first setup of basic
+#		things, such as setting the hostname.
 #
 # $Id$
 #
-# Original Author:       
-#               Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
-# Changes:      Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+# Original Author:
+#		Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+# Changes:	Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 
 # avoid being interrupted by child or keyboard
@@ -30,20 +30,20 @@ else
 	COLUMNS=
 fi
 export LINES COLUMNS CONSOLE
-  
+
 # NLS
 if [ -f /etc/sysconfig/i18n ]; then
-        . /etc/sysconfig/i18n
-        [ -n "$LANG" ] && export LANG || unset LANG
-        [ -n "$LC_CTYPE" ] && export LC_CTYPE || unset LC_CTYPE
-        [ -n "$LC_COLLATE" ] && export LC_COLLATE || unset LC_COLLATE
-        [ -n "$LC_MESSAGES" ] && export LC_MESSAGES || unset LC_MESSAGES
-        [ -n "$LC_NUMERIC" ] && export LC_NUMERIC || unset LC_NUMERIC
-        [ -n "$LC_MONETARY" ] && export LC_MONETARY || unset LC_MONETARY
-        [ -n "$LC_TIME" ] && export LC_TIME || unset LC_TIME
-        [ -n "$LC_ALL" ] && export LC_ALL || unset LC_ALL
-        [ -n "$LANGUAGE" ] && export LANGUAGE || unset LANGUAGE
-        [ -n "$LINGUAS" ] && export LINGUAS || unset LINGUAS
+	. /etc/sysconfig/i18n
+	[ -n "$LANG" ] && export LANG || unset LANG
+	[ -n "$LC_CTYPE" ] && export LC_CTYPE || unset LC_CTYPE
+	[ -n "$LC_COLLATE" ] && export LC_COLLATE || unset LC_COLLATE
+	[ -n "$LC_MESSAGES" ] && export LC_MESSAGES || unset LC_MESSAGES
+	[ -n "$LC_NUMERIC" ] && export LC_NUMERIC || unset LC_NUMERIC
+	[ -n "$LC_MONETARY" ] && export LC_MONETARY || unset LC_MONETARY
+	[ -n "$LC_TIME" ] && export LC_TIME || unset LC_TIME
+	[ -n "$LC_ALL" ] && export LC_ALL || unset LC_ALL
+	[ -n "$LANGUAGE" ] && export LANGUAGE || unset LANGUAGE
+	[ -n "$LINGUAS" ] && export LINGUAS || unset LINGUAS
 fi
 
 # Read system config data.
@@ -64,11 +64,11 @@ fi
 . /etc/rc.d/init.d/functions
 
 if [ "$argv2" != "chroot" ]; then
-    # Now find out what the current and what the previous runlevel are.
-    set $(/sbin/runlevel)
-    runlevel=$2
-    previous=$1
-    export runlevel previous
+	# Now find out what the current and what the previous runlevel are.
+	set $(/sbin/runlevel)
+	runlevel=$2
+	previous=$1
+	export runlevel previous
 fi
 
 # Get first argument. Set new runlevel to this argument.
@@ -81,8 +81,8 @@ fi
 [ -d /var/run -a -w /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
 
 # if runlevel is 0 (halt) or 6 (reboot) change to first
-# virtual console, and send messages to /dev/console 
-# (it can be serial console too) 
+# virtual console, and send messages to /dev/console
+# (it can be serial console too)
 if [ "$COLUMNS" -gt 0 ]; then
 	if [ "$argv2" != "chroot" ] && ! is_yes "$VSERVER" && \
 	   [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
@@ -114,8 +114,8 @@ sscripts=0
 for i in /etc/rc.d/rc$runlevel.d/S*; do
 	[ ! -f $i ] && continue
 	[ "${1%.rpmsave}" != "${1}" ] && continue
-        [ "${1%.rpmorig}" != "${1}" ] && continue
-        [ "${1%.rpmnew}" != "${1}" ] && continue
+	[ "${1%.rpmorig}" != "${1}" ] && continue
+	[ "${1%.rpmnew}" != "${1}" ] && continue
 	subsys=${i#/etc/rc.d/rc$runlevel.d/S??}
 	[ -f /var/lock/subsys/$subsys ] && \
 		[ ! -f /var/lock/subsys/${subsys}.init ] && continue
@@ -125,14 +125,14 @@ export sscripts
 
 if test "$previous" != "N" ; then
 	kscripts=0
-    	for i in /etc/rc.d/rc$runlevel.d/K*; do
-	        [ ! -f $i ] && continue
-        	[ "${1%.rpmsave}" != "${1}" ] && continue
-        	[ "${1%.rpmorig}" != "${1}" ] && continue
-        	[ "${1%.rpmnew}" != "${1}" ] && continue
+	for i in /etc/rc.d/rc$runlevel.d/K*; do
+		[ ! -f $i ] && continue
+		[ "${1%.rpmsave}" != "${1}" ] && continue
+		[ "${1%.rpmorig}" != "${1}" ] && continue
+		[ "${1%.rpmnew}" != "${1}" ] && continue
 		subsys=${i#/etc/rc.d/rc$runlevel.d/K??}
-                [ ! -f /var/lock/subsys/$subsys ] && \
-                    [ ! -f /var/lock/subsys/${subsys}.init ] && continue
+		[ ! -f /var/lock/subsys/$subsys ] && \
+		    [ ! -f /var/lock/subsys/${subsys}.init ] && continue
 		kscripts=$(( kscripts + 1 ))
 	done
 	export kscripts
@@ -185,7 +185,7 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		    [ ! -f /var/lock/subsys/${subsys}.init ] && continue
 
 		rc_splash "$i stop"
-		
+
 		# Bring the subsystem down.
 		$i stop
 	done
@@ -206,19 +206,19 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		    [ -f /var/lock/subsys/${subsys}.init ] && continue
 
 		# If we're in confirmation mode, get user confirmation
-		[ -n "$CONFIRM" ]  &&
+		[ -n "$CONFIRM" ] &&
 		{
 			confirm $subsys
 			case $? in
 			  0)
 				:
-			  ;;
+				;;
 			  2)
 				CONFIRM=
-			  ;;
+				;;
 			  *)
 				continue
-			  ;;
+				;;
 			esac
 		}
 
@@ -247,9 +247,9 @@ if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
 	TMPDIR=/dev/null
 	export TMPDIR
 	if [ "$argv2" != "chroot" ]; then
-    	    exec /etc/rc.d/rc.shutdown $runlevel $previous
+		exec /etc/rc.d/rc.shutdown $runlevel $previous
 	else
-	    exit 0
+		exit 0
 	fi
 else
 	if is_yes "$RUN_LDCONFIG" || [ ! -f /etc/ld.so.cache ] ; then

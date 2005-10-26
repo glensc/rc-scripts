@@ -99,4 +99,4 @@ CPUSETS=no
 RC_LOGGING=yes
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

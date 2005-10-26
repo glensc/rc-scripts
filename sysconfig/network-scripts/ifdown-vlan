@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #    ifdown-vlan - Virtual LAN configuration script
-#    Copyright (C) 2001  Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+#    Copyright (C) 2001 Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -30,12 +30,12 @@ CONFIG=$1
 source_config
 
 if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
-    exit 0
+	exit 0
 fi
 
 if [ ! -x /sbin/vconfig ]; then
-    nls "%s is missing. Can't continue." "/sbin/vconfig"
-    exit 1
+	nls "%s is missing. Can't continue." "/sbin/vconfig"
+	exit 1
 fi
 
 # set all major variables
@@ -49,4 +49,4 @@ RESULT=$?
 exit $RESULT
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

@@ -5,16 +5,16 @@
 # This script is run by the pppd _after_ the link is brought down.
 #
 # This script is called with the following arguments:
-#    Arg  Name                          Example
-#    $1   Interface name                ppp0
-#    $2   Peer name
-#    $3   User name
-#    $4   The tty                       ttyS1
-#    $5   The link speed                38400
+#	Arg	Name			Example
+#	$1	Interface name		ppp0
+#	$2	Peer name
+#	$3	User name
+#	$4	The tty			ttyS1
+#	$5	The link speed		38400
 
 set +e
 
-# The  environment is cleared before executing this script
+# The environment is cleared before executing this script
 # so the path must be reset
 PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
 export PATH
@@ -27,7 +27,7 @@ PPP_SPEED="$5"
 export PPP_IFACE PPP_PEER PPP_USER PPP_TTY PPP_SPEED
 
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network 
+. /etc/sysconfig/network-scripts/functions.network
 CONFIG="$PPP_IPPARAM"
 source_config
 

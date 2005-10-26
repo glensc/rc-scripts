@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# shutdwn       Common script for system halt/reboot.
+# shutdwn	Common script for system halt/reboot.
 #
-# Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+# Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
 #		Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
@@ -53,7 +53,7 @@ if ! is_yes "$VSERVER"; then
 	force=
 	remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
 	while [ -n "$remaining" -a "$retry" -gt 0 ]
-	do	
+	do
 		show "Unmounting file systems" ; busy
 		if ERRORS=$(umount -a $FORCE -t noproc,devfs 2>&1) ; then
 			ok
@@ -61,7 +61,7 @@ if ! is_yes "$VSERVER"; then
 			fail
 			[ -n "$ERRORS" ] && echo "$ERRORS"
 		fi
-		
+
 		sleep 2
 		remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
 		[ -z "$remaining" ] && break
@@ -87,12 +87,12 @@ if ! is_yes "$VSERVER"; then
 	goraidtab=1
 	if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
 		if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null); then
-			    run_cmd "Turning off RAID devices" /sbin/mdadm --stop --scan
-			    rc=$?
-			    [ "$rc" -eq 0 ] && goraidtab=0
+			run_cmd "Turning off RAID devices" /sbin/mdadm --stop --scan
+			rc=$?
+			[ "$rc" -eq 0 ] && goraidtab=0
 		fi
 	fi
-															
+
 	# turn off raid
 	if [ -x /sbin/raidstop -a -f /etc/raidtab -a "$goraidtab" -eq 1 ]; then
 		# we can not use raidstop -a here because this will only stop
@@ -111,7 +111,7 @@ if ! is_yes "$VSERVER"; then
 
 	show "Remounting remaining filesystems ro mode"; busy
 	if ( mount | awk '/ext2|ext3|reiserfs|xfs|jfs/ { print $3 }' | \
-		while read line; do 
+		while read line; do
 		mount -n -o ro,remount $line; done ); then
 		ok
 	else
@@ -120,12 +120,12 @@ if ! is_yes "$VSERVER"; then
 fi
 
 if [ "$runlevel" = "0" ] ; then
-       	show "The system is halted"; ok
+	show "The system is halted"; ok
 	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
 
 	if [ -x /sbin/poweroff-ups -a -f /etc/killpower -a -f /etc/sysconfig/ups ] ; then
-	     . /etc/sysconfig/ups
-	     is_yes "$POWEROFF_UPS" && /sbin/poweroff-ups
+		. /etc/sysconfig/ups
+		is_yes "$POWEROFF_UPS" && /sbin/poweroff-ups
 	fi
 	[ "$previous" != "unknown" ] && eval halt -d -p
 else

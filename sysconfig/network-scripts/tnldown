@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #    tnldown - tunnel configuration script
-#    Copyright (C) 1999, 2000  Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+#    Copyright (C) 1999, 2000 Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@
 DEV=$1
 
 [ -z "$DEV" ] && {
-    nls "Usage: %s <device name>" "tnldown" >&2
-    exit 1
+	nls "Usage: %s <device name>" "tnldown" >&2
+	exit 1
 }
 
 TNLCONFIGS=$(ls /etc/sysconfig/interfaces/tnlcfg-* 2>/dev/null | egrep -v '~$')
@@ -36,31 +36,31 @@ TNLCONFIGS=$(egrep -L '^#!' $TNLCONFIGS)
 CONFIG=$(egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS)
 
 if [ -z "$CONFIG" ]; then
-    CONFIG="$DEV"
+	CONFIG="$DEV"
 fi
 
 if false; then
-[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=tnlcfg-$CONFIG
-[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
-    echo "usage: tnldown <device name>" >&2
-    exit 1
-}
+	[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=tnlcfg-$CONFIG
+	[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
+		echo "usage: tnldown <device name>" >&2
+		exit 1
+	}
 fi
 
 source_config
 
 case "${MODE}" in
-    sit|four)
+  sit|four)
 	is_no "${IPV6_NETWORKING}" && exit 0
 	is_no "${IPV6_TUNNELCONFIG}" && exit 0
 	;;
-    ipip)
+  ipip)
 	is_no "${IPV4_NETWORKING}" && exit 0
 	;;
-    gre)
+  gre)
 	is_no "${IPV4_NETWORKING}" && exit 0
 	;;
-    ipxip|ipipx)
+  ipxip|ipipx)
 	is_no "${IPX}" && exit 0
 	;;
 esac
@@ -68,21 +68,21 @@ esac
 RESULT=0
 
 case "${MODE}" in
-    ipip|sit|gre)
+  ipip|sit|gre)
 	ip link set ${DEVICE} down
 	ip tunnel del ${DEVICE}
 	RESULT=$?
 	;;
-    four)
+  four)
 	ip link set ${DEVICE} down
 	fourcfg del ${DEVICE}
 	RESULT=$?
 	;;
-    ipxip|ipipx)
+  ipxip|ipipx)
 	;;
 esac
 
 exit $RESULT
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

@@ -6,17 +6,17 @@
 # This script is run by the pppd after the link is established.
 #
 # This script is called with the following arguments:
-#    Arg  Name                          Example
-#    $1   Interface name                ppp0
-#    $2   The tty                       ttyS1
-#    $3   The link speed                38400
-#    $4   Local IP number               12.34.56.78
-#    $5   Peer  IP number               12.34.56.99
-#    $6   Optional ``ipparam'' value    foo
+#	Arg	Name				Example
+#	$1	Interface name			ppp0
+#	$2	The tty				ttyS1
+#	$3	The link speed			38400
+#	$4	Local IP number			12.34.56.78
+#	$5	Peer IP number			12.34.56.99
+#	$6	Optional ``ipparam'' value	foo
 
 set +e
 
-# The  environment is cleared before executing this script
+# The environment is cleared before executing this script
 # so the path must be reset
 PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
 export PATH
@@ -29,8 +29,8 @@ PPP_REMOTE="$5"
 PPP_IPPARAM="$6"
 export PPP_IFACE PPP_TTY PPP_SPEED PPP_LOCAL PPP_REMOTE PPP_IPPARAM
 
-. /etc/rc.d/init.d/functions 
-. /etc/sysconfig/network-scripts/functions.network 
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/functions.network
 CONFIG="$PPP_IPPARAM"
 source_config
 

@@ -6,23 +6,23 @@
 # This script is run by the pppd after the link is established.
 #
 # This script is called with the following arguments:
-#    Arg  Name                          Example
-#    $1   Interface name                ppp0
-#    $2   The tty                       ttyS1
-#    $3   The link speed                38400
-#    $4   The network number            ???
-#    $5   Local IPX node address        ???
-#    $6   Remote IPX node address       ???
-#    $7   Local IPX routing protocol    ???
-#    $8   Remote IPX routing protocol   ???
-#    $9   Local IPX router name         ???
-#    $10  Remote IPX router name        ???
-#    $11  Optional ``ipparam'' value    foo
-#    $12  PPPD pid                      1276
+#	Arg	Name				Example
+#	$1	Interface name			ppp0
+#	$2	The tty				ttyS1
+#	$3	The link speed			38400
+#	$4	The network number		???
+#	$5	Local IPX node address		???
+#	$6	Remote IPX node address		???
+#	$7	Local IPX routing protocol	???
+#	$8	Remote IPX routing protocol	???
+#	$9	Local IPX router name		???
+#	$10	Remote IPX router name		???
+#	$11	Optional ``ipparam'' value	foo
+#	$12	PPPD pid			1276
 
 set +e
 
-# The  environment is cleared before executing this script
+# The environment is cleared before executing this script
 # so the path must be reset
 PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
 export PATH
@@ -45,7 +45,7 @@ export PPP_LOCAL_RPROTO PPP_REMOTE_RPROTO PPP_LOCAL_RNAME PPP_REMOTE_RNAME
 export PPP_IPPARAM PPP_PID
 
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network 
+. /etc/sysconfig/network-scripts/functions.network
 CONFIG="$PPP_IPPARAM"
 source_config
 
@@ -55,7 +55,7 @@ PPP_TTYNAME=$(basename "$PPP_TTY")
 export PPP_TTYNAME
 
 # Main Script starts here
-[ -x /etc/ppp/ipx-down.local ] && /etc/ppp/ipx-down.local 
+[ -x /etc/ppp/ipx-down.local ] && /etc/ppp/ipx-down.local
 
 run-parts /etc/sysconfig/interfaces/down.d/ipx
 

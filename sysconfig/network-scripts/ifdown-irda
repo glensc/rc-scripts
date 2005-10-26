@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #    ifdown-irda - IrDA configuration script
-#    Copyright (C) 2001  Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+#    Copyright (C) 2001 Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ CONFIG=$1
 source_config
 
 if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
-    exit
+	exit
 fi
 
 . /etc/sysconfig/network
@@ -43,36 +43,36 @@ ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
 
 PID=$(pidof irattach)
 for x in $PID; do
-    if grep -q "$MODEMPORT" /proc/$x/cmdline; then
-	logger -p daemon.info -t ifdown-sl "signal TERM send to \"$(ps -o cmd=$x)\" - this should be irattach"
-	kill -TERM $x
-	PID=$x
-    fi
+	if grep -q "$MODEMPORT" /proc/$x/cmdline; then
+		logger -p daemon.info -t ifdown-sl "signal TERM send to \"$(ps -o cmd=$x)\" - this should be irattach"
+		kill -TERM $x
+		PID=$x
+	fi
 done
-					    
+
 if [ -z "$PID" ]; then
-      exit 1
+	exit 1
 fi
 
 kill $PID > /dev/null 2>&1
 if [ ! -d /proc/$PID ]; then
-    /etc/sysconfig/network-scripts/ifdown-post $1
-    exit 0
+	/etc/sysconfig/network-scripts/ifdown-post $1
+	exit 0
 fi
 sleep 2
 if [ ! -d /proc/$PID ]; then
-    /etc/sysconfig/network-scripts/ifdown-post $1
-    exit 0
+	/etc/sysconfig/network-scripts/ifdown-post $1
+	exit 0
 fi
 
 kill -KILL $PID > /dev/null 2>&1
 if [ -d /proc/$PID ]; then
-    logger -p daemon.info -t ifdown-irda "$(nls 'ifdown-%s unable to kill %s for %s' "irda" "irattach" "$DEVICE")" &
+	logger -p daemon.info -t ifdown-irda "$(nls 'ifdown-%s unable to kill %s for %s' "irda" "irattach" "$DEVICE")" &
 else
-    /etc/sysconfig/network-scripts/ifdown-post $1
+	/etc/sysconfig/network-scripts/ifdown-post $1
 fi
 
 exit 1
-	    
+
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

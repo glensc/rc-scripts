@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #    ifup-irda - IrDA configuration script
-#    Copyright (C) 2001  Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+#    Copyright (C) 2001 Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -30,12 +30,12 @@ CONFIG=$1
 source_config
 
 if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
-    exit
+	exit
 fi
 
 if [ ! -x /sbin/irattach ]; then
-    nls "%s is missing. Can't continue." "/sbin/irattach"
-    exit 1
+	nls "%s is missing. Can't continue." "/sbin/irattach"
+	exit 1
 fi
 
 . /etc/sysconfig/network
@@ -46,20 +46,20 @@ setup_ip_param
 IRDAOPTS=
 
 if [ -n "${DONGLE}" ]; then
-    IRDAOPTS="${IRDAOPTS} -d ${DONGLE}"
+	IRDAOPTS="${IRDAOPTS} -d ${DONGLE}"
 fi
 
 if is_yes "${DISCOVERY}" || [ -z "${DISCOVERY}" ]; then
-    IRDAOPTS="${IRDAOPTS} -s"
+	IRDAOPTS="${IRDAOPTS} -s"
 fi
 
 /sbin/irattach ${IRDAPORT} ${IRDAOPTS}
-	
+
 ip link set dev ${DEVICE} multicast ${MULTICAST} ${ARP}
 if ! (ip link set dev ${DEVICE} up); then
-    nls "problems with setting %s %s" "IrDA" "${DEVICE}"
-    exit 1
+	nls "problems with setting %s %s" "IrDA" "${DEVICE}"
+	exit 1
 fi
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

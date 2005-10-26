@@ -12,14 +12,14 @@ elif	MODE=ipip || MODE=gre || MODE=sit ; then
 
 	REMOTEADDR=<IPv4 addres>
 	[ LOCALADDR=<IPv4 addres> ]
-        [ BIND_DEV= ] do jakiego device przybindowaæ (ma zwi±zek z routingiem itp)
+	[ BIND_DEV= ] do jakiego device przybindowaæ (ma zwi±zek z routingiem itp)
 
 	[ TTL= ]
 	[ TOS= ]
 	[ PMTUDISC={no|yes} ]
 
 	if	MODE=gre ; then
-	
+
 		[ KEY= ]
 		[ IKEY= ]
 		[ OKEY= ]
@@ -29,18 +29,14 @@ elif	MODE=ipip || MODE=gre || MODE=sit ; then
 		[ CSUM={no|yes} ]
 		[ ICSUM={no|yes} ]
 		[ OCSUM={no|yes} ]
-
 	fi
 
-		
 else	MODE=four ; then
 
-        REMOTEADDR=<IPv6 addres>
+	REMOTEADDR=<IPv6 addres>
 	LOCALADDR=<IPv6 addres>
-	
+
 	[ PRIORITY= ]
 	[ HOPLIMIT= ]
 	[ ENCAPLIMIT= ]
-	
 fi
-	

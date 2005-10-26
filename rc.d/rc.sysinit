@@ -47,8 +47,8 @@ if [ -r /etc/sysconfig/system ]; then
 	. /etc/sysconfig/system
 else
 	RUN_SULOGIN_ON_ERR=yes
-        RUN_USERPNP=yes
-        RUN_KERNELPNP=yes
+	RUN_USERPNP=yes
+	RUN_KERNELPNP=yes
 	PANIC_REBOOT_TIME=0
 	DELAY_LOGIN=yes
 	CLEAN_TMP=no
@@ -62,12 +62,12 @@ fi
 
 # sysfs is also needed before any other things (under kernel > 2.5)
 if ! is_yes "$VSERVER" && grep -q sysfs /proc/filesystems 2>/dev/null ; then
-    mount -n -o gid=17 -t sysfs sysfs /sys
+	mount -n -o gid=17 -t sysfs sysfs /sys
 fi
 
 # selinux
 if ! is_yes "$VSERVER" && grep -q selinuxfs /proc/filesystems 2>/dev/null && ! grep -q selinuxfs /proc/mounts 2>/dev/null; then
-    mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
+	mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
 fi
 
 if [ $(kernelverser) = "002006" ]; then
@@ -86,12 +86,12 @@ fi
 # Choose Hardware profile
 rm -f /var/run/hwprofile 2> /dev/null
 if [ -f /etc/sysconfig/hwprof ]; then
-    . /etc/sysconfig/hwprof
-    if is_yes "${HWPROFILES}" && [ -x /sbin/hwprofile -a -d /etc/sysconfig/hwprofiles/data ]; then
-       mount -n / -o rw,remount
-       /sbin/hwprofile -qf
-       mount -n / -o ro,remount
-    fi
+	. /etc/sysconfig/hwprof
+	if is_yes "${HWPROFILES}" && [ -x /sbin/hwprofile -a -d /etc/sysconfig/hwprofiles/data ]; then
+		mount -n / -o rw,remount
+		/sbin/hwprofile -qf
+		mount -n / -o ro,remount
+	fi
 fi
 
 # Disable splash when requested
@@ -101,21 +101,21 @@ fi
 selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
 SELINUX=
 if [ -n "$selinuxfs" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
-        if [ -r $selinuxfs/enforce ] ; then
-                SELINUX=$(cat $selinuxfs/enforce)
-        else
-                # assume enforcing if you can't read it
-                SELINUX=1
-        fi
+	if [ -r $selinuxfs/enforce ] ; then
+		SELINUX=$(cat $selinuxfs/enforce)
+	else
+		# assume enforcing if you can't read it
+		SELINUX=1
+	fi
 fi
 
 if [ -x /sbin/restorecon ] && LC_ALL=C fgrep -q " /dev " /proc/mounts 2>/dev/null ; then
-        /sbin/restorecon  -R /dev 2>/dev/null
+	/sbin/restorecon -R /dev 2>/dev/null
 fi
 
 
 if [ "$CONSOLETYPE" = "vt" -a -x /sbin/setsysfont ]; then
-    run_cmd "Setting default font" /sbin/setsysfont
+	run_cmd "Setting default font" /sbin/setsysfont
 fi
 
 # Print welcome message
@@ -147,7 +147,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	[ -x /sbin/start_udev ] && run_cmd "Starting udev" /sbin/start_udev
-		
+
 	# /dev must be also mounted before everything but only if we want use them ;-)
 	if is_yes "$MOUNT_DEVFS"; then
 		run_cmd "Mounting Device Filesystem" mount -n -t devfs /dev /dev
@@ -160,7 +160,7 @@ if ! is_yes "$VSERVER"; then
 
 	# cpuset support (mounted unconditionally, shouldn't be a problem)
 	if grep -q cpuset /proc/filesystems 2>/dev/null ; then
-	    mount -n -t cpuset none /dev/cpuset
+		mount -n -t cpuset none /dev/cpuset
 	fi
 
 	# Configure Linux kernel (initial configuration, some required modules still
@@ -245,15 +245,15 @@ if ! is_yes "$VSERVER"; then
 	if [ "$usb" = "1" ]; then
 		needusbstorage=$(LC_ALL=C cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08" 2>/dev/null)
 		if [ "$(kernelverser)" -lt "002006" ]; then
-		    LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
-		    mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02" 2>/dev/null)
-		    kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01" 2>/dev/null)
-		    if [ -n "$kbdoutput" ]; then
-			run_cmd "Initializing USB keyboard" modprobe keybdev
-		    fi
-		    if [ -n "$mouseoutput" ]; then
-			run_cmd "Initializing USB mouse" modprobe mousedev
-		    fi
+			LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
+			mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02" 2>/dev/null)
+			kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01" 2>/dev/null)
+			if [ -n "$kbdoutput" ]; then
+				run_cmd "Initializing USB keyboard" modprobe keybdev
+			fi
+			if [ -n "$mouseoutput" ]; then
+				run_cmd "Initializing USB mouse" modprobe mousedev
+			fi
 		fi
 	fi
 
@@ -281,7 +281,7 @@ if ! is_yes "$VSERVER"; then
 	_RUN_QUOTACHECK=0
 	_ROOTFS_TYPE=$(grep " / " /proc/mounts 2>/dev/null | awk '{ print $3 }')
 
-	if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ]; then 
+	if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ]; then
 		show "Checking root filesystem"; started
 		initlog -c "fsck -C -T -a $fsckoptions /"
 
@@ -329,14 +329,14 @@ if ! is_yes "$VSERVER"; then
 
 	# Unmount the initrd, if necessary
 	if LC_ALL=C grep -q /initrd /proc/mounts 2>/dev/null && ! LC_ALL=C grep -q /initrd/loopfs /proc/mounts 2>/dev/null ; then
-	    if [ -e /initrd/dev/.devfsd ]; then
-		umount /initrd/dev
-	    fi
-	    umount /initrd
-	    /sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
+		if [ -e /initrd/dev/.devfsd ]; then
+			umount /initrd/dev
+		fi
+		umount /initrd
+		/sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
 	fi
-			      
-	# Check for arguments 
+
+	# Check for arguments
 	if grep -iq nopnp /proc/cmdline 2>/dev/null; then
 		PNP=
 	else
@@ -345,16 +345,16 @@ if ! is_yes "$VSERVER"; then
 
 	# set up pnp and kernel pnp
 	if [ -n "$PNP" ]; then
-	    if is_yes "$RUN_USERPNP" && [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
-		run_cmd "Setting up ISA PNP devices (userspace pnp)" /sbin/isapnp /etc/isapnp/isapnp.conf
-	    fi
-	    if is_yes "$RUN_KERNELPNP"; then
-		/sbin/modprobe -k isa-pnp 2> /dev/null
-		if [ -e /proc/isapnp -a -f /etc/isapnp/isapnp-kernel.conf ]; then
-		    show "Setting up ISA PNP devices (kernelspace pnp)"; busy
-		    grep -v "^#" /etc/isapnp/isapnp-kernel.conf 2>/dev/null >/proc/isapnp && (deltext; ok) || (deltext; fail)
+		if is_yes "$RUN_USERPNP" && [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
+			run_cmd "Setting up ISA PNP devices (userspace pnp)" /sbin/isapnp /etc/isapnp/isapnp.conf
 		fi
-	    fi
+		if is_yes "$RUN_KERNELPNP"; then
+			/sbin/modprobe -k isa-pnp 2> /dev/null
+			if [ -e /proc/isapnp -a -f /etc/isapnp/isapnp-kernel.conf ]; then
+				show "Setting up ISA PNP devices (kernelspace pnp)"; busy
+				grep -v "^#" /etc/isapnp/isapnp-kernel.conf 2>/dev/null >/proc/isapnp && (deltext; ok) || (deltext; fail)
+			fi
+		fi
 	fi
 
 	# Remount the root filesystem read-write
@@ -368,11 +368,11 @@ fi
 
 # Clean up SELinux labels
 if [ -n "$SELINUX" ]; then
-    for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache ; do
-	[ -r $file ] && restorecon $file  >/dev/null 2>&1
-    done
+	for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache ; do
+		[ -r $file ] && restorecon $file >/dev/null 2>&1
+	done
 fi
-		  
+
 # Clear mtab
 :>/etc/mtab
 [ -f /etc/cryptomtab ] && :>/etc/cryptomtab
@@ -396,7 +396,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	if grep -q cpuset /proc/filesystems 2>/dev/null ; then
-	    mount -n -t cpuset none /dev/cpuset
+		mount -n -t cpuset none /dev/cpuset
 	fi
 fi
 
@@ -472,14 +472,14 @@ if ! is_yes "$VSERVER"; then
 	if ! grep -iq "nofirewire" /proc/cmdline 2>/dev/null ; then
 		aliases=$(/sbin/modprobe -c | awk '/^alias ieee1394-controller/ { print	$3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
-		    for alias in $aliases ; do
-			[ "$alias" = "off" ] && continue
-			run_cmd "$(nls 'Initializing firewire controller') ($alias)" /sbin/modprobe $alias
-		    done
-		    LC_ALL=C grep -E "SBP2" /proc/bus/ieee1394/devices 2>/dev/null && /sbin/modprobe -s sbp2 > /dev/null 2>&1 
+			for alias in $aliases ; do
+				[ "$alias" = "off" ] && continue
+				run_cmd "$(nls 'Initializing firewire controller') ($alias)" /sbin/modprobe $alias
+			done
+			LC_ALL=C grep -E "SBP2" /proc/bus/ieee1394/devices 2>/dev/null && /sbin/modprobe -s sbp2 > /dev/null 2>&1
 		fi
-	fi    
-	    
+	fi
+
 	# Load sound modules if they need persistent DMA buffers
 	if grep -q "^options sound dmabuf=1" "$MODULES_CONF" 2>/dev/null ; then
 		RETURN=0
@@ -503,18 +503,17 @@ if ! is_yes "$VSERVER"; then
 	# Find and activate volume groups:
 	# EVMS
 	if [ -x /sbin/evms_activate ]; then
-	    
 		if [ "$(kernelverser)" -lt "002006" ]; then
-		    # Linux 2.4 core modules
-		    modprobe -s -k evms > /dev/null 2>&1
-		    modprobe -s -k evms_passthru > /dev/null 2>&1
-		    modprobe -s -k ldev_mgr > /dev/null 2>&1
-		    modprobe -s -k dos_part > /dev/null 2>&1
+			# Linux 2.4 core modules
+			modprobe -s -k evms > /dev/null 2>&1
+			modprobe -s -k evms_passthru > /dev/null 2>&1
+			modprobe -s -k ldev_mgr > /dev/null 2>&1
+			modprobe -s -k dos_part > /dev/null 2>&1
 		else
-		    # Linux 2.6 core module
-		    modprobe -s -k evmscore > /dev/null 2>&1
+			# Linux 2.6 core module
+			modprobe -s -k evmscore > /dev/null 2>&1
 		fi
-		
+
 		is_yes "$EVMS_GUID_PTABLE" && modprobe -s -k gpt_part >/dev/null 2>&1
 		is_yes "$EVMS_LVM" && modprobe -s -k lvm_vge >/dev/null 2>&1
 		is_yes "$EVMS_AIX" && modprobe -s -k AIXlvm_vge >/dev/null 2>&1
@@ -537,13 +536,12 @@ if ! is_yes "$VSERVER"; then
 			modprobe -s -k dm-mod >/dev/null 2>&1
 			lvmignorelock="--ignorelockingfailure"
 		else
-		    modprobe -s -k lvm-mod >/dev/null 2>&1
-		    # device mapper (2.5+ and patched 2.4)
-		    modprobe -s -k dm-mod >/dev/null 2>&1
-		    lvmignorelock=""
+			modprobe -s -k lvm-mod >/dev/null 2>&1
+			# device mapper (2.5+ and patched 2.4)
+			modprobe -s -k dm-mod >/dev/null 2>&1
+			lvmignorelock=""
 		fi
-				
-	    
+
 		run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelock && \
 		run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmignorelock
 		[ "$lvmversion" = "2" ] && /sbin/vgscan --mknodes $lvmignorelock > /dev/null 2>&1
@@ -552,91 +550,88 @@ if ! is_yes "$VSERVER"; then
 
 	# Add raid devices
 	if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
-
 		modprobe -s md >/dev/null 2>&1
 		if [ -f /proc/mdstat ]; then
-		    goraidtab=1
-		    golvm=0
-		    rc=0
-		    
-		    if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
-			if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null); then
-			    run_cmd "Starting up RAID devices" /sbin/mdadm --assemble --scan
-			    rc=$?
-			    [ "$rc" -eq 0 ] && goraidtab=0 && golvm=1
+			goraidtab=1
+			golvm=0
+			rc=0
+			if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
+				if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null); then
+					run_cmd "Starting up RAID devices" /sbin/mdadm --assemble --scan
+					rc=$?
+					[ "$rc" -eq 0 ] && goraidtab=0 && golvm=1
+				fi
 			fi
-		    fi
-		    
-		    if [ -f /etc/raidtab -a "$goraidtab" -eq 1 ]; then
-			
-			for i in $(grep -v "^#" /etc/raidtab 2>/dev/null | grep "raiddev" 2>/dev/null | awk '{print $2}') ; do
-			    golvm=1
-			    RAIDDEV=$(basename $i)
-			    RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat 2>/dev/null)
-			    show "Starting up RAID device %s" $RAIDDEV
-			    busy
-			    if [ -z "$RAIDSTAT" ]; then
-				# Try raidstart first...if that fails then
-				# fall back to raid0run and if that fails too
-				# fall back to raidadd, raidrun.
-				RESULT=1
-				if [ -x /sbin/raidstart ]; then
-					/sbin/raidstart $i
-					RESULT=$?
-				fi
-				if [ $RESULT -gt 0 -a -x /sbin/raid0run ]; then
-					/sbin/raid0run $i
-					RESULT=$?
-				fi
-				if [ $RESULT -gt 0 -a -x /sbin/raidadd -a -x /sbin/raidrun ]; then
-					/sbin/raidadd $i
-					/sbin/raidrun $i
-					RESULT=$?
-				fi
-				if [ $RESULT -gt 0 ]; then
-					rc=1
-					fail
+
+			if [ -f /etc/raidtab -a "$goraidtab" -eq 1 ]; then
+				for i in $(grep -v "^#" /etc/raidtab 2>/dev/null | grep "raiddev" 2>/dev/null | awk '{print $2}') ; do
+					golvm=1
+					RAIDDEV=$(basename $i)
+					RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat 2>/dev/null)
+					show "Starting up RAID device %s" $RAIDDEV
+					busy
+					if [ -z "$RAIDSTAT" ]; then
+						# Try raidstart first...if that fails then
+						# fall back to raid0run and if that fails too
+						# fall back to raidadd, raidrun.
+						RESULT=1
+						if [ -x /sbin/raidstart ]; then
+							/sbin/raidstart $i
+							RESULT=$?
+						fi
+						if [ $RESULT -gt 0 -a -x /sbin/raid0run ]; then
+							/sbin/raid0run $i
+							RESULT=$?
+						fi
+						if [ $RESULT -gt 0 -a -x /sbin/raidadd -a -x /sbin/raidrun ]; then
+							/sbin/raidadd $i
+							/sbin/raidrun $i
+							RESULT=$?
+						fi
+						if [ $RESULT -gt 0 ]; then
+							rc=1
+							fail
+						else
+							ok
+						fi
+					else
+						ok
+					fi
+				done
+			fi
+
+			# A non-zero return means there were problems
+			if [ $rc -gt 0 ]; then
+				[ -e /proc/splash ] && echo "verbose" > /proc/splash
+				show "Starting up RAID devices"; fail
+				echo
+				echo
+				nls "*** An error occurred during the RAID startup."
+				nls "*** Dropping you to a shell; the system will reboot"
+				nls "*** when you leave the shell."
+				echo
+
+				PS1="$(nls '(RAID Repair)# ')"; export PS1
+				[ "$SELINUX" = "1" ] && disable_selinux
+				if is_yes "$RUN_SULOGIN_ON_ERR"; then
+					/sbin/sulogin
 				else
-					ok
+					/bin/sh
 				fi
-			    else
-				ok
-			    fi
-			done
-		    fi
 
-		    # A non-zero return means there were problems
-		    if [ $rc -gt 0 ]; then
-			[ -e /proc/splash ] && echo "verbose" > /proc/splash
-			show "Starting up RAID devices"; fail
-			echo
-			echo
-			nls "*** An error occurred during the RAID startup."
-			nls "*** Dropping you to a shell; the system will reboot"
-			nls "*** when you leave the shell."
-			echo
-
-			PS1="$(nls '(RAID Repair)# ')"; export PS1
-			[ "$SELINUX" = "1" ] && disable_selinux
-			if is_yes "$RUN_SULOGIN_ON_ERR"; then
-				/sbin/sulogin
-			else
-				/bin/sh
+				run_cmd "Unmounting file systems" umount -a
+				run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
+				run_cmd "Automatic reboot in progress" reboot
 			fi
-
-			run_cmd "Unmounting file systems" umount -a
-			run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
-			run_cmd "Automatic reboot in progress" reboot
-		    fi
-		    # LVM on RAID (keep in sync with LVM setting few lines above)
-		    if [ "$golvm" -eq "1" ]; then
-			if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-			    run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelock && \
-				    run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmignorelock
-			    [ "$lvmversion" = "2" ] && /sbin/vgscan --mknodes $lvmignorelock > /dev/null 2>&1
+			# LVM on RAID (keep in sync with LVM setting few lines above)
+			if [ "$golvm" -eq "1" ]; then
+				if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
+					run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelock && \
+					run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmignorelock
+					[ "$lvmversion" = "2" ] && /sbin/vgscan --mknodes $lvmignorelock > /dev/null 2>&1
+				fi
 			fi
-		    fi
-		    show "Starting up RAID devices"; ok
+			show "Starting up RAID devices"; ok
 		fi
 	fi
 
@@ -729,7 +724,7 @@ if ! is_yes "$VSERVER"; then
 		elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
 			_RUN_QUOTACHECK=1
 		fi
-		
+
 		show "Remounting encrypted filesystems back in rw mode"; busy
 		awk '
 		FILENAME=="/proc/mounts" {
@@ -746,7 +741,7 @@ if ! is_yes "$VSERVER"; then
 fi
 
 if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
-	run_cmd "Checking filesystem quotas"  /sbin/quotacheck -vnugRa
+	run_cmd "Checking filesystem quotas" /sbin/quotacheck -vnugRa
 fi
 
 # Turn on quota
@@ -789,19 +784,19 @@ rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
 # Clean up /var
 # I'd use find, but /usr may not be mounted.
 for afile in /var/lock/* /var/run/*; do
-    	bafile=$(basename $afile)
+	bafile=$(basename $afile)
 	if [ -d "$afile" ]; then
 		[ "$bafile" != "news" -a "$bafile" != "sudo" -a "$bafile" != "mon" ] && rm -rf $afile/*
 	else
-	    	[ "$bafile" != "hwprofile" ] && rm -f $afile 2> /dev/null
+		[ "$bafile" != "hwprofile" ] && rm -f $afile 2> /dev/null
 	fi
 done
 # Delete stale files
 rm -f /var/lib/rpm/__db* /var/spool/postoffice/.pid.* /tmp/.X*-lock \
 	/tmp/.lock.* /tmp/.gdm_socket /tmp/.s.PGSQL.*
 rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
-	/tmp/kde-* /tmp/ksocket-* /tmp/mc-* /tmp/mcop-* /tmp/orbit-*  \
-	/tmp/scrollkeeper-*  /tmp/ssh-*
+	/tmp/kde-* /tmp/ksocket-* /tmp/mc-* /tmp/mcop-* /tmp/orbit-* \
+	/tmp/scrollkeeper-* /tmp/ssh-*
 
 {
 # Clean up utmp/wtmp
@@ -852,8 +847,8 @@ if ! is_yes "$VSERVER"; then
 	i=5
 	while [ $i -ge 0 ]; do
 		if [ -f /var/log/dmesg.$i ]; then
-		    chmod 0600 /var/log/dmesg.$i
-		    mv -f /var/log/dmesg.$i /var/log/dmesg.$(($i+1))
+			chmod 0600 /var/log/dmesg.$i
+			mv -f /var/log/dmesg.$i /var/log/dmesg.$(($i+1))
 		fi
 		i=$(($i-1))
 	done

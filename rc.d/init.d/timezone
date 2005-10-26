@@ -19,11 +19,11 @@ NLS_DOMAIN="rc-scripts"
 ZONE_FILE="$ZONE_INFO_DIR"
 
 if [ -n "$ZONE_INFO_SCHEME" -a "$ZONE_INFO_SCHEME" != "posix" ]; then
-    ZONE_FILE="$ZONE_FILE/$ZONE_INFO_SCHEME"
+	ZONE_FILE="$ZONE_FILE/$ZONE_INFO_SCHEME"
 fi
 
 if [ -n "$ZONE_INFO_AREA" ]; then
-    ZONE_FILE="$ZONE_FILE/$ZONE_INFO_AREA"
+	ZONE_FILE="$ZONE_FILE/$ZONE_INFO_AREA"
 fi
 
 ZONE_FILE="$ZONE_FILE/$TIME_ZONE"
@@ -33,31 +33,31 @@ ZONE_FILE="$ZONE_FILE/$TIME_ZONE"
 # See how we were called.
 case "$1" in
   start)
-        rm -f /etc/localtime
+	rm -f /etc/localtime
 	if [ -f "$ZONE_FILE" ]; then
 		if [ -n "$ZONE_INFO_AREA" ]; then
-		    MESSAGE="`nls 'Setting time zone information (%s, %s)' "$ZONE_INFO_AREA" "$TIME_ZONE"`"
+			MESSAGE="`nls 'Setting time zone information (%s, %s)' "$ZONE_INFO_AREA" "$TIME_ZONE"`"
 		else
-		    MESSAGE="`nls 'Setting time zone information (%s)' "$TIME_ZONE"`"
+			MESSAGE="`nls 'Setting time zone information (%s)' "$TIME_ZONE"`"
 		fi
 		run_cmd "$MESSAGE" cp -af $ZONE_FILE /etc/localtime
 		RETVAL=$?
 	fi
-        ;;
+	;;
   stop)
-	    run_cmd "Unsetting time zone information" rm -f /etc/localtime
-	    RETVAL=$?
-        ;;
+	run_cmd "Unsetting time zone information" rm -f /etc/localtime
+	RETVAL=$?
+	;;
   restart)
-          $0 stop
-	  $0 start
-        ;;
+	$0 stop
+	$0 start
+	;;
   reload)
-          $0 restart
-        ;;
+	$0 restart
+	;;
   *)
-        echo "Usage: $0 {start|stop|restart|reload}"
-        exit 1
+	echo "Usage: $0 {start|stop|restart|reload}"
+	exit 1
 esac
 
 unset ZONE_FILE ZONE_INFO_DIR ZONE_INFO_SCHEME ZONE_INFO_AREA TIME_ZONE MESSAGE
@@ -65,4 +65,4 @@ unset ZONE_FILE ZONE_INFO_DIR ZONE_INFO_SCHEME ZONE_INFO_AREA TIME_ZONE MESSAGE
 exit $RETVAL
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh

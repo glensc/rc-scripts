@@ -13,22 +13,22 @@ CONFIG=$1
 source_config
 
 if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
-    exit
+	exit
 fi
 
 # set all major variables
 setup_ip_param
 
 if is_yes "$IPV4_NETWORKING"; then
-    if [ -n "$IP4ADDR" ]; then
-	ip -4 addr add ${IP4ADDR} peer ${REMIP} dev ${DEVICE}
-    fi
+	if [ -n "$IP4ADDR" ]; then
+		ip -4 addr add ${IP4ADDR} peer ${REMIP} dev ${DEVICE}
+	fi
 fi
 
 if is_yes "$IPV6_NETWORKING"; then
-    if [ -n "$IP6ADDR" ]; then
-	ip -6 addr add ${IP6ADDR} dev ${DEVICE}
-    fi
+	if [ -n "$IP6ADDR" ]; then
+		ip -6 addr add ${IP6ADDR} dev ${DEVICE}
+	fi
 fi
 
 ip link set dev ${DEVICE} up
@@ -41,4 +41,4 @@ setup_ip_gw_ro
 /etc/sysconfig/network-scripts/ifup-post $1
 
 # This must be last line !
-# vi:syntax=sh:ts=8:sw=4
+# vi:syntax=sh
