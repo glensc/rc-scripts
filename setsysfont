@@ -9,11 +9,11 @@
 [ -n "$SYSFONT" ] && CONSOLEFONT="$SYSFONT"
 
 case "$LANG" in
-    *.utf8|*.UTF-8)
-    if [ -x /bin/unicode_start ] && /sbin/consoletype fg ; then
-	exec unicode_start $CONSOLEFONT $CONSOLEMAP
-    fi
-    ;;
+  *.utf8|*.UTF-8)
+	if [ -x /bin/unicode_start ] && /sbin/consoletype fg ; then
+		exec unicode_start $CONSOLEFONT $CONSOLEMAP
+	fi
+	;;
 esac
 
 # console-tools, obsolete part
@@ -24,15 +24,13 @@ if [ -x /usr/bin/consolechars -o -x /bin/consolechars ]; then
 	if [ -n "$KEYTABLE" ]; then
 		loadkeys $KEYTABLE < /dev/tty0 > /dev/tty0
 	fi
-
-
 # kbd, currently used
 elif [ -x /usr/bin/setfont -o -x /bin/setfont ]; then
-    	if [ -n "$CONSOLESCREENFONTMAP" ]; then
+	if [ -n "$CONSOLESCREENFONTMAP" ]; then
 		ARGS="-u $CONSOLESCREENFONTMAP"
 	fi
 	if [ -n "$CONSOLEMAP" ]; then
-	    	if [ ! -f /lib/kbd/consoletrans/$CONSOLEMAP_to_uni.trans ]; then
+		if [ ! -f /lib/kbd/consoletrans/$CONSOLEMAP_to_uni.trans ]; then
 			CONSOLEMAP=$(echo "$CONSOLEMAP" | sed "s|iso0|8859-|g;s|iso|8859-|g")
 		fi
 		ARGS="$ARGS -m $CONSOLEMAP"
@@ -40,9 +38,12 @@ elif [ -x /usr/bin/setfont -o -x /bin/setfont ]; then
 	if [ -n "$CONSOLEFONT" ]; then
 		setfont $CONSOLEFONT $ARGS
 	else
-	    	echo -ne "\033(K" 2>/dev/null > /proc/$$/fd/0
+		echo -ne "\033(K" 2>/dev/null > /proc/$$/fd/0
 	fi
 else
 	echo "can't set font"
 	exit 1
 fi
+
+# This must be last line !
+# vi:syntax=sh

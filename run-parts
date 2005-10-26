@@ -18,7 +18,7 @@ set +e
 if [ "$1" = "-u" ]; then
 	workasuser=yes
 	shift
-fi	
+fi
 
 # std checks
 if [ $# -lt 1 ]; then
@@ -50,28 +50,31 @@ shift
 
 # Ignore *~ and *, scripts
 for i in $RUNPARTS_DIR/*[!~,] ; do
-        [ -d "$i" ] && continue
-        # Don't run *.{rpmsave,rpmorig,rpmnew,swp} scripts
-        [ "${i%.rpmsave}" != "${i}" ] && continue
-        [ "${i%.rpmorig}" != "${i}" ] && continue
-        [ "${i%.rpmnew}" != "${i}" ] && continue
-        [ "${i%.swp}" != "${i}" ] && continue
-        [ "${i%,v}" != "${i}" ] && continue
+	[ -d "$i" ] && continue
+	# Don't run *.{rpmsave,rpmorig,rpmnew,swp} scripts
+	[ "${i%.rpmsave}" != "${i}" ] && continue
+	[ "${i%.rpmorig}" != "${i}" ] && continue
+	[ "${i%.rpmnew}" != "${i}" ] && continue
+	[ "${i%.swp}" != "${i}" ] && continue
+	[ "${i%,v}" != "${i}" ] && continue
 
-        if [ -x "$i" ]; then
-	    	runprog="$i $@"
-	    	if [ "$workasuser" = "yes" ]; then
-		    runuser="$(/bin/ls -l "$i"  | awk ' { print $3 } ' 2> /dev/null)"
-		    [ -z "$runuser" ] && echo "Warning: Can't find owner for [$i] file. Not running." && continue
-      		    runprog="/bin/su $runuser -s /bin/sh -c $runprog"
-	   	fi
-                $runprog 2>&1 | awk -v "progname=$i" \
-                              'progname {
-                                   print progname ":\n"
-                                   progname="";
-                               }
-                               { print; }'
-        fi
+	if [ -x "$i" ]; then
+		runprog="$i $@"
+		if [ "$workasuser" = "yes" ]; then
+			runuser="$(/bin/ls -l "$i" | awk ' { print $3 } ' 2> /dev/null)"
+			[ -z "$runuser" ] && echo "Warning: Can't find owner for [$i] file. Not running." && continue
+			runprog="/bin/su $runuser -s /bin/sh -c $runprog"
+		fi
+		$runprog 2>&1 | awk -v "progname=$i" \
+			'progname {
+			 	print progname ":\n"
+				progname="";
+				}
+			{ print; }'
+	fi
 done
 
 exit 0
+
+# This must be last line !
+# vi:syntax=sh
