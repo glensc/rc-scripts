@@ -63,6 +63,11 @@ fi
 # sysfs is also needed before any other things (under kernel > 2.5)
 if ! is_yes "$VSERVER" && grep -q sysfs /proc/filesystems 2>/dev/null ; then
 	mount -n -o gid=17 -t sysfs sysfs /sys
+	if [ "$(kernelver)" -ge "002006014" ] && \
+		grep -q securityfs /proc/filesystems 2>/dev/null ; then
+			mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
+	fi
+													
 fi
 
 # selinux
@@ -389,6 +394,10 @@ if ! is_yes "$VSERVER"; then
 
 	if grep -q sysfs /proc/filesystems 2>/dev/null ; then
 		mount -f -t sysfs sysfs /sys
+		if [ "$(kernelver)" -ge "002006014" ] && \
+			grep -q securityfs /proc/filesystems 2>/dev/null ; then
+				mount -f -t securityfs securityfs /sys/kernel/security
+		fi
 	fi
 
 	if grep -q selinuxfs /proc/filesystems 2>/dev/null ; then
