@@ -188,7 +188,8 @@ int monitor(char *cmdname, int pid, int numfds, int *fds, int reexec, int quiet,
 	     int bytesread = 0;
 	     
 	     do {
-		char *buf=calloc(8192,sizeof(char));
+		char *b, *buf=calloc(8193,sizeof(char));
+		b = buf;
 		bytesread = read(pfds[y].fd,buf,8192);
 		if (bytesread==-1) {
 		   perror("read");
@@ -251,11 +252,15 @@ int monitor(char *cmdname, int pid, int numfds, int *fds, int reexec, int quiet,
 			      }
 			      cmdargs[cmdargc+1]=NULL;
 			      processArgs(cmdargc+1,cmdargs,1);
+			      free(cmdargs[0]);
+			      free(tmpargs);
+			      free(cmdargs);
 			  }
 		      }
+		      if (tmpstr) free(tmpstr);
 		  }
 		}
-                free(buf);
+                free(b);
 	     } while ( bytesread==8192 );
 	  }
 	  y++;
