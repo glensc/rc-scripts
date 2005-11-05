@@ -89,7 +89,6 @@ if [ -x /etc/rc.d/rc.live ]; then
 fi
 
 # Choose Hardware profile
-rm -f /var/run/hwprofile 2> /dev/null
 if [ -f /etc/sysconfig/hwprof ]; then
 	. /etc/sysconfig/hwprof
 	if is_yes "${HWPROFILES}" && [ -x /sbin/hwprofile -a -d /etc/sysconfig/hwprofiles/data ]; then
