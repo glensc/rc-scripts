@@ -1,3 +1,115 @@
+2005-11-05 01:34 +0000 [r6520]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - remove useless rm -f /var/run/hwprofile, which
+	  will never work as all filesystems are readonly at that point
+
+2005-11-01 18:34 +0000 [r6510-6511]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* src/process.c: Updated from FC.
+
+	* src/shvar.c, src/shvar.h: Be more precise about condition.
+
+2005-10-30 22:14 +0000 [r6504]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc.sysinit: Mount securityfs filesystem on
+	  kernel >= 2.6.14.
+
+2005-10-30 00:03 +0000 [r6503]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc: - corrected order of conditions
+
+2005-10-28 14:54 +0000 [r6501]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network: - ignore non-empty but commented /etc/mactab
+	  (patch by glen)
+
+2005-10-26 16:57 +0000 [r6492]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* lang.sh, run-parts, lang.csh, hwprofile, service, setsysfont: -
+	  more white space and formatting cleanup
+
+2005-10-26 16:33 +0000 [r6491]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network, rc.d/rc.shutdown, ppp/ipx-down,
+	  rc.d/init.d/timezone, sysconfig/network-scripts/ifdown-vlan,
+	  sysconfig/network-scripts/tnldown,
+	  sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/ifup-plusb,
+	  sysconfig/network-scripts/ifdown-br,
+	  sysconfig/interfaces/tnlcfg-icm,
+	  sysconfig/network-scripts/ifup-neigh, ppp/auth-up,
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/ifup-vlan,
+	  sysconfig/network-scripts/ifup-ipx,
+	  sysconfig/interfaces/tnlcfg-description,
+	  sysconfig/network-scripts/ifup-br,
+	  sysconfig/network-scripts/ifup-plip, rc.d/init.d/template.init,
+	  sysconfig/system, ppp/ip-up, rc.d/rc.sysinit,
+	  sysconfig/network-scripts/ifdown-post, rc.d/init.d/random,
+	  rc.d/init.d/single, rc.d/rc.init, sysconfig/timezone,
+	  sysconfig/clock, rc.d/init.d/cpusets,
+	  sysconfig/network-scripts/ifup-routes,
+	  sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifdown-ppp, ppp/auth-down,
+	  rc.d/init.d/sys-chroots, sysconfig/network-scripts/ifup-post,
+	  sysconfig/static-routes, sysconfig/static-nat, ppp/ip-down,
+	  ppp/ipx-up, rc.d/init.d/allowlogin, rc.d/rc.local,
+	  rc.d/init.d/functions, sysconfig/network-scripts/ifdown-sl,
+	  sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/ifdown-irda,
+	  sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/ifup-iucv, rc.d/rc, sysconfig/network,
+	  rc.d/init.d/killall, sysconfig/network-scripts/ifup-sl,
+	  rc.d/rc.modules, sysconfig/network-scripts/ifup-irda: - more vim
+	  setting removed (don't convert tabs to spaces) - white space
+	  cleanup - convert spaces to tabs - unify formatting for all
+	  scripts
+
+2005-10-25 18:22 +0000 [r6489]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc, rc.d/rc.sysinit: - add support for
+	  running inside vservers, the diff may seem huge but it's mostly
+	  white space change
+
+2005-10-25 18:15 +0000 [r6488]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - typo
+
+2005-10-25 17:11 +0000 [r6487]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc, rc.d/rc.sysinit: - source configs before functions
+
+2005-10-25 16:56 +0000 [r6485]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network: - don't start interfaces inside vserver
+
+2005-10-25 16:46 +0000 [r6484]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc: - all stty's stderr belongs to /dev/null
+
+2005-10-25 16:21 +0000 [r6482]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - detect if run inside vserver and ignore
+	  rc_splash if so
+
+2005-10-25 16:04 +0000 [r6480]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - we need /proc mounted before everything
+
+2005-10-25 14:17 +0000 [r6479]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc, rc.d/rc.sysinit, rc.d/rc.modules: -
+	  grep: all your stderr are belong to /dev/null
+
+2005-10-25 11:58 +0000 [r6477]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - better detection of tput functionality
+
+2005-10-19 19:06 +0000 [r6468]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Update for new release.
+
 2005-10-19 18:08 +0000 [r6467]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network: Working version of
