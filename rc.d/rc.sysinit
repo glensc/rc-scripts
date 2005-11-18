@@ -377,14 +377,14 @@ if [ -n "$SELINUX" ]; then
 	done
 fi
 
-# Clear mtab
-:>/etc/mtab
-[ -f /etc/cryptomtab ] && :>/etc/cryptomtab
-
 # Remove stale backups
 rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
 
 if ! is_yes "$VSERVER"; then
+	# Clear mtab
+	:>/etc/mtab
+	[ -f /etc/cryptomtab ] && :>/etc/cryptomtab
+
 	# Enter root, /proc, /sys, devfs and other into mtab.
 	mount -f /
 	mount -f /proc
