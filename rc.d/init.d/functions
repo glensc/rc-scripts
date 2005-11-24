@@ -884,6 +884,16 @@ relabel_selinux() {
 	echo $SELINUX > $selinuxfs/enforce
 }
 
+# Remove duplicate entries from mtab (for vserver guest use only)
+clean_vserver_mtab() {
+	:>/etc/mtab.clean
+	cat /etc/mtab | while read device mountpoint line ; do
+		grep -qs "$mountpoint" /etc/mtab.clean || \
+			echo "$device $mountpoint $line" >> /etc/mtab.clean
+	done
+	mv -f /etc/mtab.clean /etc/mtab
+}
+
 #/*
 # * Local variables:
 # * mode: sh
