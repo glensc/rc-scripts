@@ -226,7 +226,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Initialize USB controllers
 	usb=0
-	if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "usb" /proc/devices 2>/dev/null ; then
+	if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "/proc/bus/usb" /proc/mounts 2>/dev/null ; then
 		aliases=$(/sbin/modprobe -c | awk '/^alias usb-controller/ { print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			/sbin/modprobe -k usbcore
