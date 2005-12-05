@@ -84,6 +84,8 @@ if 	DEVICE=eth* ; then
 	[ MACADDR=<hw addres> ]
 
 	if 	DEVICE=wireless interface (man iwconfig(8))
+		WLAN_UPEARLY=<yes>|<no> Up device before setting any WLAN parameters
+					(needed for some drivers)
 		WLAN_ESSID=<ESSID or Network Name (Domain ID)>|any|off
 		WLAN_NWID=<Network ID (Domain ID)>|off
 		WLAN_FREQ=<frequency> (2.422G)

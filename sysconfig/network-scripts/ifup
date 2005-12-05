@@ -106,6 +106,7 @@ if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
 fi
 
 if is_wireless_device "${DEVICE}"; then
+	is_yes "${WLAN_UPEARLY}" && ip link set ${DEVICE} up
 	wireless_param ${DEVICE}
 	if is_yes "${WLAN_WPA}"; then
 		/usr/sbin/wpa_supplicant -B -w -D ${WLAN_WPA_DRIVER} -c ${WLAN_WPA_CONFIG} -i ${DEVICE} ${WLAN_WPA_OPTIONS} -P "/var/run/wpa_supplicant-${DEVICE}.pid"
