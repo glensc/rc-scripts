@@ -1,3 +1,48 @@
+2005-12-15 18:57 +0000 [r6651]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: modprobe with -s option so messages go to
+	  syslog.
+
+2005-12-09 15:26 +0000 [r6627]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - change reboot/halt message for vserver
+	  (request by glen)
+
+2005-12-05 00:33 +0000 [r6598]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup,
+	  sysconfig/interfaces/ifcfg-description: Up wireless device before
+	  setting any WLAN parameters support.
+
+2005-12-05 00:29 +0000 [r6597]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: udev loads core usb modules itself so
+	  /proc/bus/usb was never mounted here. Now we are checking for
+	  exact mount instead of just checking whether usb modules are
+	  loaded.
+
+2005-11-24 15:25 +0000 [r6563]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit, rc.d/init.d/functions: - remove duplicate
+	  entries in vserver guest /etc/mtab
+
+2005-11-23 20:49 +0000 [r6561]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* setsysfont: Don't yell when there is no kbd installed.
+
+2005-11-18 23:44 +0000 [r6541]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - don't clear mtab on vserver guest
+
+2005-11-17 22:54 +0000 [r6540]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - fixed vserver detection with legacy
+	  vserver code turned off
+
+2005-11-16 18:45 +0000 [r6534]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Update for 0.4.0.22.
+
 2005-11-05 01:34 +0000 [r6520]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - remove useless rm -f /var/run/hwprofile, which
