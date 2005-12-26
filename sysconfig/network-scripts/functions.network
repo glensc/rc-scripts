@@ -481,11 +481,11 @@ wireless_param ()
 		iwconfig ${device} key off
 	fi
 	[ -n "$(eval echo \$${prefix}WLAN_POWER)" ] && \
-		iwconfig ${device} "$(eval echo \$${prefix}WLAN_POWER)"
+		iwconfig ${device} power "$(eval echo \$${prefix}WLAN_POWER)"
 	[ -n "$(eval echo \$${prefix}WLAN_TXPOWER)" ] && \
-		iwconfig ${device} "$(eval echo \$${prefix}WLAN_TXPOWER)"
+		iwconfig ${device} txpower "$(eval echo \$${prefix}WLAN_TXPOWER)"
 	[ -n "$(eval echo \$${prefix}WLAN_RETRY)" ] && \
-		iwconfig ${device} "$(eval echo \$${prefix}WLAN_RETRY)"
+		iwconfig ${device} retry "$(eval echo \$${prefix}WLAN_RETRY)"
 	if is_yes "$(eval echo \$${prefix}WLAN_COMMIT)"; then
 		iwconfig ${device} commit
 	fi
