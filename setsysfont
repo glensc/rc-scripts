@@ -8,6 +8,8 @@
 
 [ -n "$SYSFONT" ] && CONSOLEFONT="$SYSFONT"
 
+. /etc/rc.d/init.d/functions
+
 case "$LANG" in
   *.utf8|*.UTF-8)
 	if [ -x /bin/unicode_start ] && /sbin/consoletype fg ; then
