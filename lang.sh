@@ -7,11 +7,17 @@ if [ -f /etc/sysconfig/i18n ]; then
 	. /etc/sysconfig/i18n
 
 	[ -n "$LANG" ] && export LANG || unset LANG
-	[ -n "$LC_CTYPE" ] && export LC_CTYPE || unset LC_CTYPE
+	[ -n "$LC_ADDRESS" ] && export LC_ADDRESS || unset LC_ADDRESS
 	[ -n "$LC_COLLATE" ] && export LC_COLLATE || unset LC_COLLATE
+	[ -n "$LC_CTYPE" ] && export LC_CTYPE || unset LC_CTYPE
+	[ -n "$LC_IDENTIFICATION" ] && export LC_IDENTIFICATION || unset LC_IDENTIFICATION
+	[ -n "$LC_MEASUREMENT" ] && export LC_MEASUREMENT || unset LC_MEASUREMENT
 	[ -n "$LC_MESSAGES" ] && export LC_MESSAGES || unset LC_MESSAGES
-	[ -n "$LC_NUMERIC" ] && export LC_NUMERIC || unset LC_NUMERIC
 	[ -n "$LC_MONETARY" ] && export LC_MONETARY || unset LC_MONETARY
+	[ -n "$LC_NAME" ] && export LC_NAME || unset LC_NAME
+	[ -n "$LC_NUMERIC" ] && export LC_NUMERIC || unset LC_NUMERIC
+	[ -n "$LC_PAPER" ] && export LC_PAPER || unset LC_PAPER
+	[ -n "$LC_TELEPHONE" ] && export LC_TELEPHONE || unset LC_TELEPHONE
 	[ -n "$LC_TIME" ] && export LC_TIME || unset LC_TIME
 	[ -n "$LC_ALL" ] && export LC_ALL || unset LC_ALL
 	[ -n "$LANGUAGE" ] && export LANGUAGE || unset LANGUAGE
