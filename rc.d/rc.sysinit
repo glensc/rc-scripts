@@ -119,7 +119,7 @@ fi
 
 
 if [ "$CONSOLETYPE" = "vt" -a -x /sbin/setsysfont ]; then
-	run_cmd "Setting default font" /sbin/setsysfont
+	/sbin/setsysfont
 fi
 
 # Print welcome message
