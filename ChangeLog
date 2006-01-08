@@ -1,4 +1,39 @@
-2005-12-15 18:57 +0000 [r6651]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+2006-01-07 15:57 +0000 [r6762]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: ESSID setting is
+	  done only once, at the end just before commit.
+
+2006-01-06 15:57 +0000 [r6750]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Don't use run_cmd for starting udev since
+	  start_udev can handle messages itself.
+
+2006-01-05 22:52 +0000 [r6747]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit, setsysfont: Fix console detection by not running
+	  setsysfont trough run_cmd (fixes utf8 font handling, too).
+
+2006-01-04 12:16 +0000 [r6734]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: No longer set hotplug stuff. Put that into
+	  sysctl.conf.
+
+2006-01-01 20:16 +0000 [r6727]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* lang.sh: Process more locale variables (havner).
+
+2006-01-01 20:12 +0000 [r6726]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* setsysfont: Include /etc/rc.d/init.d/functions.
+
+2005-12-26 10:35 +0000 [r6709]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Fix WLAN power,
+	  txpower, retry settings. Patch by Łukasz Maśko.
+
+2005-12-15 18:59 +0000 [r6651-6652]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Preparations for 0.4.0.23.
 
 	* rc.d/rc.sysinit: modprobe with -s option so messages go to
 	  syslog.
