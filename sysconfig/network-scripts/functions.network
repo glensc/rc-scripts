@@ -487,12 +487,13 @@ wireless_param ()
 	[ -n "$(eval echo \$${prefix}WLAN_NWID)" ] && iwconfig ${device} \
 		nwid "$(eval echo \$${prefix}WLAN_NWID)"
 
-	# essid should be last due to netowork rescanning by wlan devices
+	# essid should be last due to network rescanning by wlan devices
 	[ -n "$(eval echo \$${prefix}WLAN_ESSID)" ] && iwconfig ${device} \
 		essid "$(eval echo \$${prefix}WLAN_ESSID)"
 
 	if is_yes "$(eval echo \$${prefix}WLAN_COMMIT)"; then
 		iwconfig ${device} commit
+	fi
 }
 
 check_mii_tool ()
