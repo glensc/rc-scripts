@@ -380,6 +380,25 @@ fi
 # Remove stale backups
 rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
 
+# Remove /etc/nologin when starting system
+[ -f /etc/nologin.boot ] && rm -f /etc/nologin /etc/nologin.boot
+
+if is_yes "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
+	show "Enabling Delay Login"; busy
+	echo > /etc/nologin
+	nls "System bootup in progress - please wait" >> /etc/nologin
+	echo >> /etc/nologin
+	chmod 644 /etc/nologin
+	cp -fp /etc/nologin /etc/nologin.boot
+	ok
+fi
+
+# The root filesystem is now read-write, so we can now log via
+# syslog() directly...
+if [ -n "$IN_INITLOG" ]; then
+	IN_INITLOG=""
+fi
+
 if ! is_yes "$VSERVER"; then
 	# Clear mtab
 	:>/etc/mtab
@@ -406,30 +425,7 @@ if ! is_yes "$VSERVER"; then
 	if grep -q cpuset /proc/filesystems 2>/dev/null ; then
 		mount -f -t cpuset none /dev/cpuset
 	fi
-else
-	clean_vserver_mtab
-fi
 
-# Remove /etc/nologin when starting system
-[ -f /etc/nologin.boot ] && rm -f /etc/nologin /etc/nologin.boot
-
-if is_yes "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
-	show "Enabling Delay Login"; busy
-	echo > /etc/nologin
-	nls "System bootup in progress - please wait" >> /etc/nologin
-	echo >> /etc/nologin
-	chmod 644 /etc/nologin
-	cp -fp /etc/nologin /etc/nologin.boot
-	ok
-fi
-
-# The root filesystem is now read-write, so we can now log via
-# syslog() directly...
-if [ -n "$IN_INITLOG" ]; then
-	IN_INITLOG=""
-fi
-
-if ! is_yes "$VSERVER"; then
 	if [ ! -f /proc/modules ]; then
 		USEMODULES=
 	elif ! grep -iq nomodules /proc/cmdline 2>/dev/null; then
@@ -781,6 +777,8 @@ if ! is_yes "$VSERVER"; then
 
 	# ... and here finish configuring parameters
 	/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
+else
+	clean_vserver_mtab
 fi
 
 [ -n "$SELINUX" ] && [ -f /.autorelabel ] && relabel_selinux
