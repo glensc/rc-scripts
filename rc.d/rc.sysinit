@@ -746,25 +746,22 @@ if ! is_yes "$VSERVER"; then
 		' /proc/mounts /etc/fstab
 		ok
 	fi
-fi
 
-if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
-	run_cmd "Checking filesystem quotas" /sbin/quotacheck -vnugRa
-fi
 
-# Turn on quota
-if [ -x /sbin/quotaon ]; then
-	run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -aug
-fi
+	if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
+		run_cmd "Checking filesystem quotas" /sbin/quotacheck -vnugRa
+	fi
 
-[ -n "$SELINUX" ] && [ -f /.autorelabel ] && relabel_selinux
+	# Turn on quota
+	if [ -x /sbin/quotaon ]; then
+		run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -aug
+	fi
 
-# Turn on process accounting
-if [ -x /etc/rc.d/rc.acct ]; then
-	/etc/rc.d/rc.acct start
-fi
+	# Turn on process accounting
+	if [ -x /etc/rc.d/rc.acct ]; then
+		/etc/rc.d/rc.acct start
+	fi
 
-if ! is_yes "$VSERVER"; then
 	# Set the clock if timezone definition wasn't available (eg. /usr not mounted)
 	if is_yes "$TIME_SETUP_DELAYED"; then
 		if run_cmd "$(nls 'Setting clock')$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
@@ -785,6 +782,8 @@ if ! is_yes "$VSERVER"; then
 	# ... and here finish configuring parameters
 	/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 fi
+
+[ -n "$SELINUX" ] && [ -f /.autorelabel ] && relabel_selinux
 
 # Clean up /.
 rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
@@ -830,9 +829,11 @@ mkdir -m 1777 -p /tmp/.ICE-unix > /dev/null 2>&1
 chown root:root /tmp/.ICE-unix
 [ -n "$SELINUX" ] && restorecon /tmp/.ICE-unix >/dev/null 2>&1
 
-# Right, now turn on swap in case we swap to files
-swapon -a >/dev/null 2>&1
-run_cmd "Enabling swap space" /bin/true
+if ! is_yes "$VSERVER"; then
+	# Right, now turn on swap in case we swap to files
+	swapon -a >/dev/null 2>&1
+	run_cmd "Enabling swap space" /bin/true
+fi
 
 # If a SCSI tape has been detected, load the st module unconditionally
 # since many SCSI tapes don't deal well with st being loaded and unloaded

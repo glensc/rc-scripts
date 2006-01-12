@@ -37,13 +37,15 @@ run_cmd "Sending all processes the KILL signal" killall5 -9
 # Write to wtmp file before unmounting /var
 halt -w
 
-# Turn off swap, then unmount file systems.
-run_cmd "Turning off swap" swapoff -a
+if ! is_yes "$VSERVER"; then
+	# Turn off swap, then unmount file systems.
+	run_cmd "Turning off swap" swapoff -a
 
-[ -x /etc/rc.d/rc.acct ] && /etc/rc.d/rc.acct stop
+	[ -x /etc/rc.d/rc.acct ] && /etc/rc.d/rc.acct stop
 
-if [ -x /sbin/quotaoff ]; then
-	run_cmd "Turning off quotas for local filesystems" /sbin/quotaoff -a
+	if [ -x /sbin/quotaoff ]; then
+		run_cmd "Turning off quotas for local filesystems" /sbin/quotaoff -a
+	fi
 fi
 
 if ! is_yes "$VSERVER"; then
