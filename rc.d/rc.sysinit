@@ -60,19 +60,21 @@ fi
 # Read functions
 . /etc/rc.d/init.d/functions
 
-# sysfs is also needed before any other things (under kernel > 2.5)
-if ! is_yes "$VSERVER" && grep -q sysfs /proc/filesystems 2>/dev/null ; then
-	mount -n -o gid=17 -t sysfs sysfs /sys
-	if [ "$(kernelver)" -ge "002006014" ] && \
-		grep -q securityfs /proc/filesystems 2>/dev/null ; then
-			mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
+if ! is_yes "$VSERVER" ; then
+	# sysfs is also needed before any other things (under kernel > 2.5)
+	if grep -q sysfs /proc/filesystems 2>/dev/null ; then
+		mount -n -o gid=17 -t sysfs sysfs /sys
+		if [ "$(kernelver)" -ge "002006014" ] && \
+			grep -q securityfs /proc/filesystems 2>/dev/null ; then
+				mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
+		fi
+														
 	fi
-													
-fi
 
-# selinux
-if ! is_yes "$VSERVER" && grep -q selinuxfs /proc/filesystems 2>/dev/null && ! grep -q selinuxfs /proc/mounts 2>/dev/null; then
-	mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
+	# selinux
+	if grep -q selinuxfs /proc/filesystems 2>/dev/null && ! grep -q selinuxfs /proc/mounts 2>/dev/null; then
+		mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
+	fi
 fi
 
 if [ $(kernelverser) = "002006" ]; then
