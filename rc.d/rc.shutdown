@@ -46,9 +46,7 @@ if ! is_yes "$VSERVER"; then
 	if [ -x /sbin/quotaoff ]; then
 		run_cmd "Turning off quotas for local filesystems" /sbin/quotaoff -a
 	fi
-fi
 
-if ! is_yes "$VSERVER"; then
 	# Unmount file systems, killing processes if we have to.
 	sig=-15
 	retry=3
@@ -119,9 +117,6 @@ if ! is_yes "$VSERVER"; then
 	else
 		fail
 	fi
-fi
-
-if ! is_yes "$VSERVER"; then
 	_rebootwhat="system"
 else
 	_rebootwhat="vserver"
