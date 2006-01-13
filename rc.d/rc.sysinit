@@ -75,33 +75,33 @@ if ! is_yes "$VSERVER" ; then
 	if grep -q selinuxfs /proc/filesystems 2>/dev/null && ! grep -q selinuxfs /proc/mounts 2>/dev/null; then
 		mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
 	fi
-fi
 
-if [ $(kernelverser) = "002006" ]; then
-	MODULES_CONF=/etc/modprobe.conf
-elif [ -r /etc/modules.conf ]; then
-	MODULES_CONF=/etc/modules.conf
-else
-	MODULES_CONF=/etc/conf.modules
-fi
-
-# PLD LiveCD support
-if [ -x /etc/rc.d/rc.live ]; then
-	/etc/rc.d/rc.live
-fi
-
-# Choose Hardware profile
-if [ -f /etc/sysconfig/hwprof ]; then
-	. /etc/sysconfig/hwprof
-	if is_yes "${HWPROFILES}" && [ -x /sbin/hwprofile -a -d /etc/sysconfig/hwprofiles/data ]; then
-		mount -n / -o rw,remount
-		/sbin/hwprofile -qf
-		mount -n / -o ro,remount
+	if [ $(kernelverser) = "002006" ]; then
+		MODULES_CONF=/etc/modprobe.conf
+	elif [ -r /etc/modules.conf ]; then
+		MODULES_CONF=/etc/modules.conf
+	else
+		MODULES_CONF=/etc/conf.modules
 	fi
-fi
 
-# Disable splash when requested
-[ -e /proc/splash ] && is_no "$BOOT_SPLASH" && echo "0" > /proc/splash
+	# PLD LiveCD support
+	if [ -x /etc/rc.d/rc.live ]; then
+		/etc/rc.d/rc.live
+	fi
+
+	# Choose Hardware profile
+	if [ -f /etc/sysconfig/hwprof ]; then
+		. /etc/sysconfig/hwprof
+		if is_yes "${HWPROFILES}" && [ -x /sbin/hwprofile -a -d /etc/sysconfig/hwprofiles/data ]; then
+			mount -n / -o rw,remount
+			/sbin/hwprofile -qf
+			mount -n / -o ro,remount
+		fi
+	fi
+
+	# Disable splash when requested
+	[ -e /proc/splash ] && is_no "$BOOT_SPLASH" && echo "0" > /proc/splash
+fi
 
 # Check SELinux status
 selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
