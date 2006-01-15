@@ -810,12 +810,12 @@ rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
 if ! is_no "$NEED_XFILES" ; then
 	:>/var/run/utmpx
 	touch /var/log/wtmpx
-	chown root.utmp /var/run/utmpx /var/log/wtmpx
+	chown root:utmp /var/run/utmpx /var/log/wtmpx
 	chmod 0664 /var/run/utmpx /var/log/wtmpx
 else
 	:>/var/run/utmp
 	touch /var/log/wtmp
-	chown root.utmp /var/run/utmp /var/log/wtmp
+	chown root:utmp /var/run/utmp /var/log/wtmp
 	chmod 0664 /var/run/utmp /var/log/wtmp
 fi
 
