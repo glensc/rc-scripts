@@ -1,3 +1,47 @@
+2006-01-15 12:01 +0000 [r6809]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/sys-chroots, rc.d/rc.sysinit: Use correct chown
+	  user:group notation.
+
+2006-01-13 18:07 +0000 [r6803]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - more non-vserver stuff ifed
+
+2006-01-12 16:21 +0000 [r6798-6800]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - cleanup if vserver logic
+
+	* rc.d/rc.sysinit: - merge more vserver ifs
+
+	* rc.d/rc.sysinit: - typo
+
+2006-01-12 16:10 +0000 [r6797]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - more non-vserver things if'ed - kill psdevtab
+	  removal (file is obsolete since 1998)
+
+2006-01-12 16:01 +0000 [r6796]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - cleanup
+
+2006-01-12 15:29 +0000 [r6795]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc.sysinit: - skip swap/quota/acct in
+	  vserver
+
+2006-01-10 20:59 +0000 [r6788]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: mdadm now creates missing nodes when assembling
+	  an array.
+
+2006-01-09 17:23 +0000 [r6781]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Typos fixed.
+
+2006-01-08 21:53 +0000 [r6777]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Prepare for 0.4.0.24.
+
 2006-01-07 15:57 +0000 [r6762]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network: ESSID setting is
