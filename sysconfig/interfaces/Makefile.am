@@ -18,6 +18,7 @@ interfaces_DATA = \
 	ifcfg-ppp0.leased2 \
 	ifcfg-ppp0.speedtouch-neostrada \
 	ifcfg-ppp0.tpsa \
+	ifcfg-ppp0.ueagle-neostrada \
 	ifcfg-sl0 \
 	tnlcfg-description \
 	tnlcfg-icm 

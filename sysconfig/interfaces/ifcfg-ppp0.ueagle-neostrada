@@ -1,0 +1,14 @@
+DEVICE="ppp0"
+PERSIST="yes"
+USER="XXXXXXXXXXXXXX@neostrada.pl"
+ONBOOT="no"
+
+PERSIST=yes
+DEFROUTE=yes
+USEPEERDNS=yes
+AUTH=no
+MTU=1452
+DEBUG=yes
+MAXFAIL=0
+
+PPPOPTIONS="plugin pppoatm.so 0.35"
