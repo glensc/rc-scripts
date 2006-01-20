@@ -392,8 +392,13 @@ checkpid()
 # - inside chroot get only those processes, which are inside chroot.
 # - don't filter out pids which do not have corresponding running processes (process died etc)
 # (note: some processes like named are chrooted but run outside chroot)
+# - do nothing inside vserver
 filter_chroot()
 {
+	if is_yes "$VSERVER"; then
+		echo $@
+		return
+	fi
 	if [ $# -lt 1 -o ! -d /proc/1 ] ; then
 		echo $@
 		return
