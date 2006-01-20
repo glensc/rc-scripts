@@ -863,7 +863,7 @@ fi
 kill -TERM $(/sbin/pidof getkey) >/dev/null 2>&1
 } &
 if is_yes "$PROMPT"; then
-	/sbin/getkey i && touch /var/run/confirm
+	/sbin/getkey -c 5 i && touch /var/run/confirm
 fi
 wait
 echo
