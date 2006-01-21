@@ -27,7 +27,6 @@ OPTION4=5	#
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network ]; then
-		# nls "ERROR: Networking is down. %s can't be run." <service>
 		msg_network_down <service>
 		exit 1
 	fi
@@ -41,25 +40,21 @@ case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/<service> ]; then
-		# show "Starting %s service" <service>
 		msg_starting <service>
 		daemon <service>
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/<service>
 	else
-		# show "%s service is already running." <service>
 		msg_already_running <service>
 	fi
 	;;
   stop)
 	if [ -f /var/lock/subsys/<service> ]; then
 		# Stop daemons.
-		# show "Stopping %s service" <service>
 		msg_stopping <service>
 		killproc <service>
 		rm -f /var/lock/subsys/<service>
 	else
-		# show "%s service is not running." <service>
 		msg_not_running <service>
 	fi
 	;;
@@ -70,12 +65,10 @@ case "$1" in
 	;;
   reload)
 	if [ -f /var/lock/subsys/<service> ]; then
-		# show "Reload %s service" <service>
 		msg_reloading <service>
 		killproc <service> -HUP
 		RETVAL=$?
 	else
-		# show "%s service is not running." <service>
 		msg_not_running <service> >&2
 		RETVAL=7
 	fi
@@ -94,7 +87,6 @@ case "$1" in
 	RETVAL=$?
 	;;
   *)
-	# show "Usage: %s {start|stop|restart|reload|force-reload|status}"
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
 	exit 3
 esac
