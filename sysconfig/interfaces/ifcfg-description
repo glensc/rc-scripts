@@ -146,9 +146,27 @@ elif	DEVICE=ppp* || DEVICE=sl* ; then
 			or by default use address specified by IP6_PRIM_IF
 			and REMIP6
 		fi
+		PPPOA=yes|no (generic PPP over ATM)
+		if PPPOA = yes ; then
+			PPPOA_VPI=<VPI number>
+			PPPOA_VCI=<VCI number>
+		fi
 		PPPOE_DEV=<ethX> (PPP over Ethernet device)
-		PPPOE_KERNEL=yes|no (use or not kernel space PPPoE support)
-		PPPOE_OPT=<options> (used only with userspace pppoe program)
+		if PPPOE_DEV exists ; then
+			PPPOE_KERNEL=yes|no (use or not kernel space PPPoE support)
+			PPPOE_OPT=<options> (used only with userspace pppoe program)
+		fi
+		PPPOA_EAGLE=yes|no (eagle-usb support)
+		if PPPOA_EAGLE = yes ; then
+			PPPOA_OPT=<options> (used only with userspace pppoa program)
+		fi
+		PPPOA_SPEEDTOUCH=yes|no (speedtouch support)
+		if PPPOA_SPEEDTOUCH = yes ; then
+			PPPOA_KERNEL=yes|no (use or not kernel space PPPoA support)
+			PPPOA_VPI=<VPI number>
+			PPPOA_VCI=<VCI number>
+			PPPOA_OPT=<options> (used only with userspace pppoa program)
+		fi
 		UNIT=yes|no (pass unit option to pppd (depends on DEVICE name)
 		             defaults to yes)
 	fi
