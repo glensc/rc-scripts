@@ -11,4 +11,6 @@ MTU=1452
 DEBUG=yes
 MAXFAIL=0
 
-PPPOPTIONS="plugin pppoatm.so 0.35"
+PPPOA=yes
+PPPOA_VPI=0
+PPPOA_VCI=35

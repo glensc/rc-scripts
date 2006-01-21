@@ -89,6 +89,9 @@ elif is_yes "${PPPOA_SPEEDTOUCH}"; then
 		MODEMMODE="pty"
 		MODEMPORT="pppoa3 -v1 -c -vpi ${PPPOA_VPI} -vci ${PPPOA_VCI} ${PPPOA_OPT}"
 	fi
+else is_yes "${PPPOA}"; then
+	MODEMMODE="plugin pppoatm.so"
+	MODEMPORT="${PPPOA_VPI}.${PPPOA_VCI}"
 else
 	if is_no "${DIRECT_CONNECT}" || [ -z "${DIRECT_CONNECT}" ]; then
 		PEERCONF=/etc/ppp/peers/${DEVNAME}
