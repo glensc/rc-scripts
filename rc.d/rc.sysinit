@@ -126,7 +126,7 @@ fi
 
 # Print welcome message
 nls "\t\t\t%sPowered by %sPLD Linux Distribution%s" "$(termput setaf $CPOWEREDBY)" "$(termput setaf $CPLD)" "$(termput op)"
-if is_yes "$PROMPT"; then
+if ! is_no "$RC_PROMPT"; then
 	nls -n "\t\t  Press %sI%s to enter interactive startup" "$(termput setaf $CI)" "$(termput op)"
 	echo
 	sleep 1
@@ -862,7 +862,7 @@ fi
 
 kill -TERM $(/sbin/pidof getkey) >/dev/null 2>&1
 } &
-if is_yes "$PROMPT"; then
+if ! is_no "$RC_PROMPT"; then
 	/sbin/getkey -c 5 i && touch /var/run/confirm
 fi
 wait
