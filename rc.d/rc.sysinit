@@ -104,7 +104,7 @@ if ! is_yes "$VSERVER" ; then
 fi
 
 # Check SELinux status
-selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
+selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts 2> /dev/null)
 SELINUX=
 if [ -n "$selinuxfs" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
 	if [ -r $selinuxfs/enforce ] ; then
