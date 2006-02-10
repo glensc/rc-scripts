@@ -102,26 +102,26 @@ if ! is_yes "$VSERVER" ; then
 	# Disable splash when requested
 	[ -e /proc/splash ] && is_no "$BOOT_SPLASH" && echo "0" > /proc/splash
 
-# Check SELinux status
-selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts 2> /dev/null)
-SELINUX=
-if [ -n "$selinuxfs" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
-	if [ -r $selinuxfs/enforce ] ; then
-		SELINUX=$(cat $selinuxfs/enforce)
-	else
-		# assume enforcing if you can't read it
-		SELINUX=1
+	# Check SELinux status
+	selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts 2> /dev/null)
+	SELINUX=
+	if [ -n "$selinuxfs" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
+		if [ -r $selinuxfs/enforce ] ; then
+			SELINUX=$(cat $selinuxfs/enforce)
+		else
+			# assume enforcing if you can't read it
+			SELINUX=1
+		fi
 	fi
-fi
 
-if [ -x /sbin/restorecon ] && LC_ALL=C fgrep -q " /dev " /proc/mounts 2>/dev/null ; then
-	/sbin/restorecon -R /dev 2>/dev/null
-fi
+	if [ -x /sbin/restorecon ] && LC_ALL=C fgrep -q " /dev " /proc/mounts 2>/dev/null ; then
+		/sbin/restorecon -R /dev 2>/dev/null
+	fi
 
 
-if [ "$CONSOLETYPE" = "vt" -a -x /sbin/setsysfont ]; then
-	/sbin/setsysfont
-fi
+	if [ "$CONSOLETYPE" = "vt" -a -x /sbin/setsysfont ]; then
+		/sbin/setsysfont
+	fi
 fi
 
 # Print welcome message
