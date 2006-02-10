@@ -370,13 +370,13 @@ if ! is_yes "$VSERVER"; then
 	if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
 		run_cmd "Checking root filesystem quotas" /sbin/quotacheck -vnug /
 	fi
-fi
 
-# Clean up SELinux labels
-if [ -n "$SELINUX" ]; then
-	for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache ; do
-		[ -r $file ] && restorecon $file >/dev/null 2>&1
-	done
+	# Clean up SELinux labels
+	if [ -n "$SELINUX" ]; then
+		for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache ; do
+			[ -r $file ] && restorecon $file >/dev/null 2>&1
+		done
+	fi
 fi
 
 # Remove stale backups
