@@ -129,7 +129,6 @@ nls "\t\t\t%sPowered by %sPLD Linux Distribution%s" "$(termput setaf $CPOWEREDBY
 if ! is_no "$RC_PROMPT"; then
 	nls -n "\t\t  Press %sI%s to enter interactive startup" "$(termput setaf $CI)" "$(termput op)"
 	echo
-	sleep 1
 fi
 
 # Set the hostname
