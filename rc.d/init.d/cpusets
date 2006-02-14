@@ -38,6 +38,7 @@ cpuset_create()
 		[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
 		[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
 		[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
+		[ -n "$VIRTUALIZE" ] && echo "$VIRTUALIZE" >/dev/cpuset/"$NAME"/virtualize
 		[ -n "$TASKS" ] && echo "$TASKS" >/dev/cpuset/"$NAME"/tasks
 		return 0
 	fi
