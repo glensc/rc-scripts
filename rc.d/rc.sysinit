@@ -286,7 +286,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	_RUN_QUOTACHECK=0
-	_ROOTFS_TYPE=$(grep " / " /proc/mounts 2>/dev/null | awk '{ print $3 }')
+	_ROOTFS_TYPE=$(awk '$2 == "/" && $3 != "rootfs" { print $3 }' /proc/mounts 2>/dev/null)
 
 	if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" ]; then
 		show "Checking root filesystem"; started
