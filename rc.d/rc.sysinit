@@ -84,7 +84,7 @@ if ! is_yes "$VSERVER" ; then
 		MODULES_CONF=/etc/conf.modules
 	fi
 
-	# PLD LiveCD support
+	# PLD Linux LiveCD support
 	if [ -x /etc/rc.d/rc.live ]; then
 		/etc/rc.d/rc.live
 	fi

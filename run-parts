@@ -2,7 +2,7 @@
 
 # run-parts - concept taken from Debian
 #
-# modified for PLD by Pawel Wilk <siefca@pld-linux.org>
+# modified for PLD Linux by Pawel Wilk <siefca@pld-linux.org>
 #
 # NOTE:
 #	1.) run-parts is now able to get arguments!

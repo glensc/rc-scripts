@@ -6,7 +6,7 @@
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 # Hacked by:	Greg Galloway and Marc Ewing
-# Modified for PLD by:
+# Modified for PLD Linux by:
 #		Marek Obuchowicz <elephant@pld-linux.org>
 #		Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #		Micha³ Kochanowicz <mkochano@pld-linux.org>
@@ -303,7 +303,7 @@ msg_usage()
 	nls "Usage: %s" "$*"
 }
 
-# Some functions to handle PLD-style messages
+# Some functions to handle PLD Linux-style messages
 show()
 {
 	typeset text

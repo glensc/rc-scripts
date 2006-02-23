@@ -10,7 +10,7 @@ Name:		rc-scripts
 Version:	@VERSION@
 Release:	1
 License:	GPL
-Vendor:		PLD rc-scripts Team <pld-rc-scripts@pld-linux.org>
+Vendor:		PLD Linux rc-scripts Team <pld-rc-scripts@pld-linux.org>
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://svn.pld-linux.org/svn/rc-scripts/

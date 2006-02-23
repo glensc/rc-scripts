@@ -136,11 +136,11 @@ Files in /etc/sysconfig/interfaces/
     INITSCRIPT=<modem command>
       string which initialises your modem. Usualy something like 
       AT&F0&C1&D2
-      (PLD rc-scripts specific option)
+      (PLD Linux rc-scripts specific option)
     DATAFORCHAT=<list of variables>
       List of variables which should be exported to chat script.
       Used mostly for passing USERNAME and PASSWORD into it. (see below)
-      (PLD rc-scripts specific option)
+      (PLD Linux rc-scripts specific option)
     PEERDNS=yes|no
     IPV6_PPP=yes|no
       use IPv6 for ppp
@@ -174,7 +174,7 @@ Files in /etc/sysconfig/interfaces/
   the connection.  For SLIP devices, a DIP script is written
   from the chat script; for PPP devices, the chat script is used
   directly.
-  In PLD version of rc-scripts, this file is parsed by shell
+  In PLD Linux version of rc-scripts, this file is parsed by shell
   (actually by grep in firstplace to get rid of comments) before it
   is passed to chat.
   This allows you to substitute shell variables with their values 

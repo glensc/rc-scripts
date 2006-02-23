@@ -8,7 +8,7 @@
 #		Modified for RHS Linux by Marc Ewing and Donnie Barnes
 #
 
-# Default runlevel. The runlevels used by PLD are:
+# Default runlevel. The runlevels used by PLD Linux are:
 #   0 - halt (Do NOT set initdefault to this)
 #   1 - Single user mode
 #   2 - Multiuser, without NFS (The same as 3, if you do not have networking)
