@@ -165,6 +165,8 @@ if ! is_yes "$VSERVER"; then
 
 	# cpuset support (mounted unconditionally, shouldn't be a problem)
 	if grep -q cpuset /proc/filesystems 2>/dev/null ; then
+		# mkdir for udev (FIXME fix the udev instead)
+		mkdir -p /dev/cpuset 2>/dev/null
 		mount -n -t cpuset none /dev/cpuset
 	fi
 
@@ -411,19 +413,18 @@ if ! is_yes "$VSERVER"; then
 	[ -f /proc/bus/usb/devices ] && mount -f -t usbfs usbfs /proc/bus/usb
 	[ -e /dev/.devfsd ] && mount -f -t devfs devfs /dev
 
-	if grep -q sysfs /proc/filesystems 2>/dev/null ; then
+	if grep -q sysfs /proc/mounts 2>/dev/null; then
 		mount -f -t sysfs sysfs /sys
-		if [ "$(kernelver)" -ge "002006014" ] && \
-			grep -q securityfs /proc/filesystems 2>/dev/null ; then
+		if grep -q securityfs /proc/mounts 2>/dev/null ; then
 				mount -f -t securityfs securityfs /sys/kernel/security
 		fi
 	fi
 
-	if grep -q selinuxfs /proc/filesystems 2>/dev/null ; then
+	if grep -q selinuxfs /proc/mounts 2>/dev/null; then
 		mount -f -t selinuxfs selinuxfs /selinux
 	fi
 
-	if grep -q cpuset /proc/filesystems 2>/dev/null ; then
+	if grep -q cpuset /proc/mounts 2>/dev/null; then
 		mount -f -t cpuset none /dev/cpuset
 	fi
 
