@@ -10,7 +10,7 @@ DEVICE=eth0
 # etc.
 # IPADDR may be either IPv4 or IPv6
 # you may have up to 256 addresses set up
-IPADDR=192.168.0.1/24
+#IPADDR=192.168.0.1/24
 #IPADDR1=192.168.0.2/24
 #IPADDR2=192.168.0.3/24
 #IPADDR3=192.168.0.4/24
@@ -21,7 +21,7 @@ IPADDR=192.168.0.1/24
 
 # activate on boot? yes|no
 # you must set it to 'yes' if you want to have this up after bootup
-ONBOOT=no
+ONBOOT=yes
 
 # dhcp|pump|none
-BOOTPROTO=none
+BOOTPROTO=dhcp
