@@ -39,6 +39,13 @@ else
 	HOSTNAME=localhost
 fi
 
+# boot logging to /var/log/boot.msg. install showconsole package to get it.
+if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
+	RC_BOOTLOG=1
+else
+	RC_BOOTLOG=
+fi
+
 # Read system config data
 if [ -r /etc/sysconfig/system ]; then
 	. /etc/sysconfig/system
@@ -124,6 +131,7 @@ if ! is_yes "$VSERVER" ; then
 	fi
 fi
 
+
 # Print welcome message
 nls "\t\t\t%sPowered by %sPLD Linux Distribution%s" "$(termput setaf $CPOWEREDBY)" "$(termput setaf $CPLD)" "$(termput op)"
 if ! is_no "$RC_PROMPT"; then
@@ -168,6 +176,11 @@ if ! is_yes "$VSERVER"; then
 		# mkdir for udev (FIXME fix the udev instead)
 		mkdir -p /dev/cpuset 2>/dev/null
 		mount -n -t cpuset none /dev/cpuset
+	fi
+
+   # Start logging console output since we have all /dev stuff setup
+	if [ "$RC_BOOTLOG" ]; then
+		/sbin/blogd -q
 	fi
 
 	# Configure Linux kernel (initial configuration, some required modules still
@@ -382,6 +395,12 @@ if ! is_yes "$VSERVER"; then
 		for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache ; do
 			[ -r $file ] && restorecon $file >/dev/null 2>&1
 		done
+	fi
+
+else
+	# Start logging console output since we have all /dev stuff setup
+	if [ "$RC_BOOTLOG" ]; then
+		/sbin/blogd -q
 	fi
 fi
 
@@ -750,6 +769,11 @@ if ! is_yes "$VSERVER"; then
 		ok
 	fi
 
+	# /var/log should be writable now, so starting saving the boot output
+	if [ "$RC_BOOTLOG" ]; then
+		echo > /var/log/boot.msg
+		killall -IO blogd
+	fi
 
 	if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
 		run_cmd "Checking filesystem quotas" /sbin/quotacheck -vnugRa
@@ -785,8 +809,15 @@ if ! is_yes "$VSERVER"; then
 	# ... and here finish configuring parameters
 	/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 else
+	# /var/log should be writable now, so starting saving the boot output
+	if [ "$RC_BOOTLOG" ]; then
+		echo > /var/log/boot.msg
+		killall -IO blogd
+	fi
+
 	clean_vserver_mtab
 fi
+
 
 [ -n "$SELINUX" ] && [ -f /.autorelabel ] && relabel_selinux
 
