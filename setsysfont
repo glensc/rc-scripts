@@ -11,7 +11,7 @@
 case "$LANG" in
   *.utf8|*.UTF-8)
 	if [ -x /bin/unicode_start ] && /sbin/consoletype fg ; then
-		exec unicode_start $CONSOLEFONT $CONSOLEMAP
+		exec unicode_start $CONSOLEFONT $CONSOLEMAP.a0-ff
 	fi
 	;;
 esac
@@ -30,7 +30,7 @@ elif [ -x /usr/bin/setfont -o -x /bin/setfont ]; then
 		ARGS="-u $CONSOLESCREENFONTMAP"
 	fi
 	if [ -n "$CONSOLEMAP" ]; then
-		if [ ! -f /lib/kbd/consoletrans/$CONSOLEMAP_to_uni.trans ]; then
+		if [ ! -f /lib/kbd/consoletrans/${CONSOLEMAP}_to_uni.trans ]; then
 			CONSOLEMAP=$(echo "$CONSOLEMAP" | sed "s|iso0|8859-|g;s|iso|8859-|g")
 		fi
 		ARGS="$ARGS -m $CONSOLEMAP"
