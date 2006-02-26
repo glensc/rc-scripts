@@ -61,6 +61,11 @@ if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
 	unset _ctx
 fi
 
+if [ -n "$INITNG" ]; then
+	COLOR_INIT=no
+	FASTRC=yes
+fi
+
 is_yes()
 {
 	# Test syntax
