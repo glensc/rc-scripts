@@ -8,7 +8,7 @@
 #
 # probe:	true
 
-# $Id: network 5884 2005-04-25 16:01:57Z adamg $
+# $Id$
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
