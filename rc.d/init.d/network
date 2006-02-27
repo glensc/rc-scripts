@@ -39,11 +39,6 @@ if is_yes "$NETWORKING" ; then
 	fi
 fi
 
-if [ ! -x /sbin/ip ]; then
-	nls "%s is missing. Can't continue." "/sbin/ip"
-	exit 1
-fi
-
 ######
 # initialize networking:
 # - check IPv4, IPv6, IPX can be handled by system
@@ -53,6 +48,12 @@ fi
 # - setup lo interface
 network_init()
 {
+
+if [ ! -x /sbin/ip ]; then
+	nls "%s is missing. Can't continue." "/sbin/ip"
+	exit 1
+fi
+
 # Modprobe needed devices
 modprobe_net
 
