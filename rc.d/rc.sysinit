@@ -39,13 +39,6 @@ else
 	HOSTNAME=localhost
 fi
 
-# boot logging to /var/log/boot.msg. install showconsole package to get it.
-if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
-	RC_BOOTLOG=1
-else
-	RC_BOOTLOG=
-fi
-
 # Read system config data
 if [ -r /etc/sysconfig/system ]; then
 	. /etc/sysconfig/system
@@ -63,6 +56,13 @@ fi
 
 # Read functions
 . /etc/rc.d/init.d/functions
+
+# boot logging to /var/log/boot.msg. install showconsole package to get it.
+if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
+	RC_BOOTLOG=1
+else
+	RC_BOOTLOG=
+fi
 
 if ! is_yes "$VSERVER" ; then
 	# we need /proc mounted before everything
