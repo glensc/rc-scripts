@@ -67,7 +67,7 @@ RUN_LDCONFIG=no
 MOUNT_DEVFS=no
 
 # EVMS/LVM options
-# Eextensible Firmware Interface GUID Partition Table segment manager
+# Extensible Firmware Interface GUID Partition Table segment manager
 EVMS_GUID_PTABLE=no
 
 # Use EVMS for Linux LVM volumes
@@ -76,7 +76,7 @@ EVMS_LVM=no
 # Create symlinks for LVM volumes (/dev/evms/lvm/* -> /dev/*)
 EVMS_LVM_COMPAT_NODES=yes
 
-# Use EVMS for Linux MD (RAID 0/1/5) valumes
+# Use EVMS for Linux MD (RAID 0/1/5) volumes
 EVMS_MD=no
 
 # EVMS AIX LVM volumes
