@@ -829,7 +829,13 @@ rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
 for afile in /var/lock/* /var/run/*; do
 	bafile=$(basename $afile)
 	if [ -d "$afile" ]; then
-		[ "$bafile" != "news" -a "$bafile" != "sudo" -a "$bafile" != "mon" ] && rm -rf $afile/*
+		case $bafile in
+			news|sudo|mon|cvs)
+				;;
+			*)
+				rm -rf $afile/*
+				;;
+		esac
 	else
 		[ "$bafile" != "hwprofile" ] && rm -f $afile 2> /dev/null
 	fi
