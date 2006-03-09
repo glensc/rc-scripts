@@ -48,61 +48,60 @@ fi
 # - setup lo interface
 network_init()
 {
+	if [ ! -x /sbin/ip ]; then
+		nls "%s is missing. Can't continue." "/sbin/ip"
+		exit 1
+	fi
 
-if [ ! -x /sbin/ip ]; then
-	nls "%s is missing. Can't continue." "/sbin/ip"
-	exit 1
-fi
+	# Modprobe needed devices
+	modprobe_net
 
-# Modprobe needed devices
-modprobe_net
+	# Setup interfaces names
+	if [ -x /sbin/nameif -a -f /etc/mactab ] && [ $(egrep -vs '^(#| *$)' /etc/mactab | wc -l) -gt 0 ]; then
+		run_cmd "Setting interfaces names (nameif)" /sbin/nameif
+	fi
 
-# Setup interfaces names
-if [ -x /sbin/nameif -a -f /etc/mactab ] && [ $(egrep -vs '^(#| *$)' /etc/mactab | wc -l) -gt 0 ]; then
-	run_cmd "Setting interfaces names (nameif)" /sbin/nameif
-fi
+	# Kernel network parameters
+	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 
-# Kernel network parameters
-sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
+	# Set UP loopback interface
+	set_up_loopback
 
-# Set UP loopback interface
-set_up_loopback
-
-# Setup configuration
-setup_nat on
-setup_routes on
-setup_ip_rules on
-# Setup IPX
-if is_yes "$IPX"; then
-	if [ -n $IPXAUTOPRIMARY ] ; then
-		if is_yes "$IPXAUTOPRIMARY"; then
-			IPXAUTOPRIMARY="on"
-		else
-			IPXAUTOPRIMARY="off"
+	# Setup configuration
+	setup_nat on
+	setup_routes on
+	setup_ip_rules on
+	# Setup IPX
+	if is_yes "$IPX"; then
+		if [ -n $IPXAUTOPRIMARY ] ; then
+			if is_yes "$IPXAUTOPRIMARY"; then
+				IPXAUTOPRIMARY="on"
+			else
+				IPXAUTOPRIMARY="off"
+			fi
+			/sbin/ipx_configure --auto_primary=$IPXAUTOPRIMARY
 		fi
-		/sbin/ipx_configure --auto_primary=$IPXAUTOPRIMARY
-	fi
-	if [ -n $IPXAUTOFRAME ] ; then
-		if is_yes "$IPXAUTOFRAME"; then
-			IPXAUTOFRAME="on"
-		else
-			IPXAUTOFRAME="off"
+		if [ -n $IPXAUTOFRAME ] ; then
+			if is_yes "$IPXAUTOFRAME"; then
+				IPXAUTOFRAME="on"
+			else
+				IPXAUTOFRAME="off"
+			fi
+			/sbin/ipx_configure --auto_interface=$IPXAUTOFRAME
 		fi
-		/sbin/ipx_configure --auto_interface=$IPXAUTOFRAME
+		if [ -n "$IPXINTERNALNETNUM" -a "$IPXINTERNALNETNUM" != "0" ]; then
+			/sbin/ipx_internal_net add $IPXINTERNALNETNUM $IPXINTERNALNODENUM
+		fi
 	fi
-	if [ -n "$IPXINTERNALNETNUM" -a "$IPXINTERNALNETNUM" != "0" ]; then
-		/sbin/ipx_internal_net add $IPXINTERNALNETNUM $IPXINTERNALNODENUM
-	fi
-fi
 }
 
 network_postinit()
 {
-# Set static RARP table
-static_rarp
+	# Set static RARP table
+	static_rarp
 
-# Set static ARP table
-static_arp
+	# Set static ARP table
+	static_arp
 }
 
 ######
@@ -110,13 +109,13 @@ static_arp
 # - down lo interface.
 network_deinit()
 {
-setup_routes off
-setup_ip_rules off
+	setup_routes off
+	setup_ip_rules off
 
-# Set down NAT rules
-setup_nat off
-# Set DOWN loopback interface
-set_down_loopback
+	# Set down NAT rules
+	setup_nat off
+	# Set DOWN loopback interface
+	set_down_loopback
 }
 
 # Get list of interface configs
@@ -144,8 +143,8 @@ if [ -n "$bootprio" ]; then
 		for a in $(echo "$bootprio" | sort -t= -n -k2,2); do
 			i="${a%:BOOTPRIO*}"
 			case $i in
-			   	*ifcfg-lo) continue ;;
-		   	esac
+				*ifcfg-lo) continue ;;
+			esac
 			ONBOOT=""; . "$i" 2>/dev/null
 			is_yes "$ONBOOT" && echo "${i##*/}"
 		done
@@ -154,8 +153,8 @@ else
 	interfaces_boot=`
 		for i in $ifcfg_files; do
 			case ${i##*/} in
-			   	ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br|ifcfg-*.*) continue ;;
-		   	esac
+				ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br|ifcfg-*.*) continue ;;
+			esac
 			ONBOOT=""; . "$i" 2>/dev/null
 			is_yes "$ONBOOT" && echo "${i##*/}"
 		done
@@ -164,9 +163,9 @@ else
 	interfaces_vlan_boot=`
 		for i in $ifcfg_files; do
 			case ${i##*/} in
-			   	ifcfg-*.*) ;;
+				ifcfg-*.*) ;;
 				*) continue ;;
-		   	esac
+			esac
 			ONBOOT=""; . "$i" 2>/dev/null
 			is_yes "$ONBOOT" && echo "${i##*/}"
 		done
@@ -175,9 +174,9 @@ else
 	interfaces_br_boot=`
 		for i in $ifcfg_files; do
 			case ${i##*/} in
-			   	ifcfg-br*) ;;
+				ifcfg-br*) ;;
 				*) continue ;;
-		   	esac
+			esac
 			ONBOOT=""; . "$i" 2>/dev/null
 			is_yes "$ONBOOT" && echo "${i##*/}"
 		done
@@ -186,9 +185,9 @@ else
 	interfaces_sit_boot=`
 		for i in $ifcfg_files; do
 			case ${i##*/} in
-			   	ifcfg-sit*) ;;
+				ifcfg-sit*) ;;
 				*) continue ;;
-		   	esac
+			esac
 			ONBOOT=""; . "$i" 2>/dev/null
 			is_yes "$ONBOOT" && echo "${i##*/}"
 		done
