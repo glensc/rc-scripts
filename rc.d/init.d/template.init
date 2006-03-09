@@ -8,7 +8,6 @@
 #
 # $Id$
 
-
 # Source function library
 . /etc/rc.d/init.d/functions
 
@@ -33,7 +32,6 @@ if is_yes "${NETWORKING}"; then
 else
 	exit 0
 fi
-
 
 # See how we were called.
 case "$1" in
@@ -92,6 +90,3 @@ case "$1" in
 esac
 
 exit $RETVAL
-
-# This must be last line !
-# vi:syntax=sh
