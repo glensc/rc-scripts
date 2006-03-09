@@ -1,3 +1,163 @@
+2006-03-09 14:58 +0000 [r7126]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - no, please don't remove vim modeline
+
+2006-03-09 11:21 +0000 [r7125]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: vim modeline is unneccessary here.
+
+2006-03-08 15:07 +0000 [r7121]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - human readable cleaning of /var/lock - and
+	  don't remove /var/lock/cvs
+
+2006-03-05 13:41 +0000 [r7096]  Adam Gołębiowski <adamg/at/pld-linux.org>
+
+	* sysconfig/system: - typos
+
+2006-03-03 21:54 +0000 [r7083]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: The is_no() function comes from functions, don't
+	  use it before it's defined
+
+2006-02-27 18:09 +0000 [r7036]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* setsysfont: Revert hardcoded part. Fix your config instead.
+
+2006-02-27 17:49 +0000 [r7035]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - expand Id keyword
+
+2006-02-27 13:47 +0000 [r7034]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: In vserver /sbin/ip is not required.
+
+2006-02-26 11:05 +0000 [r7020]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Disable colors and enable FASTRC for
+	  initng.
+
+2006-02-26 10:45 +0000 [r7019]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* setsysfont: Unicode fixes.
+
+2006-02-24 11:04 +0000 [r7006]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Boot logging possibility with showconsole.
+
+2006-02-23 14:43 +0000 [r7005]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Respect fs_passno for rootfs when doing rootfs
+	  fsck. Enable paralell fsck for other filesystems.
+
+2006-02-23 14:23 +0000 [r7004]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Ignore "rootfs" when setting _ROOTFS_TYPE.
+
+2006-02-23 13:57 +0000 [r7003]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Make /dev/cpuset dir for udev. Check
+	  /proc/mounts instead of /proc/filesystems when filling /etc/mtab.
+
+2006-02-23 10:38 +0000 [r7002]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc-scripts.spec.in, inittab, rc.d/rc.sysinit, run-parts,
+	  doc/net-scripts.txt, doc/sysvinitfiles, rc.d/init.d/functions: We
+	  are PLD Linux (not just PLD).
+
+2006-02-23 10:35 +0000 [r6999-7001]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/init-colors: We are PLD Linux (not just PLD), fix
+	  init-colors.gentoo path.
+
+	* sysconfig/i18n: Have here also listed en_US.UTF-8
+
+	* sysconfig/interfaces/ifcfg-eth0: By default boot eth0 with dhcp.
+	  If you have static IP configuration, you need to edit this file
+	  anyway
+
+2006-02-14 00:24 +0000 [r6972]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/cpusets/cpuset-test, rc.d/init.d/cpusets: - cpuset
+	  virtualization support
+
+2006-02-10 22:21 +0000 [r6965]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Reverted last change
+
+2006-02-10 19:47 +0000 [r6964]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Disable DELAY_LOGIN for vserver, suggested by
+	  Patrys
+
+2006-02-10 19:40 +0000 [r6960-6963]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Remove stupid sleep 1
+
+	* rc.d/rc.sysinit: No SELinux labels for vserver
+
+	* rc.d/rc.sysinit: Fixing indent
+
+	* rc.d/rc.sysinit: setsysfont and selinux make no sense inside
+	  vserver (no devices attached)
+
+2006-02-10 19:31 +0000 [r6959]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Do not mount /proc in vserver
+
+2006-02-10 19:17 +0000 [r6958]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: One can't (u)mount anything inside vserver,
+	  not even network mounts
+
+2006-02-08 17:41 +0000 [r6952]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Redirect errors from mounts grepping to
+	  /dev/null.
+
+2006-02-05 15:32 +0000 [r6922]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/system, rc.d/rc.sysinit: Rename PROMPT to RC_PROMPT
+	  (PROMPT is internal zsh variable). Fixed RC_PROMPT testing to
+	  work as described in sysconfig/system.
+
+2006-01-21 13:49 +0000 [r6875-6876]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: Allow some actions when network is
+	  down (by ankry /at/ 2003-07-03).
+
+	* rc.d/init.d/template.init: - remove old syntax
+
+2006-01-21 12:32 +0000 [r6874]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: Describe current
+	  PPPoE/PPPoA config.
+
+2006-01-21 12:18 +0000 [r6873]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-ppp0.ueagle-neostrada,
+	  sysconfig/network-scripts/ifup-ppp: Generic PPP over ATM support.
+
+2006-01-20 18:02 +0000 [r6871]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - give getkey a timeout of 5s, better safe than
+	  hung init process
+
+2006-01-20 15:40 +0000 [r6869]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - skip filter_chroot() in vserver fixes
+	  running %pre/%post scripts for packages installed in vserver
+
+2006-01-19 08:52 +0000 [r6864]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/Makefile.am,
+	  sysconfig/interfaces/ifcfg-ppp0.ueagle-neostrada (added): Add
+	  ueagle example (abram).
+
+2006-01-18 08:18 +0000 [r6844]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Prepare for 0.4.0.25.
+
 2006-01-15 12:01 +0000 [r6809]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/sys-chroots, rc.d/rc.sysinit: Use correct chown
