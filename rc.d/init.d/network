@@ -119,74 +119,98 @@ setup_nat off
 set_down_loopback
 }
 
-# find all the interfaces besides loopback.
-# ignore aliases, alternative configurations, and editor backup files
-if [ -n "$(grep "^BOOTPRIO=" /etc/sysconfig/interfaces/ifcfg* 2> /dev/null)" ]; then
-	interfaces_boot=$(( \
-		. /etc/rc.d/init.d/functions; \
-		cd /etc/sysconfig/interfaces; \
-		egrep 'BOOTPRIO' ifcfg* | sort -t= -n -k2,2 | \
-		awk ' { gsub(/:BOOTPRIO.*/,NIL); print $0 } '| egrep -v 'ifcfg-lo' | \
-		for i in `cat`; do \
-			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
-			is_yes "$ONBOOT" && echo "$i"; \
-		done | \
-		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+# Get list of interface configs
+# ignores editor backup files and rpm blackups
+network_interface_configs()
+{
+	local match="$1"
+	for a in /etc/sysconfig/interfaces/$match; do
+		case "$a" in
+		*rpmorig|*rpmnew|*rpmsave|*~|*.orig)
+			continue
+			;;
+		*)
+			echo $a
+		;;
+		esac
+	done
+}
+
+ifcfg_files="$(network_interface_configs 'ifcfg-*')"
+
+if [ -n "$bootprio" ]; then
+	# find all the interfaces besides loopback.
+	interfaces_boot=`
+		for a in $(echo "$bootprio" | sort -t= -n -k2,2); do
+			i="${a%:BOOTPRIO*}"
+			case $i in
+			   	*ifcfg-lo) continue ;;
+		   	esac
+			ONBOOT=""; . "$i" 2>/dev/null
+			is_yes "$ONBOOT" && echo "${i##*/}"
+		done
+	`
 else
-	interfaces_boot=$((
-		. /etc/rc.d/init.d/functions; \
-		cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
-		egrep -v '(ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br|ifcfg-(.*)\.(.*))' | \
-		LC_ALL=C egrep 'ifcfg-[a-z0-9\.]+$' | \
-		for i in `cat`; do \
-			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
-			is_yes "$ONBOOT" && echo "$i"; \
-		done | \
-		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-	interfaces_vlan_boot=$((
-		. /etc/rc.d/init.d/functions; \
-		cd /etc/sysconfig/interfaces && ls -1 ifcfg* | \
-		egrep 'ifcfg-(.*)\.(.*)' | \
-		LC_ALL=C egrep 'ifcfg-[a-z0-9\.]+$' | \
-		for i in `cat`; do \
-			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
-			is_yes "$ONBOOT" && echo "$i"; \
-		done | \
-		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-	interfaces_br_boot=$((
-		. /etc/rc.d/init.d/functions; \
-		cd /etc/sysconfig/interfaces && ls -1 ifcfg-br* | \
-		LC_ALL=C egrep 'ifcfg-[a-z0-9\.]+$' | \
-		for i in `cat`; do \
-			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
-			is_yes "$ONBOOT" && echo "$i"; \
-		done | \
-		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
-	interfaces_sit_boot=$((
-		. /etc/rc.d/init.d/functions; \
-		cd /etc/sysconfig/interfaces && ls -1 ifcfg-sit* | \
-		LC_ALL=C egrep 'ifcfg-[a-z0-9]+$' | \
-		for i in `cat`; do \
-			ONBOOT=""; . /etc/sysconfig/interfaces/"$i"; \
-			is_yes "$ONBOOT" && echo "$i"; \
-		done | \
-		awk ' { gsub(/ifcfg-/,NIL); print $0 } ') 2> /dev/null)
+	interfaces_boot=`
+		for i in $ifcfg_files; do
+			case ${i##*/} in
+			   	ifcfg-lo|ifcfg-sit|ifcfg-atm|ifcfg-lec|ifcfg-nas|ifcfg-br|ifcfg-*.*) continue ;;
+		   	esac
+			ONBOOT=""; . "$i" 2>/dev/null
+			is_yes "$ONBOOT" && echo "${i##*/}"
+		done
+	`
+
+	interfaces_vlan_boot=`
+		for i in $ifcfg_files; do
+			case ${i##*/} in
+			   	ifcfg-*.*) ;;
+				*) continue ;;
+		   	esac
+			ONBOOT=""; . "$i" 2>/dev/null
+			is_yes "$ONBOOT" && echo "${i##*/}"
+		done
+	`
+
+	interfaces_br_boot=`
+		for i in $ifcfg_files; do
+			case ${i##*/} in
+			   	ifcfg-br*) ;;
+				*) continue ;;
+		   	esac
+			ONBOOT=""; . "$i" 2>/dev/null
+			is_yes "$ONBOOT" && echo "${i##*/}"
+		done
+	`
+
+	interfaces_sit_boot=`
+		for i in $ifcfg_files; do
+			case ${i##*/} in
+			   	ifcfg-sit*) ;;
+				*) continue ;;
+		   	esac
+			ONBOOT=""; . "$i" 2>/dev/null
+			is_yes "$ONBOOT" && echo "${i##*/}"
+		done
+	`
 fi
-tunnels=$((cd /etc/sysconfig/interfaces && ls -1 tnlcfg-* | \
-	xargs egrep -l "ONBOOT=[^n][^o]" | \
-	LC_ALL=C egrep 'tnlcfg-[a-z0-9]+$' | \
-	awk ' { gsub(/tnlcfg-/,NIL); print $0 } ') 2> /dev/null)
+
+tunnels=`
+	for i in $(network_interface_configs 'tnlcfg-*'); do
+		ONBOOT=""; . "$i" 2>/dev/null
+		is_yes "$ONBOOT" && echo "${i##*/}"
+	done
+`
 
 # See how we were called.
 case "$1" in
   start)
-	rc_splash "bootnetwork start"
-
 	if is_yes "$VSERVER"; then
 		touch /var/lock/subsys/network
 		exit 0
 	fi
 
+	rc_splash "bootnetwork start"
 	network_init
 
 	for i in $interfaces_boot $interfaces_vlan_boot $interfaces_sit_boot ; do
