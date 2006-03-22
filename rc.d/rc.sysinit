@@ -904,7 +904,10 @@ fi
 
 kill -TERM $(/sbin/pidof getkey) >/dev/null 2>&1
 } &
-if ! is_no "$RC_PROMPT"; then
+
+# extra check if the background process we just spawned is still running,
+# as in case of vserver bootup it finishes quite instantly.
+if ! is_no "$RC_PROMPT" && [ -d /proc/$! ]; then
 	/sbin/getkey -c 5 i && touch /var/run/confirm
 fi
 wait
