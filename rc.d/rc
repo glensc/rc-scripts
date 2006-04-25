@@ -23,10 +23,10 @@ argv2="$2"
 [ -z "$CONSOLE" ] && CONSOLE=/dev/console
 if [ -c $CONSOLE ]; then
 	set -- $(stty size < $CONSOLE 2>/dev/null)
-	  LINES=$1
+	LINES=$1
 	COLUMNS=$2
 else
-	  LINES=
+	LINES=
 	COLUMNS=
 fi
 export LINES COLUMNS CONSOLE
@@ -85,7 +85,7 @@ fi
 # (it can be serial console too)
 if [ "$COLUMNS" -gt 0 ]; then
 	if [ "$argv2" != "chroot" ] && ! is_yes "$VSERVER" && \
-	   [ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
+		[ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
 		CONSOLE=/dev/tty1
 		[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > $CONSOLE
 		exec 0<> /dev/console 1>&0 2>&0
@@ -132,7 +132,7 @@ if test "$previous" != "N" ; then
 		[ "${1%.rpmnew}" != "${1}" ] && continue
 		subsys=${i#/etc/rc.d/rc$runlevel.d/K??}
 		[ ! -f /var/lock/subsys/$subsys ] && \
-		    [ ! -f /var/lock/subsys/${subsys}.init ] && continue
+		[ ! -f /var/lock/subsys/${subsys}.init ] && continue
 		kscripts=$(( kscripts + 1 ))
 	done
 	export kscripts
@@ -182,7 +182,7 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		# Check if the subsystem is already up.
 		subsys=${i#/etc/rc.d/rc$runlevel.d/K??}
 		[ ! -f /var/lock/subsys/$subsys ] && \
-		    [ ! -f /var/lock/subsys/${subsys}.init ] && continue
+		[ ! -f /var/lock/subsys/${subsys}.init ] && continue
 
 		rc_splash "$i stop"
 
@@ -203,7 +203,7 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		# Check if the subsystem is already up.
 		subsys=${i#/etc/rc.d/rc$runlevel.d/S??}
 		[ -f /var/lock/subsys/$subsys ] || \
-		    [ -f /var/lock/subsys/${subsys}.init ] && continue
+		[ -f /var/lock/subsys/${subsys}.init ] && continue
 
 		# If we're in confirmation mode, get user confirmation
 		[ -n "$CONFIRM" ] &&
