@@ -136,6 +136,7 @@ network_interface_configs()
 }
 
 ifcfg_files="$(network_interface_configs 'ifcfg-*')"
+bootprio=$(grep '^BOOTPRIO=' $ifcfg_files)
 
 if [ -n "$bootprio" ]; then
 	# find all the interfaces besides loopback.
