@@ -1,3 +1,72 @@
+2006-05-07 17:27 +0000 [r7391-7393]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc-scripts.spec.in: Add sysconfig/hwprofiles dir.
+
+	* rc.d/rc.shutdown: Speedup shutdown (glen).
+
+	* sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm,
+	  sysconfig/interfaces/ifcfg-ppp0.gprs-idea,
+	  sysconfig/interfaces/Makefile.am: Add ifcfg-ppp0.gprs-idea to
+	  makefiles. Add proper initstring to ifcfg-ppp0.gprs-plusgsm.
+	  Another PHONE for gprs-idea (this one works for me with ipaq over
+	  BT).
+
+2006-05-07 17:18 +0000 [r7390]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/data/Makefile.am, sysconfig/Makefile.am,
+	  doc/Makefile.am, sysconfig/interfaces/up.d/all/Makefile.am,
+	  sysconfig/hwprofiles/Makefile.am,
+	  sysconfig/interfaces/Makefile.am,
+	  sysconfig/interfaces/down.d/all/Makefile.am: Avoid installing
+	  files that aren't packaged (glen).
+
+2006-05-07 11:09 +0000 [r7389]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: Fix missing $bootprio.
+
+2006-05-07 10:46 +0000 [r7388]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/network: Fix interfaces_boot detection (Adam Ryba).
+
+2006-04-25 07:20 +0000 [r7370]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc: Tabs.
+
+2006-03-23 09:22 +0000 [r7293]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network: - hostname -h [...] Unless you are using bind
+	  or NIS for host lookups you can change the FQDN (Fully Qualified
+	  Domain Name) and the DNS domain name (which is part of the FQDN)
+	  in the /etc/hosts file.
+
+2006-03-22 19:54 +0000 [r7279]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Vserver speedup (skips extra 5 second delay in
+	  some cases)
+
+2006-03-20 17:22 +0000 [r7253]  Radosław Zieliński <radek/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - allow \t in "alias usb-controller" (from
+	  Lukasz Masko, nov 2005)
+
+2006-03-11 14:54 +0000 [r7144]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: Typo bugfix.
+
+2006-03-09 17:54 +0000 [r7132]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: Tabs.
+
+2006-03-09 17:47 +0000 [r7131]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: Rewritten configuration parsing portion
+	  (solves ~ and .rpmnew files ignorance). execve() calls reduced
+	  from 25 to 4. Tested with ash and ksh. There could be bugs!
+
+2006-03-09 16:20 +0000 [r7127]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Prepare for 0.4.0.26.
+
 2006-03-09 14:58 +0000 [r7126]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* rc.d/init.d/template.init: - no, please don't remove vim modeline
