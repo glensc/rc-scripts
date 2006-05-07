@@ -7,7 +7,6 @@ sysconfigdir = @sysconfigdir@
 sysconfig_DATA = \
 	clock \
 	init-colors \
-	init-colors.gentoo \
 	hwprof \
 	system \
 	network \
@@ -17,4 +16,7 @@ sysconfig_DATA = \
 	i18n \
 	timezone
 
-EXTRA_DIST = $(sysconfig_DATA)
+noinst_DATA = \
+	init-colors.gentoo
+
+EXTRA_DIST = $(sysconfig_DATA) $(noinst_DATA)

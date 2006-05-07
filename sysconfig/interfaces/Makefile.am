@@ -4,10 +4,11 @@ SUBDIRS = data up.d down.d
 
 interfacesdir = @sysconfigdir@/interfaces
 
-interfaces_DATA = \
+interfaces_DATA = ifcfg-eth0
+
+noinst_DATA = \
 	ifcfg-br0 \
 	ifcfg-description \
-	ifcfg-eth0 \
 	ifcfg-eth0.1 \
 	ifcfg-irda0 \
 	ifcfg-irlan0 \
@@ -24,4 +25,4 @@ interfaces_DATA = \
 	tnlcfg-icm 
 
 
-EXTRA_DIST = $(interfaces_DATA)
+EXTRA_DIST = $(interfaces_DATA) $(noinst_DATA)

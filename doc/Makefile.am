@@ -2,9 +2,10 @@
 
 docdir = @docdir@
 
-doc_DATA = \
+doc_DATA = 
+noinst_DATA = \
 	net-scripts.txt \
 	sysconfig.txt \
 	sysvinitfiles
 
-EXTRA_DIST = $(doc_DATA)
+EXTRA_DIST = $(doc_DATA) $(noinst_DATA)

@@ -2,6 +2,7 @@
 
 alldowndir= @downdir@/all
 
-alldown_SCRIPTS = thetouch
+alldown_SCRIPTS =
+noinst_SCRIPTS =  thetouch
 
-EXTRA_DIST = $(alldown_SCRIPTS)
+EXTRA_DIST = $(alldown_SCRIPTS) $(noinst_SCRIPTS)

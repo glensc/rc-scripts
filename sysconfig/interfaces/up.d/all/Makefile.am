@@ -2,6 +2,7 @@
 
 allupdir = @updir@/all
 
-allup_SCRIPTS = thetouch
+allup_SCRIPTS = 
+noinst_SCRIPTS = thetouch
 
-EXTRA_DIST = $(allup_SCRIPTS)
+EXTRA_DIST = $(allup_SCRIPTS) $(noinst_SCRIPTS)
