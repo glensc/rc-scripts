@@ -14,6 +14,7 @@ noinst_DATA = \
 	ifcfg-irlan0 \
 	ifcfg-ppp0.callback \
 	ifcfg-ppp0.eagle-usb-neostrada \
+	ifcfg-ppp0.gprs-idea \
 	ifcfg-ppp0.gprs-plusgsm \
 	ifcfg-ppp0.leased1 \
 	ifcfg-ppp0.leased2 \
