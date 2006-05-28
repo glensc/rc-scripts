@@ -1,3 +1,22 @@
+2006-05-28 19:05 +0000 [r7454]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* autogen.sh: Always run changelog generation when asked. Obfuscate
+	  email addreses here. Use mktemp if available. Allow various
+	  locations for CVSROOT/users file.
+
+2006-05-23 15:38 +0000 [r7436]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Try harder to get
+	  value for WLAN_NICKNAME.
+
+2006-05-15 23:18 +0000 [r7408]  Zbigniew Krzystolik <zbyniu/at/pld-linux.org>
+
+	* sysctl.conf: - grsecurity options updated
+
+2006-05-07 17:33 +0000 [r7394]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Release 0.4.0.27.
+
 2006-05-07 17:27 +0000 [r7391-7393]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* rc-scripts.spec.in: Add sysconfig/hwprofiles dir.
@@ -1566,7 +1585,7 @@
 
 2003-12-19 13:59 +0000 [r3038]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* src/Makefile.am: Use /at/libdir/at/ instead of hardcoded /usr/lib path
+	* src/Makefile.am: Use @libdir@ instead of hardcoded /usr/lib path
 	  when linking ppp-watch with glib.
 
 2003-12-15 13:29 +0000 [r1739]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
