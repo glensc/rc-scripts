@@ -5,6 +5,7 @@ Important:
   suggestion (multicast, arp)
 - merge baggins changes in atm-rc (added support for RFC1483/2684 Bridged
   protocol)
+- LVM on DMRAID device isn't started at bootup (missing vchange -ay somewhere)
 
 Not realy important but mayby nice:
 - Add checking for privileges during restarting
