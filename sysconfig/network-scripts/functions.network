@@ -446,7 +446,7 @@ wireless_param ()
 	if [ -z "$(eval echo \$${prefix}WLAN_NICKNAME)" ]; then
 		 WLAN_NICKNAME="$(hostname -f 2>/dev/null || hostname 2>/dev/null || echo localhost)"
 	else
-		 WLAN_NICKANME="$(eval echo \$${prefix}WLAN_NICKNAME)"
+		 WLAN_NICKNAME="$(eval echo \$${prefix}WLAN_NICKNAME)"
 	fi
 
 	# wlan mode needs to be first
