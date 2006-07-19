@@ -2,6 +2,7 @@
 /etc/cups/printers.conf
 /etc/sysconfig/interfaces/ifcfg-eth0
 /etc/X11/XF86Config
+/etc/X11/xorg.conf
 /etc/sysconfig/system
 /etc/sysconfig/network
 /etc/sysconfig/mouse
