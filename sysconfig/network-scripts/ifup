@@ -9,8 +9,8 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 . /etc/sysconfig/network-scripts/functions.network
 
 # Will be removed in the future
-if is_yes "$NETWORKING" ; then
-	if [ -z "$IPV4_NETWORKING" ] ; then
+if is_yes "$NETWORKING"; then
+	if [ -z "$IPV4_NETWORKING" ]; then
 		echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
 		echo "Please upgrade your config"
 		echo "Assuming you want IPv4 networking"
@@ -37,7 +37,7 @@ if [ `id -u` != 0 ]; then
 	exit 1
 fi
 
-if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
+if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ]; then
 	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
 else
 	CONFIG="$DEV"
@@ -65,7 +65,7 @@ setup_ip_param
 OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
 
 if [ -x "$OTHERSCRIPT" ]; then
-	if is_yes "$DEFAULTHANDLING" ; then
+	if is_yes "$DEFAULTHANDLING"; then
 		HANDLING=1
 	fi
 	if [ "$HANDLING" = "0" ]; then
@@ -140,7 +140,7 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 
 		DHCP_ARGS=
 		if [ -n "$DHCP_CLIENT" ]; then
-			case $(basename $DHCP_CLIENT) in
+			case ${DHCP_CLIENT##*/} in
 			  pump)
 				[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
 				DHCP_ARGS="$DHCP_ARGS -i $DEVICE"
@@ -162,12 +162,12 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 		DHCP_ARGS="$DHCP_OPTIONS $DHCP_ARGS"
 
 		if check_link_down ${DEVICE}; then
-			run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "$(basename $DHCP_CLIENT)")" /bin/false
+			run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "${DHCP_CLIENT##*/}")" /bin/false
 			nls '%s: Check cable?' "$DEVICE"
 			exit 1
 		fi
 
-		if ! run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "$(basename $DHCP_CLIENT)")" $DHCP_CLIENT $DHCP_ARGS ; then
+		if ! run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "${DHCP_CLIENT##*/}")" $DHCP_CLIENT $DHCP_ARGS; then
 			exit 1
 		fi
 
@@ -177,7 +177,7 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 	fi
 else
 	# IPv4 in use ?
-	if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}" ] ; then
+	if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}" ]; then
 		# If broadcast is missing then autocalculate it
 		if ! (echo $IP4ADDROPT | egrep -q "brd|broadcast"); then
 			IP4ADDROPT="brd + ${IP4ADDROPT}"
@@ -194,7 +194,7 @@ else
 	ip link set ${DEVICE} up
 
 	# IPv6 in use ?
-	if is_yes "$IPV6_NETWORKING" && [ -n "${IP6ADDR}" ] ; then
+	if is_yes "$IPV6_NETWORKING" && [ -n "${IP6ADDR}" ]; then
 		ip addr add ${IP6ADDR} dev ${DEVICE} ${IP6ADDROPT}
 	fi
 
