@@ -1,7 +1,5 @@
 #	$Id$
 #	alias irlan0 irlan
 DEVICE=irlan0
-BOOTMETHOD=dhcp
+BOOTPROTO=dhcp
 ONBOOT=yes
-
-

@@ -81,9 +81,9 @@ Files in /etc/sysconfig/interfaces/
     GATEWAY=
     ONBOOT=yes|no
     USERCTL=yes|no
-    BOOTMETHOD=none|bootp|dhcp|pump
+    BOOTPROTO=none|bootp|dhcp|pump
 
-  If BOOTMETHOD is not "none", then the only other item that
+  If BOOTPROTO is not "none", then the only other item that
   must be set is the DEVICE item; all the rest will be determined
   by the boot protocol.  No "dummy" entries need to be created.
 
