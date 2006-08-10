@@ -57,7 +57,7 @@ network_init()
 	modprobe_net
 
 	# Setup interfaces names
-	if [ -x /sbin/nameif -a -f /etc/mactab ] && [ $(egrep -vs '^(#| *$)' /etc/mactab | wc -l) -gt 0 ]; then
+	if [ -x /sbin/nameif -a -f /etc/mactab -a -x /usb/bin/wc ] && [ $(egrep -vs '^(#| *$)' /etc/mactab | wc -l) -gt 0 ]; then
 		run_cmd "Setting interfaces names (nameif)" /sbin/nameif
 	fi
 
