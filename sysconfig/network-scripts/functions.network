@@ -512,10 +512,16 @@ check_ethtool ()
 	echo $output | LC_ALL=C grep -q "Link detected: no" && return 0 || return 2
 }
 
+check_iwconfig ()
+{
+	[ -x /sbin/iwconfig ] || return 2
+	output=$(LC_ALL=C iwconfig $1 2>&1)
+	echo $output | LC_ALL=C grep -q "radio off" && return 0 || return 2
+}
 
 check_link_down ()
 {
-	if [ -x /sbin/mii-tool -o -x /sbin/ethtool ]; then
+	if [ -x /sbin/mii-tool -o -x /sbin/ethtool -o -x /sbin/iwconfig ]; then
 		if ! LC_ALL=C ip link show dev $1 2>/dev/null| grep -q UP ; then
 			ip link set dev $1 up >/dev/null 2>&1
 			timeout=0
@@ -524,10 +530,12 @@ check_link_down ()
 				m=$?
 				check_ethtool $1
 				e=$?
+				check_iwconfig $1
+				i=$?
 				if [ $m -eq 1 ] || [ $e -eq 1 ] ; then
 					return 1
 				fi
-				if [ $m -eq 2 ] && [ $e -eq 2 ] ; then
+				if [ $m -eq 2 ] && [ $e -eq 2 ] && [ $i -eq 2 ]; then
 					return 1
 				fi
 				usleep 500000
