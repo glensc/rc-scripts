@@ -207,14 +207,14 @@ elif    DEVICE=irda* ; then     /* IrDA */
         DISCOVERY=yes|no (starts discovery of remote IrDA devices)
 fi
 				
-# You can also run some other programs *after* uping od downing
-# device. Just create functions run_up() and run_down()
+# You can also run some other programs *after* device has been brought up or down.
+# Just create functions run_up() and run_down().
 run_up()
 {
-	echo "This will be executed after uping device !"
+	echo "This will be executed after device is brought up!"
 }
 
 run_down()
 {
-	echo "This will be executed after downing device !"
+	echo "This will be executed after device is brought down!"
 }
