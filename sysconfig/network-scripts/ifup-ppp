@@ -81,7 +81,9 @@ elif is_yes "${PPPOA_SPEEDTOUCH}"; then
 	if is_yes "${PPPOA_KERNEL}"; then
 		modprobe -s -k speedtch
 		modprobe -s -k pppoatm
-		modem_run -k -s -f "${PPPOA_FIRMWARE}"
+		if [ -n "${PPPOA_FIRMWARE}" ]; then
+			modem_run -k -s -f "${PPPOA_FIRMWARE}"
+		fi
 		MODEMMODE="plugin pppoatm.so"
 		MODEMPORT="${PPPOA_VPI}.${PPPOA_VCI}"
 	else
