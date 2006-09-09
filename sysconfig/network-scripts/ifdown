@@ -59,9 +59,6 @@ if [ -x $OTHERSCRIPT ]; then
 	fi
 fi
 
-# Check to make sure the device is actually up
-check_device_down && exit 0
-
 if [ "$BOOTPROTO" = "bootp" -o "$BOOTPROTO" = "pump" ]; then
 	/sbin/pump -r -i ${DEVICE}
 	RESULT=$?
@@ -95,6 +92,9 @@ if is_wireless_device "${DEVICE}"; then
 		rm -f "/var/run/wpa_supplicant-${DEVICE}.pid"
 	fi
 fi
+
+# Check to make sure the device is actually up
+check_device_down && exit 0
 
 vlan_setup
 if is_yes $ETH_VLANS && `echo $DEVICE | grep -q ^eth` ; then
