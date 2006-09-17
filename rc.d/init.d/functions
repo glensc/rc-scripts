@@ -200,22 +200,25 @@ termput()
 	fi
 }
 
-# printf equivalent
-printf_()
-{
-	typeset text m
-	text="$1" ;
-	shift ;
-	if [ $# -gt 0 ]; then
-		m="$1";
-		shift;
-		while [ $# -gt 0 ]; do
-			m="$m\",\"$1" ;
-			shift ;
-		done
-	fi
-	awk "BEGIN {printf \"$text\", \"$m\"; }"
-}
+if [ ! -x /bin/printf ]; then
+	# printf equivalent
+	# FIXME: buggy when single or double quotes in message!
+	printf()
+	{
+		typeset text m
+		text="$1"
+		shift
+		if [ $# -gt 0 ]; then
+			m="$1"
+			shift
+			while [ $# -gt 0 ]; do
+				m="$m\",\"$1"
+				shift
+			done
+		fi
+		awk "BEGIN {printf \"$text\", \"$m\"; }"
+	}
+fi
 
 # National language support function
 nls()
@@ -251,9 +254,9 @@ nls()
 		printf "$message" "$@"
 	elif [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
 		text=$(TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="${NLS_DOMAIN:-rc-scripts}" "$message")
-		printf_ "$text" "$@"
+		printf "$text" "$@"
 	else
-		printf_ "$message" "$@"
+		printf "$message" "$@"
 	fi
 
 	echo -en "$msg_echo"
