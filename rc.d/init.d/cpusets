@@ -98,16 +98,30 @@ stop() {
 	rm -f /var/lock/subsys/cpusets
 }
 
-# find all the interfaces besides loopback.
-# ignore aliases, alternative configurations, and editor backup files
-cpusets_boot=$( (
-	. /etc/rc.d/init.d/functions; \
-	cd /etc/sysconfig/cpusets && ls -1 cpuset* | \
-	egrep 'cpuset-[a-z0-9\.:]+$' | \
-	for i in `cat`; do \
-		ONBOOT=""; . /etc/sysconfig/cpusets/"$i"; is_yes "$ONBOOT" && echo "$i"; \
-	done | \
-	awk ' { gsub(/cpuset-/,NIL); print $0 } ') 2> /dev/null)
+# Get list of config files
+# ignores editor backup files and rpm blackups
+cpuset_configs()
+{
+	local match="$1"
+	for a in /etc/sysconfig/cpusets/$match; do
+		case "$a" in
+		*rpmorig|*rpmnew|*rpmsave|*~|*.orig)
+			continue
+			;;
+		*)
+			echo $a
+		;;
+		esac
+	done
+}
+
+cpuset_files="$(cpuset_configs 'cpuset-*')"
+cpusets_boot=`
+	for i in $cpuset_files; do
+		ONBOOT=""; . "$i" 2>/dev/null
+		is_yes "$ONBOOT" && echo "${i##*/}"
+	done
+`
 
 # See how we were called.
 case "$1" in
