@@ -352,6 +352,11 @@ show()
 	echo -n "$out"
 }
 
+deltext()
+{
+	termput hpa $INIT_COL
+}
+
 # Displays message in square brackests ("[ DONE ]"). Takes two arguments.
 # First is the text to display, second is color number to use (argument to
 # tput setaf). If second argument is not given, default (2, green) will be
@@ -364,40 +369,36 @@ progress()
 	echo -n "$(termput setaf $CBRACKETS)[$(termput setaf $COLOR) $(nls --nls-domain rc-scripts "$1") $(termput setaf $CBRACKETS)]$(termput op)"
 }
 
+_busy=$(progress "BUSY" "$CBUSY")
 busy()
 {
-	progress "BUSY" "$CBUSY"
+	echo -n "$_busy"
 }
 
+_ok=$(progress "DONE")
 ok()
 {
-	progress "DONE"
-	echo
+	echo "$_ok"
 }
 
+_started=$(progress "WORK")
 started()
 {
-	progress "WORK"
-	echo
+	echo "$_started"
 }
 
+_fail=$(progress "FAIL" "$CFAIL")
 fail()
 {
-	progress "FAIL" "$CFAIL"
-	echo
+	echo "$_fail"
 	return 1
 }
 
+_died=$(progress "DIED" "$CFAIL")
 died()
 {
-	progress "DIED" "$CFAIL"
-	echo
+	echo "$_died"
 	return 1
-}
-
-deltext()
-{
-	termput hpa $INIT_COL
 }
 
 # Check if $pid (could be plural) are running
