@@ -17,9 +17,6 @@
 # Set the path.
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
-# NLS
-NLS_DOMAIN="rc-scripts"
-
 . /etc/rc.d/init.d/functions
 
 case "$1" in

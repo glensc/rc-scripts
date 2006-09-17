@@ -12,9 +12,6 @@
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
-# NLS
-NLS_DOMAIN="rc-scripts"
-
 # Source function library.
 . /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/functions.network
