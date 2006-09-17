@@ -332,6 +332,7 @@ show()
 {
 	typeset out
 
+	out=$(
 		echo -n "$INIT_DOTS"
 		termput hpa 0
 		if [ -n "$CHARS" ]; then
@@ -347,6 +348,8 @@ show()
 		fi
 
 		termput hpa $INIT_COL
+	)
+	echo -n "$out"
 }
 
 # Displays message in square brackests ("[ DONE ]"). Takes two arguments.
