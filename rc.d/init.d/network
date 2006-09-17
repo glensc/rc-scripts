@@ -266,7 +266,7 @@ fi
 tunnels=`
 	for i in $(network_interface_configs 'tnlcfg-*'); do
 		ONBOOT=""; . "$i" 2>/dev/null
-		is_yes "$ONBOOT" && echo "${i##*/}"
+		is_yes "$ONBOOT" && echo "${i##*/tnlcfg-}"
 	done
 `
 
