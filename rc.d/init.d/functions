@@ -61,11 +61,6 @@ if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
 	unset _ctx
 fi
 
-if [ -n "$INITNG" ]; then
-	COLOR_INIT=no
-	FASTRC=yes
-fi
-
 if [ -z "$GETTEXT" ]; then
 	if [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
 		GETTEXT=yes
