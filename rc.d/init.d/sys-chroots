@@ -158,7 +158,6 @@ case "$CMD" in
   restart)
 	stop
 	start
-	exit $?
 	;;
   status)
 	# TODO: running each service with status parameter
