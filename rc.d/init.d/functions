@@ -66,6 +66,24 @@ if [ -n "$INITNG" ]; then
 	FASTRC=yes
 fi
 
+if [ -z "$GETTEXT" ]; then
+	if [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
+		GETTEXT=yes
+	else
+		GETTEXT=no
+	fi
+fi
+
+if [ -n "$TPUT" ]; then
+	if [ -d /usr/share/terminfo ] && [ -x /usr/bin/tput -o -x /bin/tput ] ; then
+		TPUT=yes
+		# check if we are on proper terminal
+		tput longname >/dev/null 2>&1 || TPUT=no
+	else
+		TPUT=no
+	fi
+fi
+
 is_yes()
 {
 	# Test syntax
@@ -151,16 +169,8 @@ kernelvermser()
 # Colors workaround
 termput()
 {
-	typeset tputavail
 
-	if [ -d /usr/share/terminfo ] && [ -x /usr/bin/tput -o -x /bin/tput ] ; then
-		tputavail=yes
-		# check if we are on proper terminal
-		tput longname >/dev/null 2>&1 || tputavail=no
-	else
-		tputavail=no
-	fi
-	if is_yes "$FASTRC" || is_no "$tputavail"; then
+	if is_yes "$FASTRC" || is_no "$TPUT"; then
 		case "$1" in
 		  hpa)
 			echo -ne "\033[$(($2+1))G"
@@ -252,7 +262,7 @@ nls()
 
 	if is_yes "$FASTRC"; then
 		printf "$message" "$@"
-	elif [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
+	elif is_yes "$GETTEXT"; then
 		text=$(TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="${NLS_DOMAIN:-rc-scripts}" "$message")
 		printf "$text" "$@"
 	else
