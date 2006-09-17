@@ -30,7 +30,7 @@ case "$1" in
 	;;
   *)
 	echo "Usage: $0 {start|stop}"
-	exit 1
+	exit 3
 esac
 
 exit 0
