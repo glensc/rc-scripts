@@ -84,6 +84,7 @@ if [ -n "$TPUT" ]; then
 	fi
 fi
 
+
 is_yes()
 {
 	# Test syntax
@@ -369,32 +370,27 @@ progress()
 	echo -n "$(termput setaf $CBRACKETS)[$(termput setaf $COLOR) $(nls --nls-domain rc-scripts "$1") $(termput setaf $CBRACKETS)]$(termput op)"
 }
 
-_busy=$(progress "BUSY" "$CBUSY")
 busy()
 {
 	echo -n "$_busy"
 }
 
-_ok=$(progress "DONE")
 ok()
 {
 	echo "$_ok"
 }
 
-_started=$(progress "WORK")
 started()
 {
 	echo "$_started"
 }
 
-_fail=$(progress "FAIL" "$CFAIL")
 fail()
 {
 	echo "$_fail"
 	return 1
 }
 
-_died=$(progress "DIED" "$CFAIL")
 died()
 {
 	echo "$_died"
@@ -921,6 +917,33 @@ clean_vserver_mtab() {
 	done
 	mv -f /etc/mtab.clean /etc/mtab
 }
+
+msg_cache_init() {
+	# if we have cachefile use it
+	# if we don't create memory variables and try to save silently
+	# we store cache in /etc, as /var isn't available at boot time
+	local cachefile='/etc/rc.d/.rc-scripts.cache'
+	if [ -f "$cachefile" -a "$cachefile" -nt /etc/sysconfig/system -a "$cachefile" -nt /etc/sysconfig/init-colors ]; then
+		. "$cachefile"
+		return
+	fi
+
+	# primitive caching
+	_busy=$(progress "BUSY" "$CBUSY")
+	_ok=$(progress "DONE")
+	_started=$(progress "WORK")
+	_fail=$(progress "FAIL" "$CFAIL")
+	_died=$(progress "DIED" "$CFAIL")
+	cat <<-EOF > "$cachefile" 2>/dev/null
+	_busy='$_busy';
+	_ok='$_ok';
+	_started='$_started';
+	_fail='$_fail';
+	_died='$_died';
+EOF
+}
+
+msg_cache_init
 
 #/*
 # * Local variables:
