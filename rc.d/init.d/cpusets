@@ -67,7 +67,7 @@ cpuset_empty()
 
 # find all the interfaces besides loopback.
 # ignore aliases, alternative configurations, and editor backup files
-cpusets_boot=$((
+cpusets_boot=$( (
 	. /etc/rc.d/init.d/functions; \
 	cd /etc/sysconfig/cpusets && ls -1 cpuset* | \
 	egrep 'cpuset-[a-z0-9\.:]+$' | \
