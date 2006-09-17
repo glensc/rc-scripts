@@ -236,7 +236,7 @@ nls()
 	typeset msg_echo nls_domain text message
 	msg_echo='\n'
 	nls_domain="$NLS_DOMAIN"
-	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+	while [ "$1" != "${1##-}" ]; do
 		case "$1" in
 		  --nls-domain)
 			shift
@@ -258,15 +258,11 @@ nls()
 		return
 	fi
 
-	if is_yes "$FASTRC"; then
-		printf "$message" "$@"
-	elif is_yes "$GETTEXT"; then
-		text=$(TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="${nls_domain:-rc-scripts}" "$message")
-		printf "$text" "$@"
-	else
-		printf "$message" "$@"
+	if is_yes "$GETTEXT"; then
+		message=$(TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="${nls_domain:-rc-scripts}" "$message")
 	fi
 
+	printf "$message" "$@"
 	echo -en "$msg_echo"
 }
 
