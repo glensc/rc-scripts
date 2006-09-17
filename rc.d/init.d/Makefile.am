@@ -10,7 +10,8 @@ init_SCRIPTS = \
 	random \
 	single \
 	sys-chroots \
-	timezone
+	timezone \
+	local
 	
 init_DATA = functions
 

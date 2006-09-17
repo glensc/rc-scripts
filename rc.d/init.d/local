@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# local	Set time zone information.
+# chkconfig:	2345 99 01
+#
+# description:	This script will be executed *after* all the other init \
+# scripts. You can put your own initialization stuff in here if you don't \
+# want to do the full Sys V style init stuff.
+#
+# $Id: timezone 6491 2005-10-26 16:33:29Z baggins $
+
+# See how we were called.
+case "$1" in
+  start)
+	  touch /var/lock/subsys/local
+	  . /etc/rc.d/rc.local
+	;;
+  stop)
+	  rm -f /var/lock/subsys/local
+	;;
+  *)
+	echo "Usage: $0 {start|stop}"
+	exit 1
+esac
+
+exit 0
+
+# This must be last line !
+# vi:syntax=sh
