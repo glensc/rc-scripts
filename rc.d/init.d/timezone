@@ -27,9 +27,7 @@ ZONE_FILE="$ZONE_FILE/$TIME_ZONE"
 
 [ -L /etc/localtime -a "`resolvesymlink /etc/localtime`" = "$ZONE_FILE" ] && exit 0
 
-# See how we were called.
-case "$1" in
-  start)
+start() {
 	rm -f /etc/localtime
 	if [ -f "$ZONE_FILE" ]; then
 		if [ -n "$ZONE_INFO_AREA" ]; then
@@ -40,17 +38,25 @@ case "$1" in
 		run_cmd "$MESSAGE" cp -af $ZONE_FILE /etc/localtime
 		RETVAL=$?
 	fi
-	;;
-  stop)
+}
+
+stop() {
 	run_cmd "Unsetting time zone information" rm -f /etc/localtime
 	RETVAL=$?
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	start
 	;;
-  restart)
-	$0 stop
-	$0 start
+  stop)
+  	stop
 	;;
-  reload)
-	$0 restart
+  restart|reload)
+	stop
+	start
 	;;
   *)
 	echo "Usage: $0 {start|stop|restart|reload}"

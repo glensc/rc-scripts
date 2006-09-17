@@ -25,11 +25,7 @@ export runlevel previous
 
 [ -z "$runlevel" -o -z "$previous" -o "$runlevel" = "$previous" ] && exit 0
 
-RETVAL=0
-# See how we were called.
-case "$CMD" in
-  start)
-	# Start daemons.
+start() {
 	if [ "$previous" = "N" ]; then
 		runlevel=5
 		previous=0
@@ -122,8 +118,9 @@ case "$CMD" in
 	else
 		msg_already_running "System chroots services"
 	fi
-	;;
-  stop)
+}
+
+stop() {
 	# Stop daemons.
 	if [ "$previous" = "N" ]; then
 		runlevel=0
@@ -147,10 +144,20 @@ case "$CMD" in
 	else
 		msg_not_running "System chroots services"
 	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$CMD" in
+  start)
+  	start
+	;;
+  stop)
+	stop
 	;;
   restart)
-	$0 stop
-	$0 start
+	stop
+	start
 	exit $?
 	;;
   status)

@@ -65,20 +65,7 @@ cpuset_empty()
 	fi
 }
 
-# find all the interfaces besides loopback.
-# ignore aliases, alternative configurations, and editor backup files
-cpusets_boot=$( (
-	. /etc/rc.d/init.d/functions; \
-	cd /etc/sysconfig/cpusets && ls -1 cpuset* | \
-	egrep 'cpuset-[a-z0-9\.:]+$' | \
-	for i in `cat`; do \
-		ONBOOT=""; . /etc/sysconfig/cpusets/"$i"; is_yes "$ONBOOT" && echo "$i"; \
-	done | \
-	awk ' { gsub(/cpuset-/,NIL); print $0 } ') 2> /dev/null)
-
-# See how we were called.
-case "$1" in
-  start)
+start() {
   	rc_splash "bootcpusets start"
 
 	for i in $cpusets_boot ; do
@@ -91,8 +78,9 @@ case "$1" in
 	done
 
 	touch /var/lock/subsys/cpusets
-	;;
-  stop)
+}
+
+stop() {
 	for i in $cpusets_boot ; do
 		show "$(nls -n "Removing cpuset %s" "$i")"
 		busy
@@ -108,6 +96,26 @@ case "$1" in
 	done
 
 	rm -f /var/lock/subsys/cpusets
+}
+
+# find all the interfaces besides loopback.
+# ignore aliases, alternative configurations, and editor backup files
+cpusets_boot=$( (
+	. /etc/rc.d/init.d/functions; \
+	cd /etc/sysconfig/cpusets && ls -1 cpuset* | \
+	egrep 'cpuset-[a-z0-9\.:]+$' | \
+	for i in `cat`; do \
+		ONBOOT=""; . /etc/sysconfig/cpusets/"$i"; is_yes "$ONBOOT" && echo "$i"; \
+	done | \
+	awk ' { gsub(/cpuset-/,NIL); print $0 } ') 2> /dev/null)
+
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
 	;;
   status)
 	nls "Configured cpusets:"
@@ -129,8 +137,8 @@ case "$1" in
 	echo
 	;;
   restart)
-	$0 stop
-	$0 start
+	stop
+	start
 	;;
   *)
 	echo "Usage: $0 {start|stop|restart|status}"
