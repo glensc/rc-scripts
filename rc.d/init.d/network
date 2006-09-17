@@ -131,11 +131,6 @@ network_interface_configs()
 }
 
 start() {
-	if is_yes "$VSERVER"; then
-		touch /var/lock/subsys/network
-		exit 0
-	fi
-
 	rc_splash "bootnetwork start"
 	network_init
 
@@ -158,11 +153,6 @@ start() {
 }
 
 stop() {
-	if is_yes "$VSERVER"; then
-		rm -f /var/lock/subsys/network
-		exit 0
-	fi
-
 	# If we go to runlevel 0, 1 or 6 then umount all network fs
 	if [ "$RUNLEVEL" = "6" -o "$RUNLEVEL" = "0" -o "$RUNLEVEL" = "1" ]; then
 		if [ -x /etc/rc.d/init.d/netfs -a -f /var/lock/subsys/netfs ];
@@ -273,11 +263,21 @@ tunnels=`
 # See how we were called.
 case "$1" in
   start)
+	if is_yes "$VSERVER"; then
+		touch /var/lock/subsys/network
+		exit 0
+	fi
   	start
 	;;
+
   stop)
+	if is_yes "$VSERVER"; then
+		rm -f /var/lock/subsys/network
+		exit 0
+	fi
 	stop
 	;;
+
   status)
 	nls "Configured devices:"
 	echo "lo $interfaces"
@@ -289,10 +289,16 @@ case "$1" in
 	nls "Currently active devices and tunnels:"
 	/sbin/ip link show | awk -F":" ' (/UP/) { print $2 }' | xargs
 	;;
+
   restart)
+	if is_yes "$VSERVER"; then
+		exit 0
+	fi
+
 	stop
 	start
 	;;
+
   *)
 	echo "Usage: $0 {start|stop|restart|status}"
 	exit 3
