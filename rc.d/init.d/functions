@@ -134,7 +134,7 @@ if is_yes "${IN_SHUTDOWN}" || is_no "${RC_LOGGING}" ; then
 	initlog()
 	{
 		RESULT=0
-		while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+		while [ "$1" != "${1##-}" ]; do
 			case $1 in
 			  -c)
 				shift
@@ -562,7 +562,7 @@ killproc()
 		return 2
 	fi
 
-	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+	while [ "$1" != "${1##-}" ]; do
 		case $1 in
 		  --pidfile)
 			shift
