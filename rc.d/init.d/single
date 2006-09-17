@@ -14,9 +14,7 @@
 #
 # $Id$
 
-# Set the path.
-PATH=/sbin:/bin:/usr/sbin:/usr/bin
-
+# Source function library.
 . /etc/rc.d/init.d/functions
 
 case "$1" in
@@ -24,7 +22,7 @@ case "$1" in
 	exit 0
 	;;
   start*)
-# Kill all processes.
+	# Kill all processes.
 	[ "${BASH+bash}" = bash ] && enable kill
 
 	run_cmd "Sending all processes the TERM signal" killall5 -15
@@ -33,7 +31,7 @@ case "$1" in
 
 	rm -f /var/lock/subsys/*
 
-	# this looks nices
+	# this looks nicer
 	[ -x /usr/bin/clear ] && /usr/bin/clear
 
 # make sure modprobe is working

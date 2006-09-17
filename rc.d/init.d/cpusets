@@ -10,8 +10,6 @@
 
 # $Id$
 
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
-
 # Source function library.
 . /etc/rc.d/init.d/functions
 
