@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# local	Set time zone information.
+# local	Invoke custom scripts at startup
 # chkconfig:	2345 99 01
 #
 # description:	This script will be executed *after* all the other init \
