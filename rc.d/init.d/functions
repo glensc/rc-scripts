@@ -125,8 +125,8 @@ is_no()
 	esac
 }
 
+INIT_DOTS=$(awk -vcol=$INIT_COL 'BEGIN{ for(i = 0; i < col; i++) printf("."); }')
 if is_yes "$FASTRC"; then
-	INIT_DOTS=$(awk "BEGIN{for(\$i=0;\$i<$INIT_COL;\$i++)printf(\".\");}")
 	RC_LOGGING=no
 fi
 
@@ -318,27 +318,21 @@ msg_usage()
 show()
 {
 	typeset text
+	text="$@"
 
-	if is_yes "$FASTRC"; then
-		echo -n "$INIT_DOTS"
-		termput hpa 0
-		if [ -n "$CHARS" ]; then
-			termput setaf $CCHARS
-			echo -n "$CHARS"
-			termput op
-		fi
-		printf "$@"
-		termput hpa $INIT_COL
-	else
-		text=$(nls "$@")
-		if [ -n "$CHARS" ]; then
-			termput setaf $CCHARS
-			echo -n "$CHARS"
-			termput op
-		fi
-		echo -n "$text"
-		awk "BEGIN { for (j=length(\"$CHARS$text\"); j<$INIT_COL; j++) printf \".\" }"
+	if is_no "$FASTRC" && is_yes "$GETTEXT"; then
+		text=$(nls "$text")
 	fi
+
+	echo -n "$INIT_DOTS"
+	termput hpa 0
+	if [ -n "$CHARS" ]; then
+		termput setaf $CCHARS
+		echo -n "$CHARS"
+		termput op
+	fi
+	printf "$@"
+	termput hpa $INIT_COL
 }
 
 # Displays message in square brackests ("[ DONE ]"). Takes two arguments.
