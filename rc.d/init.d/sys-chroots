@@ -100,8 +100,6 @@ start() {
 			fi
 			chroot $dir mount -a
 			# network
-			chroot $dir /sbin/chkconfig network off
-			rm -f $dir/etc/rc.d/rc*.d/K*network
 			[ -f /var/lock/subsys/network ] && touch $dir/var/lock/subsys/network
 			# other
 			chroot $dir /sbin/chkconfig single off
@@ -129,8 +127,8 @@ stop() {
 		for dir in $SYSTEM_CHROOTS; do
 			[ ! -x "$dir/etc/rc.d/rc" ] && continue
 			msg_stopping "System chroots services for $dir"; started
-			chroot $dir /etc/rc.d/rc $runlevel chroot
 			rm -f $dir/var/lock/subsys/network
+			chroot $dir /etc/rc.d/rc $runlevel chroot
 			chroot $dir /bin/sh -c "grep -q selinuxfs /proc/filesystems && umount /selinux"
 			chroot $dir /bin/sh -c "grep -q sysfs /proc/filesystems && umount /sys"
 			chroot $dir umount -a
