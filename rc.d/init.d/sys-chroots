@@ -8,9 +8,6 @@
 # Source function library.
 . /etc/rc.d/init.d/functions
 
-# Source system configuration.
-. /etc/sysconfig/system
-
 # Source networking configuration.
 . /etc/sysconfig/network
 
@@ -43,7 +40,6 @@ start() {
 
 			chroot $dir /bin/sh -c '
 			. /etc/rc.d/init.d/functions
-			. /etc/sysconfig/system
 			# Clear mtab
 			:>/etc/mtab
 			[ -f /etc/cryptomtab ] && :>/etc/cryptomtab

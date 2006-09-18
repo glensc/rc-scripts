@@ -46,20 +46,6 @@ if [ -f /etc/sysconfig/i18n ]; then
 	[ -n "$LINGUAS" ] && export LINGUAS || unset LINGUAS
 fi
 
-# Read system config data.
-if [ -f /etc/sysconfig/system ]; then
-	. /etc/sysconfig/system
-else
-	RUN_SULOGIN_ON_ERR=yes
-	RUN_ISAPNP=yes
-	PANIC_REBOOT_TIME=0
-	DELAY_LOGIN=yes
-	CLEAN_TMP=no
-	CONSOLE_LOGLEVEL=1
-	SET_SLINKS=yes
-	RUN_LDCONFIG=yes
-fi
-
 # Source function library.
 . /etc/rc.d/init.d/functions
 

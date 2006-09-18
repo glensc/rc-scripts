@@ -39,19 +39,7 @@ else
 	HOSTNAME=localhost
 fi
 
-# Read system config data
-if [ -r /etc/sysconfig/system ]; then
-	. /etc/sysconfig/system
-else
-	RUN_SULOGIN_ON_ERR=yes
-	RUN_USERPNP=yes
-	RUN_KERNELPNP=yes
-	PANIC_REBOOT_TIME=0
-	DELAY_LOGIN=yes
-	CLEAN_TMP=no
-	CONSOLE_LOGLEVEL=1
-	SET_SLINKS=yes
-fi
+CONSOLE_LOGLEVEL=1
 
 # Read functions
 . /etc/rc.d/init.d/functions
@@ -324,7 +312,7 @@ if ! is_yes "$VSERVER"; then
 
 			PS1="$(nls '(Repair filesystem)# ')"; export PS1
 			[ "$SELINUX" = "1" ] && disable_selinux
-			if is_yes "$RUN_SULOGIN_ON_ERR"; then
+			if ! is_no "$RUN_SULOGIN_ON_ERR"; then
 				/sbin/sulogin
 			else
 				/bin/sh
@@ -369,10 +357,10 @@ if ! is_yes "$VSERVER"; then
 
 	# set up pnp and kernel pnp
 	if [ -n "$PNP" ]; then
-		if is_yes "$RUN_USERPNP" && [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
+		if ! is_no "$RUN_USERPNP" && [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
 			run_cmd "Setting up ISA PNP devices (userspace pnp)" /sbin/isapnp /etc/isapnp/isapnp.conf
 		fi
-		if is_yes "$RUN_KERNELPNP"; then
+		if ! is_no "$RUN_KERNELPNP"; then
 			/sbin/modprobe -k isa-pnp 2> /dev/null
 			if [ -e /proc/isapnp -a -f /etc/isapnp/isapnp-kernel.conf ]; then
 				show "Setting up ISA PNP devices (kernelspace pnp)"; busy
@@ -409,7 +397,7 @@ rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
 # Remove /etc/nologin when starting system
 [ -f /etc/nologin.boot ] && rm -f /etc/nologin /etc/nologin.boot
 
-if is_yes "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
+if ! is_no "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
 	show "Enabling Delay Login"; busy
 	echo > /etc/nologin
 	nls "System bootup in progress - please wait" >> /etc/nologin
@@ -461,7 +449,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Adjust symlinks as necessary in /boot to keep system services from
 	# spewing messages about mismatched System maps and so on.
-	if is_yes "$SET_SLINKS"; then
+	if ! is_no "$SET_SLINKS"; then
 		if [ -L /boot/System.map -a -r /boot/System.map-`uname -r` ] ; then
 			ln -s -f System.map-`uname -r` /boot/System.map
 		fi
@@ -642,7 +630,7 @@ if ! is_yes "$VSERVER"; then
 
 				PS1="$(nls '(RAID Repair)# ')"; export PS1
 				[ "$SELINUX" = "1" ] && disable_selinux
-				if is_yes "$RUN_SULOGIN_ON_ERR"; then
+				if ! is_no "$RUN_SULOGIN_ON_ERR"; then
 					/sbin/sulogin
 				else
 					/bin/sh
@@ -685,7 +673,7 @@ if ! is_yes "$VSERVER"; then
 
 			PS1="$(nls '(Repair filesystem)# ')"; export PS1
 			[ "$SELINUX" = "1" ] && disable_selinux
-			if is_yes "$RUN_SULOGIN_ON_ERR"; then
+			if ! is_no "$RUN_SULOGIN_ON_ERR"; then
 				/sbin/sulogin
 			else
 				/bin/sh
@@ -741,7 +729,7 @@ if ! is_yes "$VSERVER"; then
 
 			PS1="`nls '(Repair filesystem)# '`"; export PS1
 			[ "$SELINUX" = "1" ] && disable_selinux
-			if is_yes "$RUN_SULOGIN_ON_ERR"; then
+			if ! is_no "$RUN_SULOGIN_ON_ERR"; then
 				/sbin/sulogin
 			else
 				/bin/sh
@@ -800,7 +788,7 @@ if ! is_yes "$VSERVER"; then
 		. /etc/rc.d/rc.serial
 	fi
 
-	if [ -f /proc/sys/kernel/panic -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
+	if [ -f /proc/sys/kernel/panic -a -n "$PANIC_REBOOT_TIME" -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
 		show 'Setting %s seconds for kernel reboot after panic' "$PANIC_REBOOT_TIME"; busy
 		if (sysctl -w kernel.panic=$PANIC_REBOOT_TIME >/dev/null 2>&1); then ok; else fail; fi
 	fi
