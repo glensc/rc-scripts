@@ -694,6 +694,13 @@ if ! is_yes "$VSERVER"; then
 
 	run_cmd "Mounting local filesystems" mount -a -t nonfs,smbfs,ncpfs,proc,cifs -O no_netdev
 
+	# now we have /usr mounted, recheck if we have gettext and tput available.
+	if is_no "$TPUT"; then
+		GETTEXT=
+	   	TPUT=
+		rc_init_gettext
+	fi
+
 	# Now do some workaround - encrypted filesystems couldn't have been fsck-ed
 	# before mount - that's where the password is entered.
 	# mount is buggy - when remounting loopback filesystem, loop=XXX
@@ -756,7 +763,7 @@ if ! is_yes "$VSERVER"; then
 		ok
 	fi
 
-	# /var/log should be writable now, so starting saving the boot output
+	# /var/log should be writable now, so start saving the boot output
 	if [ "$RC_BOOTLOG" ]; then
 		echo > /var/log/boot.msg
 		killall -IO blogd
@@ -796,7 +803,7 @@ if ! is_yes "$VSERVER"; then
 	# ... and here finish configuring parameters
 	/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 else
-	# /var/log should be writable now, so starting saving the boot output
+	# /var/log should be writable now, so star saving the boot output
 	if [ "$RC_BOOTLOG" ]; then
 		echo > /var/log/boot.msg
 		killall -IO blogd
