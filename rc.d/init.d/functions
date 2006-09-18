@@ -919,8 +919,7 @@ msg_cache_init() {
 	# We store cache in /etc, as /var isn't available at boot time.
 	local cachefile='/etc/rc.d/.rc-scripts.cache'
 	if [ -f "$cachefile" -a "$cachefile" -nt /etc/sysconfig/system -a "$cachefile" -nt /etc/sysconfig/init-colors ]; then
-		. "$cachefile"
-		return
+		. "$cachefile" 2>/dev/null && return
 	fi
 
 	# primitive caching
@@ -929,7 +928,7 @@ msg_cache_init() {
 	_started=$(progress "WORK")
 	_fail=$(progress "FAIL" "$CFAIL")
 	_died=$(progress "DIED" "$CFAIL")
-	cat <<-EOF > "$cachefile" 2>/dev/null
+	cat <<-EOF 2>/dev/null > "$cachefile"
 	_busy='$_busy';
 	_ok='$_ok';
 	_started='$_started';
