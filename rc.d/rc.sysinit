@@ -51,7 +51,6 @@ else
 	CLEAN_TMP=no
 	CONSOLE_LOGLEVEL=1
 	SET_SLINKS=yes
-	RUN_LDCONFIG=yes
 fi
 
 # Read functions
