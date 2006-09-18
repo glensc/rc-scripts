@@ -69,7 +69,7 @@ if [ -z "$GETTEXT" ]; then
 	fi
 fi
 
-if [ -n "$TPUT" ]; then
+if [ -z "$TPUT" ]; then
 	if [ -d /usr/share/terminfo ] && [ -x /usr/bin/tput -o -x /bin/tput ] ; then
 		TPUT=yes
 		# check if we are on proper terminal
