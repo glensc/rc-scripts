@@ -1,3 +1,219 @@
+2006-09-18 23:09 +0000 [r7794]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit, rc.d/init.d/functions: Allow /usr being mounted
+	  afterwards.
+
+2006-09-18 19:06 +0000 [r7793]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/allowlogin: Drop superfluous default setting.
+
+2006-09-18 19:02 +0000 [r7792]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/sys-chroots: Don't touch chkconfig symlinks on
+	  chroot, instead play with network subsys lockfile. This allows
+	  you define sys-chroots from livecd without corrupting that
+	  chroot.
+
+2006-09-18 18:58 +0000 [r7791]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/sys-chroots, rc.d/rc, rc.d/rc.sysinit,
+	  rc.d/init.d/allowlogin: /etc/sysconfig/system already loaded by
+	  init.d/functions. Adjust defaults if no sysconfig/system is
+	  present (so the checks stay same after these changes).
+
+2006-09-18 18:50 +0000 [r7790]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: RUN_LDCONFIG not used here.
+
+2006-09-18 17:55 +0000 [r7789]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Corrected tput check.
+
+2006-09-18 12:41 +0000 [r7788]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Trap and hide errors when reading msg
+	  cachefile.
+
+2006-09-17 22:06 +0000 [r7787]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Punctuation.
+
+2006-09-17 21:52 +0000 [r7786]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: No need to force any settings for initng.
+
+2006-09-17 19:05 +0000 [r7785]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/timezone: Use lockfiles.
+
+2006-09-17 18:34 +0000 [r7784]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Cache colors in filesystem too.
+
+2006-09-17 18:21 +0000 [r7783]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: busy(), ok(), started(), are constant so
+	  their values can be cached.
+
+2006-09-17 18:15 +0000 [r7781-7782]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Buffer show() function so the display to
+	  be more smooth.
+
+	* rc.d/init.d/functions: Correct show() function printf handling.
+
+2006-09-17 17:53 +0000 [r7779-7780]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: RETVAL is set by start(); if any.
+
+	* rc.d/init.d/sys-chroots: RETVAL is set by start(); if any.
+
+2006-09-17 17:10 +0000 [r7778]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: Demonstrate use of functions.
+
+2006-09-17 17:06 +0000 [r7777]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: Shortcuts for vserver.
+
+2006-09-17 16:59 +0000 [r7776]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: Merge optimzations from network script.
+
+2006-09-17 16:52 +0000 [r7775]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: Add bug-5795.patch (assume it's correct).
+
+2006-09-17 16:47 +0000 [r7774]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network, rc.d/init.d/timezone,
+	  rc.d/init.d/sys-chroots, rc.d/init.d/cpusets: Use functions to
+	  avoid reexec for restart.
+
+2006-09-17 16:27 +0000 [r7771-7773]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/local, rc.d/init.d/sys-chroots: Propset Id
+
+	* rc.d/init.d/local: Update chkconfig description.
+
+	* rc.d/init.d/local, rc.d/init.d/cpusets: LSB compliance.
+
+2006-09-17 15:57 +0000 [r7770]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Cache termput calls within same script.
+
+2006-09-17 15:42 +0000 [r7769]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Kill bogus +arg checks.
+
+2006-09-17 15:29 +0000 [r7768]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Always use cached in show() function
+	  (There's no benefit of doing otherwise).
+
+2006-09-17 15:18 +0000 [r7765-7767]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Cleanup nls() function.
+
+	* rc.d/init.d/functions: Avoid overwriting global NLS_DOMAIN if can
+	  do without.
+
+	* rc.d/init.d/functions: Keep state of have gettext and have tput
+	  per whole initscript.
+
+2006-09-17 15:01 +0000 [r7764]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Use buggy awk-printf wrapper only if
+	  /bin/printf is not available.
+
+2006-09-17 13:49 +0000 [r7763]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/Makefile.am, rc.d/init.d/local (added): Use locking
+	  for rc.local , so that it's no longer invoked between runlevel
+	  changes.
+
+2006-09-17 13:36 +0000 [r7761-7762]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: Cosmetics for vim
+
+	* rc.d/init.d/network, rc.d/init.d/timezone, rc.d/init.d/random,
+	  rc.d/init.d/allowlogin: LSB compliance
+
+2006-09-17 13:26 +0000 [r7758-7760]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/single: Adjust indent.
+
+	* rc.d/init.d/network, rc.d/init.d/single, rc.d/init.d/cpusets:
+	  Sane $PATH is initialized in init.d/functions.
+
+	* rc.d/init.d/network, rc.d/init.d/timezone, rc.d/init.d/random,
+	  rc.d/init.d/single, rc.d/init.d/cpusets, rc.d/init.d/allowlogin:
+	  NLS_DOMAIN="rc-scripts" is the default setting, remove.
+
+2006-09-09 19:13 +0000 [r7745]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown: Allow to kill
+	  dhcp/wpa_supplicant daemon even if device disappears/is down due
+	  to some reasons.
+
+2006-09-08 18:35 +0000 [r7739]  Radosław Zieliński <radek/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada,
+	  sysconfig/network-scripts/ifup-ppp: - speedtouch-neostrada fixes:
+	  - use modem_run in kernel mode only if PPPOA_FIRMWARE is not
+	  empty; comment out PPPOA_FIRMWARE in default ifcfg-ppp0 - comment
+	  out MTU=1452; doesn't work (for me) if it's defined
+
+2006-08-31 11:58 +0000 [r7694]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: Correct english
+	  description.
+
+2006-08-31 09:51 +0000 [r7693]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: Restore basename change.
+
+2006-08-31 07:26 +0000 [r7692]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/functions.network: Detect if wireless
+	  interface is turned on.
+
+2006-08-10 12:14 +0000 [r7656]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network: - check for /usb/bin/wc existence (in case
+	  of /usr over NFS)
+
+2006-07-24 14:02 +0000 [r7546]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-irlan0, doc/net-scripts.txt:
+	  s/BOOTMETHOD/BOOTPROTO/g once more.
+
+2006-07-24 13:59 +0000 [r7544-7545]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: Default $DHCP_HOSTNAME to
+	  $HOSTNAME.
+
+	* sysconfig/network-scripts/ifup: Optimize: remove three basename
+	  calls
+
+2006-07-20 14:13 +0000 [r7537]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* TODO: - killproc() s%!&*ks
+
+2006-07-19 16:38 +0000 [r7535]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/hwprofiles/files: - added xorg.conf
+
+2006-07-09 08:06 +0000 [r7499]  Adam Gołębiowski <adamg/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - typo; noticed by
+	  Szymon Siwek (sls (at) poczta wp pl)
+
+2006-07-04 14:59 +0000 [r7491]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* TODO: Add LVM on dmraid problem
+
 2006-05-28 19:05 +0000 [r7454]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* autogen.sh: Always run changelog generation when asked. Obfuscate
