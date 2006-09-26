@@ -894,13 +894,22 @@ clean_vserver_mtab() {
 	mv -f /etc/mtab.clean /etc/mtab
 }
 
-msg_cache_init() {
+rc_cache_init() {
 	# If we have cachefile, use it.
 	# If we don't, create memory variables and try to save silently,
 	# We store cache in /etc, as /var isn't available at boot time.
 	local cachefile='/etc/rc.d/.rc-scripts.cache'
+
+	# We create $check variable which is used to invalidate the cache.
+	# The $check contains user locale and terminal.
+	local check="$TERM.$LC_MESSAGES"
+
 	if [ -f "$cachefile" -a "$cachefile" -nt /etc/sysconfig/system -a "$cachefile" -nt /etc/sysconfig/init-colors ]; then
-		. "$cachefile" 2>/dev/null && return
+		if . "$cachefile" 2>/dev/null; then
+			if [ "$check" = "$_check" ]; then
+				return
+			fi
+		fi
 	fi
 
 	# primitive caching
@@ -915,10 +924,11 @@ msg_cache_init() {
 	_started='$_started';
 	_fail='$_fail';
 	_died='$_died';
+	_check='$check';
 EOF
 }
 
-rc_init_gettext() {
+rc_gettext_init() {
 	if [ -z "$GETTEXT" ]; then
 		if [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
 			GETTEXT=yes
@@ -938,8 +948,8 @@ rc_init_gettext() {
 	fi
 }
 
-msg_cache_init
-rc_init_gettext
+rc_gettext_init
+rc_cache_init
 
 #/*
 # * Local variables:
