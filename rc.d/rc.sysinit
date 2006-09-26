@@ -698,7 +698,7 @@ if ! is_yes "$VSERVER"; then
 	if is_no "$TPUT"; then
 		GETTEXT=
 	   	TPUT=
-		rc_init_gettext
+		rc_gettext_init
 	fi
 
 	# Now do some workaround - encrypted filesystems couldn't have been fsck-ed
