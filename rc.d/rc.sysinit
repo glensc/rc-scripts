@@ -286,8 +286,8 @@ if ! is_yes "$VSERVER"; then
 	else
 		# Obey the fs_passno setting for / (see fstab(5))
 		# - find the / entry
-		# - make sure we have 6 fields
-		_ROOTFS_PASSNO=$(awk '($1 ~ /^(\/|UUID|LABEL)/ && $2 == "/" && NF == 6) { print $6}' /etc/fstab)
+		# - make sure we have at least 6 fields
+		_ROOTFS_PASSNO=$(awk '($1 !~ /^#/ && $2 == "/" && NF >= 6) { print $6}' /etc/fstab)
 	fi
 
 	_RUN_QUOTACHECK=0
