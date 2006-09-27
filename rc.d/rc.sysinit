@@ -450,12 +450,14 @@ if ! is_yes "$VSERVER"; then
 	# Adjust symlinks as necessary in /boot to keep system services from
 	# spewing messages about mismatched System maps and so on.
 	if ! is_no "$SET_SLINKS"; then
-		if [ -L /boot/System.map -a -r /boot/System.map-`uname -r` ] ; then
-			ln -s -f System.map-`uname -r` /boot/System.map
+		uname_r=$(uname -r)
+		if [ -L /boot/System.map -a -r /boot/System.map-$uname_r ] ; then
+			ln -s -f System.map-$uname_r /boot/System.map
 		fi
-		if [ ! -e /boot/System.map -a -r /boot/System.map-`uname -r` ] ; then
-			ln -s -f System.map-`uname -r` /boot/System.map
+		if [ ! -e /boot/System.map -a -r /boot/System.map-$uname_r ] ; then
+			ln -s -f System.map-$uname_r /boot/System.map
 		fi
+		unset uname_r
 	fi
 
 	# Run depmod if RUN_DEPMOD != "no" and:
