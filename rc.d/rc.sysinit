@@ -370,7 +370,10 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Remount the root filesystem read-write
-	run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
+	rw=$(awk '($1 !~ /^#/ && $2 == "/") { print $4; exit}' /proc/mounts)
+	if [[ $rw != *rw* ]]; then
+		run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
+	fi
 
 	# Update quotas if fsck was run on /
 	if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
