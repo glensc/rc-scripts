@@ -68,17 +68,17 @@ done
 
 # standard
 [ -n "$AGEING" ] && brctl setageing "$AGEING"
-[ -n "$GCINT" ] && brctl gcint "$GCINT"
+[ -n "$GCINT" ] && brctl setgcint "$GCINT"
 
 # spanning tree protocol
 if is_yes "$SPANNING_TREE"; then
 	brctl stp ${DEVICE} yes
-	[ -n "$BRIDGEPRIO" ] && brctl bridgeprio ${DEVICE} "$BRIDGEPRIO"
-	[ -n "$FD" ] && brctl fd ${DEVICE} "$FD"
-	[ -n "$HELLO" ] && brctl hello ${DEVICE} "$HELLO"
-	[ -n "$MAXAGE" ] && brctl maxage ${DEVICE} "$MAXAGE"
-	[ -n "$PATHCOST" -a -n "$PATHCOST_PORT" ] && brctl pathcost ${DEVICE} "$PATHCOST_PORT" "$PATHCOST"
-	[ -n "$PORTPRIO" -a -n "$PORTPRIO_PORT" ] && brctl portprio ${DEVICE} "$PORTPRIO_PORT" "$PORTPRIO"
+	[ -n "$BRIDGEPRIO" ] && brctl setbridgeprio ${DEVICE} "$BRIDGEPRIO"
+	[ -n "$FD" ] && brctl setfd ${DEVICE} "$FD"
+	[ -n "$HELLO" ] && brctl sethello ${DEVICE} "$HELLO"
+	[ -n "$MAXAGE" ] && brctl setmaxage ${DEVICE} "$MAXAGE"
+	[ -n "$PATHCOST" -a -n "$PATHCOST_PORT" ] && brctl setpathcost ${DEVICE} "$PATHCOST_PORT" "$PATHCOST"
+	[ -n "$PORTPRIO" -a -n "$PORTPRIO_PORT" ] && brctl setportprio ${DEVICE} "$PORTPRIO_PORT" "$PORTPRIO"
 else
 	brctl stp ${DEVICE} no
 fi
