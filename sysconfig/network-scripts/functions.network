@@ -452,7 +452,7 @@ wireless_param ()
 	# wlan mode needs to be first
 	[ -n "$(eval echo \$${prefix}WLAN_MODE)" ] && \
 		iwconfig ${device} mode "$(eval echo \$${prefix}WLAN_MODE)"
-	iwconfig ${device} nickname ${WLAN_NICKNAME}
+	iwconfig ${device} nick ${WLAN_NICKNAME}
 	[ -n "$(eval echo \$${prefix}WLAN_NWID)" ] && \
 		iwconfig ${device} nwid "$(eval echo \$${prefix}WLAN_NWID)"
 	if [ -n "$(eval echo \$${prefix}WLAN_FREQ)" -a "$(eval echo \$${prefix}${WLAN_MODE})" != "Managed" ] ; then
