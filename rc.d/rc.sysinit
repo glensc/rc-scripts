@@ -372,7 +372,7 @@ if ! is_yes "$VSERVER"; then
 	# Remount the root filesystem read-write
 	# There could be multiple entries for rootfs, so if any of them is 'ro' we
 	# assume rootfs is readonly.
-	rw=$(awk '($1 !~ /^#/ && $2 == "/") { if ($4 == "ro") readonly = 1} END { print readonly ? "ro" : "rw"}' /proc/mounts)
+	rw=$(awk '$2 == "/" { if ($4 == "ro") readonly = 1} END { print readonly ? "ro" : "rw"}' /proc/mounts)
 	if [[ $rw != *rw* ]]; then
 		run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
 	fi
