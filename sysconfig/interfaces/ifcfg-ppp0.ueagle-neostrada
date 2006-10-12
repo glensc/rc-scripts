@@ -1,4 +1,4 @@
-# $Id: ifcfg-br0 1364 2003-09-22 01:28:35Z arekm $
+# $Id$
 #
 DEVICE="ppp0"
 PERSIST="yes"
