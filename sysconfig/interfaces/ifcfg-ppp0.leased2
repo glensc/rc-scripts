@@ -1,7 +1,7 @@
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 # $Id$
 # config file for setting up hardwired (leased) serial line.
-#  This config assumes "transparent" modem (in ex. goramo), null modem
+# This config assumes "transparent" modem (in ex. goramo), null modem
 # cable or current loop. 
 # Advantage is smaller logfiles and slower 'pid spinning' (no chat is
 # executed)
@@ -11,6 +11,7 @@
 # Note: After commiting last &W You won't be able to talk to Your modem 
 # until You reset it to factory defaults using some jumper.
 # if You don't have any jumper YOU HAVE BEEN WARNED. 
+#
 DEVICE=ppp0
 ONBOOT=yes
 IPADDR=192.168.255.254/30

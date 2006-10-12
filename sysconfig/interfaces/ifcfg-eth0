@@ -1,6 +1,8 @@
-# example config for first ethernet card
+# $Id$
+# Config for Ethernet card.
+#
 
-# name of the device
+# Name of the device. Must match filename suffix.
 DEVICE=eth0
 
 # IP addresses/address prefix

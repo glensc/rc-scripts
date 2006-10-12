@@ -1,9 +1,10 @@
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 # $Id$
 # config file for setting up hardwired (leased) serial line.
-#  This configuration uses chats with modem, so You have to have an inteligent
+# This configuration uses chats with modem, so You have to have an inteligent
 # modem (AT commands compatible).
 # But You can monitor connection speed.
+#
 DEVICE=ppp0
 CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.leased1
 ONBOOT=yes

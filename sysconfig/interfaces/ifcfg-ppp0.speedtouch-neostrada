@@ -1,3 +1,5 @@
+# $Id: ifcfg-br0 1364 2003-09-22 01:28:35Z arekm $
+#
 DEVICE=ppp0
 ONBOOT=yes
 PPPOA_SPEEDTOUCH=yes

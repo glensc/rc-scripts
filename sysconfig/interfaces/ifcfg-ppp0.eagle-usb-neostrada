@@ -1,3 +1,5 @@
+# $Id: ifcfg-br0 1364 2003-09-22 01:28:35Z arekm $
+#
 DEVICE=ppp0
 ONBOOT=yes
 PPPOA_EAGLE=yes
@@ -11,4 +13,3 @@ PAPNAME=XXX@neostrada.pl
 # ppp-plugin-ifcfg-password and uncommend following lines
 # PLUGIN_IFCFG_PASSWORD=yes
 # PASSWORD=YYYY
-

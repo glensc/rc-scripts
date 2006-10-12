@@ -1,3 +1,5 @@
+# $Id$
+#
 DEVICE=ppp0
 CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0
 ONBOOT=no

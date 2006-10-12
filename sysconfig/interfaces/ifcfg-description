@@ -1,4 +1,5 @@
-#	$Id$
+# $Id$
+#
 DEVICE=<name>
 
 [ BOOTPRIO=number ]

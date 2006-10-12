@@ -1,4 +1,4 @@
-#	$Id$
+# $Id$
 #
 DEVICE=br0
 IPADDR=195.164.211.2
