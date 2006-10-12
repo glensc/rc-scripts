@@ -7,3 +7,6 @@
 
 #from 192.168.2.0/24 table 10
 #eth0 default via 192.168.2.1 table 10
+#
+# route 10.12.0.34 via 192.168.2.3 via any interface
+#any 10.12.0.34 via 192.168.2.3
