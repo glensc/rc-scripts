@@ -1,3 +1,95 @@
+2006-10-13 06:23 +0000 [r7851-7852]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* man/Makefile.am: Add getkey.1
+
+	* src/getkey.c, man/getkey.1 (added): Updated.
+
+2006-10-12 21:07 +0000 [r7849-7850]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-ppp0.gprs-idea,
+	  sysconfig/interfaces/ifcfg-ppp0.ueagle-neostrada,
+	  sysconfig/interfaces/ifcfg-eth0.1,
+	  sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada,
+	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada: Propset Id
+
+	* sysconfig/interfaces/ifcfg-ppp0.callback,
+	  sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm,
+	  sysconfig/interfaces/ifcfg-description,
+	  sysconfig/interfaces/ifcfg-br0,
+	  sysconfig/interfaces/ifcfg-ppp0.tpsa,
+	  sysconfig/interfaces/ifcfg-irlan0,
+	  sysconfig/interfaces/ifcfg-ppp0.gprs-idea,
+	  sysconfig/interfaces/ifcfg-ppp0.leased1,
+	  sysconfig/interfaces/ifcfg-ppp0.leased2,
+	  sysconfig/interfaces/ifcfg-sl0,
+	  sysconfig/interfaces/ifcfg-ppp0.ueagle-neostrada,
+	  sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada,
+	  sysconfig/interfaces/ifcfg-irda0,
+	  sysconfig/interfaces/ifcfg-eth0.1,
+	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada,
+	  sysconfig/interfaces/ifcfg-eth0: Unify file header.
+
+2006-10-12 19:49 +0000 [r7848]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/static-routes: Add sample of single host routing
+
+2006-10-05 20:39 +0000 [r7842]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Use simple if.
+
+2006-10-05 17:22 +0000 [r7840-7841]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: There are no comments in /proc/mounts.
+
+	* rc.d/rc.sysinit: There could be multiple entries for root dir.
+
+2006-10-02 22:03 +0000 [r7839]  PaweĹ Sikora <pluto/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - wireless-tools >=
+	  29 uses `nick' command.
+
+2006-09-30 10:50 +0000 [r7827]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-br: Update brctl parameters to
+	  mach new version of bridge-utils (should be backward compatible).
+	  By Szymon Siwek.
+
+2006-09-28 23:38 +0000 [r7826]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysctl.conf: Default local port range is too evil. can't even
+	  start mysqld!
+
+2006-09-28 14:35 +0000 [r7823]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Remount rootfs only if it's not already rw (or
+	  it's better to ignore remount errors?)
+
+2006-09-27 22:30 +0000 [r7820]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Relax fstab format when finding rootfs passno
+	  (allow comments at the end of line).
+
+2006-09-27 13:35 +0000 [r7819]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Optimize less uname -r calls.
+
+2006-09-26 23:59 +0000 [r7818]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Reflect init_gettext function rename.
+
+2006-09-26 23:48 +0000 [r7817]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Add checking of msg cache validity. $TPUT
+	  and $GETTEXT need to be set before msg cache can be generated.
+
+2006-09-24 09:35 +0000 [r7806]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc-scripts.spec.in: rc.local is now run from init.d/local script.
+
+2006-09-24 09:29 +0000 [r7805]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Prepare for 0.4.1.0 release (consider it beta).
+
 2006-09-18 23:09 +0000 [r7794]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/rc.sysinit, rc.d/init.d/functions: Allow /usr being mounted
