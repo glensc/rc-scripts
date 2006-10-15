@@ -57,6 +57,7 @@ case "${MODE}" in
   sit|four)
 	is_no "${IPV6_NETWORKING}" && exit 0
 	is_no "${IPV6_TUNNELCONFIG}" && exit 0
+	[ "${MODE}" = "sit" ] && is_module "sit" && modprobe -s -k sit
 	[ "${MODE}" = "four" ] && is_module "fourtun" && modprobe -s -k fourtun
 	;;
   ipip)
