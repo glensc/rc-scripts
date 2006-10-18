@@ -16,6 +16,15 @@ source_config ()
 	elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
 		. "/etc/sysconfig/interfaces/$CONFIG"
 	fi
+
+	# This is sanity check so that if you've copied ifcfg-eth0 to ifcfg-eth1
+	# and forgot to alter DEVICE= line you won't accidentally bring down eth0
+	# while executing ifdown eth1.
+	if [ -n "$DEVICE" -a  "$DEVNAME" != "$DEVICE" ]; then
+		echo >&2 "$0: DEVICE specified in $CONFIG does not match filename. Aborting!"
+		exit 1
+	fi
+
 	if [ -n "${PREFIX}" ] && ! $(echo $IPADDR | grep "/" 2>&1 >/dev/null) ; then
 		IPADDR="$IPADDR/$PREFIX"
 	fi
