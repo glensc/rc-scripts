@@ -918,14 +918,15 @@ rc_cache_init() {
 	_started=$(progress "WORK")
 	_fail=$(progress "FAIL" "$CFAIL")
 	_died=$(progress "DIED" "$CFAIL")
-	cat <<-EOF 2>/dev/null > "$cachefile"
-	_busy='$_busy';
-	_ok='$_ok';
-	_started='$_started';
-	_fail='$_fail';
-	_died='$_died';
-	_check='$check';
-EOF
+
+	# we don't use heredoc, as ksh attempts to create tempfile then
+	> "$cachefile" || return
+	echo "_busy='$_busy';" >> "$cachefile"
+	echo "_ok='$_ok';" >> "$cachefile"
+	echo "_started='$_started';" >> "$cachefile"
+	echo "_fail='$_fail';" >> "$cachefile"
+	echo "_died='$_died';" >> "$cachefile"
+	echo "_check='$check';" >> "$cachefile"
 }
 
 rc_gettext_init() {
