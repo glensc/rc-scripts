@@ -76,7 +76,7 @@ if [ -x "$OTHERSCRIPT" ]; then
 fi
 
 # is this device available? (this catches PCMCIA devices for us)
-if ! (/sbin/ip link set multicast ${MULTICAST} dev ${DEVICE} > /dev/null 2>&1); then
+if ! /sbin/ip link set multicast ${MULTICAST} dev ${DEVICE} > /dev/null 2>&1; then
 	nls "Delaying %s initialization" ${DEVICE}
 	exit 1
 fi
