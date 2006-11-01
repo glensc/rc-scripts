@@ -243,8 +243,14 @@ setup_ip_gw_ro ()
 		if [ -z "${GATEWAYDEV}" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 			# set up default gateway
 			if [ -n "${GATEWAY}" ]; then
-				ip -4 route add default via ${GATEWAY} dev ${DEVICE} ${IP4SRCADDR} onlink
-				DEFGW=${GATEWAY}
+				ip -4 route add default via ${GATEWAY} dev ${DEVICE} ${IP4SRCADDR} onlink 2>/dev/null
+				if [ $? = 0 ]; then
+					DEFGW=${GATEWAY}
+				else
+					# The default gateway could be set via eth0, while bringing up eth1 we shouldn't set default gateway again.
+					# To prevent this message just set GATEWAYDEV=eth0 in /etc/sysconfig/network.
+					nls "Warning: Default gateway already set proably via other interface. Do you need to setup GATEWAYDEV?"
+				fi
 			elif [ "${GATEWAYDEV}" = "${DEVICE}" ]; then
 				ip -4 route add default dev ${DEVICE} ${IP4SRCADDR}
 			fi
