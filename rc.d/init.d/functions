@@ -920,7 +920,7 @@ rc_cache_init() {
 	_died=$(progress "DIED" "$CFAIL")
 
 	# we don't use heredoc, as ksh attempts to create tempfile then
-	> "$cachefile" || return
+	(> "$cachefile" ) 2>/dev/null || return
 	echo "_busy='$_busy';" >> "$cachefile"
 	echo "_ok='$_ok';" >> "$cachefile"
 	echo "_started='$_started';" >> "$cachefile"
