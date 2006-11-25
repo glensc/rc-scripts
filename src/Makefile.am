@@ -25,7 +25,8 @@ sbin_PROGRAMS =	\
 	netreport \
 	ppp-watch \
 	start-stop-daemon \
-	usernetctl
+	usernetctl \
+	pci-config
 	
 EXTRA_PROGRAMS = \
 	testd 
@@ -34,7 +35,7 @@ EXTRA_DIST = $(sysconf_DATA)
 
 doexec_SOURCES = doexec.c
 
-resolvesymlink_SOURCE = resolvesymlink.c
+resolvesymlink_SOURCES = resolvesymlink.c
 
 ipcalc_SOURCES = ipcalc.c
 ipcalc_LDADD = -lpopt
@@ -65,4 +66,6 @@ INCLUDES = $(GCFLAGS)
 consoletype_SOURCES = consoletype.c
 
 start_stop_daemon_SOURCES = start-stop-daemon.c
+
+pci-config_SOURCES = pci-config.c
 
