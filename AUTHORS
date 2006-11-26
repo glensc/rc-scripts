@@ -31,6 +31,7 @@ Micha³ Kochanowicz <mkochano@pld-linux.org>
 	
 Pawe³ Wilk <siefca@gnu.org>
 	executing scripts on iface up/down
+	timezone setup & resolvesymlink
 
 Robert ¦laski <robin@atm.com.pl>
 	ATM support
