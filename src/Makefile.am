@@ -34,7 +34,7 @@ EXTRA_DIST = $(sysconf_DATA)
 
 doexec_SOURCES = doexec.c
 
-resolvesymlink_SOURCE = resolvesymlink.c
+resolvesymlink_SOURCES = resolvesymlink.c
 
 ipcalc_SOURCES = ipcalc.c
 ipcalc_LDADD = -lpopt
