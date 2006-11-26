@@ -894,6 +894,59 @@ relabel_selinux() {
 	echo $SELINUX > $selinuxfs/enforce
 }
 
+# Wake-On-Lan workaround for nForce ethernet drivers.
+# To realy help it also requires patched kernel module.
+# Written by Pawel Wilk using idea from Arjen Verweij,
+# see http://atlas.et.tudelft.nl/verwei90/nforce2/wol.html
+#
+# Call it only when system halts/suspends, there is
+# no return to the D0 power state after execution!
+#
+forcedeth_workaround()
+{
+    [ -x /sbin/ethtool ] || return 2
+    [ -x /sbin/pci-config || return 2
+    grep -qi forcedeth /proc/modules || return 0
+    
+    # TIMERIRQ DISABLED is a token in description, which
+    # protects us against system hang - only patched module will have it
+    modinfo -F description forcedeth | grep -qi 'timerirq disabled' || return 0
+
+    typeset iface bus_dev_fn bus lookfor dev_index cur_state
+
+    for iface in $(ip link show | awk -F'[ :]+' '/eth[0-9]+/ {print $2}')
+    do
+	if LC_ALL=C ethtool -i "${iface}" 2>&1 | egrep -qi 'driver:[[:blank:]]forcedeth'; then
+	    case $(LC_ALL=C ethtool "${iface}" 2>&1 | awk 'tolower($1) ~ "wake-on:" {print $2}') in
+		*d*) continue ;; # 'd' letter means that the WON was DISABLED for interface
+		"") continue ;;  # empty string means that the WON is not supported here
+	    esac
+	    bus_dev_fn=$(LC_ALL=C ethtool -i ${iface} 2>&1 | awk -F'[ :.]+' '/^bus-info:/ {printf ("%d %d %d",$3,$4,$5) }')
+	    if [ -n "${bus_dev_fn}" -a "${bus_dev_fn}" != "0 0 0" ]; then
+		bus=$(echo "${bus_dev_fn}" | awk '{print $1}')
+		lookfor=$(echo "${bus_dev_fn}" | awk '{print "at bus "$1" device/function "$2"/"$3}')
+		dev_index=$(LC_ALL=C pci-config -B${bus} 2>&1 | grep -i "${lookfor}" | awk '/Device \#[0-9]+/ {print $2}')
+		if [ -n "${dev_index}" ]; then
+		    show "Forcing sleep state for the nForce interface %s" ${iface} ; busy
+		    ip link set ${iface} up 2>&1 >/dev/null # need it to be up
+		    sleep 1
+		    pci-config -S -$dev_index 2>&1 >/dev/null
+		    RESULT=$?
+		    cur_state=$(pci-config -a -$dev_index 2>&1 | awk -F'[ \t:.]+' ' tolower($2$3) ~ "powerstate" {print tolower($4)}')
+		    if [ "${cur_state}" != "d3" ]; then
+			RESULT=1
+		    fi
+		    if [ $RESULT -gt 0 ]; then
+                	fail
+            	    else
+                        ok
+                    fi
+		fi
+	    fi
+	fi
+    done
+}
+
 # Remove duplicate entries from mtab (for vserver guest use only)
 clean_vserver_mtab() {
 	:>/etc/mtab.clean
