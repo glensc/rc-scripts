@@ -48,9 +48,6 @@ fi
 halt -w
 
 if ! is_yes "$VSERVER"; then
-	# Work-around for the nVidia drivers Wake-On-Lan functionality.
-	forcedeth_workaround
-
 	# Turn off swap, then unmount file systems.
 	run_cmd "Turning off swap" swapoff -a
 

@@ -29,10 +29,8 @@ Jan Rêkorajski <baggins@pld-linux.org>
 Micha³ Kochanowicz <mkochano@pld-linux.org>
 	fixes, progress()
 	
-Pawe³ Wilk <siefca@gnu.org>
-        executing scripts on iface up/down
-        timezone setup & resolvesymlink
-        nVidia ethernet Wake-On-Lan work-around
+Pawe³ Wilk <siefca@pl.qmail.org>
+	executing scripts on iface up/down
 
 Robert ¦laski <robin@atm.com.pl>
 	ATM support
