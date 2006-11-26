@@ -218,7 +218,6 @@ mv -f /etc/sysconfig/network-scripts/ifcfg-* /etc/sysconfig/interfaces
 %attr(755,root,root) %{_sbindir}/ppp-watch
 %attr(755,root,root) %{_sbindir}/netreport
 %attr(755,root,root) %{_sbindir}/setsysfont
-%attr(755,root,root) %{_sbindir}/pci-config
 %attr(4755,root,root) %{_sbindir}/usernetctl
 
 %attr(755,root,root) %{_sbindir}/if*

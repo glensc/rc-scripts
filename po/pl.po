@@ -684,10 +684,6 @@ msgstr "Ustalanie informacji IP dla %s (%s)"
 msgid "Unsetting time zone information"
 msgstr "Usuwanie informacji o strefie czasowej"
 
-#: ../rc.d/init.d/functions:919
-msgid "Forcing sleep state for the nForce interface %s"
-msgstr "Wymuszanie stanu u¶pienia dla interfejsu nForce %s"
-
 #~ msgid "%s (pid %s) is running..."
 #~ msgstr "%s (pid %s) jest uruchomiony..."
 
