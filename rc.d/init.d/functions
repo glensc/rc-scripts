@@ -900,7 +900,7 @@ forcedeth_workaround()
     
     # TIMERIRQ DISABLED is a token in description, which
     # protects us against system hang - only patched module will have it
-    modinfo forcedeth | grep -qi 'timerirq disabled' || return 0
+    modinfo -F description forcedeth | grep -qi 'timerirq disabled' || return 0
 
     typeset iface bus_dev_fn bus lookfor dev_index cur_state
 
