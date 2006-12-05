@@ -897,8 +897,7 @@ clean_vserver_mtab() {
 rc_cache_init() {
 	# If we have cachefile, use it.
 	# If we don't, create memory variables and try to save silently,
-	# We store cache in /etc, as /var isn't available at boot time.
-	local cachefile='/etc/rc.d/.rc-scripts.cache'
+	local cachefile='/var/cache/rc-scripts/msg.cache'
 
 	# We create $check variable which is used to invalidate the cache.
 	# The $check contains user locale and terminal.
