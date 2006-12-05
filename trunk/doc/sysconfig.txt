@@ -1,0 +1,210 @@
+$Id$
+
+Files in /etc/sysconfig
+=======================
+
+/etc/sysconfig/clock:
+
+  deprecated values from earlier releases:
+
+    CLOCKMODE=GMT indicates that the clock is set to UTC
+    CLOCKMODE=ARC on alpha only indicates the ARC console's
+      42-year time offset is in effect
+
+  currently correct values:
+
+    UTC=true indicates that the clock is set to UTC; anything
+      else indicates that it is set to local time
+    ARC=true on alpha only indicates the ARC console's
+      42-year time offset is in effect; otherwise the normal
+      Unix epoch is assumed
+
+
+/etc/sysconfig/keyboard:
+
+  KEYTABLE=<keytable file>
+  for example: KEYTABLE="/usr/lib/kbd/keytables/us.map"
+
+/etc/sysconfig/mouse:
+
+  MOUSETYPE=microsoft|mouseman|mousesystems|ps/2|msbm|logibm|atibm|
+    logitech|mmseries|mmhittab
+  XEMU3=yes|no (emulate three buttons with two buttons whenever
+    necessary, most notably in X)
+
+  In addition, /dev/mouse points to the mouse device.
+
+/etc/sysconfig/network:
+
+  NETWORKING=yes|no
+  IPV4_NETWORKING=yes|no
+  IPV6_NETWORKING=yes|no
+  HOSTNAME=<whatever hostname you want, e.g. "pldmachine">
+    Note: for compatibility with some old software people might
+    install (like trn), the /etc/HOSTNAME file should contain the
+    same value as here.
+  NISDOMAIN=<nis domain name, e.g. "mydomain.org">
+    Note: set this only if you use NIS system. DNS domainname 
+    should be set in /etc/resolv.conf
+  IGNORE_ICMP_BCAST_IPV4=yes|no (Please note that if you accept ICMP echo
+    requests with a broadcast/multicast destination address your network
+    may be used as an exploder for denial of service packet flooding attacks
+   to other hosts.
+  SPOOFING_IPV4=yes|no (anti spoofing protection)
+  GATEWAY=<gateway IP>
+  GATEWAYDEV=<gateway device> (e.g. eth0)
+  IPX=yes|no
+  IPXAUTOPRIMARY=on|off (note, that MUST be on|off, not yes|no)
+  IPXAUTOFRAME=on|off (again, not yes|no)
+  IPXINTERNALNETNUM=<netnum>
+  IPXINTERNALNODENUM=<nodenum>
+
+  All the IPX stuff is optional, and should default to off.
+
+/etc/sysconfig/static-nat
+
+  Configuration file for static Network Address Translation (NAT).
+  Contains lines of the form:
+
+    <address> via <addressreal>
+
+  NAT will translate address <address> to <addressreal>.
+
+/etc/sysconfig/static-routes:
+
+  Contains lines of the form:
+
+    <device> to [type] <network>/<prefix> via <gateway>
+
+  <device> may be a device name to have the route brought up and
+  down with the device, or "any" to have the correct devices calculated
+  at run time. [type] is optional. RH style isn't supported !
+
+  Also you can set few options after "<gateway>":
+    tos <tos>
+    metric <number>
+    table <table>
+    src <address>
+    realm <realmid>
+    mtu <mtu> or mtu lock <mtu>
+    window <number>
+    rtt <number>
+    nexthop <nexthop>
+    scope <scope>
+    protocol <rtproto>
+    onlink
+    equalize
+  For more informations see iproute2 documentation .
+
+/etc/sysconfig/routed:
+
+  SILENT=yes|no
+  EXPORT_GATEWAY=yes|no
+
+/etc/sysconfig/pcmcia:
+
+  PCMCIA=yes|no
+  PCIC=i82365|tcic
+  PCIC_OPTS=<socket driver (i82365 or tcic) timing parameters>
+  CORE_OPTS=<pcmcia_core options>
+  CARDMGR_OPTS=<cardmgr options>
+
+/etc/sysconfig/amd:
+
+  ADIR=/.automount  (normally never changed)
+  MOUNTPTS='/net /etc/amd.conf'  (standard automount stuff)
+  AMDOPTS=  (extra options for AMD)
+
+/etc/sysconfig/tape:
+
+  DEV=/dev/nst0
+    Tape device.  Use the non-rewinding one for these scripts.
+  
+    For SCSI tapes this is /dev/nst#, where # is the number of the
+    tape drive you want to use.  If you only have one then use
+    nst0.
+ 
+    For IDE tapes you use /dev/ht#, where # is the number of the tape
+    drive you want to use (usually ht0).
+ 
+    For floppy tape drives use /dev/ftape.
+
+  ADMIN=root
+    Person to mail to if the backup fails for any reason
+
+  SLEEP=5
+    Time to sleep between tape operations.  Some drives need a bit
+    more than others, but 5 seems to work for 8mm, 4mm, and DLT
+
+  BLOCKSIZE=32768
+    This worked fine for 8mm, then 4mm, and now DLT.  An optimal
+    setting is probably however much data your drive writes at one
+    time.
+
+  SHORTDATE=$(date +%y:%m:%d:%H:%M)
+    A short date string, used in backup log filenames.
+
+  DAY=$(date +log-%y:%m:%d)
+    This is used for the log file directory.
+
+  DATE=$(date)
+    Regular date string, used in log files.
+
+  LOGROOT=/var/log/backup
+    Root of the logging directory
+
+  LIST=$LOGROOT/incremental-list
+    This is the file name the incremental backup will use to store
+    the incremental list.  It will be $LIST-{some number}.
+
+  DOTCOUNT=$LOGROOT/.count
+    For counting as you go to know which incremental list to use
+
+  COUNTER=$LOGROOT/counter-file
+    For rewinding when done...might not use.
+
+  BACKUPTAB=/etc/backuptab
+    The file in which we keep our list of backup(s) we want to make.
+
+/etc/sysconfig/sendmail:
+  DAEMON=yes|no
+    yes implies -bd
+  QUEUE=1h
+    given to sendmail as -q$QUEUE
+    -q option is not given to sendmail if /etc/sysconfig/sendmail
+    exists and QUEUE is empty or undefined.
+
+/etc/sysconfig/i18n
+
+  LANG= can be any two letter ISO language code
+  LC_ALL= is the setting of the localedata configuration (eg fr_CA)
+  LINGUAS= can be a : separated list of language codes
+  SYSTERM= use to set default TERM environment variable
+
+  The above three variables are used in rc.sysinit.
+
+  SYSFONT= any font that is legal when used as
+	/usr/sbin/setfont $SYSFONT ...
+    (See kbd package for sysfont command)
+
+  UNIMAP= any unicode font that is legal fodder for
+	/usr/sbin/setfont $SYSFONT-u $UNIMAP
+
+  The above is used by the /sbin/setsysfont command (which is run
+  by rc.sysinit at boot time).
+
+/etc/sysconfig/<service>
+
+  The following are used when starting service.
+
+  SERVICE_LIMITS="-u unlimited -c 0"
+    System limits for this service.
+
+  SERVICE_CPUSET="name"
+    CPUSET to run this service in.
+
+  SERVICE_UMASK="022"
+    File creation mask for this service.
+
+  SERVICE_RUN_NICE_LEVEL="0"
+    Scheduling priority for this service.

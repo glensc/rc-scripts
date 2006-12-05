@@ -1,0 +1,26 @@
+$Id$
+
+Important:
+- don't set any flags automatically; always follow user
+  suggestion (multicast, arp)
+- merge baggins changes in atm-rc (added support for RFC1483/2684 Bridged
+  protocol)
+- LVM on DMRAID device isn't started at bootup (missing vchange -ay somewhere)
+- killproc() sucks and has no consistency, error reporting
+  you'll never know which side of PROCNAME you should add the --waitforname or -SIGNAL args
+  because if you put -SIGNAL at wrong side of PROGNAME it will enter infinitive loop:
+    killproc -TERM --waitforname slapd --waitfortime 300 slapd
+  if you put --waitforname at wrong side, it will just ignore them:
+    killproc slapd -TERM --waitforname slapd --waitfortime 300 
+  while correct would be:
+    killproc --waitforname slapd --waitfortime 300 slapd -TERM
+
+Not realy important but mayby nice:
+- Add checking for privileges during restarting
+  and if they are not enough say fuck off in a
+  nice way.
+
+Other:
+- maybe merge ATM rc scripts
+
+We are waiting for suggestions.

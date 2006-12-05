@@ -1,0 +1,228 @@
+#!/bin/sh
+#
+#	$Id$
+#
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/functions.network
+
+# Will be removed in the future
+if is_yes "$NETWORKING"; then
+	if [ -z "$IPV4_NETWORKING" ]; then
+		echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
+		echo "Please upgrade your config"
+		echo "Assuming you want IPv4 networking"
+		IPV4_NETWORKING=yes
+		export IPV4_NETWORKING
+	fi
+fi
+
+need_hostname
+
+# device name must be ifcfg-somename
+DEV=$1
+
+[ -z "$DEV" ] && {
+	nls "Usage: %s <device name>" "ifup" >&2
+	exit 1
+}
+
+if [ `id -u` != 0 ]; then
+	if [ -x /sbin/usernetctl ]; then
+		exec /sbin/usernetctl $DEV up
+	fi
+	nls "Users cannot control this device." >&2
+	exit 1
+fi
+
+if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ]; then
+	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
+else
+	CONFIG="$DEV"
+fi
+
+source_config
+
+if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
+	exit
+fi
+
+if [ "foo$2" = "foohotplug" ] && ! is_yes "${HOTPLUG}"; then
+	exit
+fi
+
+if [ "foo$2" = "foopcmcia-hotplug" ] && ! is_yes "${PCMCIA_HOTPLUG}"; then
+	exit
+fi
+
+IPSETUP=no
+
+# set all major variables
+setup_ip_param
+
+OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
+
+if [ -x "$OTHERSCRIPT" ]; then
+	if is_yes "$DEFAULTHANDLING"; then
+		HANDLING=1
+	fi
+	if [ "$HANDLING" = "0" ]; then
+		exec $OTHERSCRIPT $CONFIG $2
+	elif [ "$HANDLING" = "1" ]; then
+		$OTHERSCRIPT $CONFIG $2
+	fi
+fi
+
+# is this device available? (this catches PCMCIA devices for us)
+if ! /sbin/ip link set multicast ${MULTICAST} dev ${DEVICE} > /dev/null 2>&1; then
+	nls "Delaying %s initialization" ${DEVICE}
+	exit 1
+fi
+
+if is_yes "$SLAVE" && [ -n "$MASTER" -a -x /sbin/ifenslave ]; then
+	RFLAG="" && is_yes "${RECIEVE-ONLY}" && RFLAG="-r"
+
+	ip link set ${DEVICE} down
+	nls "Enslaving %s to %s" "$DEVICE" "$MASTER"
+	ifenslave $RFLAG "$MASTER" "$DEVICE"
+
+	exit 0
+fi
+
+if [ -n "$MACADDR" ]; then
+	ip link set ${DEVICE} address ${MACADDR}
+fi
+
+ip link set ${DEVICE} multicast ${MULTICAST} ${ARP} down
+
+if [ -n "$MTU" ]; then
+	ip link set ${DEVICE} mtu ${MTU}
+fi
+
+if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
+	run_cmd "Disabling IPv6 autoconfiguration" sysctl -w net.ipv6.conf.${DEVICE}.autoconf=0
+fi
+
+if is_wireless_device "${DEVICE}"; then
+	is_yes "${WLAN_UPEARLY}" && ip link set ${DEVICE} up
+	wireless_param ${DEVICE}
+	if is_yes "${WLAN_WPA}"; then
+		/usr/sbin/wpa_supplicant -B -w -D ${WLAN_WPA_DRIVER} -c ${WLAN_WPA_CONFIG} -i ${DEVICE} ${WLAN_WPA_OPTIONS} -P "/var/run/wpa_supplicant-${DEVICE}.pid"
+	fi
+fi
+
+if [ "$HANDLING" = "2" ]; then
+	exit 0
+fi
+
+if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; then
+	if is_yes "$IPV4_NETWORKING"; then
+		if [ "$BOOTPROTO" = "bootp" -o "$BOOTPROTO" = "pump" ]; then
+			DHCP_CLIENT=/sbin/pump
+		fi
+
+		if [ -z "$DHCP_CLIENT" ]; then
+			if [ -x /sbin/dhcpcd ]; then
+				DHCP_CLIENT=/sbin/dhcpcd
+			elif [ -x /sbin/dhclient ]; then
+				DHCP_CLIENT=/sbin/dhclient
+			elif [ -x /sbin/dhcpxd ]; then
+				DHCP_CLIENT=/sbin/dhcpxd
+			elif [ -x /sbin/pump ]; then
+				DHCP_CLIENT=/sbin/pump
+			else
+				nls "Can't find a dhcp client."
+				exit 1
+			fi
+		fi
+
+		DHCP_ARGS=
+		if [ -n "$DHCP_CLIENT" ]; then
+			if [ -z "$DHCP_HOSTNAME" ]; then
+				DHCP_HOSTNAME="$HOSTNAME"
+			fi
+			case ${DHCP_CLIENT##*/} in
+			  pump)
+				[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
+				DHCP_ARGS="$DHCP_ARGS -i $DEVICE"
+				;;
+			  dhcpcd)
+				[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
+				DHCP_ARGS="$DHCP_ARGS $DEVICE"
+				;;
+			  dhcpxd)
+				[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-H $DHCP_HOSTNAME"
+				DHCP_ARGS="$DHCP_ARGS $DEVICE"
+				;;
+			  dhclient)
+				# Can't specify a host with dhclient ?
+				DHCP_ARGS="$DEVICE"
+				;;
+			esac
+		fi
+		DHCP_ARGS="$DHCP_OPTIONS $DHCP_ARGS"
+
+		if check_link_down ${DEVICE}; then
+			run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "${DHCP_CLIENT##*/}")" /bin/false
+			nls '%s: Check cable/radio on-off switch?' "$DEVICE"
+			exit 1
+		fi
+
+		if ! run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "${DHCP_CLIENT##*/}")" $DHCP_CLIENT $DHCP_ARGS; then
+			exit 1
+		fi
+
+		# give time for determining IP information
+		check_device_down && sleep 1 && check_device_down && sleep 3
+		check_device_down && ip link set ${DEVICE} up
+	fi
+else
+	# IPv4 in use ?
+	if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}" ]; then
+		# If broadcast is missing then autocalculate it
+		if ! (echo $IP4ADDROPT | egrep -q "brd|broadcast"); then
+			IP4ADDROPT="brd + ${IP4ADDROPT}"
+		fi
+
+		if [ -n "$REMIP" ]; then
+			ip addr add ${IP4ADDR} peer ${REMIP} dev ${DEVICE} ${IP4ADDROPT}
+		else
+			ip addr add ${IP4ADDR} dev ${DEVICE} ${IP4ADDROPT}
+		fi
+	fi
+
+	# Set device up
+	ip link set ${DEVICE} up
+
+	# IPv6 in use ?
+	if is_yes "$IPV6_NETWORKING" && [ -n "${IP6ADDR}" ]; then
+		ip addr add ${IP6ADDR} dev ${DEVICE} ${IP6ADDROPT}
+	fi
+
+	# IPv4/6 gateways and default routes
+	setup_ip_gw_ro
+fi
+
+# device have to have ip address set before
+if is_yes "$PROXYARP"; then
+	run_cmd "$(nls 'Enabling proxy ARP on %s' "${DEVICE}")" sysctl -w net.ipv4.conf.${DEVICE}.proxy_arp=1
+fi
+
+if [ "$HANDLING" = "3" ]; then
+	exit 0
+fi
+
+if is_yes "$IPX"; then
+	/etc/sysconfig/network-scripts/ifup-ipx $DEVICE
+fi
+
+if [ "$HANDLING" = "4" ]; then
+	exit 0
+fi
+
+exec /etc/sysconfig/network-scripts/ifup-post $CONFIG
+
+# This must be last line !
+# vi:syntax=sh

@@ -1,0 +1,12 @@
+# Gentoo colors, copy this file as: /etc/sysconfig/init-colors, or just make a symlink
+
+CBRACKETS="$BLUE $BOLD"		# brackets [ ] color
+CDONE="$GREEN $BOLD"		# DONE and WORK color
+CBUSY="$MAGENTA $BOLD"		# BUSY color
+CFAIL="$RED $BOLD"		# FAIL and DIED color
+CPOWEREDBY="$BLUE $BOLD"	# "Powered by" color
+CPLD="$GREEN $BOLD"		# "PLD Linux Distribution" color
+CI="$RED $BOLD"			# Capital I color (press I to enter interactive startup)
+CRESMAN="$GREEN $BOLD"		# "Resource Manager" color
+CHARS=" * "			# Characters displayed on the begining of show line
+CCHARS="$GREEN $BOLD"		# Color of these characters

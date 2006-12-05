@@ -1,0 +1,962 @@
+#!/bin/sh - keep it for file(1) to get bourne shell script result
+# functions	This file contains functions to be used by most or all
+#		shell scripts in the /etc/init.d directory.
+#
+# $Id$
+#
+# Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+# Hacked by:	Greg Galloway and Marc Ewing
+# Modified for PLD Linux by:
+#		Marek Obuchowicz <elephant@pld-linux.org>
+#		Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+#		Micha³ Kochanowicz <mkochano@pld-linux.org>
+#		£ukasz Pawelczyk <havner@pld-linux.org>
+
+# First set up a default search path.
+export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+
+# Set defaults
+INIT_COL=67
+
+[ -z "${CONSOLETYPE}" ] && CONSOLETYPE="$(/sbin/consoletype)"
+
+# Set colors
+RED=1
+GREEN=2
+YELLOW=3
+BLUE=4
+MAGENTA=5
+CYAN=6
+WHITE=7
+NORMAL=9
+# Bold definition (second parameter to termput setaf)
+BOLD=1
+NOBOLD=0
+# Default colors
+CBRACKETS="$CYAN"	# brackets [ ] color
+CDONE="$GREEN"		# DONE and WORK color
+CBUSY="$MAGENTA"	# BUSY color
+CFAIL="$RED"		# FAIL and DIED color
+CPOWEREDBY="$CYAN"	# "Powered by" color
+CPLD="$GREEN"		# "PLD Linux Distribution" color
+CI="$RED"		# Capital I color (press I to enter interactive startup)
+CRESMAN="$GREEN"	# "Resource Manager" color
+CHARS=""		# Characters displayed on the beginning of show line
+CCHARS="$NORMAL"	# Color of these characters (look at /etc/sysconfig/init-colors.gentoo example)
+
+# Source configuration if available - may override default values
+[ -r /etc/sysconfig/init-colors ] && . /etc/sysconfig/init-colors
+[ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
+[ -r /etc/sysconfig/bootsplash ] && . /etc/sysconfig/bootsplash
+
+[ -z "$COLUMNS" ] && COLUMNS=80
+
+if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
+	_ctx="$(awk '/(s_context|VxID):.*/ { print $2 }' /proc/self/status 2>/dev/null)"
+	if [ -z "$_ctx" -o "$_ctx" = "0" ]; then
+		VSERVER=no
+	else
+		VSERVER=yes
+	fi
+	unset _ctx
+fi
+
+is_yes()
+{
+	# Test syntax
+	if [ $# = 0 ] ; then
+		msg_usage " is_yes {value}"
+		return 2
+	fi
+
+	# Check value
+	case "$1" in
+	  yes|Yes|YES|true|True|TRUE|on|On|ON|Y|y|1)
+		# true returns zero
+		return 0
+		;;
+	  *)
+		# false returns one
+		return 1
+		;;
+	esac
+}
+
+is_no()
+{
+	# Test syntax
+	if [ $# = 0 ] ; then
+		msg_usage " is_no {value}"
+		return 2
+	fi
+
+	case "$1" in
+	  no|No|NO|false|False|FALSE|off|Off|OFF|N|n|0)
+		# true returns zero
+		return 0
+		;;
+	  *)
+		# false returns one
+		return 1
+		;;
+	esac
+}
+
+INIT_DOTS=$(awk -vcol=$INIT_COL 'BEGIN{ for(i = 0; i < col; i++) printf("."); }')
+if is_yes "$FASTRC"; then
+	RC_LOGGING=no
+fi
+
+if is_yes "${IN_SHUTDOWN}" || is_no "${RC_LOGGING}" ; then
+	initlog()
+	{
+		RESULT=0
+		while [ "$1" != "${1##-}" ]; do
+			case $1 in
+			  -c)
+				shift
+				$1
+				RESULT=$?
+				break
+				;;
+			   *)
+				shift
+				;;
+			esac
+		done
+		return $RESULT
+	}
+fi
+
+kernelver()
+{
+	awk '{split($3,v,"."); printf("%03d%03d%03d\n", v[1],v[2],v[3]);}' /proc/version
+}
+
+kernelverser()
+{
+	awk '{split($3,v,"."); printf("%03d%03d\n", v[1],v[2]);}' /proc/version
+}
+
+kernelvermser()
+{
+	awk '{split($3,v,"."); printf("%03d\n", v[1]);}' /proc/version
+}
+
+# Colors workaround
+termput()
+{
+	local ck="_tput_$1_$2_$3"
+	local cv
+	eval cv="\$$ck"
+	if [ -n "$cv" ]; then
+		echo -ne "$cv"
+		return
+	fi
+	cv=$(_termput "$@")
+	echo -ne "$cv"
+	eval "$ck='$cv'"
+}
+
+_termput()
+{
+	if is_yes "$FASTRC" || is_no "$TPUT"; then
+		case "$1" in
+		  hpa)
+			echo -ne "\033[$(($2+1))G"
+			;;
+		  cuu*)
+			echo -ne "\033[${2}A"
+			;;
+		  el)
+			echo -ne "\033[0K"
+			;;
+		  setaf)
+			typeset ISBOLD
+			if [ -n "$3" ]; then
+				ISBOLD="$3"
+			else
+				ISBOLD="$NOBOLD";
+			fi
+			is_yes "$COLOR_INIT" && echo -ne "\033[${ISBOLD};3${2}m"
+			;;
+		  op)
+			termput setaf $NORMAL
+			;;
+		esac
+	else
+		case "$1" in
+		  hpa | cuu* | el)
+			tput "$@"
+			;;
+		  setaf)
+			if [ "$3" == "1" ]; then tput bold; else tput sgr0; fi
+			is_yes "$COLOR_INIT" && tput setaf "$2"
+			;;
+		  op)
+			termput setaf $NORMAL
+			;;
+		esac
+	fi
+}
+
+if [ ! -x /bin/printf ]; then
+	# printf equivalent
+	# FIXME: buggy when single or double quotes in message!
+	printf()
+	{
+		typeset text m
+		text="$1"
+		shift
+		if [ $# -gt 0 ]; then
+			m="$1"
+			shift
+			while [ $# -gt 0 ]; do
+				m="$m\",\"$1"
+				shift
+			done
+		fi
+		awk "BEGIN {printf \"$text\", \"$m\"; }"
+	}
+fi
+
+# National language support function
+nls()
+{
+	typeset msg_echo nls_domain text message
+	msg_echo='\n'
+	nls_domain="$NLS_DOMAIN"
+	while [ "$1" != "${1##-}" ]; do
+		case "$1" in
+		  --nls-domain)
+			shift
+			nls_domain="$1"
+			shift
+			;;
+		  -n)
+			msg_echo=''
+			shift
+			;;
+		esac
+	done
+	message="$1"
+	shift
+
+	# empty message, so we return --misiek
+	if [ -z "$message" ]; then
+		echo -en "$msg_echo"
+		return
+	fi
+
+	if is_yes "$GETTEXT"; then
+		message=$(TEXTDOMAINDIR="/etc/sysconfig/locale" gettext -e --domain="${nls_domain:-rc-scripts}" "$message")
+	fi
+
+	printf "$message" "$@"
+	echo -en "$msg_echo"
+}
+
+rc_splash()
+{
+	typeset action
+
+	action="$1"
+
+	if ! is_no "$BOOT_SPLASH" && ! is_yes "$VSERVER"; then
+		[ -x /bin/splash ] && /bin/splash "$action"
+	fi
+
+	: $((progress++))
+}
+
+msg_network_down()
+{
+	nls "ERROR: Networking is down. %s can't be run." "$1" >&2
+}
+
+msg_starting()
+{
+	show "Starting %s service" "$1"
+}
+
+msg_already_running()
+{
+	nls "%s service is already running." "$1"
+}
+
+msg_stopping()
+{
+	show "Stopping %s service" "$1"
+}
+
+msg_not_running()
+{
+	nls "%s service is not running." "$1"
+}
+
+msg_reloading()
+{
+	show "Reloading %s service" "$1"
+}
+
+msg_usage()
+{
+	nls "Usage: %s" "$*"
+}
+
+# Some functions to handle PLD Linux-style messages
+show()
+{
+	typeset out
+
+	out=$(
+		echo -n "$INIT_DOTS"
+		termput hpa 0
+		if [ -n "$CHARS" ]; then
+			termput setaf $CCHARS
+			echo -n "$CHARS"
+			termput op
+		fi
+
+		if is_no "$FASTRC" && is_yes "$GETTEXT"; then
+			nls -n "$@"
+		else
+			printf "$@"
+		fi
+
+		termput hpa $INIT_COL
+	)
+	echo -n "$out"
+}
+
+deltext()
+{
+	termput hpa $INIT_COL
+}
+
+# Displays message in square brackests ("[ DONE ]"). Takes two arguments.
+# First is the text to display, second is color number to use (argument to
+# tput setaf). If second argument is not given, default (2, green) will be
+# used).
+progress()
+{
+	typeset COLOR
+	if [ -n "$2" ]; then COLOR="$2"; else COLOR="$CDONE"; fi
+	deltext
+	echo -n "$(termput setaf $CBRACKETS)[$(termput setaf $COLOR) $(nls --nls-domain rc-scripts "$1") $(termput setaf $CBRACKETS)]$(termput op)"
+}
+
+busy()
+{
+	echo -n "$_busy"
+}
+
+ok()
+{
+	echo "$_ok"
+}
+
+started()
+{
+	echo "$_started"
+}
+
+fail()
+{
+	echo "$_fail"
+	return 1
+}
+
+died()
+{
+	echo "$_died"
+	return 1
+}
+
+# Check if $pid (could be plural) are running
+checkpid()
+{
+	while [ "$1" ]; do
+		[ -d "/proc/$1" ] && return 0
+		shift
+	done
+	return 1
+}
+
+# - outside chroot get only those processes, which are outside chroot.
+# - inside chroot get only those processes, which are inside chroot.
+# - don't filter out pids which do not have corresponding running processes (process died etc)
+# (note: some processes like named are chrooted but run outside chroot)
+# - do nothing inside vserver
+filter_chroot()
+{
+	if is_yes "$VSERVER"; then
+		echo $@
+		return
+	fi
+	if [ $# -lt 1 -o ! -d /proc/1 ] ; then
+		echo $@
+		return
+	fi
+	good_pids=""
+	for root_pid in $@; do
+		root_dir=$(resolvesymlink /proc/${root_pid}/root)
+		if [ -n "$root_dir" ]; then
+			good_add_pid=1
+			if [ -n "${SYSTEM_CHROOTS}" ]; then
+				for r_dir in ${SYSTEM_CHROOTS}; do
+					echo "$root_dir" | grep -q "^${r_dir}" && good_add_pid=0
+				done
+			fi
+			[ "$good_add_pid" -eq 1 ] && good_pids="$good_pids $root_pid"
+		elif [ ! -d "/proc/$root_pid" ]; then
+			good_pids="$good_pids $root_pid"
+		fi
+	done
+	echo $good_pids
+}
+
+# Usage run_cmd Message command_to_run
+run_cmd()
+{
+	typeset exit_code errors message force_err
+	typeset -i force_err=0
+	typeset -i exit_code=0
+	case "$1" in
+	  -a)
+		force_err=1
+		shift
+		;;
+	esac
+	message=$1
+	show "$message"; busy
+	shift
+	cd /
+	if errors=$(HOME=/tmp TMPDIR=/tmp initlog -c "$*" 2>&1); then
+		ok
+		log_success "$1 $message"
+	else
+		fail
+		log_failed "$1 $message"
+		exit_code=1
+	fi
+	[ -n "$errors" ] && [ $exit_code -eq 1 -o $force_err -eq 1 ] && echo "$errors"
+	return $exit_code
+}
+
+# A function to start a program (now it's useful on read-only filesystem too)
+daemon()
+{
+	typeset errors="" prog="" limits="" waitname="" waittime=""
+	typeset -i exit_code=0
+	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
+	# "-u unlimited" (-p for ksh) to make sure daemons will be able to fork.
+	# "-c 0" to make sure it doesn't core dump anywhere; while this could mask
+	# problems with the daemon, it also closes some security problems.
+	# Users' limits are set via pam_limits.
+	[ -z "$DEFAULT_SERVICE_LIMITS" ] && DEFAULT_SERVICE_LIMITS_HARD="-u unlimited -c 0"
+	# Test syntax. Don't use -o instead || here - this will break ksh --misiek
+	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+		case $1 in
+		  '')
+			msg_usage " daemon [--user user] [--fork] [+/-nicelevel] {program}"
+			return 2
+			;;
+		  --check)
+			# for compatibility with redhat/mandrake
+			nls "warning: --check option is ignored!"
+			shift
+			shift
+			;;
+		  --user)
+			shift
+			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
+			shift
+			;;
+		  --fork)
+			prog="/usr/bin/setsid sh -c \""
+			end='&'
+			shift
+			;;
+		  --waitforname)
+			shift
+			waitname="$1"
+			shift
+			;;
+		  --waitfortime)
+			shift
+			waittime="$1"
+			shift
+			;;
+		  -*|+*) SERVICE_RUN_NICE_LEVEL=$1
+			shift
+			;;
+		esac
+	done
+	# If command to execute ends with quotation mark, add remaining
+	# arguments and close quotation.
+	if [ "$prog" != "${prog%\"}" ]; then
+		prog="$prog $*$end\""
+	else
+		prog="$prog $*$end"
+	fi
+
+	if [ -n "$KSH_VERSION" ]; then
+		limits="`echo "${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}" | awk '/-Su/ {sub(/-Su/,"-Sp");} /-Hu/ {sub(/-Hu/,"-Hp");} /-u/ {sub(/-u/,"-p");} {print;}'`"
+	elif [ -n "$ZSH_VERSION" ]; then
+		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
+	elif [ -n "$BASH_VERSION" ]; then
+		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
+#	elif [ -n "`$SH -c 'echo ${.sh.version}' 2>/dev/null`" ]; then
+	fi
+
+	[ -n "$limits" ] && eval `echo "$limits" | awk 'BEGIN {RS="[\n-]";} !/^ *$/ { printf("ulimit -%s ;", $0); }'`
+
+	[ -z "$DEFAULT_SERVICE_UMASK" ] && DEFAULT_SERVICE_UMASK=022
+
+	# And start it up.
+	busy
+	cd /
+	is_yes "$CPUSETS" && [ -n "$SERVICE_CPUSET" ] && echo $$ > "/dev/cpuset/${SERVICE_CPUSET}/tasks"
+	if errors=$(umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK}; USER=root HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
+		if [ -n "$waitname" -a -n "$waittime" ]; then
+			# Save basename.
+			base=$(basename "$waitname")
+			# Find pid.
+			pid=$(pidofproc "$waitname" "$pidfile")
+			[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
+			i=0
+			while [ "$i" -lt "$waittime" ]; do
+				i=$(( i + 1 ))
+				checkpid $pid && sleep 1 || break
+			done
+		fi
+		log_success "$1 startup"
+		ok
+	else
+		exit_code=1
+		fail
+		log_failed "$1 startup"
+		[ -n "$errors" ] && echo "$errors"
+	fi
+	return $exit_code
+}
+
+# A function to stop a program.
+killproc()
+{
+	typeset notset killlevel base pid pidfile result
+	# Test syntax.
+	if [ $# = 0 ]; then
+		msg_usage " killproc {program} [signal]"
+		return 2
+	fi
+
+	while [ "$1" != "${1##-}" ]; do
+		case $1 in
+		  --pidfile)
+			shift
+			pidfile="$1"
+			shift
+			;;
+		  --waitforname)
+			shift
+			waitname="$1"
+			shift
+			;;
+		  --waitfortime)
+			shift
+			waittime="$1"
+			shift
+			;;
+		esac
+	done
+
+	busy
+
+	typeset -i notset=0
+	# check for second arg to be kill level
+	if [ -n "$2" ] ; then
+		killlevel=$2
+	else
+		notset=1
+		killlevel="-9"
+	fi
+
+	# Save basename.
+	base=$(basename "$1")
+
+	# Find pid.
+	pid=$(pidofproc "$1" "$pidfile")
+	[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
+
+	# Kill it.
+	if [ -n "$pid" -a "$pid" != "$$" ] && checkpid $pid 2>&1 ; then
+		if [ "$notset" = "1" ] ; then
+			if checkpid $pid 2>&1; then
+				# TERM first, then KILL if not dead
+				kill -TERM $pid
+				usleep 100000
+				if checkpid $pid && sleep 1 &&
+					checkpid $pid && sleep 3 &&
+					checkpid $pid; then
+					kill -KILL $pid
+					usleep 100000
+				fi
+			fi
+			checkpid $pid
+			result=$?
+			if [ "$result" -eq 0 ]; then
+				fail
+				log_failed "$1 shutdown"
+			else
+				ok
+				log_success "$1 shutdown"
+			fi
+			result=$(( ! $result ))
+		else
+			# use specified level only
+			if checkpid $pid > /dev/null 2>&1; then
+				kill $killlevel $pid
+				result=$?
+				if [ "$result" -eq 0 ]; then
+					ok
+					log_success "$1 got $killlevel"
+				else
+					result=7
+					fail
+					log_failed "$1 didn't get $killlevel"
+				fi
+			else
+				result=7
+				died
+				log_failed "$1 shutdown"
+			fi
+		fi
+	else
+		died
+		log_failed "$1 shutdown"
+		result=7
+	fi
+
+	if [ -n "$waitname" -a -n "$waittime" ]; then
+		# Save basename.
+		base=$(basename "$waitname")
+		# Find pid.
+		pid=$(pidofproc "$waitname" "$pidfile")
+		[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
+		i=0
+		while [ "$i" -lt "$waittime" ]; do
+			i=$(( i + 1 ))
+			checkpid $pid && sleep 1 || break
+		done
+	fi
+
+	# Remove pid file if any.
+	if [ "$notset" = "1" ]; then
+		rm -f /var/run/${base}.pid
+	fi
+
+	return $result
+}
+
+# A function to find the pid of a program.
+pidofproc()
+{
+	typeset pid pidfile base
+	base=$(basename "$1")
+	pidfile="$base.pid"
+	[ -n "$2" ] && pidfile="$2"
+
+	# Test syntax.
+	if [ $# = 0 ] ; then
+		msg_usage " pidofproc {program}"
+		return 2
+	fi
+
+	# First try pidfile or "/var/run/*.pid"
+	if (echo "${pidfile}" | grep -Eq "^/"); then
+		pidfile="${pidfile}"
+	else
+		pidfile="/var/run/${pidfile}";
+	fi
+	if [ -f "${pidfile}" ] ; then
+		typeset line p pid
+		pid=
+		read line < "${pidfile}"
+		for p in $line; do
+			[ -z "$(echo "$p" | awk '{gsub(/[0-9]/,"");print;}')" ] && pid="$pid $p"
+		done
+	fi
+
+	# Next try "pidof"
+	[ -z "$pid" ] && pidof -o $$ -o $PPID -o %PPID -x "$1"
+	pid=$(filter_chroot "$pid")
+	echo $pid
+}
+
+status()
+{
+	typeset base pid subsys daemon cpuset_msg
+	subsys=$1
+	daemon=${2:-$subsys}
+	base=$(basename $daemon)
+
+	# Test syntax.
+	if [ $# = 0 ] ; then
+		msg_usage " status {subsys} [{daemon}]"
+		return 2
+	fi
+
+	# First try "pidof"
+	pid=$(pidof -o $$ -o $PPID -o %PPID -x $daemon)
+	pid=$(filter_chroot "$pid")
+
+	if [ "$pid" != "" ]; then
+		cpuset_msg="..."
+		if is_yes "$CPUSETS" && [ -n "$SERVICE_CPUSET" ]; then
+			if $(grep -q "$pid" "/dev/cpuset/${SERVICE_CPUSET}/tasks"); then
+				cpuset_msg=$(nls " in cpuset %s..." "$SERVICE_CPUSET")
+			else
+				cpuset_msg=$(nls " outside of configured cpuset %s..." "$SERVICE_CPUSET")
+			fi
+		fi
+		nls "%s (pid %s) is running%s" "$daemon" "$pid" "$cpuset_msg"
+		return 0
+#	else
+#		pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
+#		     { if ((prog == $5) || (("(" prog ")") == $5) ||
+#			(("[" prog "]") == $5) ||
+#			((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
+#		if [ "$pid" != "" ]; then
+#			cpuset_msg="..."
+#			if is_yes "$CPUSETS" && [ -n "$SERVICE_CPUSET" ]; then
+#				if $(grep -q "$pid" "/dev/cpuset/${SERVICE_CPUSET}/tasks"); then
+#					cpuset_msg=$(nls " in cpuset %s..." "$SERVICE_CPUSET")
+#				else
+#					cpuset_msg=$(nls " outside of configured cpuset %s..." "$SERVICE_CPUSET")
+#				fi
+#			fi
+#			nls "%s (pid %s) is running%s" "$daemon" "$pid" "$cpuset_msg"
+#			return 0
+#		fi
+	fi
+
+	# Next try "/var/run/*.pid" files
+	if [ -f /var/run/${base}.pid ]; then
+		read pid < /var/run/${base}.pid
+		pid=$(filter_chroot "$pid")
+		if [ "$pid" != "" ]; then
+			nls "%s dead but pid file exists" "$subsys"
+			return 1
+		fi
+	fi
+
+	# See if /var/lock/subsys/$subsys exists
+	if [ -f /var/lock/subsys/$subsys ]; then
+		nls "%s dead but subsys locked" "$subsys"
+		return 2
+	fi
+	nls "%s is stopped" "$subsys"
+	return 3
+}
+
+# Confirm whether we really want to run this service
+confirm() {
+	typeset answer
+	nls -n "Start service %s (Y)es/(N)o/(C)ontinue? [Y] " "$1"
+	read answer
+	case $answer in
+	  y|Y|t|T|j|J|"")
+		return 0
+		;;
+	  c|C|k|K|w|W)
+		return 2
+		;;
+	  n|N)
+		return 1
+		;;
+	  *)
+		confirm $1
+		return $?
+		;;
+	esac
+}
+
+# module is needed (ie. is requested, is available and isn't loaded already)
+is_module()
+{
+	# module name without .o at end
+	if ! (lsmod | grep -q "$1"); then
+		if (ls -R /lib/modules/$(uname -r)/ 2> /dev/null | grep -q "${1}.\(\|k\)o\(\|.gz\)"); then
+			# true
+			return 0
+		fi
+	fi
+	# false
+	return 1
+}
+
+_modprobe()
+{
+	typeset parsed single die args foo result
+	parsed=no
+	while is_no "$parsed" ; do
+		case "$1" in
+		  "single")
+			single=yes
+			shift
+			;;
+		  "die")
+			die=yes
+			shift
+			;;
+		  -*)
+			args="$args $1"
+			shift
+			;;
+		  *)
+			parsed=yes
+			;;
+		esac
+	done
+	if is_yes "${single}" ; then
+		foo="$@"
+		show "Loading %s kernel module(s)" "$foo"
+		busy
+	fi
+	if [ -x /sbin/modprobe ] ; then
+		/sbin/modprobe -s $args "$@"
+		result=$?
+	else
+		deltext ; fail
+		result=1
+	fi
+	if is_yes "${single}" ; then
+		deltext
+		if [ $result == "0" ] ; then
+			is_yes "$single" && ok
+		else
+			fail
+			if is_yes "$die" ; then
+				nls "Could not load %s kernel module(s)" "$@"
+				exit 1
+			fi
+		fi
+	fi
+}
+
+log_success ()
+{
+	initlog -n $0 -s "$1 $2" -e 1
+}
+
+log_failed ()
+{
+	initlog -n $0 -s "$1 $2" -e 2
+}
+
+# RedHat/Mandrake specific functions
+action () { STRING=$1; shift; run_cmd "$STRING" "$*"; }
+success () { return 0; }
+failure () { return 1; }
+
+disable_selinux() {
+	selinuxfs=`awk '/ selinuxfs / { print $2 }' /proc/mounts`
+	echo "*** Warning -- SELinux is active"
+	echo "*** Disabling security enforcement for system recovery."
+	echo "*** Run 'setenforce 1' to reenable."
+	echo "0" > $selinuxfs/enforce
+}
+
+relabel_selinux() {
+	selinuxfs=`awk '/ selinuxfs / { print $2 }' /proc/mounts`
+	echo "
+         *** Warning -- SELinux relabel is required. ***
+         *** Disabling security enforcement.         ***
+         *** Relabeling could take a very long time, ***
+         *** depending on file system size.          ***
+         "
+	echo "0" > $selinuxfs/enforce
+	/sbin/fixfiles -F relabel > /dev/null 2>&1
+	rm -f /.autorelabel
+	echo "*** Enabling security enforcement.         ***"
+	echo $SELINUX > $selinuxfs/enforce
+}
+
+# Remove duplicate entries from mtab (for vserver guest use only)
+clean_vserver_mtab() {
+	:>/etc/mtab.clean
+	cat /etc/mtab | while read device mountpoint line ; do
+		grep -qs "$mountpoint" /etc/mtab.clean || \
+			echo "$device $mountpoint $line" >> /etc/mtab.clean
+	done
+	mv -f /etc/mtab.clean /etc/mtab
+}
+
+rc_cache_init() {
+	# If we have cachefile, use it.
+	# If we don't, create memory variables and try to save silently,
+	# We store cache in /etc, as /var isn't available at boot time.
+	local cachefile='/etc/rc.d/.rc-scripts.cache'
+
+	# We create $check variable which is used to invalidate the cache.
+	# The $check contains user locale and terminal.
+	local check="$TERM.$LC_MESSAGES"
+
+	if [ -f "$cachefile" -a "$cachefile" -nt /etc/sysconfig/system -a "$cachefile" -nt /etc/sysconfig/init-colors ]; then
+		if . "$cachefile" 2>/dev/null; then
+			if [ "$check" = "$_check" ]; then
+				return
+			fi
+		fi
+	fi
+
+	# primitive caching
+	_busy=$(progress "BUSY" "$CBUSY")
+	_ok=$(progress "DONE")
+	_started=$(progress "WORK")
+	_fail=$(progress "FAIL" "$CFAIL")
+	_died=$(progress "DIED" "$CFAIL")
+
+	# we don't use heredoc, as ksh attempts to create tempfile then
+	(> "$cachefile" ) 2>/dev/null || return
+	echo "_busy='$_busy';" >> "$cachefile"
+	echo "_ok='$_ok';" >> "$cachefile"
+	echo "_started='$_started';" >> "$cachefile"
+	echo "_fail='$_fail';" >> "$cachefile"
+	echo "_died='$_died';" >> "$cachefile"
+	echo "_check='$check';" >> "$cachefile"
+}
+
+rc_gettext_init() {
+	if [ -z "$GETTEXT" ]; then
+		if [ -x /bin/gettext -o -x /usr/bin/gettext ]; then
+			GETTEXT=yes
+		else
+			GETTEXT=no
+		fi
+	fi
+
+	if [ -z "$TPUT" ]; then
+		if [ -d /usr/share/terminfo ] && [ -x /usr/bin/tput -o -x /bin/tput ] ; then
+			TPUT=yes
+			# check if we are on proper terminal
+			tput longname >/dev/null 2>&1 || TPUT=no
+		else
+			TPUT=no
+		fi
+	fi
+}
+
+rc_gettext_init
+rc_cache_init
+
+#/*
+# * Local variables:
+# * mode: sh
+# * indent-tabs-mode: notnil
+# * End:
+# *
+# */
+# vi: syntax=sh

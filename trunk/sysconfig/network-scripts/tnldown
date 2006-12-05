@@ -1,0 +1,88 @@
+#!/bin/sh
+#
+#    tnldown - tunnel configuration script
+#    Copyright (C) 1999, 2000 Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#    $Id$
+#
+
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/functions.network
+
+DEV=$1
+
+[ -z "$DEV" ] && {
+	nls "Usage: %s <device name>" "tnldown" >&2
+	exit 1
+}
+
+TNLCONFIGS=$(ls /etc/sysconfig/interfaces/tnlcfg-* 2>/dev/null | egrep -v '~$')
+TNLCONFIGS=$(egrep -L '^#!' $TNLCONFIGS)
+CONFIG=$(egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS)
+
+if [ -z "$CONFIG" ]; then
+	CONFIG="$DEV"
+fi
+
+if false; then
+	[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || CONFIG=tnlcfg-$CONFIG
+	[ -f "/etc/sysconfig/interfaces/$CONFIG" ] || {
+		echo "usage: tnldown <device name>" >&2
+		exit 1
+	}
+fi
+
+source_config
+
+case "${MODE}" in
+  sit|four)
+	is_no "${IPV6_NETWORKING}" && exit 0
+	is_no "${IPV6_TUNNELCONFIG}" && exit 0
+	;;
+  ipip)
+	is_no "${IPV4_NETWORKING}" && exit 0
+	;;
+  gre)
+	is_no "${IPV4_NETWORKING}" && exit 0
+	;;
+  ipxip|ipipx)
+	is_no "${IPX}" && exit 0
+	;;
+esac
+
+RESULT=0
+
+case "${MODE}" in
+  ipip|sit|gre)
+	ip link set ${DEVICE} down
+	ip tunnel del ${DEVICE}
+	RESULT=$?
+	;;
+  four)
+	ip link set ${DEVICE} down
+	fourcfg del ${DEVICE}
+	RESULT=$?
+	;;
+  ipxip|ipipx)
+	;;
+esac
+
+exit $RESULT
+
+# This must be last line !
+# vi:syntax=sh

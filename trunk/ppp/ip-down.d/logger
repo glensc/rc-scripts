@@ -1,0 +1,6 @@
+#!/bin/sh
+# $Id$
+# You can put here anything :)
+#
+echo " Disconnect time: `date` from $PPP_REMOTE                    " >> /var/log/ppp.log
+echo "+---------------------------------------------------------------+" >> /var/log/ppp.log

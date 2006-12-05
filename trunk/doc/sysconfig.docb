@@ -1,0 +1,468 @@
+<refentry>
+  <refnamediv>
+    <refname>/etc/sysconfig/</refname>
+    <refpurpose>Basic system settings</refpurpose>
+  </refnamediv>
+  <refsect1>
+    <title><filename moreinfo="None">/etc/sysconfig/clock</filename></title>
+    <refsect2>
+      <title>Deprecated values from earlier releases:</title>
+      <variablelist>
+	<varlistentry>
+	  <term>CLOCKMODE=GMT</term>
+	  <listitem><para>indicates that the clock is set to UTC</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>CLOCKMODE=ARC</term>
+	  <listitem><para>on alpha only indicates the ARC console's
+	      42-year time offset is in effect</para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
+    </refsect2>
+    <refsect2>
+      <title>Currently correct values:</title>
+      <variablelist>
+	<varlistentry>
+	  <term>UTC=true</term>
+	  <listitem><para>indicates that the clock is set to UTC; anything
+	      else indicates that it is set to local time</para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>ARC=true</term>
+	  <listitem><para>on alpha only indicates the ARC console's
+	      42-year time offset is in effect; otherwise the normal
+	      Unix epoch is assumed</para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
+    </refsect2>
+  </refsect1>
+  <refsect1>
+    <title><filename moreinfo="None">/etc/sysconfig/keyboard</filename></title>
+    <variablelist>
+      <varlistentry>
+	<term>KEYTABLE=&lt;keytable file></term>
+	<listitem><para>for example:
+	    KEYTABLE="/usr/lib/kbd/keytables/us.map"</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+  <refsect1>
+    <title><filename moreinfo="None">/etc/sysconfig/mouse</filename></title>
+    <variablelist>
+      <varlistentry>
+	<term>MOUSETYPE=microsoft|mouseman|mousesystems|ps/2|msbm|logibm|atibm|
+	  logitech|mmseries|mmhittab</term>
+	<listitem><para> </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>XEMU3=yes|no</term>
+	<listitem><para>(emulate three buttons with two buttons whenever
+	    necessary, most notably in X)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+    <para>In addition, /dev/mouse points to the mouse device.</para>
+  </refsect1>
+  <refsect1>
+    <title><filename moreinfo="None">/etc/sysconfig/network</filename></title>
+    <variablelist>
+      <varlistentry><term>NETWORKING=yes|no</term>
+	<listitem><para>IPV6NETWORKING=yes|no</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry><term>HOSTNAME=$&lt;whatever hostname you want></term>
+	<listitem><note><para> for compatibility with some old software people might
+	      install (like trn), the /etc/HOSTNAME file should contain the
+	      same value as here.</para></note>
+	</listitem>
+      </varlistentry>
+      <varlistentry><term>IGNORE_ICMP_BCAST_IPV4=yes|no</term>
+	<listitem><para>(Please note that if you accept ICMP echo
+	    requests with a broadcast/multicast destination address your network
+	    may be used as an exploder for denial of service packet flooding attacks
+	    to other hosts.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>SPOOFING_IPV4=yes|no</term>
+	<listitem>
+	  <para>(anti spoofing protection)</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>GATEWAY=&lt;gateway IP></term>
+	<listitem>
+    <para>
+      </para>
+    
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>GATEWAYDEV=&lt;gateway device></term>
+	<listitem>
+	  <para>
+	    (e.g. eth0)</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>NISDOMAIN=&lt;nis domain name></term>
+	<listitem>
+	  <para></para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>IPX=yes|no</term>
+	<listitem>
+    <para>
+      </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>IPXAUTOPRIMARY=on|off</term>
+	<listitem>
+    <para>
+       (note, that MUST be on|off, not yes|no)</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>IPXAUTOFRAME=on|off</term>
+	<listitem>
+    <para>
+       (again, not yes|no)</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>IPXINTERNALNETNUM=&lt;netnum></term>
+	<listitem>
+    <para>
+      </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>IPXINTERNALNODENUM=&lt;nodenum></term>
+	<listitem>
+    <para></para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+    <para>All the IPX stuff is optional, and should default to off.</para>
+  </refsect1>
+
+  <refsect1>
+    <title><filename>/etc/sysconfig/static-nat</filename></title>
+    <para>
+      Configuration file for static Network Address Translation (NAT).
+      Contains lines of the form:</para>
+    <para>
+<literal>&lt;address> via &lt;addressreal></literal></para>
+    <para>
+      NAT will translate address &lt;address> to &lt;addressreal>.</para>
+  </refsect1>
+  <refsect1>
+    <title><filename>/etc/sysconfig/static-routes</filename></title>
+    <para>Contains lines of the form:</para>
+    <para><literal>&lt;device&gt; to [type] &lt;network&gt;/&lt;prefix&gt; via &lt;gateway&gt;</literal></para>
+    <para>&lt;device&gt; may be a device name to have the route brought up and
+      down with the device, or "none" if the route is not to be bound to any specific
+      device. [type] is optional. RH style isn't supported !</para>
+    <para>Also you can set few options after "&lt;gateway>":</para>
+      <simplelist columns=1>
+	<member>tos &lt;tos></member>
+	<member>metric &lt;number></member>
+	<member>table &lt;table></member>
+	<member>src &lt;address></member>
+	<member>realm &lt;realmid></member>
+	<member>mtu &lt;mtu> or mtu lock &lt;mtu></member>
+	<member>window &lt;number></member>
+	<member>rtt &lt;number></member>
+	<member>nexthop &lt;nexthop></member>
+	<member>scope &lt;scope></member>
+	<member>protocol &lt;rtproto></member>
+	<member>onlink</member>
+	<member>equalize</member>
+      </simplelist>
+
+    <para>For more informations see iproute2 documentation .</para>
+  </refsect1>
+
+  <refsect1>
+    <title><filename>/etc/sysconfig/routed</filename></title>
+    <simplelist>
+      <member>SILENT=yes|no</member>
+      <member>EXPORT_GATEWAY=yes|no</member>
+    </simplelist>
+  </refsect1>
+
+  <refsect1>
+    <title><filename>/etc/sysconfig/pcmcia</filename></title>
+    <simplelist>
+      <member>PCMCIA=yes|no</member>
+      <member>PCIC=i82365|tcic</member>
+      <member>PCIC_OPTS=&lt;socket driver (i82365 or tcic) timing parameters></member>
+      <member>CORE_OPTS=&lt;pcmcia_core options></member>
+      <member>CARDMGR_OPTS=&lt;cardmgr options></member>
+    </simplelist>
+  </refsect1>
+
+  <refsect1>
+    <title><filename>/etc/sysconfig/amd</filename></title>
+    <variablelist>
+      <varlistentry><term>ADIR=/.automount</term>
+	<listitem><para>(normally never changed)</para></listitem>
+      </varlistentry>
+      <varlistentry><term>MOUNTPTS='/net /etc/amd.conf'</term>
+	<listitem><para>(standard automount stuff)</para></listitem>
+      </varlistentry>
+      <varlistentry><term>AMDOPTS=</term>
+	<listitem><para>(extra options for AMD)</para></listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+  <refsect1>
+    <title><filename moreinfo="None">/etc/sysconfig/tape</filename></title>
+    <variablelist>
+      <varlistentry><term>DEV=/dev/nst0</term>
+	<listitem>
+	  <para>
+	    Tape device.  Use the non-rewinding one for these scripts.</para>
+	  <para>
+	    For SCSI tapes this is /dev/nst#, where # is the number of the
+	    tape drive you want to use.  If you only have one then use
+	    nst0.</para>
+	  <para> 
+	    For IDE tapes you use /dev/ht#, where # is the number of the tape
+	    drive you want to use (usually ht0).</para>
+	  <para>
+	    For floppy tape drives use /dev/ftape.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry><term>ADMIN=root</term>
+	<listitem><para>Person to mail to if the backup fails for any reason</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>SLEEP=5</term>
+	<listitem>
+<para>
+    Time to sleep between tape operations.  Some drives need a bit
+    more than others, but 5 seems to work for 8mm, 4mm, and DLT</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>BLOCKSIZE=32768</term>
+	<listitem>
+    <para>
+    This worked fine for 8mm, then 4mm, and now DLT.  An optimal
+    setting is probably however much data your drive writes at one
+    time.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>SHORTDATE=$(date +%y:%m:%d:%H:%M)</term>
+	<listitem>
+   <para>
+    A short date string, used in backup log filenames.</para>
+	</listitem>
+      </varlistentry>
+      
+
+      <varlistentry>
+	<term>DAY=$(date +log-%y:%m:%d)</term>
+	<listitem>
+     <para>
+    This is used for the log file directory.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>DATE=$(date)</term>
+	<listitem>
+    <para>
+    Regular date string, used in log files.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>LOGROOT=/var/log/backup</term>
+	<listitem>
+    <para>
+    Root of the logging directory</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>LIST=$LOGROOT/incremental-list</term>
+	<listitem>
+    <para>
+    This is the file name the incremental backup will use to store
+    the incremental list.  It will be $LIST-{some number}.
+    </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>DOTCOUNT=$LOGROOT/.count</term>
+	<listitem>
+    <para>
+    For counting as you go to know which incremental list to use
+    </para>
+	</listitem>
+      </varlistentry>
+
+
+      <varlistentry>
+	<term>COUNTER=$LOGROOT/counter-file</term>
+	<listitem>
+    <para>
+    For rewinding when done...might not use.
+    </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>BACKUPTAB=/etc/backuptab</term>
+	<listitem>
+    <para>
+    The file in which we keep our list of backup(s) we want to make.
+    </para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+  <refsect1>
+    <title><filename>/etc/sysconfig/sendmail</filename></title>
+      <variablelist>
+	<varlistentry>
+	  <term>DAEMON=yes|no</term>
+	  <listitem>
+	    <para>yes implies -bd</para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>QUEUE=1h</term>
+	  <listitem>
+	    <para>given to sendmail as -q$QUEUE
+	      -q option is not given to sendmail if /etc/sysconfig/sendmail
+	      exists and QUEUE is empty or undefined.</para></listitem>
+	</varlistentry>
+      </variablelist>
+  </refsect1>
+
+  <refsect1>
+    <title><filename>/etc/sysconfig/i18n</filename></title>
+      <simplelist>
+	<member>LANG= can be any two letter ISO language code</member>
+	<member>
+	  LC_ALL= is the setting of the localedata configuration (eg fr_CA)</member>
+	<member>
+	  LINGUAS= can be a : separated list of language codes</member>
+	<member>
+	  SYSTERM= use to set default TERM environment variable</member>
+      </simplelist>
+	<para>
+	  The above three variables are used in rc.sysinit.</para>
+    <variablelist>
+      <varlistentry>
+	<term>SYSFONT= any font that is legal when used as</term>
+	<listitem>
+	  <para>	/usr/sbin/setfont $SYSFONT ...
+    (See kbd package for sysfont command)
+</para>	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>UNIMAP= any unicode font that is legal fodder for</term>
+	<listitem>
+	  <para>/usr/sbin/setfont $SYSFONT-u $UNIMAP</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+    <para>
+      The above is used by the /sbin/setsysfont command (which is run
+      by rc.sysinit at boot time).
+    </para>
+  </refsect1>
+
+  <refsect1>
+    <title><filename>/etc/sysconfig/\<service\></filename></title>
+    <para>
+      The following are used when starting service.
+    </para>
+      <variablelist>
+        <varlistentry>
+	  <term>SERVICE_LIMITS="-u unlimited -c 0"</term>
+	  <listitem>
+            <para>
+	      System limits for this service.
+            </para>
+	  </listitem>
+        </varlistentry>
+        <varlistentry>
+	  <term>SERVICE_CPUSET="name"</term>
+	  <listitem>
+            <para>
+	      CPUSET to run this service in.
+            </para>
+	  </listitem>
+        </varlistentry>
+        <varlistentry>
+	  <term>SERVICE_UMASK="022"</term>
+	  <listitem>
+            <para>
+	      File creation mask for this service.
+            </para>
+	  </listitem>
+        </varlistentry>
+        <varlistentry>
+	  <term>SERVICE_RUN_NICE_LEVEL="0"</term>
+	  <listitem>
+            <para>
+	      Scheduling priority for this service.
+            </para>
+	  </listitem>
+        </varlistentry>
+      </variablelist>
+  </refsect1>
+</refentry>
+
+
+
+
+<!-- to s± informacje dla emacsa -->
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:nil
+sgml-shorttag:nil
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:t
+sgml-parent-document:"rc-scripts.docb"
+sgml-default-dtd-file:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+sgml-declaration:nil
+sgml-validate-command:"nsgmls -s %s %s"
+End:
+-->
+		      

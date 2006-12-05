@@ -1,0 +1,136 @@
+#!/bin/sh
+#
+#	$Id$
+#
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/functions.network
+
+# Will be removed in the future
+if is_yes "$NETWORKING" ; then
+	if [ -z "$IPV4_NETWORKING" ] ; then
+		echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
+		echo "Please upgrade your config"
+		echo "Assuming you want IPv4 networking"
+		IPV4_NETWORKING=yes
+	fi
+fi
+
+DEV=$1
+
+[ -z "$DEV" ] && {
+	nls "Usage: %s <device name>" "ifdown" >&2
+	exit 1
+}
+
+if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
+	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
+else
+	CONFIG="$DEV"
+fi
+
+if [ "$(id -u)" != "0" ]; then
+	if [ -x /sbin/usernetctl ]; then
+		exec /sbin/usernetctl $CONFIG down
+	fi
+	echo "Users cannot control this device." >&2
+	exit 1
+fi
+
+source_config
+
+# set all major variables
+setup_ip_param
+
+OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
+
+# shutdown tleds software
+if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
+	/usr/bin/tleds -qk "$DEVICE"
+fi
+
+if [ -x $OTHERSCRIPT ]; then
+	if [ "$HANDLING" = "0" ]; then
+		exec $OTHERSCRIPT $CONFIG $2
+	elif [ "$HANDLING" = "1" ]; then
+		$OTHERSCRIPT $CONFIG $2
+	fi
+fi
+
+if [ "$BOOTPROTO" = "bootp" -o "$BOOTPROTO" = "pump" ]; then
+	/sbin/pump -r -i ${DEVICE}
+	RESULT=$?
+fi
+
+if [ "$BOOTPROTO" = "dhcp" ]; then
+	if [ -x /sbin/dhcpcd ];then
+		/sbin/dhcpcd -k ${DEVICE}
+		RESULT=$?
+	elif [ -x /sbin/dhclient ];then
+		if [ -f /var/run/dhclient.pid ];then
+			PID=$(cat /var/run/dhclient.pid)
+			if ps ax --no-header|grep -q $PID;then
+				kill $PID
+				RESULT=$?
+			fi
+		fi
+	elif [ -x /sbin/dhcpxd ];then
+		/sbin/dhcpxd -k ${DEVICE}
+		RESULT=$?
+	elif [ -x /sbin/pump ];then
+		pump -r -i ${DEVICE}
+		RESULT=$?
+	fi
+	sleep 1
+fi
+
+if is_wireless_device "${DEVICE}"; then
+	if is_yes "${WLAN_WPA}"; then
+		killproc --pidfile "wpa_supplicant-${DEVICE}.pid" wpa_supplicant > /dev/null 2>&1
+		rm -f "/var/run/wpa_supplicant-${DEVICE}.pid"
+	fi
+fi
+
+# Check to make sure the device is actually up
+check_device_down && exit 0
+
+vlan_setup
+if is_yes $ETH_VLANS && `echo $DEVICE | grep -q ^eth` ; then
+	if echo "${DEVICE}" | grep -q '\.' ; then
+		# vlan down
+		ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+		ip link set ${DEVICE} down
+		/sbin/vconfig rem ${DEVICE} 2>&1 > /dev/null
+	else
+		# downujemy interfejs nadrzedny do vlanow
+		for VLANDEVICE in `ls /proc/net/vlan 2> /dev/null | grep ^${DEVICE}` ; do
+			# najpierw wszystkie vlany po kolei
+			ip addr flush dev ${VLANDEVICE} 2>&1 | grep -v "Nothing to flush"
+			ip link set ${VLANDEVICE} down
+			/sbin/vconfig rem ${VLANDEVICE} 2>&1 > /dev/null
+		done
+		# a potem dopiero interfejs nadrzedny
+		ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+		ip link set ${DEVICE} down
+	fi
+else
+	ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+	ip link set ${DEVICE} down
+fi
+
+if [ "$HANDLING" = "4" ]; then
+	exit 0
+fi
+
+if [ -n "$RESULT" ] ; then
+	if [ "$RESULT" -ne "0" ]; then
+		return $RESULT
+	fi
+fi
+
+exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
+
+# This must be last line !
+# vi:syntax=sh

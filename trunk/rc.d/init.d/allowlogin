@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# allowlogin	Allow users to login
+#
+# description: Allow users to login.
+#
+# $Id$
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# See how we were called.
+case "$1" in
+  start)
+	if is_yes "$DELAY_LOGIN" && [ -f /etc/nologin.boot ]; then
+		run_cmd "Allowing users to login" rm -f /etc/nologin /etc/nologin.boot
+	fi
+	;;
+  stop)
+	# /etc/nologin when shutting down system
+	if is_yes "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
+		nls "System shutdown in progress \n" > /etc/nologin
+		chmod 644 /etc/nologin
+		cp -fp /etc/nologin /etc/nologin.boot
+	fi
+	;;
+  *)
+	echo "Usage: $0 {start|stop}"
+	exit 3
+esac
+
+exit 0
+
+# This must be last line !
+# vi:syntax=sh

@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# $Id$
+#
+# This script is run by the pppd _after_ the link is brought down.
+#
+# This script is called with the following arguments:
+#	Arg	Name			Example
+#	$1	Interface name		ppp0
+#	$2	Peer name
+#	$3	User name
+#	$4	The tty			ttyS1
+#	$5	The link speed		38400
+
+set +e
+
+# The environment is cleared before executing this script
+# so the path must be reset
+PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+export PATH
+# These variables are for the use of the scripts run by run-parts
+PPP_IFACE="$1"
+PPP_PEER="$2"
+PPP_USER="$3"
+PPP_TTY="$4"
+PPP_SPEED="$5"
+export PPP_IFACE PPP_PEER PPP_USER PPP_TTY PPP_SPEED
+
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/functions.network
+CONFIG="$PPP_IPPARAM"
+source_config
+
+# as an additional convienince, $PPP_TTYNAME is set to the tty name,
+# stripped of /dev/ (if present) for easier matching.
+PPP_TTYNAME=$(basename "$PPP_TTY")
+export PPP_TTYNAME
+
+# Main Script starts here
+[ -x /etc/ppp/auth-down.local ] && /etc/ppp/auth-down.local
+
+exit 0

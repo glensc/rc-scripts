@@ -1,0 +1,28 @@
+# $Id$
+#
+DEVICE=ppp0
+CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.gprs-idea
+ONBOOT=no
+HARDFLOWCTL=no
+# ircomm0 for IRDA, rfcomm0 for BlueTooth
+MODEMPORT=/dev/ircomm0
+# MODEMPORT=/dev/bluetooth/rfcomm/0
+LINESPEED=115200
+AUTH=no
+DEBUG=yes
+DEFROUTE=yes
+PERSIST=yes
+HOLDOFF=1
+MTU=296
+#demand option not finished yet ;-(
+DEMAND=no
+PHONE='*99***1#'
+#or
+#PHONE='*99#'
+USER=idea
+PASSWORD=idea
+INITSTRING='AT+CGDCONT=1,"IP","www.idea.pl","",0,0'
+DATAFORCHAT="USER PASSWORD INITSTRING PHONE"
+PPPOPTIONS="noipdefault noproxyarp lcp-echo-failure 0 lcp-echo-interval 0 local"
+PLUGIN_IFCFG_PASSWORD=yes
+REPORTFILE=/var/log/ppp0.log

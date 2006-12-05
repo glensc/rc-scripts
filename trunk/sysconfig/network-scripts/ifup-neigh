@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+#	$Id$
+#
+# adds static arps for device $DEVICE
+
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/functions.network
+
+DEV=$1
+
+if [ -z "$DEV" ]; then
+	nls "Usage: %s <device name>" "ifup-neigh" >&2
+	exit 1
+fi
+
+if [ ! -f /etc/sysconfig/static-arp ]; then
+	exit 0
+fi
+
+if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
+	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
+else
+	CONFIG="$DEV"
+fi
+
+source_config
+
+# set all major variables
+setup_ip_param
+
+get_ppp_device_and_pid
+
+# note the trailing white space character in the grep gets rid of aliases
+egrep "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-arp | while read iface mac ip state args; do
+	if is_no "$IPV4_NETWORKING"; then
+		continue
+	fi
+	[ -z "$state" ] && state="stale"
+	/sbin/ip neigh replace $ip lladdr $mac nud $state dev $DEVICE
+done
+
+# This must be last line !
+# vi:syntax=sh

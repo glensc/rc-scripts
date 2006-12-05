@@ -1,0 +1,67 @@
+#!/bin/sh
+#
+# $Id$
+# This file should not be modified
+#
+# This script is run by the pppd after the link is established.
+# It uses run-parts to run scripts in /etc/ppp/ip-up.d, so to add routes,
+# set IP address, run the mailq etc. you should create script(s) there.
+#
+# Be aware that other packages may include /etc/ppp/ip-up.d scripts (named
+# after that package), so choose local script names with that in mind.
+#
+# This script is called with the following arguments:
+#	Arg	Name				Example
+#	$1	Interface name			ppp0
+#	$2	The tty				ttyS1
+#	$3	The link speed			38400
+#	$4	The network number		???
+#	$5	Local IPX node address		???
+#	$6	Remote IPX node address		???
+#	$7	Local IPX routing protocol	???
+#	$8	Remote IPX routing protocol	???
+#	$9	Local IPX router name		???
+#	$10	Remote IPX router name		???
+#	$11	Optional ``ipparam'' value	foo
+#	$12	PPPD pid			1276
+
+set +e
+
+# The environment is cleared before executing this script
+# so the path must be reset
+PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+export PATH
+# These variables are for the use of the scripts run by run-parts
+PPP_IFACE="$1"
+PPP_TTY="$2"
+PPP_SPEED="$3"
+PPP_NETWORK="$4"
+PPP_LOCAL="$5"
+PPP_REMOTE="$6"
+PPP_LOCAL_RPROTO="$7"
+PPP_REMOTE_RPROTO="$8"
+PPP_LOCAL_RNAME="$9"
+PPP_REMOTE_RNAME="$10"
+PPP_IPPARAM="$11"
+PPP_PID="$12"
+
+export PPP_IFACE PPP_TTY PPP_SPEED PPP_NETWORK PPP_LOCAL PPP_REMOTE
+export PPP_LOCAL_RPROTO PPP_REMOTE_RPROTO PPP_LOCAL_RNAME PPP_REMOTE_RNAME
+export PPP_IPPARAM PPP_PID
+
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/functions.network
+CONFIG="$PPP_IPPARAM"
+source_config
+
+# as an additional convenience, $PPP_TTYNAME is set to the tty name,
+# stripped of /dev/ (if present) for easier matching.
+PPP_TTYNAME=$(basename "$PPP_TTY")
+export PPP_TTYNAME
+
+# Main Script starts here
+[ -x /etc/ppp/ipx-up.local ] && /etc/ppp/ipx-up.local
+
+run-parts /etc/sysconfig/interfaces/up.d/ipx
+
+exit 0

@@ -1,0 +1,29 @@
+# $Id$
+# Config for Ethernet card.
+#
+
+# Name of the device. Must match filename suffix.
+DEVICE=eth0
+
+# IP addresses/address prefix
+# where prefix:
+# 24 - resembles netmask 255.255.255.0
+# 16 - resembles netmask 255.255.0.0
+# etc.
+# IPADDR may be either IPv4 or IPv6
+# you may have up to 256 addresses set up
+#IPADDR=192.168.0.1/24
+#IPADDR1=192.168.0.2/24
+#IPADDR2=192.168.0.3/24
+#IPADDR3=192.168.0.4/24
+
+# you may select which of the above addresses
+# is primary for this interface (it'd be IPADDR1 in the example below)
+#IP4_PRIM_IF="1"
+
+# activate on boot? yes|no
+# you must set it to 'yes' if you want to have this up after bootup
+ONBOOT=yes
+
+# dhcp|pump|none
+BOOTPROTO=dhcp

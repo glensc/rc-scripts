@@ -1,0 +1,222 @@
+# $Id$
+#
+DEVICE=<name>
+
+[ BOOTPRIO=number ]
+  ifcfg-* interfaces are configured in BOOTPRIO order starting
+  from lowest value first. You need to set BOOTPRIO in _all_ your
+  ifcfg* files because if you won't do that only these interfaces
+  with BOOTPRIO variable will be configured. Use the same schema
+  when setting variable for example BOOTPRIO=number
+  or BOOTPRIO="number" because sorting is done by sort command.
+
+[ BOOTPROTO={none|bootp|dhcp|pump} ]
+  You can specify which dhcp client to use with the DHCP_CLIENT, if
+  the DHCP_CLIENT is not specified we trying to launch in order :
+  /sbin/dhcpcd
+  /sbin/dhclient
+  /sbin/dhcpxd
+  /sbin/pump
+  if you have a preferred client define the DHCP_CLIENT variable.
+  You can also pass some options to dhcp client via DHCP_OPTIONS.
+
+[ BOOTPROTO6={none|dhcp6|v4compat}
+  dhcp6 isn't supported, yet.
+  v4compat uses available IPv4 addresses (ie. from DHCPv4)
+  and then convert them to IPv6 (IPv4-compatible) to use with
+  automatic tunnels
+
+
+IPADDR="(IPv4 or IPv6 address)/prefix"
+IP_AOPTS="broadcast xxx etc" (by default broadcast is autocalculated)
+IP_ROPTS=""
+
+IPADDR1=
+IP_AOPTS1= options for ip addr add
+IP_ROPTS1= options for ip route add (currently used only for IP4_PRIM_IF)
+
+IP4_PRIM_IF="1"		# number of primary IPv4 interface (IPADDRx)
+IP4_SRC_IF="1"		# number of IPv4 address for ip's ,,src'' parameter
+IP6_PRIM_IF=""		# 
+IP6_SRC_IF=""		# 
+
+[ ONBOOT={no|yes} ]
+[ HOTPLUG={no|yes} ] - bring up from hotplug (default to no)
+[ MULTICAST={|no|yes} ]	- for eth automatically set to yes
+[ ARP={no|yes} ]	- for eth automatically set to yes
+[ IPV6_DISABLE_AUTOCONF={yes|no} ] - disable IPv6 autoconfiguration
+
+[ IPX=yes|no ]
+if	IPX=yes ; then
+
+	IPXNETNUM_{802_2,802_2TR,802_3,EtherII,SNAP}
+	IPXPRIMARY_{802_2,802_2TR,802_3,EtherII,SNAP}=yes|no
+	IPXACTIVE_{802_2,802_2TR,802_3,EtherII,SNAP}=yes|no
+fi
+
+[ MTU= ]
+[ METRIC= ]
+[ PROXYARP={yes|no} ]
+
+QDISC=[sfq|teql0|red|prio|...] (queueing discipline)
+QDISC_CLASS=[htb|cbq|none]     (use cbq|htb as class based discipline;
+                                if none specified and bandwidth_out present
+                                then tbf is used)
+BANDWIDTH_IN=[upstream limit in kilobites, supported on 2.4 only]
+BANDWIDTH_OUT=[downstream limit in kilobites]
+
+VLAN_REORDER_HDR=[0|1]	When this is set, the VLAN device will move the
+			ethernet header around to make it look exactly like a
+			real ethernet device.  This may help programs such
+			as DHCPd which read the raw ethernet packet and
+			make assumptions about the location of bytes.
+			If you don't need it, don't turn it on, because there
+			will be at least a small performance degradation.
+			Default is ON.
+
+[ DEFAULTHANDLING=yes|no ] (used in configuration for ATM interfaces,
+			    obsolete variable)
+[ HANDLING=0|1|2|3 ] (0 is default; used ie. in ATM configuration, for
+		      details see ifup script)
+
+if 	DEVICE=eth* ; then
+
+	[ MEDIA={auto|10baseT|10base2|AUI} ]
+	[ MACADDR=<hw addres> ]
+
+	if 	DEVICE=wireless interface (man iwconfig(8))
+		WLAN_UPEARLY=<yes>|<no> Up device before setting any WLAN parameters
+					(needed for some drivers)
+		WLAN_ESSID=<ESSID or Network Name (Domain ID)>|any|off
+		WLAN_NWID=<Network ID (Domain ID)>|off
+		WLAN_FREQ=<frequency> (2.422G)
+		WLAN_CHANNEL=<channel number> (3)
+		WLAN_SENS=<the sensitivity threshold>
+		WLAN_MODE=ad-hoc|managed|master|repeater|secondary|auto
+		WLAN_AP=<Access Point address>|any|auto|off
+		WLAN_NICKNAME=<station nickname)
+		WLAN_BITRATE=<bitrate like 11M>|auto|fixed
+		WLAN_RTS_THRESHOLD=<rts/cts threshold>|auto|fixed|off
+		WLAN_FRAGMENTATION_THRESHOLD=<frag threshold>|auto|fixed|off
+		WLAN_KEY=XXXX-XXXX-XXXX-XXXX|XXXXXXXX|s:<ascii string>
+		WLAN_ENCRYPTION=on|off|open|restricted
+		WLAN_POWER=period <value>|timeout <value>|on|off|all|unicast|multicast
+		WLAN_TXPOWER=<power in dBm>|<power in mW>mW|auto|on|off
+		WLAN_RETRY=limit <value>|lifetime <value>
+		WLAN_COMMIT=yes|no (some cards require manual commit of changes)
+		if WLAN_WPA=yes; then
+			WLAN_WPA_DRIVER=<driver; see -D option of wpa_supplicant>
+			WLAN_WPA_CONFIG=<path to wpa_supplicant config file>
+			WLAN_WPA_OPTIONS=[additional wpa_supplicant options]
+		fi
+	fi
+	
+elif	DEVICE=ppp* || DEVICE=sl* ; then
+	
+	PERSIST=yes|no
+	MODEMPORT=<device, say /dev/modem>
+	LINESPEED=<speed, say 115200>
+	DEFABORT=yes|no 
+        DIRECT_CONNECT=yes|no (direct connection without chat/wvdial used for example
+			       on SDI or leased lines)
+	
+	if	DEVICE=ppp* ; then
+	
+		AUTH=yes|no
+		PEERDNS=yes|no
+		DEFROUTE=yes|no
+		ESCAPECHARS=yes|no
+		HOLDOFF=30
+	  	HARDFLOWCTL=yes|no (yes imples "modem crtscts" options)
+    	 	PPPOPTIONS=<arbitrary option string>
+		PAPNAME=<"name $PAPNAME" on pppd command line>
+		REMIP=<remote ip4 address, normally unspecified>
+		REMIP6=<remote ip6 address, normally unspecified>
+    		MRU=
+    		DISCONNECTTIMEOUT=<number of seconds, default currently 5>
+    		RETRYTIMEOUT=<number of seconds, default currently 60>
+    		INITSCRIPT=<modem command>
+    		DATAFORCHAT=<list of variables>
+    		<anything>=<anything> (for chat script)
+		IPV6_PPP=yes|no (use IPv6 for ppp ?)
+		if IPV6_PPP = yes ; then
+			IPV6_CP_USEV4=yes|no (use local IPv4 mapped addresses
+					      as IPv6 addresses)
+			IPV6_CP_PERSISTENT=yes|no (use EUI-48 addresses
+						   as IPv6 addresses; not
+						   supported on Linux, yet)
+			or by default use address specified by IP6_PRIM_IF
+			and REMIP6
+		fi
+		PPPOA=yes|no (generic PPP over ATM)
+		if PPPOA = yes ; then
+			PPPOA_VPI=<VPI number>
+			PPPOA_VCI=<VCI number>
+		fi
+		PPPOE_DEV=<ethX> (PPP over Ethernet device)
+		if PPPOE_DEV exists ; then
+			PPPOE_KERNEL=yes|no (use or not kernel space PPPoE support)
+			PPPOE_OPT=<options> (used only with userspace pppoe program)
+		fi
+		PPPOA_EAGLE=yes|no (eagle-usb support)
+		if PPPOA_EAGLE = yes ; then
+			PPPOA_OPT=<options> (used only with userspace pppoa program)
+		fi
+		PPPOA_SPEEDTOUCH=yes|no (speedtouch support)
+		if PPPOA_SPEEDTOUCH = yes ; then
+			PPPOA_KERNEL=yes|no (use or not kernel space PPPoA support)
+			PPPOA_VPI=<VPI number>
+			PPPOA_VCI=<VCI number>
+			PPPOA_OPT=<options> (used only with userspace pppoa program)
+		fi
+		UNIT=yes|no (pass unit option to pppd (depends on DEVICE name)
+		             defaults to yes)
+	fi
+
+	if	DEVICE=sl* ; then	(SLIP)
+		PROTOCOL=slip|cslip|adaptive
+		REMIP=<remote ip4 address>
+		REMIP6=<remote ip6 address, normally unspecified>
+	fi
+
+elif	DEVICE=br* ; then	/* Bridge */
+
+	BRIDGE_DEVS=<list of devices betwen which do bridging>
+		    Note: separation configuration for devices in this list
+		          should be avoided !
+	AGEING=<ethernet (MAC) address ageing time in seconds>
+	GCINT=<garbage collection interval time for the bridge in seconds>
+
+	SPANNING_TREE=yes|no (enable SPT - Spanning Tree Protocol)
+	if	SPANNING_TREE=yes ; then
+			BRIDGEPRIO=<bridge's priority; 0-65535; less == better>
+			FD=<bridge forward delay time in seconds>
+			HELLO=<bridge hello time in seconds>
+			MAXAGE=<maximum message age in seconds>
+			PATHCOST_PORT=<port number>
+			PATHCOST=<cost of the port specified in PATHCOST_PORT>
+				Note: both PATHCOST_PORT and PATHCOST must be
+				      specified to set cost of port
+			PORTPRIO_PORT=<port>
+			PORTPRIO=<port priority used by port selection algorithms;
+			          a number between 0 and 255>
+				Note: see note above
+	fi
+elif    DEVICE=irda* ; then     /* IrDA */
+        
+        IRDAPORT=<device, say /dev/ttyS1>
+        DONGLE=<driver, see README.irattach from irda-utils package>
+        DISCOVERY=yes|no (starts discovery of remote IrDA devices)
+fi
+				
+# You can also run some other programs *after* device has been brought up or down.
+# Just create functions run_up() and run_down().
+run_up()
+{
+	echo "This will be executed after device is brought up!"
+}
+
+run_down()
+{
+	echo "This will be executed after device is brought down!"
+}

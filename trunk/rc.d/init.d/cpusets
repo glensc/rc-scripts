@@ -1,0 +1,165 @@
+#!/bin/sh
+#
+# cpusets	Create/remove cpusets
+#
+# chkconfig:	12345 01 99
+# description:	Creates/Removes all cpu sets configured to \
+#		start at boot time.
+#
+# probe:	true
+
+# $Id$
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+if is_yes "${CPUSETS}" ; then
+	if ! grep -q "/dev/cpuset" /proc/mounts ; then
+		nls "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted" >&2
+	fi
+else
+	exit 0
+fi
+
+cpuset_create()
+{
+	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
+
+	. /etc/sysconfig/cpusets/cpuset-$i
+
+	if mkdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
+		[ -n "$CPUS" ] && echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
+		[ -n "$MEMS" ] && echo "$MEMS" >/dev/cpuset/"$NAME"/mems
+		[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
+		[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
+		[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
+		[ -n "$VIRTUALIZE" ] && echo "$VIRTUALIZE" >/dev/cpuset/"$NAME"/virtualize
+		[ -n "$TASKS" ] && echo "$TASKS" >/dev/cpuset/"$NAME"/tasks
+		return 0
+	fi
+	return 1
+}
+
+cpuset_remove()
+{
+	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
+
+	. /etc/sysconfig/cpusets/cpuset-$i
+
+	# This MUST be rmdir (not rm -rf)
+	if rmdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+cpuset_empty()
+{
+	if [ $(cat /dev/cpuset/$1/tasks 2>/dev/null | wc -c) -eq 0 ] ; then
+		# true returns zero
+		return 0
+	else
+		# false returns one
+		return 1
+	fi
+}
+
+start() {
+  	rc_splash "bootcpusets start"
+
+	for i in $cpusets_boot ; do
+		show "$(nls -n "Creating cpuset %s" "$i")"
+		if cpuset_create $i ; then
+			ok
+		else
+			fail
+		fi
+	done
+
+	touch /var/lock/subsys/cpusets
+}
+
+stop() {
+	for i in $cpusets_boot ; do
+		show "$(nls -n "Removing cpuset %s" "$i")"
+		busy
+		if cpuset_empty $i ; then
+			if cpuset_remove $i ; then
+				ok
+			else
+				fail
+			fi
+		else
+			fail
+		fi
+	done
+
+	rm -f /var/lock/subsys/cpusets
+}
+
+# Get list of config files
+# ignores editor backup files and rpm blackups
+cpuset_configs()
+{
+	local match="$1"
+	for a in /etc/sysconfig/cpusets/$match; do
+		case "$a" in
+		*rpmorig|*rpmnew|*rpmsave|*~|*.orig)
+			continue
+			;;
+		*)
+			echo $a
+		;;
+		esac
+	done
+}
+
+cpuset_files="$(cpuset_configs 'cpuset-*')"
+cpusets_boot=`
+	for i in $cpuset_files; do
+		ONBOOT=""; . "$i" 2>/dev/null
+		is_yes "$ONBOOT" && echo "${i##*/}"
+	done
+`
+
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  status)
+	nls "Configured cpusets:"
+	echo "$cpusets_boot"
+	echo
+	nls "Currently empty cpusets:"
+	for i in `ls -1 /dev/cpuset` ; do
+		if [ -d /dev/cpuset/$i ] ; then
+			cpuset_empty $i && echo $i
+		fi
+	done
+	echo
+	nls "Currently active cpusets:"
+	for i in `ls -1 /dev/cpuset` ; do
+		if [ -d /dev/cpuset/$i ] ; then
+			cpuset_empty $i || echo $i
+		fi
+	done
+	echo
+	;;
+  restart)
+	stop
+	start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|status}"
+	exit 3
+esac
+
+exit 0
+
+# This must be last line !
+# vi:syntax=sh

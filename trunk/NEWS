@@ -1,0 +1,24 @@
+
+	$Id$
+
+Features of rc-scripts:
+
+- National Language Support; currently only english and polish
+  supported. Translators needed.
+- LDAP support (for interfaces database). NYF.
+- Full IPv6 support (including PPP).
+
+New in 0.3.0:
+
+- fourtun (v4 over v6) tunneling support.
+- support for more dhcp clients (dhcpcd, dhclient, dhcpxd, pump)
+- Logical Volume Manager (LVM) support.
+- /etc/sysctl.conf support.
+- queueing discipline support.
+- IPv6 boot method (v4compat).
+- bridge configuration support.
+- rc.modules scipt and /etc/modules config
+- new ifcfg- config syntax
+
+Note:
+NYF - not yet finished.

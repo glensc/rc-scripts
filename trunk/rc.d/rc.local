@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# $Id$
+#
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+
+
+# This must be last line !
+# vi:syntax=sh

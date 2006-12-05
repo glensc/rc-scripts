@@ -1,0 +1,566 @@
+#!/bin/sh - keep it for file(1) to get bourne shell script result
+#
+# $Id$
+#
+# This is not a shell script; it provides functions to network scripts
+# that source it.
+
+source_config ()
+{
+	DEVNAME=$(basename "$CONFIG" | awk ' { gsub(/^ifcfg-/,NIL); print $0; } ')
+
+	if echo "$CONFIG"|egrep "^/" >/dev/null 2>&1 ; then
+		if [ -f "$CONFIG" ] ; then
+			. "$CONFIG"
+		fi
+	elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
+		. "/etc/sysconfig/interfaces/$CONFIG"
+	fi
+
+	# This is sanity check so that if you've copied ifcfg-eth0 to ifcfg-eth1
+	# and forgot to alter DEVICE= line you won't accidentally bring down eth0
+	# while executing ifdown eth1.
+	if [ -n "$DEVICE" -a  "$DEVNAME" != "$DEVICE" ]; then
+		echo >&2 "$0: DEVICE specified in $CONFIG does not match filename. Aborting!"
+		exit 1
+	fi
+
+	if [ -n "${PREFIX}" ] && ! $(echo $IPADDR | grep "/" 2>&1 >/dev/null) ; then
+		IPADDR="$IPADDR/$PREFIX"
+	fi
+}
+
+do_netreport ()
+{
+	# Notify programs that have requested notification
+	( cd /var/run/netreport || exit
+	for i in * ; do
+		[ -f $i ] && kill -SIGIO $i >/dev/null 2>&1 || \
+			rm -f $i >/dev/null 2>&1
+	done
+	)
+}
+
+need_hostname()
+{
+	if [ "`hostname`" = "(none)" -o "`hostname`" = "localhost" -o \
+	     "`hostname`" = "localhost.localdomain" ]; then
+		NEEDHOSTNAME=yes
+	else
+		unset NEEDHOSTNAME
+	fi
+}
+
+set_hostname()
+{
+	typeset hostname domain
+
+	hostname=$(echo $1 | awk ' { gsub(/\..*$/,NIL); print $0; } ')
+	domain=$(echo $1 | awk ' { sub(/^[^\.]*\./,NIL); print $0; } ')
+
+	if [ -n "$hostname" ] ; then
+		echo "$hostname" > /etc/HOSTNAME
+		hostname $hostname
+	fi
+
+	if [ -n "$domain" ] ; then
+		>/etc/resolv.conf.new
+		if ! grep -q "search $domain" /etc/resolv.conf ; then
+			echo "search $domain" >> /etc/resolv.conf.new
+		fi
+		echo "domain $domain" >> /etc/resolv.conf.new
+		grep -v "^domain " /etc/resolv.conf >> /etc/resolv.conf.new
+		mv -f /etc/resolv.conf.new /etc/resolv.conf
+	fi
+}
+
+# Setup Network Address Translation (NAT)
+setup_nat()
+{
+	typeset src via dst
+
+	if [ -r /etc/sysconfig/static-nat ]; then
+		if [ "$1" = "on" ]; then
+			grep "^[0-9]" /etc/sysconfig/static-nat | while read src via dst; do
+				/sbin/ip route add nat $dst via $src
+				/sbin/ip rule add from $src nat $dst
+			done
+		elif [ "$1" = "off" ]; then
+			/sbin/ip route show table all | egrep "^nat[[:blank:]]" | while read nat dst via src args; do
+				/sbin/ip rule del from $src nat $dst
+				/sbin/ip route del nat $dst via $src
+			done
+		fi
+	fi
+}
+
+# Setup static ARP
+static_arp()
+{
+	typeset rc arpdev host hwaddr flags neflags
+
+	if is_yes "$STATIC_ARP" && [ -r /etc/ethers ]; then
+		if [ -x /sbin/arp ]; then
+			run_cmd "Setting static ARP entries" /sbin/arp -f /etc/ethers
+		else
+			show "Setting static ARP entries"; busy
+			rc=0
+			arpdev=$(ip link show | awk -F':' '(/UP/) && ! (/NOARP/) && ! (/lo:/) && ! (/NONE:/) { print $2; exit }')
+			if [ -z "$arpdev" ]; then
+				rc=1
+			else
+				# ip supports only ip addresses
+				grep "^[0-9]" /etc/ethers | \
+				while read host hwaddr flags; do
+					case "$flags" in
+					  *temp*)
+						neflags="nud stale"
+						;;
+					  *)
+						neflags="nud permanent"
+						;;
+					esac
+					if ! /sbin/ip neigh add $host lladdr $hwaddr $neflags dev $arpdev; then
+						rc=1
+					fi
+				done
+			fi
+			if [ "$rc" -gt 0 ]; then
+				fail
+			fi
+		fi
+	fi
+}
+
+static_rarp()
+{
+	if is_yes "$STATIC_RARP"; then
+		if [ ! -e /proc/net/rarp ]; then
+			_modprobe single -k rarp
+		fi
+		if [ -r /etc/ethers -a -x /sbin/rarp ]; then
+			run_cmd "Setting static RARP entries" /sbin/rarp -f /etc/ethers
+		fi
+	fi
+}
+
+vlan_setup()
+{
+	if [ -x /sbin/vconfig -a -e /proc/net/vlan/config ] && `echo $DEVICE | grep -q ^eth`; then
+		/sbin/vconfig set_name_type DEV_PLUS_VID_NO_PAD 2>&1 > /dev/null
+		ETH_VLANS="yes"
+	else
+		ETH_VLANS="no"
+	fi
+}
+
+# Set up all IP && IP parameter variables
+setup_ip_param ()
+{
+	# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
+	if [ -z "$DEVICETYPE" ]; then
+		DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*\.?[0-9]*$/,NUL); print $0 } ')
+	fi
+
+	# Setup DEVICETYPE for special cases.
+	if (echo ${DEVICE} | LC_ALL=C egrep -q '^[a-z0-9]+\.[0-9]+$'); then
+		DEVICETYPE=vlan
+	fi
+
+	# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
+	DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
+
+	eval IP4ADDR="\$IPADDR${IP4_PRIM_IF:-}"
+	if echo "${IP4ADDR}" | grep -q ":" ; then
+		IP6ADDR=${IP4ADDR}
+		IP4ADDR=""
+	else
+		eval IP4ADDROPT="\$IP_AOPTS${IP4_PRIM_IF:-}"
+		eval IP4ROUTEOPT="\$IP_ROPTS${IP4_PRIM_IF:-}"
+	fi
+	if [ -n "${IP6_PRIM_IF}" ] ; then
+		eval IP6ADDR="\$IPADDR${IP6_PRIM_IF:-}"
+		eval IP6ADDROPT="\$IPV6_AOPTS${IP6_PRIM_IF:-}"
+	fi
+	if [ -n "${IP4_SRC_IF}" ] ; then
+		eval IP4SRCADDR="\$IPADDR${IP4_SRC_IF}"
+		IP4SRCADDR=$(echo ${IP4SRCADDR} | awk ' { gsub(/\/.*/,NIL); print "src " $0; } ')
+	fi
+	if [ -n "${IP6_SRC_IF}" ] ; then
+		eval IP6SRCADDR="\$IPADDR${IP6_SRC_IF}"
+		IP6SRCADDR=$(echo ${IP6SRCADDR} | awk ' { gsub(/\/.*/,NIL); print "src " $0; } ')
+	fi
+
+	# new rc-scripts 0.4.x option
+	if [ -z "$HANDLING" ]; then
+		HANDLING=0
+	fi
+
+	# set handling for bridge
+	case "$DEVICETYPE" in
+	  br|atm|lec|irda|vlan)
+		HANDLING=1
+		;;
+	esac
+
+	# Multicast ready devices
+	if is_yes "$MULTICAST"; then
+		MULTICAST="on"
+	else
+		case "$DEVICETYPE" in
+		  eth|br)
+			MULTICAST="on"
+			;;
+		  *)
+			MULTICAST="off"
+			;;
+		esac
+	fi
+
+	# ARP ready devices
+	if [ -n "$ARP" ] ; then
+		if is_yes "$ARP"; then
+			ARP="arp on"
+		else
+			ARP="arp off"
+		fi
+	fi
+}
+
+check_device_down ()
+{
+	if (ip link show dev ${DEVICE} 2> /dev/null | grep -q UP); then
+		return 1
+	else
+		return 0
+	fi
+}
+
+setup_ip_gw_ro ()
+{
+	# IPv4 gateway
+	if is_yes "$IPV4_NETWORKING"; then
+		if [ -z "${GATEWAYDEV}" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
+			# set up default gateway
+			if [ -n "${GATEWAY}" ]; then
+				ip -4 route add default via ${GATEWAY} dev ${DEVICE} ${IP4SRCADDR} onlink 2>/dev/null
+				if [ $? = 0 ]; then
+					DEFGW=${GATEWAY}
+				else
+					# The default gateway could be set via eth0, while bringing up eth1 we shouldn't set default gateway again.
+					# To prevent this message just set GATEWAYDEV=eth0 in /etc/sysconfig/network.
+					nls "Warning: Default gateway already set proably via other interface. Do you need to setup GATEWAYDEV?"
+				fi
+			elif [ "${GATEWAYDEV}" = "${DEVICE}" ]; then
+				ip -4 route add default dev ${DEVICE} ${IP4SRCADDR}
+			fi
+		fi
+	fi
+
+	# IPv6 gateway && IPv6 globalroute
+	if is_yes "$IPV6_NETWORKING"; then
+		if [ -z "${GATEWAY6DEV}" -o "${GATEWAY6DEV}" = "${DEVICE}" ]; then
+			# set up default gateway
+			if [ -n "${GATEWAY6}" ]; then
+				ip -6 route add default via ${GATEWAY6} dev ${DEVICE} ${IP6SRCADDR} onlink
+				DEFGW6=${GATEWAY6}
+			elif [ "${GATEWAY6DEV}" = "${DEVICE}" ]; then
+				ip -6 route add default dev ${DEVICE} ${IP6SRCADDR}
+			fi
+		fi
+		if [ -z "${IPV6_GLOBALROUTEDEV}" -o "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
+			# set up default route
+			if [ -n "${IPV6_GLOBALROUTEGW}" ]; then
+				ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR} onlink
+			elif [ "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
+				ip -6 route add 2000::/3 dev ${DEVICE} ${IP6SRCADDR}
+			fi
+		fi
+	fi
+}
+
+#
+# following function sets up routes not associated to any device
+# eg. unreachable or blackhole routes
+# (c) 1999 Jacek Konieczny <jajcus@pld-linux.org>
+#
+setup_routes()
+{
+	typeset args
+
+	if [ -f /etc/sysconfig/static-routes ]; then
+		if [ "$1" = "on" -o "$1" = "yes" ] ; then
+			egrep "^(none|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+				/sbin/ip route add $args
+			done
+		else
+			egrep "^(none|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+				/sbin/ip route del $args 2>/dev/null
+			done
+		fi
+	fi
+}
+
+# Add ONLY IPv4 address (IPv6 address is added automaticly)
+set_up_loopback()
+{
+	if is_yes "$IPV4_NETWORKING"; then
+		ip addr add 127.0.0.1/8 dev lo
+	fi
+	ip link set dev lo up
+}
+
+set_down_loopback()
+{
+	ip addr flush dev lo 2>&1 | grep -v "Nothing to flush"
+	ip link set dev lo down
+}
+
+modprobe_net()
+{
+	if is_yes "$IPV6_NETWORKING" && is_module "ipv6"; then
+		_modprobe single -k ipv6
+	fi
+
+	if is_yes "$IPX" && is_module "ipx"; then
+		_modprobe single -k ipx
+	fi
+}
+
+#
+# folowing function calculates network prefix from given network mask
+# (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
+#
+calcprefix()
+{
+	typeset len olen bad prefix
+
+	prefix=0
+	olen=8
+	bad=0
+	for i in 1 2 3 4; do
+		len=0
+		j=$(echo "$1" | awk -F"." "{ print \$${i} }")
+		case "$j" in
+		  255)	len=8 ;;
+		  254)	len=7 ;;
+		  252)	len=6 ;;
+		  248)	len=5 ;;
+		  240)	len=4 ;;
+		  224)	len=3 ;;
+		  192)	len=2 ;;
+		  128)	len=1 ;;
+		  0)	len=0 ;;
+		  *)	len=300 ;;
+		esac
+		[ "$len" -gt "$olen" ] && bad=1
+		prefix=$(($prefix + $len))
+		olen=$len
+	done
+
+	if [ "$bad" = "0" ]; then
+		echo "$prefix"
+	else
+		echo "32"
+	fi
+	return
+}
+
+#
+# folowing function calculates network mask from given prefix
+# (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
+#
+calcnetmask()
+{
+	typeset prefix a MASK
+
+	MASK=""
+	if [ "`echo "${1}" | grep "^[0-9]"`" = "" ]; then
+		prefix=32
+	else
+		typeset -i prefix=$1
+	fi
+	for i in 1 2 3 4; do
+		case $prefix in
+		  7)	a=254 ;;
+		  6)	a=252 ;;
+		  5)	a=248 ;;
+		  4)	a=240 ;;
+		  3)	a=224 ;;
+		  2)	a=192 ;;
+		  1)	a=128 ;;
+		  *)
+			[ $prefix -ge 8 ] && a=255
+			[ $prefix -le 0 ] && a=0
+			;;
+		esac
+
+		prefix="$(( $prefix - 8))"
+		if [ -z "$MASK" ]; then
+			MASK=$a
+		else
+			MASK=$MASK.$a
+		fi
+	done
+
+	echo $MASK
+	return
+}
+
+# Retrievies PPPD PID and real interface name from /var/run/ppp-*.pid
+get_ppp_device_and_pid ()
+{
+	if [ -f "/var/run/ppp-$DEVNAME.pid" ] ; then
+		eval `{
+			read PID ; echo "PID='$PID'"
+			read REALDEVICE ; echo "REALDEVICE=$REALDEVICE"
+		} < "/var/run/ppp-$DEVNAME.pid"`
+	fi
+
+	if [ -z "$REALDEVICE" ] ; then
+		REALDEVICE=$DEVICE
+	fi
+}
+
+# following function setups advanced routing rules
+# Olgierd Pieczul <wojrus@pld-linux.org>
+setup_ip_rules ()
+{
+	typeset args prio from src
+
+	if [ -f /etc/sysconfig/static-routes ] ; then
+		if is_yes "$1"; then
+			egrep "^(from|to|iif|tos|fwmark|dev|pref|priority|prio)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
+				/sbin/ip rule add $args
+			done
+		elif is_no "$1"; then
+			/sbin/ip rule show | egrep -v -e "from all lookup (main|default|local) \$" -e " map-to " | while read prio from src args; do
+				[ "$src" == "all" ] && ip rule delete $args || ip rule delete $from $src $args
+			done
+		fi
+	fi
+}
+
+is_wireless_device ()
+{
+	if [ -x /sbin/iwconfig ]; then
+		LC_ALL=C iwconfig "${1}" 2>&1 | grep -q "no wireless extensions" || return 0
+	fi
+	return 1
+}
+
+wireless_param ()
+{
+	device="$1"
+	if [ "$2" = "br" ]; then
+		prefix="${device}_"
+	else
+		prefix=""
+	fi
+
+	if [ -z "$(eval echo \$${prefix}WLAN_NICKNAME)" ]; then
+		 WLAN_NICKNAME="$(hostname -f 2>/dev/null || hostname 2>/dev/null || echo localhost)"
+	else
+		 WLAN_NICKNAME="$(eval echo \$${prefix}WLAN_NICKNAME)"
+	fi
+
+	# wlan mode needs to be first
+	[ -n "$(eval echo \$${prefix}WLAN_MODE)" ] && \
+		iwconfig ${device} mode "$(eval echo \$${prefix}WLAN_MODE)"
+	iwconfig ${device} nick ${WLAN_NICKNAME}
+	[ -n "$(eval echo \$${prefix}WLAN_NWID)" ] && \
+		iwconfig ${device} nwid "$(eval echo \$${prefix}WLAN_NWID)"
+	if [ -n "$(eval echo \$${prefix}WLAN_FREQ)" -a "$(eval echo \$${prefix}${WLAN_MODE})" != "Managed" ] ; then
+		iwconfig ${device} freq "$(eval echo \$${prefix}WLAN_FREQ)"
+	elif [ -n "$(eval echo \$${prefix}WLAN_CHANNEL)" -a "$(eval echo \$${prefix}${WLAN_MODE})" != "Managed" ]; then
+		iwconfig ${device} channel "$(eval echo \$${prefix}WLAN_CHANNEL)"
+	fi
+	[ -n "$(eval echo \$${prefix}WLAN_SENS)" ] && \
+		iwconfig ${device} sens "$(eval echo \$${prefix}WLAN_SENS)"
+	[ -n "$(eval echo \$${prefix}WLAN_AP)" ] && \
+		iwconfig ${device} ap "$(eval echo \$${prefix}WLAN_AP)"
+	[ -n "$(eval echo \$${prefix}WLAN_BITRATE)" ] && \
+		iwconfig ${device} rate "$(eval echo \$${prefix}WLAN_BITRATE)"
+	[ -n "$(eval echo \$${prefix}WLAN_RTS_THRESHOLD)" ] && \
+		iwconfig ${device} rts "$(eval echo \$${prefix}WLAN_RTS_THRESHOLD)"
+	[ -n "$(eval echo \$${prefix}WLAN_FRAGMENTATION_THRESHOLD)" ] && \
+		iwconfig ${device} frag "$(eval echo \$${prefix}WLAN_FRAGMENTATION_THRESHOLD)"
+	if [ -n "$(eval echo \$${prefix}WLAN_KEY)" ]; then
+		iwconfig ${device} key "$(eval echo \$${prefix}WLAN_KEY)"
+		[ -n "$(eval echo \$${prefix}WLAN_ENCRYPTION)" ] && \
+			iwconfig ${device} key "$(eval echo \$${prefix}WLAN_ENCRYPTION)"
+	fi
+	if is_no "$(eval echo \$${prefix}WLAN_ENCRYPTION)"; then
+		iwconfig ${device} key off
+	fi
+	[ -n "$(eval echo \$${prefix}WLAN_POWER)" ] && \
+		iwconfig ${device} power "$(eval echo \$${prefix}WLAN_POWER)"
+	[ -n "$(eval echo \$${prefix}WLAN_TXPOWER)" ] && \
+		iwconfig ${device} txpower "$(eval echo \$${prefix}WLAN_TXPOWER)"
+	[ -n "$(eval echo \$${prefix}WLAN_RETRY)" ] && \
+		iwconfig ${device} retry "$(eval echo \$${prefix}WLAN_RETRY)"
+	[ -n "$(eval echo \$${prefix}WLAN_NWID)" ] && iwconfig ${device} \
+		nwid "$(eval echo \$${prefix}WLAN_NWID)"
+
+	# essid should be last due to network rescanning by wlan devices
+	[ -n "$(eval echo \$${prefix}WLAN_ESSID)" ] && iwconfig ${device} \
+		essid "$(eval echo \$${prefix}WLAN_ESSID)"
+
+	if is_yes "$(eval echo \$${prefix}WLAN_COMMIT)"; then
+		iwconfig ${device} commit
+	fi
+}
+
+check_mii_tool ()
+{
+	[ -x /sbin/mii-tool ] || return 2
+	output=$(LC_ALL=C mii-tool $1 2>&1)
+	echo $output | LC_ALL=C grep -q "link ok" && return 1
+	echo $output | LC_ALL=C grep -q "no link" && return 0 || return 2
+}
+
+check_ethtool ()
+{
+	[ -x /sbin/ethtool ] || return 2
+	output=$(LC_ALL=C ethtool $1 2>&1)
+	echo $output | LC_ALL=C grep -q "Link detected: yes" && return 1
+	echo $output | LC_ALL=C grep -q "Link detected: no" && return 0 || return 2
+}
+
+check_iwconfig ()
+{
+	[ -x /sbin/iwconfig ] || return 2
+	output=$(LC_ALL=C iwconfig $1 2>&1)
+	echo $output | LC_ALL=C grep -q "radio off" && return 0 || return 2
+}
+
+check_link_down ()
+{
+	if [ -x /sbin/mii-tool -o -x /sbin/ethtool -o -x /sbin/iwconfig ]; then
+		if ! LC_ALL=C ip link show dev $1 2>/dev/null| grep -q UP ; then
+			ip link set dev $1 up >/dev/null 2>&1
+			timeout=0
+			while [ $timeout -le 10 ]; do
+				check_mii_tool $1
+				m=$?
+				check_ethtool $1
+				e=$?
+				check_iwconfig $1
+				i=$?
+				if [ $m -eq 1 ] || [ $e -eq 1 ] ; then
+					return 1
+				fi
+				if [ $m -eq 2 ] && [ $e -eq 2 ] && [ $i -eq 2 ]; then
+					return 1
+				fi
+				usleep 500000
+				timeout=$((timeout+1))
+			done
+			return 0
+		fi
+	fi
+	return 1
+}
+
+# This must be last line !
+# vi:syntax=sh

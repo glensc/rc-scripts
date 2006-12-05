@@ -1,0 +1,6 @@
+#!/bin/sh
+# $Id$
+# You can put here anything :)
+#
+echo "+---------------------------------------------------------------+" >> /var/log/ppp.log
+echo " Connect time: `date` with $PPP_REMOTE                    " >> /var/log/ppp.log

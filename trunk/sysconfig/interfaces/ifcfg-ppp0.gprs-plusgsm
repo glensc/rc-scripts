@@ -1,0 +1,26 @@
+# $Id$
+#
+DEVICE=ppp0
+CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0
+ONBOOT=no
+HARDFLOWCTL=yes
+# ircomm0 for IRDA, rfcomm0 for BlueTooth
+MODEMPORT=/dev/ircomm0
+LINESPEED=115200
+AUTH=no
+#QDISC="sfq quantum 1500b perturb 5"
+DEBUG=yes
+DEFROUTE=yes
+PERSIST=no
+HOLDOFF=10
+#demand option not finished yet ;-(
+DEMAND=no
+#ACTIVEFILTER=
+#IDLE=
+PHONE='*99***1#'
+USER=plusgsm
+PASSWORD=plusgsm
+INITSTRING='AT+CGDCONT=1,"IP","www.plusgsm.pl","",0,0'
+DATAFORCHAT="USER PASSWORD INITSTRING PHONE"
+
+REPORTFILE=/var/log/ppp0.log

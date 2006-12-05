@@ -1,0 +1,7 @@
+*.gmo
+*.mo
+Makefile
+Makefile.in
+cat-id-tbl.c
+rc-scripts.pot
+rc-scripts.po

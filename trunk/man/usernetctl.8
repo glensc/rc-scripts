@@ -1,0 +1,39 @@
+.TH USERNETCTL 8 "Red Hat, Inc." "RHS" \" -*- nroff -*-
+.SH NAME
+usernetctl \- allow a user to manipulate a network interface if permitted
+.SH SYNOPSIS
+.B usernetctl
+\fIinterface-name\fP up\fI|\fPdown\fI|\fPreport
+.SH DESCRIPTION
+.B usernetctl
+checks to see if users are allowed to manipulate the network interface
+specified by \fIinterface-name\fP, and then tries to bring the network
+interface up or down, if up or down was specified on the command line,
+or returns true or false status (respectively) if the report option was
+specified.
+
+.B usernetctl
+is not really meant to be called directly by users, though it currently
+works fine that way.  It is used as a wrapper by the ifup and ifdown
+scripts, so that users can do exactly the same thing as root:
+.nf
+ifup \fIinterface-name\fP
+ifdown \fIinterface-name\fP
+.fi
+and \fBifup\fP and \fBifdown\fP will call usernetctl automatically to
+allow the interface status change.
+.SH OPTIONS
+.TP
+.I "\fIinterface-name"
+The name of the network interface to check; for example, "ppp0".  For
+backwards compatibility, "ifcfg-ppp0" and
+"/etc/sysconfig/network-scripts/ifcfg-ppp0" are also supported.
+.TP
+up\fI|\fPdown
+Attempt to bring the interface up or down.
+.TP
+report
+Report on whether users can bring the interface up or down.
+.SH NOTES
+Alternate device configurations may inherit the default configuration's
+permissions.

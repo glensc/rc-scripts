@@ -1,0 +1,51 @@
+	$Id$
+
+rc-scripts is a derivative of the initscripts 3.78 release by
+RedHat Software, but with bugs removed and newer features added.
+
+To use rc-scripts you need packages such as: mktemp, modutils
+(at least 2.1.121), textutils, sh-utils, mawk (at least 1.3.3;
+other awk implementations are not tested), procps, sed, e2fsprogs,
+gettext.
+
+If you want to use networking with rc-scripts you need
+compile few features such as:
+
+Networking options  --->
+	 [*] Kernel/User netlink socket
+	 [*]   Routing messages
+
+into your kernel and install Alexey Kuznetsov iproute2 package.
+To use IPv6 networking you should compile:
+
+Networking options  --->
+	<*/M>   The IPv6 protocol (EXPERIMENTAL)
+	 [*]      IPv6: enable EUI-64 token format     
+	 [*]        IPv6: disable provider based addresses 
+
+too. 
+
+Other required or suggested packages:
+
+| What?       | Package                       |
++-------------+-------------------------------+
+  IPX		ncfps
+  fourtun	fourtun and kernel module
+  bridge	bridge-utils
+  wireless	wireless-tools
+  IrDA		irda-utils
+  serial/ppp	ppp, dip, wvdial
+  serial/slip	slattach
+  PPPoE		pppd + rp-pppoe (plugin or userspace program)
+  
+Also you should know that format of interface configuration
+files is totally different from these used in RedHat/Mandrake
+initscripts and even from stable rc-scripts branch.
+
+If you have some bug reports or suggestions please send email
+to rc-scripts maintainers at <pld-rc-scripts@pld-linux.org> or
+use our Bug Tracking System ( http://bugs.pld-linux.org/ ).
+
+-- 
+PLD Linux Distribution rc-scripts Team
+

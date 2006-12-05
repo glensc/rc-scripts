@@ -1,0 +1,12 @@
+# Default PLD Linux colors.
+
+CBRACKETS="$CYAN"	# brackets [ ] color
+CDONE="$GREEN"		# DONE and WORK color
+CBUSY="$MAGENTA"	# BUSY color
+CFAIL="$RED"		# FAIL and DIED color
+CPOWEREDBY="$CYAN"	# "Powered by" color
+CPLD="$GREEN"		# "PLD Linux Distribution" color
+CI="$RED"		# Capital I color (press I to enter interactive startup)
+CRESMAN="$GREEN"	# "Resource Manager" color
+CHARS=""		# Characters displayed on the begining of show line
+CCHARS="$NORMAL"	# Color of these characters (look at /usr/share/doc/rc-scripts-*/init-colors.gentoo.gz example)

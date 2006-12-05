@@ -1,0 +1,152 @@
+#!/bin/sh
+#
+# shutdwn	Common script for system halt/reboot.
+#
+# Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+# Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
+#		Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
+#
+# $Id$
+
+# Set the path.
+PATH=/sbin:/bin:/usr/bin:/usr/sbin
+
+# move to root dir
+cd /
+
+IN_SHUTDOWN=yes
+
+. /etc/rc.d/init.d/functions
+
+# avoid keyboard interruption
+trap "echo" INT SEGV QUIT TERM
+set +e
+
+rc_splash "reboot"
+
+# Kill all processes.
+[ "${BASH+bash}" = bash ] && enable kill
+
+runlevel=$1
+previous=$2
+
+# check for other processes.
+# there could be none if all services were terminated properly
+# pgrep -g 0 requires procps >= 3.2.6-1.1
+pids=$(pgrep -g 0 -l -v | grep -v '^1 ')
+if [ -n "$pids" ]; then
+	run_cmd "Sending all processes the TERM signal" killall5 -15
+fi
+
+pids=$(pgrep -g 0 -l -v | grep -v '^1 ')
+if [ -n "$pids" ]; then
+	sleep 5
+	run_cmd "Sending all processes the KILL signal" killall5 -9
+fi
+
+# Write to wtmp file before unmounting /var
+halt -w
+
+if ! is_yes "$VSERVER"; then
+	# Turn off swap, then unmount file systems.
+	run_cmd "Turning off swap" swapoff -a
+
+	[ -x /etc/rc.d/rc.acct ] && /etc/rc.d/rc.acct stop
+
+	if [ -x /sbin/quotaoff ]; then
+		run_cmd "Turning off quotas for local filesystems" /sbin/quotaoff -a
+	fi
+
+	# Unmount file systems, killing processes if we have to.
+	sig=-15
+	retry=3
+	force=
+	remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+	while [ -n "$remaining" -a "$retry" -gt 0 ]
+	do
+		show "Unmounting file systems" ; busy
+		if ERRORS=$(umount -a $FORCE -t noproc,devfs 2>&1) ; then
+			ok
+		else
+			fail
+			[ -n "$ERRORS" ] && echo "$ERRORS"
+		fi
+
+		sleep 2
+		remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+		[ -z "$remaining" ] && break
+		/sbin/fuser -k -m $sig $remaining > /dev/null
+		sleep 5
+		retry=$(($retry-1))
+		sig=-9
+		force="-f"
+	done
+
+	run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
+
+	if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
+		lvmversion=$(/sbin/vgchange --version 2>/dev/null | awk '{gsub("vgchange: Logical Volume Manager ",""); gsub("LVM version:     ",""); gsub(/\..*/,"");print $1; exit}')
+		if [ "$lvmversion" = "2" ] ; then
+			lvmignorelock="--ignorelockingfailure"
+		else
+			lvmignorelock=""
+		fi
+		run_cmd "Stopping LVM volume groups" /sbin/vgchange -a n $lvmignorelock
+	fi
+
+	goraidtab=1
+	if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
+		if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null); then
+			run_cmd "Turning off RAID devices" /sbin/mdadm --stop --scan
+			rc=$?
+			[ "$rc" -eq 0 ] && goraidtab=0
+		fi
+	fi
+
+	# turn off raid
+	if [ -x /sbin/raidstop -a -f /etc/raidtab -a "$goraidtab" -eq 1 ]; then
+		# we can not use raidstop -a here because this will only stop
+		# devices listed in the default config file which is not always
+		# the case. So we look only for the active raid devices
+		if [ -f /proc/mdstat ] ; then
+			mddevs=$(awk '/^md.* active/ {print $1}' /proc/mdstat)
+			for mddev in $mddevs ; do
+				show "Turning off RAID for %s" "$mddev"
+				daemon /sbin/raidstop /dev/$mddev
+			done
+			unset mddev mddevs
+		fi
+		# runcmd "Turning off RAID" /sbin/raidstop -a
+	fi
+
+	show "Remounting remaining filesystems ro mode"; busy
+	if ( mount | awk '/ext2|ext3|reiserfs|xfs|jfs/ { print $3 }' | \
+		while read line; do
+		mount -n -o ro,remount $line; done ); then
+		ok
+	else
+		fail
+	fi
+	_rebootwhat="system"
+else
+	_rebootwhat="vserver"
+fi
+
+if [ "$runlevel" = "0" ] ; then
+	show "The $_rebootwhat is halted"; ok
+	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+
+	if [ -x /sbin/poweroff-ups -a -f /etc/killpower -a -f /etc/sysconfig/ups ] ; then
+		. /etc/sysconfig/ups
+		is_yes "$POWEROFF_UPS" && /sbin/poweroff-ups
+	fi
+	[ "$previous" != "unknown" ] && eval halt -d -p
+else
+	show "Please stand by while rebooting the $_rebootwhat"; ok
+	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
+	[ -x /sbin/kexec ] && /sbin/kexec -e
+	[ "$previous" != "unknown" ] && eval reboot -d
+fi
+
+# This must be last line !
+# vi:syntax=sh
