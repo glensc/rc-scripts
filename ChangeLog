@@ -1,3 +1,107 @@
+2006-11-27 12:36 +0000 [r8006]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Revert remounting based on /proc/mounts entries
+	  (current rootfs state is not reflected there).
+
+2006-11-26 14:35 +0000 [r7999]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* AUTHORS: Readd timezone setup & resolvesymlink to Paweł Wilk.
+
+2006-11-26 10:05 +0000 [r7998]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* AUTHORS, src/Makefile.am: Fix resolvesymlink_SOURCE typo. Updated
+	  Paweł Wilk email address.
+
+2006-11-26 10:02 +0000 [r7997]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, AUTHORS, src/pci-config.c (removed), po/pl.po,
+	  rc-scripts.spec.in, src/Makefile.am, rc.d/init.d/functions:
+	  Revert nVidia madness. rc-scripts is not a place for such
+	  workaround.
+
+2006-11-26 08:06 +0000 [r7993]  Paweł Wilk <siefca/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - small improvement in
+	  forcedeth_wourkaround()
+
+2006-11-25 20:36 +0000 [r7992]  Paweł Wilk <siefca/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - added important check in
+	  forcedeth_workaround() which detects co-working drivers
+
+2006-11-25 16:01 +0000 [r7991]  Paweł Wilk <siefca/at/pld-linux.org>
+
+	* po/pl.po: - added translation for WOL work-around message
+
+2006-11-25 12:09 +0000 [r7989]  Paweł Wilk <siefca/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, AUTHORS, src/pci-config.c (added),
+	  rc-scripts.spec.in, src/Makefile.am, rc.d/init.d/functions: -
+	  added Wake-On-Lan work-around for nForce ethernet drivers - added
+	  pci-config utility which allows power state manipulation and
+	  devices listing
+
+2006-11-19 15:45 +0000 [r7986]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysctl.conf: Add dev.rtc.max-user-freq.
+
+2006-11-01 22:53 +0000 [r7938]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Ignore errors if msg cachefile can not be
+	  written (functions sourced by non-root user of readonly
+	  filesystem).
+
+2006-11-01 13:23 +0000 [r7931]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Avoid "RTNETLINK
+	  answers: File exists" message and say possible cause instead.
+
+2006-11-01 13:09 +0000 [r7930]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: Pointless subshell dropped
+
+2006-11-01 00:35 +0000 [r7926]  Paweł Gołaszewski <blues/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: - more docs
+
+2006-10-23 14:11 +0000 [r7894]  Marcin Winkler <mwinkler/at/pld-linux.org>
+
+	* rc.d/init.d/network: - fix s@usb@usr@
+
+2006-10-19 14:15 +0000 [r7878]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Avoid heredoc, pdksh makes tmpfile then.
+
+2006-10-19 13:06 +0000 [r7875]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Fix syntax errors.
+
+2006-10-19 09:55 +0000 [r7871]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Simplify.
+
+2006-10-18 20:02 +0000 [r7869]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Detect more posible cases when rootfs is read
+	  only.
+
+2006-10-18 12:22 +0000 [r7868]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Avoid bringing down
+	  eth0 in case of bad config.
+
+2006-10-18 11:55 +0000 [r7867]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: Remove ifcfg- prefix from interface names.
+
+2006-10-15 11:22 +0000 [r7856]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/tnlup: Load sit module for sit tunnels.
+
+2006-10-13 06:34 +0000 [r7853]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Prepare for 0.4.1.1 (beta1).
+
 2006-10-13 06:23 +0000 [r7851-7852]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* man/Makefile.am: Add getkey.1
