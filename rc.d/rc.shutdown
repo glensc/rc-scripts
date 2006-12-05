@@ -62,10 +62,19 @@ if ! is_yes "$VSERVER"; then
 	retry=3
 	force=
 	remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
-	while [ -n "$remaining" -a "$retry" -gt 0 ]
-	do
-		show "Unmounting file systems" ; busy
-		if ERRORS=$(umount -a $FORCE -t noproc,devfs 2>&1) ; then
+	while [ -n "$remaining" -a "$retry" -gt 0 ]; do
+	 	show "Unmounting file systems"; busy
+		ERRORS=$(umount -a $FORCE -t noproc,devfs 2>&1); rc=$?
+
+		# we might had unmounted /usr, recheck $TPUT availability
+		# but well. we need tput only for show() and busy() (ok() and fail() messages are already cached)
+		# TODO: look ahead the messages?
+		if is_yes "$TPUT"; then
+			TPUT=
+			rc_gettext_init
+		fi
+
+		if [ $rc = 0 ]; then
 			ok
 		else
 			fail
