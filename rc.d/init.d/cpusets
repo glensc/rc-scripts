@@ -25,7 +25,7 @@ fi
 
 if is_yes "${CPUSETS}" && ! grep -q "/dev/cpuset" /proc/mounts ; then
 	nls "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted" >&2
-	exit 0
+	exit 1
 fi
 
 cpuset_create()
