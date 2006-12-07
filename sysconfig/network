@@ -2,9 +2,6 @@
 ######################################################################
 # MAIN PART
 
-# Do you need IPv4 or IPv6 networking ?
-NETWORKING=yes
-
 # Do you need IPv4 networking ?
 IPV4_NETWORKING=yes
 
