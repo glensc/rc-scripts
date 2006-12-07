@@ -8,6 +8,9 @@
 # Bring down all unneeded services that are still running (there shouldn't
 # be any, so this is just a sanity check)
 
+# First set up a default search path.
+export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+
 case "$1" in
   start*)
 	exit 0
