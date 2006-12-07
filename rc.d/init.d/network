@@ -112,8 +112,7 @@ network_deinit()
 
 # Get list of interface configs
 # ignores editor backup files and rpm blackups
-network_interface_configs()
-{
+network_interface_configs() {
 	local match="$1"
 	for a in /etc/sysconfig/interfaces/$match; do
 		case "$a" in
@@ -125,6 +124,75 @@ network_interface_configs()
 		;;
 		esac
 	done
+}
+
+find_boot_interfaces() {
+	ifcfg_files="$(network_interface_configs 'ifcfg-*')"
+	bootprio=$(grep '^BOOTPRIO=' $ifcfg_files)
+
+	if [ -n "$bootprio" ]; then
+		# find all the interfaces besides loopback.
+		interfaces_boot=`
+			for a in $(echo "$bootprio" | sort -t= -n -k2,2); do
+				i="${a%:BOOTPRIO*}"
+				case $i in
+					*ifcfg-lo) continue ;;
+				esac
+				ONBOOT=""; . "$i" 2>/dev/null
+				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+			done
+		`
+	else
+		interfaces_boot=`
+			for i in $ifcfg_files; do
+				case ${i##*/} in
+					ifcfg-lo|ifcfg-sit*|ifcfg-atm*|ifcfg-lec*|ifcfg-nas*|ifcfg-br*|ifcfg-*.*) continue ;;
+				esac
+				ONBOOT=""; . "$i" 2>/dev/null
+				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+			done
+		`
+
+		interfaces_vlan_boot=`
+			for i in $ifcfg_files; do
+				case ${i##*/} in
+					ifcfg-*.*) ;;
+					*) continue ;;
+				esac
+				ONBOOT=""; . "$i" 2>/dev/null
+				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+			done
+		`
+
+		interfaces_br_boot=`
+			for i in $ifcfg_files; do
+				case ${i##*/} in
+					ifcfg-br*) ;;
+					*) continue ;;
+				esac
+				ONBOOT=""; . "$i" 2>/dev/null
+				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+			done
+		`
+
+		interfaces_sit_boot=`
+			for i in $ifcfg_files; do
+				case ${i##*/} in
+					ifcfg-sit*) ;;
+					*) continue ;;
+				esac
+				ONBOOT=""; . "$i" 2>/dev/null
+				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+			done
+		`
+	fi
+
+	tunnels=`
+		for i in $(network_interface_configs 'tnlcfg-*'); do
+			ONBOOT=""; . "$i" 2>/dev/null
+			is_yes "$ONBOOT" && echo "${i##*/tnlcfg-}"
+		done
+	`
 }
 
 start() {
@@ -188,76 +256,6 @@ stop() {
 	network_deinit
 
 	rm -f /var/lock/subsys/network
-}
-
-
-find_boot_interfaces() {
-ifcfg_files="$(network_interface_configs 'ifcfg-*')"
-bootprio=$(grep '^BOOTPRIO=' $ifcfg_files)
-
-if [ -n "$bootprio" ]; then
-	# find all the interfaces besides loopback.
-	interfaces_boot=`
-		for a in $(echo "$bootprio" | sort -t= -n -k2,2); do
-			i="${a%:BOOTPRIO*}"
-			case $i in
-				*ifcfg-lo) continue ;;
-			esac
-			ONBOOT=""; . "$i" 2>/dev/null
-			is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
-		done
-	`
-else
-	interfaces_boot=`
-		for i in $ifcfg_files; do
-			case ${i##*/} in
-				ifcfg-lo|ifcfg-sit*|ifcfg-atm*|ifcfg-lec*|ifcfg-nas*|ifcfg-br*|ifcfg-*.*) continue ;;
-			esac
-			ONBOOT=""; . "$i" 2>/dev/null
-			is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
-		done
-	`
-
-	interfaces_vlan_boot=`
-		for i in $ifcfg_files; do
-			case ${i##*/} in
-				ifcfg-*.*) ;;
-				*) continue ;;
-			esac
-			ONBOOT=""; . "$i" 2>/dev/null
-			is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
-		done
-	`
-
-	interfaces_br_boot=`
-		for i in $ifcfg_files; do
-			case ${i##*/} in
-				ifcfg-br*) ;;
-				*) continue ;;
-			esac
-			ONBOOT=""; . "$i" 2>/dev/null
-			is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
-		done
-	`
-
-	interfaces_sit_boot=`
-		for i in $ifcfg_files; do
-			case ${i##*/} in
-				ifcfg-sit*) ;;
-				*) continue ;;
-			esac
-			ONBOOT=""; . "$i" 2>/dev/null
-			is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
-		done
-	`
-fi
-
-tunnels=`
-	for i in $(network_interface_configs 'tnlcfg-*'); do
-		ONBOOT=""; . "$i" 2>/dev/null
-		is_yes "$ONBOOT" && echo "${i##*/tnlcfg-}"
-	done
-`
 }
 
 find_boot_interfaces
