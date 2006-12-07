@@ -10,14 +10,21 @@
 
 # $Id$
 
+. /etc/sysconfig/system
+
+if [ "${CPUSETS:-no}" = "no" ]; then
+   	case "$1" in
+	start|stop|restart)
+		exit 0
+		;;
+	esac
+fi
+
 # Source function library.
 . /etc/rc.d/init.d/functions
 
-if is_yes "${CPUSETS}" ; then
-	if ! grep -q "/dev/cpuset" /proc/mounts ; then
-		nls "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted" >&2
-	fi
-else
+if is_yes "${CPUSETS}" && ! grep -q "/dev/cpuset" /proc/mounts ; then
+	nls "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted" >&2
 	exit 0
 fi
 
@@ -68,7 +75,7 @@ cpuset_empty()
 start() {
   	rc_splash "bootcpusets start"
 
-	for i in $cpusets_boot ; do
+	for i in $cpusets_boot; do
 		show "$(nls -n "Creating cpuset %s" "$i")"
 		if cpuset_create $i ; then
 			ok
@@ -81,11 +88,11 @@ start() {
 }
 
 stop() {
-	for i in $cpusets_boot ; do
+	for i in $cpusets_boot; do
 		show "$(nls -n "Removing cpuset %s" "$i")"
 		busy
-		if cpuset_empty $i ; then
-			if cpuset_remove $i ; then
+		if cpuset_empty $i; then
+			if cpuset_remove $i; then
 				ok
 			else
 				fail
@@ -136,15 +143,15 @@ case "$1" in
 	echo "$cpusets_boot"
 	echo
 	nls "Currently empty cpusets:"
-	for i in `ls -1 /dev/cpuset` ; do
-		if [ -d /dev/cpuset/$i ] ; then
+	for i in `ls /dev/cpuset 2>/dev/null`; do
+		if [ -d /dev/cpuset/$i ]; then
 			cpuset_empty $i && echo $i
 		fi
 	done
 	echo
 	nls "Currently active cpusets:"
-	for i in `ls -1 /dev/cpuset` ; do
-		if [ -d /dev/cpuset/$i ] ; then
+	for i in `ls /dev/cpuset 2>/dev/null`; do
+		if [ -d /dev/cpuset/$i ]; then
 			cpuset_empty $i || echo $i
 		fi
 	done
