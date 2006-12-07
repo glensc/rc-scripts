@@ -1,19 +1,22 @@
 #!/bin/sh
 #
-# sys-chroots	This shell scripts starts and stops services in chroots
+# sys-chroots	Starts and stops services in chroots
 #
-# chkconfig:	2345 99 1
-# description:	This shell scripts starts and stops services in chroots
+# chkconfig:	2345 99 01
+# description:	This shell script starts and stops services in chroots
 
-# Source function library.
-. /etc/rc.d/init.d/functions
-
-# Source networking configuration.
-. /etc/sysconfig/network
-
-[ -z "$SYSTEM_CHROOTS" ] && exit 0
-[ -n "$1" ] && CMD="$1"
+[ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
 [ -n "$2" ] && SYSTEM_CHROOTS="$2"
+
+if [ -z "$SYSTEM_CHROOTS" ]; then
+   	case "$1" in
+	start|stop|restart)
+		exit 0
+		;;
+	esac
+fi
+
+CMD="$1"
 
 set $(/sbin/runlevel)
 runlevel=$2
@@ -21,6 +24,9 @@ previous=$1
 export runlevel previous
 
 [ -z "$runlevel" -o -z "$previous" -o "$runlevel" = "$previous" ] && exit 0
+
+# Source function library.
+. /etc/rc.d/init.d/functions
 
 start() {
 	if [ "$previous" = "N" ]; then
