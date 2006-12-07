@@ -21,9 +21,6 @@ fi
 
 . /etc/sysconfig/network
 
-# Check that networking is up.
-is_no "${NETWORKING}" && exit 0
-
 # Will be removed in the future
 if is_yes "$NETWORKING" ; then
 	if [ -z "$IPV4_NETWORKING" ] ; then
