@@ -23,7 +23,7 @@ fi
 
 # Will be removed in the future
 if [ -n "$NETWORKING" ] && is_yes "$NETWORKING"; then
-	if [ -z "$IPV4_NETWORKING" ] ; then
+	if [ -z "$IPV4_NETWORKING" ]; then
 		echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
 		echo "Please upgrade your config"
 		echo "Assuming you want IPv4 networking"
@@ -139,7 +139,7 @@ find_boot_interfaces() {
 					*ifcfg-lo) continue ;;
 				esac
 				ONBOOT=""; . "$i" 2>/dev/null
-				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
 	else
@@ -149,7 +149,7 @@ find_boot_interfaces() {
 					ifcfg-lo|ifcfg-sit*|ifcfg-atm*|ifcfg-lec*|ifcfg-nas*|ifcfg-br*|ifcfg-*.*) continue ;;
 				esac
 				ONBOOT=""; . "$i" 2>/dev/null
-				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
 
@@ -160,7 +160,7 @@ find_boot_interfaces() {
 					*) continue ;;
 				esac
 				ONBOOT=""; . "$i" 2>/dev/null
-				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
 
@@ -171,7 +171,7 @@ find_boot_interfaces() {
 					*) continue ;;
 				esac
 				ONBOOT=""; . "$i" 2>/dev/null
-				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
 
@@ -182,7 +182,7 @@ find_boot_interfaces() {
 					*) continue ;;
 				esac
 				ONBOOT=""; . "$i" 2>/dev/null
-				is_yes "$ONBOOT" && echo "${i##*/ifcfg-}"
+				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
 	fi
@@ -190,7 +190,7 @@ find_boot_interfaces() {
 	tunnels=`
 		for i in $(network_interface_configs 'tnlcfg-*'); do
 			ONBOOT=""; . "$i" 2>/dev/null
-			is_yes "$ONBOOT" && echo "${i##*/tnlcfg-}"
+			[ ${ONBOOT:-no} = yes ] && echo "${i##*/tnlcfg-}"
 		done
 	`
 }
@@ -199,7 +199,7 @@ start() {
 	rc_splash "bootnetwork start"
 	network_init
 
-	for i in $interfaces_boot $interfaces_vlan_boot $interfaces_sit_boot ; do
+	for i in $interfaces_boot $interfaces_vlan_boot $interfaces_sit_boot; do
 		run_cmd -a "$(nls 'Bringing up interface %s' "$i")" /sbin/ifup $i boot
 	done
 
