@@ -29,6 +29,10 @@ EXTRA_DIST = \
 	$(bin_SCRIPTS) \
 	rc-scripts.spec
 
+install-data-hook:
+	install -d $(DESTDIR)/var/cache/$(PACKAGE)
+	[ -f $(DESTDIR)/var/cache/$(PACKAGE)/msg.cache ] || touch $(DESTDIR)/var/cache/$(PACKAGE)/msg.cache
+
 # make rpms
 rpm: $(PACKAGE).spec
 	$(MAKE) dist
