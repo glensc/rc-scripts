@@ -21,7 +21,7 @@ RUN_SULOGIN_ON_ERR=yes
 # $SERVICE_RUN_NICE_LEVEL is not defined in /etc/sysconfig/<service>
 DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 
-# Default limits set before running deamons (hard and soft) if
+# Default limits set before running daemons (hard and soft) if
 # $SERVICE_LIMITS are not defined in /etc/sysconfig/<service>
 #
 # Use "-u" for process limits (automatically translated to "-p" for ksh).
