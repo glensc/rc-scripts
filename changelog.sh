@@ -22,7 +22,9 @@ fi
 
 awk -F":" ' { login=$1; if ($3 != "") { name=$3 } else { name=$1 }; email=$2; printf "%s\t%s <%s@pld-linux.org>\n", login, name, login } ' $users > $tmp
 
-svn log -v --xml | svn2log --users-charset=ISO8859-2 --domain "pld-linux.org" -p /rc-scripts/trunk -u $tmp --exclude ChangeLog -o ChangeLog
+branch=$(svn info | awk '/URL:/{print $NF}' | sed -e 's,^.*svn.pld-linux.org/svn,,')
+
+svn log -v --xml | svn2log --users-charset=ISO8859-2 --domain "pld-linux.org" -p $branch -u $tmp --exclude ChangeLog -o ChangeLog
 rm -f $tmp
 
 # obfuscate emails <user@domain> and (user@domain)
