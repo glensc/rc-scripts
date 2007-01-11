@@ -1,3 +1,17 @@
+2007-01-11 14:19 +0000 [r8149]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* changelog.sh: Autodetect svn path.
+
+2007-01-11 14:15 +0000 [r8147-8148]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* autogen.sh: Changelog generation moved to separate script.
+
+	* changelog.sh (added): Based on geninitrd/changelog.sh
+
+2007-01-11 14:11 +0000 [r8145]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* Makefile.am: Fix for make distcheck.
+
 2006-12-18 21:28 +0000 [r8111]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* sysctl.conf: Add kernel.core_uses_pid
