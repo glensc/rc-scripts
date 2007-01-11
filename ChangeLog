@@ -1,3 +1,75 @@
+2006-12-18 21:28 +0000 [r8111]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysctl.conf: Add kernel.core_uses_pid
+
+2006-12-14 08:08 +0000 [r8100-8101]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system: Typo.
+
+	* sysconfig/system: Spelling
+
+2006-12-08 12:17 +0000 [r8088]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* Makefile.am: Create /var/cache/rc-scripts/msg.cache on install.
+
+2006-12-08 12:07 +0000 [r8087]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network: Add $NETWORKING back, as it's used by a lot of
+	  initscripts
+
+2006-12-07 22:24 +0000 [r8086]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: Error exit code
+
+2006-12-07 21:52 +0000 [r8085]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: Small cosmetics.
+
+2006-12-07 21:47 +0000 [r8083-8084]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: Reindent.
+
+	* rc.d/init.d/network: Small reorganizing.
+
+2006-12-07 21:42 +0000 [r8080-8082]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network: $NETWORKING was supposed to be obsoleted.
+
+	* rc.d/init.d/network: $NETWORKING was supposed to be obsoleted.
+
+	* rc.d/init.d/sys-chroots: Optimize for faster exit if not
+	  configured.
+
+2006-12-07 21:32 +0000 [r8077-8079]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/killall: As we don't source functions, we must set
+	  sane PATH to ensure security
+
+	* rc.d/init.d/local: As we don't source functions, we must set sane
+	  PATH to ensure security
+
+	* rc.d/init.d/killall: Probability that there exists init.d/$subsys
+	  is bigger than init.d/$subsys.init.
+
+2006-12-07 21:18 +0000 [r8076]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: Exit early if cpusets not enabled in
+	  sysconfig/system.
+
+2006-12-05 17:39 +0000 [r8073]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: Fixes for /usr on separate parition (not
+	  tested!).
+
+2006-12-05 17:32 +0000 [r8072]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Store cachefile in /var, read/write errors
+	  are ignored anyway.
+
+2006-12-05 17:07 +0000 [r8070]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Release 0.4.0.2.
+
 2006-11-27 12:36 +0000 [r8006]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Revert remounting based on /proc/mounts entries
