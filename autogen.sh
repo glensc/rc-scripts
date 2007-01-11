@@ -8,36 +8,7 @@ test -z "$srcdir" && srcdir=.
 PKG_NAME="PLD Linux Distribution rc-scripts"
 
 if [ "$1" = "changelog" ]; then
-
-	[ -z "$svn2log" -a -x ~/bin/svn2log.py ] && svn2log=~/bin/svn2log.py
-	[ -z "$svn2log" -a -x /usr/bin/svn2log ] && svn2log=/usr/bin/svn2log
-	if [ -z "$svn2log" ]; then
-		echo >&2 'Need svn2log program!'
-		exit 1
-	fi
-
-    [ -n "$2" ] && dir="$2" || dir="rc-scripts"
-	# create users for svn2log format
-	tmp=$(mktemp -q svn2logXXXXXX 2>/dev/null || echo ${TMPDIR:-/tmp}/svn2log.tmp)
-	> $tmp
-
-	[ -z "$users" -a -f ../CVSROOT/users ] && users=../CVSROOT/users
-	[ -z "$users" -a -f ~/.CVS-PLD/CVSROOT/users ] && users=~/.CVS-PLD/CVSROOT/users
-	if [ -z "$users" ]; then
-		echo >&2 "Can't find users file!"
-		echo >&2 'Run in parent dir to fetch one:'
-		echo >&2 '$ cvs -d :pserver:cvs@cvs.pld-linux.org:/cvsroot co CVSROOT/users'
-		exit 1
-	fi
-
-    awk -F":" ' { login=$1; if ($3 != "") { name=$3 } else { name=$1 }; email=$2; printf "%s\t%s <%s@pld-linux.org>\n", login, name, login } ' $users > $tmp
-
-    svn log -v --xml | $svn2log --domain "pld-linux.org" -p /${dir}/trunk -u $tmp --exclude ChangeLog -o ChangeLog
-    rm -f $tmp
-
-	# obfuscate emails <user@domain> and (user@domain)
-	sed -i -e 's,\([<(].*\)@\(.*[)>]\),\1/at/\2,g' ChangeLog
-
+	./changelog.sh
     exit 0
 fi
 
