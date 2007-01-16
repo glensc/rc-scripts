@@ -61,7 +61,7 @@ brctl addbr ${DEVICE}
 # add interfaces to bridge
 for device in $BRIDGE_DEVS; do
 	brctl addif ${DEVICE} ${device}
-	ip link set dev ${DEVICE} multicast ${MULTICAST} ${ARP}
+	ip link set dev ${device} multicast ${MULTICAST} ${ARP}
 	ip link set ${device} up
 done
 
