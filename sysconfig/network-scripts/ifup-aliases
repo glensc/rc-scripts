@@ -73,12 +73,14 @@ for IP_ADDR in $IPV6_ADDR; do
 	fi
 done
 
-for nr in $(awk 'BEGIN { for (j=1; j<256; j++) print j}'); do
+for nr in $(awk 'BEGIN { max=0; }; /^IPADDR[0-9]+=/ { s = $0; gsub(/^IPADDR/, "", s); gsub(/=.*/, "", s); if (int(s) > int(max)) { max=s; }; };  END { for(j=1; j<=int(max); j++) print j } ' $CONFIG); do
+	echo $nr
 	eval IP_ADDR="\$IPADDR${nr}"
+	[ -z "$IP_ADDR" ] && continue
+
 	eval IP_ADDR_OPT="\$IP_AOPTS${nr}"
 	eval IP_ROUTE_OPT="\$IP_ROPTS${nr}"
 
-	[ -z "$IP_ADDR" ] && continue
 	# Be sure that primary address is added
 	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
 		if (ip addr show dev $DEVICE | egrep -q "[[:space:]]${IP_ADDR}[[:space:]]"); then
