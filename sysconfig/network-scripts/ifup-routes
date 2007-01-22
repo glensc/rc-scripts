@@ -2,7 +2,8 @@
 #
 #	$Id$
 #
-# adds static routes which go through device $DEVICE
+# Adds static routes which go through device $DEVICE
+# Called from ifup-post.
 
 if [ ! -f /etc/sysconfig/static-routes ]; then
 	return

@@ -2,7 +2,8 @@
 #
 #	$Id$
 #
-# adds all addresses of device $1
+# Adds all addresses of device.
+# Called from ifup-post.
 
 # Add all addresses
 for IP_ADDR in $IPADDR_ALIASES; do

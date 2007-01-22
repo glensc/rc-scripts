@@ -2,7 +2,8 @@
 #
 #	$Id$
 #
-# adds static arps for device $DEVICE
+# Adds static arps for device $DEVICE
+# Called from ifup-post.
 
 if [ ! -f /etc/sysconfig/static-arp ]; then
 	return
