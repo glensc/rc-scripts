@@ -71,6 +71,7 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 		  dhcpcd)
 			$DHCP_CLIENT -k ${DEVICE}
 			RESULT=$?
+			sleep 1
 			;;
 		  dhcpxd)
 			$DHCP_CLIENT -k ${DEVICE}
@@ -86,8 +87,6 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 			fi
 			;;
 		esac
-
-		sleep 1 # WHY?
 	fi
 fi
 
