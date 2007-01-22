@@ -74,7 +74,6 @@ for IP_ADDR in $IPV6_ADDR; do
 done
 
 for nr in $(awk 'BEGIN { max=0; }; /^IPADDR[0-9]+=/ { s = $0; gsub(/^IPADDR/, "", s); gsub(/=.*/, "", s); if (int(s) > int(max)) { max=s; }; };  END { for(j=1; j<=int(max); j++) print j } ' $CONFIG); do
-	echo $nr
 	eval IP_ADDR="\$IPADDR${nr}"
 	[ -z "$IP_ADDR" ] && continue
 
