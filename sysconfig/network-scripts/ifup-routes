@@ -11,7 +11,7 @@ fi
 
 # note the trailing white space character in the grep gets rid of aliases
 egrep "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
-	if (echo $args | grep -q ":") then
+	if [[ "$args" = *:* ]]; then
 		if is_no "$IPV6_NETWORKING"; then
 			continue
 		fi
