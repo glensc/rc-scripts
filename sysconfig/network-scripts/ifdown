@@ -59,31 +59,36 @@ if [ -x $OTHERSCRIPT ]; then
 	fi
 fi
 
-if [ "$BOOTPROTO" = "bootp" -o "$BOOTPROTO" = "pump" ]; then
-	/sbin/pump -r -i ${DEVICE}
-	RESULT=$?
-fi
+if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; then
+	if is_yes "$IPV4_NETWORKING"; then
+		set_dhcpclient
 
-if [ "$BOOTPROTO" = "dhcp" ]; then
-	if [ -x /sbin/dhcpcd ];then
-		/sbin/dhcpcd -k ${DEVICE}
-		RESULT=$?
-	elif [ -x /sbin/dhclient ];then
-		if [ -f /var/run/dhclient.pid ];then
-			PID=$(cat /var/run/dhclient.pid)
-			if ps ax --no-header|grep -q $PID;then
-				kill $PID
-				RESULT=$?
+		case ${DHCP_CLIENT##*/} in
+		  pump)
+			/sbin/pump -r -i ${DEVICE}
+			RESULT=$?
+			;;
+		  dhcpcd)
+			/sbin/dhcpcd -k ${DEVICE}
+			RESULT=$?
+			;;
+		  dhcpxd)
+			/sbin/dhcpxd -k ${DEVICE}
+			RESULT=$?
+			;;
+		  dhclient)
+			if [ -f /var/run/dhclient.pid ];then
+				PID=$(cat /var/run/dhclient.pid)
+				if ps ax --no-header | grep -q $PID; then
+					kill $PID
+					RESULT=$?
+				fi
 			fi
-		fi
-	elif [ -x /sbin/dhcpxd ];then
-		/sbin/dhcpxd -k ${DEVICE}
-		RESULT=$?
-	elif [ -x /sbin/pump ];then
-		pump -r -i ${DEVICE}
-		RESULT=$?
+			;;
+		esac
+
+		sleep 1 # WHY?
 	fi
-	sleep 1
 fi
 
 if is_wireless_device "${DEVICE}"; then

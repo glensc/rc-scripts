@@ -119,24 +119,7 @@ fi
 
 if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; then
 	if is_yes "$IPV4_NETWORKING"; then
-		if [ "$BOOTPROTO" = "bootp" -o "$BOOTPROTO" = "pump" ]; then
-			DHCP_CLIENT=/sbin/pump
-		fi
-
-		if [ -z "$DHCP_CLIENT" ]; then
-			if [ -x /sbin/dhcpcd ]; then
-				DHCP_CLIENT=/sbin/dhcpcd
-			elif [ -x /sbin/dhclient ]; then
-				DHCP_CLIENT=/sbin/dhclient
-			elif [ -x /sbin/dhcpxd ]; then
-				DHCP_CLIENT=/sbin/dhcpxd
-			elif [ -x /sbin/pump ]; then
-				DHCP_CLIENT=/sbin/pump
-			else
-				nls "Can't find a dhcp client."
-				exit 1
-			fi
-		fi
+		set_dhcpclient
 
 		DHCP_ARGS=
 		if [ -n "$DHCP_CLIENT" ]; then
