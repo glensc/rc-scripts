@@ -52,9 +52,9 @@ if [ -n "${BANDWIDTH_IN}" ]; then
 	tc filter add dev ${REALDEVICE} parent ffff: protocol ip prio 50 u32 match ip src 0.0.0.0/0 police rate ${BANDWIDTH_IN}kbit burst 10k drop flowid :3
 fi
 
-/etc/sysconfig/network-scripts/ifup-aliases ${CONFIG}
-/etc/sysconfig/network-scripts/ifup-routes ${CONFIG}
-/etc/sysconfig/network-scripts/ifup-neigh ${CONFIG}
+. /etc/sysconfig/network-scripts/ifup-aliases
+. /etc/sysconfig/network-scripts/ifup-routes
+. /etc/sysconfig/network-scripts/ifup-neigh
 
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then

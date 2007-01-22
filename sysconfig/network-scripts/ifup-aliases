@@ -4,29 +4,6 @@
 #
 # adds all addresses of device $1
 
-. /etc/sysconfig/network
-. /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
-
-# device name must be ifcfg-somename
-DEV=$1
-
-[ -z "$DEV" ] && {
-	nls "Usage: %s <device name>" "ifup-aliases" >&2
-	exit 1
-}
-
-if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
-	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
-else
-	CONFIG="$DEV"
-fi
-
-source_config
-
-# set all major variables
-setup_ip_param
-
 # Add all addresses
 for IP_ADDR in $IPADDR_ALIASES; do
 	IP_ADDR_OPT=""
