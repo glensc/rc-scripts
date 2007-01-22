@@ -65,15 +65,15 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 
 		case ${DHCP_CLIENT##*/} in
 		  pump)
-			/sbin/pump -r -i ${DEVICE}
+			$DHCP_CLIENT -r -i ${DEVICE}
 			RESULT=$?
 			;;
 		  dhcpcd)
-			/sbin/dhcpcd -k ${DEVICE}
+			$DHCP_CLIENT -k ${DEVICE}
 			RESULT=$?
 			;;
 		  dhcpxd)
-			/sbin/dhcpxd -k ${DEVICE}
+			$DHCP_CLIENT -k ${DEVICE}
 			RESULT=$?
 			;;
 		  dhclient)
