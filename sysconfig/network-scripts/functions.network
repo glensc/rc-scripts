@@ -43,8 +43,9 @@ do_netreport ()
 
 need_hostname()
 {
-	if [ "`hostname`" = "(none)" -o "`hostname`" = "localhost" -o \
-	     "`hostname`" = "localhost.localdomain" ]; then
+	local hostname=$(hostname)
+	if [ "$hostname" = "(none)" -o "$hostname" = "localhost" -o \
+	     "$hostname" = "localhost.localdomain" ]; then
 		NEEDHOSTNAME=yes
 	else
 		unset NEEDHOSTNAME
