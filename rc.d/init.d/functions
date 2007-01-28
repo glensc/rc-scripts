@@ -146,20 +146,7 @@ kernelvermser()
 # Colors workaround
 termput()
 {
-	local ck="_tput_$1_$2_$3"
-	local cv
-	eval cv="\$$ck"
-	if [ -n "$cv" ]; then
-		echo -ne "$cv"
-		return
-	fi
-	cv=$(_termput "$@")
-	echo -ne "$cv"
-	eval "$ck='$cv'"
-}
 
-_termput()
-{
 	if is_yes "$FASTRC" || is_no "$TPUT"; then
 		case "$1" in
 		  hpa)
