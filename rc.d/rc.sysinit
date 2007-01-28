@@ -113,6 +113,8 @@ if ! is_yes "$VSERVER" ; then
 	fi
 
 
+	[ -z "${CONSOLETYPE}" ] && CONSOLETYPE="$(/sbin/consoletype)"
+
 	if [ "$CONSOLETYPE" = "vt" -a -x /sbin/setsysfont ]; then
 		/sbin/setsysfont
 	fi

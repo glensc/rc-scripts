@@ -18,8 +18,6 @@ export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 # Set defaults
 INIT_COL=67
 
-[ -z "${CONSOLETYPE}" ] && CONSOLETYPE="$(/sbin/consoletype)"
-
 # Set colors
 RED=1
 GREEN=2
