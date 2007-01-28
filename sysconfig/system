@@ -97,6 +97,9 @@ RC_PROMPT=yes
 # Enable cpusets support?
 CPUSETS=no
 
+# Enable vserver support? (yes/no/detect)
+VSERVER=detect
+
 # Enable syslogging for rc-scripts
 RC_LOGGING=yes
 
