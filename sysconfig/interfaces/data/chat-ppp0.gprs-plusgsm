@@ -4,6 +4,7 @@ ABORT "NO CARRIER"
 ABORT "NO DIALTONE"
 ABORT "NO ANSWER"
 ABORT "Username/Password Incorrect"
-"" AT
-OK-AT-OK ATDT"$PHONE"
-CONNECT
+"" ATZ
+OK AT+CGDCONT=1,"IP","www.plusgsm.pl","",0,0
+OK "ATD*99***1#"
+CONNECT ''
