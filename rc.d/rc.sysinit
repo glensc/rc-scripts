@@ -218,7 +218,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Check if timezone definition is available
-	if [ -e /etc/localtime ] ; then
+	if [ -e /etc/localtime -a -e /dev/rtc ] ; then
 		if run_cmd "$(nls 'Setting clock')$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
 			show "$(nls 'Today`s date:') $(LC_CTYPE=C date)"; ok
 		fi
@@ -788,7 +788,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Set the clock if timezone definition wasn't available (eg. /usr not mounted)
-	if is_yes "$TIME_SETUP_DELAYED"; then
+	if is_yes "$TIME_SETUP_DELAYED" && [ -e /dev/rtc ]; then
 		if run_cmd "$(nls 'Setting clock')$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
 			show "$(nls 'Today`s date:') $(LC_CTYPE=C date)"; ok
 		fi
