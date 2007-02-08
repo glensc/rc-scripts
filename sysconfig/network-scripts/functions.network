@@ -7,7 +7,9 @@
 
 source_config ()
 {
-	DEVNAME=${CONFIG##*/ifcfg-}
+	DEVNAME=${CONFIG##*/}
+	DEVNAME=${DEVNAME##ifcfg-}
+	DEVNAME=${DEVNAME##tnlcfg-}
 
 	if [[ "$CONFIG" = /* ]]; then
 		if [ -f "$CONFIG" ] ; then
