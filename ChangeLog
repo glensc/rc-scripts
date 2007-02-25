@@ -1,3 +1,94 @@
+2007-02-08 15:42 +0000 [r8239]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - allow tnlcfg-
+	  prefix in interface CONFIGs
+
+2007-02-05 18:54 +0000 [r8223]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Delay (or even skip) clock setting if /dev/rtc
+	  doesn't exist.
+
+2007-02-04 21:39 +0000 [r8222]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/data/chat-ppp0.gprs-plusgsm: Update from
+	  Mateusz Korniak.
+
+2007-01-28 14:25 +0000 [r8209-8210]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit, rc.d/init.d/functions: - $CONSOLETYPE used only
+	  in rc.sysinit
+
+	* rc.d/init.d/functions: - termput() cannot cache in shell vars as
+	  it's always called from subshell
+
+2007-01-28 14:08 +0000 [r8207-8208]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/init-colors, sysconfig/init-colors.gentoo: Typo.
+
+	* sysconfig/system: Add VSERVER option here.
+
+2007-01-22 19:15 +0000 [r8194]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown: - do sleep 1 only when bringing
+	  down with dhcpcd
+
+2007-01-22 19:12 +0000 [r8192-8193]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown: - reuase $DHCP_CLIENT
+
+	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/functions.network: - be sure that dhcp
+	  client detection is same for ifup and ifdown
+
+2007-01-22 18:47 +0000 [r8189-8191]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-routes: - kill subshell
+
+	* sysconfig/network-scripts/ifup-neigh: - IPV4_NETWORKING does not
+	  change it's value in a loop.
+
+	* sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifup-routes,
+	  sysconfig/network-scripts/ifup-neigh: - updated comments
+
+2007-01-22 18:41 +0000 [r8188]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifup-routes,
+	  sysconfig/network-scripts/ifup-post,
+	  sysconfig/network-scripts/ifup-neigh: ifup-{aliases,routes,neigh}
+	  are now sourced instead of executed
+
+2007-01-22 18:37 +0000 [r8187]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-aliases: Die debug
+
+2007-01-22 18:16 +0000 [r8186]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Cache hostname
+	  output to call it less times
+
+2007-01-22 18:09 +0000 [r8185]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Less subshells in
+	  source_config().
+
+2007-01-18 20:20 +0000 [r8173]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-aliases: Find out number of
+	  aliases from ifcfg-xyz file.
+
+2007-01-16 23:00 +0000 [r8171]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-br: multicast/arp should be set on
+	  slave devices (patch by Szymon Siwek).
+
+2007-01-11 14:29 +0000 [r8152-8153]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: Release 0.4.1.3
+
+	* make-tag.sh (added): Nifty script to make releases in svn tagged.
+
 2007-01-11 14:19 +0000 [r8149]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* changelog.sh: Autodetect svn path.

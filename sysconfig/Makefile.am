@@ -13,8 +13,7 @@ sysconfig_DATA = \
 	static-routes \
 	static-nat \
 	static-arp \
-	i18n \
-	timezone
+	i18n
 
 noinst_DATA = \
 	init-colors.gentoo
