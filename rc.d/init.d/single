@@ -57,6 +57,3 @@ case "$1" in
 	exec init -t1 S
 	;;
 esac
-
-# This must be last line !
-# vi:syntax=sh

@@ -33,5 +33,4 @@ case "$1" in
 	;;
 esac
 
-# This must be last line !
-# vi:syntax=sh
+exit 0

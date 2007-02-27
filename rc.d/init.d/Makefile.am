@@ -21,4 +21,3 @@ install-data-hook: all
 
 uninstall-hook:
 	rm -f $(DESTDIR)$(sysconfdir)/init.d
-
