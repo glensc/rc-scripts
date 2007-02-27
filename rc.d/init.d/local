@@ -22,7 +22,7 @@ case "$1" in
 	  rm -f /var/lock/subsys/local
 	;;
   *)
-	echo "Usage: $0 {start|stop}"
+	msg_usage "$0 {start|stop}"
 	exit 3
 esac
 

@@ -162,7 +162,7 @@ case "$1" in
 	start
 	;;
   *)
-	echo "Usage: $0 {start|stop|restart|status}"
+	msg_usage "$0 {start|stop|restart|status}"
 	exit 3
 esac
 
