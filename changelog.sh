@@ -1,6 +1,6 @@
 #!/bin/sh
 # $Id: changelog.sh 8104 2006-12-14 17:14:21Z glen $
-# Run this to generate all the initial makefiles, etc.
+# Run this to generate ChangeLog.
 
 if [ ! -x /usr/bin/svn2log ]; then
 	echo >&2 'Need svn2log program!'

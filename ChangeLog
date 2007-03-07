@@ -4033,12 +4033,12 @@
 	* rc.d/init.d/functions.network: - ls 2>/dev/null (avoid "ls: no
 	  such file or directory" when directory does not exist)
 
-2000-07-20 10:07 +0000 [r776]  mis <mis/at/pld-linux.org>
+2000-07-20 10:07 +0000 [r776]  Paweł Gajda <mis/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: - one more fix to
 	  IPXFRAMETYPE
 
-2000-07-20 10:03 +0000 [r775]  mis <mis/at/pld-linux.org>
+2000-07-20 10:03 +0000 [r775]  Paweł Gajda <mis/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-description: - fixed IPXFRAMETYPE
 
