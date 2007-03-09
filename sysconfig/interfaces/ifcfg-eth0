@@ -27,3 +27,6 @@ ONBOOT=yes
 
 # dhcp|pump|none
 BOOTPROTO=dhcp
+
+# sane qdisc
+QDISC=sfq
