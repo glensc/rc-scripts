@@ -83,13 +83,10 @@ case "$1" in
   reload)
   	reload
 	;;
+# ONLY if program allows reloading without stopping
+# otherwise include force-reload with 'reload'
   force-reload)
-	# if program allows reloading without stopping
 	reload
-
-	# or if it doesn't
-	stop
-	start
 	;;
   status)
 	status <service>
