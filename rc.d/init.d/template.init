@@ -79,7 +79,6 @@ case "$1" in
   restart)
 	stop
 	start
-	exit $?
 	;;
   reload)
   	reload
