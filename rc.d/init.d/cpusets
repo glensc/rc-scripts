@@ -126,7 +126,7 @@ cpuset_files="$(cpuset_configs 'cpuset-*')"
 cpusets_boot=`
 	for i in $cpuset_files; do
 		ONBOOT=""; . "$i" 2>/dev/null
-		is_yes "$ONBOOT" && echo "${i##*/}"
+		is_yes "$ONBOOT" && echo "${i##*/cpuset-}"
 	done
 `
 
