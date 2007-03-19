@@ -697,7 +697,7 @@ if ! is_yes "$VSERVER"; then
 	# mounted). Contrary to standard usage,
 	# filesystems are NOT unmounted in single user mode.
 
-	run_cmd "Mounting local filesystems" mount -a -t nonfs,smbfs,ncpfs,proc,cifs -O no_netdev
+	run_cmd "Mounting local filesystems" mount -a -t nonfs,nfs4,smbfs,ncpfs,proc,cifs -O no_netdev
 
 	# now we have /usr mounted, recheck if we have gettext and tput available.
 	if is_no "$TPUT"; then
