@@ -224,9 +224,12 @@ stop() {
 		then
 			/etc/rc.d/init.d/netfs stop
 		else
-			netmtab=$(awk '{ if ($3 ~ /^(nfs|smbfs|ncpfs|cifs)$/ ) print $3}' /proc/mounts)
+			netmtab=$(awk '{ if ($3 ~ /^(nfs|nfs4|smbfs|ncpfs|cifs)$/ ) print $3}' /proc/mounts)
 			if (echo "$netmtab" | grep -q nfs); then
 				run_cmd "Unmounting NFS filesystems" umount -fat nfs
+			fi
+			if (echo "$netmtab" | grep -q nfs4); then
+				run_cmd "Unmounting NFSv4 filesystems" umount -fat nfs4
 			fi
 			if (echo "$netmtab" | grep -q smbfs); then
 				run_cmd "Unmounting SMB filesystems" umount -at smbfs
