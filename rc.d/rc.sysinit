@@ -129,8 +129,11 @@ if ! is_no "$RC_PROMPT"; then
 fi
 
 # Set the hostname
-[ -z "${HOSTNAME}" ] && HOSTNAME=$(hostname)
-run_cmd "$(nls 'Host:') ${HOSTNAME}" hostname ${HOSTNAME}
+if [ -z "${HOSTNAME}" ]; then
+	show "$(nls 'Host:') $(hostname)" ; ok
+else
+	run_cmd "$(nls 'Host:') ${HOSTNAME}" hostname ${HOSTNAME}
+fi
 
 # Set the NIS domain name
 if [ -n "$NISDOMAIN" ]; then
