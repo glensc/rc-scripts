@@ -352,43 +352,33 @@ modprobe_net()
 	fi
 }
 
-#
-# folowing function calculates network prefix from given network mask
-# (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
-#
+# calculate network prefix from given network mask
 calcprefix()
 {
-	typeset len olen bad prefix
+	typeset old_IFS netmask prefix endp
+
+	old_IFS=$IFS
+	IFS='.'
+	netmask=$(echo $1)
+	IFS=$old_IFS
 
 	prefix=0
-	olen=8
-	bad=0
-	for i in 1 2 3 4; do
-		len=0
-		j=$(echo "$1" | awk -F"." "{ print \$${i} }")
-		case "$j" in
-		  255)	len=8 ;;
-		  254)	len=7 ;;
-		  252)	len=6 ;;
-		  248)	len=5 ;;
-		  240)	len=4 ;;
-		  224)	len=3 ;;
-		  192)	len=2 ;;
-		  128)	len=1 ;;
-		  0)	len=0 ;;
-		  *)	len=300 ;;
-		esac
-		[ "$len" -gt "$olen" ] && bad=1
-		prefix=$(($prefix + $len))
-		olen=$len
+	endp=0
+	for n in $netmask ; do
+		for i in 128 64 32 16 8 4 2 1 ; do
+			if [ $(($n & $i)) -ne 0 ]; then
+				if [ $endp -eq 0 ]; then
+					prefix=$(($prefix + 1))
+				else
+					echo "32"
+					return
+				fi
+			else
+				endp=1
+			fi
+		done
 	done
-
-	if [ "$bad" = "0" ]; then
-		echo "$prefix"
-	else
-		echo "32"
-	fi
-	return
+	echo $prefix
 }
 
 #
