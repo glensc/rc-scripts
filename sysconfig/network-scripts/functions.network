@@ -381,16 +381,14 @@ calcprefix()
 	echo $prefix
 }
 
-#
-# folowing function calculates network mask from given prefix
+# calculate network mask from given prefix
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
-#
 calcnetmask()
 {
 	typeset prefix a MASK
 
 	MASK=""
-	if [ "`echo "${1}" | grep "^[0-9]"`" = "" ]; then
+	if [ -n "${1##[0-9]*}" ]; then
 		prefix=32
 	else
 		typeset -i prefix=$1
