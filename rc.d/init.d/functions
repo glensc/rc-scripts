@@ -309,8 +309,6 @@ show()
 		termput op
 	fi
 	echo -n "$text"
-
-	termput hpa $INIT_COL
 }
 
 deltext()
