@@ -1,3 +1,107 @@
+2007-04-26 16:45 +0000 [r8474]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* setsysfont: - replaced sed with awk
+
+2007-04-26 15:56 +0000 [r8473]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network, sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/ifdown, ppp/ip-up.d/logger,
+	  rc.d/rc.sysinit, run-parts, sysconfig/interfaces/up.d/ppp/logger,
+	  ppp/ip-down.d/logger, sysconfig/interfaces/down.d/ppp/logger,
+	  sysconfig/hwprofiles/Makefile.am, service, rc.d/init.d/cpusets,
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-ipx: - use $() for command
+	  substitution
+
+2007-04-26 15:30 +0000 [r8472]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - unify command substitution (`` -> $())
+
+2007-04-26 15:24 +0000 [r8471]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - typeset local in check_portmapper
+
+2007-04-26 14:55 +0000 [r8470]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - generic check_portmapper function
+
+2007-04-16 17:26 +0000 [r8460]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - use shell
+	  construct instead of grep in calcnetmask
+
+2007-04-16 16:21 +0000 [r8459]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - calcprefix without
+	  need of awk
+
+2007-04-14 21:55 +0000 [r8458]  Paweł Gołaszewski <blues/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - allow to have more than one line in
+	  pidfile
+
+2007-03-20 12:09 +0000 [r8389]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network: - simpler way to umount nfs4
+
+2007-03-20 11:53 +0000 [r8388]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network: - unmount NFSv4 filesystems
+
+2007-03-20 11:48 +0000 [r8387]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - cleaner solution for empty hostname
+
+2007-03-19 18:58 +0000 [r8384]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - nfs4 is also non-local fs
+
+2007-03-19 17:27 +0000 [r8383]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - in case of empty HOSTNAME set it to what the
+	  kernel thinks it is (for example workstation with kernel level IP
+	  config and / over NFS)
+
+2007-03-15 17:19 +0000 [r8379]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - can start blogd rather earlier
+
+2007-03-14 18:51 +0000 [r8378]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - fixed glen's misoptimization
+
+2007-03-13 17:11 +0000 [r8372-8373]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - avoid doing something silly if plain
+	  template is used
+
+	* rc.d/init.d/template.init: - start does not have exit code
+
+2007-03-09 21:10 +0000 [r8371]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-eth0: Add sfq as default qdisc.
+
+2007-03-07 10:24 +0000 [r8367]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* changelog.sh: - correct comment
+
+2007-03-02 15:37 +0000 [r8323]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* changelog.sh: - detect users file charset
+
+2007-02-27 21:10 +0000 [r8311-8313]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/random: - comment says do not, so won't!
+
+	* rc.d/init.d/network, rc.d/init.d/local, rc.d/init.d/random,
+	  rc.d/init.d/cpusets, rc.d/init.d/allowlogin: - well, PLDIZE!
+
+	* rc.d/init.d/Makefile.am, rc.d/init.d/network, rc.d/init.d/local,
+	  rc.d/init.d/sys-chroots, rc.d/init.d/template.init,
+	  rc.d/init.d/random, rc.d/init.d/single, rc.d/init.d/killall,
+	  rc.d/init.d/cpusets, rc.d/init.d/allowlogin,
+	  rc.d/init.d/functions: - vim autodetects syntax from shebang
+
 2007-02-25 00:59 +0000 [r8290-8293]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - Release 0.4.1.4
@@ -336,7 +440,7 @@
 
 	* rc.d/rc.sysinit: There could be multiple entries for root dir.
 
-2006-10-02 22:03 +0000 [r7839]  PaweĹ Sikora <pluto/at/pld-linux.org>
+2006-10-02 22:03 +0000 [r7839]  Paweł Sikora <pluto/at/pld-linux.org>
 
 	* sysconfig/network-scripts/functions.network: - wireless-tools >=
 	  29 uses `nick' command.
