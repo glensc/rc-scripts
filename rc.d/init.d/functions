@@ -487,15 +487,15 @@ daemon()
 	fi
 
 	if [ -n "$KSH_VERSION" ]; then
-		limits="`echo "${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}" | awk '/-Su/ {sub(/-Su/,"-Sp");} /-Hu/ {sub(/-Hu/,"-Hp");} /-u/ {sub(/-u/,"-p");} {print;}'`"
+		limits="$(echo "${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}" | awk '/-Su/ {sub(/-Su/,"-Sp");} /-Hu/ {sub(/-Hu/,"-Hp");} /-u/ {sub(/-u/,"-p");} {print;}')"
 	elif [ -n "$ZSH_VERSION" ]; then
 		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
 	elif [ -n "$BASH_VERSION" ]; then
 		limits="${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}"
-#	elif [ -n "`$SH -c 'echo ${.sh.version}' 2>/dev/null`" ]; then
+#	elif [ -n "$($SH -c 'echo ${.sh.version}' 2>/dev/null)" ]; then
 	fi
 
-	[ -n "$limits" ] && eval `echo "$limits" | awk 'BEGIN {RS="[\n-]";} !/^ *$/ { printf("ulimit -%s ;", $0); }'`
+	[ -n "$limits" ] && eval $(echo "$limits" | awk 'BEGIN {RS="[\n-]";} !/^ *$/ { printf("ulimit -%s ;", $0); }')
 
 	[ -z "$DEFAULT_SERVICE_UMASK" ] && DEFAULT_SERVICE_UMASK=022
 
@@ -708,10 +708,10 @@ status()
 		nls "%s (pid %s) is running%s" "$daemon" "$pid" "$cpuset_msg"
 		return 0
 #	else
-#		pid=`ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
+#		pid=$(ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
 #		     { if ((prog == $5) || (("(" prog ")") == $5) ||
 #			(("[" prog "]") == $5) ||
-#			((prog ":") == $5)) { print $1 ; exit 0 } }' $1`
+#			((prog ":") == $5)) { print $1 ; exit 0 } }' $1)
 #		if [ "$pid" != "" ]; then
 #			cpuset_msg="..."
 #			if is_yes "$CPUSETS" && [ -n "$SERVICE_CPUSET" ]; then
@@ -846,7 +846,7 @@ success () { return 0; }
 failure () { return 1; }
 
 disable_selinux() {
-	selinuxfs=`awk '/ selinuxfs / { print $2 }' /proc/mounts`
+	selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
 	echo "*** Warning -- SELinux is active"
 	echo "*** Disabling security enforcement for system recovery."
 	echo "*** Run 'setenforce 1' to reenable."
@@ -854,7 +854,7 @@ disable_selinux() {
 }
 
 relabel_selinux() {
-	selinuxfs=`awk '/ selinuxfs / { print $2 }' /proc/mounts`
+	selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
 	echo "
          *** Warning -- SELinux relabel is required. ***
          *** Disabling security enforcement.         ***
@@ -890,8 +890,8 @@ check_portmapper() {
 			return 1
 		fi
 	elif [ -x /sbin/pidof ]; then
-		[ -z "`/sbin/pidof portmap`" -a \
-		  -z "`/sbin/pidof rpcbind`" ] && return 1
+		[ -z "$(/sbin/pidof portmap)" -a \
+		  -z "$(/sbin/pidof rpcbind)" ] && return 1
 	fi
 	return 0
 }
