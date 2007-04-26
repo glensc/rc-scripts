@@ -880,6 +880,8 @@ clean_vserver_mtab() {
 
 # Check if any flavor of portmapper is running
 check_portmapper() {
+	typeset RPCINFO
+
 	RPCINFO=$(which rpcinfo)
 	if [ -x "$RPCINFO" ]; then
 		if $RPCINFO -p localhost >/dev/null 2>/dev/null ; then
