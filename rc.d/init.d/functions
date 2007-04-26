@@ -878,6 +878,22 @@ clean_vserver_mtab() {
 	mv -f /etc/mtab.clean /etc/mtab
 }
 
+# Check if any flavor of portmapper is running
+check_portmapper() {
+	RPCINFO=$(which rpcinfo)
+	if [ -x "$RPCINFO" ]; then
+		if $RPCINFO -p localhost >/dev/null 2>/dev/null ; then
+			return 0 
+		else
+			return 1
+		fi
+	elif [ -x /sbin/pidof ]; then
+		[ -z "`/sbin/pidof portmap`" -a \
+		  -z "`/sbin/pidof rpcbind`" ] && return 1
+	fi
+	return 0
+}
+
 rc_cache_init() {
 	# If we have cachefile, use it.
 	# If we don't, create memory variables and try to save silently,
