@@ -100,7 +100,6 @@ is_no()
 	esac
 }
 
-INIT_DOTS=$(awk -vcol=$INIT_COL 'BEGIN{ for(i = 0; i < col; i++) printf("."); }')
 if is_yes "$FASTRC"; then
 	RC_LOGGING=no
 fi
@@ -292,26 +291,26 @@ msg_usage()
 # Some functions to handle PLD Linux-style messages
 show()
 {
-	typeset out
+	typeset text
+	typeset -i len
 
-	out=$(
-		echo -n "$INIT_DOTS"
-		termput hpa 0
-		if [ -n "$CHARS" ]; then
-			termput setaf $CCHARS
-			echo -n "$CHARS"
-			termput op
-		fi
+	if is_no "$FASTRC" && is_yes "$GETTEXT"; then
+		text=$(nls -n "$@")
+	else
+		text=$(printf "$@")
+	fi
+	len=${#text}
+	while [ $((len++)) -lt $INIT_COL ]; do
+		text="$text."
+	done
+	if [ -n "$CHARS" ]; then
+		termput setaf $CCHARS
+		echo -n "$CHARS"
+		termput op
+	fi
+	echo -n "$text"
 
-		if is_no "$FASTRC" && is_yes "$GETTEXT"; then
-			nls -n "$@"
-		else
-			printf "$@"
-		fi
-
-		termput hpa $INIT_COL
-	)
-	echo -n "$out"
+	termput hpa $INIT_COL
 }
 
 deltext()
