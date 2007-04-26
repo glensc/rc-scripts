@@ -171,7 +171,7 @@ static_rarp()
 
 vlan_setup()
 {
-	if [ -x /sbin/vconfig -a -e /proc/net/vlan/config ] && `echo $DEVICE | grep -q ^eth`; then
+	if [ -x /sbin/vconfig -a -e /proc/net/vlan/config ] && $(echo $DEVICE | grep -q ^eth); then
 		/sbin/vconfig set_name_type DEV_PLUS_VID_NO_PAD 2>&1 > /dev/null
 		ETH_VLANS="yes"
 	else
@@ -424,10 +424,11 @@ calcnetmask()
 get_ppp_device_and_pid ()
 {
 	if [ -f "/var/run/ppp-$DEVNAME.pid" ] ; then
-		eval `{
+		eval $(
+		{
 			read PID ; echo "PID='$PID'"
 			read REALDEVICE ; echo "REALDEVICE=$REALDEVICE"
-		} < "/var/run/ppp-$DEVNAME.pid"`
+		} < "/var/run/ppp-$DEVNAME.pid")
 	fi
 
 	if [ -z "$REALDEVICE" ] ; then

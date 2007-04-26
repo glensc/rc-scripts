@@ -4,8 +4,8 @@
 PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 export PATH
 
-VERSION="`basename $0` ver. 0.91"
-USAGE="Usage: `basename $0` < option > | --status-all | \
+VERSION="$(basename $0) ver. 0.91"
+USAGE="Usage: $(basename $0) < option > | --status-all | \
 [ service_name [ command | --full-restart ] ]"
 
 SERVICE=

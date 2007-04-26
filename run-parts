@@ -36,9 +36,9 @@ fi
 RUNPARTS_DIR=$1
 
 # assign absolute dir name
-olddir=`pwd`
+olddir=$(pwd)
 cd $RUNPARTS_DIR
-RUNPARTS_ADIR=`pwd`
+RUNPARTS_ADIR=$(pwd)
 cd $olddir
 unset olddir
 

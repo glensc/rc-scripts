@@ -101,7 +101,7 @@ fi
 check_device_down && exit 0
 
 vlan_setup
-if is_yes $ETH_VLANS && `echo $DEVICE | grep -q ^eth` ; then
+if is_yes $ETH_VLANS && $(echo $DEVICE | grep -q ^eth) ; then
 	if echo "${DEVICE}" | grep -q '\.' ; then
 		# vlan down
 		ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
@@ -109,7 +109,7 @@ if is_yes $ETH_VLANS && `echo $DEVICE | grep -q ^eth` ; then
 		/sbin/vconfig rem ${DEVICE} 2>&1 > /dev/null
 	else
 		# downujemy interfejs nadrzedny do vlanow
-		for VLANDEVICE in `ls /proc/net/vlan 2> /dev/null | grep ^${DEVICE}` ; do
+		for VLANDEVICE in $(ls /proc/net/vlan 2> /dev/null | grep ^${DEVICE}) ; do
 			# najpierw wszystkie vlany po kolei
 			ip addr flush dev ${VLANDEVICE} 2>&1 | grep -v "Nothing to flush"
 			ip link set ${VLANDEVICE} down

@@ -2,8 +2,6 @@
 
 hwprofilesdir = @sysconfigdir@/hwprofiles
 
-hwprofiles_DATA = 
-noinst_DATA = \
-	files
+hwprofiles_DATA = files
 			  
-EXTRA_DIST = $(hwprofiles_DATA) $(noinst_DATA)
+EXTRA_DIST = $(hwprofiles_DATA)

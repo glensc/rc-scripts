@@ -132,7 +132,7 @@ find_boot_interfaces() {
 
 	if [ -n "$bootprio" ]; then
 		# find all the interfaces besides loopback.
-		interfaces_boot=`
+		interfaces_boot=$(
 			for a in $(echo "$bootprio" | sort -t= -n -k2,2); do
 				i="${a%:BOOTPRIO*}"
 				case $i in
@@ -141,9 +141,9 @@ find_boot_interfaces() {
 				ONBOOT=""; . "$i" 2>/dev/null
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
-		`
+		)
 	else
-		interfaces_boot=`
+		interfaces_boot=$(
 			for i in $ifcfg_files; do
 				case ${i##*/} in
 					ifcfg-lo|ifcfg-sit*|ifcfg-atm*|ifcfg-lec*|ifcfg-nas*|ifcfg-br*|ifcfg-*.*) continue ;;
@@ -151,9 +151,9 @@ find_boot_interfaces() {
 				ONBOOT=""; . "$i" 2>/dev/null
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
-		`
+		)
 
-		interfaces_vlan_boot=`
+		interfaces_vlan_boot=$(
 			for i in $ifcfg_files; do
 				case ${i##*/} in
 					ifcfg-*.*) ;;
@@ -162,9 +162,9 @@ find_boot_interfaces() {
 				ONBOOT=""; . "$i" 2>/dev/null
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
-		`
+		)
 
-		interfaces_br_boot=`
+		interfaces_br_boot=$(
 			for i in $ifcfg_files; do
 				case ${i##*/} in
 					ifcfg-br*) ;;
@@ -173,9 +173,9 @@ find_boot_interfaces() {
 				ONBOOT=""; . "$i" 2>/dev/null
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
-		`
+		)
 
-		interfaces_sit_boot=`
+		interfaces_sit_boot=$(
 			for i in $ifcfg_files; do
 				case ${i##*/} in
 					ifcfg-sit*) ;;
@@ -184,15 +184,15 @@ find_boot_interfaces() {
 				ONBOOT=""; . "$i" 2>/dev/null
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
-		`
+		)
 	fi
 
-	tunnels=`
+	tunnels=$(
 		for i in $(network_interface_configs 'tnlcfg-*'); do
 			ONBOOT=""; . "$i" 2>/dev/null
 			[ ${ONBOOT:-no} = yes ] && echo "${i##*/tnlcfg-}"
 		done
-	`
+	)
 }
 
 start() {

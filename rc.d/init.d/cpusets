@@ -123,12 +123,12 @@ cpuset_configs()
 }
 
 cpuset_files="$(cpuset_configs 'cpuset-*')"
-cpusets_boot=`
+cpusets_boot=$(
 	for i in $cpuset_files; do
 		ONBOOT=""; . "$i" 2>/dev/null
 		is_yes "$ONBOOT" && echo "${i##*/cpuset-}"
 	done
-`
+)
 
 # See how we were called.
 case "$1" in
@@ -143,14 +143,14 @@ case "$1" in
 	echo "$cpusets_boot"
 	echo
 	nls "Currently empty cpusets:"
-	for i in `ls /dev/cpuset 2>/dev/null`; do
+	for i in $(ls /dev/cpuset 2>/dev/null); do
 		if [ -d /dev/cpuset/$i ]; then
 			cpuset_empty $i && echo $i
 		fi
 	done
 	echo
 	nls "Currently active cpusets:"
-	for i in `ls /dev/cpuset 2>/dev/null`; do
+	for i in $(ls /dev/cpuset 2>/dev/null); do
 		if [ -d /dev/cpuset/$i ]; then
 			cpuset_empty $i || echo $i
 		fi
