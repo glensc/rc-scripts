@@ -31,7 +31,7 @@ elif [ -x /usr/bin/setfont -o -x /bin/setfont ]; then
 	fi
 	if [ -n "$CONSOLEMAP" ]; then
 		if [ ! -f /lib/kbd/consoletrans/${CONSOLEMAP}_to_uni.trans ]; then
-			CONSOLEMAP=$(echo "$CONSOLEMAP" | sed "s|iso0|8859-|g;s|iso|8859-|g")
+			CONSOLEMAP=$(echo "$CONSOLEMAP" | awk '{ gsub(/iso[0]?/,"8859-"); print $0; }')
 		fi
 		ARGS="$ARGS -m $CONSOLEMAP"
 	fi
