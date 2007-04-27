@@ -50,13 +50,15 @@ CCHARS="$NORMAL"	# Color of these characters (look at /etc/sysconfig/init-colors
 [ -z "$COLUMNS" ] && COLUMNS=80
 
 if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
-	_ctx="$(awk '/(s_context|VxID):.*/ { print $2 }' /proc/self/status 2>/dev/null)"
+	while read _f _ctx; do
+		[ "$_f" = "VxID:" -o "$_f" = "s_context:" ] && break
+	done </proc/self/status
 	if [ -z "$_ctx" -o "$_ctx" = "0" ]; then
 		VSERVER=no
 	else
 		VSERVER=yes
 	fi
-	unset _ctx
+	unset _f _ctx
 fi
 
 is_yes()
@@ -127,17 +129,53 @@ fi
 
 kernelver()
 {
-	awk '{split($3,v,"."); printf("%03d%03d%03d\n", v[1],v[2],v[3]);}' /proc/version
+	typeset _x _y _z v old_IFS ver
+	{
+		read _x _y v _z
+		old_IFS=$IFS
+		IFS='.'
+		set -- $v
+		IFS=$old_IFS
+		ver=$3
+		while [ ${#ver} -lt 3 ] ; do ver="0$ver" ; done
+		ver="$2$ver"
+		while [ ${#ver} -lt 6 ] ; do ver="0$ver" ; done
+		ver="$1$ver"
+		while [ ${#ver} -lt 9 ] ; do ver="0$ver" ; done
+		echo $ver
+	} </proc/version
 }
 
 kernelverser()
 {
-	awk '{split($3,v,"."); printf("%03d%03d\n", v[1],v[2]);}' /proc/version
+	typeset _x _y _z v old_IFS ver
+	{
+		read _x _y v _z
+		old_IFS=$IFS
+		IFS='.'
+		set -- $v
+		IFS=$old_IFS
+		ver=$2
+		while [ ${#ver} -lt 3 ] ; do ver="0$ver" ; done
+		ver="$1$ver"
+		while [ ${#ver} -lt 6 ] ; do ver="0$ver" ; done
+		echo $ver
+	} </proc/version
 }
 
 kernelvermser()
 {
-	awk '{split($3,v,"."); printf("%03d\n", v[1]);}' /proc/version
+	typeset _x _y _z v old_IFS ver
+	{
+		read _x _y v _z
+		old_IFS=$IFS
+		IFS='.'
+		set -- $v
+		IFS=$old_IFS
+		ver="$1$ver"
+		while [ ${#ver} -lt 3 ] ; do ver="0$ver" ; done
+		echo $ver
+	} </proc/version
 }
 
 # Colors workaround
@@ -843,7 +881,11 @@ success () { return 0; }
 failure () { return 1; }
 
 disable_selinux() {
-	selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
+	typeset _d selinuxfs _t _r
+
+	while read _d selinuxfs _t _r; do
+		[ "$_t" = "selinuxfs" ] && break
+	done </proc/mounts
 	echo "*** Warning -- SELinux is active"
 	echo "*** Disabling security enforcement for system recovery."
 	echo "*** Run 'setenforce 1' to reenable."
@@ -851,7 +893,11 @@ disable_selinux() {
 }
 
 relabel_selinux() {
-	selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts)
+	typeset _d selinuxfs _t _r
+
+	while read _d selinuxfs _t _r; do
+		[ "$_t" = "selinuxfs" ] && break
+	done </proc/mounts
 	echo "
          *** Warning -- SELinux relabel is required. ***
          *** Disabling security enforcement.         ***
