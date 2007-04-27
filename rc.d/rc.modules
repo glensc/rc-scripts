@@ -8,8 +8,15 @@
 
 . /etc/rc.d/init.d/functions
 
-kernel=$(awk '{split($3,v,".");OFS=".";print(v[1],v[2]);}' /proc/version)
-kerneleq=$(awk '{split($3,v,".");OFS=".";print(v[1],v[2],v[3]);}' /proc/version)
+{
+	read _x _y v _z
+	old_IFS=$IFS
+	IFS='.'
+	set -- $v
+	IFS=$old_IFS
+	kernel="$1.$2"
+	kerneleq="$1.$2.$3"
+} </proc/version
 
 # Loop over every line in /etc/modules.
 ( \
