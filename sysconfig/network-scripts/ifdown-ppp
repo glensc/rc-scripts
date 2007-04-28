@@ -33,8 +33,10 @@ kill -TERM ${PID} > /dev/null 2>&1
 sleep 2
 [ -d /proc/${PID} ] && sleep 2 && [ -d /proc/${PID} ] && sleep 5
 
-kill -KILL ${PID} > /dev/null 2>&1
-logger -p daemon.info -t ifdown-ppp "ifdown-ppp unable to nicely kill pppd-$DEVICE (pppd-$DEVNAME)" &
+if [ -d /proc/${PID} ]; then
+	kill -KILL ${PID} > /dev/null 2>&1
+	logger -p daemon.info -t ifdown-ppp "ifdown-ppp unable to nicely kill pppd-$DEVICE (pppd-$DEVNAME)" &
+fi
 
 # Special cases
 if is_yes "${PPPOA_EAGLE}"; then
