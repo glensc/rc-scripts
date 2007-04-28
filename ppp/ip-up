@@ -31,7 +31,7 @@ export PPP_IFACE PPP_TTY PPP_SPEED PPP_LOCAL PPP_REMOTE PPP_IPPARAM
 
 . /etc/rc.d/init.d/functions
 . /etc/sysconfig/network-scripts/functions.network
-CONFIG="$PPP_IPPARAM"
+CONFIG="/etc/sysconfig/interfaces/ifcfg-$PPP_IPPARAM"
 source_config
 
 # as an additional convenience, $PPP_TTYNAME is set to the tty name,
