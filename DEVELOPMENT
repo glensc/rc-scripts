@@ -24,6 +24,15 @@ something=$(whoami)
 instead of
 something="`whoami`"
 
+Warning! The following snippet will not work, use `` in such cases:
+There is one ')' too many there.
+
+interfaces_boot=$(
+	case $i in
+		*ifcfg-lo) continue ;;
+	esac
+)
+
 4)
 	consider using typeset -i variable for integer variables
 
