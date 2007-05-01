@@ -1,3 +1,51 @@
+2007-05-01 01:02 +0000 [r8488]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* DEVELOPMENT: - added warning about parenthesis in command
+	  substitution
+
+2007-05-01 00:53 +0000 [r8487]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network, rc.d/rc.sysinit: - reverted some command
+	  substitution changes due to conflicting parenthesis
+
+2007-04-28 18:34 +0000 [r8484-8485]  Jakub Bogusz <qboosh/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-ppp: - kill ugly warning if pppd
+	  was nicely killed
+
+	* ppp/ip-up, ppp/ip-down: - proper CONFIG sources (needed to
+	  override DEVICE from pppd and get ppp/ip-{up,down} scripts work
+	  again
+
+2007-04-27 20:45 +0000 [r8483]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - restore stderr redirection
+
+2007-04-27 20:21 +0000 [r8482]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - replace awk usage with shell constructs
+
+2007-04-27 14:02 +0000 [r8481]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.modules: - replace awk usage with shell constructs
+
+2007-04-27 13:32 +0000 [r8480]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc: - replace awk usage with shell constructs
+
+2007-04-26 22:03 +0000 [r8479]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - removed unneeded termput hpa
+
+2007-04-26 21:38 +0000 [r8478]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - shell magic fixing screwed dots in
+	  show() on serial console
+
+2007-04-26 16:51 +0000 [r8475]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: - Release 0.4.1.5
+
 2007-04-26 16:45 +0000 [r8474]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* setsysfont: - replaced sed with awk
