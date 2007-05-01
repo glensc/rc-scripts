@@ -316,7 +316,7 @@ if ! is_yes "$VSERVER"; then
 			nls "*** when you leave the shell."
 			echo
 
-			PS1="$(nls '(Repair filesystem)# ')"; export PS1
+			PS1="`nls '(Repair filesystem)# '`"; export PS1
 			[ "$SELINUX" = "1" ] && disable_selinux
 			if ! is_no "$RUN_SULOGIN_ON_ERR"; then
 				/sbin/sulogin
