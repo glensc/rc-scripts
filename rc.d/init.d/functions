@@ -916,21 +916,22 @@ relabel_selinux() {
 # Remove duplicate entries from mtab (for vserver guest use only)
 clean_vserver_mtab() {
 	:>/etc/mtab.clean
-	cat /etc/mtab | while read device mountpoint line ; do
+	while read device mountpoint line; do
 		grep -qs "$mountpoint" /etc/mtab.clean || \
 			echo "$device $mountpoint $line" >> /etc/mtab.clean
-	done
-	mv -f /etc/mtab.clean /etc/mtab
+	done < /etc/mtab
+	cat /etc/mtab.clean > /etc/mtab
+	rm -f /etc/mtab.clean
 }
 
 # Check if any flavor of portmapper is running
 check_portmapper() {
 	typeset RPCINFO
 
-	RPCINFO=$(which rpcinfo)
+	RPCINFO=$(which rpcinfo 2>/dev/null)
 	if [ -x "$RPCINFO" ]; then
-		if $RPCINFO -p localhost >/dev/null 2>/dev/null ; then
-			return 0 
+		if $RPCINFO -p localhost >/dev/null 2>/dev/null; then
+			return 0
 		else
 			return 1
 		fi
