@@ -1,10 +1,8 @@
 #!/bin/sh
 #
-# shutdwn	Common script for system halt/reboot.
+# shutdown	Common script for system halt/reboot.
 #
 # Author:	Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
-# Changes:	Grzegorz Stanislawski <stangrze@open.net.pl>
-#		Arkadiusz Mi¶kiewicz <misiek@pld-linux.org>
 #
 # $Id$
 
