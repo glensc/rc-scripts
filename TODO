@@ -15,7 +15,7 @@ Important:
   while correct would be:
     killproc --waitforname slapd --waitfortime 300 slapd -TERM
 
-Not realy important but mayby nice:
+Not realy important but maybe nice:
 - Add checking for privileges during restarting
   and if they are not enough say fuck off in a
   nice way.
@@ -24,3 +24,6 @@ Other:
 - maybe merge ATM rc scripts
 
 We are waiting for suggestions.
+
+serial is broken with this diff:
+http://svn.pld-linux.org/cgi-bin/viewsvn/rc-scripts/trunk/rc.d/init.d/functions?r1=7767&r2=7768&p1=rc-scripts/trunk/rc.d/init.d/functions&p2=rc-scripts/trunk/rc.d/init.d/functions
