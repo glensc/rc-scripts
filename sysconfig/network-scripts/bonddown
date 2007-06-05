@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+#	bonddown - bonding configuration script (shutdown)
+#	Author: Justas Vilimas <justas at vilimas dot eu> (2007)
+
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network-scripts/functions.network
+
+DEV=$1
+
+[ -z "$DEV" ] && {
+	nls "Usage: %s <device name>" "bonddown" >&2
+	exit 1
+}
+
+. /etc/sysconfig/interfaces/ifcfg-$DEV
+
+if [ "foo$2" = "fooboot" -a -n "${ONBOOT}" ] && is_no "${ONBOOT}"; then
+	exit
+fi
+
+for slave in $BONDING_SLAVES; do
+	run_cmd -a "$(nls '  Removing slave interface %s' "$slave")" /sbin/ifenslave -d $DEV $slave
+done
+
+/sbin/ifdown $DEV
