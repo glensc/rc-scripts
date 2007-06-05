@@ -7,6 +7,7 @@ interfacesdir = @sysconfigdir@/interfaces
 interfaces_DATA = ifcfg-eth0
 
 noinst_DATA = \
+	ifcfg-bond0 \
 	ifcfg-br0 \
 	ifcfg-description \
 	ifcfg-eth0.1 \
