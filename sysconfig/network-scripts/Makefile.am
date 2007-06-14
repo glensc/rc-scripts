@@ -4,9 +4,7 @@ sbin_SCRIPTS = \
 	ifdown \
 	ifup \
 	tnldown \
-	tnlup \
-	bonddown \
-	bondup
+	tnlup
 
 networkscriptsdir = @networkscriptsdir@
 
