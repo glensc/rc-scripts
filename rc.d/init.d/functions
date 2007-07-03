@@ -928,9 +928,8 @@ clean_vserver_mtab() {
 check_portmapper() {
 	typeset RPCINFO
 
-	RPCINFO=$(which rpcinfo 2>/dev/null)
-	if [ -x "$RPCINFO" ]; then
-		if $RPCINFO -p localhost >/dev/null 2>/dev/null; then
+	if [ -x /usr/sbin/rpcinfo ]; then
+		if /usr/sbin/rpcinfo -p localhost >/dev/null 2>/dev/null; then
 			return 0
 		else
 			return 1
