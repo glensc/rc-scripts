@@ -1,3 +1,44 @@
+2007-06-14 18:42 +0000 [r8640]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network, sysconfig/interfaces/ifcfg-bond0 (removed),
+	  sysconfig/network-scripts/bondup (removed),
+	  sysconfig/network-scripts/Makefile.am,
+	  sysconfig/network-scripts/bonddown (removed),
+	  sysconfig/interfaces/Makefile.am: - revert bonding support
+	  (unfinished and broken)
+
+2007-06-05 10:45 +0000 [r8637-8638]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/Makefile.am: - add ifcfg-bond0
+
+	* sysconfig/interfaces/ifcfg-bond0 (added): - sample config
+
+2007-06-05 10:39 +0000 [r8636]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network, sysconfig/network-scripts/bondup (added),
+	  sysconfig/network-scripts/Makefile.am,
+	  sysconfig/network-scripts/bonddown (added): - bonding support by
+	  Justas Vilimas
+
+2007-06-05 10:27 +0000 [r8635]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* TODO: - save
+
+2007-05-30 11:51 +0000 [r8631]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc, rc.d/rc.sysinit, rc.d/init.d/single: -
+	  see ChangeLog for Changes
+
+2007-05-09 20:40 +0000 [r8500]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - keep /etc/mtab permissions (whatever
+	  they are) inside vserver - which outputs to stderr if it can't
+	  find the program
+
+2007-05-01 01:10 +0000 [r8489]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: - 0.4.1.6
+
 2007-05-01 01:02 +0000 [r8488]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* DEVELOPMENT: - added warning about parenthesis in command
