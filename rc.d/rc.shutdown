@@ -62,7 +62,7 @@ if ! is_yes "$VSERVER"; then
 	remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
 	while [ -n "$remaining" -a "$retry" -gt 0 ]; do
 	 	show "Unmounting file systems"; busy
-		ERRORS=$(umount -a $FORCE -t noproc,devfs 2>&1); rc=$?
+		ERRORS=$(umount -a $force -t noproc,devfs 2>&1); rc=$?
 
 		# we might had unmounted /usr, recheck $TPUT availability
 		# but well. we need tput only for show() and busy() (ok() and fail() messages are already cached)
