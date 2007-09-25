@@ -1,3 +1,24 @@
+2007-09-11 18:47 +0000 [r8720]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: PLDize ARP cache updating
+	  procedure.
+
+2007-09-11 18:33 +0000 [r8719]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: Update ARP cache of neighbours
+	  (from fedora).
+
+2007-07-14 20:33 +0000 [r8676]  Radosław Zieliński <radek/at/pld-linux.org>
+
+	* sysconfig/network: - AUTOMATIC_IFCFG=no
+
+2007-07-03 11:51 +0000 [r8656-8658]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - release 0.4.1.7
+
+	* rc.d/init.d/functions: - do not depend on which command to find
+	  rpcinfo
+
 2007-06-14 18:42 +0000 [r8640]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/init.d/network, sysconfig/interfaces/ifcfg-bond0 (removed),
