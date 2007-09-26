@@ -1,3 +1,27 @@
+2007-09-26 12:17 +0000 [r8753-8754]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - 0.4.1.9
+
+	* sysconfig/network-scripts/ifup: - typo in arping line
+
+2007-09-25 15:59 +0000 [r8751]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - typo
+
+2007-09-25 15:54 +0000 [r8749-8750]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network: - no need to play with NFS, it screws up /
+	  over NFS and we have nfsfs for it
+
+	* rc.d/init.d/local: - source functions library (for msg_usage), no
+	  need to set PATH
+
+2007-09-25 11:34 +0000 [r8745-8746]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - 0.4.1.8
+
+	* sysconfig/network: - more info about AUTOMATIC_IFCFG
+
 2007-09-11 18:47 +0000 [r8720]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: PLDize ARP cache updating
