@@ -196,7 +196,13 @@ setup_ip_param ()
 	DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
 	eval IP4ADDR="\$IPADDR${IP4_PRIM_IF:-}"
-	if echo "${IP4ADDR}" | grep -q ":" ; then
+	# check if ipaddr doesn't contain network length -- use $NETMASK then
+	if [[ "$IP4ADDR" != */* ]] && [ "$NETMASK" ]; then
+		IP4ADDR=$IP4ADDR/$(calcprefix $NETMASK)
+	fi
+
+	# check if we have ipv6 or ipv4 address
+	if [[ "${IP4ADDR}" = *:* ]]; then
 		IP6ADDR=${IP4ADDR}
 		IP4ADDR=""
 	else
