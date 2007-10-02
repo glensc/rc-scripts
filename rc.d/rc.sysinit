@@ -250,7 +250,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	if [ "$usb" = "1" -a ! -f /proc/bus/usb/devices ]; then
-		run_cmd "Mounting USB filesystem" mount -t usbfs usbfs /proc/bus/usb
+		run_cmd "Mounting USB filesystem" mount -n -t usbfs usbfs /proc/bus/usb
 	fi
 
 	needusbstorage=
