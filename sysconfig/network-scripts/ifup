@@ -185,9 +185,9 @@ else
 	fi
 
 	if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}" -a -x /sbin/arping ]; then
-		# update ARP cache of neighboring computers
-		/sbin/arping -q -A -c 1 -I ${DEVICE} ${IP4ADDR}
-		( sleep 2; /sbin/arping -q -U -c 1 -I ${DEVICE} ${IP4ADDR} ) > /dev/null 2>&1 < /dev/null &
+		# update ARP cache of neighbouring computers
+		/sbin/arping -q -A -c 1 -I ${DEVICE} ${IP4ADDR%/*}
+		( sleep 2; /sbin/arping -q -U -c 1 -I ${DEVICE} ${IP4ADDR%/*} ) > /dev/null 2>&1 < /dev/null &
 	fi
 
 	# IPv4/6 gateways and default routes
