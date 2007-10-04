@@ -524,6 +524,10 @@ if ! is_yes "$VSERVER"; then
 		/etc/rc.d/rc.modules
 	fi
 
+	if [ -x /sbin/dmraid ]; then
+		run_cmd "Activating ATARAID devices" /sbin/dmraid -ay
+	fi
+
 	# Find and activate volume groups:
 	# EVMS
 	if [ -x /sbin/evms_activate ]; then
