@@ -27,12 +27,12 @@ source_config ()
 	# and forgot to alter DEVICE= line you won't accidentally bring down eth0
 	# while executing ifdown eth1. We do that only if configuration file exists
 	# (sometimes ifcfg-xyz isn't needed at all like server-side pppoe pppX interfaces)
-	if [ "$foundconfig" -eq "1" -a -n "$DEVICE" -a  "$DEVNAME" != "$DEVICE" ]; then
+	if [ "$foundconfig" -eq "1" -a "$DEVICE" -a  "$DEVNAME" != "$DEVICE" ]; then
 		echo >&2 "$0: DEVICE specified in $CONFIG does not match filename. Aborting!"
 		exit 1
 	fi
 
-	if [ -n "${PREFIX}" ] && [[ "$IPADDR" != */* ]]; then
+	if [ "${PREFIX}" ] && [[ "$IPADDR" != */* ]]; then
 		IPADDR="$IPADDR/$PREFIX"
 	fi
 }
@@ -66,12 +66,12 @@ set_hostname()
 	hostname=$(echo $1 | awk ' { gsub(/\..*$/,NIL); print $0; } ')
 	domain=$(echo $1 | awk ' { sub(/^[^\.]*\./,NIL); print $0; } ')
 
-	if [ -n "$hostname" ] ; then
+	if [ "$hostname" ]; then
 		echo "$hostname" > /etc/HOSTNAME
 		hostname $hostname
 	fi
 
-	if [ -n "$domain" ] ; then
+	if [ "$domain" ]; then
 		>/etc/resolv.conf.new
 		if ! grep -q "search $domain" /etc/resolv.conf ; then
 			echo "search $domain" >> /etc/resolv.conf.new
@@ -214,15 +214,15 @@ setup_ip_param ()
 		eval IP4ADDROPT="\$IP_AOPTS${IP4_PRIM_IF:-}"
 		eval IP4ROUTEOPT="\$IP_ROPTS${IP4_PRIM_IF:-}"
 	fi
-	if [ -n "${IP6_PRIM_IF}" ] ; then
+	if [ "${IP6_PRIM_IF}" ] ; then
 		eval IP6ADDR="\$IPADDR${IP6_PRIM_IF:-}"
 		eval IP6ADDROPT="\$IPV6_AOPTS${IP6_PRIM_IF:-}"
 	fi
-	if [ -n "${IP4_SRC_IF}" ] ; then
+	if [ "${IP4_SRC_IF}" ] ; then
 		eval IP4SRCADDR="\$IPADDR${IP4_SRC_IF}"
 		IP4SRCADDR=$(echo ${IP4SRCADDR} | awk ' { gsub(/\/.*/,NIL); print "src " $0; } ')
 	fi
-	if [ -n "${IP6_SRC_IF}" ] ; then
+	if [ "${IP6_SRC_IF}" ] ; then
 		eval IP6SRCADDR="\$IPADDR${IP6_SRC_IF}"
 		IP6SRCADDR=$(echo ${IP6SRCADDR} | awk ' { gsub(/\/.*/,NIL); print "src " $0; } ')
 	fi
@@ -254,7 +254,7 @@ setup_ip_param ()
 	fi
 
 	# ARP ready devices
-	if [ -n "$ARP" ] ; then
+	if [ "$ARP" ] ; then
 		if is_yes "$ARP"; then
 			ARP="arp on"
 		else
@@ -278,7 +278,7 @@ setup_ip_gw_ro ()
 	if is_yes "$IPV4_NETWORKING"; then
 		if [ -z "${GATEWAYDEV}" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 			# set up default gateway
-			if [ -n "${GATEWAY}" ]; then
+			if [ "${GATEWAY}" ]; then
 				ip -4 route add default via ${GATEWAY} dev ${DEVICE} ${IP4SRCADDR} onlink 2>/dev/null
 				if [ $? = 0 ]; then
 					DEFGW=${GATEWAY}
@@ -297,7 +297,7 @@ setup_ip_gw_ro ()
 	if is_yes "$IPV6_NETWORKING"; then
 		if [ -z "${GATEWAY6DEV}" -o "${GATEWAY6DEV}" = "${DEVICE}" ]; then
 			# set up default gateway
-			if [ -n "${GATEWAY6}" ]; then
+			if [ "${GATEWAY6}" ]; then
 				ip -6 route add default via ${GATEWAY6} dev ${DEVICE} ${IP6SRCADDR} onlink
 				DEFGW6=${GATEWAY6}
 			elif [ "${GATEWAY6DEV}" = "${DEVICE}" ]; then
@@ -306,7 +306,7 @@ setup_ip_gw_ro ()
 		fi
 		if [ -z "${IPV6_GLOBALROUTEDEV}" -o "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
 			# set up default route
-			if [ -n "${IPV6_GLOBALROUTEGW}" ]; then
+			if [ "${IPV6_GLOBALROUTEGW}" ]; then
 				ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR} onlink
 			elif [ "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
 				ip -6 route add 2000::/3 dev ${DEVICE} ${IP6SRCADDR}
@@ -399,7 +399,7 @@ calcnetmask()
 	typeset prefix a MASK
 
 	MASK=""
-	if [ -n "${1##[0-9]*}" ]; then
+	if [ "${1##[0-9]*}" ]; then
 		prefix=32
 	else
 		typeset -i prefix=$1
@@ -492,37 +492,37 @@ wireless_param()
 	fi
 
 	# wlan mode needs to be first
-	wlan_mode="$(eval echo \$${prefix}WLAN_MODE)" && [ -n "$wlan_mode" ] && \
+	wlan_mode="$(eval echo \$${prefix}WLAN_MODE)" && [ "$wlan_mode" ] && \
 		iwconfig ${device} mode "$wlan_mode"
 
 	iwconfig ${device} nick ${WLAN_NICKNAME}
 
-	val="$(eval echo \$${prefix}WLAN_NWID)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_NWID)" && [ "$val" ] && \
 		iwconfig ${device} nwid "$val"
 
 	if [ "$wlan_mode" != "Managed" ]; then
-		if val="$(eval echo \$${prefix}WLAN_FREQ)" && [ -n "$val" ]; then
+		if val="$(eval echo \$${prefix}WLAN_FREQ)" && [ "$val" ]; then
 			iwconfig ${device} freq "$val"
-		elif val="$(eval echo \$${prefix}WLAN_CHANNEL)" && [ -n "$val" ]; then
+		elif val="$(eval echo \$${prefix}WLAN_CHANNEL)" && [ "$val" ]; then
 			iwconfig ${device} channel "$val"
 		fi
 	fi
 
-	val="$(eval echo \$${prefix}WLAN_SENS)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_SENS)" && [ "$val" ] && \
 		iwconfig ${device} sens "$val"
-	val="$(eval echo \$${prefix}WLAN_AP)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_AP)" && [ "$val" ] && \
 		iwconfig ${device} ap "$val"
-	val="$(eval echo \$${prefix}WLAN_BITRATE)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_BITRATE)" && [ "$val" ] && \
 		iwconfig ${device} rate "$val"
-	val="$(eval echo \$${prefix}WLAN_RTS_THRESHOLD)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_RTS_THRESHOLD)" && [ "$val" ] && \
 		iwconfig ${device} rts "$val"
-	val="$(eval echo \$${prefix}WLAN_FRAGMENTATION_THRESHOLD)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_FRAGMENTATION_THRESHOLD)" && [ "$val" ] && \
 		iwconfig ${device} frag "$val"
 
 	local wlan_encryption="$(eval echo \$${prefix}WLAN_ENCRYPTION)"
 	local wlan_key="$(eval echo \$${prefix}WLAN_KEY)"
 	# TODO: well, actually shouldn't set WLAN_KEY if other keys than current are set
-	if [ -n "$wlan_key" ]; then
+	if [ "$wlan_key" ]; then
 		# wlan key can contain index of key to set
 		# to set other than current keys suffix with 1-4:
 		local idx
@@ -537,23 +537,23 @@ wireless_param()
 			iwconfig ${device} key "$wlan_key"
 		fi
 
-		[ -n "$wlan_encryption" ] && iwconfig ${device} key "$wlan_encryption"
+		[ "$wlan_encryption" ] && iwconfig ${device} key "$wlan_encryption"
 	fi
 
 	if is_no "$wlan_encryption"; then
 		iwconfig ${device} key off
 	fi
-	val="$(eval echo \$${prefix}WLAN_POWER)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_POWER)" && [ "$val" ] && \
 		iwconfig ${device} power "$val"
-	val="$(eval echo \$${prefix}WLAN_TXPOWER)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_TXPOWER)" && [ "$val" ] && \
 		iwconfig ${device} txpower "$val"
-	val="$(eval echo \$${prefix}WLAN_RETRY)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_RETRY)" && [ "$val" ] && \
 		iwconfig ${device} retry "$val"
-	val="$(eval echo \$${prefix}WLAN_NWID)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_NWID)" && [ "$val" ] && \
 		iwconfig ${device} nwid "$val"
 
 	# essid should be last due to network rescanning by wlan devices
-	val="$(eval echo \$${prefix}WLAN_ESSID)" && [ -n "$val" ] && \
+	val="$(eval echo \$${prefix}WLAN_ESSID)" && [ "$val" ] && \
 		iwconfig ${device} essid "$val"
 
 	if is_yes "$(eval echo \$${prefix}WLAN_COMMIT)"; then
