@@ -519,13 +519,13 @@ wireless_param()
 	val="$(eval echo \$${prefix}WLAN_FRAGMENTATION_THRESHOLD)" && [ -n "$val" ] && \
 		iwconfig ${device} frag "$val"
 
+	local wlan_encryption="$(eval echo \$${prefix}WLAN_ENCRYPTION)"
 	if val="$(eval echo \$${prefix}WLAN_KEY)" && [ -n "$val" ]; then
 		iwconfig ${device} key "$val"
-		val="$(eval echo \$${prefix}WLAN_ENCRYPTION)" && [ -n "$val" ] && \
-			iwconfig ${device} key "$val"
+		[ -n "$wlan_encryption" ] && iwconfig ${device} key "$wlan_encryption"
 	fi
 
-	if is_no "$(eval echo \$${prefix}WLAN_ENCRYPTION)"; then
+	if is_no "$wlan_encryption"; then
 		iwconfig ${device} key off
 	fi
 	val="$(eval echo \$${prefix}WLAN_POWER)" && [ -n "$val" ] && \
