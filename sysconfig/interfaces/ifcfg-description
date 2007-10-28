@@ -79,10 +79,10 @@ VLAN_REORDER_HDR=[0|1]	When this is set, the VLAN device will move the
 [ HANDLING=0|1|2|3 ] (0 is default; used ie. in ATM configuration, for
 		      details see ifup script)
 
-if 	DEVICE=eth* ; then
+if 	DEVICE=eth*; then
 
 	[ MEDIA={auto|10baseT|10base2|AUI} ]
-	[ MACADDR=<hw addres> ]
+	[ MACADDR=<hw address> ]
 
 	if 	DEVICE=wireless interface (man iwconfig(8))
 		WLAN_UPEARLY=<yes>|<no> Up device before setting any WLAN parameters
@@ -99,6 +99,13 @@ if 	DEVICE=eth* ; then
 		WLAN_RTS_THRESHOLD=<rts/cts threshold>|auto|fixed|off
 		WLAN_FRAGMENTATION_THRESHOLD=<frag threshold>|auto|fixed|off
 		WLAN_KEY=XXXX-XXXX-XXXX-XXXX|XXXXXXXX|s:<ascii string>
+		if WLAN_KEY; then
+			WLAN_KEY_1=... <optional>
+			WLAN_KEY_2=... <optional>
+			WLAN_KEY_3=... <optional>
+			WLAN_KEY_4=... <optional>
+			WLAN_KEY_CURRENT=index <optional>
+		fi
 		WLAN_ENCRYPTION=on|off|open|restricted
 		WLAN_POWER=period <value>|timeout <value>|on|off|all|unicast|multicast
 		WLAN_TXPOWER=<power in dBm>|<power in mW>mW|auto|on|off
