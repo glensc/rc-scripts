@@ -540,23 +540,23 @@ check_mii_tool ()
 {
 	[ -x /sbin/mii-tool ] || return 2
 	output=$(LC_ALL=C mii-tool $1 2>&1)
-	echo $output | LC_ALL=C grep -q "link ok" && return 1
-	echo $output | LC_ALL=C grep -q "no link" && return 0 || return 2
+	echo $output | grep -q "link ok" && return 1
+	echo $output | grep -q "no link" && return 0 || return 2
 }
 
 check_ethtool ()
 {
 	[ -x /sbin/ethtool ] || return 2
 	output=$(LC_ALL=C ethtool $1 2>&1)
-	echo $output | LC_ALL=C grep -q "Link detected: yes" && return 1
-	echo $output | LC_ALL=C grep -q "Link detected: no" && return 0 || return 2
+	echo $output | grep -q "Link detected: yes" && return 1
+	echo $output | grep -q "Link detected: no" && return 0 || return 2
 }
 
 check_iwconfig ()
 {
 	[ -x /sbin/iwconfig ] || return 2
 	output=$(LC_ALL=C iwconfig $1 2>&1)
-	echo $output | LC_ALL=C grep -q "radio off" && return 0 || return 2
+	echo $output | grep -q "radio off" && return 0 || return 2
 }
 
 check_link_down ()
