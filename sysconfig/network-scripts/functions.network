@@ -520,8 +520,23 @@ wireless_param()
 		iwconfig ${device} frag "$val"
 
 	local wlan_encryption="$(eval echo \$${prefix}WLAN_ENCRYPTION)"
-	if val="$(eval echo \$${prefix}WLAN_KEY)" && [ -n "$val" ]; then
-		iwconfig ${device} key "$val"
+	local wlan_key="$(eval echo \$${prefix}WLAN_KEY)"
+	# TODO: well, actually shouldn't set WLAN_KEY if other keys than current are set
+	if [ -n "$wlan_key" ]; then
+		# wlan key can contain index of key to set
+		# to set other than current keys suffix with 1-4:
+		local idx
+		for idx in 1 2 3 4; do
+			val="$(eval echo \$${prefix}WLAN_KEY_$idx)"
+			[ "$val" ] || continue
+			iwconfig ${device} key "[$idx] $val"
+		done
+		if val="$(eval echo \$${prefix}WLAN_KEY_CURRENT)" && [ "$val" ]; then
+			iwconfig ${device} key "[$val]"
+		else
+			iwconfig ${device} key "$wlan_key"
+		fi
+
 		[ -n "$wlan_encryption" ] && iwconfig ${device} key "$wlan_encryption"
 	fi
 
