@@ -529,7 +529,7 @@ wireless_param()
 		for idx in 1 2 3 4; do
 			val="$(eval echo \$${prefix}WLAN_KEY_$idx)"
 			[ "$val" ] || continue
-			iwconfig ${device} key "[$idx] $val"
+			iwconfig ${device} key "[$idx]" "$val"
 		done
 		if val="$(eval echo \$${prefix}WLAN_KEY_CURRENT)" && [ "$val" ]; then
 			iwconfig ${device} key "[$val]"
