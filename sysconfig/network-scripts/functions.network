@@ -474,7 +474,7 @@ is_wireless_device ()
 	return 1
 }
 
-wireless_param ()
+wireless_param()
 {
 	device="$1"
 	if [ "$2" = "br" ]; then
@@ -483,53 +483,63 @@ wireless_param ()
 		prefix=""
 	fi
 
-	if [ -z "$(eval echo \$${prefix}WLAN_NICKNAME)" ]; then
+	local val wlan_mode
+
+	if val="$(eval echo \$${prefix}WLAN_NICKNAME)" && [ -z "$val" ]; then
 		 WLAN_NICKNAME="$(hostname -f 2>/dev/null || hostname 2>/dev/null || echo localhost)"
 	else
-		 WLAN_NICKNAME="$(eval echo \$${prefix}WLAN_NICKNAME)"
+		 WLAN_NICKNAME="$val"
 	fi
 
 	# wlan mode needs to be first
-	[ -n "$(eval echo \$${prefix}WLAN_MODE)" ] && \
-		iwconfig ${device} mode "$(eval echo \$${prefix}WLAN_MODE)"
+	wlan_mode="$(eval echo \$${prefix}WLAN_MODE)" && [ -n "$wlan_mode" ] && \
+		iwconfig ${device} mode "$wlan_mode"
+
 	iwconfig ${device} nick ${WLAN_NICKNAME}
-	[ -n "$(eval echo \$${prefix}WLAN_NWID)" ] && \
-		iwconfig ${device} nwid "$(eval echo \$${prefix}WLAN_NWID)"
-	if [ -n "$(eval echo \$${prefix}WLAN_FREQ)" -a "$(eval echo \$${prefix}${WLAN_MODE})" != "Managed" ] ; then
-		iwconfig ${device} freq "$(eval echo \$${prefix}WLAN_FREQ)"
-	elif [ -n "$(eval echo \$${prefix}WLAN_CHANNEL)" -a "$(eval echo \$${prefix}${WLAN_MODE})" != "Managed" ]; then
-		iwconfig ${device} channel "$(eval echo \$${prefix}WLAN_CHANNEL)"
+
+	val="$(eval echo \$${prefix}WLAN_NWID)" && [ -n "$val" ] && \
+		iwconfig ${device} nwid "$val"
+
+	if [ "$wlan_mode" != "Managed" ]; then
+		if val="$(eval echo \$${prefix}WLAN_FREQ)" && [ -n "$val" ]; then
+			iwconfig ${device} freq "$val"
+		elif val="$(eval echo \$${prefix}WLAN_CHANNEL)" && [ -n "$val" ]; then
+			iwconfig ${device} channel "$val"
+		fi
 	fi
-	[ -n "$(eval echo \$${prefix}WLAN_SENS)" ] && \
-		iwconfig ${device} sens "$(eval echo \$${prefix}WLAN_SENS)"
-	[ -n "$(eval echo \$${prefix}WLAN_AP)" ] && \
-		iwconfig ${device} ap "$(eval echo \$${prefix}WLAN_AP)"
-	[ -n "$(eval echo \$${prefix}WLAN_BITRATE)" ] && \
-		iwconfig ${device} rate "$(eval echo \$${prefix}WLAN_BITRATE)"
-	[ -n "$(eval echo \$${prefix}WLAN_RTS_THRESHOLD)" ] && \
-		iwconfig ${device} rts "$(eval echo \$${prefix}WLAN_RTS_THRESHOLD)"
-	[ -n "$(eval echo \$${prefix}WLAN_FRAGMENTATION_THRESHOLD)" ] && \
-		iwconfig ${device} frag "$(eval echo \$${prefix}WLAN_FRAGMENTATION_THRESHOLD)"
-	if [ -n "$(eval echo \$${prefix}WLAN_KEY)" ]; then
-		iwconfig ${device} key "$(eval echo \$${prefix}WLAN_KEY)"
-		[ -n "$(eval echo \$${prefix}WLAN_ENCRYPTION)" ] && \
-			iwconfig ${device} key "$(eval echo \$${prefix}WLAN_ENCRYPTION)"
+
+	val="$(eval echo \$${prefix}WLAN_SENS)" && [ -n "$val" ] && \
+		iwconfig ${device} sens "$val"
+	val="$(eval echo \$${prefix}WLAN_AP)" && [ -n "$val" ] && \
+		iwconfig ${device} ap "$val"
+	val="$(eval echo \$${prefix}WLAN_BITRATE)" && [ -n "$val" ] && \
+		iwconfig ${device} rate "$val"
+	val="$(eval echo \$${prefix}WLAN_RTS_THRESHOLD)" && [ -n "$val" ] && \
+		iwconfig ${device} rts "$val"
+	val="$(eval echo \$${prefix}WLAN_FRAGMENTATION_THRESHOLD)" && [ -n "$val" ] && \
+		iwconfig ${device} frag "$val"
+
+	if val="$(eval echo \$${prefix}WLAN_KEY)" && [ -n "$val" ]; then
+		iwconfig ${device} key "$val"
+		val="$(eval echo \$${prefix}WLAN_ENCRYPTION)" && [ -n "$val" ] && \
+			iwconfig ${device} key "$val"
 	fi
+
 	if is_no "$(eval echo \$${prefix}WLAN_ENCRYPTION)"; then
 		iwconfig ${device} key off
 	fi
-	[ -n "$(eval echo \$${prefix}WLAN_POWER)" ] && \
-		iwconfig ${device} power "$(eval echo \$${prefix}WLAN_POWER)"
-	[ -n "$(eval echo \$${prefix}WLAN_TXPOWER)" ] && \
-		iwconfig ${device} txpower "$(eval echo \$${prefix}WLAN_TXPOWER)"
-	[ -n "$(eval echo \$${prefix}WLAN_RETRY)" ] && \
-		iwconfig ${device} retry "$(eval echo \$${prefix}WLAN_RETRY)"
-	[ -n "$(eval echo \$${prefix}WLAN_NWID)" ] && iwconfig ${device} \
-		nwid "$(eval echo \$${prefix}WLAN_NWID)"
+	val="$(eval echo \$${prefix}WLAN_POWER)" && [ -n "$val" ] && \
+		iwconfig ${device} power "$val"
+	val="$(eval echo \$${prefix}WLAN_TXPOWER)" && [ -n "$val" ] && \
+		iwconfig ${device} txpower "$val"
+	val="$(eval echo \$${prefix}WLAN_RETRY)" && [ -n "$val" ] && \
+		iwconfig ${device} retry "$val"
+	val="$(eval echo \$${prefix}WLAN_NWID)" && [ -n "$val" ] && \
+		iwconfig ${device} nwid "$val"
 
 	# essid should be last due to network rescanning by wlan devices
-	[ -n "$(eval echo \$${prefix}WLAN_ESSID)" ] && iwconfig ${device} \
-		essid "$(eval echo \$${prefix}WLAN_ESSID)"
+	val="$(eval echo \$${prefix}WLAN_ESSID)" && [ -n "$val" ] && \
+		iwconfig ${device} essid "$val"
 
 	if is_yes "$(eval echo \$${prefix}WLAN_COMMIT)"; then
 		iwconfig ${device} commit
