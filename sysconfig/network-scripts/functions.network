@@ -500,7 +500,7 @@ wireless_param()
 	val="$(eval echo \$${prefix}WLAN_NWID)" && [ "$val" ] && \
 		iwconfig ${device} nwid "$val"
 
-	if [ "$wlan_mode" != "Managed" ]; then
+	if [ "$wlan_mode" != "Managed" -a "$wlan_mode" != "managed" ]; then
 		if val="$(eval echo \$${prefix}WLAN_FREQ)" && [ "$val" ]; then
 			iwconfig ${device} freq "$val"
 		elif val="$(eval echo \$${prefix}WLAN_CHANNEL)" && [ "$val" ]; then
