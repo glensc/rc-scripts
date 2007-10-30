@@ -558,8 +558,8 @@ if ! is_yes "$VSERVER"; then
 		run_cmd "Discovering EVMS volumes" /sbin/evms_activate
 		if is_yes "$EVMS_LVM" && is_yes "$EVMS_LVM_COMPAT_NODES" ; then
 			# Link nodes for compatibility with LVM
-			if [ "echo /dev/evms/lvm/*" != '/dev/evms/lvm/*' ] ; then
-				ln -s /dev/evms/lvm/* /dev/
+			if [ "$(echo /dev/evms/lvm/*)" != '/dev/evms/lvm/*' ] ; then
+				ln -s /dev/evms/lvm/* /dev
 			fi
 		fi
 	fi
