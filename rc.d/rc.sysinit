@@ -554,6 +554,7 @@ if ! is_yes "$VSERVER"; then
 			fi
 		fi
 	fi
+
 	# LVM (keep in sync with LVM starting after RAID run!)
 	if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
 		lvmversion=$(/sbin/vgchange --version 2>/dev/null | awk '{gsub("vgchange: Logical Volume Manager ",""); gsub("LVM version:     ",""); gsub(/\..*/,"");print $1; exit}')
@@ -592,7 +593,7 @@ if ! is_yes "$VSERVER"; then
 			fi
 
 			if [ -f /etc/raidtab -a "$goraidtab" -eq 1 ]; then
-				for i in $(grep -v "^#" /etc/raidtab 2>/dev/null | grep "raiddev" 2>/dev/null | awk '{print $2}') ; do
+				for i in $(awk '!/^#/ && /raiddev/{print $2}' /etc/raidtab 2>/dev/null); do
 					golvm=1
 					RAIDDEV=$(basename $i)
 					RAIDSTAT=$(grep "^$RAIDDEV : active" /proc/mdstat 2>/dev/null)
