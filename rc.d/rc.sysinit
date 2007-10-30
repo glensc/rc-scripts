@@ -524,6 +524,15 @@ if ! is_yes "$VSERVER"; then
 		/etc/rc.d/rc.modules
 	fi
 
+	# Activate dm-multipath
+	if [ -x /sbin/multipath ]; then
+		run_cmd "Activating dm-multipath" /sbin/multipath -v 0
+		for a in /dev/mapper/*; do
+			[ $a = /dev/mapper/control ] && continue
+			/sbin/kpartx -a $a
+		done
+	fi
+
 	if [ -x /sbin/dmraid ]; then
 		run_cmd "Activating ATARAID devices" /sbin/dmraid -ay
 	fi
