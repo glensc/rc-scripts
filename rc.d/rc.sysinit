@@ -728,7 +728,7 @@ if ! is_yes "$VSERVER"; then
 	# option is removed from /etc/mtab
 	if [ -z "$fastboot" ] && grep "^[^#].*encryption=" /etc/fstab 2>/dev/null | grep -v -q "noauto" 2>/dev/null; then
 		show "Checking encrypted filesystems"; started
-		LOOPLIST="$(awk '
+		LOOPLIST="$(LC_ALL=C awk '
 		FILENAME=="/proc/mounts" {
 			TAB[$2]=$1;
 		}
@@ -824,7 +824,7 @@ if ! is_yes "$VSERVER"; then
 	# ... and here finish configuring parameters
 	/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 else
-	# /var/log should be writable now, so star saving the boot output
+	# /var/log should be writable now, so start saving the boot output
 	if [ "$RC_BOOTLOG" ]; then
 		echo > /var/log/boot.msg
 		killall -IO blogd
@@ -840,16 +840,15 @@ fi
 rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
 
 # Clean up /var
-# I'd use find, but /usr may not be mounted.
 for afile in /var/lock/* /var/run/*; do
-	bafile=$(basename $afile)
+	bafile=${afile##*/}
 	if [ -d "$afile" ]; then
 		case $bafile in
-			news|sudo|mon|cvs)
-				;;
-			*)
-				rm -rf $afile/*
-				;;
+		news|sudo|mon|cvs)
+			;;
+		*)
+			rm -rf $afile/*
+			;;
 		esac
 	else
 		[ "$bafile" != "hwprofile" ] && rm -f $afile 2> /dev/null
@@ -864,7 +863,7 @@ rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
 
 {
 # Clean up utmp/wtmp
-if ! is_no "$NEED_XFILES" ; then
+if ! is_no "$NEED_XFILES"; then
 	:>/var/run/utmpx
 	touch /var/log/wtmpx
 	chown root:utmp /var/run/utmpx /var/log/wtmpx
@@ -878,6 +877,7 @@ fi
 
 # Clean /tmp
 if is_yes "$CLEAN_TMP"; then
+	# XXX LC_ALL needed here
 	rm -rf /tmp/* /tmp/.[a-zA-Z0-9]*
 fi
 
@@ -887,9 +887,9 @@ chown root:root /tmp/.ICE-unix
 [ -n "$SELINUX" ] && restorecon /tmp/.ICE-unix >/dev/null 2>&1
 
 if ! is_yes "$VSERVER"; then
+	run_cmd "Enabling swap space" /bin/true
 	# Right, now turn on swap in case we swap to files
 	swapon -a >/dev/null 2>&1
-	run_cmd "Enabling swap space" /bin/true
 
 	# If a SCSI tape has been detected, load the st module unconditionally
 	# since many SCSI tapes don't deal well with st being loaded and unloaded
