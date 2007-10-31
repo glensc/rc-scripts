@@ -1,7 +1,7 @@
 #!/bin/sh
 # dump script used to generate .pot for translations
 
-if /bin/false; then
+. /etc/rc.d/init.d/functions
 
 nls "alarmwatch not configured (CHIPS not set), cannot start."
 nls "No kernel APM support"
@@ -186,5 +186,3 @@ nls "Starting Athlon Cooling"
 nls "Stoping Athlon Cooling"
 nls "Error: /etc/nessus/nessusd.conf not found"
 nls " Nessus daemon can't be run."
-
-fi
