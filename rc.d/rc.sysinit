@@ -953,7 +953,6 @@ if ! is_yes "$VSERVER"; then
 	chmod 0600 /var/log/dmesg /var/log/dmesg.0
 fi
 
-[ "$RC_BOOTLOG" ] && killall -TERM blogd
 kill -TERM $(/sbin/pidof getkey) >/dev/null 2>&1
 } &
 
