@@ -420,7 +420,7 @@ filter_chroot()
 		echo $@
 		return
 	fi
-	good_pids=""
+	local root_dir good_pids="" good_add_pid
 	for root_pid in $@; do
 		root_dir=$(resolvesymlink /proc/${root_pid}/root)
 		if [ -n "$root_dir" ]; then
