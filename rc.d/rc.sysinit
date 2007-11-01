@@ -6,10 +6,6 @@
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 #
 
-# Set the path
-PATH=/bin:/sbin:/usr/bin:/usr/sbin
-export PATH
-
 # reasonable start values for bootsplash progress.
 export progress=0
 export sscripts=45
@@ -573,13 +569,11 @@ if ! is_yes "$VSERVER"; then
 		/etc/rc.d/rc.modules
 	fi
 
-	# Activate dm-multipath
 	if [ -x /sbin/multipath ]; then
+		# first make nodes that were discarded due (possible) new /dev mount
+		/sbin/dmsetup mknodes
 		run_cmd "Activating dm-multipath" /sbin/multipath -v 0
-		for a in /dev/mapper/*; do
-			[ $a = /dev/mapper/control ] && continue
-			/sbin/kpartx -a $a
-		done
+		/sbin/dmsetup ls --target multipath --exec '/sbin/kpartx -a'
 	fi
 
 	if [ -x /sbin/dmraid ]; then
@@ -629,10 +623,9 @@ if ! is_yes "$VSERVER"; then
 			lvmignorelock=""
 		fi
 
-		run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelock && \
+		run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelock
 		run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmignorelock
-		[ "$lvmversion" = "2" ] && /sbin/vgscan --mknodes $lvmignorelock > /dev/null 2>&1
-
+		[ "$lvmversion" = "2" ] && /sbin/vgmknodes
 	fi
 
 	# Add raid devices
@@ -713,9 +706,9 @@ if ! is_yes "$VSERVER"; then
 			# LVM on RAID (keep in sync with LVM setting few lines above)
 			if [ "$golvm" -eq "1" ]; then
 				if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-					run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelock && \
+					run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelock
 					run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmignorelock
-					[ "$lvmversion" = "2" ] && /sbin/vgscan --mknodes $lvmignorelock > /dev/null 2>&1
+					[ "$lvmversion" = "2" ] && /sbin/vgmknodes
 				fi
 			fi
 			show "Starting up RAID devices"; ok
@@ -966,6 +959,7 @@ if ! is_yes "$VSERVER"; then
 	chmod 0600 /var/log/dmesg /var/log/dmesg.0
 fi
 
+[ "$RC_BOOTLOG" ] && killall -TERM blogd
 kill -TERM $(/sbin/pidof getkey) >/dev/null 2>&1
 } &
 
