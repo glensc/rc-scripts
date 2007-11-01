@@ -181,20 +181,14 @@ if ! is_yes "$VSERVER"; then
 		/bin/dmesg -n $CONSOLE_LOGLEVEL
 	fi
 
-	if [ -f /etc/udev/udev.conf ];then
-		. /etc/udev/udev.conf
-	fi
-
 	[ -x /sbin/start_udev ] && /sbin/start_udev
 
 	# Unmount the initrd, if necessary
-	if grep -q /initrd /proc/mounts 2>/dev/null && ! grep -q /initrd/loopfs /proc/mounts 2>/dev/null ; then
+	if grep -q /initrd /proc/mounts 2>/dev/null && ! grep -q /initrd/loopfs /proc/mounts 2>/dev/null; then
 		if [ -e /initrd/dev/.devfsd ]; then
 			umount /initrd/dev
 		fi
-		if [ -e /initrd/dev/.devfsd ]; then
-			umount /initrd/dev
-		fi
+		umount /initrd/dev 2>/dev/null
 		umount /initrd
 		/sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
 	fi
