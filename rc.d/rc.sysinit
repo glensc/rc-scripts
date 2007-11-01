@@ -196,11 +196,11 @@ if ! is_yes "$VSERVER"; then
 	# /dev must be also mounted before everything but only if we want use them ;-)
 	if is_yes "$MOUNT_DEVFS"; then
 		run_cmd "Mounting Device Filesystem" mount -n -t devfs /dev /dev
-	fi
 
-	# set up devfsd
-	if [ -e /dev/.devfsd -a -x /sbin/devfsd ]; then
-		run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
+		# set up devfsd
+		if [ -e /dev/.devfsd -a -x /sbin/devfsd ]; then
+			run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
+		fi
 	fi
 
 	# Start logging console output since we have all /dev stuff setup
