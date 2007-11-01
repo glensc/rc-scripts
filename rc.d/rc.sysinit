@@ -36,9 +36,6 @@ fi
 
 CONSOLE_LOGLEVEL=1
 
-# Only read this once.
-cmdline=$(cat /proc/cmdline)
-
 # Read functions
 . /etc/rc.d/init.d/functions
 
@@ -95,6 +92,9 @@ fi
 if ! is_yes "$VSERVER" ; then
 	# we need /proc mounted before everything
 	mount -n -o gid=17 -t proc /proc /proc
+
+	# Only read this once.
+	cmdline=$(cat /proc/cmdline)
 
 	# sysfs is also needed before any other things (under kernel > 2.5)
 	if grep -q sysfs /proc/filesystems 2>/dev/null ; then
