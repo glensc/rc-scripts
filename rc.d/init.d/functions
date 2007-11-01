@@ -743,9 +743,9 @@ status()
 	pid=$(pidof -o $$ -o $PPID -o %PPID -x $daemon)
 	pid=$(filter_chroot "$pid")
 
-	if [ "$pid" != "" ]; then
+	if [ "$pid" ]; then
 		cpuset_msg="..."
-		if is_yes "$CPUSETS" && [ -n "$SERVICE_CPUSET" ]; then
+		if [ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS" ]; then
 			if $(grep -q "$pid" "/dev/cpuset/${SERVICE_CPUSET}/tasks"); then
 				cpuset_msg=$(nls " in cpuset %s..." "$SERVICE_CPUSET")
 			else
@@ -761,7 +761,7 @@ status()
 #			((prog ":") == $5)) { print $1 ; exit 0 } }' $1)
 #		if [ "$pid" != "" ]; then
 #			cpuset_msg="..."
-#			if is_yes "$CPUSETS" && [ -n "$SERVICE_CPUSET" ]; then
+#			if [ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS" ]; then
 #				if $(grep -q "$pid" "/dev/cpuset/${SERVICE_CPUSET}/tasks"); then
 #					cpuset_msg=$(nls " in cpuset %s..." "$SERVICE_CPUSET")
 #				else
@@ -886,11 +886,6 @@ log_failed ()
 {
 	initlog -n $0 -s "$1 $2" -e 2
 }
-
-# RedHat/Mandrake specific functions
-action () { STRING=$1; shift; run_cmd "$STRING" "$*"; }
-success () { return 0; }
-failure () { return 1; }
 
 disable_selinux() {
 	typeset _d selinuxfs _t _r
