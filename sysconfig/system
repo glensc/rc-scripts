@@ -69,7 +69,7 @@ RUN_DEPMOD=ifmissing
 # Run /sbin/ldconfig at startup ?
 RUN_LDCONFIG=no
 
-# Mount /dev (Device Filesystem)
+# Mount devfs (Device Filesystem, Obsolete) to /dev
 MOUNT_DEVFS=no
 
 # EVMS/LVM options
