@@ -707,7 +707,7 @@ pidofproc()
 	fi
 
 	# First try pidfile or "/var/run/*.pid"
-	if (echo "${pidfile}" | grep -Eq "^/"); then
+	if [[ "$pidfile" = /* ]]; then
 		pidfile="${pidfile}"
 	else
 		pidfile="/var/run/${pidfile}";
