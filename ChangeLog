@@ -1,3 +1,166 @@
+2007-11-01 02:10 +0000 [r8935]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - $PATH is set from init.d/functions - improve
+	  dm-multipath setup - attempt harder to create all LVM nodes, even
+	  the ones initialized from initrd - kill blogd at the end of
+	  script
+
+2007-11-01 02:06 +0000 [r8934]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - umount /initrd earlier, right after udev
+	  startup
+
+2007-11-01 01:34 +0000 [r8932-8933]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - strstr() from fedora initscripts
+
+	* rc.d/rc.sysinit: - read /proc/cmdline just once (idea stolen from
+	  fedora)
+
+2007-11-01 01:23 +0000 [r8930-8931]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit, rc.d/init.d/functions: - disable_selinux(),
+	  relabel_selinux(), clean_vserver_mtab() used only in rc.sysinit,
+	  moved there
+
+	* rc.d/init.d/functions: - local vars
+
+2007-11-01 01:13 +0000 [r8929]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - drop redhat/mandrake compat - simple if
+	  should be lighter than function call
+
+2007-11-01 01:05 +0000 [r8927-8928]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - drop unneeded subshell
+
+	* rc.d/init.d/functions: - use shell construct to test is pathname
+	  full path
+
+2007-11-01 00:59 +0000 [r8926]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - use shell constructs for basename()
+
+2007-11-01 00:54 +0000 [r8925]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - avoid endless loop when one puts --user
+	  after daemon name - some small optimizations - update daemon()
+	  usage
+
+2007-11-01 00:48 +0000 [r8924]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system: - add DEFAULT_SERVICE_UMASK=022
+
+2007-11-01 00:35 +0000 [r8922-8923]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - shell version
+
+	* rc.d/init.d/functions: - set ulimits with one awk call in
+	  daemon()
+
+2007-10-31 23:31 +0000 [r8920-8921]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* dumb.sh: - usable
+
+	* rc.d/init.d/functions: - typo?
+
+2007-10-31 20:48 +0000 [r8919]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - small cleanups and fixes
+
+2007-10-30 19:42 +0000 [r8904]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - move $MODULES_CONF closer where it is used
+
+2007-10-30 16:23 +0000 [r8903]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - fix obvious typo (perhaps drop it as it never
+	  worked?)
+
+2007-10-30 16:10 +0000 [r8901-8902]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - activate dm-multipath
+
+	* rc.d/rc.sysinit: - small optimize to use only awk
+
+2007-10-29 11:29 +0000 [r8897]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: - assume default
+	  WLAN_WPA_CONFIG=/etc/wpa_supplicant.conf
+
+2007-10-28 17:58 +0000 [r8891-8893]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: - $HOTPLUG is processed
+	  by udev (udev_net_helper)
+
+	* sysconfig/network-scripts/functions.network: - allow
+	  WLAN_MODE=managed in lowercase (as it's in doc)
+
+	* sysconfig/network-scripts/functions.network: - key index and
+	  value should be different arguments
+
+2007-10-28 17:36 +0000 [r8890]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: Revert ntfsfix. Please use something like
+	  init.d/ntfsfix for that.
+
+2007-10-28 16:59 +0000 [r8887-8889]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - [ -n "" ] and [ ""
+	  ] are the same, save some bytes/readability ;)
+
+	* sysconfig/network-scripts/functions.network: - handle wlan
+	  different four keys
+
+	* sysconfig/interfaces/ifcfg-description: - new WLAN options
+
+2007-10-28 16:43 +0000 [r8885-8886]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - reuse
+	  WLAN_ENCRYPTION
+
+	* sysconfig/network-scripts/functions.network: - optimize
+	  wireless_param() by calling eval once
+
+2007-10-28 16:13 +0000 [r8884]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - no need for
+	  LC_ALL=C to grep fixed string
+
+2007-10-28 13:06 +0000 [r8883]  Paweł Gołaszewski <blues/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - run ntfsfix if there are some ntfs
+	  filesystems mounted and if proper app is installed
+
+2007-10-26 12:48 +0000 [r8878]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system: - use default nice "+0" to avoid confusion as
+	  "0" is not valid in service setup
+
+2007-10-04 20:22 +0000 [r8778]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Activate ATARAID devices.
+
+2007-10-03 13:10 +0000 [r8771]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Do sanity check only
+	  when configuration file exists.
+
+2007-10-03 06:55 +0000 [r8770]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: - trim network length from
+	  $IP4ADDR when doing arping
+
+2007-10-02 22:32 +0000 [r8769]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - don't try to update mtab when mounting usbfs
+	  (root is ro yet)
+
+2007-10-01 08:45 +0000 [r8768]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - support $IPADDR +
+	  $NETMASK combination if no prefix in $IPADDR present
+
 2007-09-26 12:17 +0000 [r8753-8754]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - 0.4.1.9
