@@ -17,8 +17,8 @@ CONSOLE_LOGLEVEL=1
 # On errors (when system is starting) run sulogin instead of shell ?
 RUN_SULOGIN_ON_ERR=yes
 
-# Default run nice level for all services if
-# $SERVICE_RUN_NICE_LEVEL is not defined in /etc/sysconfig/<service>
+# Default run nice level for all services if $SERVICE_RUN_NICE_LEVEL is not
+# defined in /etc/sysconfig/<service>.
 DEFAULT_SERVICE_RUN_NICE_LEVEL=+0
 
 # Default limits set before running daemons (hard and soft) if
@@ -33,6 +33,10 @@ DEFAULT_SERVICE_RUN_NICE_LEVEL=+0
 # problems with the daemon, it also closes some security problems;
 # users' limits are set via pam_limits.
 DEFAULT_SERVICE_LIMITS="-u unlimited -c 0"
+
+# Default umask for all services if $SERVICE_UMASK is not defined in
+# /etc/sysconfig/<service>.
+DEFAULT_SERVICE_UMASK=022
 
 # Setup PNP using userspace tools?
 RUN_USERPNP=yes
