@@ -191,6 +191,18 @@ if ! is_yes "$VSERVER"; then
 
 	[ -x /sbin/start_udev ] && /sbin/start_udev
 
+	# Unmount the initrd, if necessary
+	if grep -q /initrd /proc/mounts 2>/dev/null && ! grep -q /initrd/loopfs /proc/mounts 2>/dev/null ; then
+		if [ -e /initrd/dev/.devfsd ]; then
+			umount /initrd/dev
+		fi
+		if [ -e /initrd/dev/.devfsd ]; then
+			umount /initrd/dev
+		fi
+		umount /initrd
+		/sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
+	fi
+
 	# /dev must be also mounted before everything but only if we want use them ;-)
 	if is_yes "$MOUNT_DEVFS"; then
 		run_cmd "Mounting Device Filesystem" mount -n -t devfs /dev /dev
@@ -380,15 +392,6 @@ if ! is_yes "$VSERVER"; then
 		elif [ "$rc" = "1" ]; then
 			_RUN_QUOTACHECK=1
 		fi
-	fi
-
-	# Unmount the initrd, if necessary
-	if LC_ALL=C grep -q /initrd /proc/mounts 2>/dev/null && ! LC_ALL=C grep -q /initrd/loopfs /proc/mounts 2>/dev/null ; then
-		if [ -e /initrd/dev/.devfsd ]; then
-			umount /initrd/dev
-		fi
-		umount /initrd
-		/sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
 	fi
 
 	# Check for arguments
