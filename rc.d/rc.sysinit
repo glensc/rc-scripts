@@ -40,6 +40,9 @@ fi
 
 CONSOLE_LOGLEVEL=1
 
+# Only read this once.
+cmdline=$(cat /proc/cmdline)
+
 # Read functions
 . /etc/rc.d/init.d/functions
 
@@ -269,7 +272,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Initialize USB controllers
 	usb=0
-	if ! grep -iq "nousb" /proc/cmdline 2>/dev/null && ! grep -q "/proc/bus/usb" /proc/mounts 2>/dev/null ; then
+	if ! strstr "$cmdline" "nousb" && ! grep -q "/proc/bus/usb" /proc/mounts 2>/dev/null ; then
 		aliases=$(/sbin/modprobe -c | awk '/^alias[\t ]+usb-controller/ { print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			/sbin/modprobe -s -k usbcore
@@ -305,11 +308,11 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Setup hdparm thing (if exists and is needed)
-	if ! grep -iq nohdparm /proc/cmdline 2>/dev/null; then
+	if ! strstr "$cmdline" nohdparm; then
 		[ -x /etc/rc.d/rc.hdparm ] && /etc/rc.d/rc.hdparm
 	fi
 
-	if [ -f /fastboot ] || grep -iq "fastboot" /proc/cmdline 2>/dev/null ; then
+	if [ -f /fastboot ] || strstr "$cmdline" "fastboot"; then
 		fastboot=yes
 	else
 		fastboot=
@@ -389,7 +392,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Check for arguments
-	if grep -iq nopnp /proc/cmdline 2>/dev/null; then
+	if strstr "$cmdline" nopnp; then
 		PNP=
 	else
 		PNP=yes
@@ -481,7 +484,7 @@ if ! is_yes "$VSERVER"; then
 
 	if [ ! -f /proc/modules ]; then
 		USEMODULES=
-	elif ! grep -iq nomodules /proc/cmdline 2>/dev/null; then
+	elif ! strstr "$cmdline" nomodules; then
 		USEMODULES=y
 	else
 		USEMODULES=
@@ -528,7 +531,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Load firewire devices
-	if ! grep -iq "nofirewire" /proc/cmdline 2>/dev/null ; then
+	if ! strstr "$cmdline" nofirewire; then
 		aliases=$(/sbin/modprobe -c | awk '/^alias ieee1394-controller/ { print	$3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			for alias in $aliases ; do
@@ -718,7 +721,7 @@ if ! is_yes "$VSERVER"; then
 
 	_RUN_QUOTACHECK=0
 	# Check filesystems
-	if [ -z "$fastboot" ] && ! grep -q nofsck /proc/cmdline 2>/dev/null; then
+	if [ -z "$fastboot" ] && ! strstr "$cmdline" nofsck; then
 		rc_splash "fsck start"
 		show "Checking filesystems"; started
 		initlog -c "fsck -C -T -R -A -a -P $fsckoptions"
