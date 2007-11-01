@@ -554,7 +554,7 @@ daemon()
 	if errors=$(umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK}; USER=root HOME=/tmp TMPDIR=/tmp nice -n ${nice:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
 		if [ -n "$waitname" -a -n "$waittime" ]; then
 			# Save basename.
-			base=$(basename "$waitname")
+			base=${waitname##*/}
 			# Find pid.
 			pid=$(pidofproc "$waitname" "$pidfile")
 			[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
@@ -617,7 +617,7 @@ killproc()
 	fi
 
 	# Save basename.
-	base=$(basename "$1")
+	base=${1##*/}
 
 	# Find pid.
 	pid=$(pidofproc "$1" "$pidfile")
@@ -674,7 +674,7 @@ killproc()
 
 	if [ -n "$waitname" -a -n "$waittime" ]; then
 		# Save basename.
-		base=$(basename "$waitname")
+		base=${waitname##*/}
 		# Find pid.
 		pid=$(pidofproc "$waitname" "$pidfile")
 		[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
@@ -696,8 +696,7 @@ killproc()
 # A function to find the pid of a program.
 pidofproc()
 {
-	typeset pid pidfile base
-	base=$(basename "$1")
+	typeset pid pidfile base=${1##*/}
 	pidfile="$base.pid"
 	[ -n "$2" ] && pidfile="$2"
 
@@ -729,10 +728,10 @@ pidofproc()
 
 status()
 {
-	typeset base pid subsys daemon cpuset_msg
+	typeset pid subsys daemon cpuset_msg
 	subsys=$1
 	daemon=${2:-$subsys}
-	base=$(basename $daemon)
+	local base=${daemon##*/}
 
 	# Test syntax.
 	if [ $# = 0 ] ; then
