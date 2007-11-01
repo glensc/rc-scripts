@@ -467,18 +467,27 @@ run_cmd()
 }
 
 _daemon_set_ulimits() {
-	eval $(echo "${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}" | awk -vksh="${KSH_VERSION:+1}" '
-		BEGIN {RS="[\n-]"} {
-			if ($1) {
-				if (ksh) {
-					if ($1 == "Su") $1 = "Sp";
-					if ($1 == "Hu") $1 = "Hp";
-					if ($1 == "u") $1 = "p";
-				}
-				printf("ulimit -%s %s; ", $1, $2);
-			}
-		}'
-	)
+	local opt val ksh=${KSH_VERSION:+1}
+	set -- ${SERVICE_LIMITS:-$DEFAULT_SERVICE_LIMITS}
+	while [ $# -gt 0 ]; do
+		opt=$1
+		val=$2
+		if [ "$ksh" ]; then
+			case "$opt" in
+			-Hu)
+				opt=-Hp
+			;;
+			-Su)
+				opt=-Sp
+			;;
+			-u)
+				opt=-p
+			;;
+			esac
+		fi
+		ulimit $opt $val
+		shift 2
+	done
 }
 
 # A function to start a program (now it's useful on read-only filesystem too)
