@@ -43,6 +43,49 @@ CONSOLE_LOGLEVEL=1
 # Read functions
 . /etc/rc.d/init.d/functions
 
+disable_selinux() {
+	typeset _d selinuxfs _t _r
+
+	while read _d selinuxfs _t _r; do
+		[ "$_t" = "selinuxfs" ] && break
+	done </proc/mounts
+	echo "*** Warning -- SELinux is active"
+	echo "*** Disabling security enforcement for system recovery."
+	echo "*** Run 'setenforce 1' to reenable."
+	echo "0" > $selinuxfs/enforce
+}
+
+relabel_selinux() {
+	typeset _d selinuxfs _t _r
+
+	while read _d selinuxfs _t _r; do
+		[ "$_t" = "selinuxfs" ] && break
+	done </proc/mounts
+	echo "
+         *** Warning -- SELinux relabel is required. ***
+         *** Disabling security enforcement.         ***
+         *** Relabeling could take a very long time, ***
+         *** depending on file system size.          ***
+         "
+	echo "0" > $selinuxfs/enforce
+	/sbin/fixfiles -F relabel > /dev/null 2>&1
+	rm -f /.autorelabel
+	echo "*** Enabling security enforcement.         ***"
+	echo $SELINUX > $selinuxfs/enforce
+}
+
+# Remove duplicate entries from mtab (for vserver guest use only)
+clean_vserver_mtab() {
+	:>/etc/mtab.clean
+	while read device mountpoint line; do
+		grep -qs "$mountpoint" /etc/mtab.clean || \
+			echo "$device $mountpoint $line" >> /etc/mtab.clean
+	done < /etc/mtab
+	cat /etc/mtab.clean > /etc/mtab
+	rm -f /etc/mtab.clean
+}
+
+
 # boot logging to /var/log/boot.msg. install showconsole package to get it.
 if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
 	RC_BOOTLOG=1
