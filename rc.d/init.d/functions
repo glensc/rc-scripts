@@ -495,44 +495,44 @@ daemon()
 {
 	typeset errors="" prog="" waitname="" waittime=""
 	typeset -i exit_code=0
-	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
-	# Test syntax. Don't use -o instead || here - this will break ksh --misiek
-	while [ "$1" != "${1##-}" ] || [ "$1" != "${1##+}" ]; do
+	local nice=$SERVICE_RUN_NICE_LEVEL
+
+	while [ $# -gt 0 ]; do
 		case $1 in
 		  '')
-			msg_usage " daemon [--user user] [--fork] [+/-nicelevel] {program}"
+			msg_usage " daemon [--user user] [--fork] [--waitforname procname] [--waitfortime seconds] [+/-nicelevel] {program} <program args>"
 			return 2
 			;;
 		  --check)
 			# for compatibility with redhat/mandrake
 			nls "warning: --check option is ignored!"
 			shift
-			shift
 			;;
 		  --user)
 			shift
 			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
-			shift
 			;;
 		  --fork)
 			prog="/usr/bin/setsid sh -c \""
 			end='&'
-			shift
 			;;
 		  --waitforname)
 			shift
 			waitname="$1"
-			shift
 			;;
 		  --waitfortime)
 			shift
 			waittime="$1"
-			shift
 			;;
-		  -*|+*) SERVICE_RUN_NICE_LEVEL=$1
-			shift
+		  -*|+*)
+			nice=$1
+			break
+			;;
+		  *)
+			break
 			;;
 		esac
+		shift
 	done
 	# If command to execute ends with quotation mark, add remaining
 	# arguments and close quotation.
@@ -545,12 +545,13 @@ daemon()
 	_daemon_set_ulimits
 
 	[ -z "$DEFAULT_SERVICE_UMASK" ] && DEFAULT_SERVICE_UMASK=022
+	[ -z "$DEFAULT_SERVICE_RUN_NICE_LEVEL" ] && DEFAULT_SERVICE_RUN_NICE_LEVEL=0
 
 	# And start it up.
 	busy
 	cd /
-	is_yes "$CPUSETS" && [ -n "$SERVICE_CPUSET" ] && echo $$ > "/dev/cpuset/${SERVICE_CPUSET}/tasks"
-	if errors=$(umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK}; USER=root HOME=/tmp TMPDIR=/tmp nice -n ${SERVICE_RUN_NICE_LEVEL:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
+	[ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS" && echo $$ > "/dev/cpuset/${SERVICE_CPUSET}/tasks"
+	if errors=$(umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK}; USER=root HOME=/tmp TMPDIR=/tmp nice -n ${nice:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
 		if [ -n "$waitname" -a -n "$waittime" ]; then
 			# Save basename.
 			base=$(basename "$waitname")
@@ -559,7 +560,7 @@ daemon()
 			[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
 			i=0
 			while [ "$i" -lt "$waittime" ]; do
-				i=$(( i + 1 ))
+				i=$((i + 1))
 				checkpid $pid && sleep 1 || break
 			done
 		fi
