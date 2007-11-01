@@ -13,6 +13,7 @@ man_MANS = \
 	ppp-watch.8 \
 	usernetctl.8 \
 	usleep.1 \
+	fstab-decode.8 \
 	start-stop-daemon.8
 
 EXTRA_DIST = $(man_MANS)
