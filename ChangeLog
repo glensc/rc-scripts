@@ -1,3 +1,37 @@
+2007-11-01 13:23 +0000 [r8947-8948]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* man/fstab-decode.8 (added): - add from fc
+
+	* src/fstab-decode.c (added): - add from fc
+
+2007-11-01 13:20 +0000 [r8946]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - release 0.4.1.10
+
+2007-11-01 12:20 +0000 [r8944]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - /dev (with devfs) could be mounted by kernel
+	  (arekm note)
+
+2007-11-01 03:00 +0000 [r8941-8942]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* man/Makefile.am, src/Makefile.am: - add fstab-decode from rh
+
+	* rc.d/rc.sysinit: - don't get tempted to kill blogd
+
+2007-11-01 02:53 +0000 [r8940]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - read /proc/cmdline after /proc mount
+
+2007-11-01 02:36 +0000 [r8937-8939]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system: - devfs comment update
+
+	* rc.d/rc.sysinit: - devfsd without devfs makes no sense :)
+
+	* rc.d/rc.sysinit: - no need to source udev configs here - just
+	  umount /initrd/dev without checking
+
 2007-11-01 02:10 +0000 [r8935]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - $PATH is set from init.d/functions - improve
