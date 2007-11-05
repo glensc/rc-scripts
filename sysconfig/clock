@@ -1,7 +1,7 @@
 # $Id$
 # Should the hardware clock be kept in Coordinated Universal Time
 # (instead of local time).
-UTC=false
+UTC=true
 # true means your machine uses epoch 1980 in its hardware clock
 ARC=false
 # true means your machine uses epoch 1900 in its hardware clock
