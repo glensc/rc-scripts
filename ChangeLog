@@ -1,3 +1,21 @@
+2007-11-06 18:55 +0000 [r9004-9005]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - release 0.4.1.12
+
+	* rc.d/init.d/functions: - missing shift for nice level parsing in
+	  daemon(). fixes some (broken) initscripts
+
+2007-11-05 18:09 +0000 [r8991]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/clock: - UTC clock by default. See:
+	  http://glen.alkohol.ee/pld/clock-utc.html
+
+2007-11-02 02:29 +0000 [r8957-8959]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - release 0.4.1.11
+
+	* rc.d/init.d/functions: - ksh doesn't like $2 in # modifier
+
 2007-11-01 13:23 +0000 [r8947-8948]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* man/fstab-decode.8 (added): - add from fc
