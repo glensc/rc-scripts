@@ -533,6 +533,7 @@ daemon()
 			;;
 		  -*|+*)
 			nice=$1
+			shift
 			break
 			;;
 		  *)
