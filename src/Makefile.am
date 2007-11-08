@@ -49,7 +49,6 @@ testd_SOURCES = testd.c
 usernetctl_SOURCES = usernetctl.c
 
 usleep_SOURCES = usleep.c
-usleep_LDADD = -lpopt
 
 loglevel_SOURCES = loglevel.c
 

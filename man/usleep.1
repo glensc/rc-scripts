@@ -1,25 +1,50 @@
-.TH USLEEP 1 "Red Hat, Inc" \" -*- nroff -*-
+.\"
+.\" Copyright 2001 Werner Fink, 2001 SuSE GmbH Nuernberg, Germany.
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or
+.\" (at your option) any later version.
+.\"
+.TH USLEEP 1 "Jan 31, 2001" "Version 1.16" "The SuSE boot concept"
+.UC 1
 .SH NAME
-usleep \- sleep some number of microseconds
+Usleep \- sleep for the specified number of microseconds
+.\"
 .SH SYNOPSIS
-.B usleep
-[\fInumber\fP]
+.\"
+.B usleep [
+.I usec
+.B ]
+.\"
 .SH DESCRIPTION
 .B usleep
-sleeps some number of microseconds.  The default is 1.
-.SH OPTIONS
-\fI--usage\fP
-Show short usage message.
-.TP
-\fI--help, -?\fP
-Print help information.
-.TP
-\fI-v, --version\fP
-Print version information.
+pauses for the number of
+.I usec
+microseconds. The default is
+.B 1
+microsecond.  If
+.B 0
+microseconds are specified
+.BR sched_yield (2)
+is called.
+.\"
 .SH BUGS
-Probably not accurate on many machines down to the microsecond.  Count
-on precision only to -4 or maybe -5.
+The
+.B usleep
+program uses the
+.BR usleep (3)
+function and therefore shows the same weaknesses
+by any system activity.
+\."
+.SH SEE ALSO
+.BR usleep (3),
+.BR sleep (1),
+.BR sleep (3),
+.BR sched_yield (2).
+\."
+.SH COPYRIGHT
+2001 Werner Fink,
+2001 SuSE GmbH Nuernberg, Germany.
 .SH AUTHOR
-Donald Barnes <djb@redhat.com>
-.br
-Erik Troan <ewt@redhat.com>
+Werner Fink <werner@suse.de>

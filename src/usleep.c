@@ -1,76 +1,71 @@
-/* 
- * usleep
- * 
- * Written by Donald Barnes <djb@redhat.com> for Red Hat, Inc.
- * 
- * Copyright (c) 1997-2003 Red Hat, Inc. All rights reserved.
+/*
+ * usleep.c     Sleep for the specified number of microseconds
  *
- * This software may be freely redistributed under the terms of the GNU
- * public license.
+ * Usage:       usleep [ microseconds ]
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * Copyright 2001 Werner Fink, 2001 SuSE GmbH Nuernberg, Germany.
+ * Copyright 2005 Werner Fink, 2005 SUSE LINUX Products GmbH, Germany.
  *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Author:      Werner Fink <werner@suse.de>
  */
 
-
-#include <unistd.h>
-#include <stdlib.h>
+#ifndef  __USE_STRING_INLINES
+# define __USE_STRING_INLINES
+#endif
+#ifdef   __NO_STRING_INLINES
+# undef  __NO_STRING_INLINES
+#endif
+#include <libgen.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#ifdef _POSIX_PRIORITY_SCHEDULING
+# include <sched.h>
+#endif
+#define USAGE		"Usage:\t%s [ microseconds ]\n", we_are
 
-#include "popt.h"
+static char *we_are;
+int main(int argc, char **argv)
+{
+    unsigned long int usec = 1;
 
-int main(int argc, char **argv) {
-  unsigned long count;
-  poptContext optCon;
-  int showVersion = 0;
-  int showOot = 0;
-  int rc;
-  char * countStr = NULL;
-  struct poptOption options[] = {
-            { "version", 'v', POPT_ARG_NONE, &showVersion, 0, 
-			"Display the version of this program, and exit" },
-            { "oot", 'o', POPT_ARG_NONE, &showOot, 0, 
-			"oot says hey!" },
-	    POPT_AUTOHELP
-            { 0, 0, 0, 0, 0 }
-        };
+    if (argc > 2)
+	goto err;
 
-  optCon = poptGetContext("usleep", argc, argv, options,0);
-  /*poptReadDefaultConfig(optCon, 1);*/
-  poptSetOtherOptionHelp(optCon, "[microseconds]");
+    if (argc > 1) {
+	char *endptr;
+	usec = strtoul(argv[1], &endptr, 10);
+	if (*endptr != '\0')
+	    goto err;
+    }
 
-  if ((rc = poptGetNextOpt(optCon)) < -1) {
-	fprintf(stderr, "usleep: bad argument %s: %s\n", 
-		poptBadOption(optCon, POPT_BADOPTION_NOALIAS), 
-		poptStrerror(rc));
-	return 2;
-  }
+    if (usec)
+	usleep(usec);
+#ifdef _POSIX_PRIORITY_SCHEDULING
+    else
+	(void)sched_yield();
+#endif
+    _exit(0);
 
-  if (showVersion) {
-      printf("usleep version 1.2\n	usleep --help for more info\n");
-      return 0;
-  }
+    /* Do this at the end for speed */
+err:
+    we_are = basename(argv[0]);
+    fprintf(stderr, USAGE);
 
-  if (showOot) {
-      printf("oot says hey!\n");
-      return 0;
-  }
-
-  countStr = poptGetArg(optCon);
-
-  if (countStr == NULL) count = 1;
-
-  else if (countStr && poptGetArg(optCon)) {
-      fprintf(stderr, "%s: exactly one argument (number of microseconds) "
-      		"must be used\n", argv[0]);
-      return 2;
-  }
-
-  else count = strtoul(countStr, NULL, 0); 
-
-  usleep(count);
-  return 0;
-} 
+    if (argc > 1 && *(argv[1]) == '-') {
+	argv[1]++;
+	if (!strcmp(argv[1], "-help") || *(argv[1]) == 'h' || *(argv[1]) == '?') {
+	    fprintf(stderr, "Sleep for the specified number of microseconds.\n\n");
+	    fprintf(stderr, "Help options:\n");
+	    fprintf(stderr, "  -h, -?, --help    display this help and exit.\n");
+	    exit (0);
+	}
+    }
+    exit (1);
+}
