@@ -28,6 +28,12 @@ rc_splash "reboot"
 runlevel=$1
 previous=$2
 
+# Stop blogd before umounting /var
+if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
+	killall -QUIT blogd
+fi
+
+
 # check for other processes.
 # there could be none if all services were terminated properly
 # pgrep -g 0 requires procps >= 3.2.6-1.1

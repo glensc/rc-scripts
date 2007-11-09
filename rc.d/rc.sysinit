@@ -204,7 +204,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Start logging console output since we have all /dev stuff setup
 	if [ "$RC_BOOTLOG" ]; then
-		/sbin/blogd -q
+		/sbin/blogd
 	fi
 
 	# cpuset support (mounted unconditionally, shouldn't be a problem)
