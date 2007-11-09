@@ -14,6 +14,7 @@ man_MANS = \
 	usernetctl.8 \
 	usleep.1 \
 	fstab-decode.8 \
+	crypttab.5 \
 	start-stop-daemon.8
 
 EXTRA_DIST = $(man_MANS)
