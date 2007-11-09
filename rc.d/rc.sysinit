@@ -268,6 +268,19 @@ if ! is_yes "$VSERVER"; then
 		TIME_SETUP_DELAYED=yes
 	fi
 
+	if [ -f /etc/crypttab ]; then
+		# XXX might need modules dep
+		# Device mapper & related initialization
+		if ! fgrep -q device-mapper /proc/devices; then
+			modprobe dm-mod
+		fi
+
+		# but should do this before swapon?
+		. /etc/rc.d/init.d/cryptsetup
+		show "Starting disk encryption:"
+		init_crypto 0 && ok || fail
+	fi
+
 	# Start up swapping
 	run_cmd "Activating swap partitions" swapon -a -e
 
@@ -419,6 +432,11 @@ if ! is_yes "$VSERVER"; then
 		done
 	fi
 
+	if [ -f /etc/crypttab ]; then
+		# XXX, this must be probably done after random is initialized from /var/run/random-seed
+		show "Starting disk encryption using the RNG:"
+		init_crypto 1 && ok || fail
+	fi
 else
 	# Start logging console output since we have all /dev stuff setup
 	if [ "$RC_BOOTLOG" ]; then
