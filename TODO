@@ -5,7 +5,6 @@ Important:
   suggestion (multicast, arp)
 - merge baggins changes in atm-rc (added support for RFC1483/2684 Bridged
   protocol)
-- LVM on DMRAID device isn't started at bootup (missing vchange -ay somewhere)
 - killproc() sucks and has no consistency, error reporting
   you'll never know which side of PROCNAME you should add the --waitforname or -SIGNAL args
   because if you put -SIGNAL at wrong side of PROGNAME it will enter infinitive loop:
@@ -24,6 +23,3 @@ Other:
 - maybe merge ATM rc scripts
 
 We are waiting for suggestions.
-
-serial is broken with this diff:
-http://svn.pld-linux.org/cgi-bin/viewsvn/rc-scripts/trunk/rc.d/init.d/functions?r1=7767&r2=7768&p1=rc-scripts/trunk/rc.d/init.d/functions&p2=rc-scripts/trunk/rc.d/init.d/functions
