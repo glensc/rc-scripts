@@ -145,6 +145,11 @@ else
 	_rebootwhat="vserver"
 fi
 
+if [ -f /etc/crypttab ]; then
+	show "Stopping disk encryption:"
+	halt_crypto && ok || fail
+fi
+
 if [ "$runlevel" = "0" ] ; then
 	show "The $_rebootwhat is halted"; ok
 	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
