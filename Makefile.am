@@ -8,6 +8,7 @@ sysconf_DATA = \
 	adjtime \
 	inittab \
 	modules \
+	crypttab \
 	sysctl.conf
 
 profiledir = @sysconfdir@/profile.d
