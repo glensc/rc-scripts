@@ -145,7 +145,7 @@ else
 	_rebootwhat="vserver"
 fi
 
-if [ -f /etc/crypttab ]; then
+if [ -f /etc/crypttab ] && ! is_empty_file /etc/crypttab; then
 	. /etc/rc.d/init.d/cryptsetup
 
 	show "Stopping disk encryption"

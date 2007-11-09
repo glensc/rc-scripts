@@ -268,7 +268,7 @@ if ! is_yes "$VSERVER"; then
 		TIME_SETUP_DELAYED=yes
 	fi
 
-	if [ -f /etc/crypttab ]; then
+	if [ -f /etc/crypttab ] && ! is_empty_file /etc/crypttab; then
 		# XXX might need modules dep
 		# Device mapper & related initialization
 		if ! fgrep -q device-mapper /proc/devices; then
@@ -432,7 +432,7 @@ if ! is_yes "$VSERVER"; then
 		done
 	fi
 
-	if [ -f /etc/crypttab ]; then
+	if [ -f /etc/crypttab ] && ! is_empty_file /etc/crypttab; then
 		# XXX, this must be probably done after random is initialized from /var/run/random-seed
 		show "Starting disk encryption using the RNG:"
 		init_crypto 1 && ok || fail
