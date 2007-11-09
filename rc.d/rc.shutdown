@@ -29,10 +29,9 @@ runlevel=$1
 previous=$2
 
 # Stop blogd before umounting /var
-if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
-	killall -QUIT blogd
+if [ -x /sbin/blogd ]; then
+	killall -q -QUIT blogd
 fi
-
 
 # check for other processes.
 # there could be none if all services were terminated properly
