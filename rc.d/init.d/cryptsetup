@@ -1,6 +1,6 @@
 #!/bin/sh
 # cryptsetup functions for rc-scripts
-# if invoked standalone, processes /etc/cryptab like on boot.
+# if invoked standalone, processes /etc/cryptab like on boot/shutdown
 
 key_is_random() {
 	[ "$1" = "/dev/urandom" -o "$1" = "/dev/hw_random" -o "$1" = "/dev/random" ]
@@ -124,10 +124,50 @@ init_crypto() {
 	return $ret
 }
 
-# if invoked directly,
-if [[ "$0" = *cryptsetup ]] && [ -f /etc/crypttab ]; then
-	. /etc/rc.d/init.d/functions
+halt_crypto() {
+    fnval=0
+    while read dst src key; do
+	[ -z "$dst" -o "${dst#\#}" != "$dst" ] && continue
+        if [ -b "/dev/mapper/$dst" ]; then
+            if /sbin/dmsetup info "$dst" | grep -q '^Open count: *0$'; then
+                /sbin/cryptsetup remove "$dst"
+            else
+                fnval=1
+            fi
+        fi
+    done < /etc/crypttab
+    return $fnval
+}
 
+# if not invoked directly, return to caller
+if [[ "$0" != *cryptsetup ]] || [ ! -f /etc/crypttab ]; then
+	return
+fi
+
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
 	show "Starting disk encryption:"
 	init_crypto 1 && ok || fail
-fi
+	;;
+  stop)
+	show "Stopping disk encryption:"
+	halt_crypto && ok || fail
+	;;
+  status)
+	# this is way overkill, but at least we have some status output...
+	if fgrep -q dm_crypt /proc/modules; then
+		nls "dm-crypt module is loaded"
+	else
+		nls "dm-crypt module is not loaded"
+	fi
+	;;
+  *)
+	msg_usage "$0 {start|stop|status}"
+	exit 3
+esac
+
+exit $RETVAL
