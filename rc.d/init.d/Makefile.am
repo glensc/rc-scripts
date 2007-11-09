@@ -10,6 +10,7 @@ init_SCRIPTS = \
 	random \
 	single \
 	sys-chroots \
+	cryptsetup \
 	local
 	
 init_DATA = functions
