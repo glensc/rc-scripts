@@ -146,7 +146,9 @@ else
 fi
 
 if [ -f /etc/crypttab ]; then
-	show "Stopping disk encryption:"
+	. /etc/rc.d/init.d/cryptsetup
+
+	show "Stopping disk encryption"
 	halt_crypto && ok || fail
 fi
 

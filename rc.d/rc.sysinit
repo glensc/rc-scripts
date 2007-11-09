@@ -277,7 +277,7 @@ if ! is_yes "$VSERVER"; then
 
 		# but should do this before swapon?
 		. /etc/rc.d/init.d/cryptsetup
-		show "Starting disk encryption:"
+		show "Starting disk encryption"
 		init_crypto 0 && ok || fail
 	fi
 
