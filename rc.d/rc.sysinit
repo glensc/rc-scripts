@@ -584,7 +584,7 @@ if ! is_yes "$VSERVER"; then
 		# first make nodes that were discarded due (possible) new /dev mount
 		/sbin/dmsetup mknodes
 		run_cmd "Activating dm-multipath" /sbin/multipath -v 0
-		/sbin/dmsetup ls --target multipath --exec '/sbin/kpartx -a'
+		/sbin/dmsetup ls --target multipath --exec '/sbin/kpartx -a -p p'
 	fi
 
 	if [ -x /sbin/dmraid ]; then
