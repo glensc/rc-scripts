@@ -61,6 +61,7 @@ reload() {
 	if [ -f /var/lock/subsys/<service> ]; then
 		msg_reloading <service>
 		killproc <service> -HUP
+		killproc --pidfile /var/run/<service>.pid <service> -HUP
 		RETVAL=$?
 	else
 		msg_not_running <service>
