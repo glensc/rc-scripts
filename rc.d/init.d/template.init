@@ -37,7 +37,7 @@ start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/<service> ]; then
 		msg_starting <service>
-		daemon <service>
+		daemon /usr/sbin/<service>
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/<service>
 	else
@@ -50,6 +50,7 @@ stop() {
 		# Stop daemons.
 		msg_stopping <service>
 		killproc <service>
+		killproc --pidfile /var/run/<service>.pid <service> -TERM
 		rm -f /var/lock/subsys/<service>
 	else
 		msg_not_running <service>
