@@ -88,7 +88,9 @@ case "$1" in
 # ONLY if program allows reloading without stopping
 # otherwise include force-reload with 'reload'
   force-reload)
-	restart
+	stop
+	start
+	
 	;;
   status)
 	status <service>
