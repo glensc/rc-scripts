@@ -69,6 +69,18 @@ reload() {
 	fi
 }
 
+condrestart() {
+	if [ -f /var/lock/subsys/<service> ]; then
+		stop
+		start
+	else
+		if [ $1 -ne 0 ]; then
+			msg_not_running <service>
+		fi
+		RETVAL=$1
+	fi
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
@@ -78,22 +90,28 @@ case "$1" in
   stop)
   	stop
 	;;
-# include force-reload here if program doesn't support reloading without restart
-#  restart|force-reload)
   restart)
 	stop
 	start
 	;;
+  try-restart)
+	condrestart 0
+	;;
 # include force-reload here if program allows reloading without restart
+# otherwise remove reload action and support force-reload as restart if running
   reload|force-reload)
   	reload
+	;;
+# use this one if program doesn't support reloading without restart
+  force-reload)
+	condrestart 7
 	;;
   status)
 	status <service>
 	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
 	exit 3
 esac
 
