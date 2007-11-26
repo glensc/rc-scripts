@@ -81,6 +81,29 @@ clean_vserver_mtab() {
 	rm -f /etc/mtab.clean
 }
 
+# Loads modules from /etc/modules, /etc/modules.X.Y and /etc/modules.X.Y.Z
+load_kernel_modules() {
+	{
+		local _x _y v _z
+		read  _x _y v _z
+		old_IFS=$IFS
+		IFS='.'
+		set -- $v
+		IFS=$old_IFS
+		kernel="$1.$2"
+		kerneleq="$1.$2.$3"
+	} < /proc/version
+
+	local module
+	# Loop over every line in modules file
+	( \
+		egrep -hv '^(#|[[:blank:]]*$)' /etc/modules /etc/modules.$kernel /etc/modules.$kerneleq 2>/dev/null
+		echo '' # make sure there is a LF at the end
+	) | while read module args; do
+		[ -z "$module" ] && continue
+		modprobe -s $module -- $args
+	done
+}
 
 # boot logging to /var/log/boot.msg. install showconsole package to get it.
 if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
@@ -575,9 +598,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Load modules
-	if [ -x /etc/rc.d/rc.modules ]; then
-		/etc/rc.d/rc.modules
-	fi
+	load_kernel_modules
 
 	if [ -x /sbin/multipath ]; then
 		# first make nodes that were discarded due (possible) new /dev mount
