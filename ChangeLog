@@ -1,3 +1,103 @@
+2007-11-25 11:18 +0000 [r9091]  Jakub Bogusz <qboosh/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - force-reload is not supposed to
+	  start service if it is not running - new try-restart action (as
+	  specified by LSB 3.1.0, formerly "condrestart" in some distros)
+	  it should restart service if running and just exit sucessfully
+	  otherwise
+
+2007-11-25 08:46 +0000 [r9090]  Jakub Bogusz <qboosh/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - simplified
+
+2007-11-21 23:24 +0000 [r9076-9077]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - better this way
+
+	* rc.d/init.d/template.init: - this should be restart, who put
+	  reload there?
+
+2007-11-21 23:18 +0000 [r9074-9075]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - reload also could use pidfile
+
+	* rc.d/init.d/template.init: - one more killproc sample
+
+2007-11-13 18:57 +0000 [r9043]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - suffix dm-multipath partitions with pN
+
+2007-11-09 01:54 +0000 [r9033]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - blogd might be already down and it might had
+	  been started manually
+
+2007-11-09 01:47 +0000 [r9032]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/hwprofiles/Makefile.am: - if the file is not packaged
+	  in spec, don't install it either
+
+2007-11-09 01:37 +0000 [r9030-9031]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc.sysinit: - /etc/crypttab shouldn't be
+	  empty when using it
+
+	* rc.d/init.d/functions: - add is_empty_file() function
+
+2007-11-09 01:20 +0000 [r9028-9029]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* crypttab (added), Makefile.am: - add sample /etc/crypttab
+
+	* TODO: - cleanup
+
+2007-11-09 01:10 +0000 [r9027]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc.sysinit: - bugfixes for crypttab
+
+2007-11-09 00:49 +0000 [r9025-9026]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - add /etc/crypttab processing
+
+	* rc.d/init.d/cryptsetup: - add halt_crypto() from fc
+	  initscripts-8.54 - add standalone mode for start/stop
+
+2007-11-09 00:37 +0000 [r9024]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - initial /etc/crypttab processing
+
+2007-11-09 00:33 +0000 [r9021-9023]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/Makefile.am: - add cryptsetup
+
+	* rc.d/init.d/cryptsetup (added): - based on code from rc.sysinit
+	  of fc initscripts-8.54
+
+	* man/Makefile.am, man/crypttab.5 (added): - add crypttab.5 from fc
+	  initscripts-8.54
+
+2007-11-09 00:21 +0000 [r9020]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/random: - use subsys lock files
+
+2007-11-09 00:00 +0000 [r9019]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc.sysinit: - blogd updates
+
+2007-11-08 00:42 +0000 [r9016]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* src/usleep.c, man/usleep.1, src/Makefile.am: - update with suse
+	  variant from killproc-2.12 (and who's oot?
+	  http://lists.rpath.com/pipermail/initscripts-commits/2006-December/000573.html)
+
+2007-11-08 00:29 +0000 [r9013-9015]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* src/initlog.c: - update from initscripts-8.54, except killing
+	  startDaemon() and adding deprecation message
+
+	* src/initlog.conf: - update from initscripts-8.54
+
+	* src/minilogd.c: - update from initscripts-8.54
+
 2007-11-06 18:55 +0000 [r9004-9005]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - release 0.4.1.12
