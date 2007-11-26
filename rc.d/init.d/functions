@@ -108,7 +108,7 @@ is_no()
 # empty lines and lines beginning with hash are ignored
 is_empty_file() {
 	[ -s "$1" ] || return 0
-	egrep -vq '^(#| *$)' "$1" && return 1 || return 0
+	egrep -vq "^(#|[[:blank:]]*$)" "$1" && return 1 || return 0
 }
 
 # returns OK if $1 contains $2
