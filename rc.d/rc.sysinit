@@ -500,30 +500,29 @@ if ! is_yes "$VSERVER"; then
 		USEMODULES=
 	fi
 
+	uname_r=$(uname -r)
 	# Adjust symlinks as necessary in /boot to keep system services from
 	# spewing messages about mismatched System maps and so on.
 	if ! is_no "$SET_SLINKS"; then
-		uname_r=$(uname -r)
 		if [ -L /boot/System.map -a -r /boot/System.map-$uname_r ] ; then
 			ln -s -f System.map-$uname_r /boot/System.map
 		fi
 		if [ ! -e /boot/System.map -a -r /boot/System.map-$uname_r ] ; then
 			ln -s -f System.map-$uname_r /boot/System.map
 		fi
-		unset uname_r
 	fi
 
 	# Run depmod if RUN_DEPMOD != "no" and:
 	# a) user requested or RUN_DEPMOD="";
 	# b) modules.dep is missing
-	# c) modules.dep is older than /etc/modules.conf or /lib/modules/`uname -r`
 	if ! is_no "$RUN_DEPMOD" && [ -n "$USEMODULES" ]; then
 		if is_yes "$RUN_DEPMOD" || [ -z "$RUN_DEPMOD" ]; then
 			run_cmd "Finding module dependencies" depmod -a
-		elif [ "$RUN_DEPMOD" = "ifmissing" ]; then
+		elif [ "$RUN_DEPMOD" = "ifmissing" ] && [ ! -f /lib/modules/$uname_r/modules.dep ]; then
 			run_cmd "Finding module dependencies" depmod -A
 		fi
 	fi
+	unset uname_r
 
 	if [ -f /proc/sys/kernel/modprobe ]; then
 		if [ -n "$USEMODULES" ]; then
