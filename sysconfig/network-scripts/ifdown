@@ -120,8 +120,12 @@ if is_yes $ETH_VLANS && $(echo $DEVICE | grep -q ^eth) ; then
 		ip link set ${DEVICE} down
 	fi
 else
-	ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
-	ip link set ${DEVICE} down
+	if [ -n "${SUBDEVICE}" ]; then
+		ip addr del ${IP4ADDR} label ${SUBDEVICE} dev ${DEVICE}
+	else
+		ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+		ip link set ${DEVICE} down
+	fi
 fi
 
 if [ "$HANDLING" = "4" ]; then

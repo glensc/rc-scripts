@@ -189,7 +189,7 @@ setup_ip_param ()
 {
 	# detect network device type (ie. dummy, eth for dummy0, eth0 ..)
 	if [ -z "$DEVICETYPE" ]; then
-		DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[0-9]*\.?[0-9]*$/,NUL); print $0 } ')
+		DEVICETYPE=$(echo $DEVICE | awk ' { gsub(/[\.:]?[0-9]*[\.:]?[0-9]*$/,NUL); print $0 } ')
 	fi
 
 	# Setup DEVICETYPE for special cases.
@@ -198,6 +198,7 @@ setup_ip_param ()
 	fi
 
 	# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
+	SUBDEVICE=$(echo "$DEVICE" | egrep "([0-9]+:[0-9]+)" )
 	DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
 	eval IP4ADDR="\$IPADDR${IP4_PRIM_IF:-}"

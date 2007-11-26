@@ -169,10 +169,14 @@ else
 			IP4ADDROPT="brd + ${IP4ADDROPT}"
 		fi
 
+		if [ -n "${SUBDEVICE}" ]; then
+			ALIAS="label ${SUBDEVICE}"
+		fi
+
 		if [ -n "$REMIP" ]; then
-			ip addr add ${IP4ADDR} peer ${REMIP} dev ${DEVICE} ${IP4ADDROPT}
+			ip addr add ${IP4ADDR} peer ${REMIP} ${ALIAS} dev ${DEVICE} ${IP4ADDROPT}
 		else
-			ip addr add ${IP4ADDR} dev ${DEVICE} ${IP4ADDROPT}
+			ip addr add ${IP4ADDR} ${ALIAS} dev ${DEVICE} ${IP4ADDROPT}
 		fi
 	fi
 
