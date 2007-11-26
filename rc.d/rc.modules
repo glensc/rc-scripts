@@ -6,7 +6,10 @@
 # rc.modules: launch modules specified in /etc/modules
 # $Id$
 
-. /etc/rc.d/init.d/functions
+# if invoked directly, source functions library
+if [[ "$0" != *rc.modules ]]; then
+	. /etc/rc.d/init.d/functions
+fi
 
 {
 	read _x _y v _z
@@ -25,10 +28,9 @@
 	[ -f "/etc/modules.${kerneleq}" ] && egrep -v "^(#|[[:blank:]]*#)" "/etc/modules.${kerneleq}" 2>/dev/null; \
 	echo \
 ) | # make sure there is a LF at the end
-while read module args
-do
+while read module args; do
 	[ -z "$module" ] && continue
-	_modprobe single $module
+	modprobe -s $module
 done
 
 # This must be last line !
