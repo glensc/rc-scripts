@@ -87,7 +87,7 @@ if ! is_yes "$VSERVER"; then
 		sleep 2
 		remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
 		[ -z "$remaining" ] && break
-		/sbin/fuser -k -m $sig $remaining > /dev/null
+		fuser -k -m $sig $remaining > /dev/null
 		sleep 5
 		retry=$(($retry-1))
 		sig=-9
