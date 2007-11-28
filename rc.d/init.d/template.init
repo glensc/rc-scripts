@@ -74,9 +74,7 @@ condrestart() {
 		stop
 		start
 	else
-		if [ $1 -ne 0 ]; then
-			msg_not_running <service>
-		fi
+		msg_not_running <service>
 		RETVAL=$1
 	fi
 }
