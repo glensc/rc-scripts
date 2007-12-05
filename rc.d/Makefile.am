@@ -7,7 +7,6 @@ rcdir = @rcdir@
 rc_SCRIPTS = \
 	rc \
 	rc.local \
-	rc.modules \
 	rc.sysinit \
 	rc.shutdown \
 	rc.init
