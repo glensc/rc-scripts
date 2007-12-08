@@ -98,7 +98,7 @@ set_dhcpclient()
 		elif [ -x /sbin/pump ]; then
 			DHCP_CLIENT=/sbin/pump
 		else
-			nls "Can't find a dhcp client."
+			nls "Can't find a DHCP client."
 			exit 1
 		fi
 	fi
@@ -176,7 +176,7 @@ static_rarp()
 
 vlan_setup()
 {
-	if [ -x /sbin/vconfig -a -e /proc/net/vlan/config ] && $(echo $DEVICE | grep -q ^eth); then
+	if [ -x /sbin/vconfig -a -e /proc/net/vlan/config ] && echo $DEVICE | grep -q ^eth; then
 		/sbin/vconfig set_name_type DEV_PLUS_VID_NO_PAD 2>&1 > /dev/null
 		ETH_VLANS="yes"
 	else
@@ -193,12 +193,12 @@ setup_ip_param ()
 	fi
 
 	# Setup DEVICETYPE for special cases.
-	if (echo ${DEVICE} | LC_ALL=C egrep -q '^[a-z0-9]+\.[0-9]+$'); then
+	if echo ${DEVICE} | LC_ALL=C egrep -q '^[a-z0-9]+\.[0-9]+$'; then
 		DEVICETYPE=vlan
 	fi
 
 	# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
-	SUBDEVICE=$(echo "$DEVICE" | egrep "([0-9]+:[0-9]+)" )
+	SUBDEVICE=$(echo "$DEVICE" | egrep "([0-9]+:[0-9]+)")
 	DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
 	eval IP4ADDR="\$IPADDR${IP4_PRIM_IF:-}"
@@ -266,7 +266,7 @@ setup_ip_param ()
 
 check_device_down ()
 {
-	if (ip link show dev ${DEVICE} 2> /dev/null | grep -q UP); then
+	if LC_ALL=C ip link show dev ${DEVICE} 2> /dev/null | grep -q UP; then
 		return 1
 	else
 		return 0
@@ -349,7 +349,7 @@ set_up_loopback()
 
 set_down_loopback()
 {
-	ip addr flush dev lo 2>&1 | grep -v "Nothing to flush"
+	LC_ALL=C ip addr flush dev lo 2>&1 | grep -v "Nothing to flush"
 	ip link set dev lo down
 }
 
@@ -581,8 +581,7 @@ check_ethtool ()
 check_iwconfig ()
 {
 	[ -x /sbin/iwconfig ] || return 2
-	output=$(LC_ALL=C iwconfig $1 2>&1)
-	echo $output | grep -q "radio off" && return 0 || return 2
+	LC_ALL=C iwconfig "$1" 2>&1 | grep -q "radio off" && return 0 || return 2
 }
 
 check_link_down ()
@@ -612,6 +611,3 @@ check_link_down ()
 	fi
 	return 1
 }
-
-# This must be last line !
-# vi:syntax=sh
