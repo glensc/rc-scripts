@@ -255,6 +255,78 @@ stop() {
 	rm -f /var/lock/subsys/network
 }
 
+# Reload all active interfaces
+reload() {
+	if [ ! -f /var/lock/subsys/network ]; then
+		msg_not_running network
+		RETVAL=7
+		return
+	fi
+
+	set_dhcpclient
+
+	# if no DHCP client found we can't reload anything
+	if [ -z "$DHCP_CLIENT" ]; then
+		return
+	fi
+
+	local DHCP_ARGS
+	case ${DHCP_CLIENT##*/} in
+#	  pump)
+#		DHCP_ARGS="$DHCP_ARGS -i $DEVICE"
+#		;;
+	  dhcpcd)
+		DHCP_ARGS="-n"
+		;;
+#	  dhcpxd)
+#		DHCP_ARGS="$DHCP_ARGS $DEVICE"
+#		;;
+#	  dhclient)
+#		DHCP_ARGS="$DEVICE"
+#		;;
+	  *)
+		echo "Reloading using $DHCP_CLIENT DHCP Client is not implmemented in rc-scripts"
+		RETVAL=1
+		return
+		;;
+	esac
+
+	# for IPv4 DHCP interfaces send signal to refresh interface
+	local dev devs=${*-$(/sbin/ip link show | awk -F":" ' (/UP/) { print $2 }' | xargs)}
+	for dev in $devs; do
+		if [ ! -f /etc/sysconfig/interfaces/ifcfg-$dev ]; then
+			continue
+		fi
+		. /etc/sysconfig/interfaces/ifcfg-$dev
+
+		if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ] && is_yes "$IPV4_NETWORKING"; then
+			case ${DHCP_CLIENT##*/} in
+			  pump)
+				DHCP_ARGS="$DHCP_ARGS -i $DEVICE"
+				;;
+			  dhcpcd)
+				DHCP_ARGS="$DHCP_ARGS $DEVICE"
+				;;
+			  dhcpxd)
+				DHCP_ARGS="$DHCP_ARGS $DEVICE"
+				;;
+			  dhclient)
+				DHCP_ARGS="$DHCP_ARGS $DEVICE"
+				;;
+			esac
+			DHCP_ARGS="$DHCP_OPTIONS $DHCP_ARGS"
+
+			show 'Reloading interface %s' $dev
+			if $DHCP_CLIENT $DHCP_ARGS; then
+				ok
+			else
+				fail
+			fi
+		fi
+	done
+
+}
+
 find_boot_interfaces
 
 # See how we were called.
@@ -287,6 +359,14 @@ case "$1" in
 	/sbin/ip link show | awk -F":" ' (/UP/) { print $2 }' | xargs
 	;;
 
+  reload)
+	if is_yes "$VSERVER"; then
+		exit 0
+	fi
+	shift
+	reload ${1:+"$@"}
+	;;
+
   restart)
 	if is_yes "$VSERVER"; then
 		exit 0
@@ -297,7 +377,7 @@ case "$1" in
 	;;
 
   *)
-	msg_usage "$0 {start|stop|restart|status}"
+	msg_usage "$0 {start|stop|reload|restart|status}"
 	exit 3
 esac
 
