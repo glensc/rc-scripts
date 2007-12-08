@@ -273,16 +273,16 @@ reload() {
 	local DHCP_ARGS
 	case ${DHCP_CLIENT##*/} in
 #	  pump)
-#		DHCP_ARGS="$DHCP_ARGS -i $DEVICE"
+#		DHCP_ARGS=""
 #		;;
 	  dhcpcd)
 		DHCP_ARGS="-n"
 		;;
 #	  dhcpxd)
-#		DHCP_ARGS="$DHCP_ARGS $DEVICE"
+#		DHCP_ARGS=""
 #		;;
 #	  dhclient)
-#		DHCP_ARGS="$DEVICE"
+#		DHCP_ARGS=""
 #		;;
 	  *)
 		echo "Reloading using $DHCP_CLIENT DHCP Client is not implmemented in rc-scripts"
@@ -292,7 +292,7 @@ reload() {
 	esac
 
 	# for IPv4 DHCP interfaces send signal to refresh interface
-	local dev devs=${*-$(/sbin/ip link show | awk -F":" ' (/UP/) { print $2 }' | xargs)}
+	local dev devs=${*-$(/sbin/ip link show | awk -F: '/UP/{print $2}')}
 	for dev in $devs; do
 		if [ ! -f /etc/sysconfig/interfaces/ifcfg-$dev ]; then
 			continue
