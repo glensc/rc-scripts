@@ -1,3 +1,8 @@
+2007-12-11 12:27 +0000 [r9137]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - load dm-multipath module before multipath
+	  activating for setups when rootfs was not also on multipath
+
 2007-12-10 22:25 +0000 [r9135]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* lang.sh: - cosmetics
