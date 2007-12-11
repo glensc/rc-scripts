@@ -1,3 +1,76 @@
+2007-12-10 22:25 +0000 [r9135]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lang.sh: - cosmetics
+
+2007-12-10 22:20 +0000 [r9134]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* lang.sh: Don't overwrite session settings (that can be comming
+	  from ssh).
+
+2007-12-08 13:05 +0000 [r9132]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: - cleanups
+
+2007-12-08 13:02 +0000 [r9130-9131]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: - added reload target (will ask DHCP client
+	  to renew lease), only dhcpcd supported for now
+
+	* sysconfig/network-scripts/functions.network: - minor cosetics
+
+2007-12-05 13:15 +0000 [r9128]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/Makefile.am, rc.d/rc.modules (removed): - rc.modules
+	  functionality integrated to rc.sysinit
+
+2007-12-05 13:02 +0000 [r9127]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - formatting
+
+2007-12-01 20:49 +0000 [r9125]  Adam Gołębiowski <adamg/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - skip fsck on / if device node doesn't exist
+	  yet, e.g.: rootfs-on-lvm and udev is used (perhaps we should try
+	  to fsck / once more later on?)
+
+2007-11-28 20:28 +0000 [r9117]  Jakub Bogusz <qboosh/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - simplicity and verboseness wins: let
+	  try-restart inform if service is not running
+
+2007-11-26 20:37 +0000 [r9102]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/functions.network: - apply
+	  SOURCES/rc-scripts-dev_alias.patch (if it is buggy then the bugs
+	  should be fixed -- it's been applied in pld ac for ages)
+
+2007-11-26 20:32 +0000 [r9101]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - /etc/rc.d/rc.modules moved to internal
+	  functions - module paramters also accepted from modules file
+
+2007-11-26 20:15 +0000 [r9100]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - make $RUN_DEPMOD=ifmissing really behave so as
+	  described (depmod -A stats every module file in modules dir)
+
+2007-11-26 20:08 +0000 [r9096-9099]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.modules: - plain modprobe the module - skip loading
+	  rc-scripts functions if they appear to be loaded already
+
+	* rc.d/rc.shutdown: - apply SOURCES/rc-scripts-fuser.patch
+
+	* rc.d/init.d/functions: - tab-safe is_empty_file() now (from
+	  rc.modules)
+
+	* sysconfig/system: - add $RC_BOOTLOG=yes
+
+2007-11-26 17:46 +0000 [r9092]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - prepare 0.4.1.13
+
 2007-11-25 11:18 +0000 [r9091]  Jakub Bogusz <qboosh/at/pld-linux.org>
 
 	* rc.d/init.d/template.init: - force-reload is not supposed to
