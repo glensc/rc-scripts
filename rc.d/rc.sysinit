@@ -604,6 +604,7 @@ if ! is_yes "$VSERVER"; then
 	if [ -x /sbin/multipath ]; then
 		# first make nodes that were discarded due (possible) new /dev mount
 		/sbin/dmsetup mknodes
+		modprobe -s dm-multipath
 		run_cmd "Activating dm-multipath" /sbin/multipath -v 0
 		/sbin/dmsetup ls --target multipath --exec '/sbin/kpartx -a -p p'
 	fi
