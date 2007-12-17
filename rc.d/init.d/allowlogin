@@ -24,8 +24,20 @@ case "$1" in
 		cp -fp /etc/nologin /etc/nologin.boot
 	fi
 	;;
+  status)
+	if is_yes "$DELAY_LOGIN"; then
+		nls "Delay login is enabled"
+	else
+		nls "Delay login is not enabled"
+	fi
+	if [ -f /etc/nologin ]; then
+		nls "Users are not allowed to login right now"
+	else
+		nls "Users are allowed to login right now"
+	fi
+	;;
   *)
-	msg_usage "$0 {start|stop}"
+	msg_usage "$0 {start|stop|status}"
 	exit 3
 esac
 
