@@ -15,14 +15,21 @@
 # See how we were called.
 case "$1" in
   start)
-	  touch /var/lock/subsys/local
-	  . /etc/rc.d/rc.local
+	touch /var/lock/subsys/local
+	. /etc/rc.d/rc.local
 	;;
   stop)
-	  rm -f /var/lock/subsys/local
+	rm -f /var/lock/subsys/local
+	;;
+  status)
+	if [ -f /var/lock/subsys/local ]; then
+		nls 'rc.local has been started'
+	else
+		nls 'rc.local has not been started'
+	fi
 	;;
   *)
-	msg_usage "$0 {start|stop}"
+	msg_usage "$0 {start|stop|status}"
 	exit 3
 esac
 
