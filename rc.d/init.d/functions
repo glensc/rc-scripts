@@ -46,7 +46,6 @@ CCHARS="$NORMAL"	# Color of these characters (look at /etc/sysconfig/init-colors
 [ -r /etc/sysconfig/init-colors ] && . /etc/sysconfig/init-colors
 [ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
 [ -r /etc/sysconfig/bootsplash ] && . /etc/sysconfig/bootsplash
-
 [ -z "$COLUMNS" ] && COLUMNS=80
 
 if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
@@ -61,6 +60,11 @@ if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
 		VSERVER=yes
 	fi
 	unset _f _ctx
+fi
+
+# we need to know in functions if we were called from a terminal
+if [ -z "$ISATTY" ]; then
+	[ -t ] && ISATTY=yes || ISATTY=no
 fi
 
 is_yes()
@@ -197,6 +201,7 @@ kernelvermser()
 # Colors workaround
 termput()
 {
+	is_yes "$ISATTY" || return
 
 	if is_yes "$FASTRC" || is_no "$TPUT"; then
 		case "$1" in
@@ -924,9 +929,16 @@ rc_cache_init() {
 	# If we don't, create memory variables and try to save silently,
 	local cachefile='/var/cache/rc-scripts/msg.cache'
 
+	local term
+	if is_yes "$ISATTY"; then
+		term=$TERM
+	else
+		term=dumb
+	fi
+
 	# We create $check variable which is used to invalidate the cache.
 	# The $check contains user locale and terminal.
-	local check="$TERM.$LC_MESSAGES"
+	local check="$term.$LC_MESSAGES"
 
 	if [ -f "$cachefile" -a "$cachefile" -nt /etc/sysconfig/system -a "$cachefile" -nt /etc/sysconfig/init-colors ]; then
 		if . "$cachefile" 2>/dev/null; then
