@@ -1,4 +1,23 @@
-2007-12-11 12:27 +0000 [r9137]  Elan Ruusamäe <glen/at/pld-linux.org>
+2007-12-30 13:31 +0000 [r9170]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - prepare 0.4.1.15
+
+2007-12-27 00:52 +0000 [r9162]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - handle when there's no terminal attached
+	  (f.e gui tools like smart)
+
+2007-12-17 17:39 +0000 [r9145]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/local: - implement status
+
+2007-12-17 17:35 +0000 [r9144]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/allowlogin: - implement status
+
+2007-12-11 12:29 +0000 [r9137-9140]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - prepare 0.4.1.14
 
 	* rc.d/rc.sysinit: - load dm-multipath module before multipath
 	  activating for setups when rootfs was not also on multipath
