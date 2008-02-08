@@ -5,7 +5,7 @@
 # ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
 # Grzegorz Stanislawski <stangrze@open.net.pl>
 # Features:
-#  - since persist option is included to pppd it''s no need to do werid loops
+#  - since persist option is included to pppd it's no need to do werid loops
 #    ifup-ppp script. This also makes your logfile grow slower when Your link
 #    is down.
 #  - chat-ppp? file with script for chat is now parsed by shell, so You can
