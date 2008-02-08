@@ -102,7 +102,7 @@ else
 				# XXX: REPORTFILE support is problematic here --misiek
 				[ -f "${CHATSCRIPT}" ] || CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-${PARENTDEVNAME}
 				if [ ! -f "${CHATSCRIPT}" ]; then
-					nls '%s does not exist' "${CHATSCRIPT}"
+					nls '%s does not exist, perhaps set $CHATSCRIPT' "${CHATSCRIPT}"
 					nls 'ifup-ppp for %s exiting' "${DEVNAME}"
 					logger -p daemon.info -t ifup-ppp \
 						"$(nls '%s does not exist for %s' "${CHATSCRIPT}" "${DEVICE}")"
