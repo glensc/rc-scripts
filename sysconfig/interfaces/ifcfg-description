@@ -178,6 +178,7 @@ elif	DEVICE=ppp* || DEVICE=sl* ; then
 		fi
 		UNIT=yes|no (pass unit option to pppd (depends on DEVICE name)
 		             defaults to yes)
+		WVDIALSECT= (section in wvdial config maybe)
 	fi
 
 	if	DEVICE=sl* ; then	(SLIP)
