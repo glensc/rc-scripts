@@ -16,4 +16,4 @@ PERSIST=yes
 DEFROUTE=yes
 USEPEERDNS=yes
 
-CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-kou
+CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.kou
