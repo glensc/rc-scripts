@@ -6,6 +6,7 @@ interfacesdata_DATA =
 
 noinst_DATA = \
 	chat-ppp0.kou \
+	chat-ppp0.kou-disconnect \
 	chat-ppp0.callback \
 	chat-ppp0.leased1 \
 	chat-ppp0.tpsa \
