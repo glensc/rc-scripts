@@ -131,6 +131,11 @@ else
 	fi
 fi
 
+if [ -z "$MODEMPORT" ]; then
+	echo >&2 "Missing modemport!"
+	exit 1
+fi
+
 if [ -z "$HOLDOFF" ]; then
 	HOLDOFF=30
 fi
