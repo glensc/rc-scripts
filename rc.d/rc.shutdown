@@ -109,7 +109,7 @@ if ! is_yes "$VSERVER"; then
 	goraidtab=1
 	if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
 		if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null); then
-			run_cmd "Turning off RAID devices" /sbin/mdadm --stop --scan
+			/sbin/mdadm --stop --scan > /dev/null 2>&1
 			rc=$?
 			[ "$rc" -eq 0 ] && goraidtab=0
 		fi
