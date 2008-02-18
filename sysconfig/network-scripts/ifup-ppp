@@ -136,6 +136,11 @@ if [ -z "$MODEMPORT" ]; then
 	exit 1
 fi
 
+if [ ! -c "$MODEMPORT" ]; then
+	echo >&2 "MODEMPORT=$MODEMPORT is not a character device!"
+	exit 1
+fi
+
 if [ -z "$HOLDOFF" ]; then
 	HOLDOFF=30
 fi
