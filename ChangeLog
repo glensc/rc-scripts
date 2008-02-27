@@ -1,3 +1,9 @@
+2008-02-27 10:35 +0000 [r9533]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
+	  - fix for network script that it does not enslave eth interfaces
+	  from it during stop phase (Ilja Bobkevič)
+
 2008-02-18 20:56 +0000 [r9424]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup-ppp: - require $MODEMPORT being
