@@ -1,3 +1,79 @@
+2008-02-18 20:56 +0000 [r9424]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: - require $MODEMPORT being
+	  character device (/dev/modem, /dev/tts/USB0)
+
+2008-02-14 15:23 +0000 [r9346]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-ppp0.pppoe (added): - add config i
+	  used for adsl setup
+
+2008-02-11 10:16 +0000 [r9303]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: mdadm stop will yell that it can't stop rootfs
+	  array. Such errors are misleading and useless.
+
+2008-02-09 20:00 +0000 [r9279]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: - fail on required MODEMPORT
+	  (or set it to /dev/modem?)
+
+2008-02-08 22:58 +0000 [r9254]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: - typo
+
+2008-02-08 22:17 +0000 [r9252-9253]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/data/Makefile.am: - kõu disconnect script
+
+	* sysconfig/interfaces/data/chat-ppp0.kou-disconnect (added): -
+	  disconnect script (not tested)
+
+2008-02-08 19:34 +0000 [r9240-9245]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/data/Makefile.am,
+	  sysconfig/interfaces/Makefile.am: - files for kõu
+	  (http://www.kou.ee/)
+
+	* sysconfig/interfaces/ifcfg-ppp0.kou: - renamed chatscript
+
+	* sysconfig/interfaces/data/chat-ppp0.kou (added),
+	  sysconfig/interfaces/data/chat-kou (removed): - renamed
+
+	* sysconfig/interfaces/ifcfg-ppp0.kou (added),
+	  sysconfig/interfaces/ifcfg-kou (removed): - renamed
+
+	* sysconfig/interfaces/data/chat-kou (added): - chat script for kõu
+	  (http://www.kou.ee/)
+
+	* sysconfig/interfaces/ifcfg-kou (added): - config for kõu
+	  (http://www.kou.ee/)
+
+2008-02-08 17:34 +0000 [r9238]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - use find to overcome arguments length exceeded
+	  when descending to php sessions dir (and yes, /usr is already
+	  mounted when this code is ran)
+
+2008-02-08 15:39 +0000 [r9237]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: - give hint on missing
+	  chatscript error
+
+2008-02-08 14:54 +0000 [r9236]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: - placeholder for
+	  WVDIALSECT
+
+2008-01-29 12:10 +0000 [r9209]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* modules: - mention that /etc/modules.X.Y and /etc/modules.X.Y.Z
+	  are readed too - mention that module options are processed too
+
+2008-01-15 09:40 +0000 [r9174]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.local: - leave EOF clean ;)
+
 2007-12-30 13:31 +0000 [r9170]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - prepare 0.4.1.15
