@@ -124,6 +124,25 @@ else
 		ip addr del ${IP4ADDR} label ${SUBDEVICE} dev ${DEVICE}
 	else
 		ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+
+		if [ ${DEVICETYPE} = "bond" ]; then
+			if [ ! -x /sbin/ifenslave ]; then
+				nls "%s is missing. Can't continue." "/sbin/ifenslave"
+				exit 1
+			fi
+
+			# get up the bonding device before enslaving
+			if ! check_device_down "${DEVICE}"; then
+				ip link set ${DEVICE} up
+			fi
+
+			for BSVAR in $(awk '/Slave Interface:/{ print $3}' /proc/net/bonding/${DEVICE}); do
+				if [ "${BSVAR}" ]; then
+					ifenslave -d ${DEVICE} $BSVAR
+				fi
+			done
+		fi
+
 		ip link set ${DEVICE} down
 	fi
 fi

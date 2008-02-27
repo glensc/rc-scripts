@@ -81,6 +81,11 @@ if ! /sbin/ip link set multicast ${MULTICAST} dev ${DEVICE} > /dev/null 2>&1; th
 	exit 1
 fi
 
+if is_yes "$SLAVE" && [ ! -x /sbin/ifenslave ]; then
+	nls "%s is missing. Can't continue." "/sbin/ifenslave"
+	exit 1
+fi
+
 if is_yes "$SLAVE" && [ -n "$MASTER" -a -x /sbin/ifenslave ]; then
 	RFLAG="" && is_yes "${RECIEVE-ONLY}" && RFLAG="-r"
 
