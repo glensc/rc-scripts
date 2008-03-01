@@ -28,5 +28,8 @@ ONBOOT=yes
 # dhcp|pump|none
 BOOTPROTO=dhcp
 
+# pass parameters to dhcp client
+#DHCP_OPTIONS="-R"
+
 # sane qdisc
 QDISC=sfq
