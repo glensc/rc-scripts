@@ -8,13 +8,13 @@
 
 [ -n "$SYSFONT" ] && CONSOLEFONT="$SYSFONT"
 
-case "$LANG" in
-  *.utf8|*.UTF-8)
+if [ "$(LANG="$LANG" locale charmap)" = "UTF-8" ]; then
 	if [ -x /bin/unicode_start ] && /sbin/consoletype fg ; then
 		exec unicode_start $CONSOLEFONT $CONSOLEMAP
 	fi
-	;;
-esac
+elif [ -x /bin/unicode_stop ] && /sbin/consoletype fg ; then
+	unicode_stop
+fi
 
 # console-tools, obsolete part
 if [ -x /usr/bin/consolechars -o -x /bin/consolechars ]; then
