@@ -159,7 +159,7 @@ if [ "$runlevel" = "0" ] ; then
 		. /etc/sysconfig/ups
 		if is_yes "$POWEROFF_UPS"; then
 			if [ -d /etc/ups.d ]; then
-				for i in /etc/ups.d/*; do
+				for i in /etc/ups.d/*.sh; do
 					[ ! -f $i -o ! -x $i ] && continue
 					$i poweroff
 				done
