@@ -155,9 +155,17 @@ if [ "$runlevel" = "0" ] ; then
 	show "The $_rebootwhat is halted"; ok
 	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
 
-	if [ -x /sbin/poweroff-ups -a -f /etc/killpower -a -f /etc/sysconfig/ups ] ; then
+	if [ -f /etc/killpower -a -f /etc/sysconfig/ups ] ; then
 		. /etc/sysconfig/ups
-		is_yes "$POWEROFF_UPS" && /sbin/poweroff-ups
+		if is_yes "$POWEROFF_UPS"; then
+			if [ -d /etc/ups.d ]; then
+				for i in /etc/ups.d/*; do
+					[ ! -f $i -o ! -x $i ] && continue
+					$i poweroff
+				done
+			fi
+		       [ -x /sbin/poweroff-ups ] && /sbin/poweroff-ups
+	       fi
 	fi
 	[ "$previous" != "unknown" ] && eval halt -d -p
 else
