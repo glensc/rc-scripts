@@ -1,3 +1,33 @@
+2008-03-24 19:17 +0000 [r9667-9668]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - release 0.4.1.16
+
+	* sysconfig/network-scripts/functions.network: - return val doc for
+	  check_{mii_tool,ethtool,iwconfig} - code readability
+
+2008-03-22 12:14 +0000 [r9649]  Jakub Bogusz <qboosh/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: - typo
+
+2008-03-19 14:21 +0000 [r9646]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: Use .sh - safer.
+
+2008-03-19 12:51 +0000 [r9645]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: Multiple UPS support.
+
+2008-03-09 12:33 +0000 [r9575]  Jakub Bogusz <qboosh/at/pld-linux.org>
+
+	* setsysfont: - use "locale charmap" to detect UTF-8 locales
+	  properly - call unicode_stop for non-UTF locales (Linux 2.6.24+
+	  has unicode console by default)
+
+2008-03-01 18:01 +0000 [r9549]  Andrzej Dopierała <undefine/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-eth0: - add commented DHCP_OPTIONS
+	  option to show how to pass parameters to dhcp client
+
 2008-02-27 10:35 +0000 [r9533]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
