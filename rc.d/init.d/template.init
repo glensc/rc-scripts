@@ -6,6 +6,10 @@
 #
 # description:	<service> long service description
 #
+# processname:	<service>
+# config:
+# pidfile:
+#
 # $Id$
 
 # Source function library
