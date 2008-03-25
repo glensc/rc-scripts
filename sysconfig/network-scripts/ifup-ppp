@@ -49,11 +49,6 @@ if [ -z "${REPORTFILE}" ] ; then
 	REPORTFILE=/dev/null
 fi
 
-if [ -n "$MODEMPORT" -a ! -c "$MODEMPORT" ]; then
-	echo >&2 "MODEMPORT=$MODEMPORT is not a character device!"
-	exit 1
-fi
-
 if [ -n "${PPPOE_DEV}" ]; then
 	if is_yes "${PPPOE_KERNEL}"; then
 		modprobe -s -k pppoe
@@ -100,6 +95,12 @@ elif is_yes "${PPPOA}"; then
 	MODEMMODE="plugin pppoatm.so"
 	MODEMPORT="${PPPOA_VPI}.${PPPOA_VCI}"
 else
+
+	if [ -n "$MODEMPORT" -a ! -c "$MODEMPORT" ]; then
+		echo >&2 "MODEMPORT=$MODEMPORT is not a character device!"
+		exit 1
+	fi
+
 	if is_no "${DIRECT_CONNECT}" || [ -z "${DIRECT_CONNECT}" ]; then
 		PEERCONF=/etc/ppp/peers/${DEVNAME}
 		if [ ! -f ${PEERCONF} ]; then
