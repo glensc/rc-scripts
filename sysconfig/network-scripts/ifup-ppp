@@ -49,6 +49,11 @@ if [ -z "${REPORTFILE}" ] ; then
 	REPORTFILE=/dev/null
 fi
 
+if [ -n "$MODEMPORT" -a ! -c "$MODEMPORT" ]; then
+	echo >&2 "MODEMPORT=$MODEMPORT is not a character device!"
+	exit 1
+fi
+
 if [ -n "${PPPOE_DEV}" ]; then
 	if is_yes "${PPPOE_KERNEL}"; then
 		modprobe -s -k pppoe
@@ -133,11 +138,6 @@ fi
 
 if [ -z "$MODEMPORT" ]; then
 	echo >&2 "Missing modemport!"
-	exit 1
-fi
-
-if [ ! -c "$MODEMPORT" ]; then
-	echo >&2 "MODEMPORT=$MODEMPORT is not a character device!"
 	exit 1
 fi
 
