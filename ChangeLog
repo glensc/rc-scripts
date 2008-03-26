@@ -1,3 +1,33 @@
+2008-03-26 16:20 +0000 [r9682]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* setsysfont: - /usr is not mounted when this is called from
+	  rc.sysinit
+
+2008-03-26 14:42 +0000 [r9681]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network: - i always set full hostname here, why "only
+	  hostname" comment?
+
+2008-03-26 08:46 +0000 [r9680]  Sławomir Paszkiewicz <paszczus/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: - "sync" option must be used
+	  before "plugin" option - changes made by seba (at) pro-ject.net
+	  (merged from cvs)
+
+2008-03-26 08:42 +0000 [r9677-9679]  Sławomir Paszkiewicz <paszczus/at/pld-linux.org>
+
+	* sysconfig/interfaces/Makefile.am: - added
+	  ifcfg-ppp0.ueagle4-neostrada
+
+	* sysconfig/interfaces/ifcfg-description: - added SYNC option
+
+	* sysconfig/interfaces/ifcfg-ppp0.ueagle4-neostrada (added): -
+	  config for neostrada using usb modem Sagem E4
+
+2008-03-26 08:11 +0000 [r9675]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - release 0.4.1.17
+
 2008-03-25 23:41 +0000 [r9674]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/init.d/template.init: - more chkconfig vars
