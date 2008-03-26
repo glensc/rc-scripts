@@ -133,6 +133,7 @@ elif	DEVICE=ppp* || DEVICE=sl* ; then
 		PEERDNS=yes|no
 		DEFROUTE=yes|no
 		ESCAPECHARS=yes|no
+		SYNC=yes|no (yes implies "sync" option)
 		HOLDOFF=30
 	  	HARDFLOWCTL=yes|no (yes implies "modem crtscts" options)
     	 	PPPOPTIONS=<arbitrary option string>
