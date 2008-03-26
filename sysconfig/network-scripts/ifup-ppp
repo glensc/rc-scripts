@@ -163,6 +163,9 @@ fi
 if is_yes "${MODEMCTL}"; then
 	opts="$opts modem"
 fi
+if is_yes "${SYNC}"; then
+	opts="$opts sync"
+fi
 if is_yes "${ESCAPECHARS}"; then
 	opts="$opts asyncmap FFFFFFFF"
 else
