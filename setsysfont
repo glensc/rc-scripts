@@ -8,11 +8,18 @@
 
 [ -n "$SYSFONT" ] && CONSOLEFONT="$SYSFONT"
 
-if [ "$(LANG="$LANG" locale charmap)" = "UTF-8" ]; then
-	if [ -x /bin/unicode_start ] && /sbin/consoletype fg ; then
+
+charmap=
+# /usr might not be mounted
+if [ -x /usr/bin/locale ]; then
+	charmap=$(LANG="$LANG" locale charmap)
+fi
+
+if [ "$charmap" = "UTF-8" ]; then
+	if [ -x /bin/unicode_start ] && /sbin/consoletype fg; then
 		exec unicode_start $CONSOLEFONT $CONSOLEMAP
 	fi
-elif [ -x /bin/unicode_stop ] && /sbin/consoletype fg ; then
+elif [ -x /bin/unicode_stop ] && /sbin/consoletype fg; then
 	unicode_stop
 fi
 
@@ -43,6 +50,3 @@ elif [ -x /usr/bin/setfont -o -x /bin/setfont ]; then
 fi
 
 exit 0
-
-# This must be last line !
-# vi:syntax=sh
