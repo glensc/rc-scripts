@@ -11,7 +11,7 @@ IPV4_NETWORKING=yes
 # Do you want IPv4 forwarding ?
 # then set it in /etc/sysctl.conf
 
-# Set hostname here (only hostname)
+# Set hostname here
 HOSTNAME=pldmachine
 
 # Allow udev to create /etc/sysconfig/interfaces/ifcfg-* automatically?
@@ -58,6 +58,3 @@ STATIC_RARP=no
 # Specify interface on which you want to enable tleds software
 # (also you need tleds package installed) -- default set to no
 TLEDS_DEV=no
-
-# This must be last line !
-# vi:syntax=sh
