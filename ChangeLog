@@ -1,3 +1,15 @@
+2008-03-25 23:41 +0000 [r9674]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - more chkconfig vars
+
+2008-03-25 15:14 +0000 [r9670-9671]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: - actually check $MODEMPORT
+	  being chardevice after all *DSL variants
+
+	* sysconfig/network-scripts/ifup-ppp: - check $MODEMPORT set from
+	  config (not the value set from this script)
+
 2008-03-24 19:17 +0000 [r9667-9668]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - release 0.4.1.16
