@@ -167,12 +167,12 @@ if [ "$runlevel" = "0" ] ; then
 		       [ -x /sbin/poweroff-ups ] && /sbin/poweroff-ups
 	       fi
 	fi
-	[ "$previous" != "unknown" ] && eval halt -d -p
+	[ "$previous" != "unknown" ] && eval halt -d -p -f
 else
 	show "Please stand by while rebooting the $_rebootwhat"; ok
 	[ -f /fastboot ] && (show "On the next boot fsck will be skipped."; ok)
 	[ -x /sbin/kexec ] && /sbin/kexec -e
-	[ "$previous" != "unknown" ] && eval reboot -d
+	[ "$previous" != "unknown" ] && eval reboot -d -f
 fi
 
 # This must be last line !
