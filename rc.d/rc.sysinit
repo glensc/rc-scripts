@@ -922,8 +922,7 @@ for afile in /var/lock/* /var/run/*; do
 		news|sudo|mon|cvs)
 			;;
 		*)
-			# remove everything underneath except dirs
-			find $afile ! -type d -print0 | xargs -0 rm -f
+			rm -rf $afile/*
 			;;
 		esac
 	else
@@ -1003,3 +1002,6 @@ if ! is_no "$RC_PROMPT" && [ -d /proc/$! ]; then
 fi
 wait
 echo
+
+# This must be last line !
+# vi:syntax=sh
