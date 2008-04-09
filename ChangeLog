@@ -1,3 +1,23 @@
+2008-04-09 09:02 +0000 [r9703-9704]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: - 0.4.1.20
+
+	* rc.d/rc.sysinit: - reverted r9238, /usr may NOT be mounted at
+	  this time, ever heard of NFS?
+
+2008-03-27 15:42 +0000 [r9688]  Patryk Zawadzki <patrys/at/pld-linux.org>
+
+	* configure.ac: - bump version to 0.4.1.19
+
+2008-03-27 15:19 +0000 [r9687]  Patryk Zawadzki <patrys/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - force reboot/halt to work with other init
+	  daemons
+
+2008-03-26 19:43 +0000 [r9685]  Sławomir Paszkiewicz <paszczus/at/pld-linux.org>
+
+	* configure.ac: - forgot to commit; 0.4.1.18
+
 2008-03-26 16:20 +0000 [r9682]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* setsysfont: - /usr is not mounted when this is called from
