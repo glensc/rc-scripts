@@ -915,6 +915,7 @@ fi
 rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
 
 # Clean up /var
+# /usr could be still not mounted if it is on NFS.
 for afile in /var/lock/* /var/run/*; do
 	bafile=${afile##*/}
 	if [ -d "$afile" ]; then
@@ -929,6 +930,7 @@ for afile in /var/lock/* /var/run/*; do
 		[ "$bafile" != "hwprofile" ] && rm -f $afile 2> /dev/null
 	fi
 done
+
 # Delete stale files
 rm -f /var/lib/rpm/__db* /var/spool/postoffice/.pid.* /tmp/.X*-lock \
 	/tmp/.lock.* /tmp/.gdm_socket /tmp/.s.PGSQL.*
@@ -1002,6 +1004,3 @@ if ! is_no "$RC_PROMPT" && [ -d /proc/$! ]; then
 fi
 wait
 echo
-
-# This must be last line !
-# vi:syntax=sh
