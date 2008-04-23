@@ -156,14 +156,17 @@ kernelver()
 		IFS='.'
 		set -- $v
 		IFS=$old_IFS
-		ver=${3%_*}
-		while [ ${#ver} -lt 3 ] ; do ver="0$ver" ; done
+
+		# strip _* or -* from versions like: "2.6.25_vanilla-1", "2.6.25-1"
+		ver=${3%[-_]*}
+
+		while [ ${#ver} -lt 3 ]; do ver="0$ver"; done
 		ver="$2$ver"
-		while [ ${#ver} -lt 6 ] ; do ver="0$ver" ; done
+		while [ ${#ver} -lt 6 ]; do ver="0$ver"; done
 		ver="$1$ver"
-		while [ ${#ver} -lt 9 ] ; do ver="0$ver" ; done
+		while [ ${#ver} -lt 9 ]; do ver="0$ver"; done
 		echo $ver
-	} </proc/version
+	} < /proc/version
 }
 
 kernelverser()
