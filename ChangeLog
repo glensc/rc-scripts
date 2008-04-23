@@ -1,3 +1,20 @@
+2008-04-23 22:31 +0000 [r9720]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - handle also `uname -r` returning
+	  "2.6.25-1"
+
+2008-04-23 22:27 +0000 [r9718-9719]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - second try: /var/run cleanup without find and
+	  without args len exceeded error
+
+	* rc.d/init.d/functions: - fix for kernels whose release is
+	  "2.6.25_vanilla-1", found by vip`
+
+2008-04-16 17:30 +0000 [r9711]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/i18n: Obsolete texts.
+
 2008-04-09 09:02 +0000 [r9703-9704]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* configure.ac: - 0.4.1.20
