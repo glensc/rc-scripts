@@ -922,7 +922,7 @@ for afile in /var/lock/* /var/run/*; do
 		news|sudo|mon|cvs)
 			;;
 		*)
-			rm -rf $afile/*
+			echo $afile/* | xargs rm -rf
 			;;
 		esac
 	else
