@@ -1,4 +1,8 @@
-2008-04-23 22:31 +0000 [r9720]  Elan Ruusamäe <glen/at/pld-linux.org>
+2008-04-23 22:35 +0000 [r9720-9722]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - 0.4.1.21
+
+	* rc.d/rc.sysinit: - leave note for future not to fall again
 
 	* rc.d/init.d/functions: - handle also `uname -r` returning
 	  "2.6.25-1"
