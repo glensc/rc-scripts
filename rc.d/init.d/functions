@@ -158,7 +158,7 @@ kernelver()
 		IFS=$old_IFS
 
 		# strip _* or -* from versions like: "2.6.25_vanilla-1", "2.6.25-1"
-		ver=${3%[-_]*}
+		ver=${3%%[-_]*}
 
 		while [ ${#ver} -lt 3 ]; do ver="0$ver"; done
 		ver="$2$ver"
