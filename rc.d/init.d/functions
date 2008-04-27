@@ -8,9 +8,9 @@
 # Hacked by:	Greg Galloway and Marc Ewing
 # Modified for PLD Linux by:
 #		Marek Obuchowicz <elephant@pld-linux.org>
-#		Arkadiusz Mi∂kiewicz <misiek@pld-linux.org>
-#		Micha≥ Kochanowicz <mkochano@pld-linux.org>
-#		£ukasz Pawelczyk <havner@pld-linux.org>
+#		Arkadiusz Mi≈õkiewicz <misiek@pld-linux.org>
+#		Micha≈Ç Kochanowicz <mkochano@pld-linux.org>
+#		≈Åukasz Pawelczyk <havner@pld-linux.org>
 
 # First set up a default search path.
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
