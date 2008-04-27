@@ -4,11 +4,11 @@
 MAINTAINERS
 
 Maintainer of development version
-is Arkadiusz Mi∂kiewicz <misiek@pld-linux.org>
+is Arkadiusz Mi≈õkiewicz <misiek@pld-linux.org>
 
 AUTHORS/CREDITS
 
-Arkadiusz Mi∂kiewicz <misiek@pld-linux.org>
+Arkadiusz Mi≈õkiewicz <misiek@pld-linux.org>
 	networking functions, iproute2 support,
 	national language support, scripts for
 	controling tunnels and bridges
@@ -23,23 +23,23 @@ Grzegorz Stanislawski <stangrze@open.net.pl>
 	ppp scripts, prefix/netmask converting
 	functions, bug fixes
 
-Jan RÍkorajski <baggins@pld-linux.org>
+Jan Rƒôkorajski <baggins@pld-linux.org>
 	general, ipv6 and dhcp fixes
 	
-Micha≥ Kochanowicz <mkochano@pld-linux.org>
+Micha≈Ç Kochanowicz <mkochano@pld-linux.org>
 	fixes, progress()
 	
-Pawe≥ Wilk <siefca@gnu.org>
+Pawe≈Ç Wilk <siefca@gnu.org>
 	executing scripts on iface up/down
 	timezone setup & resolvesymlink
 
-Robert ¶laski <robin@atm.com.pl>
+Robert ≈ölaski <robin@atm.com.pl>
 	ATM support
 
 Sebastian Zagrodzki <s.zagrodzki@mimuw.edu.pl>
 	many fixes
 
-Tomasz K≥oczko <kloczek@wun.zie.pg.gda.pl>
+Tomasz K≈Çoczko <kloczek@wun.zie.pg.gda.pl>
 	automake/autoconf updates, bug fixes
 
 Mandrake Software
