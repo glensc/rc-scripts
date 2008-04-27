@@ -27,8 +27,7 @@ EXTRA_DIST = \
 	$(sysconf_DATA) \
 	$(profile_DATA) \
 	$(sbin_SCRIPTS) \
-	$(bin_SCRIPTS) \
-	rc-scripts.spec
+	$(bin_SCRIPTS)
 
 install-data-hook:
 	install -d $(DESTDIR)$(localstatedir)/cache/$(PACKAGE)

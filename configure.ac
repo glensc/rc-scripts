@@ -222,5 +222,5 @@ AC_CONFIG_FILES([Makefile \
 	sysconfig/interfaces/down.d/tnl/Makefile \
 	rc.d/Makefile rc.d/init.d/Makefile \
 	po/Makefile \
-	rc-scripts.spec])
+	])
 AC_OUTPUT
