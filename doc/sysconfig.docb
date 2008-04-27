@@ -43,7 +43,7 @@
     <title><filename moreinfo="None">/etc/sysconfig/keyboard</filename></title>
     <variablelist>
       <varlistentry>
-	<term>KEYTABLE=&lt;keytable file></term>
+	<term>KEYTABLE=&lt;keytable file&gt;</term>
 	<listitem><para>for example:
 	    KEYTABLE="/usr/lib/kbd/keytables/us.map"</para>
 	</listitem>
@@ -76,7 +76,7 @@
 	<listitem><para>IPV6NETWORKING=yes|no</para>
 	</listitem>
       </varlistentry>
-      <varlistentry><term>HOSTNAME=$&lt;whatever hostname you want></term>
+      <varlistentry><term>HOSTNAME=$&lt;whatever hostname you want&gt;</term>
 	<listitem><note><para> for compatibility with some old software people might
 	      install (like trn), the /etc/HOSTNAME file should contain the
 	      same value as here.</para></note>
@@ -96,7 +96,7 @@
       </varlistentry>
 
       <varlistentry>
-	<term>GATEWAY=&lt;gateway IP></term>
+	<term>GATEWAY=&lt;gateway IP&gt;</term>
 	<listitem>
     <para>
       </para>
@@ -105,7 +105,7 @@
       </varlistentry>
 
       <varlistentry>
-	<term>GATEWAYDEV=&lt;gateway device></term>
+	<term>GATEWAYDEV=&lt;gateway device&gt;</term>
 	<listitem>
 	  <para>
 	    (e.g. eth0)</para>
@@ -446,7 +446,7 @@
 
 
 
-<!-- to s± informacje dla emacsa -->
+<!-- to sÄ… informacje dla emacsa -->
 <!-- Keep this comment at the end of the file
 Local variables:
 mode: sgml

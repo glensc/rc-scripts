@@ -35,8 +35,8 @@
 	 (define %body-attr% (list (list "BGCOLOR" "#FFFFFF") (list "TEXT" "#000000")))
 	 ;;(define %titlepage-in-info-order% #t)
 	 (define %html-header-tags% '(("META" ("NAME" "description") ("CONTENT" "taki sobie
-	 te∂cik"))
-	 ("META" ("HTTP-EQUIV" "content-type") ("content" "text/html; charset=ISO-8859-2"))))
+	 te≈õcik"))
+	 ("META" ("HTTP-EQUIV" "content-type") ("content" "text/html; charset=UTF-8"))))
 	 (define %spacing-paras% #f)
 
       </style-specification-body>

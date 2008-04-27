@@ -5,19 +5,19 @@
 <!ENTITY netscripts SYSTEM "netscripts.docb">
 ]>
 
-<!-- To jest przyk≥adowy dokument g≥Ûwny w≥±czaj±cy sysconfig.docb -->
+<!-- To jest przyk≈Çadowy dokument g≈Ç√≥wny w≈ÇƒÖczajƒÖcy sysconfig.docb -->
 
 <book lang="pl">
    <bookinfo>
       <date>1998.10.19</date>
-      <title>tytu≥</title>
-      <subtitle>podtytu≥</subtitle>
+      <title>tytu≈Ç</title>
+      <subtitle>podtytu≈Ç</subtitle>
    </bookinfo>
 
    <reference id=pld-pakiety>
-      <title>Opisy pakietÛw</title>
+      <title>Opisy pakiet√≥w</title>
       <partintro>
-	 <para>Opisy pakietÛw specyficznych dla PLD</para>
+	 <para>Opisy pakiet√≥w specyficznych dla PLD</para>
       </partintro>
       
 
