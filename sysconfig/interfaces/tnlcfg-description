@@ -12,7 +12,7 @@ elif	MODE=ipip || MODE=gre || MODE=sit ; then
 
 	REMOTEADDR=<IPv4 addres>
 	[ LOCALADDR=<IPv4 addres> ]
-	[ BIND_DEV= ] do jakiego device przybindowaæ (ma zwi±zek z routingiem itp)
+	[ BIND_DEV= ] do jakiego device przybindowaÄ‡ (ma zwiÄ…zek z routingiem itp)
 
 	[ TTL= ]
 	[ TOS= ]
