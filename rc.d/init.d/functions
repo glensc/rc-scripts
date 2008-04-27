@@ -122,11 +122,11 @@ strstr() {
 	return 0
 }
 
-if is_yes "$FASTRC"; then
+if is_yes "$FASTRC" || is_yes "$IN_SHUTDOWN"; then
 	RC_LOGGING=no
 fi
 
-if is_yes "${IN_SHUTDOWN}" || is_no "${RC_LOGGING}" ; then
+if is_no "$RC_LOGGING"; then
 	initlog()
 	{
 		RESULT=0
@@ -900,15 +900,23 @@ _modprobe()
 	fi
 }
 
-log_success ()
-{
-	initlog -n $0 -s "$1 $2" -e 1
-}
+if is_no "$RC_LOGGING"; then
+	log_success() {
+		:
+	}
 
-log_failed ()
-{
-	initlog -n $0 -s "$1 $2" -e 2
-}
+	log_failed () {
+		:
+	}
+else
+	log_success () {
+		initlog -n $0 -s "$1 $2" -e 1
+	}
+
+	log_failed () {
+		initlog -n $0 -s "$1 $2" -e 2
+	}
+fi
 
 # Check if any flavor of portmapper is running
 check_portmapper() {
