@@ -476,7 +476,14 @@ run_cmd()
 	show "$message"; busy
 	shift
 	cd /
-	if errors=$(HOME=/tmp TMPDIR=/tmp initlog -c "$*" 2>&1); then
+	if errors=$(
+		export HOME=/tmp TMPDIR=/tmp
+		if is_no "$RC_LOGGING"; then
+			"$@" 2>&1
+		else
+			initlog -c "$*" 2>&1
+		fi
+		); then
 		ok
 		log_success "$1 $message"
 	else
@@ -518,7 +525,7 @@ daemon()
 	typeset errors="" prog="" end="" waitname="" waittime=""
 	typeset -i exit_code=0
 	local nice=$SERVICE_RUN_NICE_LEVEL
-	local pidfile
+	local fork user closefds pidfile
 
 	while [ $# -gt 0 ]; do
 		case $1 in
@@ -534,10 +541,15 @@ daemon()
 		  --user)
 			shift
 			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
+			user=$1
 			;;
 		  --fork)
+		  	fork=1
 			prog="/usr/bin/setsid sh -c \""
 			end='&'
+			;;
+		  --closefds)
+		  	closefds=1
 			;;
 		  --waitforname)
 			shift
@@ -579,7 +591,46 @@ daemon()
 	busy
 	cd /
 	[ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS" && echo $$ > "/dev/cpuset/${SERVICE_CPUSET}/tasks"
-	if errors=$(umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK}; USER=root HOME=/tmp TMPDIR=/tmp nice -n ${nice:-$DEFAULT_SERVICE_RUN_NICE_LEVEL} initlog -c "$prog" 2>&1); then
+	if errors=`
+		umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK};
+	   	export USER=root HOME=/tmp TMPDIR=/tmp
+		nice=${nice:-$DEFAULT_SERVICE_RUN_NICE_LEVEL}
+		nice=${nice:-0}
+
+		if [ "$closefds" = 1 ]; then
+			exec 1>&-
+			exec 2>&-
+			exec 0>&-
+		else
+			exec 2>&1
+		fi
+
+		if is_no "$RC_LOGGING" ; then
+			prog=$1; shift
+			if [ ! -x $prog ]; then
+				logger -t rc-scripts -p daemon.debug "daemon: Searching PATH for $prog, consider using full path in initscript"
+				local a o=$IFS
+				IFS=:
+				for a in $PATH; do
+					if [ -x $a/$prog ]; then
+						prog=$a/$prog
+						break
+					fi
+				done
+				IFS=$o
+			fi
+			/sbin/start-stop-daemon -q --start \
+				--nicelevel $nice \
+				${pidfile:+--pidfile $pidfile} \
+				${user:+-u $user} \
+				${fork:+-b} \
+				--exec "$prog" \
+				-- ${1:+"$@"}
+		else
+			nice -n $nice initlog -c "$prog" 2>&1
+		fi
+		`; then
+
 		if [ -n "$waitname" -a -n "$waittime" ]; then
 			# Save basename.
 			base=${waitname##*/}
