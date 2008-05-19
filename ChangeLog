@@ -1,3 +1,45 @@
+2008-05-19 06:04 +0000 [r9756]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - add --pidfile to daemon()
+
+2008-04-27 02:00 +0000 [r9733]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - disable log_success/log_failed when
+	  RC_LOGGING is off
+
+2008-04-27 01:34 +0000 [r9731-9732]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/tnlcfg-description: - utf8
+
+	* doc/rc-scripts.docb, doc/polski.dsl, doc/sysconfig.docb: - utf8
+
+2008-04-27 01:29 +0000 [r9730]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc-scripts.spec.in (removed), Makefile.am, configure.ac: -
+	  outdated, use spec from cvs
+
+2008-04-27 01:24 +0000 [r9729]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/ifdown-irda,
+	  sysconfig/network-scripts/ifdown-vlan,
+	  sysconfig/network-scripts/ifup-br,
+	  sysconfig/network-scripts/tnldown,
+	  sysconfig/network-scripts/ifdown-br, hwprofile,
+	  sysconfig/network-scripts/ifup-irda, rc.d/init.d/functions,
+	  sysconfig/network-scripts/ifup-vlan: - utf8
+
+2008-04-27 01:20 +0000 [r9728]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* AUTHORS: - utf8
+
+2008-04-24 21:23 +0000 [r9724-9725]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - 0.4.1.22
+
+	* rc.d/init.d/functions: - make stripping string suffixes from
+	  EXTRAVER more greedy
+
 2008-04-23 22:35 +0000 [r9720-9722]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - 0.4.1.21
