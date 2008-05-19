@@ -515,9 +515,10 @@ _daemon_set_ulimits() {
 # A function to start a program (now it's useful on read-only filesystem too)
 daemon()
 {
-	typeset errors="" prog="" waitname="" waittime=""
+	typeset errors="" prog="" end="" waitname="" waittime=""
 	typeset -i exit_code=0
 	local nice=$SERVICE_RUN_NICE_LEVEL
+	local pidfile
 
 	while [ $# -gt 0 ]; do
 		case $1 in
@@ -545,6 +546,10 @@ daemon()
 		  --waitfortime)
 			shift
 			waittime="$1"
+			;;
+		  --pidfile)
+			shift
+			pidfile="$1"
 			;;
 		  -*|+*)
 			nice=$1
