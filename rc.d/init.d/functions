@@ -77,11 +77,11 @@ is_yes()
 
 	# Check value
 	case "$1" in
-	  yes|Yes|YES|true|True|TRUE|on|On|ON|Y|y|1)
+	yes|Yes|YES|true|True|TRUE|on|On|ON|Y|y|1)
 		# true returns zero
 		return 0
 		;;
-	  *)
+	*)
 		# false returns one
 		return 1
 		;;
@@ -97,11 +97,11 @@ is_no()
 	fi
 
 	case "$1" in
-	  no|No|NO|false|False|FALSE|off|Off|OFF|N|n|0)
+	no|No|NO|false|False|FALSE|off|Off|OFF|N|n|0)
 		# true returns zero
 		return 0
 		;;
-	  *)
+	*)
 		# false returns one
 		return 1
 		;;
@@ -132,13 +132,13 @@ if is_no "$RC_LOGGING"; then
 		RESULT=0
 		while [ "$1" != "${1##-}" ]; do
 			case $1 in
-			  -c)
+			-c)
 				shift
 				$1
 				RESULT=$?
 				break
 				;;
-			   *)
+			*)
 				shift
 				;;
 			esac
@@ -208,16 +208,16 @@ termput()
 
 	if is_yes "$FASTRC" || is_no "$TPUT"; then
 		case "$1" in
-		  hpa)
+		hpa)
 			echo -ne "\033[$(($2+1))G"
 			;;
-		  cuu*)
+		cuu*)
 			echo -ne "\033[${2}A"
 			;;
-		  el)
+		el)
 			echo -ne "\033[0K"
 			;;
-		  setaf)
+		setaf)
 			typeset ISBOLD
 			if [ -n "$3" ]; then
 				ISBOLD="$3"
@@ -226,20 +226,20 @@ termput()
 			fi
 			is_yes "$COLOR_INIT" && echo -ne "\033[${ISBOLD};3${2}m"
 			;;
-		  op)
+		op)
 			termput setaf $NORMAL
 			;;
 		esac
 	else
 		case "$1" in
-		  hpa | cuu* | el)
+		hpa | cuu* | el)
 			tput "$@"
 			;;
-		  setaf)
+		setaf)
 			if [ "$3" == "1" ]; then tput bold; else tput sgr0; fi
 			is_yes "$COLOR_INIT" && tput setaf "$2"
 			;;
-		  op)
+		op)
 			termput setaf $NORMAL
 			;;
 		esac
@@ -274,12 +274,12 @@ nls()
 	nls_domain="$NLS_DOMAIN"
 	while [ "$1" != "${1##-}" ]; do
 		case "$1" in
-		  --nls-domain)
+		--nls-domain)
 			shift
 			nls_domain="$1"
 			shift
 			;;
-		  -n)
+		-n)
 			msg_echo=''
 			shift
 			;;
@@ -467,7 +467,7 @@ run_cmd()
 	typeset -i force_err=0
 	typeset -i exit_code=0
 	case "$1" in
-	  -a)
+	-a)
 		force_err=1
 		shift
 		;;
@@ -529,46 +529,46 @@ daemon()
 
 	while [ $# -gt 0 ]; do
 		case $1 in
-		  '')
+		'')
 			msg_usage " daemon [--user user] [--fork] [--waitforname procname] [--waitfortime seconds] [+/-nicelevel] {program} <program args>"
 			return 2
 			;;
-		  --check)
+		--check)
 			# for compatibility with redhat/mandrake
 			nls "warning: --check option is ignored!"
 			shift
 			;;
-		  --user)
+		--user)
 			shift
 			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
 			user=$1
 			;;
-		  --fork)
-		  	fork=1
+		--fork)
+			fork=1
 			prog="/usr/bin/setsid sh -c \""
 			end='&'
 			;;
-		  --closefds)
-		  	closefds=1
+		--closefds)
+			closefds=1
 			;;
-		  --waitforname)
+		--waitforname)
 			shift
 			waitname="$1"
 			;;
-		  --waitfortime)
+		--waitfortime)
 			shift
 			waittime="$1"
 			;;
-		  --pidfile)
+		--pidfile)
 			shift
 			pidfile="$1"
 			;;
-		  -*|+*)
+		-*|+*)
 			nice=$1
 			shift
 			break
 			;;
-		  *)
+		*)
 			break
 			;;
 		esac
@@ -593,7 +593,7 @@ daemon()
 	[ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS" && echo $$ > "/dev/cpuset/${SERVICE_CPUSET}/tasks"
 	if errors=`
 		umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK};
-	   	export USER=root HOME=/tmp TMPDIR=/tmp
+		export USER=root HOME=/tmp TMPDIR=/tmp
 		nice=${nice:-$DEFAULT_SERVICE_RUN_NICE_LEVEL}
 		nice=${nice:-0}
 
@@ -666,17 +666,17 @@ killproc()
 
 	while [ "$1" != "${1##-}" ]; do
 		case $1 in
-		  --pidfile)
+		--pidfile)
 			shift
 			pidfile="$1"
 			shift
 			;;
-		  --waitforname)
+		--waitforname)
 			shift
 			waitname="$1"
 			shift
 			;;
-		  --waitfortime)
+		--waitfortime)
 			shift
 			waittime="$1"
 			shift
@@ -877,16 +877,16 @@ confirm() {
 	nls -n "Start service %s (Y)es/(N)o/(C)ontinue? [Y] " "$1"
 	read answer
 	case $answer in
-	  y|Y|t|T|j|J|"")
+	y|Y|t|T|j|J|"")
 		return 0
 		;;
-	  c|C|k|K|w|W)
+	c|C|k|K|w|W)
 		return 2
 		;;
-	  n|N)
+	n|N)
 		return 1
 		;;
-	  *)
+	*)
 		confirm $1
 		return $?
 		;;
@@ -913,19 +913,19 @@ _modprobe()
 	parsed=no
 	while is_no "$parsed" ; do
 		case "$1" in
-		  "single")
+		"single")
 			single=yes
 			shift
 			;;
-		  "die")
+		"die")
 			die=yes
 			shift
 			;;
-		  -*)
+		-*)
 			args="$args $1"
 			shift
 			;;
-		  *)
+		*)
 			parsed=yes
 			;;
 		esac
@@ -986,7 +986,7 @@ check_portmapper() {
 		fi
 	elif [ -x /sbin/pidof ]; then
 		[ -z "$(/sbin/pidof portmap)" -a \
-		  -z "$(/sbin/pidof rpcbind)" ] && return 1
+			-z "$(/sbin/pidof rpcbind)" ] && return 1
 	fi
 	return 0
 }
