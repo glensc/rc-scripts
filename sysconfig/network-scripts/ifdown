@@ -153,7 +153,7 @@ fi
 
 if [ -n "$RESULT" ] ; then
 	if [ "$RESULT" -ne "0" ]; then
-		return $RESULT
+		exit $RESULT
 	fi
 fi
 
