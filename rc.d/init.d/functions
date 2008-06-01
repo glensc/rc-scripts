@@ -65,6 +65,7 @@ fi
 # we need to know in functions if we were called from a terminal
 if [ -z "$ISATTY" ]; then
 	[ -t ] && ISATTY=yes || ISATTY=no
+	export ISATTY
 fi
 
 is_yes()
