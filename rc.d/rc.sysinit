@@ -981,7 +981,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Now that we have all of our basic modules loaded and the kernel going,
 	# let's dump the syslog ring somewhere so we can find it later
-	dmesg -s 131072 > /var/log/dmesg
+	dmesg -s 524288 > /var/log/dmesg
 	i=5
 	while [ $i -ge 0 ]; do
 		if [ -f /var/log/dmesg.$i ]; then
