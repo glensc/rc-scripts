@@ -1,4 +1,59 @@
-2008-05-19 06:04 +0000 [r9756]  Elan Ruusamäe <glen/at/pld-linux.org>
+2008-08-07 20:39 +0000 [r9860]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Actually don't use -s option since dmesg uses
+	  klogctl() to retrieve real ring buffer size.
+
+2008-08-07 20:36 +0000 [r9859]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: dump 524288 of dmesg data
+
+2008-07-24 10:10 +0000 [r9851]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysctl.conf: Don't set net.ipv4.ip_local_port_range; use kernel
+	  default
+
+2008-07-24 10:06 +0000 [r9850]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysctl.conf: Disable tcp syncookies by default (these disable
+	  SACK which according to DaveM 'sets TCP stack back by 10 years')
+
+2008-07-22 17:39 +0000 [r9849]  Jakub Bogusz <qboosh/at/pld-linux.org>
+
+	* sysconfig/i18n: - proper encoding for de_DE
+
+2008-07-17 20:42 +0000 [r9846]  Bartosz Świątek <shadzik/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: - wpa_supplicant 0.6.3 doesn't
+	  have a "-w" option!!
+
+2008-06-10 21:00 +0000 [r9801]  Paweł Gołaszewski <blues/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-ppp: - try last resort in setting
+	  MODEMPORT - compatibility change.
+
+2008-06-01 11:28 +0000 [r9785]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Export ISATTY. Calling this test from
+	  inside of initlog() return true even if output still goes into
+	  terminal. By exporting we make sure that initial test result is
+	  used for entire run of the script. Fixes wrong 'DONE' string
+	  alignment when bringin up dhcp.
+
+2008-05-22 19:08 +0000 [r9761]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown: Return can be only from
+	  function. Use exit.
+
+2008-05-19 06:21 +0000 [r9759-9760]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - tabs
+
+	* rc.d/init.d/functions: - try not to use initlog if $RC_LOGGING is
+	  off (avoits usleeps for each startup)
+
+2008-05-19 06:05 +0000 [r9756-9757]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - 0.4.1.23
 
 	* rc.d/init.d/functions: - add --pidfile to daemon()
 
