@@ -53,10 +53,10 @@ pr:12345:powerokwait:/sbin/shutdown -c "Power Restored; Shutdown Cancelled"
 2:2345:respawn:/sbin/mingetty tty2
 3:2345:respawn:/sbin/mingetty tty3
 4:2345:respawn:/sbin/mingetty tty4
-5:2345:respawn:/sbin/mingetty tty5
-6:2345:respawn:/sbin/mingetty tty6
-7:2345:respawn:/sbin/mingetty tty7
-8:2345:respawn:/sbin/mingetty tty8
+#5:2345:respawn:/sbin/mingetty tty5
+#6:2345:respawn:/sbin/mingetty tty6
+#7:2345:respawn:/sbin/mingetty tty7
+#8:2345:respawn:/sbin/mingetty tty8
 
 # Examples
 # 9:2345:respawn:/sbin/mingetty --mono tty9
