@@ -623,7 +623,7 @@ daemon()
 			/sbin/start-stop-daemon -q --start \
 				--nicelevel $nice \
 				${pidfile:+--pidfile $pidfile} \
-				${user:+-u $user} \
+				${user:+-c $user -u $user} \
 				${fork:+-b} \
 				--exec "$prog" \
 				-- ${1:+"$@"}
