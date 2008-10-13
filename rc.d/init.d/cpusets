@@ -28,8 +28,7 @@ if is_yes "${CPUSETS}" && ! grep -q "/dev/cpuset" /proc/mounts ; then
 	exit 1
 fi
 
-cpuset_create()
-{
+cpuset_create() {
 	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
 
 	. /etc/sysconfig/cpusets/cpuset-$i
@@ -47,8 +46,7 @@ cpuset_create()
 	return 1
 }
 
-cpuset_remove()
-{
+cpuset_remove() {
 	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
 
 	. /etc/sysconfig/cpusets/cpuset-$i
@@ -61,8 +59,7 @@ cpuset_remove()
 	fi
 }
 
-cpuset_empty()
-{
+cpuset_empty() {
 	if [ $(cat /dev/cpuset/$1/tasks 2>/dev/null | wc -c) -eq 0 ] ; then
 		# true returns zero
 		return 0
@@ -107,8 +104,7 @@ stop() {
 
 # Get list of config files
 # ignores editor backup files and rpm blackups
-cpuset_configs()
-{
+cpuset_configs() {
 	local match="$1"
 	for a in /etc/sysconfig/cpusets/$match; do
 		case "$a" in

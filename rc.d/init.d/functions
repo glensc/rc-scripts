@@ -68,8 +68,7 @@ if [ -z "$ISATTY" ]; then
 	export ISATTY
 fi
 
-is_yes()
-{
+is_yes() {
 	# Test syntax
 	if [ $# = 0 ] ; then
 		msg_usage " is_yes {value}"
@@ -89,8 +88,7 @@ is_yes()
 	esac
 }
 
-is_no()
-{
+is_no() {
 	# Test syntax
 	if [ $# = 0 ] ; then
 		msg_usage " is_no {value}"
@@ -128,8 +126,7 @@ if is_yes "$FASTRC" || is_yes "$IN_SHUTDOWN"; then
 fi
 
 if is_no "$RC_LOGGING"; then
-	initlog()
-	{
+	initlog() {
 		RESULT=0
 		while [ "$1" != "${1##-}" ]; do
 			case $1 in
@@ -148,8 +145,7 @@ if is_no "$RC_LOGGING"; then
 	}
 fi
 
-kernelver()
-{
+kernelver() {
 	typeset _x _y _z v old_IFS ver
 	{
 		read _x _y v _z
@@ -170,8 +166,7 @@ kernelver()
 	} < /proc/version
 }
 
-kernelverser()
-{
+kernelverser() {
 	typeset _x _y _z v old_IFS ver
 	{
 		read _x _y v _z
@@ -187,8 +182,7 @@ kernelverser()
 	} </proc/version
 }
 
-kernelvermser()
-{
+kernelvermser() {
 	typeset _x _y _z v old_IFS ver
 	{
 		read _x _y v _z
@@ -203,8 +197,7 @@ kernelvermser()
 }
 
 # Colors workaround
-termput()
-{
+termput() {
 	is_yes "$ISATTY" || return
 
 	if is_yes "$FASTRC" || is_no "$TPUT"; then
@@ -250,8 +243,7 @@ termput()
 if [ ! -x /bin/printf ]; then
 	# printf equivalent
 	# FIXME: buggy when single or double quotes in message!
-	printf()
-	{
+	printf() {
 		typeset text m
 		text="$1"
 		shift
@@ -268,8 +260,7 @@ if [ ! -x /bin/printf ]; then
 fi
 
 # National language support function
-nls()
-{
+nls() {
 	typeset msg_echo nls_domain text message
 	msg_echo='\n'
 	nls_domain="$NLS_DOMAIN"
@@ -303,8 +294,7 @@ nls()
 	echo -en "$msg_echo"
 }
 
-rc_splash()
-{
+rc_splash() {
 	typeset action
 
 	action="$1"
@@ -316,44 +306,36 @@ rc_splash()
 	: $((progress++))
 }
 
-msg_network_down()
-{
+msg_network_down() {
 	nls "ERROR: Networking is down. %s can't be run." "$1" >&2
 }
 
-msg_starting()
-{
+msg_starting() {
 	show "Starting %s service" "$1"
 }
 
-msg_already_running()
-{
+msg_already_running() {
 	nls "%s service is already running." "$1"
 }
 
-msg_stopping()
-{
+msg_stopping() {
 	show "Stopping %s service" "$1"
 }
 
-msg_not_running()
-{
+msg_not_running() {
 	nls "%s service is not running." "$1"
 }
 
-msg_reloading()
-{
+msg_reloading() {
 	show "Reloading %s service" "$1"
 }
 
-msg_usage()
-{
+msg_usage() {
 	nls "Usage: %s" "$*"
 }
 
 # Some functions to handle PLD Linux-style messages
-show()
-{
+show() {
 	typeset text
 	typeset -i len
 
@@ -374,8 +356,7 @@ show()
 	echo -n "$text"
 }
 
-deltext()
-{
+deltext() {
 	termput hpa $INIT_COL
 }
 
@@ -383,44 +364,37 @@ deltext()
 # First is the text to display, second is color number to use (argument to
 # tput setaf). If second argument is not given, default (2, green) will be
 # used).
-progress()
-{
+progress() {
 	typeset COLOR
 	if [ -n "$2" ]; then COLOR="$2"; else COLOR="$CDONE"; fi
 	deltext
 	echo -n "$(termput setaf $CBRACKETS)[$(termput setaf $COLOR) $(nls --nls-domain rc-scripts "$1") $(termput setaf $CBRACKETS)]$(termput op)"
 }
 
-busy()
-{
+busy() {
 	echo -n "$_busy"
 }
 
-ok()
-{
+ok() {
 	echo "$_ok"
 }
 
-started()
-{
+started() {
 	echo "$_started"
 }
 
-fail()
-{
+fail() {
 	echo "$_fail"
 	return 1
 }
 
-died()
-{
+died() {
 	echo "$_died"
 	return 1
 }
 
 # Check if $pid (could be plural) are running
-checkpid()
-{
+checkpid() {
 	while [ "$1" ]; do
 		[ -d "/proc/$1" ] && return 0
 		shift
@@ -433,8 +407,7 @@ checkpid()
 # - don't filter out pids which do not have corresponding running processes (process died etc)
 # (note: some processes like named are chrooted but run outside chroot)
 # - do nothing inside vserver
-filter_chroot()
-{
+filter_chroot() {
 	if is_yes "$VSERVER"; then
 		echo $@
 		return
@@ -462,8 +435,7 @@ filter_chroot()
 }
 
 # Usage run_cmd Message command_to_run
-run_cmd()
-{
+run_cmd() {
 	typeset exit_code errors message force_err
 	typeset -i force_err=0
 	typeset -i exit_code=0
@@ -521,8 +493,7 @@ _daemon_set_ulimits() {
 }
 
 # A function to start a program (now it's useful on read-only filesystem too)
-daemon()
-{
+daemon() {
 	typeset errors="" prog="" end="" waitname="" waittime=""
 	typeset -i exit_code=0
 	local nice=$SERVICE_RUN_NICE_LEVEL
@@ -592,7 +563,7 @@ daemon()
 	busy
 	cd /
 	[ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS" && echo $$ > "/dev/cpuset/${SERVICE_CPUSET}/tasks"
-	if errors=`
+	if errors=$(
 		umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK};
 		export USER=root HOME=/tmp TMPDIR=/tmp
 		nice=${nice:-$DEFAULT_SERVICE_RUN_NICE_LEVEL}
@@ -630,7 +601,7 @@ daemon()
 		else
 			nice -n $nice initlog -c "$prog" 2>&1
 		fi
-		`; then
+		); then
 
 		if [ -n "$waitname" -a -n "$waittime" ]; then
 			# Save basename.
@@ -656,8 +627,7 @@ daemon()
 }
 
 # A function to stop a program.
-killproc()
-{
+killproc() {
 	typeset notset killlevel base pid pidfile result
 	# Test syntax.
 	if [ $# = 0 ]; then
@@ -774,8 +744,7 @@ killproc()
 }
 
 # A function to find the pid of a program.
-pidofproc()
-{
+pidofproc() {
 	typeset pid pidfile base=${1##*/}
 	pidfile="$base.pid"
 	[ -n "$2" ] && pidfile="$2"
@@ -806,8 +775,7 @@ pidofproc()
 	echo $pid
 }
 
-status()
-{
+status() {
 	typeset pid subsys daemon cpuset_msg
 	subsys=$1
 	daemon=${2:-$subsys}
@@ -895,8 +863,7 @@ confirm() {
 }
 
 # module is needed (ie. is requested, is available and isn't loaded already)
-is_module()
-{
+is_module() {
 	# module name without .o at end
 	if ! lsmod | grep -q "$1"; then
 		if ls -R /lib/modules/$(uname -r)/ 2> /dev/null | grep -q "${1}.\(\|k\)o\(\|.gz\)"; then
@@ -908,8 +875,7 @@ is_module()
 	return 1
 }
 
-_modprobe()
-{
+_modprobe() {
 	typeset parsed single die args foo result
 	parsed=no
 	while is_no "$parsed" ; do
@@ -962,15 +928,15 @@ if is_no "$RC_LOGGING"; then
 		:
 	}
 
-	log_failed () {
+	log_failed() {
 		:
 	}
 else
-	log_success () {
+	log_success() {
 		initlog -n $0 -s "$1 $2" -e 1
 	}
 
-	log_failed () {
+	log_failed() {
 		initlog -n $0 -s "$1 $2" -e 2
 	}
 fi
