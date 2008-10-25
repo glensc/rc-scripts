@@ -218,7 +218,7 @@ fi
 
 if is_yes "$ENABLE_6TO4"; then
 	# find an usable IPv4 address for this device; might have been obtained by dhcp or ppp
-	for ipv4 in `/sbin/ip addr show dev $DEVICE | awk '/ inet /{print $2}' | sed -e 's,/.*,,'`; do
+	for ipv4 in `/sbin/ip addr show dev $DEVICE | awk -F'[ /]+' '/ inet /{print $3}'`; do
 		if [   `ipcalc -n $ipv4/8`  != "NETWORK=10.0.0.0"    \
 			-a `ipcalc -n $ipv4/12` != "NETWORK=172.16.0.0"  \
 			-a `ipcalc -n $ipv4/24` != "NETWORK=192.168.0.0" \
