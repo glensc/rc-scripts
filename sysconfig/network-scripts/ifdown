@@ -99,11 +99,9 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 	fi
 fi
 
-if is_wireless_device "${DEVICE}"; then
-	if is_yes "${WLAN_WPA}"; then
-		killproc --pidfile "wpa_supplicant-${DEVICE}.pid" wpa_supplicant > /dev/null 2>&1
-		rm -f "/var/run/wpa_supplicant-${DEVICE}.pid"
-	fi
+if is_yes "${WLAN_WPA}"; then
+	killproc --pidfile "wpa_supplicant-${DEVICE}.pid" wpa_supplicant > /dev/null 2>&1
+	rm -f "/var/run/wpa_supplicant-${DEVICE}.pid"
 fi
 
 # Check to make sure the device is actually up
