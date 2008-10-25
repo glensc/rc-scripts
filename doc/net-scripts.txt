@@ -149,6 +149,9 @@ Files in /etc/sysconfig/interfaces/
        IPV6_CP_PERSISTENT=yes|no
          use EUI-48 addresses as IPv6 addresses
        or by default use address specified by IP6_PRIM_IF and REMIP6
+    ENABLE_6TO4=yes|no
+      configure a 6to4 tunnel, if the interface has a public
+      (non-RFC1918) IPv4 address
     <anything>=<anything>
       Variable name and it's value for use by chat script.
       Note: You don't have to define variables here, if they are defined 

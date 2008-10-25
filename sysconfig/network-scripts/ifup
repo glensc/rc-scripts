@@ -216,6 +216,27 @@ if is_yes "$IPX"; then
 	/etc/sysconfig/network-scripts/ifup-ipx $DEVICE
 fi
 
+if is_yes "$ENABLE_6TO4"; then
+	# find an usable IPv4 address for this device; might have been obtained by dhcp or ppp
+	for ipv4 in `/sbin/ip addr show dev $DEVICE | awk '/ inet /{print $2}' | sed -e 's,/.*,,'`; do
+		if [   `ipcalc -n $ipv4/8`  != "NETWORK=10.0.0.0"    \
+			-a `ipcalc -n $ipv4/12` != "NETWORK=172.16.0.0"  \
+			-a `ipcalc -n $ipv4/24` != "NETWORK=192.168.0.0" \
+			-a `ipcalc -n $ipv4/24` != "NETWORK=169.254.0.0" ]; then
+			local_ipv4=$ipv4
+			local_ipv6=`printf "2002:%02x%02x:%02x%02x::1" $(echo $ipv4 | tr . ' ')`
+			break
+		fi
+	done
+	if [ -n "$local_ipv4" ]; then   # we have an usable IPv4 address; set up the tunnel
+		tun6to4=tun6to4_$DEVICE 
+		/sbin/ip tunnel add $tun6to4 mode sit ttl 128 remote any local $local_ipv4
+		/sbin/ip link set dev $tun6to4 up
+		/sbin/ip -6 addr  add $local_ipv6/16 dev $tun6to4
+		/sbin/ip -6 route add 2000::/3 via ::192.88.99.1 dev $tun6to4 metric 1
+	fi
+fi
+
 if [ "$HANDLING" = "4" ]; then
 	exit 0
 fi

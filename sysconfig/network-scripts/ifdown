@@ -59,6 +59,15 @@ if [ -x $OTHERSCRIPT ]; then
 	fi
 fi
 
+if is_yes "$ENABLE_6TO4"; then
+	tun6to4=tun6to4_$DEVICE 
+	/sbin/ip -6 route flush dev $tun6to4 2>/dev/null
+	if [ $? = 0 ]; then   # the tunnel has been set up in ifup
+		/sbin/ip link set dev $tun6to4 down
+		/sbin/ip tunnel del $tun6to4
+	fi
+fi
+
 if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; then
 	if is_yes "$IPV4_NETWORKING"; then
 		set_dhcpclient
