@@ -72,6 +72,9 @@ RUN_LDCONFIG=no
 # Mount devfs (Device Filesystem, Obsolete) to /dev
 MOUNT_DEVFS=no
 
+# Start udev (udev-core required)?
+START_UDEV=yes
+
 # EVMS/LVM options
 # Extensible Firmware Interface GUID Partition Table segment manager
 EVMS_GUID_PTABLE=no

@@ -126,7 +126,6 @@ if ! is_yes "$VSERVER" ; then
 			grep -q securityfs /proc/filesystems 2>/dev/null ; then
 				mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
 		fi
-														
 	fi
 
 	# selinux
@@ -204,7 +203,9 @@ if ! is_yes "$VSERVER"; then
 		/bin/dmesg -n $CONSOLE_LOGLEVEL
 	fi
 
-	[ -x /sbin/start_udev ] && /sbin/start_udev
+	if ! is_no "$START_UDEV"; then
+		[ -x /sbin/start_udev ] && /sbin/start_udev
+	fi
 
 	# Unmount the initrd, if necessary
 	if grep -q /initrd /proc/mounts 2>/dev/null && ! grep -q /initrd/loopfs /proc/mounts 2>/dev/null; then
@@ -793,7 +794,7 @@ if ! is_yes "$VSERVER"; then
 	# now we have /usr mounted, recheck if we have gettext and tput available.
 	if is_no "$TPUT"; then
 		GETTEXT=
-	   	TPUT=
+		TPUT=
 		rc_gettext_init
 	fi
 
