@@ -20,15 +20,24 @@ if [ "$1" = "-u" ]; then
 	shift
 fi
 
+if [ "$1" = "--test" ]; then
+	test=yes
+	shift
+fi
+
+if [ "$1" = "--" ]; then
+	shift
+fi
+
 # std checks
 if [ $# -lt 1 ]; then
-	echo "Usage: run-parts [-u] <dir> <args...>"
+	echo "Usage: run-parts [-u] [--test] <dir> <args...>"
 	exit 1
 fi
 
 if [ ! -d $1 ]; then
 	echo "Is not a directory: $1"
-	echo "Usage: run-parts [-u] <dir> <args...>"
+	echo "Usage: run-parts [-u] [--test] <dir> <args...>"
 	exit 1
 fi
 
@@ -60,6 +69,10 @@ for i in $RUNPARTS_DIR/*[!~,] ; do
 
 	if [ -x "$i" ]; then
 		runprog="$i $@"
+		if [ "$test" = yes ]; then
+			echo "$runprog"
+			continue
+		fi
 		if [ "$workasuser" = "yes" ]; then
 			runuser="$(/bin/ls -l "$i" | awk ' { print $3 } ' 2> /dev/null)"
 			[ -z "$runuser" ] && echo "Warning: Can't find owner for [$i] file. Not running." && continue
