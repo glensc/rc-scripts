@@ -15,11 +15,6 @@
 # keep going when something fails
 set +e
 
-if [ "$1" = "-u" ]; then
-	workasuser=yes
-	shift
-fi
-
 if [ "$1" = "--test" ]; then
 	test=yes
 	shift
@@ -73,11 +68,6 @@ for i in $RUNPARTS_DIR/*[!~,] ; do
 			echo "$runprog"
 			continue
 		fi
-		if [ "$workasuser" = "yes" ]; then
-			runuser="$(/bin/ls -l "$i" | awk ' { print $3 } ' 2> /dev/null)"
-			[ -z "$runuser" ] && echo "Warning: Can't find owner for [$i] file. Not running." && continue
-			runprog="/bin/su $runuser -s /bin/sh -c $runprog"
-		fi
 		$runprog 2>&1 | awk -v "progname=$i" \
 			'progname {
 			 	print progname ":\n"
@@ -88,6 +78,3 @@ for i in $RUNPARTS_DIR/*[!~,] ; do
 done
 
 exit 0
-
-# This must be last line !
-# vi:syntax=sh
