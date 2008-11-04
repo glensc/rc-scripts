@@ -54,7 +54,7 @@ HOW TO MAKE A RELEASE
 - svn up
 - make distcheck
 - update configure.ac release and commit it
-- ./changelog.sh && svn ci ChangeLog
+- svn up && ./changelog.sh && svn ci ChangeLog
 - make dist
 - ./make-tag.sh
 - upload tarball to distfiles, update rc-scripts.spec:HEAD
