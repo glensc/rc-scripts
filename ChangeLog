@@ -1,3 +1,13 @@
+2008-11-04 20:04 +0000 [r9963]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - wtf 0.4.1.24 was already there? bump to 0.4.1.25
+	  then
+
+2008-11-04 19:57 +0000 [r9962]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* DEVELOPMENT: - somewhy have to svn up again after configure.ac
+	  commit
+
 2008-11-04 19:45 +0000 [r9959]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - 0.4.1.24 release
