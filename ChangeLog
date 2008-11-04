@@ -1,3 +1,67 @@
+2008-11-04 18:07 +0000 [r9958]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lang.sh: - LC_ALL was still overwritten with i18n value even if
+	  one had from ssh session
+
+2008-10-29 08:54 +0000 [r9927]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* run-parts: - rip out -u <runas_user> -- it's bad concept and
+	  nothing should be using it anyway
+
+2008-10-28 00:09 +0000 [r9926]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* run-parts: - add --test and -- to behave like debian run-parts(1)
+
+2008-10-26 13:43 +0000 [r9922]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/system, rc.d/rc.sysinit: - introduce START_UDEV
+	  variable
+
+2008-10-25 22:53 +0000 [r9921]  Andrzej Dopierała <undefine/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
+	  - wpa is also usefull with not wireless devices - eg with 8021x.
+	  - patch by Pawel Nogas <pnogas(AT)amu(DOT)edu(DOT)pl>
+
+2008-10-25 18:35 +0000 [r9920]  Radosław Zieliński <radek/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: - removed sed dependency
+
+2008-10-25 18:16 +0000 [r9918-9919]  Radosław Zieliński <radek/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-eth0.1: - typo
+
+	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
+	  doc/net-scripts.txt, sysconfig/interfaces/ifcfg-eth0: - support
+	  for automatic 6to4 tunnels
+
+2008-10-13 13:21 +0000 [r9909]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* rc.d/init.d/network, backtick-test.sh (added): - restored some
+	  backticks - pdksh has broken $(...) closing paren detection, -
+	  added backtick-test.sh to test whenever this would be valid some
+	  day
+
+2008-10-13 01:04 +0000 [r9908]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* rc.d/init.d/network, rc.d/init.d/cpusets, rc.d/init.d/functions:
+	  - unified function definitions (line-saving way), - use
+	  unambiguous $(...) instead of backticks.
+
+2008-10-12 18:08 +0000 [r9907]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - start-stop-daemon uses -c not -u to
+	  change UID
+
+2008-09-16 20:39 +0000 [r9869]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* inittab: - full set of samples for default terminals (default
+	  keymap doesn't allow you switch over 12)
+
+2008-09-15 08:23 +0000 [r9868]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* inittab: - you don't likely need so many terminals
+
 2008-08-07 20:39 +0000 [r9860]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: Actually don't use -s option since dmesg uses
