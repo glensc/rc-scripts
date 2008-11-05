@@ -497,7 +497,7 @@ daemon() {
 	typeset errors="" prog="" end="" waitname="" waittime=""
 	typeset -i exit_code=0
 	local nice=$SERVICE_RUN_NICE_LEVEL
-	local fork user closefds pidfile
+	local fork user closefds pidfile chdir=/
 
 	while [ $# -gt 0 ]; do
 		case $1 in
@@ -519,6 +519,10 @@ daemon() {
 			fork=1
 			prog="/usr/bin/setsid sh -c \""
 			end='&'
+			;;
+		--chdir)
+			shift
+			chdir=$1
 			;;
 		--closefds)
 			closefds=1
@@ -561,7 +565,7 @@ daemon() {
 
 	# And start it up.
 	busy
-	cd /
+	cd $chdir
 	[ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS" && echo $$ > "/dev/cpuset/${SERVICE_CPUSET}/tasks"
 	if errors=$(
 		umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK};
@@ -595,6 +599,7 @@ daemon() {
 				--nicelevel $nice \
 				${pidfile:+--pidfile $pidfile} \
 				${user:+-c $user} \
+				${chdir:+--chdir "$chdir"} \
 				${fork:+-b} \
 				--exec "$prog" \
 				-- ${1:+"$@"}
