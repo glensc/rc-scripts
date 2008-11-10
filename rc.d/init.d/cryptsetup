@@ -9,8 +9,8 @@ key_is_random() {
 # Because of a chicken/egg problem, init_crypto must be run twice.  /var may be
 # encrypted but /var/lib/random-seed is needed to initialize swap.
 init_crypto() {
-	local have_random dst src key opt mode owner params makeswap skip arg opt
-	local param value rc ret mke2fs mdir
+	local have_random dst src key opt mode owner params makeswap skip arg
+	local param value rc ret mke2fs mdir cnt=0
 
 	ret=0
 	have_random=$1
@@ -89,6 +89,10 @@ init_crypto() {
 			continue
 		fi
 
+		if [ $cnt = 0 ]; then
+			echo ""
+			cnt=1
+		fi
 		if /sbin/cryptsetup isLuks "$src" 2>/dev/null; then
 			if key_is_random "$key"; then
 				echo "$dst: LUKS requires non-random key, skipping"
@@ -150,11 +154,11 @@ RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-	show "Starting disk encryption:"
+	show "Starting disk encryption"; busy
 	init_crypto 1 && ok || fail
 	;;
   stop)
-	show "Stopping disk encryption:"
+	show "Stopping disk encryption"; busy
 	halt_crypto && ok || fail
 	;;
   status)
