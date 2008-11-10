@@ -25,13 +25,13 @@ init_crypto() {
 				mode=$(ls -l "$key" | cut -c 5-10)
 				owner=$(ls -l $key | awk '{ print $3 }')
 				if [ "$mode" != "------" ] && ! key_is_random "$key"; then
-					echo $"INSECURE MODE FOR $key"
+					echo "INSECURE MODE FOR $key"
 				fi
 				if [ "$owner" != root ]; then
-					echo $"INSECURE OWNER FOR $key"
+					echo "INSECURE OWNER FOR $key"
 				fi
 			else
-				echo $"Key file for $dst not found, skipping"
+				echo "Key file for $dst not found, skipping"
 				ret=1
 				continue
 			fi
@@ -55,21 +55,21 @@ init_crypto() {
 			cipher)
 				params="$params -c $value"
 				if [ -z "$value" ]; then
-					echo $"$dst: no value for cipher option, skipping"
+					echo "$dst: no value for cipher option, skipping"
 					skip="yes"
 				fi
 			;;
 			size)
 				params="$params -s $value"
 				if [ -z "$value" ]; then
-					echo $"$dst: no value for size option, skipping"
+					echo "$dst: no value for size option, skipping"
 					skip="yes"
 				fi
 			;;
 			hash)
 				params="$params -h $value"
 				if [ -z "$value" ]; then
-					echo $"$dst: no value for hash option, skipping"
+					echo "$dst: no value for hash option, skipping"
 					skip="yes"
 				fi
 			;;
@@ -91,7 +91,7 @@ init_crypto() {
 
 		if /sbin/cryptsetup isLuks "$src" 2>/dev/null; then
 			if key_is_random "$key"; then
-				echo $"$dst: LUKS requires non-random key, skipping"
+				echo "$dst: LUKS requires non-random key, skipping"
 				ret=1
 				continue
 			fi
