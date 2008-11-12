@@ -12,6 +12,11 @@ init_crypto() {
 	local have_random dst src key opt mode owner params makeswap skip arg
 	local param value rc ret mke2fs mdir cnt=0
 
+	# call mknodes as the dm node could be missing if device was opened from
+	# initrd.
+	# XXX: shouldn't udev handle the nodes creation here?
+	/sbin/dmsetup mknodes
+
 	ret=0
 	have_random=$1
 	while read dst src key opt; do
