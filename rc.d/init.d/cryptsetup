@@ -10,7 +10,7 @@ key_is_random() {
 # encrypted but /var/lib/random-seed is needed to initialize swap.
 init_crypto() {
 	local have_random dst src key opt mode owner params makeswap skip arg
-	local param value rc ret mke2fs mdir cnt=0
+	local param value rc ret mke2fs mdir
 
 	# call mknodes as the dm node could be missing if device was opened from
 	# initrd.
@@ -30,14 +30,15 @@ init_crypto() {
 				mode=$(ls -l "$key" | cut -c 5-10)
 				owner=$(ls -l $key | awk '{ print $3 }')
 				if [ "$mode" != "------" ] && ! key_is_random "$key"; then
-					echo "INSECURE MODE FOR $key"
+					nls "INSECURE MODE FOR %s" "$key"
+					ret=1
 				fi
 				if [ "$owner" != root ]; then
-					echo "INSECURE OWNER FOR $key"
+					nls "INSECURE OWNER FOR %s" "$key"
+					ret=1
 				fi
 			else
-				echo "Key file for $dst not found, skipping"
-				ret=1
+				nls "Key file for %s not found, skipping" "$dst"
 				continue
 			fi
 		else
@@ -60,21 +61,21 @@ init_crypto() {
 			cipher)
 				params="$params -c $value"
 				if [ -z "$value" ]; then
-					echo "$dst: no value for cipher option, skipping"
+					nls "%s: no value for cipher option, skipping" "$dst"
 					skip="yes"
 				fi
 			;;
 			size)
 				params="$params -s $value"
 				if [ -z "$value" ]; then
-					echo "$dst: no value for size option, skipping"
+					nls "%s: no value for size option, skipping" "$dst"
 					skip="yes"
 				fi
 			;;
 			hash)
 				params="$params -h $value"
 				if [ -z "$value" ]; then
-					echo "$dst: no value for hash option, skipping"
+					nls "%s: no value for hash option, skipping" "$dst"
 					skip="yes"
 				fi
 			;;
@@ -94,18 +95,14 @@ init_crypto() {
 			continue
 		fi
 
-		if [ $cnt = 0 ]; then
-			echo ""
-			cnt=1
-		fi
 		if /sbin/cryptsetup isLuks "$src" 2>/dev/null; then
 			if key_is_random "$key"; then
-				echo "$dst: LUKS requires non-random key, skipping"
+				nls "%s: LUKS requires non-random key, skipping" "$dst"
 				ret=1
 				continue
 			fi
 			if [ -n "$params" ]; then
-				echo "$dst: options are invalid for LUKS partitions, ignoring them"
+				nls "%s: options are invalid for LUKS partitions, ignoring them" "$dst"
 			fi
 			/sbin/cryptsetup ${key:+-d $key} luksOpen "$src" "$dst" <&1
 		else
@@ -160,11 +157,11 @@ RETVAL=0
 case "$1" in
   start)
 	show "Starting disk encryption"; busy
-	init_crypto 1 && ok || fail
+	init_crypto 1 && ok
 	;;
   stop)
 	show "Stopping disk encryption"; busy
-	halt_crypto && ok || fail
+	halt_crypto && ok
 	;;
   status)
 	# this is way overkill, but at least we have some status output...
