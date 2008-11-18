@@ -95,6 +95,12 @@ init_crypto() {
 			continue
 		fi
 
+		if [ ! -b "$src"  ]; then
+			nls "$src: No such device"
+			ret=1
+			continue
+		fi
+
 		if /sbin/cryptsetup isLuks "$src" 2>/dev/null; then
 			if key_is_random "$key"; then
 				nls "%s: LUKS requires non-random key, skipping" "$dst"
