@@ -15,5 +15,6 @@ AUTH=no
 PERSIST=yes
 DEFROUTE=yes
 USEPEERDNS=yes
+DEBUG=no
 
 CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.kou
