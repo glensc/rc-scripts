@@ -75,6 +75,11 @@ if [ -x "$OTHERSCRIPT" ]; then
 	fi
 fi
 
+if [ -n "$MACVLAN_DEV" -a -n "$MACVLAN_MACADDR" ]; then
+	ip link del link ${MACVLAN_DEV} ${DEVICE} type macvlan > /dev/null 2>&1
+	ip link add link ${MACVLAN_DEV} address ${MACVLAN_MACADDR} ${DEVICE} type macvlan
+fi
+
 # is this device available? (this catches PCMCIA devices for us)
 if ! /sbin/ip link set multicast ${MULTICAST} dev ${DEVICE} > /dev/null 2>&1; then
 	nls "Delaying %s initialization" ${DEVICE}

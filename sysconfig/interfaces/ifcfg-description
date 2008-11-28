@@ -84,6 +84,12 @@ if 	DEVICE=eth*; then
 	[ MEDIA={auto|10baseT|10base2|AUI} ]
 	[ MACADDR=<hw address> ]
 
+	if macvlan
+		MACVLAN_DEV=<exitsting base interface eg. eth0>
+		MACVLAN_MACADDR=<desired hw address of new interface>
+	fi
+	
+
 	if 	DEVICE=wireless interface (man iwconfig(8))
 		WLAN_UPEARLY=<yes>|<no> Up device before setting any WLAN parameters
 					(needed for some drivers)
