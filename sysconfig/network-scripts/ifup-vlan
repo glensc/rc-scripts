@@ -56,6 +56,8 @@ if [ ! -x /sbin/vconfig ]; then
 	exit 1
 fi
 
+modprobe -s -k 8021q
+
 if [ ! -e /proc/net/vlan/config ]; then
 	nls "VLAN kernel support is missing. Can't continue."
 	exit 1
