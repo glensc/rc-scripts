@@ -781,19 +781,27 @@ pidofproc() {
 }
 
 status() {
-	typeset pid subsys daemon cpuset_msg
+	typeset pid subsys daemon cpuset_msg pidfile
+	if [ "$1" = "--pidfile" ]; then
+		pidfile=$2
+		shift 2
+	fi
+
 	subsys=$1
 	daemon=${2:-$subsys}
-	local base=${daemon##*/}
 
 	# Test syntax.
 	if [ $# = 0 ] ; then
-		msg_usage " status {subsys} [{daemon}]"
+		msg_usage " status [--pidfile PIDFILE] {subsys} [{daemon}]"
 		return 2
 	fi
 
-	# First try "pidof"
-	pid=$(pidof -o $$ -o $PPID -o %PPID -x $daemon)
+	# if pidfile specified, pid must be there
+	if [ "$pidfile" -a -f "$pidfile" ]; then
+		read pid < $pidfile
+	else
+		pid=$(pidof -o $$ -o $PPID -o %PPID -x $daemon)
+	fi
 	pid=$(filter_chroot "$pid")
 
 	if [ "$pid" ]; then
@@ -807,26 +815,10 @@ status() {
 		fi
 		nls "%s (pid %s) is running%s" "$daemon" "$pid" "$cpuset_msg"
 		return 0
-#	else
-#		pid=$(ps ax | awk 'BEGIN { prog=ARGV[1]; ARGC=1 }
-#		     { if ((prog == $5) || (("(" prog ")") == $5) ||
-#			(("[" prog "]") == $5) ||
-#			((prog ":") == $5)) { print $1 ; exit 0 } }' $1)
-#		if [ "$pid" != "" ]; then
-#			cpuset_msg="..."
-#			if [ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS" ]; then
-#				if $(grep -q "$pid" "/dev/cpuset/${SERVICE_CPUSET}/tasks"); then
-#					cpuset_msg=$(nls " in cpuset %s..." "$SERVICE_CPUSET")
-#				else
-#					cpuset_msg=$(nls " outside of configured cpuset %s..." "$SERVICE_CPUSET")
-#				fi
-#			fi
-#			nls "%s (pid %s) is running%s" "$daemon" "$pid" "$cpuset_msg"
-#			return 0
-#		fi
 	fi
 
 	# Next try "/var/run/*.pid" files
+	local base=${daemon##*/}
 	if [ -f /var/run/${base}.pid ]; then
 		read pid < /var/run/${base}.pid
 		pid=$(filter_chroot "$pid")
