@@ -326,7 +326,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	if [ "$usb" = "1" -a ! -f /proc/bus/usb/devices ]; then
-		run_cmd "Mounting USB filesystem" mount -n -t usbfs usbfs /proc/bus/usb
+		run_cmd "Mounting USB filesystem" mount -n -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb
 	fi
 
 	needusbstorage=
@@ -499,7 +499,7 @@ if ! is_yes "$VSERVER"; then
 	# Enter root, /proc, /sys, devfs and other into mtab.
 	mount -f /
 	mount -f /proc
-	[ -f /proc/bus/usb/devices ] && mount -f -t usbfs usbfs /proc/bus/usb
+	[ -f /proc/bus/usb/devices ] && mount -f -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb
 	[ -e /dev/.devfsd ] && mount -f -t devfs devfs /dev
 
 	if grep -q sysfs /proc/mounts 2>/dev/null; then
