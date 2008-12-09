@@ -64,10 +64,10 @@ if ! is_yes "$VSERVER"; then
 	sig=-15
 	retry=3
 	force=
-	remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+	remaining=$(awk '!/(^#| proc | loopfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
 	while [ -n "$remaining" -a "$retry" -gt 0 ]; do
 	 	show "Unmounting file systems"; busy
-		ERRORS=$(umount -a $force -t noproc,devfs 2>&1); rc=$?
+		ERRORS=$(umount -a $force -t noproc 2>&1); rc=$?
 
 		# we might had unmounted /usr, recheck $TPUT availability
 		# but well. we need tput only for show() and busy() (ok() and fail() messages are already cached)
@@ -85,7 +85,7 @@ if ! is_yes "$VSERVER"; then
 		fi
 
 		sleep 2
-		remaining=$(awk '!/(^#| proc | loopfs | devfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+		remaining=$(awk '!/(^#| proc | loopfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
 		[ -z "$remaining" ] && break
 		fuser -k -m $sig $remaining > /dev/null
 		sleep 5

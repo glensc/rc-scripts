@@ -209,21 +209,9 @@ if ! is_yes "$VSERVER"; then
 
 	# Unmount the initrd, if necessary
 	if grep -q /initrd /proc/mounts 2>/dev/null && ! grep -q /initrd/loopfs /proc/mounts 2>/dev/null; then
-		if [ -e /initrd/dev/.devfsd ]; then
-			umount /initrd/dev
-		fi
 		umount /initrd/dev 2>/dev/null
 		umount /initrd
 		/sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
-	fi
-
-	# /dev must be also mounted before everything but only if we want use them ;-)
-	if is_yes "$MOUNT_DEVFS"; then
-		run_cmd "Mounting Device Filesystem" mount -n -t devfs /dev /dev
-	fi
-	# set up devfsd
-	if [ -e /dev/.devfsd -a -x /sbin/devfsd ]; then
-		run_cmd "Starting Device Filesystem Daemon" /sbin/devfsd /dev
 	fi
 
 	# Start logging console output since we have all /dev stuff setup
@@ -497,11 +485,10 @@ if ! is_yes "$VSERVER"; then
 	:>/etc/mtab
 	[ -f /etc/cryptomtab ] && :>/etc/cryptomtab
 
-	# Enter root, /proc, /sys, devfs and other into mtab.
+	# Enter root, /proc, /sys and other into mtab.
 	mount -f /
 	mount -f /proc
 	[ -f /proc/bus/usb/devices ] && mount -f -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb
-	[ -e /dev/.devfsd ] && mount -f -t devfs devfs /dev
 
 	if grep -q sysfs /proc/mounts 2>/dev/null; then
 		mount -f -t sysfs sysfs /sys

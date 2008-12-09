@@ -83,10 +83,6 @@ msgstr "%s zabity ale plik z numerem procesu istnieje"
 msgid "Saving random seed"
 msgstr "Zapisanie podstawy generatora losowego"
 
-#: .././rc.d/rc.sysinit:146
-msgid "Starting Device Filesystem Daemon"
-msgstr "Uruchamianie Zarz±dcy Systemu Plików Urz±dzeñ (devfsd)"
-
 #: .././rc.d/rc.sysinit:245
 msgid "Initializing USB keyboard"
 msgstr "Inicjalizacja klawiatury USB"
@@ -427,10 +423,6 @@ msgstr "Sprawdzanie quot w systemach plików"
 #: .././rc.d/rc.sysinit:224
 msgid "Initializing USB controller"
 msgstr "Inicjalizacja kontrolera USB"
-
-#: .././rc.d/rc.sysinit:141
-msgid "Mounting Device Filesystem"
-msgstr "Pod³±czanie systemów plików urz±dzeñ (DEVfs)"
 
 #: .././rc.d/rc.sysinit:561
 msgid "Starting up RAID device %s"

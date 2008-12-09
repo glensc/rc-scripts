@@ -40,7 +40,7 @@ if [ ! -x /usr/sbin/pppd ]; then
 	exit 1
 fi
 
-# modprobe ppp modules (udev and devfsd case)
+# modprobe ppp modules (udev case)
 [ ! -e /dev/ppp ] && modprobe -s -k char-major-108
 
 opts="lock"
