@@ -232,9 +232,10 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# cpuset support (mounted unconditionally, shouldn't be a problem)
-	if grep -q cpuset /proc/filesystems 2>/dev/null ; then
-		# mkdir for udev (FIXME fix the udev instead)
-		mkdir -p /dev/cpuset 2>/dev/null
+	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
+		mount -n -t cgroup none /dev/cpuset -ocpuset
+		[ $? -eq 0 ] && echo "/sbin/cpuset_release_agent" > /dev/cpuset/release_agent
+	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
 		mount -n -t cpuset none /dev/cpuset
 	fi
 
