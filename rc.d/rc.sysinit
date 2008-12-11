@@ -648,7 +648,11 @@ if ! is_yes "$VSERVER"; then
 
 		run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelock
 		run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmignorelock
-		[ "$lvmversion" = "2" ] && /sbin/vgmknodes
+		if [ "$lvmversion" = "2" ]; then
+			/sbin/vgmknodes
+			# display VG statistics
+			/sbin/vgdisplay -s
+		fi
 	fi
 
 	# Add raid devices
