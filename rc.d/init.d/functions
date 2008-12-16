@@ -668,8 +668,26 @@ killproc() {
 		killlevel=$2
 	else
 		notset=1
-		killlevel="-9"
+		killlevel="-KILL"
 	fi
+
+	# experimental start-stop-daemon based killing.
+	# works only with pidfile
+	if is_no "$RC_LOGGING" && [ "$pidfile" ]; then
+		local sig=${killevel:--TERM}
+		/sbin/start-stop-daemon --stop \
+			--retry ${sig#-}/10/${sig#-}/60/KILL/10 \
+			-s ${sig#-} \
+			${pidfile:+--pidfile $pidfile}
+		result=$?
+		if [ "$result" -eq 0 ]; then
+			ok
+		else
+			fail
+		fi
+		return $result
+	fi
+
 
 	# Save basename.
 	base=${1##*/}
