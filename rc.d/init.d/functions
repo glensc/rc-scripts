@@ -636,26 +636,23 @@ killproc() {
 	typeset notset killlevel base pid pidfile result
 	# Test syntax.
 	if [ $# = 0 ]; then
-		msg_usage " killproc {program} [signal]"
+		msg_usage " killproc <--pidfile PIDFILE> {program} [-SIGNAME]"
 		return 2
 	fi
 
 	while [ "$1" != "${1##-}" ]; do
 		case $1 in
 		--pidfile)
-			shift
-			pidfile="$1"
-			shift
+			pidfile="$2"
+			shift 2
 			;;
 		--waitforname)
-			shift
-			waitname="$1"
-			shift
+			waitname="$2"
+			shift 2
 			;;
 		--waitfortime)
-			shift
-			waittime="$1"
-			shift
+			waittime="$2"
+			shift 2
 			;;
 		esac
 	done
@@ -706,6 +703,8 @@ killproc() {
 				if checkpid $pid && sleep 1 &&
 					checkpid $pid && sleep 3 &&
 					checkpid $pid; then
+					# XXX: SIGKILL is sent already on 4th second!
+					# HARMFUL for example to mysqld (which is already workarounded)
 					kill -KILL $pid
 					usleep 100000
 				fi
