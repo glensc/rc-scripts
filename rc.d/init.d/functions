@@ -636,7 +636,7 @@ killproc() {
 	typeset notset killlevel base pid pidfile result
 	# Test syntax.
 	if [ $# = 0 ]; then
-		msg_usage " killproc <--pidfile PIDFILE> {program} [-SIGNAME]"
+		msg_usage " killproc [--pidfile PIDFILE] {program} [-SIGNAME]"
 		return 2
 	fi
 
