@@ -1,3 +1,104 @@
+2008-12-31 19:25 +0000 [r10044]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: 0.4.1.26
+
+2008-12-25 07:08 +0000 [r10040]  Jakub Bogusz <qboosh/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - optional argument in square brackets
+
+2008-12-16 19:00 +0000 [r10038]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - add usage for killproc - shift 2 is
+	  better than shift shift
+
+2008-12-16 18:55 +0000 [r10037]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - try ssd for killproc. needs pidfile to
+	  work reliably - what values to use for --retry?
+
+2008-12-11 17:04 +0000 [r10034]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - display LVM VG stats after LVM has been
+	  initialized
+
+2008-12-09 14:35 +0000 [r10030]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, po/pl.po, sysconfig/system, rc.d/rc.sysinit,
+	  sysconfig/network-scripts/ifup-ppp: - removed DevFS support
+
+2008-12-09 14:31 +0000 [r10029]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - udev-135-2 finally creates /dev/cpuset
+	  directory - use cgroup fs in newer kernels
+
+2008-12-04 19:49 +0000 [r10022]  Paweł Sikora <pluto/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - allow usb group to operate on /proc/bus/usb.
+
+2008-12-02 07:14 +0000 [r10020]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysctl.conf: Leave default for kernel.
+
+2008-12-02 00:08 +0000 [r10019]  Paweł Sikora <pluto/at/pld-linux.org>
+
+	* sysctl.conf: - describe kernel.randomize_va_space feature.
+
+2008-11-30 19:27 +0000 [r10016]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-vlan: Load 8021q module.
+
+2008-11-30 15:15 +0000 [r10014]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - add --pidfile to status()
+
+2008-11-28 16:09 +0000 [r10010]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup,
+	  sysconfig/interfaces/ifcfg-description,
+	  sysconfig/interfaces/ifcfg-eth0.1: macvlan support.
+
+2008-11-27 14:47 +0000 [r10007]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - load dm-mod before using dmsetup in multipath
+	  case
+
+2008-11-18 13:40 +0000 [r9998]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cryptsetup: - catch missing device errors
+
+2008-11-18 13:26 +0000 [r9996-9997]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/data/chat-ppp0.kou: - it starts pppd right
+	  after connection - with kernel or fixed firmware there's OK said
+	  after ATZ
+
+	* sysconfig/interfaces/ifcfg-ppp0.kou: - add debug line (disabled)
+
+2008-11-14 01:23 +0000 [r9991]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cryptsetup: - use nls
+
+2008-11-12 23:27 +0000 [r9985]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cryptsetup: - dmsetup mknodes so the startup doesn't
+	  complain on missing nodes
+
+2008-11-10 00:46 +0000 [r9974]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cryptsetup: - output formatting cosmetics
+
+2008-11-10 00:15 +0000 [r9973]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cryptsetup: - no bashism
+
+2008-11-05 22:48 +0000 [r9970]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - add --chdir to daemon()
+
+2008-11-05 22:39 +0000 [r9969]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - -u is for stopping in ssd
+
 2008-11-04 20:04 +0000 [r9963]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - wtf 0.4.1.24 was already there? bump to 0.4.1.25
