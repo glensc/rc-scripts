@@ -29,17 +29,20 @@ if is_yes "${CPUSETS}" && ! grep -q "/dev/cpuset" /proc/mounts ; then
 fi
 
 cpuset_create() {
-	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
+	local cgroup CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
 
 	. /etc/sysconfig/cpusets/cpuset-$i
 
 	if mkdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
-		[ -n "$CPUS" ] && echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
-		[ -n "$MEMS" ] && echo "$MEMS" >/dev/cpuset/"$NAME"/mems
-		[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
-		[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
-		[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
+		cgroup=
+		[ -e /dev/cpuset/cpuset.cpus ] && cgroup="cpuset."
+
+		[ -n "$CPUS" ] && echo "$CPUS" >/dev/cpuset/"$NAME"/${cgroup}cpus
+		[ -n "$MEMS" ] && echo "$MEMS" >/dev/cpuset/"$NAME"/${cgroup}mems
+		[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/${cgroup}cpu_exclusive
+		[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/${cgroup}mem_exclusive
 		[ -n "$VIRTUALIZE" ] && echo "$VIRTUALIZE" >/dev/cpuset/"$NAME"/virtualize
+		[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
 		[ -n "$TASKS" ] && echo "$TASKS" >/dev/cpuset/"$NAME"/tasks
 		return 0
 	fi
