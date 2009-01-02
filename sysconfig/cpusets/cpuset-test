@@ -19,9 +19,6 @@ MEM_EXCLUSIVE=1
 # 
 #NOTIFY_ON_RELEASE=0
 
-#
-#VIRTUALIZE=1
-
 # PIDs of tasks in this cpuset
 #TASKS=
 
