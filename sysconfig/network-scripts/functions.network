@@ -174,16 +174,6 @@ static_rarp()
 	fi
 }
 
-vlan_setup()
-{
-	if [ -x /sbin/vconfig -a -e /proc/net/vlan/config ] && echo $DEVICE | grep -q ^eth; then
-		/sbin/vconfig set_name_type DEV_PLUS_VID_NO_PAD 2>&1 > /dev/null
-		ETH_VLANS="yes"
-	else
-		ETH_VLANS="no"
-	fi
-}
-
 # Set up all IP && IP parameter variables
 setup_ip_param ()
 {
