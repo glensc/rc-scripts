@@ -43,7 +43,7 @@ setup_ip_param
 
 ip link set ${DEVICE} down
 ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
-/sbin/vconfig rem ${DEVICE}
+ip link del ${DEVICE}
 RESULT=$?
 
 exit $RESULT
