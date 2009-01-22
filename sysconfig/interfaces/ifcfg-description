@@ -74,6 +74,8 @@ VLAN_REORDER_HDR=[0|1]	When this is set, the VLAN device will move the
 			will be at least a small performance degradation.
 			Default is ON.
 
+[ VLAN_GVRP=yes|no ]    Enable GVRP.
+
 [ DEFAULTHANDLING=yes|no ] (used in configuration for ATM interfaces,
 			    obsolete variable)
 [ HANDLING=0|1|2|3 ] (0 is default; used ie. in ATM configuration, for
