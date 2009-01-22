@@ -33,11 +33,6 @@ if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
 	exit 0
 fi
 
-if [ ! -x /sbin/vconfig ]; then
-	nls "%s is missing. Can't continue." "/sbin/vconfig"
-	exit 1
-fi
-
 # set all major variables
 setup_ip_param
 
