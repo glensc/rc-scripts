@@ -89,7 +89,7 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 		  dhclient)
 			if [ -f /var/run/dhclient.pid ];then
 				PID=$(cat /var/run/dhclient.pid)
-				if ps ax --no-header | grep -q $PID; then
+				if kill -0 $PID 2>/dev/null; then
 					kill $PID
 					RESULT=$?
 				fi
