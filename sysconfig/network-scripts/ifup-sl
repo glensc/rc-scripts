@@ -115,6 +115,3 @@ else
 
 	/etc/sysconfig/network-scripts/ifup-post $1
 fi
-
-# This must be last line !
-# vi:syntax=sh

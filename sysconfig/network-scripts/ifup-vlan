@@ -82,6 +82,3 @@ RESULT=$?
 # XXX: more VLAN specific options support
 
 exit $RESULT
-
-# This must be last line !
-# vi:syntax=sh

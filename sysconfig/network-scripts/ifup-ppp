@@ -265,6 +265,3 @@ fi
 /usr/sbin/pppd $opts ${MODEMMODE} "${MODEMPORT}" ${LINESPEED} \
 	ipparam ${DEVNAME} linkname ${DEVNAME} \
 	${PPPOPTIONS}
-
-# This must be last line !
-# vi:syntax=sh

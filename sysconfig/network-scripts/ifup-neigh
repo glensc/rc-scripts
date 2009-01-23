@@ -18,6 +18,3 @@ egrep "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-arp | while read iface m
 	[ -z "$state" ] && state="stale"
 	/sbin/ip neigh replace $ip lladdr $mac nud $state dev $DEVICE
 done
-
-# This must be last line !
-# vi:syntax=sh

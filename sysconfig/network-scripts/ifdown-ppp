@@ -53,6 +53,3 @@ fi
 /etc/sysconfig/network-scripts/ifdown-post $1
 
 exit 1
-
-# This must be last line !
-# vi:syntax=sh

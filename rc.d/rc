@@ -267,6 +267,3 @@ echo "${af6}[${af2} $runlevel ${af6}]${af7}"
 unset af2 af6 af7
 
 exit 0
-
-# This must be last line !
-# vi:syntax=sh

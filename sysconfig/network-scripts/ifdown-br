@@ -49,6 +49,3 @@ done
 
 ip link set ${DEVICE} down
 brctl delbr ${DEVICE}
-
-# This must be last line !
-# vi:syntax=sh

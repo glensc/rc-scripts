@@ -330,6 +330,3 @@ if [ "$#" -le "0" -o "$OPTIND" -eq 1 ]; then
 fi
 
 exit 0
-
-# This must be last line !
-# vi:syntax=sh

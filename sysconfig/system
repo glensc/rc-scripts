@@ -109,6 +109,3 @@ RC_LOGGING=yes
 
 # Disable console logging by blogd
 RC_BOOTLOG=yes
-
-# This must be last line !
-# vi:syntax=sh

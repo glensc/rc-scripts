@@ -39,6 +39,3 @@ ip link set dev ${DEVICE} up
 setup_ip_gw_ro
 
 /etc/sysconfig/network-scripts/ifup-post $1
-
-# This must be last line !
-# vi:syntax=sh

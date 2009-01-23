@@ -71,6 +71,3 @@ else
 	echo "${SERVICE}: unrecognized service" >&2
 	exit 1
 fi
-
-# This must be last line !
-# vi:syntax=sh

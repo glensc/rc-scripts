@@ -248,6 +248,3 @@ if [ "$HANDLING" = "4" ]; then
 fi
 
 exec /etc/sysconfig/network-scripts/ifup-post $CONFIG
-
-# This must be last line !
-# vi:syntax=sh

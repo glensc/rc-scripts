@@ -73,6 +73,3 @@ else
 fi
 
 exit 1
-
-# This must be last line !
-# vi:syntax=sh

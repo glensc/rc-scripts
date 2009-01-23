@@ -83,6 +83,3 @@ case "${MODE}" in
 esac
 
 exit $RESULT
-
-# This must be last line !
-# vi:syntax=sh

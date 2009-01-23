@@ -50,6 +50,3 @@ for frametype in '802.2' '802.2TR' '802.3' 'EtherII' 'SNAP'; do
 done
 
 exit 0
-
-# This must be last line !
-# vi:syntax=sh

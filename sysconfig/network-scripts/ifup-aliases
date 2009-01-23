@@ -89,6 +89,3 @@ if is_yes "$IPV6_NETWORKING" && [ "$BOOTPROTO6" = "v4compat" ]; then
 		ip -6 addr add ::$addr dev $DEVICE
 	done
 fi
-
-# This must be last line !
-# vi:syntax=sh

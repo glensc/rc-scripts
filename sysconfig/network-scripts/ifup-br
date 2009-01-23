@@ -88,6 +88,3 @@ if ! (ip link set dev ${DEVICE} up); then
 	nls "problems with setting bridge %s" "${DEVICE}"
 	exit 1
 fi
-
-# This must be last line !
-# vi:syntax=sh

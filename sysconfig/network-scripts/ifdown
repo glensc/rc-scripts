@@ -144,6 +144,3 @@ if [ -n "$RESULT" ] ; then
 fi
 
 exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
-
-# This must be last line !
-# vi:syntax=sh

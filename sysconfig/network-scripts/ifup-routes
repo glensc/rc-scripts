@@ -22,6 +22,3 @@ egrep "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-routes | while read devi
 	fi
 	/sbin/ip route add $args dev $REALDEVICE
 done
-
-# This must be last line !
-# vi:syntax=sh

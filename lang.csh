@@ -1,6 +1,6 @@
 #!/bin/csh
 #
-#	$Id$
+# $Id$
 #
 
 test -f /etc/sysconfig/i18n
@@ -29,6 +29,3 @@ if ($status == 0) then
 		setenv LESSCHARSET latin1
 	endif
 endif
-
-# This must be last line !
-# vi:syntax=csh

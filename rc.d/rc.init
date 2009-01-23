@@ -1,3 +1,4 @@
+#!/bin/sh
 # $Id$
 # This script is started by init ...
 
@@ -16,6 +17,3 @@
 
 # Execute the program.
 eval exec "$4"
-
-# This must be last line !
-# vi:syntax=sh

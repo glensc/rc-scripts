@@ -46,6 +46,3 @@ run_down
 do_netreport
 
 exit 0
-
-# This must be last line !
-# vi:syntax=sh
