@@ -30,15 +30,15 @@ init_crypto() {
 				mode=$(ls -l "$key" | cut -c 5-10)
 				owner=$(ls -l $key | awk '{ print $3 }')
 				if [ "$mode" != "------" ] && ! key_is_random "$key"; then
-					eol fail nls "INSECURE MODE FOR %s" "$key"
+					nls "INSECURE MODE FOR %s" "$key"
 					ret=1
 				fi
 				if [ "$owner" != root ]; then
-					eol fail nls "INSECURE OWNER FOR %s" "$key"
+					nls "INSECURE OWNER FOR %s" "$key"
 					ret=1
 				fi
 			else
-				eol fail nls "Key file for %s not found, skipping" "$dst"
+				nls "Key file for %s not found, skipping" "$dst"
 				continue
 			fi
 		else
@@ -61,21 +61,21 @@ init_crypto() {
 			cipher)
 				params="$params -c $value"
 				if [ -z "$value" ]; then
-					eol fail nls "%s: no value for cipher option, skipping" "$dst"
+					nls "%s: no value for cipher option, skipping" "$dst"
 					skip="yes"
 				fi
 			;;
 			size)
 				params="$params -s $value"
 				if [ -z "$value" ]; then
-					eol fail nls "%s: no value for size option, skipping" "$dst"
+					nls "%s: no value for size option, skipping" "$dst"
 					skip="yes"
 				fi
 			;;
 			hash)
 				params="$params -h $value"
 				if [ -z "$value" ]; then
-					eol fail nls "%s: no value for hash option, skipping" "$dst"
+					nls "%s: no value for hash option, skipping" "$dst"
 					skip="yes"
 				fi
 			;;
@@ -103,12 +103,12 @@ init_crypto() {
 
 		if /sbin/cryptsetup isLuks "$src" 2>/dev/null; then
 			if key_is_random "$key"; then
-				eol fail nls "%s: LUKS requires non-random key, skipping" "$dst"
+				nls "%s: LUKS requires non-random key, skipping" "$dst"
 				ret=1
 				continue
 			fi
 			if [ -n "$params" ]; then
-				eol fail nls "%s: options are invalid for LUKS partitions, ignoring them" "$dst"
+				nls "%s: options are invalid for LUKS partitions, ignoring them" "$dst"
 			fi
 			/sbin/cryptsetup ${key:+-d $key} luksOpen "$src" "$dst" <&1
 		else
@@ -141,7 +141,7 @@ halt_crypto() {
     while read dst src key; do
 	[ -z "$dst" -o "${dst#\#}" != "$dst" ] && continue
         if [ -b "/dev/mapper/$dst" ]; then
-            if LC_ALL=C /sbin/dmsetup info "$dst" | grep -q '^Open count: *0$'; then
+            if /sbin/dmsetup info "$dst" | grep -q '^Open count: *0$'; then
                 /sbin/cryptsetup remove "$dst"
             else
                 fnval=1
