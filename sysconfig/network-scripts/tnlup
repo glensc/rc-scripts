@@ -31,7 +31,7 @@ DEV=$1
 	exit 1
 }
 
-TNLCONFIGS=$(ls /etc/sysconfig/interfaces/tnlcfg-* 2>/dev/null | egrep -v '~$')
+TNLCONFIGS=$(LC_ALL=C ls /etc/sysconfig/interfaces/tnlcfg-* 2>/dev/null | egrep -v '~$')
 TNLCONFIGS=$(egrep -L '^#!' $TNLCONFIGS)
 CONFIG=$(egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS)
 

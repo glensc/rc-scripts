@@ -61,7 +61,7 @@ fi
 # set all major variables
 setup_ip_param
 
-if (ip link add type vlan help 2>&1 | grep -q "VLANID :="); then
+if (LC_ALL=C ip link add type vlan help 2>&1 | grep -q "VLANID :="); then
 	/sbin/ip link set ${VLAN_DEV} up
 	/sbin/ip link add link ${VLAN_DEV} name ${DEVICE} type vlan id ${VLAN_ID}
 	# default yes

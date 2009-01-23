@@ -36,5 +36,5 @@ install-data-hook:
 # make rpms
 rpm: $(PACKAGE).spec
 	$(MAKE) dist
-	rpmbin=`LANG=C LC_ALL=C rpm -ta 2>&1 | grep -q "unknown option" && echo rpmbuild || echo rpm` ; \
+	rpmbin=`LC_ALL=C rpm -ta 2>&1 | grep -q "unknown option" && echo rpmbuild || echo rpm` ; \
 		$$rpmbin -ta --clean --rmsource $(PACKAGE)-$(VERSION).tar.gz

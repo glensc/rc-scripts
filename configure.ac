@@ -9,7 +9,7 @@ echo -n "Finding shell scripts"
 SHSCRIPTS=""
 for shfile in $(find ${srcdir}/rc.d ${srcdir}/sysconfig ! -path "*/\.*/*" ! -name "*~" -type f); do
     echo -n "."
-    if (LANG=C file ${shfile} | grep -q 'shell script'); then
+    if (LC_ALL=C file ${shfile} | grep -q 'shell script'); then
 	SHSCRIPTS="${SHSCRIPTS} ${shfile}"
     fi
 done

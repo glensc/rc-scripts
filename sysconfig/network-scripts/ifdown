@@ -110,7 +110,7 @@ check_device_down && exit 0
 if [ -n "${SUBDEVICE}" ]; then
 	ip addr del ${IP4ADDR} label ${SUBDEVICE} dev ${DEVICE}
 else
-	ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+	LC_ALL=C ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
 
 	if [ ${DEVICETYPE} = "bond" ]; then
 		if [ ! -x /sbin/ifenslave ]; then

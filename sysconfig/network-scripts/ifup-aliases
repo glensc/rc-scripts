@@ -65,7 +65,7 @@ for nr in $(awk 'BEGIN { max=0; }; /^IPADDR[0-9]+=/ { s = $0; gsub(/^IPADDR/, ""
 		fi
 	fi
 	# Check for IPv6 address
-	if (echo $IP_ADDR | grep -q ":"); then
+	if echo $IP_ADDR | grep -q ":"; then
 		if is_yes "${IPV6_NETWORKING}"; then
 			ip -6 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
 		fi

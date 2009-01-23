@@ -116,7 +116,7 @@ setup_nat()
 				/sbin/ip rule add from $src nat $dst
 			done
 		elif [ "$1" = "off" ]; then
-			/sbin/ip route show table all | egrep "^nat[[:blank:]]" | while read nat dst via src args; do
+			LC_ALL=C /sbin/ip route show table all | egrep "^nat[[:blank:]]" | while read nat dst via src args; do
 				/sbin/ip rule del from $src nat $dst
 				/sbin/ip route del nat $dst via $src
 			done
@@ -450,7 +450,7 @@ setup_ip_rules ()
 				/sbin/ip rule add $args
 			done
 		elif is_no "$1"; then
-			/sbin/ip rule show | egrep -v -e "from all lookup (main|default|local) \$" -e " map-to " | while read prio from src args; do
+			LC_ALL=C /sbin/ip rule show | egrep -v -e "from all lookup (main|default|local) \$" -e " map-to " | while read prio from src args; do
 				[ "$src" == "all" ] && ip rule delete $args || ip rule delete $from $src $args
 			done
 		fi
