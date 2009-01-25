@@ -141,7 +141,7 @@ halt_crypto() {
     while read dst src key; do
 	[ -z "$dst" -o "${dst#\#}" != "$dst" ] && continue
         if [ -b "/dev/mapper/$dst" ]; then
-            if /sbin/dmsetup info "$dst" | grep -q '^Open count: *0$'; then
+            if LC_ALL=C /sbin/dmsetup info "$dst" | grep -q '^Open count: *0$'; then
                 /sbin/cryptsetup remove "$dst"
             else
                 fnval=1
