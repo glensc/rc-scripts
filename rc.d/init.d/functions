@@ -497,12 +497,12 @@ daemon() {
 	typeset errors="" prog="" end="" waitname="" waittime=""
 	typeset -i exit_code=0
 	local nice=$SERVICE_RUN_NICE_LEVEL
-	local fork user closefds pidfile chdir=/
+	local fork user closefds pidfile makepid chdir=/
 
 	while [ $# -gt 0 ]; do
 		case $1 in
 		'')
-			msg_usage " daemon [--user user] [--fork] [--waitforname procname] [--waitfortime seconds] [+/-nicelevel] {program} <program args>"
+		msg_usage " daemon [--check] [--user user] [--fork] [--chdir directory] [--closefds] [--waitforname procname] [--waitfortime seconds] [--pidfile file] [--makepid] [+/-nicelevel] {program} <program args>"
 			return 2
 			;;
 		--check)
@@ -538,6 +538,9 @@ daemon() {
 		--pidfile)
 			shift
 			pidfile="$1"
+			;;
+		--makepid)
+			makepid=1
 			;;
 		-*|+*)
 			nice=$1
@@ -601,6 +604,7 @@ daemon() {
 				${user:+-c $user} \
 				${chdir:+--chdir "$chdir"} \
 				${fork:+-b} \
+				${makepid:+-m} \
 				--exec "$prog" \
 				-- ${1:+"$@"}
 		else
