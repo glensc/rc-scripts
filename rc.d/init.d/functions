@@ -16,7 +16,18 @@
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 
 # Set defaults
-INIT_COL=67
+if [ -z "$COLUMNS" -o -z "$LINES" ]; then
+	_setterm() {
+		set -- $(stty size 2>/dev/null)
+		LINES=${LINES:-$1}
+		COLUMNS=${COLUMNS:-$2}
+	}
+	_setterm
+	unset _setterm
+fi
+[ -z "$COLUMNS" ] && COLUMNS=80
+export LINES COLUMNS
+INIT_COL=$((COLUMNS - 13))
 
 # Set colors
 RED=1
@@ -46,7 +57,6 @@ CCHARS="$NORMAL"	# Color of these characters (look at /etc/sysconfig/init-colors
 [ -r /etc/sysconfig/init-colors ] && . /etc/sysconfig/init-colors
 [ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
 [ -r /etc/sysconfig/bootsplash ] && . /etc/sysconfig/bootsplash
-[ -z "$COLUMNS" ] && COLUMNS=80
 
 if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
 	{
@@ -990,7 +1000,7 @@ rc_cache_init() {
 
 	# We create $check variable which is used to invalidate the cache.
 	# The $check contains user locale and terminal.
-	local check="$term.$LC_MESSAGES"
+	local check="$term.$LC_MESSAGES.$INIT_COL"
 
 	if [ -f "$cachefile" -a "$cachefile" -nt /etc/sysconfig/system -a "$cachefile" -nt /etc/sysconfig/init-colors ]; then
 		if . "$cachefile" 2>/dev/null; then
