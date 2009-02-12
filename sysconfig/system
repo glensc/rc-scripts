@@ -4,7 +4,7 @@
 COLOR_INIT=yes
 
 # Print status at which column
-INIT_COL=67
+#INIT_COL=67
 
 # Do you want fast boot? (without NLS, excessive logging and fancy
 # terminals support)
