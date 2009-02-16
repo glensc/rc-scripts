@@ -13,7 +13,7 @@
 #		Łukasz Pawelczyk <havner@pld-linux.org>
 
 # First set up a default search path.
-export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 
 # Set defaults
 if [ -z "$COLUMNS" -o -z "$LINES" ]; then
@@ -548,6 +548,7 @@ daemon() {
 		--pidfile)
 			shift
 			pidfile="$1"
+			[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
 			;;
 		--makepid)
 			makepid=1
@@ -658,6 +659,7 @@ killproc() {
 		case $1 in
 		--pidfile)
 			pidfile="$2"
+			[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
 			shift 2
 			;;
 		--waitforname)
@@ -815,6 +817,7 @@ status() {
 	typeset pid subsys daemon cpuset_msg pidfile
 	if [ "$1" = "--pidfile" ]; then
 		pidfile=$2
+		[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
 		shift 2
 	fi
 
