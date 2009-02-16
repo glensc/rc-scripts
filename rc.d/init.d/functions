@@ -80,7 +80,7 @@ fi
 
 is_yes() {
 	# Test syntax
-	if [ $# = 0 ] ; then
+	if [ $# = 0 ]; then
 		msg_usage " is_yes {value}"
 		return 2
 	fi
@@ -100,7 +100,7 @@ is_yes() {
 
 is_no() {
 	# Test syntax
-	if [ $# = 0 ] ; then
+	if [ $# = 0 ]; then
 		msg_usage " is_no {value}"
 		return 2
 	fi
@@ -185,9 +185,9 @@ kernelverser() {
 		set -- $v
 		IFS=$old_IFS
 		ver=$2
-		while [ ${#ver} -lt 3 ] ; do ver="0$ver" ; done
+		while [ ${#ver} -lt 3 ]; do ver="0$ver"; done
 		ver="$1$ver"
-		while [ ${#ver} -lt 6 ] ; do ver="0$ver" ; done
+		while [ ${#ver} -lt 6 ]; do ver="0$ver"; done
 		echo $ver
 	} </proc/version
 }
@@ -201,7 +201,7 @@ kernelvermser() {
 		set -- $v
 		IFS=$old_IFS
 		ver="$1$ver"
-		while [ ${#ver} -lt 3 ] ; do ver="0$ver" ; done
+		while [ ${#ver} -lt 3 ]; do ver="0$ver"; done
 		echo $ver
 	} </proc/version
 }
@@ -240,7 +240,7 @@ termput() {
 			tput "$@"
 			;;
 		setaf)
-			if [ "$3" == "1" ]; then tput bold; else tput sgr0; fi
+			if [ "$3" = "1" ]; then tput bold; else tput sgr0; fi
 			is_yes "$COLOR_INIT" && tput setaf "$2"
 			;;
 		op)
@@ -422,7 +422,7 @@ filter_chroot() {
 		echo $@
 		return
 	fi
-	if [ $# -lt 1 -o ! -d /proc/1 ] ; then
+	if [ $# -lt 1 -o ! -d /proc/1 ]; then
 		echo $@
 		return
 	fi
@@ -595,7 +595,7 @@ daemon() {
 			exec 2>&1
 		fi
 
-		if is_no "$RC_LOGGING" ; then
+		if is_no "$RC_LOGGING"; then
 			prog=$1; shift
 			if [ ! -x $prog ]; then
 				logger -t rc-scripts -p daemon.debug "daemon: Searching PATH for $prog, consider using full path in initscript"
@@ -677,7 +677,7 @@ killproc() {
 
 	typeset -i notset=0
 	# check for second arg to be kill level
-	if [ -n "$2" ] ; then
+	if [ -n "$2" ]; then
 		killlevel=$2
 	else
 		notset=1
@@ -710,8 +710,8 @@ killproc() {
 	[ -z "$pid" ] && pid=$(pidofproc "$base" "$pidfile")
 
 	# Kill it.
-	if [ -n "$pid" -a "$pid" != "$$" ] && checkpid $pid 2>&1 ; then
-		if [ "$notset" = "1" ] ; then
+	if [ -n "$pid" -a "$pid" != "$$" ] && checkpid $pid 2>&1; then
+		if [ "$notset" = "1" ]; then
 			if checkpid $pid 2>&1; then
 				# TERM first, then KILL if not dead
 				kill -TERM $pid
@@ -788,7 +788,7 @@ pidofproc() {
 	[ -n "$2" ] && pidfile="$2"
 
 	# Test syntax.
-	if [ $# = 0 ] ; then
+	if [ $# = 0 ]; then
 		msg_usage " pidofproc {program}"
 		return 2
 	fi
@@ -799,7 +799,7 @@ pidofproc() {
 	else
 		pidfile="/var/run/${pidfile}";
 	fi
-	if [ -f "${pidfile}" ] ; then
+	if [ -f "${pidfile}" ]; then
 		typeset p pid
 		pid=
 		for p in $(< "${pidfile}"); do
@@ -825,7 +825,7 @@ status() {
 	daemon=${2:-$subsys}
 
 	# Test syntax.
-	if [ $# = 0 ] ; then
+	if [ $# = 0 ]; then
 		msg_usage " status [--pidfile PIDFILE] {subsys} [{daemon}]"
 		return 2
 	fi
@@ -909,7 +909,7 @@ is_module() {
 _modprobe() {
 	typeset parsed single die args foo result
 	parsed=no
-	while is_no "$parsed" ; do
+	while is_no "$parsed"; do
 		case "$1" in
 		"single")
 			single=yes
@@ -928,25 +928,25 @@ _modprobe() {
 			;;
 		esac
 	done
-	if is_yes "${single}" ; then
+	if is_yes "${single}"; then
 		foo="$@"
 		show "Loading %s kernel module(s)" "$foo"
 		busy
 	fi
-	if [ -x /sbin/modprobe ] ; then
+	if [ -x /sbin/modprobe ]; then
 		/sbin/modprobe -s $args "$@"
 		result=$?
 	else
-		deltext ; fail
+		deltext; fail
 		result=1
 	fi
-	if is_yes "${single}" ; then
+	if is_yes "${single}"; then
 		deltext
-		if [ $result == "0" ] ; then
+		if [ $result = "0" ]; then
 			is_yes "$single" && ok
 		else
 			fail
-			if is_yes "$die" ; then
+			if is_yes "$die"; then
 				nls "Could not load %s kernel module(s)" "$@"
 				exit 1
 			fi
@@ -1040,7 +1040,7 @@ rc_gettext_init() {
 	fi
 
 	if [ -z "$TPUT" ]; then
-		if [ -d /usr/share/terminfo ] && [ -x /usr/bin/tput -o -x /bin/tput ] ; then
+		if [ -d /usr/share/terminfo ] && [ -x /usr/bin/tput -o -x /bin/tput ]; then
 			TPUT=yes
 			# check if we are on proper terminal
 			tput longname >/dev/null 2>&1 || TPUT=no
