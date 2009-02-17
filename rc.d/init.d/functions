@@ -612,10 +612,11 @@ daemon() {
 			/sbin/start-stop-daemon -q --start \
 				--nicelevel $nice \
 				${pidfile:+--pidfile $pidfile} \
-				${user:+-c $user} \
+				${makepid:+--make-pidfile} \
+				${user:+--chiud $user} \
 				${chdir:+--chdir "$chdir"} \
-				${fork:+-b} \
-				${makepid:+-m} \
+				${fork:+--background} \
+				${waitname:+--name $waitname} \
 				--exec "$prog" \
 				-- ${1:+"$@"}
 		else
