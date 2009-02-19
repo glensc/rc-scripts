@@ -613,7 +613,7 @@ daemon() {
 				--nicelevel $nice \
 				${pidfile:+--pidfile $pidfile} \
 				${makepid:+--make-pidfile} \
-				${user:+--chiud $user} \
+				${user:+--chuid $user} \
 				${chdir:+--chdir "$chdir"} \
 				${fork:+--background} \
 				${waitname:+--name $waitname} \
