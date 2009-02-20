@@ -1,3 +1,143 @@
+2009-02-19 20:03 +0000 [r10132]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - 15 seems to be normal color on 16 and
+	  256 color consoles
+
+2009-02-19 10:15 +0000 [r10130]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - typo
+
+2009-02-17 17:23 +0000 [r10127]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - added {waitname:+--name $waitname} to
+	  ssd, otherwise there's no way to start qpopperd and qpoppersd
+	  both at the same time /usr/sbin/qpoppersd already running. - use
+	  long options names
+
+2009-02-16 01:07 +0000 [r10123-10124]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - keep one style of spacing, do not
+	  pollute sh with C-style comparision == operator
+
+	* rc.d/init.d/functions: - expand relative --pidfile to absolute
+	  /var/run path; ssd in killproc has broken plenty of daemons
+	  including amavisd-new, apache and clamav - dropped ancient
+	  /usr/X11R6/bin from $PATH
+
+2009-02-12 11:29 +0000 [r10122]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - calculate default INIT_COL from terminal
+	  size
+
+2009-02-12 11:26 +0000 [r10121]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system: - no hardcoded default in config for INIT_COL
+
+2009-02-09 19:59 +0000 [r10115]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - typo
+
+2009-02-04 20:28 +0000 [r10099]  Paweł Gołaszewski <blues/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - makepid functionality to daemon function
+
+2009-01-25 14:58 +0000 [r10096]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cryptsetup: - LC_ALL=C for greps
+
+2009-01-23 15:03 +0000 [r10095]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - local output for
+	  func internal vars
+
+2009-01-23 13:54 +0000 [r10094]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown: - grepping pid from ps ax could
+	  be ambigous, use kill -0 for running-pid-check
+
+2009-01-23 13:45 +0000 [r10093]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cryptsetup: - revert unwanted commit
+
+2009-01-23 13:39 +0000 [r10092]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-routes, rc.d/rc.shutdown,
+	  sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifdown-ppp,
+	  sysconfig/network-scripts/tnldown,
+	  sysconfig/network-scripts/ifup-post,
+	  sysconfig/network-scripts/ifup-plusb,
+	  sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/ifdown-br,
+	  sysconfig/network-scripts/ifup-neigh,
+	  sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/ifup-ipx,
+	  sysconfig/network-scripts/ifup-vlan,
+	  sysconfig/network-scripts/ifdown-sl,
+	  sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/ifdown-irda,
+	  sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/ifup-br,
+	  sysconfig/network-scripts/ifup-plip, sysconfig/system,
+	  sysconfig/network-scripts/ifup-iucv, rc.d/rc,
+	  sysconfig/network-scripts/ifdown-post, rc.d/rc.init, lang.csh,
+	  hwprofile, service, sysconfig/network-scripts/ifup-sl,
+	  sysconfig/network-scripts/ifup-irda: - cleanup vi:syntax, not
+	  needed and doesn't work anyway (should be vim:ft if any)
+
+2009-01-23 13:34 +0000 [r10091]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/ifdown-vlan,
+	  sysconfig/network-scripts/ifup-br,
+	  sysconfig/network-scripts/tnldown,
+	  sysconfig/network-scripts/ifdown, Makefile.am,
+	  sysconfig/network-scripts/ifdown-br, rc.d/init.d/cryptsetup,
+	  sysconfig/network-scripts/functions.network, configure.ac,
+	  sysconfig/network-scripts/ifup-vlan: - force LC_ALL=C when
+	  grepping data from possibly localized program outputs
+
+2009-01-22 09:06 +0000 [r10090]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: Mention GVRP option.
+
+2009-01-22 09:02 +0000 [r10089]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* po/pl.po: Update
+
+2009-01-22 08:56 +0000 [r10087-10088]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-vlan: Prefer vlan creation using
+	  iproute2, fallback to vconfig.
+
+	* sysconfig/network-scripts/ifdown: No need for special handling
+	  for vlans when downing master device.
+
+2009-01-22 08:41 +0000 [r10086]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-vlan: vconfig no longer needed
+	  here.
+
+2009-01-22 07:43 +0000 [r10085]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-vlan,
+	  sysconfig/network-scripts/ifdown: Delete devices using iproute2.
+
+2009-01-05 19:08 +0000 [r10050]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit, rc.d/init.d/cpusets: - use noprefix mount option
+	  for cgroup cpuset
+
+2009-01-02 19:01 +0000 [r10047-10048]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/cpusets/cpuset-test: - removed reference to cpuset
+	  virtualization (feature long dead, and no signs of resurrection)
+
+	* rc.d/init.d/cpusets: - fix for /dev/cpuset mounted as cgroup
+	  -ocpuset
+
 2008-12-31 19:25 +0000 [r10044]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* configure.ac: 0.4.1.26
