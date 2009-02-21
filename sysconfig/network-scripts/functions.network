@@ -451,7 +451,7 @@ setup_ip_rules ()
 			done
 		elif is_no "$1"; then
 			LC_ALL=C /sbin/ip rule show | egrep -v -e "from all lookup (main|default|local) \$" -e " map-to " | while read prio from src args; do
-				[ "$src" == "all" ] && ip rule delete $args || ip rule delete $from $src $args
+				[ "$src" = "all" ] && ip rule delete $args || ip rule delete $from $src $args
 			done
 		fi
 	fi

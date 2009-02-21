@@ -123,7 +123,7 @@ if test "$previous" != "N" ; then
 	export kscripts
 fi
 
-if test "$previous" == "N" -a "$runlevel" == "5" ; then
+if test "$previous" = "N" -a "$runlevel" = "5" ; then
 	export progress=16
 	sscripts=$(( $sscripts + 15 ))
 else
