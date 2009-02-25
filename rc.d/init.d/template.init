@@ -39,48 +39,52 @@ fi
 
 start() {
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/<service> ]; then
-		msg_starting <service>
-		daemon /usr/sbin/<service>
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/<service>
-	else
+	if [ -f /var/lock/subsys/<service> ]; then
 		msg_already_running <service>
+		return
 	fi
+
+	msg_starting <service>
+	daemon /usr/sbin/<service>
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/<service>
 }
 
 stop() {
-	if [ -f /var/lock/subsys/<service> ]; then
-		# Stop daemons.
-		msg_stopping <service>
-		killproc <service>
-		killproc --pidfile /var/run/<service>.pid <service> -TERM
-		rm -f /var/lock/subsys/<service>
-	else
+	if [ ! -f /var/lock/subsys/<service> ]; then
 		msg_not_running <service>
+		return
 	fi
+
+	# Stop daemons.
+	msg_stopping <service>
+	killproc <service>
+	killproc --pidfile /var/run/<service>.pid <service> -TERM
+	rm -f /var/lock/subsys/<service>
 }
 
 reload() {
-	if [ -f /var/lock/subsys/<service> ]; then
-		msg_reloading <service>
-		killproc <service> -HUP
-		killproc --pidfile /var/run/<service>.pid <service> -HUP
-		RETVAL=$?
-	else
+	if [ ! -f /var/lock/subsys/<service> ]; then
 		msg_not_running <service>
 		RETVAL=7
+		return
 	fi
+
+	msg_reloading <service>
+	killproc <service> -HUP
+	killproc --pidfile /var/run/<service>.pid <service> -HUP
+	RETVAL=$?
 }
 
 condrestart() {
-	if [ -f /var/lock/subsys/<service> ]; then
-		stop
-		start
-	else
+	if [ ! -f /var/lock/subsys/<service> ]; then
 		msg_not_running <service>
 		RETVAL=$1
+		return
 	fi
+
+	stop
+	start
 }
 
 RETVAL=0
