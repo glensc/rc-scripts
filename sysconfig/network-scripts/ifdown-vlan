@@ -38,7 +38,16 @@ setup_ip_param
 
 ip link set ${DEVICE} down
 LC_ALL=C ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
-ip link del ${DEVICE}
+
+if (ip link help 2>&1 | grep -q del); then
+	/sbin/ip link del ${DEVICE}
+elif [ -x /sbin/vconfig ]; then
+	/sbin/vconfig rem ${DEVICE}
+else
+	nls "/sbin/vconfig or iproute2 with vlan support is missing. Can't continue."
+	exit 1
+fi
+
 RESULT=$?
 
 exit $RESULT
