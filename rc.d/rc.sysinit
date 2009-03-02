@@ -431,9 +431,9 @@ if ! is_yes "$VSERVER"; then
 		fi
 	fi
 
-	_ROOTFS_RO=$(awk '($1 !~ /^#/ && $2 == "/" && ($4 == "ro" || $4 ~ /,ro$// || $4 ~ /^ro,/ || $4 ~ /,ro,/ ) && NF >= 6) { print "ro" }' /etc/fstab)
+	_ROOTFS_RO=$(awk '($1 !~ /^#/ && $2 == "/" && ($4 == "ro" || $4 ~ /,ro$/ || $4 ~ /^ro,/ || $4 ~ /,ro,/ ) && NF >= 6) { print "ro" }' /etc/fstab)
 	# Remount the root filesystem read-write
-	if [ "x$_ROOTFS_RO" == "x" ] ; then
+	if [ -z "$_ROOTFS_RO" ]; then
 		run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
 	fi
 
