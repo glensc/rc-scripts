@@ -431,8 +431,11 @@ if ! is_yes "$VSERVER"; then
 		fi
 	fi
 
+	_ROOTFS_RO=$(awk '($1 !~ /^#/ && $2 == "/" && ($4 == "ro" || $4 ~ /,ro$// || $4 ~ /^ro,/ || $4 ~ /,ro,/ ) && NF >= 6) { print "ro" }' /etc/fstab)
 	# Remount the root filesystem read-write
-	run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
+	if [ "x$_ROOTFS_RO" == "x" ] ; then
+		run_cmd "Remounting root filesystem in rw mode" mount -n -o remount,rw /
+	fi
 
 	# Update quotas if fsck was run on /
 	if [ "$_RUN_QUOTACHECK" = "1" -a -x /sbin/quotacheck ]; then
@@ -459,7 +462,7 @@ else
 fi
 
 # Remove stale backups
-rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
+rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~ >/dev/null 2>&1
 
 # Remove /etc/nologin when starting system
 [ -f /etc/nologin.boot ] && rm -f /etc/nologin /etc/nologin.boot
@@ -906,7 +909,7 @@ fi
 [ -n "$SELINUX" ] && [ -f /.autorelabel ] && relabel_selinux
 
 # Clean up /.
-rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff
+rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff >/dev/null 2>&1
 
 # Clean up /var
 # /usr could be still not mounted if it is on NFS.
