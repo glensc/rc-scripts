@@ -642,7 +642,7 @@ daemon() {
 		exit_code=1
 		fail
 		log_failed "$1 startup"
-		[ -n "$errors" ] && echo "$errors"
+		[ -n "$errors" ] && echo >&2 "$errors"
 	fi
 	return $exit_code
 }
