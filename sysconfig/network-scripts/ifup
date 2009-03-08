@@ -39,6 +39,8 @@ fi
 
 if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ]; then
 	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
+elif [ -f "/etc/sysconfig/interfaces/$DEV" ]; then
+	CONFIG="/etc/sysconfig/interfaces/$DEV"
 else
 	CONFIG="$DEV"
 fi
@@ -225,7 +227,7 @@ fi
 if is_yes "$ENABLE_6TO4"; then
 	# find an usable IPv4 address for this device; might have been obtained by dhcp or ppp
 	for ipv4 in `/sbin/ip addr show dev $DEVICE | awk -F'[ /]+' '/ inet /{print $3}'`; do
-		if [   `ipcalc -n $ipv4/8`  != "NETWORK=10.0.0.0"    \
+		if [       `ipcalc -n $ipv4/8`  != "NETWORK=10.0.0.0"    \
 			-a `ipcalc -n $ipv4/12` != "NETWORK=172.16.0.0"  \
 			-a `ipcalc -n $ipv4/24` != "NETWORK=192.168.0.0" \
 			-a `ipcalc -n $ipv4/24` != "NETWORK=169.254.0.0" ]; then
@@ -234,8 +236,8 @@ if is_yes "$ENABLE_6TO4"; then
 			break
 		fi
 	done
-	if [ -n "$local_ipv4" ]; then   # we have an usable IPv4 address; set up the tunnel
-		tun6to4=tun6to4_$DEVICE 
+	if [ -n "$local_ipv4" ]; then	# we have an usable IPv4 address; set up the tunnel
+		tun6to4=tun6to4_$DEVICE
 		/sbin/ip tunnel add $tun6to4 mode sit ttl 128 remote any local $local_ipv4
 		/sbin/ip link set dev $tun6to4 up
 		/sbin/ip -6 addr  add $local_ipv6/16 dev $tun6to4
