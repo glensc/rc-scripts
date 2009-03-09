@@ -114,14 +114,14 @@ fi
 
 if ! is_yes "$VSERVER" ; then
 	# we need /proc mounted before everything
-	mount -n -o gid=17 -t proc /proc /proc
+	is_fsmounted proc /proc || mount -n -o gid=17 -t proc /proc /proc
 
 	# Only read this once.
 	cmdline=$(cat /proc/cmdline)
 
 	# sysfs is also needed before any other things (under kernel > 2.5)
 	if grep -q sysfs /proc/filesystems 2>/dev/null ; then
-		mount -n -o gid=17 -t sysfs sysfs /sys
+		is_fsmounted sysfs /sys || mount -n -o gid=17 -t sysfs sysfs /sys
 		if [ "$(kernelver)" -ge "002006014" ] && \
 			grep -q securityfs /proc/filesystems 2>/dev/null ; then
 				mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
