@@ -13,13 +13,13 @@ for IP_ADDR in $IPADDR_ALIASES; do
 	[ -z "$IP_ADDR" ] && continue
 	# Be sure that primary address is added
 	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
-		if (ip addr show dev $DEVICE | egrep -q "[[:space:]]${IP_ADDR}[[:space:]]"); then
+		if (ip addr show dev $DEVICE | grep -qE "[[:space:]]${IP_ADDR}[[:space:]]"); then
 			continue
 		fi
 	fi
 	if is_yes "${IPV4_NETWORKING}"; then
 		# If broadcast is missing then autocalculate it
-		if ! (echo $IP_ADDR_OPT | egrep -q "brd|broadcast"); then
+		if ! (echo $IP_ADDR_OPT | grep -qE "brd|broadcast"); then
 			IP_ADDR_OPT="brd + ${IP_ADDR_OPT}"
 		fi
 		ip -4 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
@@ -33,7 +33,7 @@ for IP_ADDR in $IPV6_ADDR; do
 	[ -z "$IP_ADDR" ] && continue
 	# Be sure that primary address is added
 	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
-		if (ip addr show dev $DEVICE | egrep -q "[[:space:]]${IP_ADDR}[[:space:]]"); then
+		if (ip addr show dev $DEVICE | grep -qE "[[:space:]]${IP_ADDR}[[:space:]]"); then
 			continue
 		fi
 	fi
@@ -44,7 +44,7 @@ for IP_ADDR in $IPV6_ADDR; do
 		fi
 	elif is_yes "${IPV4_NETWORKING}"; then
 		# If broadcast is missing then autocalculate it
-		if ! (echo $IP_ADDR_OPT | egrep -q "brd|broadcast"); then
+		if ! (echo $IP_ADDR_OPT | grep -qE "brd|broadcast"); then
 			IP_ADDR_OPT="brd + ${IP_ADDR_OPT}"
 		fi
 		ip -4 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
@@ -60,7 +60,7 @@ for nr in $(awk 'BEGIN { max=0; }; /^IPADDR[0-9]+=/ { s = $0; gsub(/^IPADDR/, ""
 
 	# Be sure that primary address is added
 	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
-		if (ip addr show dev $DEVICE | egrep -q "[[:space:]]${IP_ADDR}[[:space:]]"); then
+		if (ip addr show dev $DEVICE | grep -qE "[[:space:]]${IP_ADDR}[[:space:]]"); then
 			continue
 		fi
 	fi
@@ -71,7 +71,7 @@ for nr in $(awk 'BEGIN { max=0; }; /^IPADDR[0-9]+=/ { s = $0; gsub(/^IPADDR/, ""
 		fi
 	elif is_yes "${IPV4_NETWORKING}"; then
 		# If broadcast is missing then autocalculate it
-		if ! (echo $IP_ADDR_OPT | egrep -q "brd|broadcast"); then
+		if ! (echo $IP_ADDR_OPT | grep -qE "brd|broadcast"); then
 			IP_ADDR_OPT="brd + ${IP_ADDR_OPT}"
 		fi
 		ip -4 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}

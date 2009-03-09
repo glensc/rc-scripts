@@ -45,7 +45,7 @@ if [ ! -f /etc/sysconfig/interfaces/ifcfg-${VLAN_DEV} ]; then
 	exit 1
 fi
 
-if ! egrep -ql "ONBOOT=[^n][^o]" /etc/sysconfig/interfaces/ifcfg-${VLAN_DEV}; then
+if ! grep -qlE "ONBOOT=[^n][^o]" /etc/sysconfig/interfaces/ifcfg-${VLAN_DEV}; then
 	# XXX: maybe display some message? Right now disabling VLAN_DEV means disabling
 	# VLANs, too. --misiek
 	exit 1

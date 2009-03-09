@@ -116,7 +116,7 @@ setup_nat()
 				/sbin/ip rule add from $src nat $dst
 			done
 		elif [ "$1" = "off" ]; then
-			LC_ALL=C /sbin/ip route show table all | egrep "^nat[[:blank:]]" | while read nat dst via src args; do
+			LC_ALL=C /sbin/ip route show table all | grep -E "^nat[[:blank:]]" | while read nat dst via src args; do
 				/sbin/ip rule del from $src nat $dst
 				/sbin/ip route del nat $dst via $src
 			done
@@ -183,12 +183,12 @@ setup_ip_param ()
 	fi
 
 	# Setup DEVICETYPE for special cases.
-	if echo ${DEVICE} | LC_ALL=C egrep -q '^[a-z0-9]+\.[0-9]+$'; then
+	if echo ${DEVICE} | LC_ALL=C grep -qE '^[a-z0-9]+\.[0-9]+$'; then
 		DEVICETYPE=vlan
 	fi
 
 	# real name of device (ie. is eth0 for eth0,eth0:1,eth0:alias)
-	SUBDEVICE=$(echo "$DEVICE" | egrep "([0-9]+:[0-9]+)")
+	SUBDEVICE=$(echo "$DEVICE" | grep -E "([0-9]+:[0-9]+)")
 	DEVICE=$(echo $DEVICE | awk ' { gsub(/:.*$/,NUL); print $0 } ')
 
 	eval IP4ADDR="\$IPADDR${IP4_PRIM_IF:-}"
@@ -317,11 +317,11 @@ setup_routes()
 
 	if [ -f /etc/sysconfig/static-routes ]; then
 		if [ "$1" = "on" -o "$1" = "yes" ] ; then
-			egrep "^(none|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+			grep -E "^(none|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
 				/sbin/ip route add $args
 			done
 		else
-			egrep "^(none|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+			grep -E "^(none|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
 				/sbin/ip route del $args 2>/dev/null
 			done
 		fi
@@ -446,11 +446,11 @@ setup_ip_rules ()
 
 	if [ -f /etc/sysconfig/static-routes ] ; then
 		if is_yes "$1"; then
-			egrep "^(from|to|iif|tos|fwmark|dev|pref|priority|prio)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
+			grep -E "^(from|to|iif|tos|fwmark|dev|pref|priority|prio)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
 				/sbin/ip rule add $args
 			done
 		elif is_no "$1"; then
-			LC_ALL=C /sbin/ip rule show | egrep -v -e "from all lookup (main|default|local) \$" -e " map-to " | while read prio from src args; do
+			LC_ALL=C /sbin/ip rule show | grep -vE -e "from all lookup (main|default|local) \$" -e " map-to " | while read prio from src args; do
 				[ "$src" = "all" ] && ip rule delete $args || ip rule delete $from $src $args
 			done
 		fi

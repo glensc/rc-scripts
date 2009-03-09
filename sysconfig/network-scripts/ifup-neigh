@@ -14,7 +14,7 @@ if [ ! -f /etc/sysconfig/static-arp ]; then
 fi
 
 # note the trailing white space character in the grep gets rid of aliases
-egrep "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-arp | while read iface mac ip state args; do
+grep -E "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-arp | while read iface mac ip state args; do
 	[ -z "$state" ] && state="stale"
 	/sbin/ip neigh replace $ip lladdr $mac nud $state dev $DEVICE
 done

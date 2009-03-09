@@ -31,9 +31,9 @@ DEV=$1
 	exit 1
 }
 
-TNLCONFIGS=$(LC_ALL=C ls /etc/sysconfig/interfaces/tnlcfg-* 2>/dev/null | egrep -v '~$')
-TNLCONFIGS=$(egrep -L '^#!' $TNLCONFIGS)
-CONFIG=$(egrep -l "^DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS)
+TNLCONFIGS=$(LC_ALL=C ls /etc/sysconfig/interfaces/tnlcfg-* 2>/dev/null | grep -vE '~$')
+TNLCONFIGS=$(grep -LE '^#!' $TNLCONFIGS)
+CONFIG=$(grep -lE "^DEVICE=[\"\']*$DEV[\"\']*\$" $TNLCONFIGS)
 
 if [ -z "$CONFIG" ]; then
 	CONFIG="$DEV"

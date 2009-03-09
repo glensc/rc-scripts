@@ -171,7 +171,7 @@ case "$1" in
 	;;
   status)
 	# this is way overkill, but at least we have some status output...
-	if fgrep -q dm_crypt /proc/modules; then
+	if grep -qF dm_crypt /proc/modules; then
 		nls "dm-crypt module is loaded"
 	else
 		nls "dm-crypt module is not loaded"

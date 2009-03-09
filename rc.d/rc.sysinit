@@ -97,7 +97,7 @@ load_kernel_modules() {
 	local module
 	# Loop over every line in modules file
 	( \
-		egrep -hv '^(#|[[:blank:]]*$)' /etc/modules /etc/modules.$kernel /etc/modules.$kerneleq 2>/dev/null
+		grep -hvE '^(#|[[:blank:]]*$)' /etc/modules /etc/modules.$kernel /etc/modules.$kerneleq 2>/dev/null
 		echo '' # make sure there is a LF at the end
 	) | while read module args; do
 		[ -z "$module" ] && continue
@@ -283,7 +283,7 @@ if ! is_yes "$VSERVER"; then
 	if [ -f /etc/crypttab ] && ! is_empty_file /etc/crypttab; then
 		# XXX might need modules dep
 		# Device mapper & related initialization
-		if ! fgrep -q device-mapper /proc/devices; then
+		if ! grep -qF device-mapper /proc/devices; then
 			modprobe dm-mod
 		fi
 
@@ -581,12 +581,12 @@ if ! is_yes "$VSERVER"; then
 
 	if grep -q "^options sound dmabuf=1" "$MODULES_CONF" 2>/dev/null ; then
 		RETURN=0
-		alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
+		alias=$(/sbin/modprobe -c | grep -sE "^alias[[:space:]]+sound[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
 		if [ -n "$alias" -a "$alias" != "off" ] ; then
 			run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
 			RETURN=$?
 		fi
-		alias=$(/sbin/modprobe -c | egrep -s "^alias[[:space:]]+sound-slot-0[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
+		alias=$(/sbin/modprobe -c | grep -sE "^alias[[:space:]]+sound-slot-0[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
 		if [ -n "$alias" -a "$alias" != "off" ] ; then
 			run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
 			RETURN=$?

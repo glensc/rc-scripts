@@ -178,7 +178,7 @@ else
 	# IPv4 in use ?
 	if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}" ]; then
 		# If broadcast is missing then autocalculate it
-		if ! (echo $IP4ADDROPT | egrep -q "brd|broadcast"); then
+		if ! (echo $IP4ADDROPT | grep -qE "brd|broadcast"); then
 			IP4ADDROPT="brd + ${IP4ADDROPT}"
 		fi
 
