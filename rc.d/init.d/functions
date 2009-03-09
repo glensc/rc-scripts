@@ -999,7 +999,7 @@ is_fsmounted() {
 	[ -n "$fstype" -a -n "$mntpoint" ] || return 1
 
 	if [ -r /proc/mounts ]; then
-		fgrep -q " $mntpoint $fstype " /proc/mounts
+		grep -qE "[ \t]$mntpoint[ \t]+$fstype[ \t]" /proc/mounts
 		return $?
 	else
 		if [ "$(/bin/stat -L -f -c %T $mntpoint 2>/dev/null)" = "$fstype" ]; then
