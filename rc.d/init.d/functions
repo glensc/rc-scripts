@@ -990,6 +990,21 @@ check_portmapper() {
 	return 0
 }
 
+# is_fsmounted fstype mntpoint
+# Check if filesystem fstype is mounted on mntpoint
+is_fsmounted() {
+	typeset fstype=$1
+	typeset mntpoint=$2
+
+	[ -n "$fstype" -a -n "$mntpoint" ] || return 1
+
+	if [ "$(/bin/stat -L -f -c %T $mntpoint 2>/dev/null)" = "$fstype" ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 rc_cache_init() {
 	# If we have cachefile, use it.
 	# If we don't, create memory variables and try to save silently,
