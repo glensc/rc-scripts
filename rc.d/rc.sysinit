@@ -129,7 +129,7 @@ if ! is_yes "$VSERVER" ; then
 	fi
 
 	# selinux
-	if grep -q selinuxfs /proc/filesystems 2>/dev/null && ! grep -q selinuxfs /proc/mounts 2>/dev/null; then
+	if grep -q selinuxfs /proc/filesystems 2>/dev/null && ! is_fsmounted selinuxfs /selinux; then
 		mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
 	fi
 
@@ -163,10 +163,9 @@ if ! is_yes "$VSERVER" ; then
 		fi
 	fi
 
-	if [ -x /sbin/restorecon ] && LC_ALL=C fgrep -q " /dev " /proc/mounts 2>/dev/null ; then
+	if [ -x /sbin/restorecon ] && is_fsmounted tmpfs /dev; then
 		/sbin/restorecon -R /dev 2>/dev/null
 	fi
-
 
 	[ -z "${CONSOLETYPE}" ] && CONSOLETYPE="$(/sbin/consoletype)"
 
@@ -221,7 +220,7 @@ if ! is_yes "$VSERVER"; then
 
 	# cpuset support (mounted unconditionally, shouldn't be a problem)
 	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
-		mount -n -t cgroup none /dev/cpuset -ocpuset,noprefix
+		mount -n -t cgroup none /dev/cpuset -o cpuset,noprefix
 		[ $? -eq 0 ] && echo "/sbin/cpuset_release_agent" > /dev/cpuset/release_agent
 	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
 		mount -n -t cpuset none /dev/cpuset
@@ -299,7 +298,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Initialize USB controllers
 	usb=0
-	if ! strstr "$cmdline" "nousb" && ! grep -q "/proc/bus/usb" /proc/mounts 2>/dev/null ; then
+	if ! strstr "$cmdline" "nousb" && ! is_fsmounted usbfs /proc/bus/usb ; then
 		aliases=$(/sbin/modprobe -c | awk '/^alias[\t ]+usb-controller/ { print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			/sbin/modprobe -s -k usbcore
@@ -314,7 +313,7 @@ if ! is_yes "$VSERVER"; then
 		fi
 	fi
 
-	if [ "$usb" = "1" -a ! -f /proc/bus/usb/devices ]; then
+	if [ "$usb" = "1" -a ! is_fsmounted usbfs /proc/bus/usb ]; then
 		run_cmd "Mounting USB filesystem" mount -n -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb
 	fi
 
@@ -491,20 +490,24 @@ if ! is_yes "$VSERVER"; then
 	# Enter root, /proc, /sys and other into mtab.
 	mount -f /
 	mount -f /proc
-	[ -f /proc/bus/usb/devices ] && mount -f -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb
+	if is_fsmounted usbfs /proc/bus/usb; then
+		mount -f -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb
+	fi
 
-	if grep -q sysfs /proc/mounts 2>/dev/null; then
+	if is_fsmounted sysfs /sys; then
 		mount -f -t sysfs sysfs /sys
-		if grep -q securityfs /proc/mounts 2>/dev/null ; then
-				mount -f -t securityfs securityfs /sys/kernel/security
+		if is_fsmounted securityfs /sys/kernel/security ; then
+			mount -f -t securityfs securityfs /sys/kernel/security
 		fi
 	fi
 
-	if grep -q selinuxfs /proc/mounts 2>/dev/null; then
+	if is_fsmounted selinuxfs /selinux; then
 		mount -f -t selinuxfs selinuxfs /selinux
 	fi
 
-	if grep -q cpuset /proc/mounts 2>/dev/null; then
+	if is_fsmounted cgroup /dev/cpuset; then
+		mount -f -t cgroup -o cpuset,noprefix none /dev/cpuset
+	elif is_fsmounted cpuset /dev/cpuset; then
 		mount -f -t cpuset none /dev/cpuset
 	fi
 
