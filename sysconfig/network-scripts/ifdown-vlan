@@ -39,7 +39,7 @@ setup_ip_param
 ip link set ${DEVICE} down
 LC_ALL=C ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
 
-if (ip link help 2>&1 | grep -q del); then
+if LC_ALL=C ip link help 2>&1 | grep -q del; then
 	/sbin/ip link del ${DEVICE}
 elif [ -x /sbin/vconfig ]; then
 	/sbin/vconfig rem ${DEVICE}
