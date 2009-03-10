@@ -1,3 +1,142 @@
+2009-03-10 11:39 +0000 [r10197-10198]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/functions.network: - addlabel is IPv6
+	  only
+
+	* sysconfig/network-scripts/ifup-aliases: - added addrlabel support
+
+2009-03-10 11:33 +0000 [r10196]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-aliases: - removed dead code
+
+2009-03-10 11:20 +0000 [r10195]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: - add IP_LABEL support
+
+2009-03-10 11:16 +0000 [r10194]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - allow addrlabel
+	  setting for ipv4 adresses
+
+2009-03-10 11:11 +0000 [r10192-10193]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - remove IP6_SRC_IF
+	  dead code - started adding IP_LABEL
+
+	* doc/net-scripts.txt: - remove IP6_SRC_IF, add IP_ALABEL
+
+2009-03-10 11:02 +0000 [r10191]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: - just remove IP6_SRC_IF
+	  to avoid confusion
+
+2009-03-10 10:56 +0000 [r10190]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-description: - add IP_LABEL setting
+	  for ip addrlabel (see RFC 3484) - added comment about uselessness
+	  of IP6_SRC_IF setting
+
+2009-03-09 21:21 +0000 [r10186]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - use exntended regexp functionality
+
+2009-03-09 21:12 +0000 [r10185]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network, sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifup-routes,
+	  sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/tnldown, rc.d/rc.sysinit,
+	  rc.d/init.d/cryptsetup, sysconfig/network-scripts/ifup-neigh,
+	  sysconfig/network-scripts/functions.network,
+	  rc.d/init.d/functions, sysconfig/network-scripts/ifup-vlan: - man
+	  grep, "Direct invocation as either egrep or fgrep is deprecated",
+	  use grep -F or grep -E
+
+2009-03-09 21:04 +0000 [r10183-10184]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - fix syntax
+
+	* rc.d/init.d/functions: - man grep, glen. "Direct invocation as
+	  either egrep or fgrep is deprecated" - and better safe than
+	  sorry, use grep -E with proper regexp
+
+2009-03-09 18:50 +0000 [r10181-10182]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-vlan: - ip link help might be
+	  localized, remove unneeded subshell
+
+	* rc.d/init.d/functions: - /proc/mounts isn't localized and it has
+	  fixed format (use fgrep)
+
+2009-03-09 18:03 +0000 [r10180]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - use is_fsmounted for checking mount points -
+	  fix mtab entry for /dev/cpuset
+
+2009-03-09 17:47 +0000 [r10179]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - use /proc/mounts if available for
+	  checking mounted fs
+
+2009-03-09 16:07 +0000 [r10178]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - check if /proc and /sys are mounted before
+	  trying to mount them
+
+2009-03-09 15:54 +0000 [r10177]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - added is_fsmounted function to check if
+	  a given filesystem is mounted, requires /bin/stat (i.e. coreutils
+	  >= 7.1-2)
+
+2009-03-08 15:48 +0000 [r10176]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: - rc.d/init.d/network calls
+	  "/sbin/ifup tnlcfg-$i boot" causing awk: cannot open tnlcfg-tun0
+	  (No such file or directory) from ifup-post tnlcfg-tun0 (calling
+	  ifup-aliases without full $CONFIG path) This fixes long lasting
+	  bug:
+	  http://www.mail-archive.com/pld-devel-pl@lists.pld-linux.org/msg18413.html
+	  http://www.mail-archive.com/pld-devel-pl@lists.pld-linux.org/msg11198.html
+
+2009-03-06 12:56 +0000 [r10174]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - daemon() startup errors dump to stderr
+
+2009-03-02 12:39 +0000 [r10159]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - no bashism, typo
+
+2009-03-02 12:28 +0000 [r10158]  Zbigniew Krzystolik <zbyniu/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - remount rootfs rw only if no option 'ro' in
+	  fstab - hide remove errors on /etc/*mtab~* /fastboot etc
+
+2009-02-27 16:36 +0000 [r10150]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-vlan: - fixed exit status when no
+	  appropriate tools found
+
+2009-02-27 16:33 +0000 [r10149]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-vlan: - restored vconfig support
+	  for older iproute2 users
+
+2009-02-25 07:43 +0000 [r10146]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - less indent by using return in
+	  functions
+
+2009-02-21 12:43 +0000 [r10135]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc, sysconfig/network-scripts/functions.network: Comparsion
+	  correction.
+
+2009-02-20 09:05 +0000 [r10133]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Preparations for 0.4.1.27.
+
 2009-02-19 20:03 +0000 [r10132]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - 15 seems to be normal color on 16 and
