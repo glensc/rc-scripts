@@ -73,11 +73,11 @@ Files in /etc/sysconfig/interfaces/
   Base items:
     DEVICE=<name of physical device (except dynamically-allocated PPP
       devices where it is the "logical name")
-    IPADDR=		IP_AOPTS=	IP_ROPTS=
-    IPADDR1=		IP_AOPTS1=	IP_ROPTS1=
-    IP_ADDRx=		IP_AOPTSx=	IP_ROPTSx=
+    IPADDR=		IP_AOPTS=	IP_ROPTS=	IP_LABEL=
+    IPADDR1=		IP_AOPTS1=	IP_ROPTS1=	IP_LABEL1=
+    IP_ADDRx=		IP_AOPTSx=	IP_ROPTSx=	IP_LABELx=
     IP4_PRIM_IF=	IP4_SRC_IF=
-    IP6_PRIM_IF=	IP6_SRC_IF=
+    IP6_PRIM_IF=
     GATEWAY=
     ONBOOT=yes|no
     USERCTL=yes|no
