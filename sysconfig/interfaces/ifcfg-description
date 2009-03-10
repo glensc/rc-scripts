@@ -40,7 +40,6 @@ IP_LABEL1= IPv6 address label as per RFC 3484 (ip addrlabel ...)
 IP4_PRIM_IF="1"		# number of primary IPv4 interface (IPADDRx)
 IP4_SRC_IF="1"		# number of IPv4 address for ip's ,,src'' parameter
 IP6_PRIM_IF=""		#
-IP6_SRC_IF=""		# useless, setting ignored by IPv6 kernel code
 
 [ ONBOOT={no|yes} ]
 [ HOTPLUG={no|yes} ] - bring up from hotplug (udev for example) (default to no)
