@@ -30,15 +30,17 @@ DEVICE=<name>
 IPADDR="(IPv4 or IPv6 address)/prefix"
 IP_AOPTS="broadcast xxx etc" (by default broadcast is autocalculated)
 IP_ROPTS=""
+IP_LABEL=""
 
 IPADDR1=
 IP_AOPTS1= options for ip addr add
 IP_ROPTS1= options for ip route add (currently used only for IP4_PRIM_IF)
+IP_LABEL1= IPv6 address label as per RFC 3484 (ip addrlabel ...)
 
 IP4_PRIM_IF="1"		# number of primary IPv4 interface (IPADDRx)
 IP4_SRC_IF="1"		# number of IPv4 address for ip's ,,src'' parameter
 IP6_PRIM_IF=""		#
-IP6_SRC_IF=""		#
+IP6_SRC_IF=""		# useless, setting ignored by IPv6 kernel code
 
 [ ONBOOT={no|yes} ]
 [ HOTPLUG={no|yes} ] - bring up from hotplug (udev for example) (default to no)
