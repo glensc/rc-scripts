@@ -191,6 +191,9 @@ else
 		else
 			ip addr add ${IP4ADDR} ${ALIAS} dev ${DEVICE} ${IP4ADDROPT}
 		fi
+		if [ -n "${IP4ADDRLABEL}" ]; then
+			ip addrlabel add prefix ${IP4ADDR} dev ${DEVICE} label ${IP4ADDRLABEL}
+		fi
 	fi
 
 	# Set device up
@@ -199,6 +202,9 @@ else
 	# IPv6 in use ?
 	if is_yes "$IPV6_NETWORKING" && [ -n "${IP6ADDR}" ]; then
 		ip addr add ${IP6ADDR} dev ${DEVICE} ${IP6ADDROPT}
+		if [ -n "${IP6ADDRLABEL}" ]; then
+			ip addrlabel add prefix ${IP6ADDR} dev ${DEVICE} label ${IP6ADDRLABEL}
+		fi
 	fi
 
 	if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}" -a -x /sbin/arping ]; then
