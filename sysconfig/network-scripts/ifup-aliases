@@ -43,6 +43,7 @@ for nr in $(awk 'BEGIN { max=0; }; /^IPADDR[0-9]+=/ { s = $0; gsub(/^IPADDR/, ""
 
 	eval IP_ADDR_OPT="\$IP_AOPTS${nr}"
 	eval IP_ROUTE_OPT="\$IP_ROPTS${nr}"
+	eval IP_ADDR_LABEL="\$IP_LABEL${nr}"
 
 	# Be sure that primary address is added
 	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
@@ -54,6 +55,7 @@ for nr in $(awk 'BEGIN { max=0; }; /^IPADDR[0-9]+=/ { s = $0; gsub(/^IPADDR/, ""
 	if echo $IP_ADDR | grep -q ":"; then
 		if is_yes "${IPV6_NETWORKING}"; then
 			ip -6 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
+			ip -6 addrlabel add prefix ${IP_ADDR} dev ${DEVICE} label ${IP_ADDR_LABEL}
 		fi
 	elif is_yes "${IPV4_NETWORKING}"; then
 		# If broadcast is missing then autocalculate it
