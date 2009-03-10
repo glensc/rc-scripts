@@ -201,6 +201,7 @@ setup_ip_param ()
 	if [[ "${IP4ADDR}" = *:* ]]; then
 		IP6ADDR=${IP4ADDR}
 		IP4ADDR=""
+		eval IP6ADDRLABEL="\$IP_LABEL${IP6_PRIM_IF:-}"
 	else
 		eval IP4ADDROPT="\$IP_AOPTS${IP4_PRIM_IF:-}"
 		eval IP4ROUTEOPT="\$IP_ROPTS${IP4_PRIM_IF:-}"
@@ -212,10 +213,6 @@ setup_ip_param ()
 	if [ "${IP4_SRC_IF}" ] ; then
 		eval IP4SRCADDR="\$IPADDR${IP4_SRC_IF}"
 		IP4SRCADDR=$(echo ${IP4SRCADDR} | awk ' { gsub(/\/.*/,NIL); print "src " $0; } ')
-	fi
-	if [ "${IP6_SRC_IF}" ] ; then
-		eval IP6SRCADDR="\$IPADDR${IP6_SRC_IF}"
-		IP6SRCADDR=$(echo ${IP6SRCADDR} | awk ' { gsub(/\/.*/,NIL); print "src " $0; } ')
 	fi
 
 	# new rc-scripts 0.4.x option
