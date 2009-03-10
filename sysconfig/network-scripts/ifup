@@ -191,9 +191,6 @@ else
 		else
 			ip addr add ${IP4ADDR} ${ALIAS} dev ${DEVICE} ${IP4ADDROPT}
 		fi
-		if [ -n "${IP4ADDRLABEL}" ]; then
-			ip addrlabel add prefix ${IP4ADDR} dev ${DEVICE} label ${IP4ADDRLABEL}
-		fi
 	fi
 
 	# Set device up

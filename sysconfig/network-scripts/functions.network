@@ -204,7 +204,6 @@ setup_ip_param ()
 	else
 		eval IP4ADDROPT="\$IP_AOPTS${IP4_PRIM_IF:-}"
 		eval IP4ROUTEOPT="\$IP_ROPTS${IP4_PRIM_IF:-}"
-		eval IP4ADDRLABEL="\$IP_LABEL${IP4_PRIM_IF:-}"
 	fi
 	if [ "${IP6_PRIM_IF}" ] ; then
 		eval IP6ADDR="\$IPADDR${IP6_PRIM_IF:-}"
