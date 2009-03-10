@@ -201,14 +201,15 @@ setup_ip_param ()
 	if [[ "${IP4ADDR}" = *:* ]]; then
 		IP6ADDR=${IP4ADDR}
 		IP4ADDR=""
-		eval IP6ADDRLABEL="\$IP_LABEL${IP6_PRIM_IF:-}"
 	else
 		eval IP4ADDROPT="\$IP_AOPTS${IP4_PRIM_IF:-}"
 		eval IP4ROUTEOPT="\$IP_ROPTS${IP4_PRIM_IF:-}"
+		eval IP4ADDRLABEL="\$IP_LABEL${IP4_PRIM_IF:-}"
 	fi
 	if [ "${IP6_PRIM_IF}" ] ; then
 		eval IP6ADDR="\$IPADDR${IP6_PRIM_IF:-}"
 		eval IP6ADDROPT="\$IPV6_AOPTS${IP6_PRIM_IF:-}"
+		eval IP6ADDRLABEL="\$IP_LABEL${IP6_PRIM_IF:-}"
 	fi
 	if [ "${IP4_SRC_IF}" ] ; then
 		eval IP4SRCADDR="\$IPADDR${IP4_SRC_IF}"
