@@ -1,3 +1,8 @@
+2009-03-11 12:41 +0000 [r10203]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: - 0.4.2.0, well deserved version bump after few
+	  years of development
+
 2009-03-10 11:39 +0000 [r10197-10198]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup,
