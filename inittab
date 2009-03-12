@@ -46,7 +46,8 @@ pf::powerfail:/sbin/shutdown -f -h +2 "Power Failure; System Shutting Down"
 pr:12345:powerokwait:/sbin/shutdown -c "Power Restored; Shutdown Cancelled"
 
 # Run agetty on serial port
-# 0:12345:respawn:/sbin/agetty 9600 ttyS0 vt100
+#s0:12345:respawn:/sbin/agetty 115200 ttyS0 vt100
+#s1:12345:respawn:/sbin/agetty 115200 ttyS1 vt100
 
 # Run gettys in standard runlevels
 1:12345:respawn:/sbin/mingetty --noclear tty1
@@ -63,8 +64,8 @@ pr:12345:powerokwait:/sbin/shutdown -c "Power Restored; Shutdown Cancelled"
 #12:2345:respawn:/sbin/mingetty tty12
 
 # Examples
-# 9:2345:respawn:/sbin/mingetty --mono tty9
-# 10:2345:respawn:/sbin/mingetty --remote-host=some.host.in.net.pl tty10
+#9:2345:respawn:/sbin/mingetty --mono tty9
+#10:2345:respawn:/sbin/mingetty --remote-host=some.host.in.net.pl tty10
 
 # Run xdm in runlevel 5
 #x:5:respawn:/usr/bin/X11/xdm -nodaemon
