@@ -64,7 +64,9 @@ if ! is_yes "$VSERVER"; then
 	sig=-15
 	retry=3
 	force=
-	remaining=$(awk '!/(^#| proc | loopfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+	remaining=$(awk '$3 !~ /^(proc|loopfs|devpts|shm|iso9660|ramfs|tmpfs|sysfs|securityfs|squashfs)$/ \
+			&& $1 !~ /^(none|\/dev\/root)$/ \
+			&& $2 !~ /^\/$/ {print $2}' /proc/mounts)
 	while [ -n "$remaining" -a "$retry" -gt 0 ]; do
 	 	show "Unmounting file systems"; busy
 		ERRORS=$(umount -a $force -t noproc 2>&1); rc=$?
@@ -85,7 +87,9 @@ if ! is_yes "$VSERVER"; then
 		fi
 
 		sleep 2
-		remaining=$(awk '!/(^#| proc | loopfs | devpts | shm | iso9660 | ramfs | tmpfs | sysfs | securityfs | squashfs |^none|^\/dev\/root| \/ )/ {print $2}' /proc/mounts)
+		remaining=$(awk '$3 !~ /^(proc|loopfs|devpts|shm|iso9660|ramfs|tmpfs|sysfs|securityfs|squashfs)$/ \
+				&& $1 !~ /^(none|\/dev\/root)$/ \
+				&& $2 !~ /^\/$/ {print $2}' /proc/mounts)
 		[ -z "$remaining" ] && break
 		fuser -k -m $sig $remaining > /dev/null
 		sleep 5
