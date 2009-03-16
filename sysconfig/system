@@ -100,7 +100,7 @@ RC_PROMPT=yes
 
 # List (space separated) of special mount points that must not be unmounted
 # on system shutdown.
-# May contain regular exporessions (eg. "/dev/rootunion/.*")
+# May contain regular expressions (eg. "/dev/rootunion/.*")
 #UMOUNT_IGNORE=
 
 # Enable cpusets support?
