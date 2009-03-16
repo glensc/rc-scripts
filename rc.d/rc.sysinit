@@ -638,7 +638,7 @@ if ! is_yes "$VSERVER"; then
 
 	# LVM (keep in sync with LVM starting after RAID run!)
 	if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-		lvmversion=$(/sbin/vgchange --version 2>/dev/null | awk '{gsub("vgchange: Logical Volume Manager ",""); gsub("LVM version:     ",""); gsub(/\..*/,"");print $1; exit}')
+		lvmversion=$(LC_ALL=C /sbin/vgchange --version 2>/dev/null | awk '/LVM version:/{if ($3 >= 2) print "2"}')
 		if [ "$lvmversion" = "1" ] ; then
 			modprobe -s -k lvm-mod >/dev/null 2>&1
 			lvmignorelock=""
