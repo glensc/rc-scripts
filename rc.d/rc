@@ -149,8 +149,8 @@ text="$(termput op)$(nls '%sResource Manager: %sEntering runlevel number' "$af2"
 text_size="$(nls '%sResource Manager: %sEntering runlevel number' "" "")"
 resp_size="$(nls 'DONE')"
 {
-	typeset _len=${#text_size}
-	typeset -i _last_col=$(($INIT_COL+${#resp_size}-${#runlevel}))
+	local _len=${#text_size}
+	local _last_col=$(($INIT_COL+${#resp_size}-${#runlevel}))
 	while [ $((_len++)) -lt $_last_col ]; do
 		text="$text."
 	done
@@ -256,8 +256,8 @@ rc_splash "master"
 text="$(nls '%sResource Manager: %sRunlevel has been reached' "$af2" "$af7")"
 text_size="$(nls '%sResource Manager: %sRunlevel has been reached' "" "")"
 {
-	typeset -i _len=${#text_size}
-	typeset -i _last_col=$(($INIT_COL+${#resp_size}-${#runlevel}))
+	local _len=${#text_size}
+	local _last_col=$(($INIT_COL+${#resp_size}-${#runlevel}))
 	while [ $((_len++)) -lt $_last_col ]; do
 		text="$text."
 	done

@@ -40,7 +40,7 @@ CONSOLE_LOGLEVEL=1
 . /etc/rc.d/init.d/functions
 
 disable_selinux() {
-	typeset _d selinuxfs _t _r
+	local _d selinuxfs _t _r
 
 	while read _d selinuxfs _t _r; do
 		[ "$_t" = "selinuxfs" ] && break
@@ -52,7 +52,7 @@ disable_selinux() {
 }
 
 relabel_selinux() {
-	typeset _d selinuxfs _t _r
+	local _d selinuxfs _t _r
 
 	while read _d selinuxfs _t _r; do
 		[ "$_t" = "selinuxfs" ] && break

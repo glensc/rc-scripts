@@ -156,7 +156,7 @@ if is_no "$RC_LOGGING"; then
 fi
 
 kernelver() {
-	typeset _x _y _z v old_IFS ver
+	local _x _y _z v old_IFS ver
 	{
 		read _x _y v _z
 		old_IFS=$IFS
@@ -177,7 +177,7 @@ kernelver() {
 }
 
 kernelverser() {
-	typeset _x _y _z v old_IFS ver
+	local _x _y _z v old_IFS ver
 	{
 		read _x _y v _z
 		old_IFS=$IFS
@@ -193,7 +193,7 @@ kernelverser() {
 }
 
 kernelvermser() {
-	typeset _x _y _z v old_IFS ver
+	local _x _y _z v old_IFS ver
 	{
 		read _x _y v _z
 		old_IFS=$IFS
@@ -222,7 +222,7 @@ termput() {
 			echo -ne "\033[0K"
 			;;
 		setaf)
-			typeset ISBOLD
+			local ISBOLD
 			if [ -n "$3" ]; then
 				ISBOLD="$3"
 			else
@@ -254,7 +254,7 @@ if [ ! -x /bin/printf ]; then
 	# printf equivalent
 	# FIXME: buggy when single or double quotes in message!
 	printf() {
-		typeset text m
+		local text m
 		text="$1"
 		shift
 		if [ $# -gt 0 ]; then
@@ -271,7 +271,7 @@ fi
 
 # National language support function
 nls() {
-	typeset msg_echo nls_domain text message
+	local msg_echo nls_domain text message
 	msg_echo='\n'
 	nls_domain="$NLS_DOMAIN"
 	while [ "$1" != "${1##-}" ]; do
@@ -305,9 +305,7 @@ nls() {
 }
 
 rc_splash() {
-	typeset action
-
-	action="$1"
+	local action="$1"
 
 	if ! is_no "$BOOT_SPLASH" && ! is_yes "$VSERVER"; then
 		[ -x /bin/splash ] && /bin/splash "$action"
@@ -346,8 +344,7 @@ msg_usage() {
 
 # Some functions to handle PLD Linux-style messages
 show() {
-	typeset text
-	typeset -i len
+	local text len
 
 	if is_no "$FASTRC" && is_yes "$GETTEXT"; then
 		text=$(nls -n "$@")
@@ -375,8 +372,12 @@ deltext() {
 # tput setaf). If second argument is not given, default (2, green) will be
 # used).
 progress() {
-	typeset COLOR
-	if [ -n "$2" ]; then COLOR="$2"; else COLOR="$CDONE"; fi
+	local COLOR
+	if [ -n "$2" ]; then
+	   	COLOR="$2"
+	else
+	   	COLOR="$CDONE"
+	fi
 	deltext
 	echo -n "$(termput setaf $CBRACKETS)[$(termput setaf $COLOR) $(nls --nls-domain rc-scripts "$1") $(termput setaf $CBRACKETS)]$(termput op)"
 }
@@ -446,9 +447,8 @@ filter_chroot() {
 
 # Usage run_cmd Message command_to_run
 run_cmd() {
-	typeset exit_code errors message force_err
-	typeset -i force_err=0
-	typeset -i exit_code=0
+	local exit_code errors message force_err
+	local force_err=0 exit_code=0
 	case "$1" in
 	-a)
 		force_err=1
@@ -504,8 +504,8 @@ _daemon_set_ulimits() {
 
 # A function to start a program (now it's useful on read-only filesystem too)
 daemon() {
-	typeset errors="" prog="" end="" waitname="" waittime=""
-	typeset -i exit_code=0
+	local errors="" prog="" end="" waitname="" waittime=""
+	local exit_code=0
 	local nice=$SERVICE_RUN_NICE_LEVEL
 	local fork user closefds pidfile makepid chdir=/
 
@@ -649,7 +649,7 @@ daemon() {
 
 # A function to stop a program.
 killproc() {
-	typeset notset killlevel base pid pidfile result
+	local notset killlevel base pid pidfile result
 	# Test syntax.
 	if [ $# = 0 ]; then
 		msg_usage " killproc [--pidfile PIDFILE] {program} [-SIGNAME]"
@@ -676,7 +676,7 @@ killproc() {
 
 	busy
 
-	typeset -i notset=0
+	local notset=0
 	# check for second arg to be kill level
 	if [ -n "$2" ]; then
 		killlevel=$2
@@ -784,7 +784,7 @@ killproc() {
 
 # A function to find the pid of a program.
 pidofproc() {
-	typeset pid pidfile base=${1##*/}
+	local pid pidfile base=${1##*/}
 	pidfile="$base.pid"
 	[ -n "$2" ] && pidfile="$2"
 
@@ -801,8 +801,7 @@ pidofproc() {
 		pidfile="/var/run/${pidfile}";
 	fi
 	if [ -f "${pidfile}" ]; then
-		typeset p pid
-		pid=
+		local p pid=""
 		for p in $(< "${pidfile}"); do
 			[ -z "$(echo "$p" | awk '{gsub(/[0-9]/,"");print;}')" ] && pid="$pid $p"
 		done
@@ -815,7 +814,7 @@ pidofproc() {
 }
 
 status() {
-	typeset pid subsys daemon cpuset_msg pidfile
+	local pid subsys daemon cpuset_msg pidfile
 	if [ "$1" = "--pidfile" ]; then
 		pidfile=$2
 		[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
@@ -874,7 +873,7 @@ status() {
 
 # Confirm whether we really want to run this service
 confirm() {
-	typeset answer
+	local answer
 	nls -n "Start service %s (Y)es/(N)o/(C)ontinue? [Y] " "$1"
 	read answer
 	case $answer in
@@ -908,7 +907,7 @@ is_module() {
 }
 
 _modprobe() {
-	typeset parsed single die args foo result
+	local parsed single die args foo result
 	parsed=no
 	while is_no "$parsed"; do
 		case "$1" in
@@ -975,8 +974,6 @@ fi
 
 # Check if any flavor of portmapper is running
 check_portmapper() {
-	typeset RPCINFO
-
 	if [ -x /usr/sbin/rpcinfo ]; then
 		if /usr/sbin/rpcinfo -p localhost >/dev/null 2>/dev/null; then
 			return 0
@@ -993,8 +990,8 @@ check_portmapper() {
 # is_fsmounted fstype mntpoint
 # Check if filesystem fstype is mounted on mntpoint
 is_fsmounted() {
-	typeset fstype=$1
-	typeset mntpoint=$2
+	local fstype=$1
+	local mntpoint=$2
 
 	[ -n "$fstype" -a -n "$mntpoint" ] || return 1
 

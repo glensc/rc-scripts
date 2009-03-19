@@ -7,7 +7,7 @@
 
 source_config ()
 {
-	typeset foundconfig=0
+	local foundconfig=0
 
 	DEVNAME=${CONFIG##*/}
 	DEVNAME=${DEVNAME##ifcfg-}
@@ -60,7 +60,7 @@ need_hostname()
 
 set_hostname()
 {
-	typeset hostname domain
+	local hostname domain
 
 	hostname=$(echo $1 | awk ' { gsub(/\..*$/,NIL); print $0; } ')
 	domain=$(echo $1 | awk ' { sub(/^[^\.]*\./,NIL); print $0; } ')
@@ -107,7 +107,7 @@ set_dhcpclient()
 # Setup Network Address Translation (NAT)
 setup_nat()
 {
-	typeset src via dst
+	local src via dst
 
 	if [ -r /etc/sysconfig/static-nat ]; then
 		if [ "$1" = "on" ]; then
@@ -127,7 +127,7 @@ setup_nat()
 # Setup static ARP
 static_arp()
 {
-	typeset rc arpdev host hwaddr flags neflags
+	local rc arpdev host hwaddr flags neflags
 
 	if is_yes "$STATIC_ARP" && [ -r /etc/ethers ]; then
 		if [ -x /sbin/arp ]; then
@@ -310,7 +310,7 @@ setup_ip_gw_ro ()
 #
 setup_routes()
 {
-	typeset args
+	local args
 
 	if [ -f /etc/sysconfig/static-routes ]; then
 		if [ "$1" = "on" -o "$1" = "yes" ] ; then
@@ -354,7 +354,7 @@ modprobe_net()
 # calculate network prefix from given network mask
 calcprefix()
 {
-	typeset old_IFS netmask prefix endp
+	local old_IFS netmask prefix endp
 
 	old_IFS=$IFS
 	IFS='.'
@@ -384,13 +384,13 @@ calcprefix()
 # (c) 1999 Grzegorz Stanislawski <stangrze@open.net.pl>
 calcnetmask()
 {
-	typeset prefix a MASK
+	local prefix a MASK
 
 	MASK=""
 	if [ "${1##[0-9]*}" ]; then
 		prefix=32
 	else
-		typeset -i prefix=$1
+		prefix=$1
 	fi
 	for i in 1 2 3 4; do
 		case $prefix in
@@ -439,7 +439,7 @@ get_ppp_device_and_pid ()
 # Olgierd Pieczul <wojrus@pld-linux.org>
 setup_ip_rules ()
 {
-	typeset args prio from src
+	local args prio from src
 
 	if [ -f /etc/sysconfig/static-routes ] ; then
 		if is_yes "$1"; then
