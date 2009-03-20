@@ -473,17 +473,12 @@ wireless_param()
 
 	local val wlan_mode
 
-	if val="$(eval echo \$${prefix}WLAN_NICKNAME)" && [ -z "$val" ]; then
-		 WLAN_NICKNAME="$(hostname -f 2>/dev/null || hostname 2>/dev/null || echo localhost)"
-	else
-		 WLAN_NICKNAME="$val"
-	fi
-
 	# wlan mode needs to be first
 	wlan_mode="$(eval echo \$${prefix}WLAN_MODE)" && [ "$wlan_mode" ] && \
 		iwconfig ${device} mode "$wlan_mode"
 
-	iwconfig ${device} nick ${WLAN_NICKNAME}
+	val="$(eval echo \$${prefix}WLAN_NICKNAME)" && [ "$val" ] && \
+		iwconfig ${device} nick "$val"
 
 	val="$(eval echo \$${prefix}WLAN_NWID)" && [ "$val" ] && \
 		iwconfig ${device} nwid "$val"
