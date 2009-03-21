@@ -15,8 +15,8 @@
 # See how we were called.
 case "$1" in
   start)
-	touch /var/lock/subsys/local
 	. /etc/rc.d/rc.local
+	touch /var/lock/subsys/local
 	;;
   stop)
 	rm -f /var/lock/subsys/local
