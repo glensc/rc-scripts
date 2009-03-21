@@ -19,7 +19,7 @@ case "$1" in
   stop)
 	# /etc/nologin when shutting down system
 	if is_yes "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
-		nls "System shutdown in progress \n" > /etc/nologin
+		nls "System shutdown in progress\n" > /etc/nologin
 		chmod 644 /etc/nologin
 		cp -fp /etc/nologin /etc/nologin.boot
 	fi
