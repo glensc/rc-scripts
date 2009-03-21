@@ -129,7 +129,7 @@ stop() {
 		export runlevel previous
 	fi
 
-	if [ -f /var/lock/subsys/sys-chroots ]; then
+	if [ ! -f /var/lock/subsys/sys-chroots ]; then
 		msg_not_running "System chroots services"
 		return
 	fi
