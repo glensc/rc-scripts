@@ -35,89 +35,90 @@ start() {
 		export runlevel previous
 	fi
 
-	if [ ! -f /var/lock/subsys/sys-chroots ]; then
-		msg_starting "System chroots services"; started
-
-		for dir in $SYSTEM_CHROOTS; do
-			[ ! -x "$dir/etc/rc.d/rc" ] && continue
-			msg_starting "System chroots services for $dir"; started
-
-			# Cleaning part, keep in sync with rc.sysinit
-
-			chroot $dir /bin/sh -c '
-			. /etc/rc.d/init.d/functions
-			# Clear mtab
-			:>/etc/mtab
-			[ -f /etc/cryptomtab ] && :>/etc/cryptomtab
-
-			# Remove stale backups
-			rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
-
-			# Clean up /var
-			# I would d use find, but /usr may not be mounted.
-			for afile in /var/lock/* /var/run/*; do
-				bafile=$(basename $afile)
-				if [ -d "$afile" ]; then
-					[ "$bafile" != "news" -a "$bafile" != "sudo" -a "$bafile" != "mon" ] && rm -rf $afile/*
-				else
-					[ "$bafile" != "hwprofile" ] && rm -f $afile 2> /dev/null
-				fi
-			done
-			# Delete stale files
-			rm -f /var/lib/rpm/__db* /var/spool/postoffice/.pid.* /tmp/.X*-lock \
-				/tmp/.lock.* /tmp/.gdm_socket /tmp/.s.PGSQL.*
-			rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
-				/tmp/kde-* /tmp/ksocket-* /tmp/mc-* /tmp/mcop-* /tmp/orbit-* \
-				/tmp/scrollkeeper-* /tmp/ssh-*
-
-			# Clean up utmp/wtmp
-			if ! is_no "$NEED_XFILES" ; then
-				:>/var/run/utmpx
-				touch /var/log/wtmpx
-				chown root:utmp /var/run/utmpx /var/log/wtmpx
-				chmod 0664 /var/run/utmpx /var/log/wtmpx
-			else
-				:>/var/run/utmp
-				touch /var/log/wtmp
-				chown root:utmp /var/run/utmp /var/log/wtmp
-				chmod 0664 /var/run/utmp /var/log/wtmp
-			fi
-			# Clean /tmp
-			if is_yes "$CLEAN_TMP"; then
-				rm -rf /tmp/* /tmp/.[a-zA-Z0-9]*
-			fi
-			'
-
-			# Do our things
-
-			# proc
-			chroot $dir mount -o gid=17 -t proc proc /proc
-			# usbfs, if available
-			if [ -f /proc/bus/usb/devices ]; then
-				chroot $dir mount -t usbfs usbfs /proc/bus/usb
-			fi
-			# sysfs is also needed before any other things (under kernel > 2.5)
-			if grep -q sysfs /proc/filesystems ; then
-				chroot $dir mount -o gid=17 -t sysfs sysfs /sys
-			fi
-			# selinux
-			if grep -q selinuxfs /proc/filesystems ; then
-				chroot $dir mount -o gid=17 -t selinuxfs selinuxfs /selinux
-			fi
-			chroot $dir mount -a
-			# network
-			[ -f /var/lock/subsys/network ] && touch $dir/var/lock/subsys/network
-			# other
-			chroot $dir /sbin/chkconfig single off
-			rm -f $dir/etc/rc.d/rc*.d/K*single
-			# run it
-			chroot $dir /etc/rc.d/rc $runlevel chroot
-		done
-
-		touch /var/lock/subsys/sys-chroots
-	else
+	if [ -f /var/lock/subsys/sys-chroots ]; then
 		msg_already_running "System chroots services"
+		return
 	fi
+
+	msg_starting "System chroots services"; started
+
+	for dir in $SYSTEM_CHROOTS; do
+		[ ! -x "$dir/etc/rc.d/rc" ] && continue
+		msg_starting "System chroots services for $dir"; started
+
+		# Cleaning part, keep in sync with rc.sysinit
+
+		chroot $dir /bin/sh -c '
+		. /etc/rc.d/init.d/functions
+		# Clear mtab
+		:>/etc/mtab
+		[ -f /etc/cryptomtab ] && :>/etc/cryptomtab
+
+		# Remove stale backups
+		rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
+
+		# Clean up /var
+		# I would d use find, but /usr may not be mounted.
+		for afile in /var/lock/* /var/run/*; do
+			bafile=$(basename $afile)
+			if [ -d "$afile" ]; then
+				[ "$bafile" != "news" -a "$bafile" != "sudo" -a "$bafile" != "mon" ] && rm -rf $afile/*
+			else
+				[ "$bafile" != "hwprofile" ] && rm -f $afile 2> /dev/null
+			fi
+		done
+		# Delete stale files
+		rm -f /var/lib/rpm/__db* /var/spool/postoffice/.pid.* /tmp/.X*-lock \
+			/tmp/.lock.* /tmp/.gdm_socket /tmp/.s.PGSQL.*
+		rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
+			/tmp/kde-* /tmp/ksocket-* /tmp/mc-* /tmp/mcop-* /tmp/orbit-* \
+			/tmp/scrollkeeper-* /tmp/ssh-*
+
+		# Clean up utmp/wtmp
+		if ! is_no "$NEED_XFILES" ; then
+			:>/var/run/utmpx
+			touch /var/log/wtmpx
+			chown root:utmp /var/run/utmpx /var/log/wtmpx
+			chmod 0664 /var/run/utmpx /var/log/wtmpx
+		else
+			:>/var/run/utmp
+			touch /var/log/wtmp
+			chown root:utmp /var/run/utmp /var/log/wtmp
+			chmod 0664 /var/run/utmp /var/log/wtmp
+		fi
+		# Clean /tmp
+		if is_yes "$CLEAN_TMP"; then
+			rm -rf /tmp/* /tmp/.[a-zA-Z0-9]*
+		fi
+		'
+
+		# Do our things
+
+		# proc
+		chroot $dir mount -o gid=17 -t proc proc /proc
+		# usbfs, if available
+		if [ -f /proc/bus/usb/devices ]; then
+			chroot $dir mount -t usbfs usbfs /proc/bus/usb
+		fi
+		# sysfs is also needed before any other things (under kernel > 2.5)
+		if grep -q sysfs /proc/filesystems ; then
+			chroot $dir mount -o gid=17 -t sysfs sysfs /sys
+		fi
+		# selinux
+		if grep -q selinuxfs /proc/filesystems ; then
+			chroot $dir mount -o gid=17 -t selinuxfs selinuxfs /selinux
+		fi
+		chroot $dir mount -a
+		# network
+		[ -f /var/lock/subsys/network ] && touch $dir/var/lock/subsys/network
+		# other
+		chroot $dir /sbin/chkconfig single off
+		rm -f $dir/etc/rc.d/rc*.d/K*single
+		# run it
+		chroot $dir /etc/rc.d/rc $runlevel chroot
+	done
+
+	touch /var/lock/subsys/sys-chroots
 }
 
 stop() {
@@ -129,21 +130,22 @@ stop() {
 	fi
 
 	if [ -f /var/lock/subsys/sys-chroots ]; then
-		msg_stopping "System chroots services"; started
-		for dir in $SYSTEM_CHROOTS; do
-			[ ! -x "$dir/etc/rc.d/rc" ] && continue
-			msg_stopping "System chroots services for $dir"; started
-			rm -f $dir/var/lock/subsys/network
-			chroot $dir /etc/rc.d/rc $runlevel chroot
-			chroot $dir /bin/sh -c "grep -q selinuxfs /proc/filesystems && umount /selinux"
-			chroot $dir /bin/sh -c "grep -q sysfs /proc/filesystems && umount /sys"
-			chroot $dir umount -a
-			chroot $dir umount /proc
-		done
-		rm -f /var/lock/subsys/sys-chroots >/dev/null 2>&1
-	else
 		msg_not_running "System chroots services"
+		return
 	fi
+
+	msg_stopping "System chroots services"; started
+	for dir in $SYSTEM_CHROOTS; do
+		[ ! -x "$dir/etc/rc.d/rc" ] && continue
+		msg_stopping "System chroots services for $dir"; started
+		rm -f $dir/var/lock/subsys/network
+		chroot $dir /etc/rc.d/rc $runlevel chroot
+		chroot $dir /bin/sh -c "grep -q selinuxfs /proc/filesystems && umount /selinux"
+		chroot $dir /bin/sh -c "grep -q sysfs /proc/filesystems && umount /sys"
+		chroot $dir umount -a
+		chroot $dir umount /proc
+	done
+	rm -f /var/lock/subsys/sys-chroots >/dev/null 2>&1
 }
 
 RETVAL=0
