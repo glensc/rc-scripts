@@ -1,3 +1,59 @@
+2009-03-23 16:07 +0000 [r10235]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: - 0.4.2.1
+
+2009-03-21 21:30 +0000 [r10225-10226]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/sys-chroots: - correct
+
+	* rc.d/init.d/sys-chroots: - invert condition to bring down one
+	  level of indent
+
+2009-03-21 21:24 +0000 [r10223-10224]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/local: - proper order of commands
+
+	* rc.d/init.d/killall: - correction
+
+2009-03-21 21:17 +0000 [r10222]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/allowlogin: - why the space?
+
+2009-03-20 16:03 +0000 [r10221]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Set nickname only
+	  when specified in config since many wifi adapters don't support
+	  this setting.
+
+2009-03-19 00:15 +0000 [r10218]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc, rc.d/rc.sysinit, DEVELOPMENT,
+	  sysconfig/network-scripts/functions.network,
+	  rc.d/init.d/functions: - use "local" not "typeset" (compatible
+	  with: pdksh/bash/dash)
+
+2009-03-16 11:34 +0000 [r10214]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc.sysinit: - shorter lvm version detect
+
+2009-03-16 11:27 +0000 [r10213]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - remove unneeded subshells
+
+2009-03-16 11:23 +0000 [r10212]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system: - typo
+
+2009-03-15 23:09 +0000 [r10210-10211]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, sysconfig/system: - added UMOUNT_IGNORE option
+
+	* rc.d/rc.shutdown: - refactor awk invocation in fs unmounting code
+
+2009-03-12 15:32 +0000 [r10208]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* inittab: - sX prefix ofr serial lines
+
 2009-03-11 12:41 +0000 [r10203]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* configure.ac: - 0.4.2.0, well deserved version bump after few
