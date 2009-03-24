@@ -1,4 +1,4 @@
-#!/bin/sh - keep it for file(1) to get bourne shell script result
+#!/bin/busybox sh - keep it for file(1) to get bourne shell script result
 #
 # $Id$
 #

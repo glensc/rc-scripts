@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 # testd         This shell script takes care of starting and stopping
 #               testd (example daemon).

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 # network	Bring up/down networking
 #

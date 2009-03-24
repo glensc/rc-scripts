@@ -10,7 +10,7 @@ where <servicename> is the name of the service.  There must be no
 Sample Script
 =============
 
-#!/bin/sh
+#!/bin/busybox sh
 #
 #	/etc/rc.d/init.d/<servicename>
 #

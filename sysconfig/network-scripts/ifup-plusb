@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 # The plusb network driver is a USB host-host cable based on the Prolific
 # chip. It works a lot like the plip driver.

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 # cryptsetup functions for rc-scripts
 # if invoked standalone, processes /etc/cryptab like on boot/shutdown
 

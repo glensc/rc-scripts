@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 #    tnldown - tunnel configuration script
 #    Copyright (C) 1999, 2000 Arkadiusz Miśkiewicz <misiek@pld-linux.org>

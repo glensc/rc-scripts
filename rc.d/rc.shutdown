@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 # shutdown	Common script for system halt/reboot.
 #

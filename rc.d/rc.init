@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 # $Id$
 # This script is started by init ...
 

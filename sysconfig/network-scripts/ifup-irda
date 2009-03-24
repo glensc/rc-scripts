@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 #    ifup-irda - IrDA configuration script
 #    Copyright (C) 2001 Arkadiusz Miśkiewicz <misiek@pld-linux.org>

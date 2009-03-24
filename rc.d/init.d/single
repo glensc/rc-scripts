@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 # single	Script for sedding up administrative/rescue shell.
 #

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 #    ifdown-vlan - Virtual LAN configuration script
 #    Copyright (C) 2001 Arkadiusz Miśkiewicz <misiek@pld-linux.org>

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 # $Id$
 # You can put here anything :)
 #

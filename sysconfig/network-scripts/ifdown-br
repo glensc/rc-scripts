@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 #    ifdown-br - bridge configuration script
 #    Copyright (C) 2000 Arkadiusz Miśkiewicz <misiek@pld-linux.org>

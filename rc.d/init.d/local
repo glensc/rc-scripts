@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 # local	Invoke custom scripts at startup
 # chkconfig:	2345 99 01

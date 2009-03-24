@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 # (C) 2001 Arkadiusz Miśkiewicz <misiek@pld.ORG.PL>
 # Hardware Profiles for rc-scripts TOTALNEW.
 # $Id$

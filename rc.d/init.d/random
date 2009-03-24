@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox sh
 #
 # random	Script to snapshot random state and reload it at boot time.
 #
