@@ -11,6 +11,8 @@ for shfile in $(find ${srcdir}/rc.d ${srcdir}/sysconfig ! -path "*/\.*/*" ! -nam
     echo -n "."
     if (LC_ALL=C file ${shfile} | grep -q 'shell script'); then
 	SHSCRIPTS="${SHSCRIPTS} ${shfile}"
+    elif (LC_ALL=C file ${shfile} | grep -q 'busybox sh script'); then
+	SHSCRIPTS="${SHSCRIPTS} ${shfile}"
     fi
 done
 echo "done"
