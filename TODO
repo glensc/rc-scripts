@@ -1,5 +1,12 @@
 $Id$
 
+Busybox:
+- [[ expr ]] looks b0rken, according to comments in bb ash code
+	[[ /bin/m* = "/bin/m*" ]]; echo $?
+  should produce "0", but instead gives:
+  sh: /bin/mawk: unknown operand
+  2
+
 Important:
 - don't set any flags automatically; always follow user
   suggestion (multicast, arp)
