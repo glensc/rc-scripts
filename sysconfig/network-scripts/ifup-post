@@ -58,7 +58,7 @@ fi
 
 # don't set hostname on ppp/slip connections
 if [ -n "$NEEDHOSTNAME" -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
-	IPADDR=$(ip -f inet addr show dev ${DEVICE} |
+	IPADDR=$(/sbin/ip -f inet addr show dev ${DEVICE} |
 		awk '/inet/ { print $2 }' |awk -F"/" '{ print $1 }')
 	eval $(ipcalc -s -h ${IPADDR}) && set_hostname $HOSTNAME
 fi

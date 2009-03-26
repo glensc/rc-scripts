@@ -46,7 +46,7 @@ if is_yes "${PPPOA_EAGLE}"; then
 	fi
 	if [ -x $EAGLECTRL ]; then
 		PPPOA_IFACE=$( $EAGLECTRL -i 2>/dev/null)
-		[ -n "$PPPOA_IFACE" ] && ip link set "$PPPOA_IFACE" down
+		[ -n "$PPPOA_IFACE" ] && /sbin/ip link set "$PPPOA_IFACE" down
 	fi
 fi
 

@@ -29,17 +29,17 @@ setup_ip_param
 
 if is_yes "$IPV4_NETWORKING"; then
 	if [ -n "$IP4ADDR" ]; then
-		ip -4 addr add ${IP4ADDR} peer ${REMIP} dev ${DEVICE}
+		/sbin/ip -4 addr add ${IP4ADDR} peer ${REMIP} dev ${DEVICE}
 	fi
 fi
 
 if is_yes "$IPV6_NETWORKING"; then
 	if [ -n "$IP6ADDR" ]; then
-		ip -6 addr add ${IP6ADDR} dev ${DEVICE}
+		/sbin/ip -6 addr add ${IP6ADDR} dev ${DEVICE}
 	fi
 fi
 
-ip link set dev ${DEVICE} up
+/sbin/ip link set dev ${DEVICE} up
 
 . /etc/sysconfig/network
 

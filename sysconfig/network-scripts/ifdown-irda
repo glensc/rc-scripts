@@ -38,8 +38,8 @@ fi
 # set all major variables
 setup_ip_param
 
-ip link set ${DEVICE} down
-ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+/sbin/ip link set ${DEVICE} down
+/sbin/ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
 
 PID=$(pidof irattach)
 for x in $PID; do

@@ -69,12 +69,12 @@ RESULT=0
 
 case "${MODE}" in
   ipip|sit|gre)
-	ip link set ${DEVICE} down
-	ip tunnel del ${DEVICE}
+	/sbin/ip link set ${DEVICE} down
+	/sbin/ip tunnel del ${DEVICE}
 	RESULT=$?
 	;;
   four)
-	ip link set ${DEVICE} down
+	/sbin/ip link set ${DEVICE} down
 	fourcfg del ${DEVICE}
 	RESULT=$?
 	;;

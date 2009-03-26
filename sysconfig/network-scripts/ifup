@@ -78,8 +78,8 @@ if [ -x "$OTHERSCRIPT" ]; then
 fi
 
 if [ -n "$MACVLAN_DEV" -a -n "$MACVLAN_MACADDR" ]; then
-	ip link del link ${MACVLAN_DEV} ${DEVICE} type macvlan > /dev/null 2>&1
-	ip link add link ${MACVLAN_DEV} address ${MACVLAN_MACADDR} ${DEVICE} type macvlan
+	/sbin/ip link del link ${MACVLAN_DEV} ${DEVICE} type macvlan > /dev/null 2>&1
+	/sbin/ip link add link ${MACVLAN_DEV} address ${MACVLAN_MACADDR} ${DEVICE} type macvlan
 fi
 
 # is this device available? (this catches PCMCIA devices for us)
@@ -96,7 +96,7 @@ fi
 if is_yes "$SLAVE" && [ -n "$MASTER" -a -x /sbin/ifenslave ]; then
 	RFLAG="" && is_yes "${RECIEVE-ONLY}" && RFLAG="-r"
 
-	ip link set ${DEVICE} down
+	/sbin/ip link set ${DEVICE} down
 	nls "Enslaving %s to %s" "$DEVICE" "$MASTER"
 	ifenslave $RFLAG "$MASTER" "$DEVICE"
 
@@ -104,13 +104,13 @@ if is_yes "$SLAVE" && [ -n "$MASTER" -a -x /sbin/ifenslave ]; then
 fi
 
 if [ -n "$MACADDR" ]; then
-	ip link set ${DEVICE} address ${MACADDR}
+	/sbin/ip link set ${DEVICE} address ${MACADDR}
 fi
 
-ip link set ${DEVICE} multicast ${MULTICAST} ${ARP} down
+/sbin/ip link set ${DEVICE} multicast ${MULTICAST} ${ARP} down
 
 if [ -n "$MTU" ]; then
-	ip link set ${DEVICE} mtu ${MTU}
+	/sbin/ip link set ${DEVICE} mtu ${MTU}
 fi
 
 if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
@@ -118,7 +118,7 @@ if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
 fi
 
 if is_wireless_device "${DEVICE}"; then
-	is_yes "${WLAN_UPEARLY}" && ip link set ${DEVICE} up
+	is_yes "${WLAN_UPEARLY}" && /sbin/ip link set ${DEVICE} up
 	wireless_param ${DEVICE}
 fi
 
@@ -172,7 +172,7 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 
 		# give time for determining IP information
 		check_device_down && sleep 1 && check_device_down && sleep 3
-		check_device_down && ip link set ${DEVICE} up
+		check_device_down && /sbin/ip link set ${DEVICE} up
 	fi
 else
 	# IPv4 in use ?
@@ -187,20 +187,20 @@ else
 		fi
 
 		if [ -n "$REMIP" ]; then
-			ip addr add ${IP4ADDR} peer ${REMIP} ${ALIAS} dev ${DEVICE} ${IP4ADDROPT}
+			/sbin/ip addr add ${IP4ADDR} peer ${REMIP} ${ALIAS} dev ${DEVICE} ${IP4ADDROPT}
 		else
-			ip addr add ${IP4ADDR} ${ALIAS} dev ${DEVICE} ${IP4ADDROPT}
+			/sbin/ip addr add ${IP4ADDR} ${ALIAS} dev ${DEVICE} ${IP4ADDROPT}
 		fi
 	fi
 
 	# Set device up
-	ip link set ${DEVICE} up
+	/sbin/ip link set ${DEVICE} up
 
 	# IPv6 in use ?
 	if is_yes "$IPV6_NETWORKING" && [ -n "${IP6ADDR}" ]; then
-		ip addr add ${IP6ADDR} dev ${DEVICE} ${IP6ADDROPT}
+		/sbin/ip addr add ${IP6ADDR} dev ${DEVICE} ${IP6ADDROPT}
 		if [ -n "${IP6ADDRLABEL}" ]; then
-			ip addrlabel add prefix ${IP6ADDR} dev ${DEVICE} label ${IP6ADDRLABEL}
+			/sbin/ip addrlabel add prefix ${IP6ADDR} dev ${DEVICE} label ${IP6ADDRLABEL}
 		fi
 	fi
 

@@ -42,7 +42,7 @@ for frametype in '802.2' '802.2TR' '802.3' 'EtherII' 'SNAP'; do
 		  yes|true) primary="-p" ;;
 		  *) primary= ;;
 		esac
-		ip link set $DEVICE up
+		/sbin/ip link set $DEVICE up
 		/sbin/ipx_interface add $primary $DEVICE $frametype \
 			$(eval echo $(echo \$$(echo IPXNETNUM_$framename)))
 		;;

@@ -134,7 +134,7 @@ static_arp()
 		else
 			show "Setting static ARP entries"; busy
 			rc=0
-			arpdev=$(ip link show | awk -F':' '(/UP/) && ! (/NOARP/) && ! (/lo:/) && ! (/NONE:/) { print $2; exit }')
+			arpdev=$(/sbin/ip link show | awk -F':' '(/UP/) && ! (/NOARP/) && ! (/lo:/) && ! (/NONE:/) { print $2; exit }')
 			if [ -z "$arpdev" ]; then
 				rc=1
 			else
@@ -253,7 +253,7 @@ setup_ip_param ()
 
 check_device_down ()
 {
-	if LC_ALL=C ip link show dev ${DEVICE} 2> /dev/null | grep -q UP; then
+	if LC_ALL=C /sbin/ip link show dev ${DEVICE} 2> /dev/null | grep -q UP; then
 		return 1
 	else
 		return 0
@@ -267,7 +267,7 @@ setup_ip_gw_ro ()
 		if [ -z "${GATEWAYDEV}" -o "${GATEWAYDEV}" = "${DEVICE}" ]; then
 			# set up default gateway
 			if [ "${GATEWAY}" ]; then
-				ip -4 route add default via ${GATEWAY} dev ${DEVICE} ${IP4SRCADDR} onlink 2>/dev/null
+				/sbin/ip -4 route add default via ${GATEWAY} dev ${DEVICE} ${IP4SRCADDR} onlink 2>/dev/null
 				if [ $? = 0 ]; then
 					DEFGW=${GATEWAY}
 				else
@@ -276,7 +276,7 @@ setup_ip_gw_ro ()
 					nls "Warning: Default gateway already set proably via other interface. Do you need to setup GATEWAYDEV?"
 				fi
 			elif [ "${GATEWAYDEV}" = "${DEVICE}" ]; then
-				ip -4 route add default dev ${DEVICE} ${IP4SRCADDR}
+				/sbin/ip -4 route add default dev ${DEVICE} ${IP4SRCADDR}
 			fi
 		fi
 	fi
@@ -286,18 +286,18 @@ setup_ip_gw_ro ()
 		if [ -z "${GATEWAY6DEV}" -o "${GATEWAY6DEV}" = "${DEVICE}" ]; then
 			# set up default gateway
 			if [ "${GATEWAY6}" ]; then
-				ip -6 route add default via ${GATEWAY6} dev ${DEVICE} ${IP6SRCADDR} onlink
+				/sbin/ip -6 route add default via ${GATEWAY6} dev ${DEVICE} ${IP6SRCADDR} onlink
 				DEFGW6=${GATEWAY6}
 			elif [ "${GATEWAY6DEV}" = "${DEVICE}" ]; then
-				ip -6 route add default dev ${DEVICE} ${IP6SRCADDR}
+				/sbin/ip -6 route add default dev ${DEVICE} ${IP6SRCADDR}
 			fi
 		fi
 		if [ -z "${IPV6_GLOBALROUTEDEV}" -o "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
 			# set up default route
 			if [ "${IPV6_GLOBALROUTEGW}" ]; then
-				ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR} onlink
+				/sbin/ip -6 route add 2000::/3 via ${IPV6_GLOBALROUTEGW} dev ${DEVICE} ${IP6SRCADDR} onlink
 			elif [ "${IPV6_GLOBALROUTEDEV}" = "${DEVICE}" ]; then
-				ip -6 route add 2000::/3 dev ${DEVICE} ${IP6SRCADDR}
+				/sbin/ip -6 route add 2000::/3 dev ${DEVICE} ${IP6SRCADDR}
 			fi
 		fi
 	fi
@@ -329,15 +329,15 @@ setup_routes()
 set_up_loopback()
 {
 	if is_yes "$IPV4_NETWORKING"; then
-		ip addr add 127.0.0.1/8 dev lo
+		/sbin/ip addr add 127.0.0.1/8 dev lo
 	fi
-	ip link set dev lo up
+	/sbin/ip link set dev lo up
 }
 
 set_down_loopback()
 {
-	LC_ALL=C ip addr flush dev lo 2>&1 | grep -v "Nothing to flush"
-	ip link set dev lo down
+	LC_ALL=C /sbin/ip addr flush dev lo 2>&1 | grep -v "Nothing to flush"
+	/sbin/ip link set dev lo down
 }
 
 modprobe_net()
@@ -448,7 +448,7 @@ setup_ip_rules ()
 			done
 		elif is_no "$1"; then
 			LC_ALL=C /sbin/ip rule show | grep -vE -e "from all lookup (main|default|local) \$" -e " map-to " | while read prio from src args; do
-				[ "$src" = "all" ] && ip rule delete $args || ip rule delete $from $src $args
+				[ "$src" = "all" ] && /sbin/ip rule delete $args || /sbin/ip rule delete $from $src $args
 			done
 		fi
 	fi
@@ -589,8 +589,8 @@ check_iwconfig ()
 check_link_down ()
 {
 	if [ -x /sbin/mii-tool -o -x /sbin/ethtool -o -x /sbin/iwconfig ]; then
-		if ! LC_ALL=C ip link show dev $1 2>/dev/null| grep -q UP ; then
-			ip link set dev $1 up >/dev/null 2>&1
+		if ! LC_ALL=C /sbin/ip link show dev $1 2>/dev/null| grep -q UP ; then
+			/sbin/ip link set dev $1 up >/dev/null 2>&1
 			timeout=0
 			while [ $timeout -le 10 ]; do
 				check_mii_tool $1

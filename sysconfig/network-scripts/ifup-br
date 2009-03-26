@@ -45,8 +45,8 @@ setup_ip_param
 
 # set device down and forget all addresses
 for device in $BRIDGE_DEVS; do
-	ip link set ${device} down
-	LC_ALL=C ip addr flush dev ${device} 2>&1 | grep -v "Nothing to flush"
+	/sbin/ip link set ${device} down
+	LC_ALL=C /sbin/ip addr flush dev ${device} 2>&1 | grep -v "Nothing to flush"
 done
 
 # set wireless parameters
@@ -61,8 +61,8 @@ brctl addbr ${DEVICE}
 # add interfaces to bridge
 for device in $BRIDGE_DEVS; do
 	brctl addif ${DEVICE} ${device}
-	ip link set dev ${device} multicast ${MULTICAST} ${ARP}
-	ip link set ${device} up
+	/sbin/ip link set dev ${device} multicast ${MULTICAST} ${ARP}
+	/sbin/ip link set ${device} up
 done
 
 
@@ -83,8 +83,8 @@ else
 	brctl stp ${DEVICE} no
 fi
 
-ip link set dev ${DEVICE} multicast ${MULTICAST} ${ARP}
-if ! (ip link set dev ${DEVICE} up); then
+/sbin/ip link set dev ${DEVICE} multicast ${MULTICAST} ${ARP}
+if ! (/sbin/ip link set dev ${DEVICE} up); then
 	nls "problems with setting bridge %s" "${DEVICE}"
 	exit 1
 fi

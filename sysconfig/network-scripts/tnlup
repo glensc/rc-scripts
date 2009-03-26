@@ -114,12 +114,12 @@ fi
 
 case "${MODE}" in
   ipip|sit)
-	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} \
+	/sbin/ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} \
 		remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV}
 	RESULT=$?
 	;;
   gre)
-	ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} \
+	/sbin/ip tunnel add ${DEVICE} mode ${MODE} local ${LOCALADDR} \
 		remote ${REMOTEADDR} ${TTL} ${TOS} ${PMTUDISC} ${BIND_DEV} \
 		${CSUM} ${ISEQ} ${KEY} ${IKEY} ${OKEY}
 	RESULT=$?

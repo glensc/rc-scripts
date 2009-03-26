@@ -10,12 +10,12 @@ for IP_ADDR in $IPADDR_ALIASES; do
 	[ -z "$IP_ADDR" ] && continue
 	# Be sure that primary address is added
 	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
-		if (ip addr show dev $DEVICE | grep -qE "[[:space:]]${IP_ADDR}[[:space:]]"); then
+		if (/sbin/ip addr show dev $DEVICE | grep -qE "[[:space:]]${IP_ADDR}[[:space:]]"); then
 			continue
 		fi
 	fi
 	if is_yes "${IPV4_NETWORKING}"; then
-		ip -4 addr add ${IP_ADDR} dev ${DEVICE} brd +
+		/sbin/ip -4 addr add ${IP_ADDR} dev ${DEVICE} brd +
 	fi
 done
 
@@ -23,17 +23,17 @@ for IP_ADDR in $IPV6_ADDR; do
 	[ -z "$IP_ADDR" ] && continue
 	# Be sure that primary address is added
 	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
-		if (ip addr show dev $DEVICE | grep -qE "[[:space:]]${IP_ADDR}[[:space:]]"); then
+		if (/sbin/ip addr show dev $DEVICE | grep -qE "[[:space:]]${IP_ADDR}[[:space:]]"); then
 			continue
 		fi
 	fi
 	# Check for IPv6 address
 	if (echo $IP_ADDR | grep -q ":"); then
 		if is_yes "${IPV6_NETWORKING}"; then
-			ip -6 addr add ${IP_ADDR} dev ${DEVICE}
+			/sbin/ip -6 addr add ${IP_ADDR} dev ${DEVICE}
 		fi
 	elif is_yes "${IPV4_NETWORKING}"; then
-		ip -4 addr add ${IP_ADDR} dev ${DEVICE} brd +
+		/sbin/ip -4 addr add ${IP_ADDR} dev ${DEVICE} brd +
 	fi
 done
 
@@ -47,33 +47,35 @@ for nr in $(awk 'BEGIN { max=0; }; /^IPADDR[0-9]+=/ { s = $0; gsub(/^IPADDR/, ""
 
 	# Be sure that primary address is added
 	if [ "$IP_ADDR" = "$IP4ADDR" -o "$IP_ADDR" = "$IP6ADDR" ]; then
-		if (ip addr show dev $DEVICE | grep -qE "[[:space:]]${IP_ADDR}[[:space:]]"); then
+		if (/sbin/ip addr show dev $DEVICE | grep -qE "[[:space:]]${IP_ADDR}[[:space:]]"); then
 			continue
 		fi
 	fi
 	# Check for IPv6 address
 	if echo $IP_ADDR | grep -q ":"; then
 		if is_yes "${IPV6_NETWORKING}"; then
-			ip -6 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
-			[ -n "${IP_ADDR_LABEL}" ] && ip -6 addrlabel add prefix ${IP_ADDR} dev ${DEVICE} label ${IP_ADDR_LABEL}
+			/sbin/ip -6 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
+			if [ -n "${IP_ADDR_LABEL}" ]; then
+				/sbin/ip -6 addrlabel add prefix ${IP_ADDR} dev ${DEVICE} label ${IP_ADDR_LABEL}
+			fi
 		fi
 	elif is_yes "${IPV4_NETWORKING}"; then
 		# If broadcast is missing then autocalculate it
 		if ! (echo $IP_ADDR_OPT | grep -qE "brd|broadcast"); then
 			IP_ADDR_OPT="brd + ${IP_ADDR_OPT}"
 		fi
-		ip -4 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
+		/sbin/ip -4 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
 	fi
 done
 
 # Setup IPv4-compatible addresses
 if is_yes "$IPV6_NETWORKING" && [ "$BOOTPROTO6" = "v4compat" ]; then
 	# enable automatic tunnels
-	ip link set sit0 up
+	/sbin/ip link set sit0 up
 
 	# add v4compat addresses to device
-	for addr in $(ip -4 addr show scope global dev $DEVICE | \
+	for addr in $(/sbin/ip -4 addr show scope global dev $DEVICE | \
 		awk '/inet/ { print $2 }' | awk -F"/" '{ print $1 }'); do
-		ip -6 addr add ::$addr dev $DEVICE
+		/sbin/ip -6 addr add ::$addr dev $DEVICE
 	done
 fi

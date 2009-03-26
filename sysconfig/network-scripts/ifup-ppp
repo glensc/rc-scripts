@@ -73,7 +73,7 @@ elif is_yes "${PPPOA_EAGLE}"; then
 	if [ -z "$PPPOA_IFACE" ]; then
 		PPPOA_IFACE="(unknown)"
 	else
-		ip link set "$PPPOA_IFACE" up
+		/sbin/ip link set "$PPPOA_IFACE" up
 	fi
 	MODEMMODE="pty"
 	MODEMPORT="pppoa -I ${PPPOA_IFACE} ${PPPOA_OPT}"
@@ -179,7 +179,7 @@ fi
 if is_yes "${DEFROUTE}"; then
 	# pppd will no longer delete an existing default route
 	# so we have to help it out a little here.
-	ip route del 0/0 > /dev/null 2>&1
+	/sbin/ip route del 0/0 > /dev/null 2>&1
 	opts="$opts defaultroute"
 elif ! is_no "${DEFROUTE}"; then
 	opts="$opts defaultroute"
