@@ -548,7 +548,7 @@ daemon() {
 		--pidfile)
 			shift
 			pidfile="$1"
-			[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
+			case "$pidfile" in /*);; *) pidfile="/var/run/$pidfile";; esac
 			;;
 		--makepid)
 			makepid=1
@@ -660,7 +660,7 @@ killproc() {
 		case $1 in
 		--pidfile)
 			pidfile="$2"
-			[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
+			case "$pidfile" in /*);; *) pidfile="/var/run/$pidfile";; esac
 			shift 2
 			;;
 		--waitforname)
@@ -795,11 +795,10 @@ pidofproc() {
 	fi
 
 	# First try pidfile or "/var/run/*.pid"
-	if [[ "$pidfile" = /* ]]; then
-		pidfile="${pidfile}"
-	else
-		pidfile="/var/run/${pidfile}";
-	fi
+	case "$pidfile" in
+		/*)pidfile="${pidfile}";;
+		*) pidfile="/var/run/$pidfile";;
+	esac
 	if [ -f "${pidfile}" ]; then
 		local p pid=""
 		for p in $(< "${pidfile}"); do
@@ -817,7 +816,7 @@ status() {
 	local pid subsys daemon cpuset_msg pidfile
 	if [ "$1" = "--pidfile" ]; then
 		pidfile=$2
-		[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
+		case "$pidfile" in /*);; *) pidfile="/var/run/$pidfile";; esac
 		shift 2
 	fi
 

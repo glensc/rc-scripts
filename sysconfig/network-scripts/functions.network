@@ -13,15 +13,16 @@ source_config ()
 	DEVNAME=${DEVNAME##ifcfg-}
 	DEVNAME=${DEVNAME##tnlcfg-}
 
-	if [[ "$CONFIG" = /* ]]; then
-		if [ -f "$CONFIG" ] ; then
+	case "$CONFIG" in
+		/*) if [ -f "$CONFIG" ] ; then
 			. "$CONFIG"
 			foundconfig=1
-		fi
-	elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
-		. "/etc/sysconfig/interfaces/$CONFIG"
-		foundconfig=1
-	fi
+		    fi ;;
+		*) if [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
+			. "/etc/sysconfig/interfaces/$CONFIG"
+			foundconfig=1
+		   fi ;;
+	esac
 
 	# This is sanity check so that if you've copied ifcfg-eth0 to ifcfg-eth1
 	# and forgot to alter DEVICE= line you won't accidentally bring down eth0
@@ -32,9 +33,7 @@ source_config ()
 		exit 1
 	fi
 
-	if [ "${PREFIX}" ] && [[ "$IPADDR" != */* ]]; then
-		IPADDR="$IPADDR/$PREFIX"
-	fi
+	case "$IPADDR" in */*);; *) [ "${PREFIX}" ] && IPADDR="$IPADDR/$PREFIX";; esac
 }
 
 do_netreport ()
@@ -193,18 +192,19 @@ setup_ip_param ()
 
 	eval IP4ADDR="\$IPADDR${IP4_PRIM_IF:-}"
 	# check if ipaddr doesn't contain network length -- use $NETMASK then
-	if [[ "$IP4ADDR" != */* ]] && [ "$NETMASK" ]; then
-		IP4ADDR=$IP4ADDR/$(calcprefix $NETMASK)
-	fi
+	case "$IP4ADDR" in */*);; *) [ "$NETMASK" ] && IP4ADDR=$IP4ADDR/$(calcprefix $NETMASK);; esac
 
 	# check if we have ipv6 or ipv4 address
-	if [[ "${IP4ADDR}" = *:* ]]; then
+	case "$IP4ADDR" in
+	*:*)
 		IP6ADDR=${IP4ADDR}
 		IP4ADDR=""
-	else
+		;;
+	*)
 		eval IP4ADDROPT="\$IP_AOPTS${IP4_PRIM_IF:-}"
 		eval IP4ROUTEOPT="\$IP_ROPTS${IP4_PRIM_IF:-}"
-	fi
+		;;
+	esac
 	if [ "${IP6_PRIM_IF}" ] ; then
 		eval IP6ADDR="\$IPADDR${IP6_PRIM_IF:-}"
 		eval IP6ADDROPT="\$IPV6_AOPTS${IP6_PRIM_IF:-}"

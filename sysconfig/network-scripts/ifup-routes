@@ -11,14 +11,17 @@ fi
 
 # note the trailing white space character in the grep gets rid of aliases
 grep -E "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
-	if [[ "$args" = *:* ]]; then
+	case "$args" in
+	*:*)
 		if is_no "$IPV6_NETWORKING"; then
 			continue
 		fi
-	else
+		;;
+	*)
 		if is_no "$IPV4_NETWORKING"; then
 			continue
 		fi
-	fi
+		;;
+	esac
 	/sbin/ip route add $args dev $REALDEVICE
 done
