@@ -33,19 +33,9 @@ if [ -x /sbin/blogd ]; then
 	killall -q -QUIT blogd
 fi
 
-# check for other processes.
-# there could be none if all services were terminated properly
-# pgrep -g 0 requires procps >= 3.2.6-1.1
-pids=$(pgrep -g 0 -l -v | grep -v '^1 ')
-if [ -n "$pids" ]; then
-	run_cmd "Sending all processes the TERM signal" killall5 -15
-fi
-
-pids=$(pgrep -g 0 -l -v | grep -v '^1 ')
-if [ -n "$pids" ]; then
-	sleep 5
-	run_cmd "Sending all processes the KILL signal" killall5 -9
-fi
+run_cmd "Sending all processes the TERM signal" killall5 -15
+sleep 3
+run_cmd "Sending all processes the KILL signal" killall5 -9
 
 # Write to wtmp file before unmounting /var
 halt -w
