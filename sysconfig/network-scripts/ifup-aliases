@@ -55,7 +55,9 @@ for nr in $(awk 'BEGIN { max=0; }; /^IPADDR[0-9]+=/ { s = $0; gsub(/^IPADDR/, ""
 	if echo $IP_ADDR | grep -q ":"; then
 		if is_yes "${IPV6_NETWORKING}"; then
 			ip -6 addr add ${IP_ADDR} dev ${DEVICE} ${IP_ADDR_OPT}
-			[ -n "${IP_ADDR_LABEL}" ] && ip -6 addrlabel add prefix ${IP_ADDR} dev ${DEVICE} label ${IP_ADDR_LABEL}
+			if [ -n "${IP_ADDR_LABEL}" ]; then
+				ip -6 addrlabel add prefix ${IP_ADDR} dev ${DEVICE} label ${IP_ADDR_LABEL}
+			fi
 		fi
 	elif is_yes "${IPV4_NETWORKING}"; then
 		# If broadcast is missing then autocalculate it
