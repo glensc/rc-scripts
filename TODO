@@ -7,6 +7,11 @@ Busybox:
   sh: /bin/mawk: unknown operand
   2
 
+  fix:
+  if [[ $foo = "/bin/m*" ]]; then echo yes; fi
+  ->
+  case "$foo" in /bin/m*) echo yes;; esac
+
 Important:
 - don't set any flags automatically; always follow user
   suggestion (multicast, arp)
