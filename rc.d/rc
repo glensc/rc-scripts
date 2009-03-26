@@ -50,7 +50,7 @@ fi
 
 if [ "$argv2" != "chroot" ]; then
 	# Now find out what the current and what the previous runlevel are.
-	set $(/sbin/runlevel)
+	set $(runlevel)
 	runlevel=$2
 	previous=$1
 	export runlevel previous
@@ -72,7 +72,7 @@ if [ "$COLUMNS" -gt 0 ]; then
 	if [ "$argv2" != "chroot" ] && ! is_yes "$VSERVER" && \
 		[ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
 		CONSOLE=/dev/tty1
-		[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > $CONSOLE
+		chvt 1 && echo > $CONSOLE
 		exec 0<> /dev/console 1>&0 2>&0
 	fi
 else

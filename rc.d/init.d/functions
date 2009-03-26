@@ -250,25 +250,6 @@ termput() {
 	fi
 }
 
-if [ ! -x /bin/printf ]; then
-	# printf equivalent
-	# FIXME: buggy when single or double quotes in message!
-	printf() {
-		local text m
-		text="$1"
-		shift
-		if [ $# -gt 0 ]; then
-			m="$1"
-			shift
-			while [ $# -gt 0 ]; do
-				m="$m\",\"$1"
-				shift
-			done
-		fi
-		awk "BEGIN {printf \"$text\", \"$m\"; }"
-	}
-fi
-
 # National language support function
 nls() {
 	local msg_echo nls_domain text message
@@ -522,12 +503,12 @@ daemon() {
 			;;
 		--user)
 			shift
-			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
+			[ "$1" != "root" ] && prog="su $1 -c \""
 			user=$1
 			;;
 		--fork)
 			fork=1
-			prog="/usr/bin/setsid sh -c \""
+			prog="setsid sh -c \""
 			end='&'
 			;;
 		--chdir)
@@ -979,9 +960,8 @@ check_portmapper() {
 		else
 			return 1
 		fi
-	elif [ -x /sbin/pidof ]; then
-		[ -z "$(/sbin/pidof portmap)" -a \
-			-z "$(/sbin/pidof rpcbind)" ] && return 1
+	elif [ -z "$(pidof portmap)" -a -z "$(pidof rpcbind)" ]; then
+		return 1
 	fi
 	return 0
 }
@@ -998,7 +978,7 @@ is_fsmounted() {
 		grep -qE "[[:blank:]]$mntpoint[[:blank:]]+$fstype[[:blank:]]" /proc/mounts
 		return $?
 	else
-		if [ "$(/bin/stat -L -f -c %T $mntpoint 2>/dev/null)" = "$fstype" ]; then
+		if [ "$(stat -L -f -c %T $mntpoint 2>/dev/null)" = "$fstype" ]; then
 			return 0
 		else
 			return 1

@@ -161,7 +161,7 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 		DHCP_ARGS="$DHCP_OPTIONS $DHCP_ARGS"
 
 		if check_link_down ${DEVICE}; then
-			run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "${DHCP_CLIENT##*/}")" /bin/false
+			run_cmd "$(nls 'Determining IP information for %s (%s)' "$DEVICE" "${DHCP_CLIENT##*/}")" false
 			nls '%s: Check cable/radio on-off switch?' "$DEVICE"
 			exit 1
 		fi

@@ -18,7 +18,7 @@ fi
 
 CMD="$1"
 
-set $(/sbin/runlevel)
+set $(runlevel)
 runlevel=$2
 previous=$1
 export runlevel previous
@@ -48,7 +48,7 @@ start() {
 
 		# Cleaning part, keep in sync with rc.sysinit
 
-		chroot $dir /bin/sh -c '
+		chroot $dir sh -c '
 		. /etc/rc.d/init.d/functions
 		# Clear mtab
 		:>/etc/mtab
@@ -140,8 +140,8 @@ stop() {
 		msg_stopping "System chroots services for $dir"; started
 		rm -f $dir/var/lock/subsys/network
 		chroot $dir /etc/rc.d/rc $runlevel chroot
-		chroot $dir /bin/sh -c "grep -q selinuxfs /proc/filesystems && umount /selinux"
-		chroot $dir /bin/sh -c "grep -q sysfs /proc/filesystems && umount /sys"
+		chroot $dir sh -c "grep -q selinuxfs /proc/filesystems && umount /selinux"
+		chroot $dir sh -c "grep -q sysfs /proc/filesystems && umount /sys"
 		chroot $dir umount -a
 		chroot $dir umount /proc
 	done

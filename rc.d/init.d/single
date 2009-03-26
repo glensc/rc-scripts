@@ -30,7 +30,7 @@ case "$1" in
 	rm -f /var/lock/subsys/*
 
 	# this looks nicer
-	[ -x /usr/bin/clear ] && /usr/bin/clear
+	clear
 
 	# make sure modprobe is working
 	if [ -f /proc/sys/kernel/modprobe ]; then

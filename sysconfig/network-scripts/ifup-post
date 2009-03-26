@@ -60,7 +60,7 @@ fi
 if [ -n "$NEEDHOSTNAME" -a "${DEVICETYPE}" != "ppp" -a "${DEVICETYPE}" != "slip" ]; then
 	IPADDR=$(ip -f inet addr show dev ${DEVICE} |
 		awk '/inet/ { print $2 }' |awk -F"/" '{ print $1 }')
-	eval $(/bin/ipcalc --silent --hostname ${IPADDR}) && set_hostname $HOSTNAME
+	eval $(ipcalc -s -h ${IPADDR}) && set_hostname $HOSTNAME
 fi
 
 # run tleds software
