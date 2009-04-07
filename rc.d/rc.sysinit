@@ -272,7 +272,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Check if timezone definition is available
-	if [ -e /etc/localtime -a -e /dev/rtc ] ; then
+	if [ -e /etc/localtime ] ; then
 		if run_cmd "$(nls 'Setting clock')$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
 			show "$(nls 'Today`s date:') $(LC_CTYPE=C date)"; ok
 		fi
