@@ -38,7 +38,7 @@ if [ ! -x /sbin/brctl ]; then
 fi
 
 # load bridge module
-is_module "bridge" && modprobe -s -k bridge
+is_module "bridge" && /sbin/modprobe -s -k bridge
 
 # set all major variables
 setup_ip_param

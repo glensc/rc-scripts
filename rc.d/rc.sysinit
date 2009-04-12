@@ -101,7 +101,7 @@ load_kernel_modules() {
 		echo '' # make sure there is a LF at the end
 	) | while read module args; do
 		[ -z "$module" ] && continue
-		modprobe -s $module -- $args
+		/sbin/modprobe -s $module -- $args
 	done
 }
 
@@ -284,7 +284,7 @@ if ! is_yes "$VSERVER"; then
 		# XXX might need modules dep
 		# Device mapper & related initialization
 		if ! grep -qF device-mapper /proc/devices; then
-			modprobe dm-mod
+			/sbin/modprobe dm-mod
 		fi
 
 		# but should do this before swapon?
@@ -321,14 +321,14 @@ if ! is_yes "$VSERVER"; then
 	if [ "$usb" = "1" ]; then
 		needusbstorage=$(LC_ALL=C cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08" 2>/dev/null)
 		if [ "$(kernelverser)" -lt "002006" ]; then
-			LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
+			LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" /sbin/modprobe hid 2> /dev/null
 			mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02" 2>/dev/null)
 			kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01" 2>/dev/null)
 			if [ -n "$kbdoutput" ]; then
-				run_cmd "Initializing USB keyboard" modprobe keybdev
+				run_cmd "Initializing USB keyboard" /sbin/modprobe keybdev
 			fi
 			if [ -n "$mouseoutput" ]; then
-				run_cmd "Initializing USB mouse" modprobe mousedev
+				run_cmd "Initializing USB mouse" /sbin/modprobe mousedev
 			fi
 		fi
 	fi
@@ -555,7 +555,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Load usb storage here, to match most other things
 	if [ -n "$needusbstorage" ]; then
-		modprobe -k usb-storage >/dev/null 2>&1
+		/sbin/modprobe -k usb-storage >/dev/null 2>&1
 	fi
 
 	# Load firewire devices
@@ -583,12 +583,12 @@ if ! is_yes "$VSERVER"; then
 		RETURN=0
 		alias=$(/sbin/modprobe -c | grep -sE "^alias[[:space:]]+sound[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
 		if [ -n "$alias" -a "$alias" != "off" ] ; then
-			run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
+			run_cmd "$(nls 'Loading sound module') ($alias)" /sbin/modprobe -s $alias
 			RETURN=$?
 		fi
 		alias=$(/sbin/modprobe -c | grep -sE "^alias[[:space:]]+sound-slot-0[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
 		if [ -n "$alias" -a "$alias" != "off" ] ; then
-			run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
+			run_cmd "$(nls 'Loading sound module') ($alias)" /sbin/modprobe -s $alias
 			RETURN=$?
 		fi
 	fi
@@ -598,9 +598,9 @@ if ! is_yes "$VSERVER"; then
 
 	if [ -x /sbin/multipath ]; then
 		# first make nodes that were discarded due (possible) new /dev mount
-		modprobe -s dm-mod
+		/sbin/modprobe -s dm-mod
 		/sbin/dmsetup mknodes
-		modprobe -s dm-multipath
+		/sbin/modprobe -s dm-multipath
 		run_cmd "Activating dm-multipath" /sbin/multipath -v 0
 		/sbin/dmsetup ls --target multipath --exec '/sbin/kpartx -a -p p'
 	fi
@@ -614,19 +614,19 @@ if ! is_yes "$VSERVER"; then
 	if [ -x /sbin/evms_activate ]; then
 		if [ "$(kernelverser)" -lt "002006" ]; then
 			# Linux 2.4 core modules
-			modprobe -s -k evms > /dev/null 2>&1
-			modprobe -s -k evms_passthru > /dev/null 2>&1
-			modprobe -s -k ldev_mgr > /dev/null 2>&1
-			modprobe -s -k dos_part > /dev/null 2>&1
+			/sbin/modprobe -s -k evms > /dev/null 2>&1
+			/sbin/modprobe -s -k evms_passthru > /dev/null 2>&1
+			/sbin/modprobe -s -k ldev_mgr > /dev/null 2>&1
+			/sbin/modprobe -s -k dos_part > /dev/null 2>&1
 		else
 			# Linux 2.6 core module
-			modprobe -s -k evmscore > /dev/null 2>&1
+			/sbin/modprobe -s -k evmscore > /dev/null 2>&1
 		fi
 
-		is_yes "$EVMS_GUID_PTABLE" && modprobe -s -k gpt_part >/dev/null 2>&1
-		is_yes "$EVMS_LVM" && modprobe -s -k lvm_vge >/dev/null 2>&1
-		is_yes "$EVMS_AIX" && modprobe -s -k AIXlvm_vge >/dev/null 2>&1
-		is_yes "$EVMS_OS2" && modprobe -s -k os2lvm_vge >/dev/null 2>&1
+		is_yes "$EVMS_GUID_PTABLE" && /sbin/modprobe -s -k gpt_part >/dev/null 2>&1
+		is_yes "$EVMS_LVM" && /sbin/modprobe -s -k lvm_vge >/dev/null 2>&1
+		is_yes "$EVMS_AIX" && /sbin/modprobe -s -k AIXlvm_vge >/dev/null 2>&1
+		is_yes "$EVMS_OS2" && /sbin/modprobe -s -k os2lvm_vge >/dev/null 2>&1
 		run_cmd "Discovering EVMS volumes" /sbin/evms_activate
 		if is_yes "$EVMS_LVM" && is_yes "$EVMS_LVM_COMPAT_NODES" ; then
 			# Link nodes for compatibility with LVM
@@ -640,15 +640,15 @@ if ! is_yes "$VSERVER"; then
 	if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
 		lvmversion=$(LC_ALL=C /sbin/vgchange --version 2>/dev/null | awk '/LVM version:/{if ($3 >= 2) print "2"}')
 		if [ "$lvmversion" = "1" ] ; then
-			modprobe -s -k lvm-mod >/dev/null 2>&1
+			/sbin/modprobe -s -k lvm-mod >/dev/null 2>&1
 			lvmignorelock=""
 		elif [ "$lvmversion" = "2" ] ; then
-			modprobe -s -k dm-mod >/dev/null 2>&1
+			/sbin/modprobe -s -k dm-mod >/dev/null 2>&1
 			lvmignorelock="--ignorelockingfailure"
 		else
-			modprobe -s -k lvm-mod >/dev/null 2>&1
+			/sbin/modprobe -s -k lvm-mod >/dev/null 2>&1
 			# device mapper (2.5+ and patched 2.4)
-			modprobe -s -k dm-mod >/dev/null 2>&1
+			/sbin/modprobe -s -k dm-mod >/dev/null 2>&1
 			lvmignorelock=""
 		fi
 
@@ -663,7 +663,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Add raid devices
 	if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
-		modprobe -s md >/dev/null 2>&1
+		/sbin/modprobe -s md >/dev/null 2>&1
 		if [ -f /proc/mdstat ]; then
 			goraidtab=1
 			golvm=0
@@ -974,7 +974,7 @@ if ! is_yes "$VSERVER"; then
 		if grep -qv ' 9 st' /proc/devices 2>/dev/null; then
 			if [ -n "$USEMODULES" ] ; then
 				# Try to load the module. If it fails, ignore it...
-				insmod -p st >/dev/null 2>&1 && modprobe -s st >/dev/null 2>&1
+				insmod -p st >/dev/null 2>&1 && /sbin/modprobe -s st >/dev/null 2>&1
 			fi
 		fi
 	fi

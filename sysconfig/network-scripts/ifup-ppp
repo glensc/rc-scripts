@@ -41,7 +41,7 @@ if [ ! -x /usr/sbin/pppd ]; then
 fi
 
 # modprobe ppp modules (udev case)
-[ ! -e /dev/ppp ] && modprobe -s -k char-major-108
+[ ! -e /dev/ppp ] && /sbin/modprobe -s -k char-major-108
 
 opts="lock"
 
@@ -51,7 +51,7 @@ fi
 
 if [ -n "${PPPOE_DEV}" ]; then
 	if is_yes "${PPPOE_KERNEL}"; then
-		modprobe -s -k pppoe
+		/sbin/modprobe -s -k pppoe
 		MODEMMODE="plugin rp-pppoe.so"
 		MODEMPORT="${PPPOE_DEV}"
 	else
@@ -79,8 +79,8 @@ elif is_yes "${PPPOA_EAGLE}"; then
 	MODEMPORT="pppoa -I ${PPPOA_IFACE} ${PPPOA_OPT}"
 elif is_yes "${PPPOA_SPEEDTOUCH}"; then
 	if is_yes "${PPPOA_KERNEL}"; then
-		modprobe -s -k speedtch
-		modprobe -s -k pppoatm
+		/sbin/modprobe -s -k speedtch
+		/sbin/modprobe -s -k pppoatm
 		if [ -n "${PPPOA_FIRMWARE}" ]; then
 			modem_run -k -s -f "${PPPOA_FIRMWARE}"
 		fi

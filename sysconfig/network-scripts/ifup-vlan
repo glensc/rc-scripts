@@ -51,7 +51,7 @@ if ! grep -qlE "ONBOOT=[^n][^o]" /etc/sysconfig/interfaces/ifcfg-${VLAN_DEV}; th
 	exit 1
 fi
 
-modprobe -s -k 8021q
+/sbin/modprobe -s -k 8021q
 
 if [ ! -e /proc/net/vlan/config ]; then
 	nls "VLAN kernel support is missing. Can't continue."
