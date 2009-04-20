@@ -294,7 +294,8 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Start up swapping
-	run_cmd "Activating swap partitions" swapon -a -e
+	run_cmd "Activating swap partitions" true
+	swapon -a >/dev/null 2>&1
 
 	# Initialize USB controllers
 	usb=0
