@@ -578,8 +578,9 @@ check_iwconfig ()
 {
 	[ -x /sbin/iwconfig ] || return 2
 	local output=$(LC_ALL=C iwconfig "$1" 2>&1)
+	# "radio off" is ipwxxx only "feature" (and there is no "radio on")
 	echo "$output" | grep -q "radio off" && return 0
-	# XXX why no 'radio on' check?
+	# XXX: need more generic checks for wifi
 	return 2
 }
 
@@ -592,17 +593,20 @@ check_link_down ()
 		if ! LC_ALL=C ip link show dev $1 2>/dev/null| grep -q UP ; then
 			ip link set dev $1 up >/dev/null 2>&1
 			timeout=0
-			while [ $timeout -le 10 ]; do
+			while [ $timeout -le 6 ]; do
 				check_mii_tool $1
 				m=$?
 				check_ethtool $1
 				e=$?
 				check_iwconfig $1
 				i=$?
-				if [ $m -eq 1 ] || [ $e -eq 1 ] ; then
+				# trust ethtool and iwconfig
+				if [ $i -eq 1 ] || [ $e -eq 1 ] ; then
 					return 1
 				fi
-				if [ $m -eq 2 ] && [ $e -eq 2 ] && [ $i -eq 2 ]; then
+				# use mii check only if all other check are unsupported
+				# (mii check lies too often)
+				if [ $m -eq 1 ] && [ $i -eq 2 ] && [ $e -eq 2 ]; then
 					return 1
 				fi
 				usleep 500000
