@@ -49,6 +49,7 @@ uruchamiam usluge
 HOW TO MAKE A RELEASE
 
 - svn up
+- ./autogen.sh
 - make distcheck
 - update configure.ac release and commit it
 - svn up && ./changelog.sh && svn ci ChangeLog
