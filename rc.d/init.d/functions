@@ -682,7 +682,6 @@ killproc() {
 		killlevel=$2
 	else
 		notset=1
-		killlevel="-KILL"
 	fi
 
 	# experimental start-stop-daemon based killing.
