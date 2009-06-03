@@ -576,12 +576,13 @@ check_ethtool ()
 # 2 - unsupported
 check_iwconfig ()
 {
+	local output
 	[ -x /sbin/iwconfig ] || return 2
-	local output=$(LC_ALL=C iwconfig "$1" 2>&1)
+	output=$(LC_ALL=C iwconfig "$1" 2>&1)
 	# "radio off" is ipwxxx only "feature" (and there is no "radio on")
 	echo "$output" | grep -q "radio off" && return 0
 	# rfkill state (are there devices with multiple rfkill buttons?)
-	local output=$(cat /sys/class/net/${1}/device/rfkill*/state 2> /dev/null)
+	output=$(cat /sys/class/net/${1}/device/rfkill*/state 2> /dev/null)
 	# 1 is rfkill not active
 	[ "$output" = "1" ] && return 1
 	[ "$output" = "0" -o "$output" = "2" ] && return 0
