@@ -15,7 +15,7 @@ IPV4_NETWORKING=yes
 HOSTNAME=pldmachine
 
 # Allow udev to create /etc/sysconfig/interfaces/ifcfg-* automatically?
-# See /lib/udev/udev_net_helper for details.
+# See /lib/udev/net_helper for details.
 AUTOMATIC_IFCFG=no
 
 # Set NIS domain name here if you use NIS
