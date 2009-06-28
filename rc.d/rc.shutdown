@@ -184,6 +184,10 @@ else
 	if [ -f /fastboot ]; then
 	   	show "On the next boot fsck will be skipped."; ok
 	fi
-	[ -x /sbin/kexec ] && /sbin/kexec -e
+
+	if [ -x /sbin/kexec ] && [ "`cat /sys/kernel/kexec_loaded 2>/dev/null`" = "1" ]; then
+		/sbin/kexec -e
+	fi
+
 	[ "$previous" != "unknown" ] && eval reboot -d -f
 fi
