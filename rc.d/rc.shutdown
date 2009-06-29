@@ -60,6 +60,9 @@ if ! is_yes "$VSERVER"; then
 		run_cmd "Turning off quotas for local filesystems" /sbin/quotaoff -a
 	fi
 
+	# grab kexec_loaded state before we umount /sys
+	kexec_loaded=`cat /sys/kernel/kexec_loaded 2>/dev/null`
+
 	# Unmount file systems, killing processes if we have to.
 	sig=-15
 	retry=3
@@ -185,8 +188,10 @@ else
 	   	show "On the next boot fsck will be skipped."; ok
 	fi
 
-	if [ -x /sbin/kexec ] && [ "`cat /sys/kernel/kexec_loaded 2>/dev/null`" = "1" ]; then
+	if [ -x /sbin/kexec ] && [ "$kexec_loaded" = "1" ]; then
+	   	show "Will now restart with kexec"
 		/sbin/kexec -e
+		fail
 	fi
 
 	[ "$previous" != "unknown" ] && eval reboot -d -f
