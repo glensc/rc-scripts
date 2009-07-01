@@ -1,3 +1,34 @@
+2009-06-29 00:13 +0000 [r10399]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - nice message about kexec being used
+
+2009-06-28 22:17 +0000 [r10398]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - invoke kexec only if image loaded
+
+2009-06-05 18:30 +0000 [r10372]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network: - update udev path
+
+2009-06-03 06:29 +0000 [r10367-10369]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - one local should
+	  be enough
+
+	* rc.d/init.d/functions: - update path
+
+	* sysconfig/network-scripts/functions.network: - i don't think cat
+	  output is localized
+
+2009-06-02 20:34 +0000 [r10366]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Add rfkill support.
+
+2009-05-26 19:51 +0000 [r10361]  Zbigniew Krzystolik <zbyniu/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - don't kill -KILL (in start-stop-daemon),
+	  try TERM first
+
 2009-05-22 18:30 +0000 [r10358]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* DEVELOPMENT, configure.ac: Prepare for 0.4.2.2.
