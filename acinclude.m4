@@ -1,5 +1,5 @@
 dnl DPKG_CACHED_TRY_COMPILE(<description>,<cachevar>,<include>,<program>,<ifyes>,<ifno>)
-AC_DEFUN(DPKG_CACHED_TRY_COMPILE,[
+AC_DEFUN([DPKG_CACHED_TRY_COMPILE],[
  AC_MSG_CHECKING($1)
  AC_CACHE_VAL($2,[
   AC_TRY_COMPILE([$3],[$4],[$2=yes],[$2=no])
@@ -14,7 +14,7 @@ AC_DEFUN(DPKG_CACHED_TRY_COMPILE,[
 ])
 
 dnl DPKG_C_GCC_ATTRIBUTE(<short-label>,<cachevar>,<func-params>,<attribute>,<HAVE>,<desc>,[<true-cmds>],[<false-cmds>])
-AC_DEFUN(DPKG_C_GCC_ATTRIBUTE,[
+AC_DEFUN([DPKG_C_GCC_ATTRIBUTE],[
   DPKG_CACHED_TRY_COMPILE(__attribute__(($1)),dpkg_cv_c_attribute_$2,,
    [extern int testfunction($3) __attribute__(($4))],
    AC_MSG_RESULT(yes)
@@ -25,7 +25,7 @@ AC_DEFUN(DPKG_C_GCC_ATTRIBUTE,[
 ])
 
 dnl DPKG_C_GCC_TRY_WARNS(<warnings>,<cachevar>)
-AC_DEFUN(DPKG_C_GCC_TRY_WARNS,[
+AC_DEFUN([DPKG_C_GCC_TRY_WARNS],[
  AC_MSG_CHECKING([GCC warning flag(s) $1])
  if test "${GCC-no}" = yes
  then
@@ -50,7 +50,7 @@ dnl DPKG_CACHED_TRY_COMPILE(<description>,<cachevar>,<include>,<program>,<ifyes>
 
 
 dnl Check if a #define is present in an include file
-AC_DEFUN(DPKG_CHECK_DEFINE,
+AC_DEFUN([DPKG_CHECK_DEFINE],
   [AC_CACHE_CHECK(if $1 is defined in $2,
      ac_cv_define_$1,
      [AC_TRY_COMPILE([
