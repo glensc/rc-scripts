@@ -25,7 +25,7 @@ if [ -z "$COLUMNS" -o -z "$LINES" ]; then
 	_setterm
 	unset _setterm
 fi
-[ -z "$LINES" -o "$LINES" -le 0 ] && COLUMNS=40
+[ -z "$LINES" -o "$LINES" -le 0 ] && LINES=40
 [ -z "$COLUMNS" -o "$COLUMNS" -le 0 ] && COLUMNS=80
 export LINES COLUMNS
 INIT_COL=$((COLUMNS - 13))
