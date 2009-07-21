@@ -203,7 +203,11 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	if ! is_no "$START_UDEV"; then
-		[ -x /sbin/start_udev ] && /sbin/start_udev
+		if [ -x /sbin/start_udev ]; then
+			/sbin/start_udev
+		elif [ -x /lib/firmware/firmware-loader.sh ]; then
+			/sbin/sysctl -e -w kernel.hotplug=/lib/firmware/firmware-loader.sh
+		fi
 	fi
 
 	# Unmount the initrd, if necessary
