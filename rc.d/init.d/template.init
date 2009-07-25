@@ -38,24 +38,20 @@ else
 fi
 
 # configtest itself
+# must return non-zero if check failed
+# output is discarded if checkconfig is ran without details
 configtest() {
-	local rc out
-
-	# capture program output from configtest, print it out only on error
-	out=`/usr/sbin/<service> -t 2>&1`; rc=$?
-	if [ $rc -gt 0 ]; then
-		echo >&2 "$out"
-	fi
-	return $rc
+	/usr/sbin/<service> -t 2>&1
+	return $?
 }
 
-# wrapper for configtest:
+# wrapper for configtest
 checkconfig() {
 	local details=${1:-0}
 
 	if [ $details = 1 ]; then
 		# run config test and display report (status action)
-		show "Checking %s configuration" "<service_name>"; busy; echo
+		show "Checking %s configuration" "<service_name>"; busy
 		local out
 		out=`configtest 2>&1`
 		RETVAL=$?
@@ -63,8 +59,8 @@ checkconfig() {
 			ok
 		else
 			fail
-			echo >&2 "$out"
 		fi
+		[ "$out" ] && echo >&2 "$out"
 	else
 		# run config test and abort with nice message if failed
 		# (for actions checking status before action).
@@ -157,7 +153,7 @@ case "$1" in
   force-reload)
 	condrestart 7
 	;;
-  checkconfig)
+  checkconfig|configtest)
 	checkconfig 1
 	;;
   status)
