@@ -37,6 +37,40 @@ else
 	exit 0
 fi
 
+# configtest itself
+configtest() {
+	local rc out
+
+	# capture program output from configtest, print it out only on error
+	out=`/usr/sbin/<service> -t 2>&1`; rc=$?
+	if [ $rc -gt 0 ]; then
+		echo >&2 "$out"
+	fi
+	return $rc
+}
+
+# wrapper for configtest:
+checkconfig() {
+	local details=${1:-0}
+
+	if [ $details = 1 ]; then
+		# run config test and display report (status action)
+		show "Checking %s configuration" "<service_name>"; busy; echo
+		configtest
+		RETVAL=$?
+	else
+		# run config test and abort with nice message if failed
+		# (for actions checking status before action).
+		configtest >/dev/null 2>&1
+		RETVAL=$?
+		if [ $RETVAL != 0 ]; then
+			show "Checking %s configuration" "<service_name>"; fail
+			nls 'Configuration test failed. See details with %s "checkconfig"' $0
+			exit $RETVAL
+		fi
+	fi
+}
+
 start() {
 	# Check if the service is already running?
 	if [ -f /var/lock/subsys/<service> ]; then
@@ -44,6 +78,7 @@ start() {
 		return
 	fi
 
+	checkconfig
 	msg_starting "<service_name>"
 	daemon /usr/sbin/<service>
 	RETVAL=$?
@@ -70,6 +105,7 @@ reload() {
 		return
 	fi
 
+	checkconfig
 	msg_reloading "<service_name>"
 	killproc <service> -HUP
 	killproc --pidfile /var/run/<service>.pid <service> -HUP
@@ -83,6 +119,7 @@ condrestart() {
 		return
 	fi
 
+	checkconfig
 	stop
 	start
 }
@@ -97,6 +134,7 @@ case "$1" in
   	stop
 	;;
   restart)
+	checkconfig
 	stop
 	start
 	;;
@@ -112,12 +150,15 @@ case "$1" in
   force-reload)
 	condrestart 7
 	;;
+  checkconfig)
+	checkconfig 1
+	;;
   status)
 	status <service>
 	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|checkconfig|status}"
 	exit 3
 esac
 
