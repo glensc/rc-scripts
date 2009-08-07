@@ -35,7 +35,7 @@ fi
 
 # Try to load slip module
 if is_module "slip"; then
-	/sbin/modprobe -s -k slip
+	/sbin/modprobe -s slip
 fi
 
 # we can use dip or direct slip connection via slattach

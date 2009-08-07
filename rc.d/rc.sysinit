@@ -305,7 +305,7 @@ if ! is_yes "$VSERVER"; then
 	if ! strstr "$cmdline" "nousb" && ! is_fsmounted usbfs /proc/bus/usb ; then
 		aliases=$(/sbin/modprobe -c | awk '/^alias[\t ]+usb-controller/ { print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
-			/sbin/modprobe -s -k usbcore
+			/sbin/modprobe -s usbcore
 			for alias in $aliases ; do
 				[ "$alias" = "off" ] && continue
 				run_cmd "$(nls 'Initializing USB controller') ($alias)" /sbin/modprobe -s $alias
@@ -426,7 +426,7 @@ if ! is_yes "$VSERVER"; then
 			run_cmd "Setting up ISA PNP devices (userspace pnp)" /sbin/isapnp /etc/isapnp/isapnp.conf
 		fi
 		if ! is_no "$RUN_KERNELPNP"; then
-			/sbin/modprobe -k isa-pnp 2> /dev/null
+			/sbin/modprobe isa-pnp 2> /dev/null
 			if [ -e /proc/isapnp -a -f /etc/isapnp/isapnp-kernel.conf ]; then
 				show "Setting up ISA PNP devices (kernelspace pnp)"; busy
 				grep -v "^#" /etc/isapnp/isapnp-kernel.conf 2>/dev/null >/proc/isapnp && (deltext; ok) || (deltext; fail)
@@ -559,7 +559,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Load usb storage here, to match most other things
 	if [ -n "$needusbstorage" ]; then
-		modprobe -k usb-storage >/dev/null 2>&1
+		modprobe usb-storage >/dev/null 2>&1
 	fi
 
 	# Load firewire devices
@@ -618,19 +618,19 @@ if ! is_yes "$VSERVER"; then
 	if [ -x /sbin/evms_activate ]; then
 		if [ "$(kernelverser)" -lt "002006" ]; then
 			# Linux 2.4 core modules
-			modprobe -s -k evms > /dev/null 2>&1
-			modprobe -s -k evms_passthru > /dev/null 2>&1
-			modprobe -s -k ldev_mgr > /dev/null 2>&1
-			modprobe -s -k dos_part > /dev/null 2>&1
+			modprobe -s evms > /dev/null 2>&1
+			modprobe -s evms_passthru > /dev/null 2>&1
+			modprobe -s ldev_mgr > /dev/null 2>&1
+			modprobe -s dos_part > /dev/null 2>&1
 		else
 			# Linux 2.6 core module
-			modprobe -s -k evmscore > /dev/null 2>&1
+			modprobe -s evmscore > /dev/null 2>&1
 		fi
 
-		is_yes "$EVMS_GUID_PTABLE" && modprobe -s -k gpt_part >/dev/null 2>&1
-		is_yes "$EVMS_LVM" && modprobe -s -k lvm_vge >/dev/null 2>&1
-		is_yes "$EVMS_AIX" && modprobe -s -k AIXlvm_vge >/dev/null 2>&1
-		is_yes "$EVMS_OS2" && modprobe -s -k os2lvm_vge >/dev/null 2>&1
+		is_yes "$EVMS_GUID_PTABLE" && modprobe -s gpt_part >/dev/null 2>&1
+		is_yes "$EVMS_LVM" && modprobe -s lvm_vge >/dev/null 2>&1
+		is_yes "$EVMS_AIX" && modprobe -s AIXlvm_vge >/dev/null 2>&1
+		is_yes "$EVMS_OS2" && modprobe -s os2lvm_vge >/dev/null 2>&1
 		run_cmd "Discovering EVMS volumes" /sbin/evms_activate
 		if is_yes "$EVMS_LVM" && is_yes "$EVMS_LVM_COMPAT_NODES" ; then
 			# Link nodes for compatibility with LVM
@@ -644,15 +644,15 @@ if ! is_yes "$VSERVER"; then
 	if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
 		lvmversion=$(LC_ALL=C /sbin/vgchange --version 2>/dev/null | awk '/LVM version:/{if ($3 >= 2) print "2"}')
 		if [ "$lvmversion" = "1" ] ; then
-			modprobe -s -k lvm-mod >/dev/null 2>&1
+			modprobe -s lvm-mod >/dev/null 2>&1
 			lvmignorelock=""
 		elif [ "$lvmversion" = "2" ] ; then
-			modprobe -s -k dm-mod >/dev/null 2>&1
+			modprobe -s dm-mod >/dev/null 2>&1
 			lvmignorelock="--ignorelockingfailure"
 		else
-			modprobe -s -k lvm-mod >/dev/null 2>&1
+			modprobe -s lvm-mod >/dev/null 2>&1
 			# device mapper (2.5+ and patched 2.4)
-			modprobe -s -k dm-mod >/dev/null 2>&1
+			modprobe -s dm-mod >/dev/null 2>&1
 			lvmignorelock=""
 		fi
 

@@ -166,7 +166,7 @@ static_rarp()
 {
 	if is_yes "$STATIC_RARP"; then
 		if [ ! -e /proc/net/rarp ]; then
-			_modprobe single -k rarp
+			_modprobe single rarp
 		fi
 		if [ -r /etc/ethers -a -x /sbin/rarp ]; then
 			run_cmd "Setting static RARP entries" /sbin/rarp -f /etc/ethers
@@ -343,11 +343,11 @@ set_down_loopback()
 modprobe_net()
 {
 	if is_yes "$IPV6_NETWORKING" && is_module "ipv6"; then
-		_modprobe single -k ipv6
+		_modprobe single ipv6
 	fi
 
 	if is_yes "$IPX" && is_module "ipx"; then
-		_modprobe single -k ipx
+		_modprobe single ipx
 	fi
 }
 
