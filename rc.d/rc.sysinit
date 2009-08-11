@@ -575,15 +575,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Load sound modules if they need persistent DMA buffers
-	if [ $(kernelverser) = "002006" ]; then
-		MODULES_CONF=/etc/modprobe.conf
-	elif [ -r /etc/modules.conf ]; then
-		MODULES_CONF=/etc/modules.conf
-	else
-		MODULES_CONF=/etc/conf.modules
-	fi
-
-	if grep -q "^options sound dmabuf=1" "$MODULES_CONF" 2>/dev/null ; then
+	if (/sbin/modprobe -c 2> /dev/null | grep -q "^options sound dmabuf=1"); then
 		RETURN=0
 		alias=$(/sbin/modprobe -c | grep -sE "^alias[[:space:]]+sound[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
 		if [ -n "$alias" -a "$alias" != "off" ] ; then
