@@ -1,3 +1,73 @@
+2009-08-16 20:53 +0000 [r10487]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Release 0.4.2.4.
+
+2009-08-11 14:06 +0000 [r10473]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - no subshell needed and unify modprobe -c
+	  callout
+
+2009-08-11 07:08 +0000 [r10469]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Don't use modprobe.conf file. Use /sbin/modprobe
+	  -c output instead.
+
+2009-08-07 17:42 +0000 [r10460]  Marcin Król <hawk/at/pld-linux.org>
+
+	* sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/ifup-br, rc.d/rc.sysinit,
+	  sysconfig/network-scripts/ifup-sl,
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/ifup-vlan: - '-k' is no longer valid
+	  modprobe switch
+
+2009-07-25 19:44 +0000 [r10427]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - configtest alias - allow output of
+	  configtest success
+
+2009-07-25 19:29 +0000 [r10426]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - improved configtest output sequence
+
+2009-07-25 19:24 +0000 [r10425]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - add checkconfig action sample
+
+2009-07-25 19:19 +0000 [r10424]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - use <service_name> for msg as it
+	  usualy differs
+
+2009-07-21 18:25 +0000 [r10422]  Zbigniew Krzystolik <zbyniu/at/pld-linux.org>
+
+	* firmware-loader.sh (added), rc.d/rc.sysinit: - added
+	  firmware-loader.sh for autoload firmware on systems w/o udev
+
+2009-07-17 07:40 +0000 [r10421]  Bartosz Świątek <shadzik/at/pld-linux.org>
+
+	* sysconfig/i18n: - add en_US.UTF-8/UTF-8 de_DE.UTF-8/UTF-8
+	  en_GB.UTF-8/UTF-8 to supported langs
+
+2009-07-16 18:09 +0000 [r10420]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Update LINES correctly.
+
+2009-07-16 17:07 +0000 [r10419]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/functions: On IPMI serial console COLUMNS ends up
+	  with negative value like -13. Protect agains such thing. Also
+	  protect LINES.
+
+2009-07-01 04:39 +0000 [r10409]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* acinclude.m4: - fix underquoted definition warning
+
+2009-07-01 04:35 +0000 [r10408]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - 0.4.2.3
+
 2009-06-29 00:13 +0000 [r10399]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - nice message about kexec being used
