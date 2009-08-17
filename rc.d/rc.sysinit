@@ -990,13 +990,24 @@ if ! is_yes "$VSERVER"; then
 	chmod 0600 /var/log/dmesg /var/log/dmesg.0
 fi
 
-kill -TERM $(/sbin/pidof getkey) >/dev/null 2>&1
+if ! is_no "$RC_PROMPT"; then
+	while :; do
+		pid=$(/sbin/pidof getkey)
+		[ -n "$pid" -o -e /var/run/getkey_done ] && break
+		usleep 100000
+	done
+	[ -n "$pid" ] && kill -TERM "$pid" >/dev/null 2>&1
+fi
 } &
 
 # extra check if the background process we just spawned is still running,
 # as in case of vserver bootup it finishes quite instantly.
-if ! is_no "$RC_PROMPT" && [ -d /proc/$! ]; then
-	/sbin/getkey -c 5 i && touch /var/run/confirm
+if ! is_no "$RC_PROMPT"; then
+	/sbin/getkey i && touch /var/run/confirm
+	touch /var/run/getkey_done
 fi
 wait
+if ! is_no "$RC_PROMPT"; then
+	rm -f /var/run/getkey_done
+fi
 echo
