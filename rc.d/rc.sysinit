@@ -101,7 +101,8 @@ load_kernel_modules() {
 		echo '' # make sure there is a LF at the end
 	) | while read module args; do
 		[ -z "$module" ] && continue
-		args=$(echo $args | awk '{ gsub(/#.*/, ""); print; }')
+		# strip comments
+		args=${args%%#*}
 		modprobe -s $module -- $args
 	done
 }
