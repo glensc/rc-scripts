@@ -668,9 +668,17 @@ if ! is_yes "$VSERVER"; then
 			rc=0
 			if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
 				if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null); then
-					run_cmd "Starting up RAID devices" /sbin/mdadm --assemble --scan --auto=yes
+					show "Starting up RAID devices"; busy
+				       	/sbin/mdadm --assemble --scan --auto=yes
 					rc=$?
-					[ "$rc" -eq 0 ] && goraidtab=0 && golvm=1
+					if [ "$rc" -eq 0 -o "$rc" -eq 2 ]; then
+						deltext; ok
+						goraidtab=0
+						golvm=1
+					else
+						deltext; fail
+					fi
+
 				fi
 			fi
 
