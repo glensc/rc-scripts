@@ -676,6 +676,8 @@ if ! is_yes "$VSERVER"; then
 				       	/sbin/mdadm --assemble --scan --auto=yes
 					rc=$?
 					if [ "$rc" -eq 0 -o "$rc" -eq 2 ]; then
+						# rc is used later, too so set sane value
+						rc=0
 						deltext; ok
 						goraidtab=0
 						golvm=1
