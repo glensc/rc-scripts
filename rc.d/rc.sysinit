@@ -750,7 +750,7 @@ if ! is_yes "$VSERVER"; then
 			fi
 			# LVM on RAID (keep in sync with LVM setting few lines above)
 			if [ "$golvm" -eq "1" ]; then
-				if is_yes "$EVMS_LVM" || [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
+				if ! is_no "$EVMS_LVM" && [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
 					run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelock
 					run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmignorelock
 					[ "$lvmversion" = "2" ] && /sbin/vgmknodes
