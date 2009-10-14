@@ -94,7 +94,7 @@ load_kernel_modules() {
 		kerneleq="$1.$2.$3"
 	} < /proc/version
 
-	local module
+	local module args
 	# Loop over every line in modules file
 	( \
 		grep -hvE '^(#|[[:blank:]]*$)' /etc/modules /etc/modules.$kernel /etc/modules.$kerneleq 2>/dev/null
