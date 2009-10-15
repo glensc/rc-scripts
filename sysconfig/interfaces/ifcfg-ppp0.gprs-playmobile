@@ -13,7 +13,7 @@ DEBUG=yes
 DEFROUTE=yes
 PERSIST=yes
 HOLDOFF=1
-MTU=296
+#MTU=296
 #demand option not finished yet ;-(
 DEMAND=no
 PHONE='*99***1#'
