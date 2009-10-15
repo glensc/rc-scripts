@@ -1,0 +1,25 @@
+# $Id$
+#
+DEVICE=ppp0
+CHATSCRIPT=/etc/sysconfig/interfaces/chat-ppp0.gprs-playmobile
+ONBOOT=no
+HARDFLOWCTL=no
+# ttyUSB0 or tts/USB0 for USB modems, ircomm0 for IRDA, rfcomm0 for BlueTooth
+MODEMPORT=/dev/ttyUSB0
+# MODEMPORT=/dev/bluetooth/rfcomm/0
+LINESPEED=115200
+AUTH=no
+DEBUG=yes
+DEFROUTE=yes
+PERSIST=yes
+HOLDOFF=1
+MTU=296
+#demand option not finished yet ;-(
+DEMAND=no
+PHONE='*99***1#'
+#or
+#PHONE='*99#'
+INITSTRING='AT+CGDCONT=1,"IP","","0.0.0.0",0,0;+CGQMIN=1,0,0, 0,0,0;+CGQREQ=1,0,0,0,0,0;+CGEQREQ=1,4,0,0,0,0,2,0 ,"0E0","0E0",3,0,0;+CGEQMIN=1,3,0,0,0,0,0,0,"0E0", "0E0",2,0,0'
+DATAFORCHAT="INITSTRING PHONE"
+PPPOPTIONS="noipdefault noproxyarp lcp-echo-failure 0 lcp-echo-interval 0 local"
+REPORTFILE=/var/log/ppp0.log
