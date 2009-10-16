@@ -41,7 +41,7 @@ fi
 # must return non-zero if check failed
 # output is discarded if checkconfig is ran without details
 configtest() {
-	/usr/sbin/<service> -t 2>&1
+	/usr/sbin/<service> -t
 	return $?
 }
 
@@ -53,7 +53,7 @@ checkconfig() {
 		# run config test and display report (status action)
 		show "Checking %s configuration" "<service_name>"; busy
 		local out
-		out=`configtest 2>&1`
+		out=$(configtest 2>&1)
 		RETVAL=$?
 		if [ $RETVAL = 0 ]; then
 			ok
