@@ -289,7 +289,7 @@ reload() {
 	esac
 
 	# for IPv4 DHCP interfaces send signal to refresh interface
-	local dev devs=${*-$(/sbin/ip link show | awk -F: '/UP/{print $2}')}
+	local dev devs=${*:-$(/sbin/ip link show | awk -F: '/UP/{print $2}')}
 	for dev in $devs; do
 		if [ ! -f /etc/sysconfig/interfaces/ifcfg-$dev ]; then
 			continue
