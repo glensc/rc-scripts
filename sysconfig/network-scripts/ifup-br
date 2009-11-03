@@ -69,12 +69,12 @@ done
 # standard
 [ -n "$AGEING" ] && brctl setageing "$AGEING"
 [ -n "$GCINT" ] && brctl setgcint "$GCINT"
+[ -n "$FD" ] && brctl setfd ${DEVICE} "$FD"
 
 # spanning tree protocol
 if is_yes "$SPANNING_TREE"; then
 	brctl stp ${DEVICE} yes
 	[ -n "$BRIDGEPRIO" ] && brctl setbridgeprio ${DEVICE} "$BRIDGEPRIO"
-	[ -n "$FD" ] && brctl setfd ${DEVICE} "$FD"
 	[ -n "$HELLO" ] && brctl sethello ${DEVICE} "$HELLO"
 	[ -n "$MAXAGE" ] && brctl setmaxage ${DEVICE} "$MAXAGE"
 	[ -n "$PATHCOST" -a -n "$PATHCOST_PORT" ] && brctl setpathcost ${DEVICE} "$PATHCOST_PORT" "$PATHCOST"
