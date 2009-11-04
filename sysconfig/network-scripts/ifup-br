@@ -43,9 +43,8 @@ is_module "bridge" && modprobe -s bridge
 # set all major variables
 setup_ip_param
 
-# set device down and forget all addresses
+# forget all addresses
 for device in $BRIDGE_DEVS; do
-	ip link set ${device} down
 	LC_ALL=C ip addr flush dev ${device} 2>&1 | grep -v "Nothing to flush"
 done
 
