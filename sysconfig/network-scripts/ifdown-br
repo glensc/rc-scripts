@@ -43,7 +43,6 @@ setup_ip_param
 # set device down and forget all addresses
 for device in ${BRIDGE_DEVS}; do
 	LC_ALL=C ip addr flush dev ${device} 2>&1 | grep -v "Nothing to flush"
-	ip link set ${device} down
 	brctl delif ${DEVICE} ${device}
 done
 
