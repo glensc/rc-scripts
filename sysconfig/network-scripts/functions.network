@@ -27,7 +27,7 @@ source_config ()
 	# and forgot to alter DEVICE= line you won't accidentally bring down eth0
 	# while executing ifdown eth1. We do that only if configuration file exists
 	# (sometimes ifcfg-xyz isn't needed at all like server-side pppoe pppX interfaces)
-	if [ "$foundconfig" -eq "1" -a "$DEVICE" -a  "$DEVNAME" != "$DEVICE" ]; then
+	if [ "$foundconfig" -eq "1" -a "$DEVICE" -a "$DEVNAME" != "$DEVICE" ]; then
 		echo >&2 "$0: DEVICE specified in $CONFIG does not match filename. Aborting!"
 		exit 1
 	fi
@@ -618,6 +618,10 @@ check_link_down ()
 				usleep 500000
 				timeout=$((timeout+1))
 			done
+			# do not abort dhclient if all the checks are unsupported
+			if [ $m -eq 2 ] && [ $i -eq 2 ] && [ $e -eq 2 ]; then
+				return 2
+			fi
 			return 0
 		fi
 	fi
