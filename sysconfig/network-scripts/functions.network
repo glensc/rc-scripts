@@ -73,7 +73,7 @@ set_hostname()
 	if [ "$domain" ]; then
 		# XXX umask and possible /etc/resolv.conf symlink breakage
 		> /etc/resolv.conf.new
-		if ! grep -q "search $domain" /etc/resolv.conf ; then
+		if ! grep -q "search $domain" /etc/resolv.conf; then
 			echo "search $domain" >> /etc/resolv.conf.new
 		fi
 		echo "domain $domain" >> /etc/resolv.conf.new
@@ -363,8 +363,8 @@ calcprefix()
 
 	prefix=0
 	endp=0
-	for n in $netmask ; do
-		for i in 128 64 32 16 8 4 2 1 ; do
+	for n in $netmask; do
+		for i in 128 64 32 16 8 4 2 1; do
 			if [ $(($n & $i)) -ne 0 ]; then
 				if [ $endp -eq 0 ]; then
 					prefix=$(($prefix + 1))
@@ -394,13 +394,13 @@ calcnetmask()
 	fi
 	for i in 1 2 3 4; do
 		case $prefix in
-		  7)	a=254 ;;
-		  6)	a=252 ;;
-		  5)	a=248 ;;
-		  4)	a=240 ;;
-		  3)	a=224 ;;
-		  2)	a=192 ;;
-		  1)	a=128 ;;
+		  7)	a=254;;
+		  6)	a=252;;
+		  5)	a=248;;
+		  4)	a=240;;
+		  3)	a=224;;
+		  2)	a=192;;
+		  1)	a=128;;
 		  *)
 			[ $prefix -ge 8 ] && a=255
 			[ $prefix -le 0 ] && a=0
@@ -425,8 +425,8 @@ get_ppp_device_and_pid ()
 	if [ -f "/var/run/ppp-$DEVNAME.pid" ]; then
 		eval $(
 		{
-			read PID ; echo "PID='$PID'"
-			read REALDEVICE ; echo "REALDEVICE=$REALDEVICE"
+			read PID; echo "PID='$PID'"
+			read REALDEVICE; echo "REALDEVICE=$REALDEVICE"
 		} < "/var/run/ppp-$DEVNAME.pid")
 	fi
 
@@ -593,10 +593,11 @@ check_iwconfig ()
 # returns
 # 0 - link down
 # 1 - link up
+# 2 - unknown/unsupported
 check_link_down ()
 {
 	if [ -x /sbin/mii-tool -o -x /sbin/ethtool -o -x /sbin/iwconfig ]; then
-		if ! LC_ALL=C ip link show dev $1 2>/dev/null| grep -q UP ; then
+		if ! LC_ALL=C ip link show dev $1 2>/dev/null| grep -q UP; then
 			ip link set dev $1 up >/dev/null 2>&1
 			timeout=0
 			while [ $timeout -le 6 ]; do
@@ -625,5 +626,5 @@ check_link_down ()
 			return 0
 		fi
 	fi
-	return 1
+	return 2
 }
