@@ -14,11 +14,11 @@ source_config ()
 	DEVNAME=${DEVNAME##tnlcfg-}
 
 	if [[ "$CONFIG" = /* ]]; then
-		if [ -f "$CONFIG" ] ; then
+		if [ -f "$CONFIG" ]; then
 			. "$CONFIG"
 			foundconfig=1
 		fi
-	elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ] ; then
+	elif [ -f "/etc/sysconfig/interfaces/$CONFIG" ]; then
 		. "/etc/sysconfig/interfaces/$CONFIG"
 		foundconfig=1
 	fi
@@ -205,12 +205,12 @@ setup_ip_param ()
 		eval IP4ADDROPT="\$IP_AOPTS${IP4_PRIM_IF:-}"
 		eval IP4ROUTEOPT="\$IP_ROPTS${IP4_PRIM_IF:-}"
 	fi
-	if [ "${IP6_PRIM_IF}" ] ; then
+	if [ "${IP6_PRIM_IF}" ]; then
 		eval IP6ADDR="\$IPADDR${IP6_PRIM_IF:-}"
 		eval IP6ADDROPT="\$IPV6_AOPTS${IP6_PRIM_IF:-}"
 		eval IP6ADDRLABEL="\$IP_LABEL${IP6_PRIM_IF:-}"
 	fi
-	if [ "${IP4_SRC_IF}" ] ; then
+	if [ "${IP4_SRC_IF}" ]; then
 		eval IP4SRCADDR="\$IPADDR${IP4_SRC_IF}"
 		IP4SRCADDR=$(echo ${IP4SRCADDR} | awk ' { gsub(/\/.*/,NIL); print "src " $0; } ')
 	fi
@@ -242,7 +242,7 @@ setup_ip_param ()
 	fi
 
 	# ARP ready devices
-	if [ "$ARP" ] ; then
+	if [ "$ARP" ]; then
 		if is_yes "$ARP"; then
 			ARP="arp on"
 		else
@@ -313,7 +313,7 @@ setup_routes()
 	local args
 
 	if [ -f /etc/sysconfig/static-routes ]; then
-		if [ "$1" = "on" -o "$1" = "yes" ] ; then
+		if [ "$1" = "on" -o "$1" = "yes" ]; then
 			grep -E "^(none|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
 				/sbin/ip route add $args
 			done
@@ -422,7 +422,7 @@ calcnetmask()
 # Retrievies PPPD PID and real interface name from /var/run/ppp-*.pid
 get_ppp_device_and_pid ()
 {
-	if [ -f "/var/run/ppp-$DEVNAME.pid" ] ; then
+	if [ -f "/var/run/ppp-$DEVNAME.pid" ]; then
 		eval $(
 		{
 			read PID ; echo "PID='$PID'"
@@ -430,7 +430,7 @@ get_ppp_device_and_pid ()
 		} < "/var/run/ppp-$DEVNAME.pid")
 	fi
 
-	if [ -z "$REALDEVICE" ] ; then
+	if [ -z "$REALDEVICE" ]; then
 		REALDEVICE=$DEVICE
 	fi
 }
@@ -441,7 +441,7 @@ setup_ip_rules ()
 {
 	local args prio from src
 
-	if [ -f /etc/sysconfig/static-routes ] ; then
+	if [ -f /etc/sysconfig/static-routes ]; then
 		if is_yes "$1"; then
 			grep -E "^(from|to|iif|tos|fwmark|dev|pref|priority|prio)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
 				/sbin/ip rule add $args
@@ -600,18 +600,18 @@ check_link_down ()
 			ip link set dev $1 up >/dev/null 2>&1
 			timeout=0
 			while [ $timeout -le 6 ]; do
-				check_mii_tool $1
-				m=$?
 				check_ethtool $1
 				e=$?
 				check_iwconfig $1
 				i=$?
 				# trust ethtool and iwconfig
-				if [ $i -eq 1 ] || [ $e -eq 1 ] ; then
+				if [ $i -eq 1 ] || [ $e -eq 1 ]; then
 					return 1
 				fi
 				# use mii check only if all other check are unsupported
 				# (mii check lies too often)
+				check_mii_tool $1
+				m=$?
 				if [ $m -eq 1 ] && [ $i -eq 2 ] && [ $e -eq 2 ]; then
 					return 1
 				fi
