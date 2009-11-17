@@ -815,7 +815,7 @@ pidofproc() {
 
 status() {
 	local pid subsys daemon cpuset_msg pidfile
-	if [ "$1" = "--pidfile" ]; then
+	if [ "$1" = "--pidfile" -o "$1" = "-p" ]; then
 		pidfile=$2
 		[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
 		shift 2
