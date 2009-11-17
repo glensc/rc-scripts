@@ -151,10 +151,10 @@ halt_crypto() {
     return $fnval
 }
 
+[ -f /etc/crypttab ] || return
+
 # if not invoked directly, return to caller
-if [[ "$0" != *cryptsetup ]] || [ ! -f /etc/crypttab ]; then
-	return
-fi
+case "$0" in *cryptsetup);; *) return;; esac
 
 . /etc/rc.d/init.d/functions
 

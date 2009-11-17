@@ -50,7 +50,7 @@ fi
 
 if [ "$argv2" != "chroot" ]; then
 	# Now find out what the current and what the previous runlevel are.
-	set $(/sbin/runlevel)
+	set $(runlevel)
 	runlevel=$2
 	previous=$1
 	export runlevel previous

@@ -549,7 +549,7 @@ daemon() {
 		--pidfile)
 			shift
 			pidfile="$1"
-			[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
+			case "$pidfile" in /*);; *) pidfile="/var/run/$pidfile";; esac
 			;;
 		--makepid)
 			makepid=1
@@ -661,7 +661,7 @@ killproc() {
 		case $1 in
 		--pidfile)
 			pidfile="$2"
-			[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
+			case "$pidfile" in /*);; *) pidfile="/var/run/$pidfile";; esac
 			shift 2
 			;;
 		--waitforname)
@@ -795,11 +795,10 @@ pidofproc() {
 	fi
 
 	# First try pidfile or "/var/run/*.pid"
-	if [[ "$pidfile" = /* ]]; then
-		pidfile="${pidfile}"
-	else
-		pidfile="/var/run/${pidfile}";
-	fi
+	case "$pidfile" in
+		/*)pidfile="${pidfile}";;
+		*) pidfile="/var/run/$pidfile";;
+	esac
 	if [ -f "${pidfile}" ]; then
 		local p pid=""
 		for p in $(< "${pidfile}"); do
@@ -817,7 +816,7 @@ status() {
 	local pid subsys daemon cpuset_msg pidfile
 	if [ "$1" = "--pidfile" -o "$1" = "-p" ]; then
 		pidfile=$2
-		[[ "$pidfile" != /* ]] && pidfile="/var/run/$pidfile"
+		case "$pidfile" in /*);; *) pidfile="/var/run/$pidfile";; esac
 		shift 2
 	fi
 
@@ -980,9 +979,8 @@ check_portmapper() {
 		else
 			return 1
 		fi
-	elif [ -x /sbin/pidof ]; then
-		[ -z "$(/sbin/pidof portmap)" -a \
-			-z "$(/sbin/pidof rpcbind)" ] && return 1
+	elif [ -z "$(pidof portmap)" -a -z "$(pidof rpcbind)" ]; then
+		return 1
 	fi
 	return 0
 }
@@ -999,7 +997,7 @@ is_fsmounted() {
 		grep -qE "[[:blank:]]$mntpoint[[:blank:]]+$fstype[[:blank:]]" /proc/mounts
 		return $?
 	else
-		if [ "$(/bin/stat -L -f -c %T $mntpoint 2>/dev/null)" = "$fstype" ]; then
+		if [ "$(stat -L -f -c %T $mntpoint 2>/dev/null)" = "$fstype" ]; then
 			return 0
 		else
 			return 1

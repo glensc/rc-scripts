@@ -201,7 +201,7 @@ fi
 if ! is_yes "$VSERVER"; then
 	# Set console loglevel
 	if [ -n "$CONSOLE_LOGLEVEL" ]; then
-		/bin/dmesg -n $CONSOLE_LOGLEVEL
+		dmesg -n $CONSOLE_LOGLEVEL
 	fi
 
 	if ! is_no "$START_UDEV"; then
@@ -238,7 +238,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Configure Linux kernel (initial configuration, some required modules still
 	# may be missing).
-	/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
+	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 
 	# Set the system clock.
 	ARC=0
@@ -261,13 +261,13 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	CLOCKDEF=""
-	CLOCKFLAGS="--hctosys"
+	CLOCKFLAGS="-w"
 
 	if is_yes "$UTC" ; then
-		CLOCKFLAGS="$CLOCKFLAGS --utc"
+		CLOCKFLAGS="$CLOCKFLAGS -u"
 		CLOCKDEF="$CLOCKDEF (utc)"
 	else
-		CLOCKFLAGS="$CLOCKFLAGS --localtime"
+		CLOCKFLAGS="$CLOCKFLAGS -l"
 		CLOCKDEF="$CLOCKDEF (local)"
 	fi
 
@@ -282,8 +282,8 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Check if timezone definition is available
-	if [ -e /etc/localtime ] ; then
-		if run_cmd "$(nls 'Setting clock')$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
+	if [ -e /etc/localtime -a -e /dev/rtc ] ; then
+		if run_cmd "$(nls 'Setting clock')$CLOCKDEF" hwclock $CLOCKFLAGS; then
 			show "$(nls 'Today`s date:') $(LC_CTYPE=C date)"; ok
 		fi
 	else
@@ -892,8 +892,8 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Set the clock if timezone definition wasn't available (eg. /usr not mounted)
-	if is_yes "$TIME_SETUP_DELAYED"; then
-		if run_cmd "$(nls 'Setting clock')$CLOCKDEF" /sbin/hwclock $CLOCKFLAGS; then
+	if is_yes "$TIME_SETUP_DELAYED" && [ -e /dev/rtc ]; then
+		if run_cmd "$(nls 'Setting clock')$CLOCKDEF" hwclock $CLOCKFLAGS; then
 			show "$(nls 'Today`s date:') $(LC_CTYPE=C date)"; ok
 		fi
 	fi
@@ -909,7 +909,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# ... and here finish configuring parameters
-	/sbin/sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
+	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 else
 	# /var/log should be writable now, so start saving the boot output
 	if [ "$RC_BOOTLOG" ]; then
@@ -976,7 +976,7 @@ chown root:root /tmp/.ICE-unix
 [ -n "$SELINUX" ] && restorecon /tmp/.ICE-unix >/dev/null 2>&1
 
 if ! is_yes "$VSERVER"; then
-	run_cmd "Enabling swap space" /bin/true
+	run_cmd "Enabling swap space" true
 	# Right, now turn on swap in case we swap to files
 	swapon -a >/dev/null 2>&1
 
