@@ -830,8 +830,8 @@ status() {
 	fi
 
 	# if pidfile specified, pid must be there
-	if [ "$pidfile" -a -f "$pidfile" ]; then
-		read pid < $pidfile
+	if [ "$pidfile" ]; then
+		[ -f "$pidfile" ] && read pid < $pidfile
 	else
 		pid=$(pidof -o $$ -o $PPID -o %PPID -x $daemon)
 	fi
