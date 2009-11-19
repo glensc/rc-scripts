@@ -812,6 +812,7 @@ pidofproc() {
 	echo $pid
 }
 
+# status [--pidfile PIDFILE] {subsys} [{daemon}]"
 status() {
 	local pid subsys daemon cpuset_msg pidfile
 	if [ "$1" = "--pidfile" -o "$1" = "-p" ]; then
@@ -850,20 +851,20 @@ status() {
 		return 0
 	fi
 
-	# Next try "/var/run/*.pid" files
+	# Next try "/var/run/*.pid" files; if pidfile is not set
 	local base=${daemon##*/}
-	if [ -f /var/run/${base}.pid ]; then
+	if [ -z "$pidfile" -a -f /var/run/${base}.pid ]; then
 		read pid < /var/run/${base}.pid
 		pid=$(filter_chroot "$pid")
-		if [ "$pid" != "" ]; then
-			nls "%s dead but pid file exists" "$subsys"
+		if [ "$pid" ]; then
+			nls "%s dead but pid file (%s) exists" "$subsys" /var/run/${base}.pid
 			return 1
 		fi
 	fi
 
 	# See if /var/lock/subsys/$subsys exists
 	if [ -f /var/lock/subsys/$subsys ]; then
-		nls "%s dead but subsys locked" "$subsys"
+		nls "daemon %s dead but subsys (%s) locked" "$daemon" "$subsys"
 		return 2
 	fi
 	nls "%s is stopped" "$subsys"
