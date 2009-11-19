@@ -839,8 +839,8 @@ status() {
 
 	if [ "$pid" ]; then
 		cpuset_msg="..."
-		if [ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS" ]; then
-			if $(grep -q "$pid" "/dev/cpuset/${SERVICE_CPUSET}/tasks"); then
+		if [ -n "$SERVICE_CPUSET" ] && is_yes "$CPUSETS"; then
+			if grep -q "$pid" "/dev/cpuset/${SERVICE_CPUSET}/tasks"; then
 				cpuset_msg=$(nls " in cpuset %s..." "$SERVICE_CPUSET")
 			else
 				cpuset_msg=$(nls " outside of configured cpuset %s..." "$SERVICE_CPUSET")
