@@ -1,4 +1,4 @@
-#!/bin/busybox sh
+#!/bin/sh
 #
 # sys-chroots	Starts and stops services in chroots
 #
