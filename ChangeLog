@@ -1,3 +1,134 @@
+2009-11-19 21:21 +0000 [r10984]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - with --pidfile set in status(), don't
+	  make wrong assumptions by finding process by name
+
+2009-11-19 21:07 +0000 [r10983]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - fix weird typo
+
+2009-11-19 20:41 +0000 [r10982]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - if pidfile specified, pid must be there,
+	  don't fallback for pidof(1)
+
+2009-11-19 13:31 +0000 [r10981]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.local: - rc.local is sourced, not executed
+
+2009-11-17 07:10 +0000 [r10976]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/sys-chroots, rc.d/rc, rc.d/rc.sysinit,
+	  rc.d/init.d/cryptsetup, rc.d/init.d/functions: - partial merge of
+	  baggin's busybox branch changes
+
+2009-11-17 06:22 +0000 [r10975]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - status -p shortopt for --pidfile
+
+2009-11-16 14:49 +0000 [r10971]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: -
+	  unknown/unsupported: return 2 if no tools found or all the
+	  methods failed
+
+2009-11-16 14:07 +0000 [r10970]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - don't call
+	  check_mii_tool if ethtool or iwconfig reported success
+
+2009-11-16 14:03 +0000 [r10969]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - check rfkill
+	  before iwconfig (more common and doesn't require binary) - note
+	  /sys/class/net/${1}/operstate file on some systems
+
+2009-11-16 14:00 +0000 [r10968]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - it's common for
+	  WiFi that all the methods of link state determinaion fail, don't
+	  abort dhclient in such case
+
+2009-11-04 08:03 +0000 [r10945]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-br: - don't disable bridged device
+	  just before bridge starts! - this interrupts every subdevice
+	  currently active (like VLAN interfaces in another bridges)
+
+2009-11-04 07:58 +0000 [r10944]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifdown-br: - dont't set bridged device
+	  down! some subdevice can still be used (e.g. VLAN interface in
+	  another bridge), - NOTE: addresses from underlying device are
+	  flushed on ifup-br so there should not exist anyone anyway
+
+2009-11-03 15:47 +0000 [r10933]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-br: - bridge forward delay is used
+	  regardless of STP, - NB hello timer runs always too, it's just
+	  not used without STP
+
+2009-10-25 18:33 +0000 [r10854]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network: - fix devs detect
+
+2009-10-16 08:50 +0000 [r10792]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - stderr redirected anyway, nothing
+	  special needed in configtest()
+
+2009-10-15 10:03 +0000 [r10789]  Paweł Zuzelski <pawelz/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-ppp0.gprs-playmobile: - do not reduce
+	  MTU by default. It kills ipsec.
+
+2009-10-15 09:32 +0000 [r10788]  Paweł Zuzelski <pawelz/at/pld-linux.org>
+
+	* sysconfig/interfaces/ifcfg-ppp0.gprs-playmobile (added),
+	  sysconfig/interfaces/data/chat-ppp0.gprs-playmobile (added): -
+	  ppp configuration for PLAY MOBILE (tested on HUAWEI E169 and E220
+	  modems)
+
+2009-10-14 07:35 +0000 [r10784]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - local args in /etc/modules processing
+
+2009-09-14 23:31 +0000 [r10603]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - there's no point in trying to run
+	  vg{scan,change} if they're not present; so made them sufficient
+	  unless is_no "$EVMS_LVM"
+
+2009-09-02 19:58 +0000 [r10524]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Set rc to 0 for mdadm rc=2 case.
+
+2009-09-01 18:59 +0000 [r10523]  Paweł Gołaszewski <blues/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - cpuset shouldn't be mounted unconditionally -
+	  it has few options
+
+2009-08-30 20:14 +0000 [r10518]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: mdadm status codes 0 and 2 (new in mdadm 3.0)
+	  are success
+
+2009-08-25 10:25 +0000 [r10493]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - use shell construct
+
+2009-08-25 09:26 +0000 [r10492]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Skip comments in args.
+
+2009-08-24 06:16 +0000 [r10491]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Restore extra check.
+
+2009-08-17 20:34 +0000 [r10490]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit, src/getkey.c: New getkey handling (from fc).
+
 2009-08-16 20:53 +0000 [r10487]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Release 0.4.2.4.
