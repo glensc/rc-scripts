@@ -8,6 +8,6 @@
 # Comments begin with a `#', and everything on the line after them are ignored.
 #
 # You can also have /etc/modules.X.Y and /etc/modules.X.Y.Z, where X.Y.Z are kernel version numbers
-# The modules files are preocessed in exactly that order too.
+# The modules files are processed in exactly that order too.
 
 #loop
