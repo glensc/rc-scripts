@@ -594,35 +594,39 @@ check_iwconfig ()
 # 2 - unknown/unsupported
 check_link_down ()
 {
-	if [ -x /sbin/mii-tool -o -x /sbin/ethtool -o -x /sbin/iwconfig ]; then
-		if ! LC_ALL=C ip link show dev $1 2>/dev/null| grep -q UP; then
-			ip link set dev $1 up >/dev/null 2>&1
-			timeout=0
-			while [ $timeout -le 6 ]; do
-				check_ethtool $1
-				e=$?
-				check_iwconfig $1
-				i=$?
-				# trust ethtool and iwconfig
-				if [ $i -eq 1 ] || [ $e -eq 1 ]; then
-					return 1
-				fi
-				# use mii check only if all other check are unsupported
-				# (mii check lies too often)
-				check_mii_tool $1
-				m=$?
-				if [ $m -eq 1 ] && [ $i -eq 2 ] && [ $e -eq 2 ]; then
-					return 1
-				fi
-				usleep 500000
-				timeout=$((timeout+1))
-			done
-			# do not abort dhclient if all the checks are unsupported
-			if [ $m -eq 2 ] && [ $i -eq 2 ] && [ $e -eq 2 ]; then
-				return 2
-			fi
-			return 0
-		fi
+	local e i m timeout
+	if [ ! -x /sbin/mii-tool -a ! -x /sbin/ethtool -a ! -x /sbin/iwconfig ]; then
+		return 2
 	fi
+
+	if ! LC_ALL=C ip link show dev $1 2>/dev/null | grep -q UP; then
+		ip link set dev $1 up >/dev/null 2>&1
+		timeout=0
+		while [ $timeout -le 6 ]; do
+			check_ethtool $1
+			e=$?
+			check_iwconfig $1
+			i=$?
+			# trust ethtool and iwconfig
+			if [ $i -eq 1 ] || [ $e -eq 1 ]; then
+				return 1
+			fi
+			# use mii check only if all other check are unsupported
+			# (mii check lies too often)
+			check_mii_tool $1
+			m=$?
+			if [ $m -eq 1 ] && [ $i -eq 2 ] && [ $e -eq 2 ]; then
+				return 1
+			fi
+			usleep 500000
+			timeout=$((timeout+1))
+		done
+		# do not abort dhclient if all the checks are unsupported
+		if [ $m -eq 2 ] && [ $i -eq 2 ] && [ $e -eq 2 ]; then
+			return 2
+		fi
+		return 0
+	fi
+
 	return 2
 }
