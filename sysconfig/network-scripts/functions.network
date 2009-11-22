@@ -532,8 +532,6 @@ wireless_param()
 		iwconfig ${device} txpower "$val"
 	val="$(eval echo \$${prefix}WLAN_RETRY)" && [ "$val" ] && \
 		iwconfig ${device} retry "$val"
-	val="$(eval echo \$${prefix}WLAN_NWID)" && [ "$val" ] && \
-		iwconfig ${device} nwid "$val"
 
 	# essid should be last due to network rescanning by wlan devices
 	val="$(eval echo \$${prefix}WLAN_ESSID)" && [ "$val" ] && \
