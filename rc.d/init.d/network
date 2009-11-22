@@ -108,12 +108,12 @@ network_deinit() {
 }
 
 # Get list of interface configs
-# ignores editor backup files and rpm blackups
+# ignores editor backup files and rpm backups
 network_interface_configs() {
 	local match="$1"
 	for a in /etc/sysconfig/interfaces/$match; do
 		case "$a" in
-		*rpmorig|*rpmnew|*rpmsave|*~|*.orig)
+		*.rpmorig|*.rpmnew|*.rpmsave|*~|*.orig)
 			continue
 			;;
 		*)
