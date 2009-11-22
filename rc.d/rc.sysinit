@@ -267,7 +267,7 @@ if ! is_yes "$VSERVER"; then
 		CLOCKFLAGS="$CLOCKFLAGS -u"
 		CLOCKDEF="$CLOCKDEF (utc)"
 	else
-		CLOCKFLAGS="$CLOCKFLAGS -l"
+		CLOCKFLAGS="$CLOCKFLAGS --localtime"
 		CLOCKDEF="$CLOCKDEF (local)"
 	fi
 
