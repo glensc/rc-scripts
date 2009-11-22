@@ -58,3 +58,7 @@ STATIC_RARP=no
 # Specify interface on which you want to enable tleds software
 # (also you need tleds package installed) -- default set to no
 TLEDS_DEV=no
+
+# enable globally for all network interfaces.
+# bring up from hotplug (udev for example) (default to no)
+#HOTPLUG=yes
