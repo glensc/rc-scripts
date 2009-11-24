@@ -110,9 +110,9 @@ if ! is_yes "$VSERVER"; then
 
 	run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
 
-	if is_yes "$EVMS_LVM" || [ -x /sbin/vgchange ]; then
+	if [ -x /sbin/vgchange ]; then
 		lvmversion=$(LC_ALL=C /sbin/vgchange --version 2>/dev/null | awk '/LVM version:/{if ($3 >= 2) print "2"}')
-		if [ "$lvmversion" = "2" ] ; then
+		if [ "$lvmversion" = "2" ]; then
 			lvmignorelock="--ignorelockingfailure"
 		else
 			lvmignorelock=""
