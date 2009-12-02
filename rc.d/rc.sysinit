@@ -261,10 +261,10 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	CLOCKDEF=""
-	CLOCKFLAGS="-w"
+	CLOCKFLAGS="--hctosys"
 
 	if is_yes "$UTC" ; then
-		CLOCKFLAGS="$CLOCKFLAGS -u"
+		CLOCKFLAGS="$CLOCKFLAGS --utc"
 		CLOCKDEF="$CLOCKDEF (utc)"
 	else
 		CLOCKFLAGS="$CLOCKFLAGS --localtime"
