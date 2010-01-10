@@ -1,3 +1,62 @@
+2009-12-02 19:13 +0000 [r11004]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - more reverting baggins buzybox branch changes
+	  regarding hwclock
+
+2009-11-24 11:07 +0000 [r11001]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc.sysinit: - having EVMS_LVM=yes without
+	  the tools doesn't make them work - having EVMS_LVM=no mustn't
+	  prevent plain LVM from bringing up - conclusion: these parts of
+	  code are EVMS_LVM independant
+
+2009-11-22 23:24 +0000 [r10999]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/Makefile.am: - add rc.init back
+
+2009-11-22 23:14 +0000 [r10998]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.init (added): - restore, but this time with some doc too
+
+2009-11-22 20:39 +0000 [r10996]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - hwclock doesn't recognize -l (patch from
+	  devel-en)
+
+2009-11-22 13:54 +0000 [r10995]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - formatting
+
+2009-11-22 13:51 +0000 [r10993-10994]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - nwid already set
+	  earlier
+
+	* rc.d/init.d/network: - typo, dots
+
+2009-11-22 09:19 +0000 [r10990-10992]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.init (removed), rc.d/Makefile.am: - rc.init does not seem
+	  to be used anywhere; remove it
+
+	* sysconfig/network: - mention HOTPLUG
+
+	* sysconfig/interfaces/ifcfg-description: - cleanup
+
+2009-11-20 12:58 +0000 [r10989]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - cleanup trailing whitespace
+
+2009-11-20 12:54 +0000 [r10988]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/sys-chroots: - back to /bin/sh
+
+2009-11-20 12:35 +0000 [r10985-10987]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* modules: - apply rc-scripts-modules.patch
+
+	* configure.ac: - prepare for 0.4.2.6 release
+
 2009-11-19 21:21 +0000 [r10984]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/init.d/functions: - with --pidfile set in status(), don't
@@ -530,12 +589,12 @@
 	  sysconfig/network-scripts/ifdown-br,
 	  sysconfig/network-scripts/ifup-neigh,
 	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-ipx,
 	  sysconfig/network-scripts/ifup-vlan,
-	  sysconfig/network-scripts/ifdown-sl,
+	  sysconfig/network-scripts/ifup-ipx,
 	  sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/ifdown-irda,
+	  sysconfig/network-scripts/ifdown-sl,
 	  sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/ifdown-irda,
 	  sysconfig/network-scripts/ifup-br,
 	  sysconfig/network-scripts/ifup-plip, sysconfig/system,
 	  sysconfig/network-scripts/ifup-iucv, rc.d/rc,
@@ -1923,7 +1982,7 @@
 
 2006-11-26 10:02 +0000 [r7997]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, AUTHORS, src/pci-config.c (removed), po/pl.po,
+	* rc.d/rc.shutdown, AUTHORS, po/pl.po, src/pci-config.c (removed),
 	  rc-scripts.spec.in, src/Makefile.am, rc.d/init.d/functions:
 	  Revert nVidia madness. rc-scripts is not a place for such
 	  workaround.
@@ -2027,20 +2086,21 @@
 
 	* sysconfig/interfaces/ifcfg-ppp0.callback,
 	  sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm,
-	  sysconfig/interfaces/ifcfg-description,
 	  sysconfig/interfaces/ifcfg-br0,
-	  sysconfig/interfaces/ifcfg-ppp0.tpsa,
+	  sysconfig/interfaces/ifcfg-description,
 	  sysconfig/interfaces/ifcfg-irlan0,
+	  sysconfig/interfaces/ifcfg-ppp0.tpsa,
 	  sysconfig/interfaces/ifcfg-ppp0.gprs-idea,
 	  sysconfig/interfaces/ifcfg-ppp0.leased1,
 	  sysconfig/interfaces/ifcfg-ppp0.leased2,
-	  sysconfig/interfaces/ifcfg-sl0,
 	  sysconfig/interfaces/ifcfg-ppp0.ueagle-neostrada,
-	  sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada,
-	  sysconfig/interfaces/ifcfg-irda0,
+	  sysconfig/interfaces/ifcfg-sl0,
 	  sysconfig/interfaces/ifcfg-eth0.1,
-	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada,
-	  sysconfig/interfaces/ifcfg-eth0: Unify file header.
+	  sysconfig/interfaces/ifcfg-irda0,
+	  sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada,
+	  sysconfig/interfaces/ifcfg-eth0,
+	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada: Unify file
+	  header.
 
 2006-10-12 19:49 +0000 [r7848]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -2723,23 +2783,23 @@
 
 2005-10-26 16:33 +0000 [r6491]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/init.d/network, rc.d/rc.shutdown, ppp/ipx-down,
+	* rc.d/rc.shutdown, ppp/ipx-down, rc.d/init.d/network,
 	  rc.d/init.d/timezone, sysconfig/network-scripts/ifdown-vlan,
 	  sysconfig/network-scripts/tnldown,
 	  sysconfig/network-scripts/ifdown,
 	  sysconfig/network-scripts/ifup-plusb,
 	  sysconfig/network-scripts/ifdown-br,
 	  sysconfig/interfaces/tnlcfg-icm,
-	  sysconfig/network-scripts/ifup-neigh, ppp/auth-up,
-	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-neigh,
+	  sysconfig/network-scripts/functions.network, ppp/auth-up,
 	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-vlan,
 	  sysconfig/network-scripts/ifup-ipx,
+	  sysconfig/network-scripts/ifup-vlan,
 	  sysconfig/interfaces/tnlcfg-description,
 	  sysconfig/network-scripts/ifup-br,
-	  sysconfig/network-scripts/ifup-plip, rc.d/init.d/template.init,
-	  sysconfig/system, ppp/ip-up, rc.d/rc.sysinit,
-	  sysconfig/network-scripts/ifdown-post, rc.d/init.d/random,
+	  sysconfig/network-scripts/ifup-plip, sysconfig/system,
+	  rc.d/init.d/template.init, ppp/ip-up, rc.d/init.d/random,
+	  rc.d/rc.sysinit, sysconfig/network-scripts/ifdown-post,
 	  rc.d/init.d/single, rc.d/rc.init, sysconfig/timezone,
 	  sysconfig/clock, rc.d/init.d/cpusets,
 	  sysconfig/network-scripts/ifup-routes,
@@ -2753,11 +2813,11 @@
 	  sysconfig/network-scripts/ifdown-irda,
 	  sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifup-iucv, rc.d/rc, sysconfig/network,
-	  rc.d/init.d/killall, sysconfig/network-scripts/ifup-sl,
-	  rc.d/rc.modules, sysconfig/network-scripts/ifup-irda: - more vim
-	  setting removed (don't convert tabs to spaces) - white space
-	  cleanup - convert spaces to tabs - unify formatting for all
-	  scripts
+	  rc.d/init.d/killall, rc.d/rc.modules,
+	  sysconfig/network-scripts/ifup-sl,
+	  sysconfig/network-scripts/ifup-irda: - more vim setting removed
+	  (don't convert tabs to spaces) - white space cleanup - convert
+	  spaces to tabs - unify formatting for all scripts
 
 2005-10-25 18:22 +0000 [r6489]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -2844,13 +2904,13 @@
 	  sysconfig/network-scripts/ifup-neigh,
 	  sysconfig/network-scripts/functions.network,
 	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-vlan,
 	  sysconfig/network-scripts/ifup-ipx,
+	  sysconfig/network-scripts/ifup-vlan,
 	  sysconfig/network-scripts/ifup-br,
 	  sysconfig/network-scripts/ifup-plip, sysconfig/system,
-	  rc.d/init.d/template.init, rc.d/init.d/random,
-	  sysconfig/network-scripts/ifdown-post, rc.d/rc.sysinit,
-	  rc.d/rc.init, rc.d/init.d/single, sysconfig/timezone, hwprofile,
+	  rc.d/init.d/template.init, rc.d/rc.sysinit, rc.d/init.d/random,
+	  sysconfig/network-scripts/ifdown-post, rc.d/rc.init,
+	  rc.d/init.d/single, sysconfig/timezone, hwprofile,
 	  rc.d/init.d/cpusets, sysconfig/network-scripts/ifup-routes,
 	  sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/ifdown-ppp,
@@ -3094,11 +3154,11 @@
 2005-01-24 13:38 +0000 [r5476]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* man/ipcalc.1 (added), man/usleep.1 (added), doc/consoletype.1
-	  (removed), Makefile.am, man/usernetctl.8 (added), doc/initlog.1
+	  (removed), man/usernetctl.8 (added), Makefile.am, doc/initlog.1
 	  (removed), doc/doexec.1 (removed), doc/Makefile.am,
 	  doc/ppp-watch.8 (removed), man/consoletype.1 (added),
-	  man/initlog.1 (added), man/doexec.1 (added), man/Makefile.am,
-	  man/ppp-watch.8 (added), doc/netreport.1 (removed),
+	  man/initlog.1 (added), man/doexec.1 (added), man/ppp-watch.8
+	  (added), man/Makefile.am, doc/netreport.1 (removed),
 	  doc/genhostid.1 (removed), man/netreport.1 (added),
 	  man/genhostid.1 (added), doc/ipcalc.1 (removed), doc/usleep.1
 	  (removed), doc/usernetctl.8 (removed): - moved manuals to man/
@@ -3134,20 +3194,20 @@
 
 2005-01-02 22:53 +0000 [r5418]  Radosław Zieliński <radek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup-aliases,
-	  sysconfig/network-scripts/ifup-routes,
+	* sysconfig/network-scripts/ifup-routes,
+	  sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/ifdown-ppp,
 	  sysconfig/network-scripts/ifdown-vlan,
 	  sysconfig/network-scripts/tnldown,
-	  sysconfig/network-scripts/ifup-plusb,
-	  sysconfig/network-scripts/ifdown,
 	  sysconfig/network-scripts/ifup-post,
+	  sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/ifup-plusb,
 	  sysconfig/network-scripts/ifdown-br,
 	  sysconfig/network-scripts/ifup-neigh,
-	  sysconfig/network-scripts/functions.network,
 	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-ipx,
+	  sysconfig/network-scripts/functions.network,
 	  sysconfig/network-scripts/ifup-vlan,
+	  sysconfig/network-scripts/ifup-ipx,
 	  sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/ifdown-sl,
 	  sysconfig/network-scripts/ifup,
