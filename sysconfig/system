@@ -82,9 +82,6 @@ EVMS_LVM=no
 # Create symlinks for LVM volumes (/dev/evms/lvm/* -> /dev/*)
 EVMS_LVM_COMPAT_NODES=yes
 
-# Use EVMS for Linux MD (RAID 0/1/5) volumes
-EVMS_MD=no
-
 # EVMS AIX LVM volumes
 EVMS_AIX=no
 
