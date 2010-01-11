@@ -29,7 +29,7 @@ if grep -q vim:encoding=utf-8 $users; then
 else
 	charset=ISO8859-2
 fi
-svn log -v --xml | svn2log --users-charset=$charset --domain "pld-linux.org" -p $branch -u $tmp --exclude ChangeLog -o ChangeLog
+LC_ALL=C svn log -v --xml | LC_ALL=C svn2log --users-charset=$charset --domain "pld-linux.org" -p $branch -u $tmp --exclude ChangeLog -o ChangeLog
 rm -f $tmp
 
 # obfuscate emails <user@domain> and (user@domain)
