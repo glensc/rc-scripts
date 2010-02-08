@@ -833,6 +833,10 @@ status() {
 	# if pidfile specified, pid must be there
 	if [ "$pidfile" ]; then
 		[ -f "$pidfile" ] && read pid < $pidfile
+		# filter_chroot does not filter out dead pids, so this extra check, see t/status-pidfile.sh
+		if [ ! -d "/proc/$pid" ]; then
+			pid=
+		fi
 	else
 		pid=$(pidof -o $$ -o $PPID -o %PPID -x $daemon)
 	fi
