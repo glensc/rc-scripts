@@ -121,7 +121,7 @@ if 	DEVICE=eth*; then
 		WLAN_RETRY=limit <value>|lifetime <value>
 		WLAN_COMMIT=yes|no (some cards require manual commit of changes)
 		if WLAN_WPA=yes; then
-			WLAN_WPA_DRIVER=<driver; see -D option of wpa_supplicant>
+			WLAN_WPA_DRIVER=<driver: see -D option of wpa_supplicant; default is wext>
 			WLAN_WPA_CONFIG=<path to wpa_supplicant config file>
 			WLAN_WPA_OPTIONS=[additional wpa_supplicant options]
 		fi
