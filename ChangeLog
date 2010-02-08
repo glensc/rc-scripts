@@ -1,3 +1,11 @@
+2010-01-11 09:07 +0000 [r11098]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/system: Drop EVMS_MD since it's not used.
+
+2010-01-10 22:05 +0000 [r11096]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Prepare for 0.4.2.7.
+
 2009-12-02 19:13 +0000 [r11004]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - more reverting baggins buzybox branch changes
