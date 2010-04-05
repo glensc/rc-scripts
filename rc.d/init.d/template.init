@@ -131,10 +131,10 @@ RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-  	start
+	start
 	;;
   stop)
-  	stop
+	stop
 	;;
   restart)
 	checkconfig
@@ -147,7 +147,7 @@ case "$1" in
 # include force-reload here if program allows reloading without restart
 # otherwise remove reload action and support force-reload as restart if running
   reload|force-reload)
-  	reload
+	reload
 	;;
 # use this one if program doesn't support reloading without restart
   force-reload)
