@@ -18,15 +18,6 @@
 # Get network config
 . /etc/sysconfig/network
 
-# Set defaults
-OPTION1=""	# Strings
-OPTION2="-q"	#
-OPTION3=	# Values
-OPTION4=5	#
-
-# Get service config - may override defaults
-[ -f /etc/sysconfig/<service> ] && . /etc/sysconfig/<service>
-
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
@@ -36,6 +27,15 @@ if is_yes "${NETWORKING}"; then
 else
 	exit 0
 fi
+
+# Set defaults
+OPTION1=""	# Strings
+OPTION2="-q"	#
+OPTION3=	# Values
+OPTION4=5	#
+
+# Get service config - may override defaults
+[ -f /etc/sysconfig/<service> ] && . /etc/sysconfig/<service>
 
 # configtest itself
 # must return non-zero if check failed
