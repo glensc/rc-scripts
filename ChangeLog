@@ -1,3 +1,46 @@
+2010-04-07 07:00 +0000 [r11312]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - add --redirfds similar to --closefds
+
+2010-04-05 19:18 +0000 [r11309]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - tabs
+
+2010-04-05 19:13 +0000 [r11308]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - no need to load service config to
+	  check network state
+
+2010-02-08 17:34 +0000 [r11137]  Jakub Bogusz <qboosh/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup,
+	  sysconfig/interfaces/ifcfg-description: - WLAN_WPA_DRIVER should
+	  default to wext
+
+2010-02-08 17:11 +0000 [r11136]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - skip dead pids in status() with
+	  --pidfile, or is filter_chroot() broken by design?
+
+2010-02-08 17:06 +0000 [r11135]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* t/status-pidfile.sh (added): - test for status() --pidfile
+
+2010-02-08 16:51 +0000 [r11134]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* t/backtick-test.sh (added), backtick-test.sh (removed), t
+	  (added): - move tests to t/
+
+2010-01-15 13:56 +0000 [r11113]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/functions: Use two separate tests instead of single
+	  double test since bash yells about wrong integer if variable is
+	  empty (and bash can source functions file).
+
+2010-01-11 10:52 +0000 [r11099]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* changelog.sh: - C locale for consistent changelog
+
 2010-01-11 09:07 +0000 [r11098]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* sysconfig/system: Drop EVMS_MD since it's not used.
