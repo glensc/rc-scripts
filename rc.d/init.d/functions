@@ -508,12 +508,12 @@ daemon() {
 	local errors="" prog="" end="" waitname="" waittime=""
 	local exit_code=0
 	local nice=$SERVICE_RUN_NICE_LEVEL
-	local fork user closefds pidfile makepid chdir=/
+	local fork user closefds redirfds pidfile makepid chdir=/
 
 	while [ $# -gt 0 ]; do
 		case $1 in
 		'')
-		msg_usage " daemon [--check] [--user user] [--fork] [--chdir directory] [--closefds] [--waitforname procname] [--waitfortime seconds] [--pidfile file] [--makepid] [+/-nicelevel] {program} <program args>"
+		msg_usage " daemon [--check] [--user user] [--fork] [--chdir directory] [--closefds] [--redirfds] [--waitforname procname] [--waitfortime seconds] [--pidfile file] [--makepid] [+/-nicelevel] {program} <program args>"
 			return 2
 			;;
 		--check)
@@ -537,6 +537,9 @@ daemon() {
 			;;
 		--closefds)
 			closefds=1
+			;;
+		--redirfds)
+			redirfds=1
 			;;
 		--waitforname)
 			shift
@@ -592,6 +595,10 @@ daemon() {
 			exec 1>&-
 			exec 2>&-
 			exec 0>&-
+		elif [ "$redirfds" = 1 ]; then
+			exec 1>/dev/null
+			exec 2>/dev/null
+			exec 0>/dev/null
 		else
 			exec 2>&1
 		fi
