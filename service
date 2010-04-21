@@ -4,6 +4,18 @@
 PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 export PATH
 
+is_ignored_file() {
+	case "$1" in
+	skeleton | README | *.dpkg-dist | *.dpkg-old | rc | rcS | single | reboot | bootclean.sh)
+		return 0
+		;;
+	*rpmorig | *rpmnew | *rpmsave | *~ | *.orig)
+		return 0
+		;;
+	esac
+	return 1
+}
+
 VERSION="$(basename $0) ver. 0.91-pld"
 USAGE="Usage: $(basename $0) < option > | --status-all | \
 [ service_name [ command | --full-restart ] ]"
@@ -37,14 +49,30 @@ while [ $# -gt 0 ]; do
 			cd ${SERVICEDIR}
 			for SERVICE in *; do
 				case "${SERVICE}" in
-				  functions | halt | killall | single| linuxconf| kudzu | \
-				  *rpmorig | *rpmnew | *rpmsave | *~ | *.orig)
+				functions | halt | killall | single| linuxconf| kudzu)
 					;;
-				  *)
-					if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-						env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" status
+				*)
+				if ! is_ignored_file "${SERVICE}" \
+						&& [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+					if ! grep -qs "\Wstatus)" "$SERVICE"; then
+						#printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
+						echo " [ ? ]  $SERVICE" 1>&2
+						continue
+					else
+						out=$(env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
+						if [ "$?" = "0" -a -n "$out" ]; then
+							#printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
+							echo " [ + ]  $SERVICE"
+							continue
+						else
+							#printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
+							echo " [ - ]  $SERVICE"
+							continue
+						fi
 					fi
-					;;
+					#env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
+				fi
+				;;
 				esac
 			done
 			exit 0
