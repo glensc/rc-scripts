@@ -4,7 +4,7 @@
 PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 export PATH
 
-VERSION="$(basename $0) ver. 0.91"
+VERSION="$(basename $0) ver. 0.91-pld"
 USAGE="Usage: $(basename $0) < option > | --status-all | \
 [ service_name [ command | --full-restart ] ]"
 
@@ -35,7 +35,7 @@ while [ $# -gt 0 ]; do
 	  *)
 		if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
 			cd ${SERVICEDIR}
-			for SERVICE in * ; do
+			for SERVICE in *; do
 				case "${SERVICE}" in
 				  functions | halt | killall | single| linuxconf| kudzu | \
 				  *rpmorig | *rpmnew | *rpmsave | *~ | *.orig)
