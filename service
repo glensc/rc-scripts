@@ -36,15 +36,15 @@ fi
 cd /
 while [ $# -gt 0 ]; do
 	case "${1}" in
-	  --help | -h | --h* )
+	--help | -h | --h* )
 		echo "${USAGE}" >&2
 		exit 0
 		;;
-	  --version | -V )
+	--version | -V )
 		echo "${VERSION}" >&2
 		exit 0
 		;;
-	  *)
+	*)
 		if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
 			cd ${SERVICEDIR}
 			for SERVICE in *; do
@@ -85,6 +85,8 @@ while [ $# -gt 0 ]; do
 			fi
 		elif [ -z "${SERVICE}" ]; then
 			SERVICE="${1}"
+		elif [ -z "${ACTION}" ]; then
+			ACTION="${1}"
 		else
 			OPTIONS="${OPTIONS} ${1}"
 		fi
@@ -94,7 +96,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-	env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${OPTIONS}
+	exec env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${ACTION} ${OPTIONS}
 else
 	echo "${SERVICE}: unrecognized service" >&2
 	exit 1
