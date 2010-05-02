@@ -89,7 +89,9 @@ set_dhcpclient()
 	fi
 
 	if [ -z "$DHCP_CLIENT" ]; then
-		if [ -x /sbin/dhcpcd ]; then
+		if [ "$BOOTPROTO" = "zeroconf" -a -x /usr/sbin/avahi-autoipd ]; then
+			DHCP_CLIENT=/usr/sbin/avahi-autoipd
+		elif [ -x /sbin/dhcpcd ]; then
 			DHCP_CLIENT=/sbin/dhcpcd
 		elif [ -x /sbin/dhclient ]; then
 			DHCP_CLIENT=/sbin/dhclient
@@ -97,6 +99,8 @@ set_dhcpclient()
 			DHCP_CLIENT=/sbin/dhcpxd
 		elif [ -x /sbin/pump ]; then
 			DHCP_CLIENT=/sbin/pump
+		elif [ "$BOOTPROTO" = "auto" -a -x /usr/sbin/avahi-autoipd ]; then
+			DHCP_CLIENT=/usr/sbin/avahi-autoipd
 		else
 			nls "Can't find a DHCP client."
 			exit 1

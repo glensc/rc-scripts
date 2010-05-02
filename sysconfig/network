@@ -62,3 +62,8 @@ TLEDS_DEV=no
 # enable globally for all network interfaces.
 # bring up from hotplug (udev for example) (default to no)
 #HOTPLUG=yes
+
+# set up Zeroconf routes for communication via/with IPv4ALL link-local
+# addresses
+ZEROCONF=yes
+

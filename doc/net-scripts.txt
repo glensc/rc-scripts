@@ -81,7 +81,7 @@ Files in /etc/sysconfig/interfaces/
     GATEWAY=
     ONBOOT=yes|no
     USERCTL=yes|no
-    BOOTPROTO=none|bootp|dhcp|pump
+    BOOTPROTO=none|bootp|dhcp|pump|zeroconf|auto
 
   If BOOTPROTO is not "none", then the only other item that
   must be set is the DEVICE item; all the rest will be determined

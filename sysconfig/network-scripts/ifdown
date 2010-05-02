@@ -95,6 +95,10 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 				fi
 			fi
 			;;
+		  avahi-autoipd)
+			$DHCP_CLIENT -k ${DEVICE}
+			RESULT=$?
+			;;
 		esac
 	fi
 fi
