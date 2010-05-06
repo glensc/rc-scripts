@@ -1170,9 +1170,11 @@ upstart_status() {
 	fi
 	if strstr "$status" "running" ; then
 		# program is running or service is OK
+		echo "$status"
 		return 0
 	else
 		# program is not running
+		echo "$status"
 		return 3
 	fi
 	# TODO: other statuses
@@ -1263,7 +1265,7 @@ _upstart_controlled () {
 #		- to pass handle only specific commands the upstart way
 #                 and leave the rest to the script
 #
-alias upstart_controlled='_check_init $0 "$@"'
+alias upstart_controlled='_upstart_controlled $0 "$@"'
 
 rc_gettext_init
 rc_cache_init
