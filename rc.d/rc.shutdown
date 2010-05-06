@@ -16,6 +16,8 @@ IN_SHUTDOWN=yes
 
 . /etc/rc.d/init.d/functions
 
+emit pld.shutdown-started
+
 # avoid keyboard interruption
 trap "echo" INT SEGV QUIT TERM
 set +e
