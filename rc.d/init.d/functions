@@ -1103,32 +1103,167 @@ emit () {
 	/sbin/initctl emit "$@"
 }
 
-_check_init () {
-	# check if the init script can be run this way
-	# make sure the old-styl init scripts are not
-	# used
+is_upstart_task() {
+	# Return 0 if the given service is an upstart task.
+	grep -q '^task' "/etc/init/$1.conf"
+}
+is_upstart_running() {
+	# Return 0 if the given service is running via upstart
+	initctl status "$1" 2>/dev/null | grep -q running
+}
+upstart_start() {
+	local service=$1
+	is_upstart_running "${service}" && return 0
+	msg_starting "${service}"
+	if errors=$(/sbin/initctl start ${service} 2>&1) ; then
+		ok
+		return 0
+	else
+		fail
+		echo "$errors" >&2
+		return 1
+	fi
+}
+upstart_stop() {
+	local service=$1
+	if ! is_upstart_running "${service}" && ! is_upstart_task "${service}" ; then
+		return 0
+	fi
+	msg_stopping "${service}"
+	if errors=$(/sbin/initctl stop ${service}) ; then
+		ok
+		return 0
+	else
+		fail
+		echo "$errors" >&2
+		return 1
+	fi
+}
+upstart_reload() {
+	local service=$1
+	if ! is_upstart_running "${service}" && ! is_upstart_task "${service}" ; then
+		return 0
+	fi
+	msg_reloading "${service}"
+	if errors=$(/sbin/initctl reload ${service}) ; then
+		ok
+		return 0
+	else
+		fail
+		echo "$errors" >&2
+		return 1
+	fi
+}
+upstart_status() {
+	# get service status
+	# should be compliant with
+        # http://refspecs.freestandards.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
+	local service=$1
+	local status
+	if is_upstart_task "${service}" ; then
+		# we probably should have a way to handle task status
+		return 0
+	fi
+	if ! status=$(/sbin/initctl status "${service}") ; then
+		# program or service status is not known
+		return 4
+	fi
+	if strstr "$status" "running" ; then
+		# program is running or service is OK
+		return 0
+	else
+		# program is not running
+		return 3
+	fi
+	# TODO: other statuses
+}
+
+_upstart_controlled () {
+	# If the service is to be handled by upstart
+	# execute the start/stop/etc. commands the upstart way
 	if ! use_upstart ; then
 		return 0
 	fi	
-	if is_yes $CHECK_INIT_OVERRIDE ; then
-		return 0
-	fi
-	local name=$(basename "$1")
-	local command=$(basename "$2")
+	local script=$1
+	shift
+	local command=$1
+	shift
+	local commands="$*"
+	local name=$(basename "$script")
 	if [ ! -f /etc/init/${name}.conf ] ; then
 		return 0
 	fi
+	if [ -n "$commands" ] ; then
+		local cmd
+		local found=0
+		# is there a better way
+		for cmd in $commands ; do
+			if [ "$command" = "$cmd" ] ; then
+				found=1
+				break;
+			fi
+		done
+		if [ $found = 0 ] ; then
+			# let the script handle it
+			return 0
+		fi
+	fi
 	case "$command" in
-		start|stop|status)
-			echo "Use 'initctl $command $name' to control this service"
-			exit 1
+		start)
+			upstart_start $name
+			exit $?
+			;;
+		stop)
+			upstart_stop $name
+			exit $?
+			;;
+		status)
+			upstart_status $name
+			exit $?
+			;;
+		restart)
+			upstart_stop $name
+			upstart_start $name
+			exit $?
+			;;
+		reload)
+			if is_upstart_task "$name" ; then
+				nls "$command not implemented for $name"
+				exit 3
+			else
+				upstart_reload "$name"
+				exit $?
+			fi
+			;;
+		force-reload)
+			if is_upstart_task "$name" ; then
+				upstart_stop "$name"
+				upstart_start "$name"
+				exit $?
+			else
+				upstart_reload "$name"
+				exit $?
+			fi
 			;;
 		*)
+		        msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+			exit 3
 			;;
 	esac
-	return 0
+	return 1 # should not happen
 }
-alias check_init='_check_init $0 "$@"'
+
+# Usage:
+#   somewhere at the begining of init script:
+#     upstart_controlled
+#		- to pass implement all upstart commands via initctl
+#                 start, stop, status, restart, reload and force_reload
+#		  are implemented
+#     upstart_controlled command...
+#		- to pass handle only specific commands the upstart way
+#                 and leave the rest to the script
+#
+alias upstart_controlled='_check_init $0 "$@"'
 
 rc_gettext_init
 rc_cache_init
