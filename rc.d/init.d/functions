@@ -1078,6 +1078,58 @@ rc_gettext_init() {
 	fi
 }
 
+use_upstart () {
+	# True when upstart-event-based boot should be used
+	is_yes "$USE_UPSTART" && return 0
+	is_no "$USE_UPSTART" && return 1
+	if [ ! -x /sbin/initctl ] ; then
+		USE_UPSTART="no"
+		return 1
+	fi
+	local cmdline=$(cat /proc/cmdline)
+	if strstr "$cmdline" "pld.no-upstart" ; then
+		USE_UPSTART="no"
+		return 1
+	else
+		USE_UPSTART="yes"
+		return 0
+	fi
+}
+
+emit () {
+	# emit upstart signal
+	# only when 'upstart' boot is enabled
+	use_upstart || return 0
+	/sbin/initctl emit "$@"
+}
+
+_check_init () {
+	# check if the init script can be run this way
+	# make sure the old-styl init scripts are not
+	# used
+	if ! use_upstart ; then
+		return 0
+	fi	
+	if is_yes $CHECK_INIT_OVERRIDE ; then
+		return 0
+	fi
+	local name=$(basename "$1")
+	local command=$(basename "$2")
+	if [ ! -f /etc/init/${name}.conf ] ; then
+		return 0
+	fi
+	case "$command" in
+		start|stop|status)
+			echo "Use 'initctl $command $name' to control this service"
+			exit 1
+			;;
+		*)
+			;;
+	esac
+	return 0
+}
+alias check_init='_check_init $0 "$@"'
+
 rc_gettext_init
 rc_cache_init
 
