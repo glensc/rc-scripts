@@ -10,6 +10,8 @@ USAGE="Usage: $(basename $0) < option > | --status-all | \
 
 SERVICE=
 
+. /etc/rc.d/init.d/functions
+
 if [ -d /etc/rc.d/init.d ]; then
 	SERVICEDIR="/etc/rc.d/init.d"
 else
@@ -20,6 +22,64 @@ if [ $# -eq 0 ]; then
 	echo "${USAGE}" >&2
 	exit 1
 fi
+
+is_task() {
+	grep -q '^task' "/etc/init/$1.conf"
+}
+is_running() {
+	initctl status "$1" 2>/dev/null | grep -q running
+}
+upstart_start() {
+	local SERVICE=$1
+	is_running "${SERVICE}" && return 0
+	msg_starting "${SERVICE}"
+	if errors=$(/sbin/initctl start ${SERVICE} 2>&1) ; then
+		ok
+		return 0
+	else
+		fail
+		echo "$errors" >&2
+		return 1
+	fi
+}
+upstart_stop() {
+	local SERVICE=$1
+	if ! is_running "${SERVICE}" && ! is_task "${SERVICE}" ; then
+		return 0
+	fi
+	msg_stopping "${SERVICE}"
+	if errors=$(/sbin/initctl stop ${SERVICE}) ; then
+		ok
+		return 0
+	else
+		fail
+		echo "$errors" >&2
+		return 1
+	fi
+}
+upstart_status() {
+	# get service status
+	# should be compliant with
+        # http://refspecs.freestandards.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
+	local SERVICE=$1
+	local status
+	if is_task "${SERVICE}" ; then
+		# we probably should have a way to handle task status
+		return 0
+	fi
+	if ! status=$(/sbin/initctl status "${SERVICE}") ; then
+		# program or service status is not known
+		return 4
+	fi
+	if strstr "$status" "running" ; then
+		# program is running or service is OK
+		return 0
+	else
+		# program is not running
+		return 3
+	fi
+	# TODO: other statuses
+}
 
 cd /
 while [ $# -gt 0 ]; do
@@ -36,6 +96,9 @@ while [ $# -gt 0 ]; do
 		if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
 			cd ${SERVICEDIR}
 			for SERVICE in * ; do
+				if use_upstart && [ -f "/etc/init/${SERVICE}.conf" ] ; then
+					continue
+				fi
 				case "${SERVICE}" in
 				  functions | halt | killall | single| linuxconf| kudzu | \
 				  *rpmorig | *rpmnew | *rpmsave | *~ | *.orig)
@@ -47,10 +110,26 @@ while [ $# -gt 0 ]; do
 					;;
 				esac
 			done
+			if [ -d /etc/init ] && use_upstart ; then
+				cd /etc/init
+				for f in *.conf ; do
+					SERVICE="${f%.conf}"
+					case "${SERVICE}" in
+					  control-alt-delete | rc | rcS-sulogin | rcS | start-ttys | tty)
+						;;
+					  *)
+					  	/sbin/initctl status "${SERVICE}"
+						;;
+					esac
+				done
+			fi
 			exit 0
 		elif [ $# -eq 2 -a "${2}" = "--full-restart" ]; then
 			SERVICE="${1}"
-			if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+			if [ -f "/etc/init/${SERVICE}.conf" ] && use_upstart ; then
+				upstart_stop
+				upstart_start
+			elif [ -x "${SERVICEDIR}/${SERVICE}" ]; then
 				env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" stop
 				env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" start
 				exit $?
@@ -58,6 +137,7 @@ while [ $# -gt 0 ]; do
 		elif [ -z "${SERVICE}" ]; then
 			SERVICE="${1}"
 		else
+			COMMAND="${1}"
 			OPTIONS="${OPTIONS} ${1}"
 		fi
 		shift
@@ -65,9 +145,59 @@ while [ $# -gt 0 ]; do
 	esac
 done
 
+if [ -f "/etc/init/${SERVICE}.conf" ] && use_upstart ; then
+	case $COMMAND in
+		start)
+			upstart_start "${SERVICE}"
+			exit $?
+			;;
+		stop)
+			upstart_stop "${SERVICE}"
+			exit $?
+			;;
+		status)
+			upstart_status "${SERVICE}"
+			exit $?
+			;;
+		force-reload)
+			if ! grep -Eq '#\s*pld-flags:.*no-sighup-reload' "/etc/init/${SERVICE}.conf" ; then
+				upstart_reload "${SERVICE}"
+				exit $?
+			else
+				upstart_stop "${SERVICE}"
+				upstart_start "${SERVICE}"
+				exit $?
+			fi
+			;;
+		reload)
+			if ! grep -Eq '#\s*pld-flags:.*no-sighup-reload' "/etc/init/${SERVICE}.conf" ; then
+				upstart_reload "${SERVICE}"
+				exit $?
+			fi
+			if [ ! -x "${SERVICEDIR}/${SERVICE}" ]; then
+				msg_usage "$0 {start|stop|restart|status|force-reload}"
+				exit 3
+			fi
+			# if not handled here, pass it the rc.d/init.d script
+			;;
+		*)
+			if [ ! -x "${SERVICEDIR}/${SERVICE}" ]; then
+				commands="start|stop|restart|status|force-reload"
+				if ! grep -Eq '#\s*pld-flags:.*no-sighup-reload' "/etc/init/${SERVICE}.conf" ; then
+					commands="$commands|reload"
+				fi
+				msg_usage "$0 {$commands}"
+				exit 3
+			fi
+			# pass the rest to the rc.d/init.d script
+			;;
+	esac
+fi
+
 if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
 	env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${OPTIONS}
 else
 	echo "${SERVICE}: unrecognized service" >&2
 	exit 1
 fi
+
