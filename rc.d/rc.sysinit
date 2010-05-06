@@ -120,6 +120,9 @@ if ! is_yes "$VSERVER" ; then
 
 	# Only read this once.
 	cmdline=$(cat /proc/cmdline)
+	if strstr "$cmdline" "pld.no-upstart" ; then
+		USE_UPSTART="no"
+	fi
 
 	# sysfs is also needed before any other things (under kernel > 2.5)
 	if grep -q sysfs /proc/filesystems 2>/dev/null ; then
@@ -520,6 +523,9 @@ if ! is_yes "$VSERVER"; then
 	elif is_fsmounted cpuset /dev/cpuset; then
 		mount -f -t cpuset none /dev/cpuset
 	fi
+	
+	emit root-filesystem
+	emit virtual-filesystems
 
 	if [ ! -f /proc/modules ]; then
 		USEMODULES=
@@ -886,6 +892,12 @@ if ! is_yes "$VSERVER"; then
 		run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -aug
 	fi
 
+	emit local-filesystems
+
+	# FIXME: this should be delayed until remote filesystems are mounted,
+	#        especialy when /usr or other standard fs is remote
+	emit filesystem
+
 	# Turn on process accounting
 	if [ -x /etc/rc.d/rc.acct ]; then
 		/etc/rc.d/rc.acct start
@@ -911,6 +923,11 @@ if ! is_yes "$VSERVER"; then
 	# ... and here finish configuring parameters
 	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 else
+	emit root-filesystem
+	emit virtual-filesystems
+	emit local-filesystems
+	emit filesystem
+
 	# /var/log should be writable now, so start saving the boot output
 	if [ "$RC_BOOTLOG" ]; then
 		echo > /var/log/boot.msg
@@ -979,6 +996,7 @@ if ! is_yes "$VSERVER"; then
 	run_cmd "Enabling swap space" true
 	# Right, now turn on swap in case we swap to files
 	swapon -a >/dev/null 2>&1
+	emit all-swaps
 
 	# If a SCSI tape has been detected, load the st module unconditionally
 	# since many SCSI tapes don't deal well with st being loaded and unloaded
@@ -1004,6 +1022,8 @@ if ! is_yes "$VSERVER"; then
 	done
 	cp -f /var/log/dmesg /var/log/dmesg.0
 	chmod 0600 /var/log/dmesg /var/log/dmesg.0
+else
+	emit all-swaps
 fi
 
 if ! is_no "$RC_PROMPT"; then
@@ -1027,3 +1047,6 @@ if ! is_no "$RC_PROMPT"; then
 	rm -f /var/run/getkey_done
 fi
 echo
+
+emit pld.sysinit-done
+
