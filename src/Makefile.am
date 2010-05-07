@@ -26,6 +26,7 @@ sbin_PROGRAMS =	\
 	ppp-watch \
 	start-stop-daemon \
 	fstab-decode \
+	setuidgid \
 	usernetctl
 	
 EXTRA_PROGRAMS = \
@@ -65,5 +66,7 @@ INCLUDES = $(GCFLAGS)
 consoletype_SOURCES = consoletype.c
 
 start_stop_daemon_SOURCES = start-stop-daemon.c
+
+setuidgid_SOURCES = setuidgid.c
 
 fstab_decode_SOURCES = fstab-decode.c
