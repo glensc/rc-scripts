@@ -117,6 +117,37 @@ Simple example, the job description for syslog-ng::
   
   exec /usr/sbin/syslog-ng -F -f /etc/syslog-ng/syslog-ng.conf
 
+Tracking startup progress
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The easiest way to run a program from an upstart job is to ``exec`` it
+the way it will stay in foreground (that is what is the ``-F`` option in the
+example above for). However, when process is started this way Upstart cannot
+differentiate before the ``program starting failed`` and ``program has 
+terminated`` cases. It will also assumed the job has started as soon as the 
+command has been executed and that may be not what other jobs wait for.
+
+A 'proper daemon' first checks command line arguments and configuration, then
+forks two times and returns with success only when the child process is ready.
+Upstart can handle such daemons with ``expect daemon`` stanza. So, to manage
+such daemon via Upstart, exec so it daemonize and use ``expect daemon``
+directive to tell Upstart what happens. Unfortunately, when ``expect daemon``
+is used and the process forks only once or does some more weird thing, Upstart
+job may lock up. Also, libdaemon-based daemons don't play well with ``expect
+daemon``.
+
+When the service forks once ``expect fork`` should be used instead.
+
+There is also an ``expect stop`` option, probably the most elegant way to
+track process startup. The process doesn't have to fork in this case and
+Upstart doesn't have to track that forking. The process should raise SIGSTOP
+when it is ready – only then Upstart will emit the job's ``started`` event and
+let the process continue. Unfortunately, currently hardly anything supports
+this interface.
+
+When no ``expect`` stanza will help and we need to properly wait for process
+startup, then ``post-start`` script must be used. See the init(5) man page for
+details.
 
 Updating init scripts
 ---------------------
@@ -182,4 +213,4 @@ The ``emit`` function does nothing when upstart-controlled boot is disabled (not
 to trigger any upstart jobs), otherwise it calls ``/sbin/initctl emit``
 
 ..
- vi: tw=78 ft=rst spell spl=en
+ vi: tw=78 ft=rst spl=en
