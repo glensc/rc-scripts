@@ -1190,12 +1190,29 @@ _upstart_controlled () {
 	shift
 	local command=$1
 	shift
-	local commands="$*"
 	local name=$(basename "$script")
 	if [ ! -f /etc/init/${name}.conf ] ; then
 		return 0
 	fi
-	if [ -n "$commands" ] ; then
+	local commands
+	local extra_commands
+	if [ "$1" = "--except" ] ; then
+		shift
+		commands="$*"
+		for cmd in $commands ; do
+			if [ "$command" = "$cmd" ] ; then
+				return 0
+			fi
+			case "$cmd" in
+				start|stop|status|reload|restart|try-restart|force-reload)
+					;;
+				*)
+					extra_commands="|$cmd"
+					;;
+			esac
+		done
+	elif [ -n "$*" ] ; then
+		commands="$*"
 		local cmd
 		local found=0
 		# is there a better way
@@ -1256,7 +1273,7 @@ _upstart_controlled () {
 			fi
 			;;
 		*)
-		        msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+		        msg_usage "$0 {start|stop|restart|reload|force-reload|status$extra_commands}"
 			exit 3
 			;;
 	esac
