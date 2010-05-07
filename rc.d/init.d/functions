@@ -1228,6 +1228,14 @@ _upstart_controlled () {
 			upstart_start $name
 			exit $?
 			;;
+		try-restart)
+			if ! is_upstart_running "$name" ; then
+				exit 0
+			fi
+			upstart_stop $name
+			upstart_start $name
+			exit $?
+			;;
 		reload)
 			if is_upstart_task "$name" ; then
 				nls "$command not implemented for $name"
