@@ -177,7 +177,7 @@ e.g.::
 	RETVAL=$?
 
 The ``emit`` function does nothing when upstart-controlled boot is disabled (not
-to trigger any upstart jobs), otherwise it calls ``/sbin/initctl emit`` ...
+to trigger any upstart jobs), otherwise it calls ``/sbin/initctl emit``
 
---
+..
  vi: tw=78 ft=rst spell spl=en
