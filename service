@@ -9,6 +9,7 @@ USAGE="Usage: $(basename $0) < option > | --status-all | \
 [ service_name [ command | --full-restart ] ]"
 
 SERVICE=
+USE_UPSTART=
 
 if [ -d /etc/rc.d/init.d ]; then
 	SERVICEDIR="/etc/rc.d/init.d"
@@ -32,6 +33,14 @@ while [ $# -gt 0 ]; do
 		echo "${VERSION}" >&2
 		exit 0
 		;;
+	  --upstart)
+	  	USE_UPSTART=yes
+		shift
+		;;
+	  --no-upstart)
+	  	USE_UPSTART=no
+		shift
+		;;
 	  *)
 		if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
 			cd ${SERVICEDIR}
@@ -42,7 +51,7 @@ while [ $# -gt 0 ]; do
 					;;
 				  *)
 					if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-						env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" status
+						env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" status
 					fi
 					;;
 				esac
@@ -51,8 +60,8 @@ while [ $# -gt 0 ]; do
 		elif [ $# -eq 2 -a "${2}" = "--full-restart" ]; then
 			SERVICE="${1}"
 			if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-				env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" stop
-				env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" start
+				env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" stop
+				env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" start
 				exit $?
 			fi
 		elif [ -z "${SERVICE}" ]; then
@@ -66,7 +75,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-	env -i LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${OPTIONS}
+	env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${OPTIONS}
 else
 	echo "${SERVICE}: unrecognized service" >&2
 	exit 1

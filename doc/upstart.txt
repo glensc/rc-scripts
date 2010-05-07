@@ -14,10 +14,12 @@ by using a ``pld.no-upstart`` kernel command-line option.
 An init script may be called with ``USE_UPSTART=no`` environment variable
 to disable special upstart-related processing – this way one may use
 ``/etc/rc.d/init.d/$service start`` to start a service even if upstart job 
-for that service is present.
+for that service is present. The ``/sbin/service`` script has two new options
+``--upstart`` and ``--no-upstart`` to force new- or old-style service control.
 
 ``USE_UPSTART=no`` can also be places in ``/etc/sysconfig/system``
-configuration file.
+configuration file, though it can break ``*-upstart`` packages
+installation/removal a bit.
 
 Available events
 ----------------
