@@ -43,8 +43,8 @@ root-filesystem
 virtual-filesystems
         when virtual filesystems (/proc, /sys, etc.) are mounted
 
-PLD-specifi system events:
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+PLD-specific system events:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 pld.sysinit-done
         when rc.sysinit finished its job
