@@ -204,9 +204,9 @@ init script. In such case, the script should emit appropriate events.
 e.g.::
 
 	msg_starting "syslog-ng"
-	emit starting JOB=_ SERVICE=syslog
+	emit starting JOB=syslog-ng SERVICE=syslog
 	daemon /usr/sbin/syslog-ng -f /etc/syslog-ng/syslog-ng.conf $OPTIONS
-	emit started JOB=_ SERVICE=syslog
+	emit started JOB=syslog-ng SERVICE=syslog
 	RETVAL=$?
 
 The ``emit`` function does nothing when upstart-controlled boot is disabled (not
