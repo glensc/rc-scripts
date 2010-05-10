@@ -956,7 +956,7 @@ for afile in /var/lock/* /var/run/*; do
 			;;
 		esac
 	else
-		[ "$bafile" != "hwprofile" ] && rm -f $afile 2> /dev/null
+		[ "$bafile" != "hwprofile" -a "$bafile" != "random-seed" ] && rm -f $afile 2> /dev/null
 	fi
 done
 
