@@ -1196,6 +1196,7 @@ _upstart_controlled () {
 	fi
 	local commands
 	local extra_commands
+	local has_configtest
 	if [ "$1" = "--except" ] ; then
 		shift
 		commands="$*"
@@ -1205,6 +1206,10 @@ _upstart_controlled () {
 			fi
 			case "$cmd" in
 				start|stop|status|reload|restart|try-restart|force-reload)
+					;;
+				configtest)
+					has_configtest=yes
+					extra_commands="|$cmd"
 					;;
 				*)
 					extra_commands="|$cmd"
@@ -1241,6 +1246,9 @@ _upstart_controlled () {
 			exit $?
 			;;
 		restart)
+			if is_yes $has_configtest ; then
+				"$script" configtest || exit 1
+			fi
 			upstart_stop $name
 			upstart_start $name
 			exit $?
@@ -1249,11 +1257,17 @@ _upstart_controlled () {
 			if ! is_upstart_running "$name" ; then
 				exit 0
 			fi
+			if is_yes $has_configtest ; then
+				"$script" configtest || exit 1
+			fi
 			upstart_stop $name
 			upstart_start $name
 			exit $?
 			;;
 		reload)
+			if is_yes $has_configtest ; then
+				"$script" configtest || exit 1
+			fi
 			if is_upstart_task "$name" ; then
 				nls "$command not implemented for $name"
 				exit 3
@@ -1263,6 +1277,9 @@ _upstart_controlled () {
 			fi
 			;;
 		force-reload)
+			if is_yes $has_configtest ; then
+				"$script" configtest || exit 1
+			fi
 			if is_upstart_task "$name" ; then
 				upstart_stop "$name"
 				upstart_start "$name"
