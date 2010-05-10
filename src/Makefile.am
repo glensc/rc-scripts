@@ -66,6 +66,7 @@ INCLUDES = $(GCFLAGS)
 consoletype_SOURCES = consoletype.c
 
 start_stop_daemon_SOURCES = start-stop-daemon.c
+start_stop_daemon_LDADD = -lcap
 
 setuidgid_SOURCES = setuidgid.c
 

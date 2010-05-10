@@ -62,6 +62,11 @@
 #include <limits.h>
 #endif
 
+#if HAVE_SYS_CAPABILITY_H
+#include <sys/prctl.h>
+#include <sys/capability.h>
+#endif
+
 #if defined(OShpux)
 #include <sys/param.h>
 #include <sys/pstat.h>
@@ -117,6 +122,7 @@ static char what_stop[1024];
 static const char *schedule_str = NULL;
 static const char *progname = "";
 static int nicelevel = 0;
+static char *caplist = NULL;
 
 static struct stat exec_stat;
 #if defined(OSHURD)
@@ -278,6 +284,7 @@ do_help(void)
 "  -n|--name <process-name>      stop processes with this name\n"
 "  -s|--signal <signal>          signal to send (default TERM)\n"
 "  -a|--startas <pathname>       program to start (default is <executable>)\n"
+"  -D|--dropcap <capbilities>    drop theses capabilities\n"
 "  -C|--chdir <directory>        Change to <directory>(default is /)\n"
 "  -N|--nicelevel <incr>         add incr to the process's nice level\n"
 "  -b|--background               force the process to detach\n"
@@ -442,6 +449,46 @@ parse_schedule(const char *schedule_str) {
 	}
 }
 
+#ifdef HAVE_SYS_CAPABILITY_H
+static void
+remove_capabilities(char *capstr) {
+	cap_value_t capval;
+	char *savedptr, *ptr;
+	cap_t caps;
+
+	caps = cap_get_proc();
+	if (caps == NULL) {
+		fatal("Unable to retrieve my capabilities");
+	}
+
+	ptr = strtok_r(capstr, ",", &savedptr);
+	while (ptr) {
+		if (cap_from_name(ptr, &capval) != 0) {
+			errno = EINVAL;
+			fatal("Unable to parse this capability : \"%s\"", ptr);
+		}
+
+		if (prctl(PR_CAPBSET_DROP, capval, 0, 0) != 0) {
+			fatal("Unable to drop this capability: %s", ptr);
+		}
+
+		if (cap_set_flag(caps, CAP_INHERITABLE, 1, (cap_value_t *)&capval, CAP_CLEAR) != 0) {
+			fatal("Unable to clear the capability %s", ptr);
+		}
+
+		ptr = strtok_r(NULL, ",", &savedptr);
+	}
+
+	if (cap_set_proc(caps) != 0) {
+		fatal("Unable to remove theses capabilities from the inherited set\n");
+	}
+
+	if (cap_free(caps) == -1) {
+		fatal("Cannot free the capability");
+	}
+}
+#endif
+
 static void
 parse_options(int argc, char * const *argv)
 {
@@ -460,6 +507,7 @@ parse_options(int argc, char * const *argv)
 		{ "user",	  1, NULL, 'u'},
 		{ "group",	  1, NULL, 'g'},
 		{ "chroot",	  1, NULL, 'r'},
+		{ "dropcap",      1, NULL, 'D'},
 		{ "verbose",	  0, NULL, 'v'},
 		{ "exec",	  1, NULL, 'x'},
 		{ "chuid",	  1, NULL, 'c'},
@@ -473,7 +521,7 @@ parse_options(int argc, char * const *argv)
 	int c;
 
 	for (;;) {
-		c = getopt_long(argc, argv, "HKSVa:n:op:qr:s:tu:vx:c:N:bmR:g:d:",
+		c = getopt_long(argc, argv, "HKSVa:n:op:qr:s:tu:vx:c:N:bmR:g:d:D",
 				longopts, (int *) 0);
 		if (c == -1)
 			break;
@@ -532,6 +580,13 @@ parse_options(int argc, char * const *argv)
 			break;
 		case 'r':  /* --chroot /new/root */
 			changeroot = optarg;
+			break;
+		case 'D':  /* --dropcap cap_net_raw,cap_mac_admin */
+#ifdef HAVE_SYS_CAPABILITY_H
+			caplist = optarg;
+#else
+			badusage("Capabilities are not supported on your OS");
+#endif
 			break;
 		case 'N':  /* --nice */
 			nicelevel = atoi(optarg);
@@ -736,7 +791,8 @@ check(pid_t pid)
 		return;
 	if (start && !pid_is_running(pid))
 		return;
-	push(&found, pid);
+	if (stop && pid_is_running(pid))
+		push(&found, pid);
 }
 
 static void
@@ -1298,6 +1354,13 @@ main(int argc, char **argv)
 		setpgid(0,0);
 #endif
 	}
+
+#ifdef HAVE_SYS_CAPABILITY_H
+	if (caplist) {
+		remove_capabilities(caplist);
+	}
+#endif
+
 	execv(startas, argv);
 	fatal("Unable to start %s: %s", startas, strerror(errno));
 }

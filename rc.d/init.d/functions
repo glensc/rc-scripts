@@ -625,6 +625,7 @@ daemon() {
 				${chdir:+--chdir "$chdir"} \
 				${fork:+--background} \
 				${waitname:+--name $waitname} \
+				${SERVICE_DROPCAPS:+--dropcap $SERVICE_DROPCAPS} \
 				--exec "$prog" \
 				-- ${1:+"$@"}
 		else
