@@ -39,7 +39,7 @@ case "$1" in
 		touch /var/lock/subsys/random
 		deltext
 		ok
-		emit started JOB=random
+		emit --nowait started JOB=random
 	fi
 	;;
   stop)
@@ -55,7 +55,7 @@ case "$1" in
 		rm -f /var/lock/subsys/random
 		deltext
 		ok
-		emit stopped JOB=random
+		emit --no-wait stopped JOB=random
 	fi
 	;;
   status)

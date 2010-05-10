@@ -213,7 +213,7 @@ start() {
 	network_postinit
 
 	touch /var/lock/subsys/network
-	emit pld.network-started
+	emit --no-wait pld.network-started
 }
 
 stop() {
@@ -253,7 +253,7 @@ stop() {
 	network_deinit
 
 	rm -f /var/lock/subsys/network
-	emit pld.network-stopped
+	emit --no-wait pld.network-stopped
 }
 
 # Reload all active interfaces

@@ -524,8 +524,8 @@ if ! is_yes "$VSERVER"; then
 		mount -f -t cpuset none /dev/cpuset
 	fi
 	
-	emit root-filesystem
-	emit virtual-filesystems
+	emit --no-wait root-filesystem
+	emit --no-wait virtual-filesystems
 
 	if [ ! -f /proc/modules ]; then
 		USEMODULES=
@@ -892,11 +892,11 @@ if ! is_yes "$VSERVER"; then
 		run_cmd "Turning on quotas for local filesystems" /sbin/quotaon -aug
 	fi
 
-	emit local-filesystems
+	emit --no-wait local-filesystems
 
 	# FIXME: this should be delayed until remote filesystems are mounted,
 	#        especialy when /usr or other standard fs is remote
-	emit filesystem
+	emit --no-wait filesystem
 
 	# Turn on process accounting
 	if [ -x /etc/rc.d/rc.acct ]; then
@@ -923,10 +923,10 @@ if ! is_yes "$VSERVER"; then
 	# ... and here finish configuring parameters
 	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 else
-	emit root-filesystem
-	emit virtual-filesystems
-	emit local-filesystems
-	emit filesystem
+	emit --no-wait root-filesystem
+	emit --no-wait virtual-filesystems
+	emit --no-wait local-filesystems
+	emit --no-wait filesystem
 
 	# /var/log should be writable now, so start saving the boot output
 	if [ "$RC_BOOTLOG" ]; then
@@ -996,7 +996,7 @@ if ! is_yes "$VSERVER"; then
 	run_cmd "Enabling swap space" true
 	# Right, now turn on swap in case we swap to files
 	swapon -a >/dev/null 2>&1
-	emit all-swaps
+	emit --no-wait all-swaps
 
 	# If a SCSI tape has been detected, load the st module unconditionally
 	# since many SCSI tapes don't deal well with st being loaded and unloaded
@@ -1023,7 +1023,7 @@ if ! is_yes "$VSERVER"; then
 	cp -f /var/log/dmesg /var/log/dmesg.0
 	chmod 0600 /var/log/dmesg /var/log/dmesg.0
 else
-	emit all-swaps
+	emit --no-wait all-swaps
 fi
 
 if ! is_no "$RC_PROMPT"; then
@@ -1048,5 +1048,5 @@ if ! is_no "$RC_PROMPT"; then
 fi
 echo
 
-emit pld.sysinit-done
+emit --no-wait pld.sysinit-done
 
