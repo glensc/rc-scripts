@@ -1,4 +1,48 @@
-2010-04-07 07:00 +0000 [r11312]  Elan Ruusamäe <glen/at/pld-linux.org>
+2010-05-10 11:23 +0000 [r11419]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* t/backtick-test.sh, rc.d/init.d/network, rc.d/rc.shutdown,
+	  sysconfig/interfaces/up.d/ip, sysconfig/interfaces/up.d/all, doc,
+	  init/random.conf, man, init/Makefile.am,
+	  sysconfig/interfaces/down.d, man/es, sysconfig/network-scripts,
+	  sysconfig/interfaces, sysconfig/interfaces/down.d/all,
+	  sysconfig/cpusets, isapnp, sysconfig/interfaces/up.d/tnl,
+	  rc.d/rc.sysinit, rc.d/init.d/random,
+	  sysconfig/interfaces/up.d/ppp, sysconfig/interfaces/up.d/ipx,
+	  service, /, configure.ac, man/sv, man/de, sysconfig, man/ja,
+	  Makefile.am, rc.d/init.d, sysconfig/interfaces/down.d/tnl, po,
+	  sysconfig/interfaces/down.d/ppp, sysconfig/interfaces/down.d/ipx,
+	  man/fr, rc.d/init.d/functions, doc/make-html, doc/upstart.txt
+	  (added), sysconfig/hwprofiles, rc.d, src,
+	  sysconfig/interfaces/down.d/ip, src/setuidgid.c (added), rc.d/rc,
+	  sysconfig/interfaces/up.d, ppp, sysconfig/interfaces/data,
+	  src/Makefile.am, man/ru, init (added): - upstart_native branch
+	  merged
+
+2010-05-02 12:16 +0000 [r11364]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-routes,
+	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
+	  sysconfig/network, doc/net-scripts.txt,
+	  sysconfig/network-scripts/functions.network: - support for
+	  zeroconf networking (based on information from
+	  http://avahi.org/wiki/AvahiAutoipd#Routes)
+
+2010-04-21 20:24 +0000 [r11340]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* service: - grab $ACTION variable
+
+2010-04-21 18:26 +0000 [r11339]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* service: - nicer output (brief) for --status-all ported from
+	  ubuntu
+
+2010-04-21 18:21 +0000 [r11338]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* service: - identify as pld
+
+2010-04-07 07:02 +0000 [r11312-11313]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - release 0.4.2.8
 
 	* rc.d/init.d/functions: - add --redirfds similar to --closefds
 
