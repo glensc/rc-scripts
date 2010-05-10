@@ -51,11 +51,12 @@ case "$1" in
 	fi
 	;;
   status)
-	# this is way overkill, but at least we have some status output...
-	if [ -c /dev/random ] ; then
-		nls "The random data source exists"
-	else
+  	entropy_avail="$(cat /proc/sys/kernel/random/entropy_avail)"
+	if [ "$entropy_avail" -eq 0 -o ! -c /dev/random ] ; then
 		nls "The random data source is missing"
+		exit 1
+	else
+		nls "$entropy_avail bytes of entropy available"
 	fi
 	;;
   *)
