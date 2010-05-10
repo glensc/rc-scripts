@@ -14,6 +14,9 @@
 
 random_seed=/var/run/random-seed
 
+poolfile=/proc/sys/kernel/random/poolsize
+[ -r $poolfile ] && bytes="$(cat $poolfile)" || bytes=512
+
 # See how we were called.
 case "$1" in
   start)
@@ -22,14 +25,13 @@ case "$1" in
 		show "Initializing random number generator"
 		busy
 		# Carry a random seed from start-up to start-up
-		# Load and then save 512 bytes, which is the size of the entropy pool
 		if [ -f $random_seed ]; then
 			cat $random_seed >/dev/urandom
 		else
 			touch $random_seed
 		fi
 		chmod 600 $random_seed
-		dd if=/dev/urandom of=$random_seed count=1 bs=512 2>/dev/null
+		dd if=/dev/urandom of=$random_seed count=1 bs=$bytes 2>/dev/null
 		touch /var/lock/subsys/random
 		deltext
 		ok
@@ -38,12 +40,11 @@ case "$1" in
   stop)
 	if [ -f /var/lock/subsys/random ]; then
 		# Carry a random seed from shut-down to start-up
-		# Save 512 bytes, which is the size of the entropy pool
 		show "Saving random seed"
 		busy
 		touch $random_seed
 		chmod 600 $random_seed
-		dd if=/dev/urandom of=$random_seed count=1 bs=512 2>/dev/null
+		dd if=/dev/urandom of=$random_seed count=1 bs=$bytes 2>/dev/null
 
 		rm -f /var/lock/subsys/random
 		deltext
