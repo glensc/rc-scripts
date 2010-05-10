@@ -28,6 +28,7 @@ updir='${sysconfigdir}/interfaces/up.d'
 downdir='${sysconfigdir}/interfaces/down.d'
 networkscriptsdir='${sysconfigdir}/network-scripts'
 rcdir='${sysconfdir}/rc.d'
+initdir='${sysconfdir}/init'
 docdir="${prefix}/doc/$PACKAGE-$VERSION"
 
 dnl i18n support
@@ -106,6 +107,7 @@ AC_SUBST(sysconfigdir)
 AC_SUBST(updir)
 AC_SUBST(downdir)
 AC_SUBST(rcdir)
+AC_SUBST(initdir)
 AC_SUBST(docdir)
 AC_SUBST(GLIBDIR)
 AC_SUBST(GLIBNAME)
@@ -222,5 +224,6 @@ AC_CONFIG_FILES([Makefile \
 	sysconfig/interfaces/down.d/tnl/Makefile \
 	rc.d/Makefile rc.d/init.d/Makefile \
 	po/Makefile \
+	init/Makefile \
 	])
 AC_OUTPUT
