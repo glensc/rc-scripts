@@ -510,6 +510,9 @@ daemon() {
 	local nice=$SERVICE_RUN_NICE_LEVEL
 	local fork user closefds redirfds pidfile makepid chdir=/
 
+	# NOTE: if you wonder how the shellish (by syntax) $prog works in ssd mode,
+	# then the answer is: it totally ignores $prog and uses "$@" itself.
+
 	while [ $# -gt 0 ]; do
 		case $1 in
 		'')
