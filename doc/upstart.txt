@@ -170,10 +170,17 @@ and exit.
 
 Sometimes some commands must be implemented in a special way (not all services
 may understand SIGHUP as a signal to reload their configuration) or extra
-commands are provided (like 'configtest'). In such case 'upstart_controlled'
-should be given a list of commands to implement. If the first argument of the
-script was not one of the listed commands, processing will continue past
-'upstart_controlled' call and the commands may be handled by the init script.
+commands are provided (like 'configtest'). In such case ``upstart_controlled``
+should be given a list of commands to implement or, preferrably, ``--except``
+and the list of commands which stay implemented in the script. If the first
+argument of the script is one to be of the 'not upstart_controlled' commands,
+processing will continue past 'upstart_controlled' call and the commands may
+be handled by the init script.
+
+When ``configtest`` is includes in the ``upstart_controlled --except`` list
+then ``$script configtest`` will be called before each restart/reload attempt,
+but only when done by ``/sbin/service`` or call to the script. Direct initctl
+calls are not affected.
 
 The minimal init script, for a service which will be controlled by upstart
 only would be::
