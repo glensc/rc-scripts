@@ -1246,7 +1246,7 @@ _upstart_controlled () {
 			exit $?
 			;;
 		restart)
-			if is_yes $has_configtest ; then
+			if is_yes "$has_configtest" ; then
 				"$script" configtest || exit 1
 			fi
 			upstart_stop $name
@@ -1257,7 +1257,7 @@ _upstart_controlled () {
 			if ! is_upstart_running "$name" ; then
 				exit 0
 			fi
-			if is_yes $has_configtest ; then
+			if is_yes "$has_configtest" ; then
 				"$script" configtest || exit 1
 			fi
 			upstart_stop $name
@@ -1265,7 +1265,7 @@ _upstart_controlled () {
 			exit $?
 			;;
 		reload)
-			if is_yes $has_configtest ; then
+			if is_yes "$has_configtest" ; then
 				"$script" configtest || exit 1
 			fi
 			if is_upstart_task "$name" ; then
@@ -1277,7 +1277,7 @@ _upstart_controlled () {
 			fi
 			;;
 		force-reload)
-			if is_yes $has_configtest ; then
+			if is_yes "$has_configtest" ; then
 				"$script" configtest || exit 1
 			fi
 			if is_upstart_task "$name" ; then
