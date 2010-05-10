@@ -20,6 +20,8 @@ IN_SHUTDOWN=yes
 trap "echo" INT SEGV QUIT TERM
 set +e
 
+emit pld.shutdown-started
+
 rc_splash "reboot"
 
 # Kill all processes.

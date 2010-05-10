@@ -1,0 +1,223 @@
+===================================
+Upstart event-based service startup
+===================================
+
+This version of rc-scripts support Upstart event-based service startup. This
+can co-exist with old-style startup scripts.
+
+Enabling/disabling event-base service startup
+---------------------------------------------
+
+Upstart event-based service startup may be disabled on boot time
+by using a ``pld.no-upstart`` kernel command-line option.
+
+An init script may be called with ``USE_UPSTART=no`` environment variable
+to disable special upstart-related processing – this way one may use
+``/etc/rc.d/init.d/$service start`` to start a service even if upstart job 
+for that service is present. The ``/sbin/service`` script has two new options
+``--upstart`` and ``--no-upstart`` to force new- or old-style service control.
+
+``USE_UPSTART=no`` can also be places in ``/etc/sysconfig/system``
+configuration file, though it can break ``*-upstart`` packages
+installation/removal a bit.
+
+Available events
+----------------
+
+Ubuntu-compatible system events
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+all-swaps
+        when swaps from ``/etc/fstab`` are activated
+
+filesystem
+        when basic filesystem hierarchy (FHS) is mounted
+        NOTE: currently it doesn't wait for network filesystems!
+
+local-filesystems
+        when all local filesystems are mounted and initialized
+
+root-filesystem
+        when root filesystem is mounted r/w and initialized
+
+virtual-filesystems
+        when virtual filesystems (/proc, /sys, etc.) are mounted
+
+PLD-specific system events:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+pld.sysinit-done
+        when rc.sysinit finished its job
+
+pld.shutdown-started
+        when rc.shutdown starts
+
+pld.network-starting
+        just before network initialization is started
+
+pld.network-started
+        when network is initialized
+
+pld.network-stopping
+        just before network shutdown is started
+
+pld.network-stopped
+        when network configuration is shut down
+
+Jobs
+~~~~
+
+The standard Upstart events are available for job control:
+starting(7) started(7) stopping(7) stopped(7)  (see man pages)
+
+As relying on job name is not good enough when several alternative
+implementations of a service are available, the start*/stop* jobs
+may have extra 'SERVICE' variable attached. SERVICE variable contains
+the generic service name, which can be used like this::
+
+  start on started SERVICE=syslog
+
+Job events and enabling/disabling event-base service startup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Please note that relying on events not raised by PLD service jobs
+or scripts (like 'startup') will make job ignore the 'pld.no-upstart'
+setting.
+
+
+Writing Upstart job descriptions
+--------------------------------
+
+Job description files in ``/etc/init`` are not only the recipes to start 
+a service, but also configuration files for that service. Keep that in mind
+when writing the ``*.conf`` files. No complicated logic, that can change from 
+a release to a release, should be implemented there, the script should be
+readable, basic configuration settings easy to find and no upstart-controlled
+settings (like resource limit)  reimplemented in the script or started daemon 
+arguments.
+
+The syntax of the ``/etc/init/*.conf`` files is described in the init(5) man
+page.
+
+Instead of using ``/etc/sysconfig/$service`` files put the service
+configuration directly into the ``*.conf`` file. When 'env' stanza is used for
+that, the value may be overridden when starting the job with initctl.
+
+Simple example, the job description for syslog-ng::
+
+  start on pld.network-started
+  stop on pld.shutdown-started
+  
+  env SERVICE=syslog
+  export SERVICE
+  
+  respawn
+  
+  console output
+  
+  exec /usr/sbin/syslog-ng -F -f /etc/syslog-ng/syslog-ng.conf
+
+Tracking startup progress
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The easiest way to run a program from an upstart job is to ``exec`` it
+the way it will stay in foreground (that is what is the ``-F`` option in the
+example above for). However, when process is started this way Upstart cannot
+differentiate before the ``program starting failed`` and ``program has 
+terminated`` cases. It will also assumed the job has started as soon as the 
+command has been executed and that may be not what other jobs wait for.
+
+A 'proper daemon' first checks command line arguments and configuration, then
+forks two times and returns with success only when the child process is ready.
+Upstart can handle such daemons with ``expect daemon`` stanza. So, to manage
+such daemon via Upstart, exec so it daemonize and use ``expect daemon``
+directive to tell Upstart what happens. Unfortunately, when ``expect daemon``
+is used and the process forks only once or does some more weird thing, Upstart
+job may lock up. Also, libdaemon-based daemons don't play well with ``expect
+daemon``.
+
+When the service forks once ``expect fork`` should be used instead.
+
+There is also an ``expect stop`` option, probably the most elegant way to
+track process startup. The process doesn't have to fork in this case and
+Upstart doesn't have to track that forking. The process should raise SIGSTOP
+when it is ready – only then Upstart will emit the job's ``started`` event and
+let the process continue. Unfortunately, currently hardly anything supports
+this interface.
+
+When no ``expect`` stanza will help and we need to properly wait for process
+startup, then ``post-start`` script must be used. See the init(5) man page for
+details.
+
+Updating init scripts
+---------------------
+
+Parts of the system will still expect ``service $name`` or even, directly,
+``/etc/rc.d/init.d/$name`` scripts working. Also, LSB expects compatible
+init scripts in /etc/init.d. For this still to work, an upstart-controlled
+service is expected to have its ``/etc/rc.d/init.d/$name`` script also present. 
+It must also be named exactly as the main upstart job for the service.
+
+The script must be a bit modified (in comparison to the traditional init
+scripts) to make use of the upstart features.
+
+For the start/stop/status/reload commands to work the script should include a
+``upstart_controlled`` command placed before commands are handled (and after
+``/etc/rc.d/init.d/function`` was included). This command (shell alias actually) 
+will be ignored when upstart boot control is disabled or no upstart job is
+available for the service. Otherwise it will implement the basic LSB commands
+and exit.
+
+Sometimes some commands must be implemented in a special way (not all services
+may understand SIGHUP as a signal to reload their configuration) or extra
+commands are provided (like 'configtest'). In such case ``upstart_controlled``
+should be given a list of commands to implement or, preferrably, ``--except``
+and the list of commands which stay implemented in the script. If the first
+argument of the script is one to be of the 'not upstart_controlled' commands,
+processing will continue past 'upstart_controlled' call and the commands may
+be handled by the init script.
+
+When ``configtest`` is includes in the ``upstart_controlled --except`` list
+then ``$script configtest`` will be called before each restart/reload attempt,
+but only when done by ``/sbin/service`` or call to the script. Direct initctl
+calls are not affected.
+
+The minimal init script, for a service which will be controlled by upstart
+only would be::
+
+  #!/bin/sh
+  
+  . /etc/rc.d/init.d/functions
+  
+  upstart_controlled
+  
+  echo "Service available only via upstart boot"
+  exit 3
+
+Minimal change to an existing PLD script to handle upstart control is to add::
+  
+  upstart_controlled
+
+before the usual::
+
+  RETVAL=0
+  # See how we were called.
+  case "$1" in
+    start)
+
+Sometimes other upstart jobs will rely on a service started by the traditional
+init script. In such case, the script should emit appropriate events.
+
+e.g.::
+
+	msg_starting "syslog-ng"
+	emit starting JOB=syslog-ng SERVICE=syslog
+	daemon /usr/sbin/syslog-ng -f /etc/syslog-ng/syslog-ng.conf $OPTIONS
+	emit started JOB=syslog-ng SERVICE=syslog
+	RETVAL=$?
+
+The ``emit`` function does nothing when upstart-controlled boot is disabled (not
+to trigger any upstart jobs), otherwise it calls ``/sbin/initctl emit``
+
+..
+ vi: tw=78 ft=rst spl=en

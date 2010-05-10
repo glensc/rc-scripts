@@ -196,6 +196,9 @@ if [ -d /etc/rc.d/rc$runlevel.d ]; then
 		[ -f /var/lock/subsys/$subsys ] || \
 		[ -f /var/lock/subsys/${subsys}.init ] && continue
 
+		# Check if it is managed by upstart
+		use_upstart && [ -f /etc/init/${subsys}.conf ] && continue
+
 		# If we're in confirmation mode, get user confirmation
 		[ -n "$CONFIRM" ] &&
 		{

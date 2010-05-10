@@ -1078,6 +1078,237 @@ rc_gettext_init() {
 	fi
 }
 
+use_upstart () {
+	# True when upstart-event-based boot should be used
+	is_yes "$USE_UPSTART" && return 0
+	is_no "$USE_UPSTART" && return 1
+	if [ ! -x /sbin/initctl ] ; then
+		USE_UPSTART="no"
+		return 1
+	fi
+	local cmdline=$(cat /proc/cmdline)
+	if strstr "$cmdline" "pld.no-upstart" ; then
+		USE_UPSTART="no"
+		return 1
+	else
+		USE_UPSTART="yes"
+		return 0
+	fi
+}
+
+emit () {
+	# emit upstart signal
+	# only when 'upstart' boot is enabled
+	use_upstart || return 0
+	/sbin/initctl emit "$@"
+}
+
+is_upstart_task() {
+	# Return 0 if the given service is an upstart task.
+	grep -q '^task' "/etc/init/$1.conf"
+}
+is_upstart_running() {
+	# Return 0 if the given service is running via upstart
+	initctl status "$1" 2>/dev/null | grep -q running
+}
+upstart_start() {
+	local service=$1
+	is_upstart_running "${service}" && return 0
+	msg_starting "${service}"
+	if errors=$(/sbin/initctl start ${service} 2>&1) ; then
+		ok
+		return 0
+	else
+		fail
+		echo "$errors" >&2
+		return 1
+	fi
+}
+upstart_stop() {
+	local service=$1
+	if ! is_upstart_running "${service}" && ! is_upstart_task "${service}" ; then
+		return 0
+	fi
+	msg_stopping "${service}"
+	if errors=$(/sbin/initctl stop ${service}) ; then
+		ok
+		return 0
+	else
+		fail
+		echo "$errors" >&2
+		return 1
+	fi
+}
+upstart_reload() {
+	local service=$1
+	if ! is_upstart_running "${service}" && ! is_upstart_task "${service}" ; then
+		return 0
+	fi
+	msg_reloading "${service}"
+	if errors=$(/sbin/initctl reload ${service}) ; then
+		ok
+		return 0
+	else
+		fail
+		echo "$errors" >&2
+		return 1
+	fi
+}
+upstart_status() {
+	# get service status
+	# should be compliant with
+        # http://refspecs.freestandards.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
+	local service=$1
+	local status
+	if is_upstart_task "${service}" ; then
+		# we probably should have a way to handle task status
+		return 0
+	fi
+	if ! status=$(/sbin/initctl status "${service}") ; then
+		# program or service status is not known
+		return 4
+	fi
+	if strstr "$status" "running" ; then
+		# program is running or service is OK
+		echo "$status"
+		return 0
+	else
+		# program is not running
+		echo "$status"
+		return 3
+	fi
+	# TODO: other statuses
+}
+
+_upstart_controlled () {
+	# If the service is to be handled by upstart
+	# execute the start/stop/etc. commands the upstart way
+	if ! use_upstart ; then
+		return 0
+	fi	
+	local script=$1
+	shift
+	local command=$1
+	shift
+	local name=$(basename "$script")
+	if [ ! -f /etc/init/${name}.conf ] ; then
+		return 0
+	fi
+	local commands
+	local extra_commands
+	local has_configtest
+	if [ "$1" = "--except" ] ; then
+		shift
+		commands="$*"
+		for cmd in $commands ; do
+			if [ "$command" = "$cmd" ] ; then
+				return 0
+			fi
+			case "$cmd" in
+				start|stop|status|reload|restart|try-restart|force-reload)
+					;;
+				configtest)
+					has_configtest=yes
+					extra_commands="|$cmd"
+					;;
+				*)
+					extra_commands="|$cmd"
+					;;
+			esac
+		done
+	elif [ -n "$*" ] ; then
+		commands="$*"
+		local cmd
+		local found=0
+		# is there a better way
+		for cmd in $commands ; do
+			if [ "$command" = "$cmd" ] ; then
+				found=1
+				break;
+			fi
+		done
+		if [ $found = 0 ] ; then
+			# let the script handle it
+			return 0
+		fi
+	fi
+	case "$command" in
+		start)
+			upstart_start $name
+			exit $?
+			;;
+		stop)
+			upstart_stop $name
+			exit $?
+			;;
+		status)
+			upstart_status $name
+			exit $?
+			;;
+		restart)
+			if is_yes $has_configtest ; then
+				"$script" configtest || exit 1
+			fi
+			upstart_stop $name
+			upstart_start $name
+			exit $?
+			;;
+		try-restart)
+			if ! is_upstart_running "$name" ; then
+				exit 0
+			fi
+			if is_yes $has_configtest ; then
+				"$script" configtest || exit 1
+			fi
+			upstart_stop $name
+			upstart_start $name
+			exit $?
+			;;
+		reload)
+			if is_yes $has_configtest ; then
+				"$script" configtest || exit 1
+			fi
+			if is_upstart_task "$name" ; then
+				nls "$command not implemented for $name"
+				exit 3
+			else
+				upstart_reload "$name"
+				exit $?
+			fi
+			;;
+		force-reload)
+			if is_yes $has_configtest ; then
+				"$script" configtest || exit 1
+			fi
+			if is_upstart_task "$name" ; then
+				upstart_stop "$name"
+				upstart_start "$name"
+				exit $?
+			else
+				upstart_reload "$name"
+				exit $?
+			fi
+			;;
+		*)
+		        msg_usage "$0 {start|stop|restart|reload|force-reload|status$extra_commands}"
+			exit 3
+			;;
+	esac
+	return 1 # should not happen
+}
+
+# Usage:
+#   somewhere at the begining of init script:
+#     upstart_controlled
+#		- to pass implement all upstart commands via initctl
+#                 start, stop, status, restart, reload and force_reload
+#		  are implemented
+#     upstart_controlled command...
+#		- to pass handle only specific commands the upstart way
+#                 and leave the rest to the script
+#
+alias upstart_controlled='_upstart_controlled $0 "$@"'
+
 rc_gettext_init
 rc_cache_init
 
