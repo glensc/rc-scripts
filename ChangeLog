@@ -1,3 +1,22 @@
+2010-05-10 14:35 +0000 [r11424]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* configure.ac: - Version: 0.4.3.1
+
+2010-05-10 14:31 +0000 [r11423]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* src/start-stop-daemon.c, src/Makefile.am,
+	  man/start-stop-daemon.8, configure.ac, rc.d/init.d/functions: -
+	  'dropcaps' and 'start-stop-daemon-pid-check' patches from
+	  packages/rc-scripts applied
+
+2010-05-10 12:59 +0000 [r11422]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - properly quote is_yes() argument
+
+2010-05-10 11:50 +0000 [r11420]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* configure.ac: - Version: 0.4.3.0
+
 2010-05-10 11:23 +0000 [r11419]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* t/backtick-test.sh, rc.d/init.d/network, rc.d/rc.shutdown,
