@@ -149,6 +149,51 @@ When no ``expect`` stanza will help and we need to properly wait for process
 startup, then ``post-start`` script must be used. See the init(5) man page for
 details.
 
+Debuging jobs
+~~~~~~~~~~~~~
+
+Making sure job description is correct and Upstart will properly manage the
+process may be tricky. One way to check if the job was described and started
+properly is to use ``pstree -p`` command and compare it to ``initctl status``
+output. Example::
+
+  # initctl status cherokee
+  cherokee start/running, process 22419
+
+  # pstree -p
+  init(1)─┬─Terminal(19446)─┬─bash(8983)───console(9003)
+        ....
+          |-bacula-sd(3514)---{bacula-sd}(3520)
+          |-cherokee(22419)-+-cherokee-worker(22423)-+-rrdtool(22425)
+          |                 |                        |-{cherokee-worker}(22424)
+          |                 |                        |-{cherokee-worker}(22426)
+          |                 |                        |-{cherokee-worker}(22427)
+          |                 |                        |-{cherokee-worker}(22428)
+          |                 |                        |-{cherokee-worker}(22429)
+          |                 |                        |-{cherokee-worker}(22430)
+          |                 |                        |-{cherokee-worker}(22431)
+          |                 |                        |-{cherokee-worker}(22432)
+          |                 |                        |-{cherokee-worker}(22433)
+          |                 |                        `-{cherokee-worker}(22434)
+          |                 `-{cherokee}(22422)
+          |-conserver(3471)---conserver(3477)
+        ....
+
+
+As you can see, Upstart thinks the main process of 'cherokee' is '22419',
+and indeed this is the only 'cherokee' child of init. So this state is correct.
+
+Common problem that may appear in pstree output:
+
+  1. The main process pid differs from what Upstart thinks. That usually
+     happens when bad 'expect fork' or 'expect daemon' is used. May cause
+     Upstart lock-up when the PID reported by ``initctl status`` does not exist
+     at all.
+
+  2. Init has multiple children processes for one job instance. It may happen
+     when previously running job was not properly killed, when bad 'expect' was
+     used or when the daemon does weird forking on startup.
+
 Updating init scripts
 ---------------------
 
