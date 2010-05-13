@@ -11,6 +11,11 @@ sysconf_DATA = \
 	crypttab \
 	sysctl.conf
 
+firmwaredir = /lib/firmware
+
+firmware_SCRIPTS = \
+	firmware-loader.sh
+
 profiledir = @sysconfdir@/profile.d
 
 profile_DATA = \
@@ -26,6 +31,7 @@ sbin_SCRIPTS = \
 EXTRA_DIST = \
 	$(sysconf_DATA) \
 	$(profile_DATA) \
+	$(firmware_SCRIPTS) \
 	$(sbin_SCRIPTS) \
 	$(bin_SCRIPTS)
 
