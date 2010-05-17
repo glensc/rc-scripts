@@ -123,7 +123,16 @@ if is_wireless_device "${DEVICE}"; then
 fi
 
 if is_yes "${WLAN_WPA}"; then
+	[ -z "$WLAN_WPA_WAIT_TIMEOUT" ] && WLAN_WPA_WAIT_TIMEOUT=15
 	/usr/sbin/wpa_supplicant -D ${WLAN_WPA_DRIVER:-wext} -c ${WLAN_WPA_CONFIG:-/etc/wpa_supplicant.conf} -i ${DEVICE} ${WLAN_WPA_OPTIONS} -P "/var/run/wpa_supplicant-${DEVICE}.pid" -B
+	i=0
+	while [ "$i" -lt "$WLAN_WPA_WAIT_TIMEOUT" ]; do
+		i=$((i + 1))
+		# check_link_down sleeps for 0.5s
+		check_link_down ${DEVICE} 2
+		status=$?
+		[ "$status" = "1" ] && break
+	done
 fi
 
 if [ "$HANDLING" = "2" ]; then
