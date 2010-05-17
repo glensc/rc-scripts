@@ -598,19 +598,24 @@ check_iwconfig ()
 # 2 - unknown/unsupported
 check_link_down ()
 {
-	local e i m timeout
+	local e i m timeout device max_timeout
+	device="$1"
+	max_timeout="$2"
+
 	if [ ! -x /sbin/mii-tool -a ! -x /sbin/ethtool -a ! -x /sbin/iwconfig ]; then
 		return 2
 	fi
 
-	if ! LC_ALL=C ip link show dev $1 2>/dev/null | grep -q UP; then
-		ip link set dev $1 up >/dev/null 2>&1
+	[ -z "$max_timeout" ] && max_timeout=6
+
+	if ! LC_ALL=C ip link show dev $device 2>/dev/null | grep -q UP; then
+		ip link set dev $device up >/dev/null 2>&1
 	fi
 	timeout=0
-	while [ $timeout -le 6 ]; do
-		check_ethtool $1
+	while [ $timeout -le $max_timeout ]; do
+		check_ethtool $device
 		e=$?
-		check_iwconfig $1
+		check_iwconfig $device
 		i=$?
 		# trust ethtool and iwconfig
 		if [ $i -eq 1 ] || [ $e -eq 1 ]; then
@@ -618,7 +623,7 @@ check_link_down ()
 		fi
 		# use mii check only if all other check are unsupported
 		# (mii check lies too often)
-		check_mii_tool $1
+		check_mii_tool $device
 		m=$?
 		if [ $m -eq 1 ] && [ $i -eq 2 ] && [ $e -eq 2 ]; then
 			return 1
