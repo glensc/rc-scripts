@@ -700,7 +700,7 @@ killproc() {
 	# works only with pidfile
 	if is_no "$RC_LOGGING" && [ "$pidfile" ]; then
 		local sig=${killlevel:--TERM}
-		/sbin/start-stop-daemon --stop \
+		/sbin/start-stop-daemon -q --stop \
 			--retry ${sig#-}/10/${sig#-}/60/KILL/10 \
 			-s ${sig#-} \
 			${pidfile:+--pidfile $pidfile}
