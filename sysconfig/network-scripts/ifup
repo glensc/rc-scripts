@@ -147,6 +147,9 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 			  dhcpcd)
 				[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-h $DHCP_HOSTNAME"
 				DHCP_ARGS="$DHCP_ARGS $DEVICE"
+				if is_no "$ZEROCONF"; then
+					DHCP_ARGS="$DHCP_ARGS --noipv4ll"
+				fi
 				;;
 			  dhcpxd)
 				[ -n "$DHCP_HOSTNAME" ] && DHCP_ARGS="-H $DHCP_HOSTNAME"
