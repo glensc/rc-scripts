@@ -1090,7 +1090,7 @@ use_upstart () {
 		USE_UPSTART="no"
 		return 1
 	fi
-	local cmdline=$(cat /proc/cmdline)
+	local cmdline=$(cat /proc/cmdline 2>/dev/null)
 	if strstr "$cmdline" "pld.no-upstart" ; then
 		USE_UPSTART="no"
 		return 1
