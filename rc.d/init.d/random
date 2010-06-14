@@ -12,6 +12,11 @@
 # Source function library.
 . /etc/rc.d/init.d/functions
 
+# do nothing in vserver
+if is_yes "$VSERVER"; then
+	return
+fi
+
 upstart_controlled start stop
 
 random_seed=/var/run/random-seed
