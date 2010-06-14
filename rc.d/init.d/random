@@ -24,53 +24,68 @@ random_seed=/var/run/random-seed
 poolfile=/proc/sys/kernel/random/poolsize
 [ -r $poolfile ] && bytes="$(cat $poolfile)" || bytes=512
 
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/random ]; then
+		return
+	fi
+
+	emit starting JOB=random
+	show "Initializing random number generator"
+	busy
+	# Carry a random seed from start-up to start-up
+	if [ -f $random_seed ]; then
+		cat $random_seed >/dev/urandom
+	else
+		touch $random_seed
+	fi
+	chmod 600 $random_seed
+	dd if=/dev/urandom of=$random_seed count=1 bs=$bytes 2>/dev/null
+	touch /var/lock/subsys/random
+	deltext
+	ok
+	emit --nowait started JOB=random
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/random ]; then
+		return
+	fi
+
+	# Carry a random seed from shut-down to start-up
+	emit stopping JOB=random
+	show "Saving random seed"
+	busy
+	touch $random_seed
+	chmod 600 $random_seed
+	dd if=/dev/urandom of=$random_seed count=1 bs=$bytes 2>/dev/null
+
+	rm -f /var/lock/subsys/random
+	deltext
+	ok
+	emit --no-wait stopped JOB=random
+}
+
+status() {
+	entropy_avail="$(cat /proc/sys/kernel/random/entropy_avail)"
+	if [ "$entropy_avail" -eq 0 -o ! -c /dev/random ] ; then
+		nls "The random data source is missing"
+		RETVAL=1
+	else
+		nls "$entropy_avail bytes of entropy available"
+	fi
+}
 
 # See how we were called.
 case "$1" in
   start)
-	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/random ]; then
-		emit starting JOB=random
-		show "Initializing random number generator"
-		busy
-		# Carry a random seed from start-up to start-up
-		if [ -f $random_seed ]; then
-			cat $random_seed >/dev/urandom
-		else
-			touch $random_seed
-		fi
-		chmod 600 $random_seed
-		dd if=/dev/urandom of=$random_seed count=1 bs=$bytes 2>/dev/null
-		touch /var/lock/subsys/random
-		deltext
-		ok
-		emit --nowait started JOB=random
-	fi
+	start
 	;;
   stop)
-	if [ -f /var/lock/subsys/random ]; then
-		# Carry a random seed from shut-down to start-up
-		emit stopping JOB=random
-		show "Saving random seed"
-		busy
-		touch $random_seed
-		chmod 600 $random_seed
-		dd if=/dev/urandom of=$random_seed count=1 bs=$bytes 2>/dev/null
-
-		rm -f /var/lock/subsys/random
-		deltext
-		ok
-		emit --no-wait stopped JOB=random
-	fi
+	stop
 	;;
   status)
-  	entropy_avail="$(cat /proc/sys/kernel/random/entropy_avail)"
-	if [ "$entropy_avail" -eq 0 -o ! -c /dev/random ] ; then
-		nls "The random data source is missing"
-		exit 1
-	else
-		nls "$entropy_avail bytes of entropy available"
-	fi
+	status
 	;;
   *)
 	msg_usage "$0 {start|stop|status}"
