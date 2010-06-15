@@ -1,3 +1,14 @@
+2010-06-15 11:33 +0000 [r11561]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* configure.ac: - firmwaredir was wrong
+
+2010-06-15 11:17 +0000 [r11558-11559]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* configure.ac: - Version: 0.4.3.3
+
+	* Makefile.am, configure.ac: - firmwaredir relative to
+	  ${exec_prefix} to fix 'make distcheck'
+
 2010-06-15 10:13 +0000 [r11557]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:

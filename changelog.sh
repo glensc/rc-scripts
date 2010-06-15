@@ -7,6 +7,9 @@ if [ ! -x /usr/bin/svn2log ]; then
 	exit 1
 fi
 
+# make sure '.' entry is up to date, or the log will be outdated too
+svn up . >/dev/null
+
 # create users for svn2log format
 tmp=$(mktemp -q svn2logXXXXXX 2>/dev/null || echo ${TMPDIR:-/tmp}/svn2log.tmp)
 > $tmp
