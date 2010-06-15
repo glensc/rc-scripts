@@ -29,7 +29,7 @@ downdir='${sysconfigdir}/interfaces/down.d'
 networkscriptsdir='${sysconfigdir}/network-scripts'
 rcdir='${sysconfdir}/rc.d'
 initdir='${sysconfdir}/init'
-firmwaredir='${exec_prefix}/lib'
+firmwaredir='${exec_prefix}/lib/firmware'
 docdir="${prefix}/doc/$PACKAGE-$VERSION"
 
 dnl i18n support
