@@ -29,6 +29,7 @@ downdir='${sysconfigdir}/interfaces/down.d'
 networkscriptsdir='${sysconfigdir}/network-scripts'
 rcdir='${sysconfdir}/rc.d'
 initdir='${sysconfdir}/init'
+firmwaredir='${exec_prefix}/lib'
 docdir="${prefix}/doc/$PACKAGE-$VERSION"
 
 dnl i18n support
@@ -109,6 +110,7 @@ AC_SUBST(downdir)
 AC_SUBST(rcdir)
 AC_SUBST(initdir)
 AC_SUBST(docdir)
+AC_SUBST(firmwaredir)
 AC_SUBST(GLIBDIR)
 AC_SUBST(GLIBNAME)
 AC_SUBST(GCFLAGS)

@@ -11,8 +11,6 @@ sysconf_DATA = \
 	crypttab \
 	sysctl.conf
 
-firmwaredir = /lib/firmware
-
 firmware_SCRIPTS = \
 	firmware-loader.sh
 
