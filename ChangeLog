@@ -1,3 +1,82 @@
+2010-06-15 10:13 +0000 [r11557]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
+	  - allow multiple dhclient instances running on one machine
+
+2010-06-14 17:25 +0000 [r11555-11556]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/random: - reorganize into functions
+
+	* rc.d/init.d/random: - do not touch host random inside vserver
+	  (discussed with baggins and arekm long time ago)
+
+2010-06-08 09:01 +0000 [r11552]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - /proc/cmdline may be unavailable (like
+	  in a VServer) make cat quiet in such case
+
+2010-05-18 12:13 +0000 [r11476]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: No need for wait loop.
+	  check_link_down sleeps for specified time in 0.5s intervals.
+
+2010-05-17 20:26 +0000 [r11475]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup,
+	  sysconfig/interfaces/ifcfg-description: Wait for wpa_supplicant
+	  to actually connect to network before trying dhcp.
+
+2010-05-17 20:20 +0000 [r11474]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Support for max
+	  timeout as parameter.
+
+2010-05-17 20:16 +0000 [r11473]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Don't rely on ip
+	  link UP checking. Always to mii-tool/ethtool test.
+
+2010-05-17 19:08 +0000 [r11472]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: Respect ZEROCONF variable for
+	  dhcpcd.
+
+2010-05-17 18:08 +0000 [r11471]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - ok to exit silently in ssd mode of
+	  killproc, no need to noise about missing pidfile
+
+2010-05-13 07:17 +0000 [r11462]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* Makefile.am: Include/install firmware-loader.sh brought by commit
+	  r10422.
+
+2010-05-12 07:11 +0000 [r11460]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* doc/Makefile.am: - include upstart.txt in the package
+
+2010-05-12 07:08 +0000 [r11459]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* doc/upstart.txt: - notes about job debuging
+
+2010-05-11 17:21 +0000 [r11458]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* configure.ac: - Version: 0.4.3.2
+
+2010-05-11 10:10 +0000 [r11449]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* init/Makefile.am: - new listed in Makefile.am
+
+2010-05-11 08:54 +0000 [r11447]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* init/rc.conf (added), init/rcS-sulogin.conf (added),
+	  init/rcS.conf (added): - init job descriptions moved from
+	  upstart-SysVinit
+
+2010-05-10 17:24 +0000 [r11427]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - note about two modes in daemon
+
 2010-05-10 14:35 +0000 [r11424]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* configure.ac: - Version: 0.4.3.1
