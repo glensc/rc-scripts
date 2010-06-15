@@ -87,7 +87,11 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 			RESULT=$?
 			;;
 		  dhclient)
-			if [ -f /var/run/dhclient.pid ];then
+		  	if [ -f "/var/run/dhclient.$DEVICE.pid" ] ; then
+				$DHCP_CLIENT -r -pf /var/run/dhclient.$DEVICE.pid -lf /var/lib/dhclient/dhclient.$DEVICE.leases 2>/dev/null
+				RESULT=$?
+			elif [ -f /var/run/dhclient.pid ]; then
+				# may be left by older rc-scripts
 				PID=$(cat /var/run/dhclient.pid)
 				if kill -0 $PID 2>/dev/null; then
 					kill $PID

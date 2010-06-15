@@ -160,7 +160,7 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 				;;
 			  dhclient)
 				# Can't specify a host with dhclient ?
-				DHCP_ARGS="$DEVICE"
+				DHCP_ARGS="$DEVICE -pf /var/run/dhclient.$DEVICE.pid -lf /var/lib/dhclient/dhclient.$DEVICE.leases"
 				;;
 			  avahi-autoipd)
 				DHCP_ARGS="-D $DEVICE"
