@@ -75,7 +75,7 @@ if ! is_yes "$VSERVER"; then
 		UMOUNT_IGNORE="/ $UMOUNT_IGNORE"
 	fi
 	remaining=$(awk -v ig="^($UMOUNT_IGNORE)$" 'BEGIN { gsub(/[\t ]+/, "|", ig); } \
-			$3 !~ /^(proc|loopfs|devpts|shm|iso9660|ramfs|tmpfs|sysfs|securityfs|squashfs)$/ \
+			$3 !~ /^(proc|loopfs|devpts|devtmpfs|shm|iso9660|ramfs|tmpfs|sysfs|securityfs|squashfs)$/ \
 			&& $1 !~ /^(none|\/dev\/root)$/ \
 			&& $2 !~ ig {print $2}' /proc/mounts)
 	while [ -n "$remaining" -a "$retry" -gt 0 ]; do
@@ -99,7 +99,7 @@ if ! is_yes "$VSERVER"; then
 
 		sleep 2
 		remaining=$(awk -v ig="^($UMOUNT_IGNORE)$" 'BEGIN { gsub(/[\t ]+/, "|", ig); } \
-				$3 !~ /^(proc|loopfs|devpts|shm|iso9660|ramfs|tmpfs|sysfs|securityfs|squashfs)$/ \
+				$3 !~ /^(proc|loopfs|devpts|devtmpfs|shm|iso9660|ramfs|tmpfs|sysfs|securityfs|squashfs)$/ \
 				&& $1 !~ /^(none|\/dev\/root)$/ \
 				&& $2 !~ ig {print $2}' /proc/mounts)
 		[ -z "$remaining" ] && break
