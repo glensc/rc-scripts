@@ -19,7 +19,7 @@ case "$1" in
 	touch /var/lock/subsys/local
 	;;
   stop)
-	rm -f /var/lock/subsys/local
+	rm -f /var/lock/subsys/local >/dev/null 2>&1
 	;;
   status)
 	if [ -f /var/lock/subsys/local ]; then

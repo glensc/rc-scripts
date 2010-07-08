@@ -27,7 +27,7 @@ case "$1" in
 	sleep 5
 	run_cmd "Sending all processes the KILL signal" killall5 -9
 
-	rm -f /var/lock/subsys/*
+	rm -f /var/lock/subsys/* >/dev/null 2>&1
 
 	# this looks nicer
 	[ -x /usr/bin/clear ] && /usr/bin/clear

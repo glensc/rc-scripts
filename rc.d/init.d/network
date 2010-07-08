@@ -252,7 +252,7 @@ stop() {
 
 	network_deinit
 
-	rm -f /var/lock/subsys/network
+	rm -f /var/lock/subsys/network >/dev/null 2>&1
 	emit --no-wait pld.network-stopped
 }
 
@@ -345,7 +345,7 @@ case "$1" in
   stop)
 	if is_yes "$VSERVER"; then
 		emit pld.network-stopping
-		rm -f /var/lock/subsys/network
+		rm -f /var/lock/subsys/network >/dev/null 2>&1
 		emit pld.network-stopped
 		exit 0
 	fi

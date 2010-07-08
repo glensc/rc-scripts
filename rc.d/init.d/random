@@ -60,7 +60,7 @@ stop() {
 	chmod 600 $random_seed
 	dd if=/dev/urandom of=$random_seed count=1 bs=$bytes 2>/dev/null
 
-	rm -f /var/lock/subsys/random
+	rm -f /var/lock/subsys/random >/dev/null 2>&1
 	deltext
 	ok
 	emit --no-wait stopped JOB=random
