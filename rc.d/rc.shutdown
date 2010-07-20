@@ -38,13 +38,14 @@ fi
 # check for other processes.
 # there could be none if all services were terminated properly
 # pgrep -g 0 requires procps >= 3.2.6-1.1
+# XXX: pgrep is on /usr!
 pids=$(pgrep -g 0 -l -v | grep -v '^1 ')
-if [ -n "$pids" ]; then
+if [ -n "$pids" ] || [ ! -x /usr/bin/pgrep ]; then
 	run_cmd "Sending all processes the TERM signal" killall5 -15
 fi
 
 pids=$(pgrep -g 0 -l -v | grep -v '^1 ')
-if [ -n "$pids" ]; then
+if [ -n "$pids" ] || [ ! -x /usr/bin/pgrep ]; then
 	sleep 5
 	run_cmd "Sending all processes the KILL signal" killall5 -9
 fi
