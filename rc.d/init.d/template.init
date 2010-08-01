@@ -158,6 +158,8 @@ case "$1" in
 	;;
   status)
 	status <service>
+	status --pidfile /var/run/<service>.pid <service>
+	status --pidfile /var/run/<service>.pid <service> <procname>
 	RETVAL=$?
 	;;
   *)
