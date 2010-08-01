@@ -332,9 +332,9 @@ if ! is_yes "$VSERVER"; then
 
 	needusbstorage=
 	if [ "$usb" = "1" ]; then
-		needusbstorage=$(LC_ALL=C cat /proc/bus/usb/devices 2>/dev/null|grep -e "^I.*Cls=08" 2>/dev/null)
+		needusbstorage=$(cat /proc/bus/usb/devices 2>/dev/null | grep -e "^I.*Cls=08" 2>/dev/null)
 		if [ "$(kernelverser)" -lt "002006" ]; then
-			LC_ALL=C grep -q 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
+			grep -q 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
 			mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02" 2>/dev/null)
 			kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01" 2>/dev/null)
 			if [ -n "$kbdoutput" ]; then
@@ -582,7 +582,7 @@ if ! is_yes "$VSERVER"; then
 				[ "$alias" = "off" ] && continue
 				run_cmd "$(nls 'Initializing firewire controller') ($alias)" /sbin/modprobe $alias
 			done
-			LC_ALL=C grep -E "SBP2" /proc/bus/ieee1394/devices 2>/dev/null && /sbin/modprobe -s sbp2 > /dev/null 2>&1
+			grep -E "SBP2" /proc/bus/ieee1394/devices 2>/dev/null && /sbin/modprobe -s sbp2 > /dev/null 2>&1
 		fi
 	fi
 
@@ -821,7 +821,7 @@ if ! is_yes "$VSERVER"; then
 	# option is removed from /etc/mtab
 	if [ -z "$fastboot" ] && grep "^[^#].*encryption=" /etc/fstab 2>/dev/null | grep -v -q "noauto" 2>/dev/null; then
 		show "Checking encrypted filesystems"; started
-		LOOPLIST="$(LC_ALL=C awk '
+		LOOPLIST="$(awk '
 		FILENAME=="/proc/mounts" {
 			TAB[$2]=$1;
 		}
