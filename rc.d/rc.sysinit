@@ -107,6 +107,51 @@ load_kernel_modules() {
 	done
 }
 
+check_root_fs() {
+	show "Checking root filesystem"; started
+	initlog -c "fsck -C -T -a $fsckoptions /"
+	rc=$?
+
+	# A return of 4 or higher means there were serious problems.
+	if [ $rc -gt 3 ]; then
+		[ -e /proc/splash ] && echo "verbose" > /proc/splash
+		# don't use '\n' in nls macro !
+		echo
+		echo
+		nls "*** An error occurred during the file system check."
+		nls "*** Dropping you to a shell; the system will reboot"
+		nls "*** when you leave the shell."
+		echo
+
+		PS1="$(nls '(Repair filesystem)# ')"; export PS1
+		[ "$SELINUX" = "1" ] && disable_selinux
+		if ! is_no "$RUN_SULOGIN_ON_ERR"; then
+			/sbin/sulogin
+		else
+			/bin/sh
+		fi
+
+		run_cmd "Unmounting file systems" umount -a
+		mount -n -o remount,ro /
+		run_cmd "Automatic reboot in progress" reboot
+	# A return of 2 or 3 means that filesystem was repaired but we need
+	# to reboot.
+	elif [ "$rc" = "2" -o "$rc" = "3" ]; then
+		[ -e /proc/splash ] && echo "verbose" > /proc/splash
+		echo
+		nls "*** Filesystem was repaired but system needs to be"
+		nls "*** rebooted before mounting it."
+		nls "*** REBOOTING ***"
+		echo
+
+		run_cmd "Unmounting file systems" umount -a
+		mount -n -o remount,ro /
+		run_cmd "Automatic reboot in progress" reboot
+	elif [ "$rc" = "1" ]; then
+		_RUN_QUOTACHECK=1
+	fi
+}
+
 # boot logging to /var/log/boot.msg. install showconsole package to get it.
 if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
 	RC_BOOTLOG=1
@@ -377,49 +422,7 @@ if ! is_yes "$VSERVER"; then
 	_ROOTFS_TYPE=$(awk '$2 == "/" && $3 != "rootfs" { print $3 }' /proc/mounts 2>/dev/null)
 
 	if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" -a "$_ROOTFS_PASSNO" != 0 -a -e $_ROOTFS_DEVICE ]; then
-		show "Checking root filesystem"; started
-		initlog -c "fsck -C -T -a $fsckoptions /"
-
-		rc=$?
-
-		# A return of 4 or higher means there were serious problems.
-		if [ $rc -gt 3 ]; then
-			[ -e /proc/splash ] && echo "verbose" > /proc/splash
-			# don't use '\n' in nls macro !
-			echo
-			echo
-			nls "*** An error occurred during the file system check."
-			nls "*** Dropping you to a shell; the system will reboot"
-			nls "*** when you leave the shell."
-			echo
-
-			PS1="`nls '(Repair filesystem)# '`"; export PS1
-			[ "$SELINUX" = "1" ] && disable_selinux
-			if ! is_no "$RUN_SULOGIN_ON_ERR"; then
-				/sbin/sulogin
-			else
-				/bin/sh
-			fi
-
-			run_cmd "Unmounting file systems" umount -a
-			mount -n -o remount,ro /
-			run_cmd "Automatic reboot in progress" reboot
-		# A return of 2 or 3 means that filesystem was repaired but we need
-		# to reboot.
-		elif [ "$rc" = "2" -o "$rc" = "3" ]; then
-			[ -e /proc/splash ] && echo "verbose" > /proc/splash
-			echo
-			nls "*** Filesystem was repaired but system needs to be"
-			nls "*** rebooted before mounting it."
-			nls "*** REBOOTING ***"
-			echo
-
-			run_cmd "Unmounting file systems" umount -a
-			mount -n -o remount,ro /
-			run_cmd "Automatic reboot in progress" reboot
-		elif [ "$rc" = "1" ]; then
-			_RUN_QUOTACHECK=1
-		fi
+		check_root_fs
 	fi
 
 	# Check for arguments
