@@ -917,7 +917,8 @@ if ! is_yes "$VSERVER"; then
 
 	if [ -f /proc/sys/kernel/panic -a -n "$PANIC_REBOOT_TIME" -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
 		show 'Setting %s seconds for kernel reboot after panic' "$PANIC_REBOOT_TIME"; busy
-		if (sysctl -w kernel.panic=$PANIC_REBOOT_TIME >/dev/null 2>&1); then ok; else fail; fi
+		# NOTE: you should use /etc/sysctl.conf instead
+		if sysctl -w kernel.panic=$PANIC_REBOOT_TIME >/dev/null 2>&1; then ok; else fail; fi
 	fi
 
 	# ... and here finish configuring parameters
