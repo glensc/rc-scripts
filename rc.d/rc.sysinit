@@ -666,9 +666,9 @@ if ! is_yes "$VSERVER"; then
 		run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelock
 		run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmignorelock
 		if [ "$lvmversion" = "2" ]; then
-			/sbin/vgmknodes
+			/sbin/vgmknodes $lvmignorelock
 			# display VG statistics
-			/sbin/vgdisplay -s
+			/sbin/vgdisplay -s $lvmignorelock
 		fi
 	fi
 
