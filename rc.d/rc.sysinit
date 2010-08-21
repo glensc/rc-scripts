@@ -252,12 +252,10 @@ if ! is_yes "$VSERVER"; then
 		dmesg -n $CONSOLE_LOGLEVEL
 	fi
 
-	if ! is_no "$START_UDEV"; then
-		if [ -x /sbin/start_udev ]; then
-			/sbin/start_udev
-		elif [ -x /lib/firmware/firmware-loader.sh ]; then
-			/sbin/sysctl -e -w kernel.hotplug=/lib/firmware/firmware-loader.sh
-		fi
+	if ! is_no "$START_UDEV" && [ -x /sbin/start_udev ]; then
+		/sbin/start_udev
+	elif [ -x /lib/firmware/firmware-loader.sh ]; then
+		/sbin/sysctl -e -w kernel.hotplug=/lib/firmware/firmware-loader.sh
 	fi
 
 	# Unmount the initrd, if necessary
