@@ -152,7 +152,7 @@ check_root_fs() {
 	fi
 }
 
-# boot logging to /var/log/boot.msg. install showconsole package to get it.
+# boot logging to /var/log/boot.log. install showconsole package to get it.
 if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
 	RC_BOOTLOG=1
 else
@@ -880,7 +880,7 @@ if ! is_yes "$VSERVER"; then
 
 	# /var/log should be writable now, so start saving the boot output
 	if [ "$RC_BOOTLOG" ]; then
-		echo > /var/log/boot.msg
+		echo > /var/log/boot.log
 		killall -IO blogd
 	fi
 
@@ -932,7 +932,7 @@ else
 
 	# /var/log should be writable now, so start saving the boot output
 	if [ "$RC_BOOTLOG" ]; then
-		echo > /var/log/boot.msg
+		echo > /var/log/boot.log
 		killall -IO blogd
 	fi
 
