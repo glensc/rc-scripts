@@ -419,7 +419,7 @@ if ! is_yes "$VSERVER"; then
 	_ROOTFS_DEVICE=$(awk '($1 !~ /^#/ && $2 == "/" && NF >= 6) { print $1}' /etc/fstab)
 	_ROOTFS_TYPE=$(awk '$2 == "/" && $3 != "rootfs" { print $3 }' /proc/mounts 2>/dev/null)
 
-	if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" -a "$_ROOTFS_PASSNO" != 0 -a -e $_ROOTFS_DEVICE ]; then
+	if [ -z "$fastboot" -a "$_ROOTFS_TYPE" != "aufs" -a "$_ROOTFS_TYPE" != "nfs" -a "$_ROOTFS_TYPE" != "romfs" -a "$_ROOTFS_TYPE" != "squashfs" -a "$_ROOTFS_PASSNO" != 0 -a -e $_ROOTFS_DEVICE ]; then
 		check_root_fs
 	fi
 
