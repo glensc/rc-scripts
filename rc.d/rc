@@ -258,14 +258,15 @@ rc_splash "master"
 # Say something ;)
 text="$(nls '%sResource Manager: %sRunlevel has been reached' "$af2" "$af7")"
 text_size="$(nls '%sResource Manager: %sRunlevel has been reached' "" "")"
-{
-	local _len=${#text_size}
-	local _last_col=$(($INIT_COL+${#resp_size}-${#runlevel}))
-	while [ $((_len++)) -lt $_last_col ]; do
-		text="$text."
-	done
-	echo -n "$text"
-}
+
+_len=${#text_size}
+_last_col=$(($INIT_COL+${#resp_size}-${#runlevel}))
+while [ $((_len++)) -lt $_last_col ]; do
+	text="$text."
+done
+echo -n "$text"
+unset _len _last_col
+
 echo "${af6}[${af2} $runlevel ${af6}]${af7}"
 unset af2 af6 af7
 
