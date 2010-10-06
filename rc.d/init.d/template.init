@@ -96,8 +96,8 @@ stop() {
 
 	# Stop daemons.
 	msg_stopping "<service_name>"
-	killproc <service>
-	killproc --pidfile /var/run/<service>.pid <service> -TERM
+	killproc <procname>
+	killproc --pidfile /var/run/<service>.pid <procname> -TERM
 	rm -f /var/lock/subsys/<service>
 }
 
@@ -110,8 +110,8 @@ reload() {
 
 	checkconfig
 	msg_reloading "<service_name>"
-	killproc <service> -HUP
-	killproc --pidfile /var/run/<service>.pid <service> -HUP
+	killproc <procname> -HUP
+	killproc --pidfile /var/run/<service>.pid <procname> -HUP
 	RETVAL=$?
 }
 
