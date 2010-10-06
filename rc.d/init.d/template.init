@@ -6,7 +6,7 @@
 #
 # description:	<service> long service description
 #
-# processname:	<service>
+# processname:	<procname>
 # config:
 # pidfile:
 #
