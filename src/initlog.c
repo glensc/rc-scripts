@@ -51,7 +51,7 @@ struct logInfo *logData = NULL;
 void readConfiguration(char *fname) {
     int fd,num=0;
     struct stat sbuf;
-    char *data,*line, *d;
+    char *data,*line;
     regex_t *regexp;
     int lfac=-1,lpri=-1;
     
@@ -60,7 +60,7 @@ void readConfiguration(char *fname) {
 	    close(fd);
 	    return;
     }
-    d = data=malloc(sbuf.st_size+1);
+    data=malloc(sbuf.st_size+1);
     if (read(fd,data,sbuf.st_size)!=sbuf.st_size) {
 	    close(fd);
 	    free(data);
@@ -110,7 +110,6 @@ void readConfiguration(char *fname) {
     }
     if (lfac!=-1) logfacility=lfac;
     if (lpri!=-1) logpriority=lpri;
-    free(d);
 }
     
 char *getLine(char **data) {
@@ -249,10 +248,7 @@ int logLine(struct logInfo *logEnt) {
 	) {
 	DDEBUG("starting daemon failed, pooling entry %d\n",logEntries);
 	logData=realloc(logData,(logEntries+1)*sizeof(struct logInfo));
-	logData[logEntries].fac = logEnt->fac;
-	logData[logEntries].pri = logEnt->pri;
-	logData[logEntries].cmd = strdup(logEnt->cmd);
-	logData[logEntries].line = strdup(logEnt->line);
+	logData[logEntries]= (*logEnt);
 	logEntries++;
     } else {
 	if (logEntries>0) {
@@ -283,22 +279,19 @@ int logEvent(char *cmd, int eventtype,char *string) {
 	/* insert more here */
 	NULL
     };
-    int x=0,len, rc;
+    int x=0,len;
     struct logInfo logentry;
     
     if (cmd) {
-	logentry.cmd = basename(cmd);
+	logentry.cmd = strdup(basename(cmd));
 	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') &&
 	    ( logentry.cmd[1] >= '0' && logentry.cmd[1] <= '9' ) &&
 	    ( logentry.cmd[2] >= '0' && logentry.cmd[2] <= '9' ) )
 	  logentry.cmd+=3;
-	logentry.cmd = strdup(logentry.cmd);
     } else
       logentry.cmd = strdup(_("(none)"));
-    if (!string) {
-      string = alloca(strlen(cmd)+1);
-      strcpy(string,cmd);
-    }
+    if (!string)
+      string = strdup(cmd);
     
     while (eventtable[x] && x<eventtype) x++;
     if (!(eventtable[x])) x=0;
@@ -310,33 +303,25 @@ int logEvent(char *cmd, int eventtype,char *string) {
     logentry.pri = logpriority;
     logentry.fac = logfacility;
     
-    rc = logLine(&logentry);
-    free(logentry.line);
-    free(logentry.cmd);
-    return rc;
+    return logLine(&logentry);
 }
 
 int logString(char *cmd, char *string) {
     struct logInfo logentry;
-    int rc;
     
     if (cmd) {
-	logentry.cmd = basename(cmd);
+	logentry.cmd = strdup(basename(cmd));
 	if ((logentry.cmd[0] =='K' || logentry.cmd[0] == 'S') && 
 	    ( logentry.cmd[1] >= '0' && logentry.cmd[1] <= 0x39 ) &&
 	    ( logentry.cmd[2] >= '0' && logentry.cmd[2] <= 0x39 ) )
 	  logentry.cmd+=3;
-	logentry.cmd = strdup(logentry.cmd);
     } else
       logentry.cmd = strdup(_(""));
     logentry.line = strdup(string);
     logentry.pri = logpriority;
     logentry.fac = logfacility;
     
-    rc = logLine(&logentry);
-    free(logentry.line);
-    free(logentry.cmd);
-    return rc;
+    return logLine(&logentry);
 }
 
 int processArgs(int argc, char **argv, int silent) {
