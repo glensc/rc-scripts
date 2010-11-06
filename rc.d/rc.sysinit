@@ -270,16 +270,12 @@ if ! is_yes "$VSERVER"; then
 		/sbin/blogd
 	fi
 
-	# cpuset support (mount if not found in fstab - should be ^# excluded?)
+	# cpuset support
 	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
-		if ! grep -q cgroup /etc/fstab 2>/dev/null ; then
-			mount -n -t cgroup none /dev/cpuset -o cpuset,noprefix
-			[ $? -eq 0 ] && echo "/sbin/cpuset_release_agent" > /dev/cpuset/release_agent
-		fi
+		mount -n -t cgroup none /dev/cpuset -o cpuset,noprefix
+		[ $? -eq 0 ] && echo "/sbin/cpuset_release_agent" > /dev/cpuset/release_agent
 	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
-		if ! grep -q cpuset /etc/fstab 2>/dev/null ; then
-			mount -n -t cpuset none /dev/cpuset
-		fi
+		mount -n -t cpuset none /dev/cpuset
 	fi
 
 	# Configure Linux kernel (initial configuration, some required modules still
