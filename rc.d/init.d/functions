@@ -73,6 +73,22 @@ if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
 	unset _f _ctx
 fi
 
+# VSERVER_ISOLATION_NET = isolation only inside of vserver guests
+if [ -z "$VSERVER_ISOLATION_NET" -o "$VSERVER_ISOLATION_NET" = "detect" ]; then
+	VSERVER_ISOLATION_NET=no
+	if [ "$VSERVER" = "yes" ]; then
+		{
+			while read _t _data; do
+				[ "$_t" = "net:" ] && break
+			done < /proc/self/nsproxy
+		} 2> /dev/null
+		if [ "${_data##*\(}" = "I)" ]; then
+			VSERVER_ISOLATION_NET=yes
+		fi
+		unset _f _data
+	fi
+fi
+
 # we need to know in functions if we were called from a terminal
 if [ -z "$ISATTY" ]; then
 	[ -t ] && ISATTY=yes || ISATTY=no

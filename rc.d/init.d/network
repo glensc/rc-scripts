@@ -333,7 +333,7 @@ find_boot_interfaces
 # See how we were called.
 case "$1" in
   start)
-	if is_yes "$VSERVER"; then
+	if is_yes "$VSERVER_ISOLATION_NET"; then
 		emit pld.network-starting
 		touch /var/lock/subsys/network
 		emit pld.network-started
@@ -343,7 +343,7 @@ case "$1" in
 	;;
 
   stop)
-	if is_yes "$VSERVER"; then
+	if is_yes "$VSERVER_ISOLATION_NET"; then
 		emit pld.network-stopping
 		rm -f /var/lock/subsys/network >/dev/null 2>&1
 		emit pld.network-stopped
@@ -365,7 +365,7 @@ case "$1" in
 	;;
 
   reload)
-	if is_yes "$VSERVER"; then
+	if is_yes "$VSERVER_ISOLATION_NET"; then
 		exit 0
 	fi
 	shift
@@ -373,7 +373,7 @@ case "$1" in
 	;;
 
   restart)
-	if is_yes "$VSERVER"; then
+	if is_yes "$VSERVER_ISOLATION_NET"; then
 		exit 0
 	fi
 

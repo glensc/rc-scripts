@@ -106,6 +106,9 @@ CPUSETS=no
 # Enable vserver support? (yes/no/detect)
 VSERVER=detect
 
+# Vserver isolation only networking inside of guest (yes/no/detect)
+VSERVER_ISOLATION_NET=detect
+
 # Enable syslogging for rc-scripts
 RC_LOGGING=yes
 
