@@ -270,8 +270,10 @@ if ! is_yes "$VSERVER"; then
 		/sbin/blogd
 	fi
 
-	# cpuset support
+	# cgroup/cpuset support
 	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
+		# creating is more convenient than artificial conflict with older udev
+		mkdir -p /dev/cgroup
 		# mount w/o options enables all available cgroup subsystems
 		modprobe -s blk-cgroup
 		mount -n -t cgroup none /dev/cgroup
