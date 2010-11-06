@@ -272,8 +272,9 @@ if ! is_yes "$VSERVER"; then
 
 	# cpuset support
 	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
-		mount -n -t cgroup none /dev/cpuset -o cpuset,noprefix
-		[ $? -eq 0 ] && echo "/sbin/cpuset_release_agent" > /dev/cpuset/release_agent
+		# mount w/o options enables all available cgroup subsystems
+		modprobe -s blk-cgroup
+		mount -n -t cgroup none /dev/cgroup
 	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
 		mount -n -t cpuset none /dev/cpuset
 	fi
@@ -515,8 +516,8 @@ if ! is_yes "$VSERVER"; then
 		mount -f -t selinuxfs selinuxfs /selinux
 	fi
 
-	if is_fsmounted cgroup /dev/cpuset; then
-		mount -f -t cgroup -o cpuset,noprefix none /dev/cpuset
+	if is_fsmounted cgroup /dev/cgroup; then
+		mount -f -t cgroup none /dev/cgroup
 	elif is_fsmounted cpuset /dev/cpuset; then
 		mount -f -t cpuset none /dev/cpuset
 	fi
