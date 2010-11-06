@@ -1,3 +1,123 @@
+2010-11-06 08:43 +0000 [r11889]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Release 0.4.3.4.
+
+2010-11-06 00:33 +0000 [r11888]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - create /dev/cgroup (see comment)
+
+2010-11-06 00:26 +0000 [r11887]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - use full blown cgroup subsystem if
+	  available
+
+2010-11-06 00:11 +0000 [r11886]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - if cgroup is available use all its subsystems
+	  instead of just cpusets
+
+2010-11-06 00:07 +0000 [r11885]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - commit at rev 10523 was completely bogus,
+	  preventing mounting cpuset at all, as default fstab contains
+	  cpuset line with noauto option
+
+2010-10-09 21:21 +0000 [r11840]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* src/initlog.c: Update initlog from initscripts.
+
+2010-10-06 08:03 +0000 [r11831]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - procname
+
+2010-10-06 07:58 +0000 [r11830]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - killproc wants procname mostly
+
+2010-09-30 04:26 +0000 [r11823]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc: Fix 'local: można używać tylko w funkcji' on bash.
+
+2010-09-19 18:38 +0000 [r11812]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Make sysctl quiet.
+
+2010-09-03 09:07 +0000 [r11801]  Bartosz Świątek <shadzik/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - don't check the fs on aufs and squashfs
+	  systems
+
+2010-08-26 10:30 +0000 [r11789]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - use /var/log/boot.log, to match with plymouth
+	  path
+
+2010-08-21 18:00 +0000 [r11788]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Set firmware-loader also when udev is off.
+
+2010-08-01 16:32 +0000 [r11741]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/i18n: - plain en with utf8
+
+2010-08-01 16:13 +0000 [r11739]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - skip lock when making nodes on boot
+
+2010-08-01 16:08 +0000 [r11738]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - check_root_fs to function for readability
+
+2010-08-01 15:58 +0000 [r11735-11737]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - remove locale setup where it is pointless
+	  (grep for fixed strings, and cat)
+
+	* rc.d/init.d/template.init: - sample for status with pidfile
+
+	* rc.d/rc.sysinit: - skip unneccesary subshell
+
+2010-07-26 13:31 +0000 [r11715]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: - typo
+
+2010-07-26 13:20 +0000 [r11714]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup: - allow per-interface
+	  configuration files for dhclient.conf – single config file with
+	  'interface' directive(s) conflicts with interface name given on
+	  the command line.
+
+2010-07-21 08:23 +0000 [r11688]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/allowlogin: - functions, exit early if disabled
+
+2010-07-20 08:42 +0000 [r11684]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - ugly hack to still do killall as pgrep is on
+	  /usr, or rather drop pgrep as it never returns empty nowadays due
+	  kernel threads?
+
+2010-07-08 10:47 +0000 [r11638-11639]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network, rc.d/init.d/local, rc.d/init.d/random,
+	  rc.d/init.d/single, rc.d/init.d/cpusets: - ignore
+	  /var/lock/subsys remove readonly fs errors (after fsck wants to
+	  reboot system)
+
+	* rc.d/init.d/network, rc.d/init.d/random, rc.d/init.d/single,
+	  rc.d/init.d/killall, rc.d/init.d/cpusets, rc.d/init.d/allowlogin:
+	  - executable initscripts
+
+2010-06-18 06:40 +0000 [r11565]  Bartłomiej Zimoń <cactus/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: - fix shutdown/restart on kernels with devtmpfs
+
+2010-06-15 11:37 +0000 [r11562]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* changelog.sh: - changelog.sh script improved and ChangeLog
+	  updated
+
 2010-06-15 11:33 +0000 [r11561]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* configure.ac: - firmwaredir was wrong
