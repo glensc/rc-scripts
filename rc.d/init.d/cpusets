@@ -23,8 +23,16 @@ fi
 # Source function library.
 . /etc/rc.d/init.d/functions
 
-if is_yes "${CPUSETS}" && ! grep -q "/dev/cpuset" /proc/mounts ; then
-	nls "ERROR: CPUSET support not enabled in kernel or /dev/cpuset not mounted" >&2
+if grep -q "/dev/cgroup" /proc/mounts ; then
+	CGDIR="/dev/cgroup"
+	CSUBSYS="cpuset."
+else
+	CGDIR="/dev/cpuset"
+	CSUBSYS=""
+fi
+
+if is_yes "${CPUSETS}" && [ -z "${CGDIR}" ]; then
+	nls "ERROR: CGROUP/CPUSET support not enabled in kernel or /dev/cpuset or /dev/cgroup not mounted" >&2
 	exit 1
 fi
 
@@ -33,14 +41,14 @@ cpuset_create() {
 
 	. /etc/sysconfig/cpusets/cpuset-$i
 
-	if mkdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
-		[ -n "$CPUS" ] && echo "$CPUS" >/dev/cpuset/"$NAME"/cpus
-		[ -n "$MEMS" ] && echo "$MEMS" >/dev/cpuset/"$NAME"/mems
-		[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >/dev/cpuset/"$NAME"/cpu_exclusive
-		[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >/dev/cpuset/"$NAME"/mem_exclusive
-		[ -n "$VIRTUALIZE" ] && echo "$VIRTUALIZE" >/dev/cpuset/"$NAME"/virtualize
-		[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >/dev/cpuset/"$NAME"/notify_on_release
-		[ -n "$TASKS" ] && echo "$TASKS" >/dev/cpuset/"$NAME"/tasks
+	if mkdir "${CGDIR}/${NAME}" >/dev/null 2>&1 ; then
+		[ -n "$CPUS" ] && echo "$CPUS" >"${CGDIR}/${NAME}/${CSUBSYS}cpus"
+		[ -n "$MEMS" ] && echo "$MEMS" >"${CGDIR}/${NAME}/${CSUBSYS}mems"
+		[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >"${CGDIR}/${NAME}/${CSUBSYS}cpu_exclusive"
+		[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >"${CGDIR}/${NAME}/${CSUBSYS}mem_exclusive"
+		[ -n "$VIRTUALIZE" ] && echo "$VIRTUALIZE" >"${CGDIR}/${NAME}/${CSUBSYS}virtualize"
+		[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >"${CGDIR}/${NAME}/${CSUBSYS}notify_on_release"
+		[ -n "$TASKS" ] && echo "$TASKS" >"${CGDIR}/${NAME}/tasks"
 		return 0
 	fi
 	return 1
@@ -52,7 +60,7 @@ cpuset_remove() {
 	. /etc/sysconfig/cpusets/cpuset-$i
 
 	# This MUST be rmdir (not rm -rf)
-	if rmdir /dev/cpuset/"$NAME" >/dev/null 2>&1 ; then
+	if rmdir "${CGDIR}${NAME}" >/dev/null 2>&1 ; then
 		return 0
 	else
 		return 1
@@ -60,7 +68,7 @@ cpuset_remove() {
 }
 
 cpuset_empty() {
-	if [ $(cat /dev/cpuset/$1/tasks 2>/dev/null | wc -c) -eq 0 ] ; then
+	if [ $(cat "${CGDIR}/$1/tasks" 2>/dev/null | wc -c) -eq 0 ] ; then
 		# true returns zero
 		return 0
 	else
@@ -140,14 +148,14 @@ case "$1" in
 	echo
 	nls "Currently empty cpusets:"
 	for i in $(ls /dev/cpuset 2>/dev/null); do
-		if [ -d /dev/cpuset/$i ]; then
+		if [ -d ${CGDIR}/$i ]; then
 			cpuset_empty $i && echo $i
 		fi
 	done
 	echo
 	nls "Currently active cpusets:"
 	for i in $(ls /dev/cpuset 2>/dev/null); do
-		if [ -d /dev/cpuset/$i ]; then
+		if [ -d ${CGDIR}/$i ]; then
 			cpuset_empty $i || echo $i
 		fi
 	done
