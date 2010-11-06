@@ -275,7 +275,7 @@ if ! is_yes "$VSERVER"; then
 		# creating is more convenient than artificial conflict with older udev
 		mkdir -p /dev/cgroup
 		# mount w/o options enables all available cgroup subsystems
-		modprobe -s blk-cgroup
+		modprobe -s blk-cgroup 2> /dev/null
 		mount -n -t cgroup none /dev/cgroup
 	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
 		mount -n -t cpuset none /dev/cpuset
