@@ -1,3 +1,17 @@
+2010-11-06 10:47 +0000 [r11894]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: Release 0.4.3.5.
+
+2010-11-06 09:57 +0000 [r11893]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/network, sysconfig/system, rc.d/init.d/functions:
+	  Detect isolation only vserver networking. New variable -
+	  VSERVER_ISOLATION_NET.
+
+2010-11-06 09:12 +0000 [r11892]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Silent modprobe.
+
 2010-11-06 08:43 +0000 [r11889]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Release 0.4.3.4.
