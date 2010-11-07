@@ -342,10 +342,11 @@ if ! is_yes "$VSERVER"; then
 			modprobe dm-mod
 		fi
 
-		# but should do this before swapon?
 		. /etc/rc.d/init.d/cryptsetup
 		show "Starting disk encryption"
-		init_crypto 0 && ok || fail
+		init_crypto 0
+		delay_cryptsetup=$?
+		[ $delay_cryptsetup = 0 ] && ok || fail
 	fi
 
 	# Start up swapping
@@ -461,10 +462,11 @@ if ! is_yes "$VSERVER"; then
 		done
 	fi
 
-	if [ -f /etc/crypttab ] && ! is_empty_file /etc/crypttab; then
-		# XXX, this must be probably done after random is initialized from /var/run/random-seed
+	if [ "$delay_cryptsetup" != 0 ]; then
 		show "Starting disk encryption using the RNG"
-		init_crypto 1 && ok || fail
+		init_crypto 1
+		delay_cryptsetup=$?
+		[ $delay_cryptsetup = 0 ] && ok || fail
 	fi
 else
 	# Start logging console output since we have all /dev stuff setup
@@ -667,6 +669,13 @@ if ! is_yes "$VSERVER"; then
 			# display VG statistics
 			/sbin/vgdisplay -s $lvmignorelock
 		fi
+	fi
+
+	if [ "$delay_cryptsetup" != 0 ]; then
+		show "Starting disk encryption"
+		init_crypto 1
+		delay_cryptsetup=$?
+		[ $delay_cryptsetup = 0 ] && ok || fail
 	fi
 
 	# Add raid devices
