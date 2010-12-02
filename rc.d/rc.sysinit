@@ -339,6 +339,7 @@ if ! is_yes "$VSERVER"; then
 		TIME_SETUP_DELAYED=yes
 	fi
 
+	delay_cryptsetup=0
 	if [ -f /etc/crypttab ] && ! is_empty_file /etc/crypttab; then
 		# XXX might need modules dep
 		# Device mapper & related initialization
