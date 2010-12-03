@@ -31,73 +31,87 @@ NCPMTAB=$(LC_ALL=C awk '$3 == "ncpfs" { print $2 }' /proc/mounts)
 NETDEVMTAB=$(LC_ALL=C awk '$4 ~ /_netdev/ && $2 != "/" { print $2 }' /etc/mtab)
 
 start() {
-	[ ! -f /var/lock/subsys/network ] && exit 0
-	[ "$(id -u)" != "0" ] && exit 4
-        [ -n "$NFSFSTAB" ] && 
-	  {
-	    [ ! -f /var/lock/subsys/rpcbind ] && service rpcbind start
-	    run_cmd "Mounting NFS filesystems" mount -a -t nfs,nfs4
-	  }
-        [ -n "$CIFSFSTAB" ] && run_cmd "Mounting CIFS filesystems" mount -a -t cifs
-        [ -n "$NCPFSTAB" ] && run_cmd "Mounting NCP filesystems" mount -a -t ncpfs
-        [ -n "$NETDEVFSTAB" ] &&
-	  {
-	    if [ -f /etc/mdadm.conf ]; then
-		mdadm -A -s
-	    fi
-	    if [ -f /etc/multipath.conf ] && [ -x /sbin/multipath ]; then
-	    	modprobe dm-multipath >/dev/null 2>&1
-		/sbin/multipath -v 0
-		if [ -x /sbin/kpartx ]; then
-		       /sbin/dmsetup ls --target multipath --exec "/sbin/kpartx -a -p p"
-		fi
-	    fi
-	    if [ -x /sbin/lvm ]; then
-		if /sbin/lvm vgscan > /dev/null 2>&1 ; then
-		       run_cmd "Setting up Logical Volume Management" /sbin/lvm vgchange -a y
-		fi
-	    fi
+	if [ ! -f /var/lock/subsys/network ]; then
+		return
+	fi
+	if [ "$(id -u)" != "0" ]; then
+		RETVAL=4
+		return
+	fi
 
-	    if [ -f /etc/crypttab ]; then
-	        init_crypto 1
-	    fi
+	[ -n "$NFSFSTAB" ] && {
+		[ ! -f /var/lock/subsys/rpcbind ] && service rpcbind start
+		run_cmd "Mounting NFS filesystems" mount -a -t nfs,nfs4
+	}
 
-	    show "Checking network-attached filesystems"; started
-	    initlog -c "fsck -A -T -R -a -t opts=_netdev"
-	    rc=$?
-	    
-	    if [ "$rc" -gt 1 ]; then
-		echo
-		echo
-		nls "*** An error occurred during the file system check."
-		nls "*** Dropping you to a shell; the system will reboot"
-		nls "*** when you leave the shell."
+	[ -n "$CIFSFSTAB" ] && run_cmd "Mounting CIFS filesystems" mount -a -t cifs
+	[ -n "$NCPFSTAB" ] && run_cmd "Mounting NCP filesystems" mount -a -t ncpfs
+
+	[ -n "$NETDEVFSTAB" ] && {
+		if [ -f /etc/mdadm.conf ]; then
+			mdadm -A -s
+		fi
+
+		if [ -f /etc/multipath.conf ] && [ -x /sbin/multipath ]; then
+			modprobe dm-multipath >/dev/null 2>&1
+			/sbin/multipath -v 0
+			if [ -x /sbin/kpartx ]; then
+				/sbin/dmsetup ls --target multipath --exec "/sbin/kpartx -a -p p"
+			fi
+		fi
+
+		if [ -x /sbin/lvm ]; then
+			if /sbin/lvm vgscan > /dev/null 2>&1 ; then
+				run_cmd "Setting up Logical Volume Management" /sbin/lvm vgchange -a y
+			fi
+		fi
+
+		if [ -f /etc/crypttab ]; then
+			init_crypto 1
+		fi
+
+		show "Checking network-attached filesystems"; started
+		initlog -c "fsck -A -T -R -a -t opts=_netdev"
+		rc=$?
 		
-		PS1="$(nls '(Repair filesystem)# ')"; export PS1
-		[ "$SELINUX" = "1" ] && disable_selinux
-		if ! is_no "$RUN_SULOGIN_ON_ERR"; then
-			/sbin/sulogin
-		else
-			/bin/sh
+		if [ "$rc" -gt 1 ]; then
+			echo
+			echo
+			nls "*** An error occurred during the file system check."
+			nls "*** Dropping you to a shell; the system will reboot"
+			nls "*** when you leave the shell."
+			
+			PS1="$(nls '(Repair filesystem)# ')"; export PS1
+			[ "$SELINUX" = "1" ] && disable_selinux
+			if ! is_no "$RUN_SULOGIN_ON_ERR"; then
+				/sbin/sulogin
+			else
+				/bin/sh
+			fi
+			shutdown -r now
 		fi
-		shutdown -r now
-	   fi
-	  }
-	touch /var/lock/subsys/netfs
+	}
+
 	run_cmd "Mounting other filesystems" mount -a -t nonfs,nfs4,cifs,ncpfs,gfs
+
+	touch /var/lock/subsys/netfs
 }
 
 stop() {
-        # Unmount loopback stuff first
-	[ "$(id -u)" != "0" ] && exit 4
+	# Unmount loopback stuff first
+	if [ "$(id -u)" != "0" ]; then
+		RETVAL=4
+		return
+	fi
+
 	__umount_loopback_loop
-  	if [ -n "$NETDEVMTAB" ]; then
+	if [ -n "$NETDEVMTAB" ]; then
 		__umount_loop '$4 ~ /_netdev/ && $2 != "/" {print $2}' \
 			/etc/mtab \
 			"$(nls "Unmounting network block filesystems")" \
 			"$(nls "Unmounting network block filesystems (retry)")"
 	fi
-  	if [ -n "$NFSMTAB" ]; then
+	if [ -n "$NFSMTAB" ]; then
 		__umount_loop '$3 ~ /^nfs/ && $3 != "nfsd" && $2 != "/" {print $2}' \
 			/proc/mounts \
 			"$(nls "Unmounting NFS filesystems")" \
@@ -110,44 +124,45 @@ stop() {
 }
 
 status() {
-	if [ -f /proc/mounts ]; then
-	        [ -n "$NFSFSTAB" ] && {
-		     nls "Configured NFS mountpoints: "
-		     for fs in $NFSFSTAB; do echo $fs ; done
-		}
-	        [ -n "$CIFSFSTAB" ] && {
-		     nls "Configured CIFS mountpoints: "
-		     for fs in $CIFSFSTAB; do echo $fs ; done
-		}
-	        [ -n "$NCPFSTAB" ] && {
-		     nls "Configured NCP mountpoints: "
-		     for fs in $NCPFSTAB; do echo $fs ; done
-		}
-		[ -n "$NETDEVFSTAB" ] && {
-		      nls "Configured network block devices: "
-		      for fs in $NETDEVFSTAB; do echo $fs ; done
-		}
-		[ -n "$NFSMTAB" ] && {
-                      nls "Active NFS mountpoints: "
-		      for fs in $NFSMTAB; do echo $fs ; done
-		}
-		[ -n "$CIFSMTAB" ] && {
-                      nls "Active CIFS mountpoints: "
-		      for fs in $CIFSMTAB; do echo $fs ; done
-		}
-		[ -n "$NCPMTAB" ] && {
-                      nls "Active NCP mountpoints: "
-		      for fs in $NCPMTAB; do echo $fs ; done
-		}
-		[ -n "$NETDEVMTAB" ] && {
-		      nls "Active network block devices: "
-		      for fs in $NETDEVMTAB; do echo $fs ; done
-		}
-	else
+	[ -r /var/lock/subsys/netfs ] || RETVAL=3
+
+	if [ ! -f /proc/mounts ]; then
 		nls "/proc filesystem unavailable"
+		return
 	fi
 
-	[ -r /var/lock/subsys/netfs ] || exit 3
+	[ -n "$NFSFSTAB" ] && {
+		nls "Configured NFS mountpoints: "
+		for fs in $NFSFSTAB; do echo $fs; done
+	}
+	[ -n "$CIFSFSTAB" ] && {
+		nls "Configured CIFS mountpoints: "
+		for fs in $CIFSFSTAB; do echo $fs; done
+	}
+	[ -n "$NCPFSTAB" ] && {
+		nls "Configured NCP mountpoints: "
+		for fs in $NCPFSTAB; do echo $fs; done
+	}
+	[ -n "$NETDEVFSTAB" ] && {
+		nls "Configured network block devices: "
+		for fs in $NETDEVFSTAB; do echo $fs; done
+	}
+	[ -n "$NFSMTAB" ] && {
+		nls "Active NFS mountpoints: "
+		for fs in $NFSMTAB; do echo $fs; done
+	}
+	[ -n "$CIFSMTAB" ] && {
+		nls "Active CIFS mountpoints: "
+		for fs in $CIFSMTAB; do echo $fs; done
+	}
+	[ -n "$NCPMTAB" ] && {
+		nls "Active NCP mountpoints: "
+		for fs in $NCPMTAB; do echo $fs; done
+	}
+	[ -n "$NETDEVMTAB" ] && {
+		nls "Active network block devices: "
+		for fs in $NETDEVMTAB; do echo $fs; done
+	}
 }
 
 RETVAL=0
@@ -171,7 +186,7 @@ case "$1" in
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|status}"
-	exit 2
+	exit 3
 esac
 
 exit $RETVAL
