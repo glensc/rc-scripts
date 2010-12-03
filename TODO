@@ -13,6 +13,7 @@ Important:
     killproc slapd -TERM --waitforname slapd --waitfortime 300 
   while correct would be:
     killproc --waitforname slapd --waitfortime 300 slapd -TERM
+- switch to use __umount_*loop instead of own umount loop when stopping system
 
 Not realy important but maybe nice:
 - Add checking for privileges during restarting
