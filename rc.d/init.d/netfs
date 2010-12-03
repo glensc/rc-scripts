@@ -11,7 +11,8 @@
 #	       CIFS (Lan Manager/Windows), and NCP (NetWare) mount points.
 
 [ -f /etc/sysconfig/network ] || exit 0
-. /etc/init.d/functions
+. /etc/rc.d/init.d/functions
+. /etc/rc.d/init.d/cryptsetup
 . /etc/sysconfig/network
 
 # nfs uses own script for that
@@ -55,7 +56,7 @@ case "$1" in
 	    fi
 	    if [ -x /sbin/lvm ]; then
 		if /sbin/lvm vgscan > /dev/null 2>&1 ; then
-		       run_cmd "Setting up Logical Volume Management:" /sbin/lvm vgchange -a y
+		       run_cmd "Setting up Logical Volume Management" /sbin/lvm vgchange -a y
 		fi
 	    fi
 
@@ -157,7 +158,7 @@ case "$1" in
 	exit $?
 	;;
   *)
-	echo $"Usage: $0 {start|stop|restart|reload|status}"
+	msg_usage "$0 {start|stop|restart|reload|status}"
 	exit 2
 esac
 
