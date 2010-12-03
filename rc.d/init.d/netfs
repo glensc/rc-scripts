@@ -33,7 +33,7 @@ NETDEVMTAB=$(LC_ALL=C awk '$4 ~ /_netdev/ && $2 != "/" { print $2 }' /etc/mtab)
 case "$1" in
   start)
         [ ! -f /var/lock/subsys/network ] && exit 0
-        [ "$EUID" != "0" ] && exit 4
+	[ "$(id -u)" != "0" ] && exit 4
         [ -n "$NFSFSTAB" ] && 
 	  {
 	    [ ! -f /var/lock/subsys/rpcbind ] && service rpcbind start
