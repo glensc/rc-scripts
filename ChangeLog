@@ -1,3 +1,54 @@
+2010-12-03 11:43 +0000 [r11936]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: 0.4.3.6
+
+2010-12-03 11:33 +0000 [r11934-11935]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/netfs: Bugfix (bring in cryptsetup; cleanups).
+
+	* rc.d/init.d/netfs: Bugfix.
+
+2010-12-03 10:37 +0000 [r11933]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/Makefile.am, rc.d/init.d/network: Bring in netfs.
+
+2010-12-03 10:33 +0000 [r11930-11932]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/netfs: : not needed.
+
+	* TODO: - better umount on stop
+
+	* rc.d/init.d/netfs: Bugfixes. Seems to be working fine.
+
+2010-12-03 10:25 +0000 [r11929]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/functions: __umount_*loop from FC.
+
+2010-12-03 10:15 +0000 [r11928]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/netfs: Don't touch nfs if we have separate nfsfs
+	  script.
+
+2010-12-03 09:38 +0000 [r11927]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/netfs (added): Networked filesystems mount/umount.
+	  Unfinished.
+
+2010-12-02 15:30 +0000 [r11922]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - avoid crypto init retries if no crypttab is
+	  setup
+
+2010-11-25 23:54 +0000 [r11913]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - don't mount cgroup if it's set up in fstab
+	  http://lists.pld-linux.org/mailman/pipermail/pld-devel-pl/2010-November/152970.html
+	  BTW, all this kinda sucks and needs revamp :(
+
+2010-11-07 19:54 +0000 [r11900]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - init crypt mounts also after lvm has been run
+
 2010-11-06 10:47 +0000 [r11894]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Release 0.4.3.5.
