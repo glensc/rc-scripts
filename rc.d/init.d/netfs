@@ -30,10 +30,8 @@ CIFSMTAB=$(LC_ALL=C awk '$3 == "cifs" { print $2 }' /proc/mounts)
 NCPMTAB=$(LC_ALL=C awk '$3 == "ncpfs" { print $2 }' /proc/mounts)
 NETDEVMTAB=$(LC_ALL=C awk '$4 ~ /_netdev/ && $2 != "/" { print $2 }' /etc/mtab)
 
-# See how we were called.
-case "$1" in
-  start)
-        [ ! -f /var/lock/subsys/network ] && exit 0
+start() {
+	[ ! -f /var/lock/subsys/network ] && exit 0
 	[ "$(id -u)" != "0" ] && exit 4
         [ -n "$NFSFSTAB" ] && 
 	  {
@@ -87,8 +85,9 @@ case "$1" in
 	  }
 	touch /var/lock/subsys/netfs
 	run_cmd "Mounting other filesystems" mount -a -t nonfs,nfs4,cifs,ncpfs,gfs
-	;;
-  stop)
+}
+
+stop() {
         # Unmount loopback stuff first
 	[ "$(id -u)" != "0" ] && exit 4
 	__umount_loopback_loop
@@ -108,9 +107,10 @@ case "$1" in
 	[ -n "$CIFSMTAB" ] && run_cmd "Unmounting CIFS filesystems" umount -a -t cifs
 	[ -n "$NCPMTAB" ] && run_cmd "Unmounting NCP filesystems" umount -a -t ncp,ncpfs
 	rm -f /var/lock/subsys/netfs
-	;;
-  status)
-	if [ -f /proc/mounts ] ; then
+}
+
+status() {
+	if [ -f /proc/mounts ]; then
 	        [ -n "$NFSFSTAB" ] && {
 		     nls "Configured NFS mountpoints: "
 		     for fs in $NFSFSTAB; do echo $fs ; done
@@ -146,20 +146,32 @@ case "$1" in
 	else
 		nls "/proc filesystem unavailable"
 	fi
+
 	[ -r /var/lock/subsys/netfs ] || exit 3
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status
 	;;
   restart)
-	$0 stop
-	$0 start
-	exit $?
+	stop
+	start
 	;;
   reload)
-        $0 start
-	exit $?
+	start
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|status}"
 	exit 2
 esac
 
-exit 0
+exit $RETVAL
