@@ -37,10 +37,10 @@ case "$1" in
         [ -n "$NFSFSTAB" ] && 
 	  {
 	    [ ! -f /var/lock/subsys/rpcbind ] && service rpcbind start
-	    run_cmd "Mounting NFS filesystems: " mount -a -t nfs,nfs4
+	    run_cmd "Mounting NFS filesystems" mount -a -t nfs,nfs4
 	  }
-        [ -n "$CIFSFSTAB" ] && run_cmd "Mounting CIFS filesystems: " mount -a -t cifs
-        [ -n "$NCPFSTAB" ] && run_cmd "Mounting NCP filesystems: " mount -a -t ncpfs
+        [ -n "$CIFSFSTAB" ] && run_cmd "Mounting CIFS filesystems" mount -a -t cifs
+        [ -n "$NCPFSTAB" ] && run_cmd "Mounting NCP filesystems" mount -a -t ncpfs
         [ -n "$NETDEVFSTAB" ] &&
 	  {
 	    if [ -f /etc/mdadm.conf ]; then
@@ -85,7 +85,7 @@ case "$1" in
 	   fi
 	  }
 	touch /var/lock/subsys/netfs
-	run_cmd "Mounting other filesystems: " mount -a -t nonfs,nfs4,cifs,ncpfs,gfs
+	run_cmd "Mounting other filesystems" mount -a -t nonfs,nfs4,cifs,ncpfs,gfs
 	;;
   stop)
         # Unmount loopback stuff first
@@ -94,18 +94,18 @@ case "$1" in
   	if [ -n "$NETDEVMTAB" ]; then
 		__umount_loop '$4 ~ /_netdev/ && $2 != "/" {print $2}' \
 			/etc/mtab \
-			"$(nls "Unmounting network block filesystems: ")" \
-			"$(nls "Unmounting network block filesystems (retry): ")"
+			"$(nls "Unmounting network block filesystems")" \
+			"$(nls "Unmounting network block filesystems (retry)")"
 	fi
   	if [ -n "$NFSMTAB" ]; then
 		__umount_loop '$3 ~ /^nfs/ && $3 != "nfsd" && $2 != "/" {print $2}' \
 			/proc/mounts \
-			"$(nls "Unmounting NFS filesystems: ")" \
-			"$(nls "Unmounting NFS filesystems (retry): ")" \
+			"$(nls "Unmounting NFS filesystems")" \
+			"$(nls "Unmounting NFS filesystems (retry)")" \
 			"-f -l"
 	fi
-	[ -n "$CIFSMTAB" ] && run_cmd "Unmounting CIFS filesystems: " umount -a -t cifs
-	[ -n "$NCPMTAB" ] && run_cmd "Unmounting NCP filesystems: " umount -a -t ncp,ncpfs
+	[ -n "$CIFSMTAB" ] && run_cmd "Unmounting CIFS filesystems" umount -a -t cifs
+	[ -n "$NCPMTAB" ] && run_cmd "Unmounting NCP filesystems" umount -a -t ncp,ncpfs
 	rm -f /var/lock/subsys/netfs
 	;;
   status)
