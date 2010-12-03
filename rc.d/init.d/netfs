@@ -89,19 +89,19 @@ case "$1" in
 	;;
   stop)
         # Unmount loopback stuff first
-        [ "$EUID" != "0" ] && exit 4
+	[ "$(id -u)" != "0" ] && exit 4
 	__umount_loopback_loop
   	if [ -n "$NETDEVMTAB" ]; then
 		__umount_loop '$4 ~ /_netdev/ && $2 != "/" {print $2}' \
 			/etc/mtab \
-			$(nls "Unmounting network block filesystems: ") \
-			$(nls "Unmounting network block filesystems (retry): ")
+			"$(nls "Unmounting network block filesystems: ")" \
+			"$(nls "Unmounting network block filesystems (retry): ")"
 	fi
   	if [ -n "$NFSMTAB" ]; then
 		__umount_loop '$3 ~ /^nfs/ && $3 != "nfsd" && $2 != "/" {print $2}' \
 			/proc/mounts \
-			$(nls "Unmounting NFS filesystems: ") \
-			$(nls "Unmounting NFS filesystems (retry): ") \
+			"$(nls "Unmounting NFS filesystems: ")" \
+			"$(nls "Unmounting NFS filesystems (retry): ")" \
 			"-f -l"
 	fi
 	[ -n "$CIFSMTAB" ] && run_cmd "Unmounting CIFS filesystems: " umount -a -t cifs
