@@ -223,17 +223,6 @@ stop() {
 		if [ -x /etc/rc.d/init.d/netfs -a -f /var/lock/subsys/netfs ];
 		then
 			/etc/rc.d/init.d/netfs stop
-		else
-			netmtab=$(awk '{ if ($3 ~ /^(smbfs|ncpfs|cifs)$/ ) print $3}' /proc/mounts)
-			if (echo "$netmtab" | grep -q smbfs); then
-				run_cmd "Unmounting SMB filesystems" umount -at smbfs
-			fi
-			if (echo "$netmtab" | grep -q ncpfs); then
-				run_cmd "Unmounting NCP filesystems" umount -at ncpfs
-			fi
-			if (echo "$netmtab" | grep -q cifs); then
-				run_cmd "Unmounting CIFS filesystems" umount -at cifs
-			fi
 		fi
 	fi
 

@@ -6,6 +6,7 @@ init_SCRIPTS = \
 	allowlogin \
 	cpusets \
 	killall \
+	netfs \
 	network \
 	random \
 	single \
