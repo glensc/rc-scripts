@@ -37,6 +37,8 @@ OPTION4=5	#
 # Get service config - may override defaults
 [ -f /etc/sysconfig/<service> ] && . /etc/sysconfig/<service>
 
+pidfile="/var/run/<service>.pid"
+
 # configtest itself
 # must return non-zero if check failed
 # output is discarded if checkconfig is ran without details
@@ -97,7 +99,7 @@ stop() {
 	# Stop daemons.
 	msg_stopping "<service_name>"
 	killproc <procname>
-	killproc --pidfile /var/run/<service>.pid <procname> -TERM
+	killproc --pidfile $pidfile <procname> -TERM
 	rm -f /var/lock/subsys/<service>
 }
 
@@ -111,7 +113,7 @@ reload() {
 	checkconfig
 	msg_reloading "<service_name>"
 	killproc <procname> -HUP
-	killproc --pidfile /var/run/<service>.pid <procname> -HUP
+	killproc --pidfile $pidfile <procname> -HUP
 	RETVAL=$?
 }
 
@@ -158,8 +160,8 @@ case "$1" in
 	;;
   status)
 	status <service>
-	status --pidfile /var/run/<service>.pid <service>
-	status --pidfile /var/run/<service>.pid <service> <procname>
+	status --pidfile $pidfile <service>
+	status --pidfile $pidfile <service> <procname>
 	RETVAL=$?
 	;;
   *)
