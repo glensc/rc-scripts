@@ -462,26 +462,37 @@ filter_chroot() {
 	echo $good_pids
 }
 
-# Usage run_cmd Message command_to_run
+# Usage:
+# run_cmd Message command_to_run
+# run_cmd -a Message command_to_run
+# run_cmd --user "username" "Message" command_to_run
 run_cmd() {
-	local exit_code errors message force_err
-	local force_err=0 exit_code=0
-	case "$1" in
-	-a)
-		force_err=1
+	local force_err=0 exit_code=0 errors user
+	while [ $# -gt 0 ]; do
+		case "$1" in
+		-a)
+			force_err=1
+			;;
+		--user)
+			shift
+			user=$1
+			;;
+		*)
+			break
+		esac
 		shift
-		;;
-	esac
-	message=$1
+	done
+
+	local message=$1; shift
 	show "$message"; busy
-	shift
-	cd /
+
 	if errors=$(
+		cd /
 		export HOME=/tmp TMPDIR=/tmp
 		if is_no "$RC_LOGGING"; then
-			"$@" 2>&1
+			${user:+setuidgid -s $user} "$@" 2>&1
 		else
-			initlog -c "$*" 2>&1
+			${user:+setuidgid -s $user} initlog -c "$*" 2>&1
 		fi
 		); then
 		ok
