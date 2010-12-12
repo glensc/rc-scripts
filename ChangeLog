@@ -1,3 +1,23 @@
+2010-12-12 17:42 +0000 [r11982-11983]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - 0.4.3.7
+
+	* rc.d/init.d/functions: add --user support to run_cmd Usage:
+	  run_cmd --user stats "Message" command_to_run arg1 arg2...
+
+2010-12-07 14:08 +0000 [r11973]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/template.init: - pidfile var
+
+2010-12-03 13:10 +0000 [r11940]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/netfs: - some formatting, respect to use functios
+	  (RETVAL variable vs exit calls)
+
+2010-12-03 13:04 +0000 [r11939]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/netfs: - use functions
+
 2010-12-03 11:43 +0000 [r11936]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: 0.4.3.6
