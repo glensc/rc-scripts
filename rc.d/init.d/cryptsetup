@@ -162,12 +162,12 @@ RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-	show "Starting disk encryption"; busy
-	init_crypto 1 && ok
+	show "Starting disk encryption"; started
+	init_crypto 1 && deltext; ok
 	;;
   stop)
-	show "Stopping disk encryption"; busy
-	halt_crypto && ok
+	show "Stopping disk encryption"; started
+	halt_crypto && deltext; ok
 	;;
   status)
 	# this is way overkill, but at least we have some status output...
