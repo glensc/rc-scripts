@@ -15,6 +15,10 @@
 . /etc/rc.d/init.d/cryptsetup
 . /etc/sysconfig/network
 
+if is_yes "$VSERVER"; then
+	exit 0
+fi
+
 # nfs uses own script for that
 if [ ! -f /etc/rc.d/init.d/nfsfs ]; then
 	NFSFSTAB=$(LC_ALL=C awk '!/^#/ && $3 ~ /^nfs/ && $3 != "nfsd" && $4 !~ /noauto/ { print $2 }' /etc/fstab)
