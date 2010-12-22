@@ -272,7 +272,7 @@ if ! is_yes "$VSERVER"; then
 
 	# cgroup/cpuset support
 	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
-		if ! grep -q cgroup /etc/fstab 2>/dev/null ; then
+		if ! grep -q "^[^#].*cgroup" /etc/fstab 2>/dev/null ; then
 			# creating is more convenient than artificial conflict with older udev
 			mkdir -p /dev/cgroup
 			# mount w/o options enables all available cgroup subsystems
@@ -280,7 +280,7 @@ if ! is_yes "$VSERVER"; then
 			mount -n -t cgroup none /dev/cgroup
 		fi
 	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
-		if ! grep -q cpuset /etc/fstab 2>/dev/null ; then
+		if ! grep -q "^[^#].*cpuset" /etc/fstab 2>/dev/null ; then
 			mount -n -t cpuset none /dev/cpuset
 		fi
 	fi
