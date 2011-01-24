@@ -35,13 +35,13 @@ IPXINTERNALNETNUM=
 IPXINTERNALNODENUM=
 
 # Do you need IPv6 networking ?
-IPV6_NETWORKING=no
+IPV6_NETWORKING=yes
 
 # Do you want IPv6 forwarding ?
 # then set it in /etc/sysctl.conf
 
 # Enable tunnel interfaces configuration ?
-IPV6_TUNNELCONFIG=no
+IPV6_TUNNELCONFIG=yes
 
 # Global route for IPv6 host with IPv6 forwarding
 IPV6_GLOBALROUTEGW=
