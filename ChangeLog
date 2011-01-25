@@ -1,3 +1,27 @@
+2011-01-25 18:56 +0000 [r12083-12084]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* configure.ac: 0.4.3.8
+
+	* autogen.sh: Disabled --enable-maintainer-mode
+	  --enable-compile-warnings (unsupported by current auto*).
+
+2011-01-24 18:19 +0000 [r12082]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network: IPv6 networking on by default.
+
+2010-12-22 10:23 +0000 [r12020]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/netfs: Don't mount fs inside of vserver guest.
+
+2010-12-22 05:54 +0000 [r12019]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: cgroup/cpuset can exist in fstab but be
+	  commented out. Handle that.
+
+2010-12-20 18:09 +0000 [r12014]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/cryptsetup: started instead of busy
+
 2010-12-12 17:42 +0000 [r11982-11983]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - 0.4.3.7
