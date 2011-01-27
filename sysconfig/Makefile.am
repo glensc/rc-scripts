@@ -5,7 +5,6 @@ SUBDIRS = network-scripts interfaces hwprofiles cpusets
 sysconfigdir = @sysconfigdir@
 
 sysconfig_DATA = \
-	clock \
 	init-colors \
 	hwprof \
 	system \
