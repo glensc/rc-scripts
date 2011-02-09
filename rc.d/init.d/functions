@@ -697,7 +697,7 @@ killproc() {
 
 	while [ "$1" != "${1##-}" ]; do
 		case $1 in
-		--pidfile)
+		--pidfile|-p)
 			pidfile="$2"
 			case "$pidfile" in /*);; *) pidfile="/var/run/$pidfile";; esac
 			shift 2
