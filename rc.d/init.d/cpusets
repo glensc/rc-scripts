@@ -23,27 +23,37 @@ fi
 # Source function library.
 . /etc/rc.d/init.d/functions
 
+CGDIR=
+CSUBSYS=
 if grep -q "/dev/cgroup" /proc/mounts ; then
 	CGDIR="/dev/cgroup"
-	CSUBSYS="cpuset."
 elif grep -q "/dev/cpuset" /proc/mounts ; then
 	CGDIR="/dev/cpuset"
-	CSUBSYS=""
+fi
+
+if [ -e ${CGDIR}/cpuset.cpus ]; then
+	CSUBSYS="cpuset."
+elif [ ! -e ${CGDIR}/cpus ]; then
+	nls "ERROR: CGROUP/CPUSET mounted in a way I can't recognize" >&2
+	exit 1
 fi
 
 cpuset_mount() {
 	[ -n "${CGDIR}" ] && return
 
 	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
-		# creating is more convenient than artificial conflict with older udev
-		mkdir -p /dev/cgroup
-		mount -t cgroup none /dev/cgroup -ocpuset
+		mkdir -p /dev/cpuset
+		mount -t cgroup none /dev/cpuset -ocpuset
+		CSUBSYS="cpuset."
 	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
+		mkdir -p /dev/cpuset
 		mount -t cpuset none /dev/cpuset
+		CSUBSYS=""
 	else
 		nls "ERROR: CGROUP/CPUSET support not enabled in kernel" >&2
 		exit 1
 	fi
+	CGDIR="/dev/cpuset"
 }
 
 cpuset_create() {
