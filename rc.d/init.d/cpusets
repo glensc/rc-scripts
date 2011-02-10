@@ -48,7 +48,7 @@ cpuset_mount() {
 		fi
 	else
 		nls "ERROR: CGROUP/CPUSET support not enabled in kernel" >&2
-		return 1
+		exit 1
 	fi
 }
 
