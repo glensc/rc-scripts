@@ -26,15 +26,31 @@ fi
 if grep -q "/dev/cgroup" /proc/mounts ; then
 	CGDIR="/dev/cgroup"
 	CSUBSYS="cpuset."
-else
+elif grep -q "/dev/cpuset" /proc/mounts ; then
 	CGDIR="/dev/cpuset"
 	CSUBSYS=""
 fi
 
-if is_yes "${CPUSETS}" && [ -z "${CGDIR}" ]; then
-	nls "ERROR: CGROUP/CPUSET support not enabled in kernel or /dev/cpuset or /dev/cgroup not mounted" >&2
-	exit 1
-fi
+cpuset_mount() {
+	[ -n "${CGDIR}" ] && return
+
+	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
+		if ! grep -q "^[^#].*cgroup" /etc/fstab 2>/dev/null ; then
+			# creating is more convenient than artificial conflict with older udev
+			mkdir -p /dev/cgroup
+			modprobe -s blk-cgroup 2>/dev/null
+			# mount w/o options enables all available cgroup subsystems
+			mount -n -t cgroup none /dev/cgroup
+		fi
+	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
+		if ! grep -q "^[^#].*cpuset" /etc/fstab 2>/dev/null ; then
+			mount -n -t cpuset none /dev/cpuset
+		fi
+	else
+		nls "ERROR: CGROUP/CPUSET support not enabled in kernel" >&2
+		return 1
+	fi
+}
 
 cpuset_create() {
 	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
@@ -137,6 +153,7 @@ cpusets_boot=$(
 # See how we were called.
 case "$1" in
   start)
+	cpuset_mount
   	start
 	;;
   stop)
@@ -163,6 +180,7 @@ case "$1" in
 	;;
   restart)
 	stop
+	cpuset_mount
 	start
 	;;
   *)
