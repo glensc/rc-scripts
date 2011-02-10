@@ -31,11 +31,13 @@ elif grep -q "/dev/cpuset" /proc/mounts ; then
 	CGDIR="/dev/cpuset"
 fi
 
-if [ -e ${CGDIR}/cpuset.cpus ]; then
-	CSUBSYS="cpuset."
-elif [ ! -e ${CGDIR}/cpus ]; then
-	nls "ERROR: CGROUP/CPUSET mounted in a way I can't recognize" >&2
-	exit 1
+if [ -n "${CGDIR}" ]; then
+	if [ -e ${CGDIR}/cpuset.cpus ]; then
+		CSUBSYS="cpuset."
+	elif [ ! -e ${CGDIR}/cpus ]; then
+		nls "ERROR: CGROUP/CPUSET mounted in a way I can't recognize" >&2
+		exit 1
+	fi
 fi
 
 cpuset_mount() {
