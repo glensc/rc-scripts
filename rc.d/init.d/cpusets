@@ -35,17 +35,11 @@ cpuset_mount() {
 	[ -n "${CGDIR}" ] && return
 
 	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
-		if ! grep -q "^[^#].*cgroup" /etc/fstab 2>/dev/null ; then
-			# creating is more convenient than artificial conflict with older udev
-			mkdir -p /dev/cgroup
-			modprobe -s blk-cgroup 2>/dev/null
-			# mount w/o options enables all available cgroup subsystems
-			mount -t cgroup none /dev/cgroup
-		fi
+		# creating is more convenient than artificial conflict with older udev
+		mkdir -p /dev/cgroup
+		mount -t cgroup none /dev/cgroup -ocpuset
 	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
-		if ! grep -q "^[^#].*cpuset" /etc/fstab 2>/dev/null ; then
-			mount -t cpuset none /dev/cpuset
-		fi
+		mount -t cpuset none /dev/cpuset
 	else
 		nls "ERROR: CGROUP/CPUSET support not enabled in kernel" >&2
 		exit 1
