@@ -42,11 +42,11 @@ cpuset_mount() {
 	[ -n "${CGDIR}" ] && return
 
 	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
-		mkdir -p /dev/cpuset
+		mkdir -p /dev/cpuset 2>/dev/null
 		mount -t cgroup none /dev/cpuset -ocpuset
 		CSUBSYS="cpuset."
 	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
-		mkdir -p /dev/cpuset
+		mkdir -p /dev/cpuset 2>/dev/null
 		mount -t cpuset none /dev/cpuset
 		CSUBSYS=""
 	else
