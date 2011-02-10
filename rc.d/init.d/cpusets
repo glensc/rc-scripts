@@ -82,7 +82,7 @@ cpuset_remove() {
 	. /etc/sysconfig/cpusets/cpuset-$i
 
 	# This MUST be rmdir (not rm -rf)
-	if rmdir "${CGDIR}${NAME}" >/dev/null 2>&1 ; then
+	if rmdir "${CGDIR}/${NAME}" >/dev/null 2>&1 ; then
 		return 0
 	else
 		return 1
