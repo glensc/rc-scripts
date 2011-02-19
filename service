@@ -45,15 +45,15 @@ while [ $# -gt 0 ]; do
 		echo "${VERSION}" >&2
 		exit 0
 		;;
-	  --upstart)
-	  	USE_UPSTART=yes
+	--upstart)
+		USE_UPSTART=yes
 		shift
 		;;
-	  --no-upstart)
-	  	USE_UPSTART=no
+	--no-upstart)
+		USE_UPSTART=no
 		shift
 		;;
-	  *)
+	*)
 		if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
 			cd ${SERVICEDIR}
 			for SERVICE in *; do
