@@ -66,8 +66,8 @@ if (LC_ALL=C ip link add type vlan help 2>&1 | grep -q "VLANID :="); then
 	/sbin/ip link add link ${VLAN_DEV} name ${DEVICE} type vlan id ${VLAN_ID}
 	# default yes
 	is_no "${VLAN_REORDER_HDR}" && VLAN_REORDER_HDR=off || VLAN_REORDER_HDR=on
-	# default no
-	is_yes "$VLAN_GVRP" && VLAN_GVRP=on || VLAN_GVRP=off
+	# default yes
+	is_no "$VLAN_GVRP" && VLAN_GVRP=off || VLAN_GVRP=on
 	/sbin/ip link set ${DEVICE} type vlan reorder_hdr ${VLAN_REORDER_HDR} gvrp ${VLAN_GVRP}
 elif [ -x /sbin/vconfig ]; then
 	/sbin/vconfig set_name_type DEV_PLUS_VID_NO_PAD
