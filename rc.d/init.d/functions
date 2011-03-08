@@ -939,7 +939,7 @@ confirm() {
 is_module() {
 	# module name without .o at end
 	if ! lsmod | grep -q "$1"; then
-		if ls -R /lib/modules/$(uname -r)/ 2> /dev/null | grep -q "${1}.\(\|k\)o\(\|.gz\)"; then
+		if ls -1R /lib/modules/$(uname -r)/ 2> /dev/null | grep -q "^${1}.\(\|k\)o\(\|.gz\)"; then
 			# true
 			return 0
 		fi
