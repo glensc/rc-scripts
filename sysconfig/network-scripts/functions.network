@@ -346,12 +346,16 @@ set_down_loopback()
 
 modprobe_net()
 {
-	if is_yes "$IPV6_NETWORKING" && is_module "ipv6"; then
-		_modprobe single ipv6
+	if is_yes "$IPV6_NETWORKING" && \
+		[ "$(awk '$1 ~ /^TCPv6/ { print $8 }' /proc/net/protocols 2> /dev/null)" != "kernel" ] && \
+		is_module "ipv6"; then
+			_modprobe single ipv6
 	fi
 
-	if is_yes "$IPX" && is_module "ipx"; then
-		_modprobe single ipx
+	if is_yes "$IPX" && \
+		[ "$(awk '$1 ~ /^IPX/ { print $8 }' /proc/net/protocols 2> /dev/null)" != "kernel" ] && \
+		is_module "ipx"; then
+			_modprobe single ipx
 	fi
 }
 
