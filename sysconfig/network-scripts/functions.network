@@ -336,6 +336,14 @@ set_up_loopback()
 		ip addr add 127.0.0.1/8 dev lo
 	fi
 	ip link set dev lo up
+	grep -E "^(lo|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+		if [[ "$args" = *:* ]]; then
+			is_no "$IPV6_NETWORKING" && continue
+		else
+			is_no "$IPV4_NETWORKING" && continue
+		fi
+		/sbin/ip route add $args dev $REALDEVICE
+	done
 }
 
 set_down_loopback()
