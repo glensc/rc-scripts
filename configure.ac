@@ -69,21 +69,13 @@ fi
 
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 GLIBDIR=none
-AC_MSG_CHECKING([glib2 dir])
-GLIBDIR="`$PKG_CONFIG --variable=libdir glib-2.0`"
-GLIBNAME="libglib-2.0.a"
-GCFLAGS="`$PKG_CONFIG --cflags-only-I glib-2.0`"
-if test "x$GLIBDIR" = "x"; then
-    AC_MSG_RESULT([none])
-    AC_MSG_CHECKING([glib dir])
-    GLIBDIR="`$PKG_CONFIG --variable=libdir glib`"
-    GLIBNAME="libglib.a"
-    GCFLAGS="`$PKG_CONFIG --cflags-only-I glib`"
+AC_MSG_CHECKING([glib2])
+GLIB_LIBS="-Wl,-static `$PKG_CONFIG --libs --static glib-2.0` -Wl,-Bdynamic"
+GLIB_CFLAGS="`$PKG_CONFIG --cflags-only-I glib-2.0`"
+if test "x$GLIB_LIBS" = "x"; then
+	AC_MSG_ERROR(no)
 fi
-if test "x$GLIBDIR" = "x"; then
-    GLIBDIR=/usr/lib
-fi
-AC_MSG_RESULT([$GLIBDIR])
+AC_MSG_RESULT(yes)
 
 DPKG_C_GCC_ATTRIBUTE([,,],supported,[int x],[,,],ATTRIB,[Define if function attributes a la GCC 2.5 and higher are available.],
   DPKG_C_GCC_ATTRIBUTE(noreturn,noreturn,[int x],noreturn,NORETURN,[Define if nonreturning functions a la GCC 2.5 and higher are available.])
@@ -111,9 +103,8 @@ AC_SUBST(rcdir)
 AC_SUBST(initdir)
 AC_SUBST(docdir)
 AC_SUBST(firmwaredir)
-AC_SUBST(GLIBDIR)
-AC_SUBST(GLIBNAME)
-AC_SUBST(GCFLAGS)
+AC_SUBST(GLIB_LIBS)
+AC_SUBST(GLIB_CFLAGS)
 
 AH_BOTTOM([
 #ifdef HAVE_STDDEF_H

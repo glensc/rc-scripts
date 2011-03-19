@@ -1,9 +1,5 @@
 @SET_MAKE@
 
-GLIBDIR = @GLIBDIR@
-GCFLAGS = @GCFLAGS@
-GLIBNAME = @GLIBNAME@
-
 DEFS = @DEFS@ -D_GNU_SOURCE=1 -DSBINDIR=\""@sbindir@"\"
 
 sysconf_DATA = \
@@ -60,8 +56,8 @@ getkey_SOURCES = getkey.c
 getkey_LDADD = -lpopt
 
 ppp_watch_SOURCES = ppp-watch.c shvar.c shvar.h
-ppp_watch_LDADD = $(GLIBDIR)/$(GLIBNAME)
-INCLUDES = $(GCFLAGS)
+ppp_watch_LDADD = $(GLIB_LIBS)
+INCLUDES = $(GLIB_CFLAGS)
 
 consoletype_SOURCES = consoletype.c
 
