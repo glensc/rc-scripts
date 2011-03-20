@@ -342,7 +342,7 @@ set_up_loopback()
 		else
 			is_no "$IPV4_NETWORKING" && continue
 		fi
-		/sbin/ip route add $args dev $REALDEVICE
+		/sbin/ip route add $args dev lo
 	done
 }
 
