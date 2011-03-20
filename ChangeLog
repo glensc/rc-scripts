@@ -1,3 +1,9 @@
+2011-03-20 01:00 +0000 [r12206-12207]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: - 0.4.4.1, fixes typo in set_up_loopback
+
+	* sysconfig/network-scripts/functions.network: - use proper device
+
 2011-03-20 00:09 +0000 [r12203]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* configure.ac: - 0.4.4.0
