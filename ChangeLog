@@ -1,3 +1,89 @@
+2011-03-20 00:09 +0000 [r12203]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: - 0.4.4.0
+
+2011-03-19 23:57 +0000 [r12202]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* src/Makefile.am, configure.ac: - fix glib2 static linking
+
+2011-03-18 18:19 +0000 [r12201]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - setup static
+	  routes for loopback, see
+	  http://wiki.squid-cache.org/Features/Tproxy4 why this is needed
+
+2011-03-08 20:49 +0000 [r12198]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network,
+	  rc.d/init.d/functions: Revert previous commit. Fix is_module
+	  instead to do not match partial module names.
+
+2011-03-08 20:34 +0000 [r12197]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Load ipv6 and ipx
+	  only when not built into kernel.
+
+2011-03-04 13:37 +0000 [r12188]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-vlan: GVRP default on on vlans
+
+2011-02-19 16:03 +0000 [r12170]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* service: - tabs
+
+2011-02-10 16:37 +0000 [r12138]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - added missing slash
+
+2011-02-10 12:46 +0000 [r12136]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - don't try to find out the subsystem type
+	  if none is mounted
+
+2011-02-10 12:26 +0000 [r12135]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - silence mkdir
+
+2011-02-10 12:21 +0000 [r12134]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - always mount on /dev/cpuset (only cpuset
+	  is supported by this script) - check if mount point is proper
+	  cpuset/cgroup(cpuset) subsys
+
+2011-02-10 12:12 +0000 [r12133]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - mount only cpuset subsys cgroup - no need
+	  to parse and check fstab as this script is run after rc.sysinit
+	  mounts all filessystems listed there
+
+2011-02-10 11:04 +0000 [r12128-12130]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/cpusets: - put cpuset/cgroup mounts in mtab
+
+	* rc.d/init.d/cpusets: - exit from script if no cpuset/cgroup
+	  support in kernel
+
+	* rc.d/rc.sysinit, rc.d/init.d/cpusets: - moved cpuset/cgroup
+	  mounting code into cpuset startup script for seamless
+	  interoperability with libcgroup
+
+2011-02-09 10:55 +0000 [r12126]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: add killproc -p alias
+
+2011-01-27 06:04 +0000 [r12089-12090]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/Makefile.am: sysconfig/clock is gone
+
+	* doc/sysconfig.txt, rc.d/rc.sysinit, sysconfig/clock (removed),
+	  doc/sysconfig.docb: sysconfig/clock and related actions are
+	  obsolete now. hwclock knows how to handle these based on adjtime
+	  settings.
+
+2011-01-27 05:44 +0000 [r12088]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Check /dev/rtc or /dev/rtc0 existence.
+
 2011-01-25 18:56 +0000 [r12083-12084]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: 0.4.3.8
@@ -218,7 +304,7 @@
 	  rc.d/init.d/killall, rc.d/init.d/cpusets, rc.d/init.d/allowlogin:
 	  - executable initscripts
 
-2010-06-18 06:40 +0000 [r11565]  Bartłomiej Zimoń <cactus/at/pld-linux.org>
+2010-06-18 06:40 +0000 [r11565]  cactus <cactus/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - fix shutdown/restart on kernels with devtmpfs
 
@@ -569,12 +655,12 @@
 	* rc.d/init.d/template.init: - stderr redirected anyway, nothing
 	  special needed in configtest()
 
-2009-10-15 10:03 +0000 [r10789]  Paweł Zuzelski <pawelz/at/pld-linux.org>
+2009-10-15 10:03 +0000 [r10789]  pawelz <pawelz/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.gprs-playmobile: - do not reduce
 	  MTU by default. It kills ipsec.
 
-2009-10-15 09:32 +0000 [r10788]  Paweł Zuzelski <pawelz/at/pld-linux.org>
+2009-10-15 09:32 +0000 [r10788]  pawelz <pawelz/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.gprs-playmobile (added),
 	  sysconfig/interfaces/data/chat-ppp0.gprs-playmobile (added): -
