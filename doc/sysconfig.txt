@@ -61,7 +61,7 @@ Files in /etc/sysconfig
 
   <device> may be a device name to have the route brought up and
   down with the device, or "any" to have the correct devices calculated
-  at run time. [type] is optional. RH style isn't supported !
+  at run time. [type] is optional. RH style isn't supported!
 
   Also you can set few options after "<gateway>":
     tos <tos>
@@ -77,7 +77,11 @@ Files in /etc/sysconfig
     protocol <rtproto>
     onlink
     equalize
-  For more informations see iproute2 documentation .
+  For more informations see iproute2 documentation.
+
+/etc/sysconfig/static-routes6:
+
+  Same as /etc/sysconfig/static-routes but for IPv6.
 
 /etc/sysconfig/routed:
 

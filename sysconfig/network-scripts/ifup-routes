@@ -5,7 +5,7 @@
 # Adds static routes which go through device $DEVICE
 # Called from ifup-post.
 
-if [ ! -f /etc/sysconfig/static-routes ]; then
+if [ ! -f /etc/sysconfig/static-routes -a ! -f /etc/sysconfig/static-routes6 ]; then
 	return
 fi
 
@@ -23,6 +23,11 @@ grep -E "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-routes | while read de
 	/sbin/ip route add $args dev $REALDEVICE
 done
 
+if ! is_no "$IPV6_NETWORKING"; then
+	grep -E "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-routes6 | while read device args; do
+		/sbin/ip -6 route add $args dev $REALDEVICE
+	done
+fi
 
 # based on information from http://avahi.org/wiki/AvahiAutoipd#Routes
 if is_yes "$ZEROCONF" && ! /sbin/ip link show dev $REALDEVICE | grep -q POINTOPOINT ; then

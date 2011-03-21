@@ -10,6 +10,7 @@ sysconfig_DATA = \
 	system \
 	network \
 	static-routes \
+	static-routes6 \
 	static-nat \
 	static-arp \
 	i18n

@@ -163,6 +163,12 @@
   </refsect1>
 
   <refsect1>
+    <title><filename>/etc/sysconfig/static-routes6</filename></title>
+    <para>Same as <filename>/etc/sysconfig/static-routes</filename> but
+      for IPv6.</para>
+  </refsect1>
+
+  <refsect1>
     <title><filename>/etc/sysconfig/routed</filename></title>
     <simplelist>
       <member>SILENT=yes|no</member>
