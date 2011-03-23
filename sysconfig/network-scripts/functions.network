@@ -370,7 +370,7 @@ set_down_loopback()
 
 modprobe_net()
 {
-	if is_yes "$IPV6_NETWORKING"
+	if is_yes "$IPV6_NETWORKING"; then
 		if is_module "ipv6"; then
 			_modprobe single ipv6
 		fi
