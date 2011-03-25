@@ -375,7 +375,7 @@ modprobe_net()
 			_modprobe single ipv6
 		fi
 	elif [ -d /proc/sys/net/ipv6 ]; then
-		sysctl -w net.ipv6.conf.all.disable_ipv6=1
+		sysctl -q -w net.ipv6.conf.all.disable_ipv6=1
 	fi
 
 	if is_yes "$IPX" && is_module "ipx"; then
