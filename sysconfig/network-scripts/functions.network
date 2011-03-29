@@ -370,12 +370,8 @@ set_down_loopback()
 
 modprobe_net()
 {
-	if is_yes "$IPV6_NETWORKING"; then
-		if is_module "ipv6"; then
-			_modprobe single ipv6
-		fi
-	elif [ -d /proc/sys/net/ipv6 ]; then
-		sysctl -q -w net.ipv6.conf.all.disable_ipv6=1
+	if is_yes "$IPV6_NETWORKING" && is_module "ipv6"; then
+		_modprobe single ipv6
 	fi
 
 	if is_yes "$IPX" && is_module "ipx"; then
