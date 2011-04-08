@@ -1,4 +1,5 @@
 #!/bin/sh
+set -x
 
 # Set up a default search path.
 PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
@@ -14,6 +15,39 @@ is_ignored_file() {
 		;;
 	esac
 	return 1
+}
+
+status_all() {
+	local SERVICE
+	cd ${SERVICEDIR}
+	for SERVICE in *; do
+		case "${SERVICE}" in
+		functions | halt | killall | single| linuxconf| kudzu)
+			;;
+		*)
+		if ! is_ignored_file "${SERVICE}" \
+				&& [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+			if ! grep -qs "\Wstatus)" "$SERVICE"; then
+				#printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
+				echo " [ ? ]  $SERVICE" 1>&2
+				continue
+			else
+				out=$(env -i USE_UPSTART=$USE_UPSTART LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
+				if [ "$?" = "0" -a -n "$out" ]; then
+					#printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
+					echo " [ + ]  $SERVICE"
+					continue
+				else
+					#printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
+					echo " [ - ]  $SERVICE"
+					continue
+				fi
+			fi
+			#env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
+		fi
+		;;
+		esac
+	done
 }
 
 VERSION="$(basename $0) ver. 0.91-pld"
@@ -53,37 +87,9 @@ while [ $# -gt 0 ]; do
 		USE_UPSTART=no
 		shift
 		;;
-	*)
+	  *)
 		if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
-			cd ${SERVICEDIR}
-			for SERVICE in *; do
-				case "${SERVICE}" in
-				functions | halt | killall | single| linuxconf| kudzu)
-					;;
-				*)
-				if ! is_ignored_file "${SERVICE}" \
-						&& [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-					if ! grep -qs "\Wstatus)" "$SERVICE"; then
-						#printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
-						echo " [ ? ]  $SERVICE" 1>&2
-						continue
-					else
-						out=$(env -i USE_UPSTART=$USE_UPSTART LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
-						if [ "$?" = "0" -a -n "$out" ]; then
-							#printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
-							echo " [ + ]  $SERVICE"
-							continue
-						else
-							#printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
-							echo " [ - ]  $SERVICE"
-							continue
-						fi
-					fi
-					#env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
-				fi
-				;;
-				esac
-			done
+			status_all
 			exit 0
 		elif [ $# -eq 2 -a "${2}" = "--full-restart" ]; then
 			SERVICE="${1}"
