@@ -1,5 +1,4 @@
 #!/bin/sh
-set -x
 
 # Set up a default search path.
 PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
