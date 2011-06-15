@@ -1,3 +1,70 @@
+2011-06-15 12:45 +0000 [r12244]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* init/udev.conf (added), init/rc.conf, rc.d/rc.sysinit,
+	  init/rcS.conf: - some more 'emits' and a dummy Upstart job added
+	  so the new 'initctl check-config' won't complain.
+
+2011-06-15 10:51 +0000 [r12243]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* doc/upstart.txt: - upstart usage docs updates
+
+2011-04-18 09:50 +0000 [r12230]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* service: remove debug
+
+2011-04-14 09:42 +0000 [r12228]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: - make sure the
+	  default ip rules are preserved over network restart even if 'ip
+	  rule show' displays them using numeric table values. I have a
+	  system where 'from all lookup 255' is returned instead of 'from
+	  all lookup local' for unknown reason, but it could also happen if
+	  /etc/iproute2/rt_tables file is missing or corrupted. And bad
+	  things happen (IPv4 not working) if the 'lookup local' rule is
+	  missing.
+
+2011-04-08 19:15 +0000 [r12223]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* service: move status all to function
+
+2011-03-29 13:26 +0000 [r12219]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Revert disabling
+	  IPv6. Unfortunately it disables only IPv6 addresses while
+	  socket(AF_INET6,...) still succeeds creating ill efect.
+
+2011-03-25 16:55 +0000 [r12215]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Set sysctl value
+	  quietly.
+
+2011-03-23 21:45 +0000 [r12214]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: One more fix.
+
+2011-03-23 20:42 +0000 [r12213]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Really disable IPv6.
+
+2011-03-23 20:35 +0000 [r12212]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: Disable IPv6 if it
+	  is not enabled in config.
+
+2011-03-21 22:15 +0000 [r12211]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup-routes, doc/sysconfig.txt,
+	  sysconfig/Makefile.am, doc/sysconfig.docb,
+	  sysconfig/network-scripts/functions.network: - add static-routes6
+	  support (IPv6-only ip routes and rules)
+
+2011-03-21 20:30 +0000 [r12210]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/static-routes6 (added): - IPv6 specific rules and
+	  routes, rationale: some rules (and even routes) are addressless
+	  (e.g. fwmark or 'default' route), because of this simple ip
+	  <rule> won't handle IPv6, we have to use ip -6 <rule>
+
 2011-03-20 01:00 +0000 [r12206-12207]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* configure.ac: - 0.4.4.1, fixes typo in set_up_loopback
@@ -310,7 +377,7 @@
 	  rc.d/init.d/killall, rc.d/init.d/cpusets, rc.d/init.d/allowlogin:
 	  - executable initscripts
 
-2010-06-18 06:40 +0000 [r11565]  cactus <cactus/at/pld-linux.org>
+2010-06-18 06:40 +0000 [r11565]  Bartłomiej Zimoń <cactus/at/pld-linux.org>
 
 	* rc.d/rc.shutdown: - fix shutdown/restart on kernels with devtmpfs
 
@@ -661,12 +728,12 @@
 	* rc.d/init.d/template.init: - stderr redirected anyway, nothing
 	  special needed in configtest()
 
-2009-10-15 10:03 +0000 [r10789]  pawelz <pawelz/at/pld-linux.org>
+2009-10-15 10:03 +0000 [r10789]  Paweł Zuzelski <pawelz/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.gprs-playmobile: - do not reduce
 	  MTU by default. It kills ipsec.
 
-2009-10-15 09:32 +0000 [r10788]  pawelz <pawelz/at/pld-linux.org>
+2009-10-15 09:32 +0000 [r10788]  Paweł Zuzelski <pawelz/at/pld-linux.org>
 
 	* sysconfig/interfaces/ifcfg-ppp0.gprs-playmobile (added),
 	  sysconfig/interfaces/data/chat-ppp0.gprs-playmobile (added): -
