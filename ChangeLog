@@ -1,3 +1,7 @@
+2011-06-15 13:12 +0000 [r12245]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* configure.ac: - Version: 0.4.4.2
+
 2011-06-15 12:45 +0000 [r12244]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* init/udev.conf (added), init/rc.conf, rc.d/rc.sysinit,
