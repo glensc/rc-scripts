@@ -77,11 +77,16 @@ fi
 if [ -z "$VSERVER_ISOLATION_NET" -o "$VSERVER_ISOLATION_NET" = "detect" ]; then
 	VSERVER_ISOLATION_NET=no
 	if [ "$VSERVER" = "yes" ]; then
-		{
-			while read _t _data; do
-				[ "$_t" = "net:" ] && break
-			done < /proc/self/nsproxy
-		} 2> /dev/null
+		if [ -f /proc/self/nsproxy ]; then
+			{
+				while read _t _data; do
+					[ "$_t" = "net:" ] && break
+				done < /proc/self/nsproxy
+			} 2> /dev/null
+		else
+			# assume old kernel mode
+			VSERVER_ISOLATION_NET=yes
+		fi
 		if [ "${_data##*\(}" = "I)" ]; then
 			VSERVER_ISOLATION_NET=yes
 		fi
