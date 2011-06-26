@@ -172,9 +172,8 @@ if ! is_yes "$VSERVER" ; then
 	# sysfs is also needed before any other things (under kernel > 2.5)
 	if grep -q sysfs /proc/filesystems 2>/dev/null ; then
 		is_fsmounted sysfs /sys || mount -n -o gid=17 -t sysfs sysfs /sys
-		if [ "$(kernelver)" -ge "002006014" ] && \
-			grep -q securityfs /proc/filesystems 2>/dev/null ; then
-				mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
+		if grep -q securityfs /proc/filesystems 2>/dev/null ; then
+			mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
 		fi
 	fi
 
