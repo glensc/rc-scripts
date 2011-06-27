@@ -201,7 +201,7 @@ kernelver() {
 }
 
 kernelverser() {
-	local _x _y _z v old_IFS ver
+	local _x _y _z v v1 old_IFS ver
 	{
 		read _x _y v _z
 		old_IFS=$IFS
@@ -221,7 +221,7 @@ kernelverser() {
 }
 
 kernelvermser() {
-	local _x _y _z v old_IFS ver
+	local _x _y _z v v1 old_IFS ver
 	{
 		read _x _y v _z
 		old_IFS=$IFS
