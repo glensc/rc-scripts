@@ -178,17 +178,19 @@ if is_no "$RC_LOGGING"; then
 fi
 
 kernelver() {
-	local _x _y _z v old_IFS ver
+	local _x _y _z v v1 old_IFS ver
 	{
 		read _x _y v _z
 		old_IFS=$IFS
-		IFS='.'
+		# strip _* or -* from versions like: "2.6.25_vanilla-1", "2.6.25-1"
+		IFS='_-'
 		set -- $v
+		v1=${1}
+		IFS='.'
+		set -- $v1
 		IFS=$old_IFS
 
-		# strip _* or -* from versions like: "2.6.25_vanilla-1", "2.6.25-1"
-		ver=${3%%[-_]*}
-
+		ver=${3}
 		while [ ${#ver} -lt 3 ]; do ver="0$ver"; done
 		ver="$2$ver"
 		while [ ${#ver} -lt 6 ]; do ver="0$ver"; done
@@ -203,8 +205,12 @@ kernelverser() {
 	{
 		read _x _y v _z
 		old_IFS=$IFS
-		IFS='.'
+		# strip _* or -* from versions like: "2.6.25_vanilla-1", "2.6.25-1"
+		IFS='_-'
 		set -- $v
+		v1=${1}
+		IFS='.'
+		set -- $v1
 		IFS=$old_IFS
 		ver=$2
 		while [ ${#ver} -lt 3 ]; do ver="0$ver"; done
@@ -219,10 +225,14 @@ kernelvermser() {
 	{
 		read _x _y v _z
 		old_IFS=$IFS
-		IFS='.'
+		# strip _* or -* from versions like: "2.6.25_vanilla-1", "2.6.25-1"
+		IFS='_-'
 		set -- $v
+		v1=${1}
+		IFS='.'
+		set -- $v1
 		IFS=$old_IFS
-		ver="$1$ver"
+		ver="$1"
 		while [ ${#ver} -lt 3 ]; do ver="0$ver"; done
 		echo $ver
 	} </proc/version
