@@ -103,7 +103,7 @@ RC_PROMPT=yes
 # Enable cpusets support?
 CPUSETS=no
 
-# Enable vserver support? (yes/no/detect)
+# Enable this system as vserver guest (yes/no/detect)
 VSERVER=detect
 
 # Vserver isolation only networking inside of guest (yes/no/detect)
