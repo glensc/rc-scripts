@@ -1086,7 +1086,7 @@ __umount_loop() {
 			remaining=$(LC_ALL=C awk "/^#/ {next} $1" "$2" | sort -r)
 		done
 		[ -z "$remaining" ] && break
-		fstab-decode /sbin/fuser -k -m $sig $remaining >/dev/null
+		fstab-decode /bin/fuser -k -m $sig $remaining >/dev/null
 		sleep 3
 		retry=$(($retry -1))
 		sig=-9
@@ -1116,7 +1116,7 @@ __umount_loopback_loop() {
 		remaining=$(awk '$1 ~ /^\/dev\/loop/ && $2 != "/" {print $2}' /proc/mounts)
 		devremaining=$(awk '$1 ~ /^\/dev\/loop/ && $2 != "/" {print $1}' /proc/mounts)
 		[ -z "$remaining" ] && break
-		fstab-decode /sbin/fuser -k -m $sig $remaining >/dev/null
+		fstab-decode /bin/fuser -k -m $sig $remaining >/dev/null
 		sleep 3
 		retry=$(($retry -1))
 		sig=-9
