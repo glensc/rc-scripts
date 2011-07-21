@@ -17,7 +17,7 @@ is_ignored_file() {
 }
 
 status_all() {
-	local SERVICE
+	local SERVICE TYPE
 	cd ${SERVICEDIR}
 	for SERVICE in *; do
 		case "${SERVICE}" in
@@ -26,19 +26,26 @@ status_all() {
 		*)
 		if ! is_ignored_file "${SERVICE}" \
 				&& [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+			if [ -f /etc/init/${SERVICE}.conf ]; then
+				# U for upstart
+				TYPE='U'
+			else
+				# S for SysVinit
+				TYPE='S'
+			fi
 			if ! grep -qs "\Wstatus)" "$SERVICE"; then
 				#printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
-				echo " [ ? ]  $SERVICE" 1>&2
+				echo " [ ? ]{$TYPE} $SERVICE" 1>&2
 				continue
 			else
 				out=$(env -i USE_UPSTART=$USE_UPSTART LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
 				if [ "$?" = "0" -a -n "$out" ]; then
 					#printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
-					echo " [ + ]  $SERVICE"
+					echo " [ + ]{$TYPE} $SERVICE"
 					continue
 				else
 					#printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
-					echo " [ - ]  $SERVICE"
+					echo " [ - ]{$TYPE} $SERVICE"
 					continue
 				fi
 			fi
