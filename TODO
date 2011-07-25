@@ -14,6 +14,8 @@ Important:
   while correct would be:
     killproc --waitforname slapd --waitfortime 300 slapd -TERM
 - switch to use __umount_*loop instead of own umount loop when stopping system
+- rc-scripts won't work if /dev/console is invalid (for example I made typo when configuring serial 
+  console, console=ttys1,... instead of console=ttyS1) - rc.d/rc uses /dev/console a lot
 
 Not realy important but maybe nice:
 - Add checking for privileges during restarting
