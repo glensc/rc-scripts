@@ -82,6 +82,7 @@ Files in /etc/sysconfig/interfaces/
     ONBOOT=yes|no
     USERCTL=yes|no
     BOOTPROTO=none|bootp|dhcp|pump|zeroconf|auto
+    ETHTOOL_OPTS=
 
   If BOOTPROTO is not "none", then the only other item that
   must be set is the DEVICE item; all the rest will be determined
@@ -91,6 +92,16 @@ Files in /etc/sysconfig/interfaces/
     {IPXNETNUM,IPXPRIMARY,IPXACTIVE}_{802_2,802_3,ETHERII,SNAP}
     configuration matrix for IPX.  Only used if IPX is active.
     Managed from /etc/sysconfig/network-scripts/ifup-ipx
+
+  Deprecated, but supported:
+    ETHTOOL_OPTS=...
+      Any device-specific options supported by ethtool. For example,
+      if you wanted to force 100Mb full duplex:
+        ETHTOOL_OPTS="speed 100 duplex full autoneg off"
+      Note that changing speed or duplex settings almost always
+      requires disabling autonegotiation with 'autoneg off'.
+
+      Long term, this should be done by sysadmin-written udev rules.
 
   PPP/SLIP items:
     PERSIST=yes|no
