@@ -54,10 +54,15 @@ CRESMAN="$GREEN"	# "Resource Manager" color
 CHARS=""		# Characters displayed on the beginning of show line
 CCHARS="$NORMAL"	# Color of these characters (look at /etc/sysconfig/init-colors.gentoo example)
 
+# save from env, set by /sbin/service
+env_upstart=$USE_UPSTART
+
 # Source configuration if available - may override default values
 [ -r /etc/sysconfig/init-colors ] && . /etc/sysconfig/init-colors
 [ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
 [ -r /etc/sysconfig/bootsplash ] && . /etc/sysconfig/bootsplash
+
+[ "$env_upstart" ] && USE_UPSTART=$env_upstart
 
 if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
 	{
