@@ -20,7 +20,7 @@ SUFFIXES = .po .mo .gmo
 	  && rm -f $$file && $(GMSGFMT) -c --statistics -o $$file $<
 
 $(PACKAGE).pot: Makefile $(POTSRC)
-	$(makepot) $(POTSRC) >$(PACKAGE).po; \
+	$(makepot) $(POTSRC) > $(PACKAGE).po
 	cmp $(PACKAGE).po $(PACKAGE).pot || \
 		mv $(PACKAGE).po $(PACKAGE).pot; \
 	rm -f $(PACKAGE).po
