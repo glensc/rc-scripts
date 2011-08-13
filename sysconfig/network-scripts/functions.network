@@ -348,6 +348,8 @@ set_up_loopback()
 		ip addr add 127.0.0.1/8 dev lo
 	fi
 	ip link set dev lo up
+	emit net-device-up IFACE=lo
+
 	grep -E "^(lo|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
 		if [[ "$args" = *:* ]]; then
 			is_no "$IPV6_NETWORKING" && continue
@@ -646,6 +648,7 @@ check_link_down ()
 
 	if ! LC_ALL=C ip link show dev $device 2>/dev/null | grep -q UP; then
 		ip link set dev $device up >/dev/null 2>&1
+		emit net-device-up IFACE=$device
 	fi
 	timeout=0
 	while [ $timeout -le $max_timeout ]; do
