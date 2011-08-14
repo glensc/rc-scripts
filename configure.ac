@@ -1,6 +1,6 @@
 dnl $Id$
 
-AC_INIT(["rc-scripts"], [0.4.4.3], [pld-rc-scripts@lists.pld-linux.org], [rc-scripts])
+AC_INIT([rc-scripts], [0.4.4.3], [pld-rc-scripts@lists.pld-linux.org], [rc-scripts])
 AM_INIT_AUTOMAKE
 
 ALL_LINGUAS="pl de"
@@ -36,6 +36,10 @@ dnl i18n support
 AC_PATH_PROGS(MSGMERGE, msgmerge)
 AC_PATH_PROGS(GMSGFMT, gmsgfmt msgfmt)
 
+if test -z "$MSGMERGE" || test -z "$GMSGFMT"; then
+	AC_MSG_ERROR(install gettext-devel to be able to regenerate translations)
+fi
+
 CATALOGS=
 POTFILES=
 for lang in $ALL_LINGUAS; do
@@ -68,6 +72,10 @@ else
 fi
 
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+if test "$PKG_CONFIG" = no; then
+	AC_MSG_ERROR(You need to install pkgconfig package)
+fi
+
 GLIBDIR=none
 AC_MSG_CHECKING([glib2])
 GLIB_LIBS="-Wl,-static `$PKG_CONFIG --libs --static glib-2.0` -Wl,-Bdynamic"
@@ -93,7 +101,7 @@ AC_SUBST(POTFILES)
 AC_SUBST(POTSRC)
 AC_SUBST(localedir)
 AC_SUBST(gnulocaledir)
-			
+
 AC_SUBST(pppdir)
 AC_SUBST(networkscriptsdir)
 AC_SUBST(sysconfigdir)
