@@ -125,6 +125,10 @@ msgstr "Przełączanie głównego systemu plików w tryb zapis/odczyt"
 msgid "Please stand by while rebooting the $_rebootwhat"
 msgstr "Proszę czekać - restart systemu $_rebootwhat"
 
+#: .././rc.d/init.d/random:74
+msgid "%d bytes of entropy available"
+msgstr ""
+
 #: .././lib/ifup-br:86
 msgid "problems with setting bridge %s"
 msgstr "wystąpiły problemy przy ustawianiu bridge'a %s"
@@ -269,10 +273,6 @@ msgstr "Odłączanie systemów plików CIFS"
 #, fuzzy
 msgid "Unmounting network block filesystems (retry)"
 msgstr "Odłączanie systemów plików SMB"
-
-#: .././rc.d/init.d/random:74
-msgid "$entropy_avail bytes of entropy available"
-msgstr ""
 
 #: .././rc.d/init.d/netfs:162
 msgid "Active NCP mountpoints: "

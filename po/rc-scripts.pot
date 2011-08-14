@@ -131,6 +131,10 @@ msgstr ""
 msgid "Please stand by while rebooting the $_rebootwhat"
 msgstr ""
 
+#: .././rc.d/init.d/random:74
+msgid "%d bytes of entropy available"
+msgstr ""
+
 #: .././lib/ifup-br:86
 msgid "problems with setting bridge %s"
 msgstr ""
@@ -280,10 +284,6 @@ msgstr ""
 
 #: .././rc.d/init.d/netfs:115
 msgid "Unmounting network block filesystems (retry)"
-msgstr ""
-
-#: .././rc.d/init.d/random:74
-msgid "$entropy_avail bytes of entropy available"
 msgstr ""
 
 #: .././rc.d/init.d/netfs:162

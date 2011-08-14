@@ -72,7 +72,7 @@ status() {
 		nls "The random data source is missing"
 		RETVAL=1
 	else
-		nls "$entropy_avail bytes of entropy available"
+		nls "%d bytes of entropy available" $entropy_avail
 	fi
 }
 

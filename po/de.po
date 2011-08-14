@@ -126,6 +126,10 @@ msgstr "Das Root-Dateisystem wird ohne Schreibschütz erneut gemountet"
 msgid "Please stand by while rebooting the $_rebootwhat"
 msgstr "Bitte warten auf den Neustart des Systems"
 
+#: .././rc.d/init.d/random:74
+msgid "%d bytes of entropy available"
+msgstr ""
+
 #: .././lib/ifup-br:86
 msgid "problems with setting bridge %s"
 msgstr ""
@@ -271,10 +275,6 @@ msgstr "Die CIFS-Dateisysteme werden unmountet"
 #, fuzzy
 msgid "Unmounting network block filesystems (retry)"
 msgstr "Die SMB-Dateisysteme werden unmountet"
-
-#: .././rc.d/init.d/random:74
-msgid "$entropy_avail bytes of entropy available"
-msgstr ""
 
 #: .././rc.d/init.d/netfs:162
 msgid "Active NCP mountpoints: "
