@@ -47,7 +47,7 @@ void die2(const char *msg1, const char *msg2) {
 	exit(1);
 }
 void show_version() {
-	fprintf(stderr, "%s $Rev$ (PLD rc-scripts)\n", progname);
+	fprintf(stderr, "%s $Rev$ (PLD Linux rc-scripts)\n", progname);
 }
 void version() {
 	show_version();
