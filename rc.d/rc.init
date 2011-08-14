@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: rc.init 10092 2009-01-23 13:39:27Z glen $
+# $Id$
 #
 # If this script is intalled as /etc/rc.d/rc.init,
 # it is executed by init(8) for every program it

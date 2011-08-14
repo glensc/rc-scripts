@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: changelog.sh 8104 2006-12-14 17:14:21Z glen $
+# $Id$
 # Run this to generate ChangeLog.
 
 if [ ! -x /usr/bin/svn2log ]; then

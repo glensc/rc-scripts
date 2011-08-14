@@ -1,4 +1,4 @@
-# $Id: ifcfg-ppp0,v 1.2 2008/02/08 19:23:51 glen Exp $
+# $Id$
 
 DEVICE=ppp0
 
