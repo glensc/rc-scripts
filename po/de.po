@@ -11,13 +11,13 @@ msgstr ""
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: .././rc.d/init.d/functions:911
 #, fuzzy
 msgid "%s (pid %s) is running%s"
-msgstr "%s (pid %s) läuft..."
+msgstr "%s (pid %s) lÃ¤uft..."
 
 #: .././rc.d/rc.shutdown:122
 msgid "Stopping LVM volume groups"
@@ -27,7 +27,7 @@ msgstr ""
 #: .././lib/ifdown:23 .././lib/ifup:27 .././lib/ifup-ipx:13
 #: .././lib/tnldown:29 .././lib/tnlup:29
 msgid "Usage: %s <device name>"
-msgstr "Verwendung: %s <Gerätname>"
+msgstr "Verwendung: %s <GerÃ¤tname>"
 
 #: .././rc.d/init.d/network:308
 #, fuzzy
@@ -41,7 +41,7 @@ msgstr "Die Dateisysteme werden unmountet"
 
 #: .././rc.d/init.d/functions:1157
 msgid "WORK"
-msgstr "LÄUFT"
+msgstr "LÃ„UFT"
 
 #: .././rc.d/init.d/functions:931
 msgid "%s is stopped"
@@ -60,11 +60,11 @@ msgstr "Das System ist untergangen"
 #: .././rc.d/rc.sysinit:705 .././rc.d/rc.sysinit:748 .././rc.d/rc.sysinit:811
 #: .././rc.d/rc.shutdown:113
 msgid "Remounting root filesystem in ro mode"
-msgstr "Das Root-Dateisystem wird mit Schreibschütz erneut gemountet"
+msgstr "Das Root-Dateisystem wird mit SchreibschÃ¼tz erneut gemountet"
 
 #: .././lib/ifup-ppp:111
 msgid "ifup-ppp for %s exiting"
-msgstr "ifup-ppp für $DEVICE wird beendet"
+msgstr "ifup-ppp fÃ¼r $DEVICE wird beendet"
 
 #: .././rc.d/rc.sysinit:235 .././rc.d/rc.sysinit:237
 msgid "Host:"
@@ -72,7 +72,7 @@ msgstr "Rechnername:"
 
 #: .././lib/ifup-sl:65
 msgid "dip started for %s on %s at %s"
-msgstr "dip gestartet für %s auf %s mit %s"
+msgstr "dip gestartet fÃ¼r %s auf %s mit %s"
 
 #: .././rc.d/init.d/allowlogin:50
 msgid "Users are allowed to login right now"
@@ -110,16 +110,16 @@ msgstr ""
 
 #: .././rc.d/init.d/functions:370
 msgid "%s service is not running."
-msgstr "Der %s-Dienst läuft nicht."
+msgstr "Der %s-Dienst lÃ¤uft nicht."
 
 #: .././rc.d/init.d/netfs:150
 #, fuzzy
 msgid "Configured network block devices: "
-msgstr "Konfigurierte Geräte:"
+msgstr "Konfigurierte GerÃ¤te:"
 
 #: .././rc.d/rc.sysinit:398
 msgid "Remounting root filesystem in rw mode"
-msgstr "Das Root-Dateisystem wird ohne Schreibschütz erneut gemountet"
+msgstr "Das Root-Dateisystem wird ohne SchreibschÃ¼tz erneut gemountet"
 
 #: .././rc.d/rc.shutdown:188
 #, fuzzy
@@ -149,7 +149,7 @@ msgstr ""
 
 #: .././rc.d/rc.shutdown:62
 msgid "Turning off quotas for local filesystems"
-msgstr "Die Quotas für die lokalen Dateisysteme werden ausgeschaltet"
+msgstr "Die Quotas fÃ¼r die lokalen Dateisysteme werden ausgeschaltet"
 
 #: .././rc.d/init.d/functions:1112
 #, fuzzy
@@ -190,7 +190,7 @@ msgstr "Die NFS-Dateisysteme werden unmountet"
 #: .././lib/ifup-ipx:22 .././lib/ifup-irda:36 .././lib/ifup-sl:83
 #: .././lib/ifup-vlan:43
 msgid "%s is missing. Can't continue."
-msgstr "Es fehlt %s. Fortsetzen nicht möglich."
+msgstr "Es fehlt %s. Fortsetzen nicht mÃ¶glich."
 
 #: .././rc.d/init.d/netfs:114
 #, fuzzy
@@ -200,11 +200,11 @@ msgstr "Die Dateisysteme werden unmountet"
 #: .././rc.d/rc.sysinit:561
 #, fuzzy
 msgid "Activating ATARAID devices"
-msgstr "Die RAID-Geräte werden gestartet"
+msgstr "Die RAID-GerÃ¤te werden gestartet"
 
 #: .././rc.d/init.d/network:344
 msgid "Configured devices:"
-msgstr "Konfigurierte Geräte:"
+msgstr "Konfigurierte GerÃ¤te:"
 
 #: .././rc.d/init.d/functions:994
 msgid "Loading %s kernel module(s)"
@@ -244,7 +244,7 @@ msgstr ""
 
 #: .././lib/ifup-ppp:35 .././lib/ifup-ppp:67 .././lib/ifup-sl:44
 msgid "%s for %s exiting"
-msgstr "%s für %s wird beendet"
+msgstr "%s fÃ¼r %s wird beendet"
 
 #: .././rc.d/rc.sysinit:711
 msgid "Scanning for LVM volume groups (on RAID)"
@@ -282,7 +282,7 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit:870
 msgid "Setting %s seconds for kernel reboot after panic"
-msgstr "%s Sekunden werden für den Kern-Neustart nach der Panik eingestellt"
+msgstr "%s Sekunden werden fÃ¼r den Kern-Neustart nach der Panik eingestellt"
 
 #: .././rc.d/rc.sysinit:335
 msgid "Initializing USB mouse"
@@ -291,7 +291,7 @@ msgstr "Die USB-Maus wird initialisiert"
 #: .././rc.d/init.d/cpusets:178
 #, fuzzy
 msgid "Currently active cpusets:"
-msgstr "Bereits aktive Geräte und Tunnel:"
+msgstr "Bereits aktive GerÃ¤te und Tunnel:"
 
 #: .././lib/ifup-irda:59
 msgid "problems with setting %s %s"
@@ -304,12 +304,12 @@ msgstr "(Dateisystem-Reparieren)# "
 
 #: .././rc.d/rc.sysinit:691
 msgid "*** An error occurred during the RAID startup."
-msgstr "*** Während des RAID-Startens ist ein Fehler passiert."
+msgstr "*** WÃ¤hrend des RAID-Startens ist ein Fehler passiert."
 
 #: .././rc.d/init.d/netfs:76
 #, fuzzy
 msgid "Checking network-attached filesystems"
-msgstr "Die verschlüsselten Dateisysteme werden nachgesehen"
+msgstr "Die verschlÃ¼sselten Dateisysteme werden nachgesehen"
 
 #: .././rc.d/init.d/cryptsetup:36
 msgid "INSECURE OWNER FOR %s"
@@ -344,7 +344,7 @@ msgstr "Die Auslagerung wird ausgeschaltet"
 
 #: .././rc.d/init.d/network:351
 msgid "Currently active devices and tunnels:"
-msgstr "Bereits aktive Geräte und Tunnel:"
+msgstr "Bereits aktive GerÃ¤te und Tunnel:"
 
 #: .././lib/ifup:120
 msgid "Disabling IPv6 autoconfiguration"
@@ -366,7 +366,7 @@ msgstr "%sRessourcenmanager: %sDie Betriebsebene ist erreicht worden"
 #: .././lib/ifup-ppp:110
 #, fuzzy
 msgid "%s does not exist, perhaps set $CHATSCRIPT"
-msgstr "%s existiert für %s nicht"
+msgstr "%s existiert fÃ¼r %s nicht"
 
 #: .././rc.d/init.d/functions:358
 msgid "Starting %s service"
@@ -387,7 +387,7 @@ msgstr ""
 
 #: .././lib/functions.network:175
 msgid "Setting static RARP entries"
-msgstr "Die statischen RARP-Einträge werden eingestellt"
+msgstr "Die statischen RARP-EintrÃ¤ge werden eingestellt"
 
 #: .././rc.d/init.d/network:346
 msgid "Configured tunnels:"
@@ -399,11 +399,11 @@ msgstr ""
 
 #: .././rc.d/init.d/functions:938
 msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
-msgstr "Den %s-Dienst starten? (J)a/(N)ein/(W)eiterführen [J] "
+msgstr "Den %s-Dienst starten? (J)a/(N)ein/(W)eiterfÃ¼hren [J] "
 
 #: .././rc.d/init.d/functions:362
 msgid "%s service is already running."
-msgstr "Der %s-Dienst läuft bereits."
+msgstr "Der %s-Dienst lÃ¤uft bereits."
 
 #: .././rc.d/init.d/network:209
 msgid "Bringing up tunnel interface %s"
@@ -411,7 +411,7 @@ msgstr ""
 
 #: .././lib/ifup:35
 msgid "Users cannot control this device."
-msgstr "Die Benutzer dürfen dieses Gerät nicht kontrollieren."
+msgstr "Die Benutzer dÃ¼rfen dieses GerÃ¤t nicht kontrollieren."
 
 #: .././rc.d/init.d/netfs:124
 msgid "Unmounting CIFS filesystems"
@@ -420,7 +420,7 @@ msgstr "Die CIFS-Dateisysteme werden unmountet"
 # #### FUNCTIONS #####
 #: .././rc.d/init.d/functions:354
 msgid "ERROR: Networking is down. %s can't be run."
-msgstr "FEHLER: Das Netzwerkwesen läuft nicht. %s kann nicht gestartet werden."
+msgstr "FEHLER: Das Netzwerkwesen lÃ¤uft nicht. %s kann nicht gestartet werden."
 
 #: .././lib/ifup-sl:55
 msgid "%s does not exist"
@@ -445,7 +445,7 @@ msgstr "(RAID-Reparieren)# "
 
 #: .././rc.d/rc.sysinit:229
 msgid "\t\t  Press %sI%s to enter interactive startup"
-msgstr "\t\tDrücken sie %sI%s um interaktiv hochzufahren"
+msgstr "\t\tDrÃ¼cken sie %sI%s um interaktiv hochzufahren"
 
 #: .././rc.d/init.d/functions:906
 msgid " in cpuset %s..."
@@ -467,7 +467,7 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit:774
 msgid "Checking encrypted filesystems"
-msgstr "Die verschlüsselten Dateisysteme werden nachgesehen"
+msgstr "Die verschlÃ¼sselten Dateisysteme werden nachgesehen"
 
 # Translation of words: "DONE", "WORK", "BUSY", "FAIL", "DIED"
 # must have that same count of letters !!!!!!!!!!!!!!!!!!!!!!!
@@ -477,7 +477,7 @@ msgstr "GETAN"
 
 #: .././rc.d/rc.sysinit:499 .././rc.d/rc.sysinit:501
 msgid "Finding module dependencies"
-msgstr "Die Modul-Abhängigkeiten werden gesucht"
+msgstr "Die Modul-AbhÃ¤ngigkeiten werden gesucht"
 
 #: .././rc.d/init.d/functions:487
 msgid "username"
@@ -493,7 +493,7 @@ msgstr "/etc/ld.so.cache wird eingestellt"
 
 #: .././rc.d/rc.shutdown:142
 msgid "Turning off RAID for %s"
-msgstr "RAID wird für %s ausgeschaltet"
+msgstr "RAID wird fÃ¼r %s ausgeschaltet"
 
 #: .././rc.d/init.d/netfs:84 .././rc.d/rc.sysinit:121 .././rc.d/rc.sysinit:692
 #: .././rc.d/rc.sysinit:735 .././rc.d/rc.sysinit:798
@@ -507,7 +507,7 @@ msgstr "Die lokalen Dateisysteme werden gemountet"
 #: .././rc.d/rc.sysinit:135 .././rc.d/rc.sysinit:148 .././rc.d/rc.sysinit:706
 #: .././rc.d/rc.sysinit:749 .././rc.d/rc.sysinit:812
 msgid "Automatic reboot in progress"
-msgstr "Automatischer Neustart wird ausgeführt"
+msgstr "Automatischer Neustart wird ausgefÃ¼hrt"
 
 #: .././rc.d/rc.shutdown:194
 msgid "Will now restart with kexec"
@@ -515,11 +515,11 @@ msgstr ""
 
 #: .././rc.d/rc.shutdown:171 .././rc.d/rc.shutdown:190
 msgid "On the next boot fsck will be skipped."
-msgstr "Bei dem nächsten Start wird fsck ausgelassen."
+msgstr "Bei dem nÃ¤chsten Start wird fsck ausgelassen."
 
 #: .././rc.d/rc.sysinit:838
 msgid "Checking filesystem quotas"
-msgstr "Die Dateisystem-Quotas werden geprüft"
+msgstr "Die Dateisystem-Quotas werden geprÃ¼ft"
 
 #: .././rc.d/rc.sysinit:311
 msgid "Initializing USB controller"
@@ -527,7 +527,7 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit:653
 msgid "Starting up RAID device %s"
-msgstr "Das RAID-Gerät %s wird gestartet"
+msgstr "Das RAID-GerÃ¤t %s wird gestartet"
 
 #: .././rc.d/init.d/functions:1080
 msgid "$3"
@@ -539,7 +539,7 @@ msgstr ""
 
 #: .././lib/ifup-ppp:258
 msgid "pppd started for %s on device %s at speed %s"
-msgstr "pppd gestartet für %s auf %s mit %s"
+msgstr "pppd gestartet fÃ¼r %s auf %s mit %s"
 
 #: .././rc.d/init.d/cryptsetup:168 .././rc.d/rc.shutdown:164
 #, fuzzy
@@ -552,7 +552,7 @@ msgstr "Die NFS-Dateisysteme werden unmountet"
 
 #: .././lib/ifup-ppp:37 .././lib/ifup-sl:46 .././lib/ifup-sl:86
 msgid "%s does not exist or is not executable for %s"
-msgstr "%s für %s existiert nicht oder ist nicht ausführbar"
+msgstr "%s fÃ¼r %s existiert nicht oder ist nicht ausfÃ¼hrbar"
 
 #: .././rc.d/init.d/cryptsetup:77
 msgid "%s: no value for hash option, skipping"
@@ -560,7 +560,7 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit:384
 msgid "Setting up ISA PNP devices (userspace pnp)"
-msgstr "Die ISA-PNP-Geräte werden eingestellt (userspace pnp)"
+msgstr "Die ISA-PNP-GerÃ¤te werden eingestellt (userspace pnp)"
 
 #: .././rc.d/init.d/functions:366
 msgid "Stopping %s service"
@@ -572,17 +572,17 @@ msgstr ""
 
 #: .././rc.d/rc.shutdown:150
 msgid "Remounting remaining filesystems ro mode"
-msgstr "Die übrige Dateisysteme werden mit Schreibschütz erneut gemountet"
+msgstr "Die Ã¼brige Dateisysteme werden mit SchreibschÃ¼tz erneut gemountet"
 
 #: .././rc.d/init.d/netfs:83 .././rc.d/rc.sysinit:120 .././rc.d/rc.sysinit:734
 #: .././rc.d/rc.sysinit:797
 msgid "*** An error occurred during the file system check."
-msgstr "*** Während des Dateisystem-Prüfens ist ein Fehler passiert."
+msgstr "*** WÃ¤hrend des Dateisystem-PrÃ¼fens ist ein Fehler passiert."
 
 #: .././rc.d/rc.sysinit:817
 msgid "Remounting encrypted filesystems back in rw mode"
 msgstr ""
-"Das verschlüsselten Dateisysteme werden ohne Schreibschütz erneut gemountet"
+"Das verschlÃ¼sselten Dateisysteme werden ohne SchreibschÃ¼tz erneut gemountet"
 
 #: .././rc.d/init.d/functions:1082
 msgid "$4"
@@ -594,7 +594,7 @@ msgstr ""
 
 #: .././lib/ifup-sl:92
 msgid "slattach started for %s on %s at %s"
-msgstr "slattach gestartet für %s auf %s mit %s"
+msgstr "slattach gestartet fÃ¼r %s auf %s mit %s"
 
 #: .././rc.d/init.d/functions:1117
 msgid "Detaching loopback device $dev: "
@@ -614,7 +614,7 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit:843
 msgid "Turning on quotas for local filesystems"
-msgstr "Die Quotas für die lokalen Dateisysteme werden eingeschaltet"
+msgstr "Die Quotas fÃ¼r die lokalen Dateisysteme werden eingeschaltet"
 
 #: .././rc.d/init.d/cpusets:37
 msgid "ERROR: CGROUP/CPUSET mounted in a way I can't recognize"
@@ -671,7 +671,7 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit:632 .././rc.d/rc.sysinit:688 .././rc.d/rc.sysinit:716
 msgid "Starting up RAID devices"
-msgstr "Die RAID-Geräte werden gestartet"
+msgstr "Die RAID-GerÃ¤te werden gestartet"
 
 #: .././rc.d/rc.sysinit:435
 msgid "System bootup in progress - please wait"
@@ -689,7 +689,7 @@ msgstr "Das Root-Dateisystem wird nachgesehen"
 #: .././rc.d/init.d/cpusets:168
 #, fuzzy
 msgid "Configured cpusets:"
-msgstr "Konfigurierte Geräte:"
+msgstr "Konfigurierte GerÃ¤te:"
 
 #: .././rc.d/init.d/cpusets:105 .././rc.d/init.d/cpusets:118
 msgid "$("
@@ -705,7 +705,7 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit:389
 msgid "Setting up ISA PNP devices (kernelspace pnp)"
-msgstr "Die ISA-PNP-Geräte werden eingestellt (kernelspace pnp)"
+msgstr "Die ISA-PNP-GerÃ¤te werden eingestellt (kernelspace pnp)"
 
 #: .././rc.d/init.d/functions:1011
 msgid "Could not load %s kernel module(s)"
@@ -743,15 +743,15 @@ msgstr ""
 #: .././rc.d/init.d/allowlogin:35
 #, fuzzy
 msgid "System shutdown in progress\n"
-msgstr "System-Herunterfahren wird ausgeführt \n"
+msgstr "System-Herunterfahren wird ausgefÃ¼hrt \n"
 
 #: .././rc.d/rc.sysinit:433
 msgid "Enabling Delay Login"
-msgstr "Verzögerte Anmeldung wird aktiviert"
+msgstr "VerzÃ¶gerte Anmeldung wird aktiviert"
 
 #: .././lib/ifdown-irda:69
 msgid "ifdown-%s unable to kill %s for %s"
-msgstr "ifdown-%s kann %s nicht für %s töten"
+msgstr "ifdown-%s kann %s nicht fÃ¼r %s tÃ¶ten"
 
 #: .././rc.d/init.d/cryptsetup:98
 msgid "$src: No such device"
@@ -767,7 +767,7 @@ msgstr ""
 
 #: .././lib/ifup-ppp:113 .././lib/ifup-sl:58
 msgid "%s does not exist for %s"
-msgstr "%s existiert für %s nicht"
+msgstr "%s existiert fÃ¼r %s nicht"
 
 #: .././rc.d/rc.sysinit:279 .././rc.d/rc.sysinit:860
 msgid "Today`s date:"
@@ -783,11 +783,11 @@ msgstr ""
 
 #: .././rc.d/init.d/network:349
 msgid "Currently inactive devices and tunnels:"
-msgstr "Bereits inaktive Geräte und Tunnel:"
+msgstr "Bereits inaktive GerÃ¤te und Tunnel:"
 
 #: .././lib/ifup-ppp:34 .././lib/ifup-ppp:66 .././lib/ifup-sl:43
 msgid "%s does not exist or is not executable"
-msgstr "%s existiert nicht oder ist nicht ausführbar"
+msgstr "%s existiert nicht oder ist nicht ausfÃ¼hrbar"
 
 #: .././rc.d/rc:147 .././rc.d/rc:148
 msgid "%sResource Manager: %sEntering runlevel number"
@@ -811,7 +811,7 @@ msgstr ""
 
 #: .././lib/functions.network:137 .././lib/functions.network:139
 msgid "Setting static ARP entries"
-msgstr "Die statischen ARP-Einträge werden eingestellt"
+msgstr "Die statischen ARP-EintrÃ¤ge werden eingestellt"
 
 #: .././rc.d/init.d/functions:1158
 msgid "FAIL"
@@ -823,7 +823,7 @@ msgstr ""
 
 #: .././rc.d/rc.sysinit:242
 msgid "NIS Domain:"
-msgstr "NIS-Domäne:"
+msgstr "NIS-DomÃ¤ne:"
 
 #: .././rc.d/rc.sysinit:712
 msgid "Activating LVM volume groups (on RAID)"
@@ -863,7 +863,7 @@ msgid "%s: no value for size option, skipping"
 msgstr ""
 
 #~ msgid "Setting time zone information (%s, %s)"
-#~ msgstr "Information über die Zeitzone (%s, %s) wird eingestellt"
+#~ msgstr "Information Ã¼ber die Zeitzone (%s, %s) wird eingestellt"
 
 #~ msgid "Starting Device Filesystem Daemon"
 #~ msgstr "Der Device-Dateisystem-Server wird gestartet"
@@ -873,7 +873,7 @@ msgstr ""
 
 # #### TIMEZONE #####
 #~ msgid "Setting time zone information (%s)"
-#~ msgstr "Information über die Zeitzone (%s) wird eingestellt"
+#~ msgstr "Information Ã¼ber die Zeitzone (%s) wird eingestellt"
 
 #~ msgid "Usage: %s {start|stop|restart|reload|force-reload|status}"
 #~ msgstr "Verwendung: %s {start|stop|restart|reload|force-reload|status}"
@@ -885,13 +885,13 @@ msgstr ""
 #~ msgstr "Der %s-Dienst wird umgeladen"
 
 #~ msgid "Turning off RAID devices"
-#~ msgstr "Die RAID-Geräte werden ausgeschaltet"
+#~ msgstr "Die RAID-GerÃ¤te werden ausgeschaltet"
 
 #~ msgid "Mounting Device Filesystem"
 #~ msgstr "Das Device-Dateisystem wird gemountet"
 
 #~ msgid "Unsetting time zone information"
-#~ msgstr "Information über die Zeitzone wird gelöscht"
+#~ msgstr "Information Ã¼ber die Zeitzone wird gelÃ¶scht"
 
 #~ msgid "does not exist"
 #~ msgstr "existiert nicht"
