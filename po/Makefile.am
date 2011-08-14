@@ -5,7 +5,7 @@ EXTRA_DIST = @POTFILES@ @PACKAGE@.pot
 
 POTSRC = @POTSRC@
 
-makepot = $(top_srcdir)/makepot.pl
+makepot = $(top_srcdir)/po/makepot.pl
 
 CATOBJEXT = .gmo
 INSTOBJEXT = .mo

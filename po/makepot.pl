@@ -9,19 +9,19 @@
 # Changes:
 # 2000-08-25 Arkadiusz Miskiewicz <misiek@pld-linux.org>
 # - support for $(nls "xyz"), progress "xyz" and '' instead of "".
-# 
+#
 
 my %pot;
 
 sub potentry {
 	my( $msg, $lnr, $filename ) = @_;
-#print STDERR "msg = $msg\nlnr = $lnr\nfilename = $filename\n";	
+#print STDERR "msg = $msg\nlnr = $lnr\nfilename = $filename\n";
 	if (defined $pot{"$msg"}) {
 		$pot{"$msg"} = $pot{"$msg"} . "\n#: $filename:$lnr";
-#print STDERR "append $msg\n";		
+#print STDERR "append $msg\n";
 	} else {
 		$pot{"$msg"} = "\n#: $filename:$lnr";
-#print STDERR "new $msg\n";		
+#print STDERR "new $msg\n";
 	};
 };
 
@@ -29,7 +29,7 @@ print STDERR "\n". $#ARGV . " files\n";
 
 if (1) {
 print <<EOF ;
-# Polish translation of rc-scripts.
+# translation of rc-scripts.
 #
 msgid \"\"
 msgstr \"\"
@@ -55,7 +55,7 @@ EOF
 for (my $a = 0; $a <= $#ARGV; $a++) {
 	my $lnr = 0;
 	my $filename = $ARGV[$a];
-	print STDERR " " .$filename . "\n"; 
+	print STDERR " " .$filename . "\n";
 	open (POTSRC, "< " . $filename) || die "Can't open " . $filename;
 	foreach (<POTSRC>) {
 		chop;
@@ -76,13 +76,9 @@ for (my $a = 0; $a <= $#ARGV; $a++) {
 	};
 
 	close (POTSRC);
-	
+
 };
 
 foreach $key (keys %pot) {
 	print $pot{"$key"} . "\nmsgid \"$key\"\nmsgstr \"\"\n";
 };
-
-
-
-
