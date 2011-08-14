@@ -23,7 +23,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 CONFIG=$1
 source_config

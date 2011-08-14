@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-#    ifdown-vlan - Virtual LAN configuration script
-#    Copyright (C) 2001 Arkadiusz Miśkiewicz <misiek@pld-linux.org>
+#    ifdown-br - bridge configuration script
+#    Copyright (C) 2000 Arkadiusz Miśkiewicz <misiek@pld-linux.org>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,33 +21,30 @@
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
-cd /etc/sysconfig/network-scripts
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 CONFIG=$1
 source_config
 
 if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
-	exit 0
+	exit
+fi
+
+if [ ! -x /sbin/brctl ]; then
+	nls "%s is missing. Can't continue." "/sbin/brctl"
+	exit 1
 fi
 
 # set all major variables
 setup_ip_param
 
+# set device down and forget all addresses
+for device in ${BRIDGE_DEVS}; do
+	LC_ALL=C ip addr flush dev ${device} 2>&1 | grep -v "Nothing to flush"
+	brctl delif ${DEVICE} ${device}
+done
+
 ip link set ${DEVICE} down
-LC_ALL=C ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
-
-if LC_ALL=C ip link help 2>&1 | grep -q del; then
-	/sbin/ip link del ${DEVICE}
-elif [ -x /sbin/vconfig ]; then
-	/sbin/vconfig rem ${DEVICE}
-else
-	nls "/sbin/vconfig or iproute2 with vlan support is missing. Can't continue."
-	exit 1
-fi
-
-RESULT=$?
-
-exit $RESULT
+brctl delbr ${DEVICE}

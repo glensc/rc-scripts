@@ -1,13 +1,13 @@
 dnl $Id$
 
-AC_INIT([rc-scripts], [0.4.4.3], [pld-rc-scripts@lists.pld-linux.org], [rc-scripts])
+AC_INIT([rc-scripts], [0.4.5], [pld-rc-scripts@lists.pld-linux.org], [rc-scripts])
 AM_INIT_AUTOMAKE
 
 ALL_LINGUAS="pl de"
 
 echo -n "Finding shell scripts"
 SHSCRIPTS=""
-for shfile in $(find ${srcdir}/rc.d ${srcdir}/sysconfig ! -path "*/\.*/*" ! -name "*~" -type f); do
+for shfile in $(find ${srcdir}/rc.d ${srcdir}/sysconfig ${srcdir}/lib ! -path "*/\.*/*" ! -name "*~" -type f); do
     echo -n "."
     if (LC_ALL=C file ${shfile} | grep -q 'shell script'); then
 	SHSCRIPTS="${SHSCRIPTS} ${shfile}"
@@ -26,11 +26,11 @@ pppdir='${sysconfdir}/ppp'
 sysconfigdir='${sysconfdir}/sysconfig'
 updir='${sysconfigdir}/interfaces/up.d'
 downdir='${sysconfigdir}/interfaces/down.d'
-networkscriptsdir='${sysconfigdir}/network-scripts'
+networkscriptsdir='${exec_prefix}/lib/${PACKAGE}'
 rcdir='${sysconfdir}/rc.d'
 initdir='${sysconfdir}/init'
 firmwaredir='${exec_prefix}/lib/firmware'
-docdir="${prefix}/doc/$PACKAGE-$VERSION"
+docdir="${prefix}/doc/${PACKAGE}-${VERSION}"
 
 dnl i18n support
 AC_PATH_PROGS(MSGMERGE, msgmerge)
@@ -195,6 +195,7 @@ AH_BOTTOM([
 AM_CONFIG_HEADER(src/config.h)
 AC_CONFIG_FILES([Makefile \
 	src/Makefile \
+	lib/Makefile \
 	doc/Makefile \
 	man/Makefile \
 	man/de/Makefile \
@@ -208,7 +209,6 @@ AC_CONFIG_FILES([Makefile \
 	sysconfig/Makefile \
 	sysconfig/cpusets/Makefile \
 	sysconfig/hwprofiles/Makefile \
-	sysconfig/network-scripts/Makefile \
 	sysconfig/interfaces/Makefile \
 	sysconfig/interfaces/data/Makefile \
 	sysconfig/interfaces/up.d/Makefile \

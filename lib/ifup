@@ -6,7 +6,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 # Will be removed in the future
 if is_yes "$NETWORKING"; then
@@ -64,7 +64,7 @@ IPSETUP=no
 # set all major variables
 setup_ip_param
 
-OTHERSCRIPT="/etc/sysconfig/network-scripts/ifup-${DEVICETYPE}"
+OTHERSCRIPT="/lib/rc-scripts/ifup-${DEVICETYPE}"
 
 if [ -x "$OTHERSCRIPT" ]; then
 	if is_yes "$DEFAULTHANDLING"; then
@@ -240,7 +240,7 @@ if [ "$HANDLING" = "3" ]; then
 fi
 
 if is_yes "$IPX"; then
-	/etc/sysconfig/network-scripts/ifup-ipx $DEVICE
+	/lib/rc-scripts/ifup-ipx $DEVICE
 fi
 
 if is_yes "$ENABLE_6TO4"; then
@@ -268,4 +268,4 @@ if [ "$HANDLING" = "4" ]; then
 	exit 0
 fi
 
-exec /etc/sysconfig/network-scripts/ifup-post $CONFIG
+exec /lib/rc-scripts/ifup-post $CONFIG

@@ -19,7 +19,7 @@ fi
 
 # Source function library.
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 # Will be removed in the future
 if [ -n "$NETWORKING" ] && is_yes "$NETWORKING"; then

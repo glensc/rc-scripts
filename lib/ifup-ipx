@@ -6,7 +6,7 @@
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -24,7 +24,7 @@ if [ ! -x /sbin/ipx_interface ] ; then
 	exit 1
 fi
 
-cd /etc/sysconfig/network-scripts
+cd /lib/rc-scripts
 
 CONFIG=$1
 [ -f "$CONFIG" ] || CONFIG=ifcfg-$CONFIG

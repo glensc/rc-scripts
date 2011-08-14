@@ -45,7 +45,7 @@ export PPP_LOCAL_RPROTO PPP_REMOTE_RPROTO PPP_LOCAL_RNAME PPP_REMOTE_RNAME
 export PPP_IPPARAM PPP_PID
 
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 CONFIG="$PPP_IPPARAM"
 source_config
 

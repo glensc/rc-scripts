@@ -27,7 +27,7 @@ PPP_SPEED="$5"
 export PPP_IFACE PPP_PEER PPP_USER PPP_TTY PPP_SPEED
 
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 CONFIG="$PPP_IPPARAM"
 source_config
 

@@ -23,10 +23,10 @@ rc-scripts files:
   most of the code for handling alternative interface configurations
   and interface change notification through netreport.
 
-/etc/sysconfig/network-scripts/ifup-post
+/lib/rc-scripts/ifup-post
 
   Called when any network device EXCEPT a SLIP (with dip) device comes
-  up.  Calls /etc/sysconfig/network-scripts/ifup-routes to
+  up.  Calls /lib/rc-scripts/ifup-routes to
   bring up static routes that depend on that device.  Calls
   /sbin/network-scripts/ifup-aliases to bring up
   aliases for that device.  Sets the hostname if it is not
@@ -37,15 +37,15 @@ rc-scripts files:
   Could be extended to fix up nameservice configuration, call
   arbitrary scripts, etc, as needed.
 
-/etc/sysconfig/network-scripts/ifup-routes
+/lib/rc-scripts/ifup-routes
 
   Set up static routes for a device.
 
-/etc/sysconfig/network-scripts/ifup-aliases
+/lib/rc-scripts/ifup-aliases
 
   Bring up aliases for a device.
 
-/etc/sysconfig/network-scripts/ifdhcpc-done
+/lib/rc-scripts/ifdhcpc-done
 
   Called by dhcpcd once dhcp configuration is complete; sets
   up /etc/resolv.conf from the version dhcpcd dropped in
@@ -91,7 +91,7 @@ Files in /etc/sysconfig/interfaces/
   Ethernet-only items:
     {IPXNETNUM,IPXPRIMARY,IPXACTIVE}_{802_2,802_3,ETHERII,SNAP}
     configuration matrix for IPX.  Only used if IPX is active.
-    Managed from /etc/sysconfig/network-scripts/ifup-ipx
+    Managed from /lib/rc-scripts/ifup-ipx
 
   Deprecated, but supported:
     ETHTOOL_OPTS=...

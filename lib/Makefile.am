@@ -30,13 +30,13 @@ networkscripts_SCRIPTS = \
 	ifup-vlan
 
 networkscripts_DATA = \
-        functions.network
-	
+	functions.network
+
 #SUBDIRS = data
 
 interfacesdir = @sysconfigdir@/interfaces
 
-interfaces_DATA = 
+interfaces_DATA =
 
 EXTRA_DIST = \
 	$(interfaces_DATA) \

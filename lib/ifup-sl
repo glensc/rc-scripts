@@ -8,7 +8,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 # become a daemon in case we have to persist.
 if [ "$1" != daemon ] ; then
@@ -113,5 +113,5 @@ else
 	# IPv4/6 gateways and default routes
 	setup_ip_gw_ro
 
-	/etc/sysconfig/network-scripts/ifup-post $1
+	/lib/rc-scripts/ifup-post $1
 fi

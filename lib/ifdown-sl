@@ -6,7 +6,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 CONFIG=$1
 source_config
@@ -45,12 +45,12 @@ fi
 
 kill $PID > /dev/null 2>&1
 if [ ! -d /proc/$PID ]; then
-	/etc/sysconfig/network-scripts/ifdown-post $1
+	/lib/rc-scripts/ifdown-post $1
 	exit 0
 fi
 sleep 2
 if [ ! -d /proc/$PID ]; then
-	/etc/sysconfig/network-scripts/ifdown-post $1
+	/lib/rc-scripts/ifdown-post $1
 	exit 0
 fi
 
@@ -58,7 +58,7 @@ kill -KILL $PID > /dev/null 2>&1
 if [ -d /proc/$PID ]; then
 	logger -p daemon.info -t ifdown-sl "ifdown-sl unable to kill sl-$DEVICE" &
 else
-	/etc/sysconfig/network-scripts/ifdown-post $1
+	/lib/rc-scripts/ifdown-post $1
 fi
 
 exit 1

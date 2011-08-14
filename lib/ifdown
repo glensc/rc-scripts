@@ -6,7 +6,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 # Will be removed in the future
 if is_yes "$NETWORKING" ; then
@@ -44,7 +44,7 @@ source_config
 # set all major variables
 setup_ip_param
 
-OTHERSCRIPT="/etc/sysconfig/network-scripts/ifdown-${DEVICETYPE}"
+OTHERSCRIPT="/lib/rc-scripts/ifdown-${DEVICETYPE}"
 
 # shutdown tleds software
 if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
@@ -151,4 +151,4 @@ if [ -n "$RESULT" ] ; then
 	fi
 fi
 
-exec /etc/sysconfig/network-scripts/ifdown-post $CONFIG
+exec /lib/rc-scripts/ifdown-post $CONFIG

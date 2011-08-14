@@ -79,7 +79,7 @@
 #include "shvar.h"
 
 #define IFCFGPREFIX "/etc/sysconfig/interfaces/ifcfg-"
-#define IFUP_PPP "/etc/sysconfig/network-scripts/ifup-ppp"
+#define IFUP_PPP "/lib/rc-scripts/ifup-ppp"
 
 static int theSigterm = 0;
 static int theSigint = 0;

@@ -2,7 +2,7 @@
 #	$Id$
 #
 
-SUBDIRS = src ppp isapnp sysconfig rc.d doc man po init
+SUBDIRS = src lib ppp isapnp sysconfig rc.d doc man po init
 
 sysconf_DATA = \
 	adjtime \

@@ -30,7 +30,7 @@ PPP_IPPARAM="$6"
 export PPP_IFACE PPP_TTY PPP_SPEED PPP_LOCAL PPP_REMOTE PPP_IPPARAM
 
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 CONFIG="/etc/sysconfig/interfaces/ifcfg-$PPP_IPPARAM"
 source_config
 
@@ -44,6 +44,6 @@ export PPP_TTYNAME
 
 run-parts /etc/sysconfig/interfaces/up.d/ppp
 
-/etc/sysconfig/network-scripts/ifup-post "$CONFIG"
+/lib/rc-scripts/ifup-post "$CONFIG"
 
 exit 0

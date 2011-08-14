@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#    ifup-irda - IrDA configuration script
+#    ifdown-irda - IrDA configuration script
 #    Copyright (C) 2001 Arkadiusz Miśkiewicz <misiek@pld-linux.org>
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -21,10 +21,10 @@
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
-cd /etc/sysconfig/network-scripts
+cd /lib/rc-scripts
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 CONFIG=$1
 source_config
@@ -33,30 +33,43 @@ if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
 	exit
 fi
 
-if [ ! -x /sbin/irattach ]; then
-	nls "%s is missing. Can't continue." "/sbin/irattach"
-	exit 1
-fi
-
 . /etc/sysconfig/network
 
 # set all major variables
 setup_ip_param
 
-IRDAOPTS=
+ip link set ${DEVICE} down
+ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
 
-if [ -n "${DONGLE}" ]; then
-	IRDAOPTS="${IRDAOPTS} -d ${DONGLE}"
-fi
+PID=$(pidof irattach)
+for x in $PID; do
+	if grep -q "$MODEMPORT" /proc/$x/cmdline; then
+		logger -p daemon.info -t ifdown-sl "signal TERM send to \"$(ps -o cmd=$x)\" - this should be irattach"
+		kill -TERM $x
+		PID=$x
+	fi
+done
 
-if is_yes "${DISCOVERY}" || [ -z "${DISCOVERY}" ]; then
-	IRDAOPTS="${IRDAOPTS} -s"
-fi
-
-/sbin/irattach ${IRDAPORT} ${IRDAOPTS}
-
-ip link set dev ${DEVICE} multicast ${MULTICAST} ${ARP}
-if ! (ip link set dev ${DEVICE} up); then
-	nls "problems with setting %s %s" "IrDA" "${DEVICE}"
+if [ -z "$PID" ]; then
 	exit 1
 fi
+
+kill $PID > /dev/null 2>&1
+if [ ! -d /proc/$PID ]; then
+	/lib/rc-scripts/ifdown-post $1
+	exit 0
+fi
+sleep 2
+if [ ! -d /proc/$PID ]; then
+	/lib/rc-scripts/ifdown-post $1
+	exit 0
+fi
+
+kill -KILL $PID > /dev/null 2>&1
+if [ -d /proc/$PID ]; then
+	logger -p daemon.info -t ifdown-irda "$(nls 'ifdown-%s unable to kill %s for %s' "irda" "irattach" "$DEVICE")" &
+else
+	/lib/rc-scripts/ifdown-post $1
+fi
+
+exit 1

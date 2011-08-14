@@ -6,7 +6,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 CONFIG=$1
 source_config
@@ -50,6 +50,6 @@ if is_yes "${PPPOA_EAGLE}"; then
 	fi
 fi
 
-/etc/sysconfig/network-scripts/ifdown-post $1
+/lib/rc-scripts/ifdown-post $1
 
 exit 1

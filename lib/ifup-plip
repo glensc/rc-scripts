@@ -1,21 +1,12 @@
 #!/bin/sh
 #
-# The plusb network driver is a USB host-host cable based on the Prolific
-# chip. It works a lot like the plip driver.
-#
-# To get the plusb module to load automatically at boot, you will need to
-# add the following lines to /etc/conf.modules:
-#
-# alias plusb0 plusb
-#
-# $Id$
+#	$Id$
 #
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
-cd /etc/sysconfig/network-scripts
 . /etc/sysconfig/network
 . /etc/rc.d/init.d/functions
-. /etc/sysconfig/network-scripts/functions.network
+. /lib/rc-scripts/functions.network
 
 CONFIG=$1
 source_config
@@ -46,4 +37,4 @@ ip link set dev ${DEVICE} up
 # IPv4/6 gateways and default routes
 setup_ip_gw_ro
 
-/etc/sysconfig/network-scripts/ifup-post $1
+/lib/rc-scripts/ifup-post $1
