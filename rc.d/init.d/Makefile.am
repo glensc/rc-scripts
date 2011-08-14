@@ -13,10 +13,10 @@ init_SCRIPTS = \
 	sys-chroots \
 	cryptsetup \
 	local
-	
+
 init_DATA = functions
 
-EXTRA_DIST = $(init_SCRIPTS) $(init_DATA) template.init
+EXTRA_DIST = $(init_SCRIPTS) $(init_DATA)
 
 install-data-hook: all
 	$(LN_S) $(initdir) $(DESTDIR)$(sysconfdir)/init.d

@@ -2,8 +2,9 @@
 
 docdir = @docdir@
 
-doc_DATA = 
+doc_DATA =
 noinst_DATA = \
+	template.init \
 	net-scripts.txt \
 	sysconfig.txt \
 	sysvinitfiles \

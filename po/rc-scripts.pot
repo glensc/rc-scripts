@@ -54,11 +54,6 @@ msgstr ""
 msgid "%s is stopped"
 msgstr ""
 
-#: .././rc.d/init.d/template.init:55
-#: .././rc.d/init.d/template.init:71
-msgid "Checking %s configuration"
-msgstr ""
-
 #: .././rc.d/rc.shutdown:169
 msgid "The $_rebootwhat is halted"
 msgstr ""
@@ -738,12 +733,12 @@ msgstr ""
 msgid "Sending all processes the TERM signal"
 msgstr ""
 
-#: .././rc.d/init.d/netfs:125
-msgid "Unmounting NCP filesystems"
-msgstr ""
-
 #: .././rc.d/init.d/functions:374
 msgid "Reloading %s service"
+msgstr ""
+
+#: .././rc.d/init.d/netfs:125
+msgid "Unmounting NCP filesystems"
 msgstr ""
 
 #: .././rc.d/init.d/functions:1382
