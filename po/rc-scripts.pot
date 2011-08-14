@@ -1,4 +1,4 @@
-# Polish translation of rc-scripts.
+# translation of rc-scripts.
 #
 msgid ""
 msgstr ""

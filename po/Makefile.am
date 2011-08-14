@@ -1,7 +1,7 @@
 @SET_MAKE@
 
 
-EXTRA_DIST = @POTFILES@ @PACKAGE@.pot
+EXTRA_DIST = @POTFILES@ @PACKAGE@.pot makepot.pl
 
 POTSRC = @POTSRC@
 
