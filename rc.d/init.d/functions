@@ -1268,7 +1268,7 @@ upstart_reload() {
 upstart_status() {
 	# get service status
 	# should be compliant with
-        # http://refspecs.freestandards.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
+    # http://refspecs.freestandards.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
 	local service=$1
 	local status
 	if is_upstart_task "${service}" ; then
@@ -1291,16 +1291,16 @@ upstart_status() {
 	# TODO: other statuses
 }
 
-_upstart_controlled () {
+_upstart_controlled() {
 	# If the service is to be handled by upstart
 	# execute the start/stop/etc. commands the upstart way
-	if ! use_upstart ; then
+	if ! use_upstart; then
 		return 0
-	fi	
+	fi
 	local script=$1
 	shift
 	local command=$1
-	shift
+	[ $# -gt 0 ] && shift
 	local name=$(basename "$script")
 	if [ ! -f /etc/init/${name}.conf ] ; then
 		return 0
@@ -1401,7 +1401,7 @@ _upstart_controlled () {
 			fi
 			;;
 		*)
-		        msg_usage "$0 {start|stop|restart|reload|force-reload|status$extra_commands}"
+			msg_usage "$0 {start|stop|restart|reload|force-reload|status$extra_commands}"
 			exit 3
 			;;
 	esac
