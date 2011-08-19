@@ -411,9 +411,9 @@ deltext() {
 progress() {
 	local COLOR
 	if [ -n "$2" ]; then
-	   	COLOR="$2"
+		COLOR="$2"
 	else
-	   	COLOR="$CDONE"
+		COLOR="$CDONE"
 	fi
 	deltext
 	echo -n "$(termput setaf $CBRACKETS)[$(termput setaf $COLOR) $(nls --nls-domain rc-scripts "$1") $(termput setaf $CBRACKETS)]$(termput op)"
@@ -1268,7 +1268,7 @@ upstart_reload() {
 upstart_status() {
 	# get service status
 	# should be compliant with
-    # http://refspecs.freestandards.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
+	# http://refspecs.freestandards.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
 	local service=$1
 	local status
 	if is_upstart_task "${service}" ; then
@@ -1409,7 +1409,7 @@ _upstart_controlled() {
 }
 
 # Usage:
-#   somewhere at the begining of init script:
+#	somewhere at the begining of init script:
 #     upstart_controlled
 #		- to pass implement all upstart commands via initctl
 #                 start, stop, status, restart, reload and force_reload
