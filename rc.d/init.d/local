@@ -15,7 +15,9 @@
 # See how we were called.
 case "$1" in
   start)
+	msg_starting "rc.local"
 	. /etc/rc.d/rc.local
+	ok
 	touch /var/lock/subsys/local
 	;;
   stop)
