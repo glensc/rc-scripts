@@ -198,7 +198,7 @@ if ! is_yes "$VSERVER" ; then
 	fi
 
 	# Disable splash when requested
-	[ -e /proc/splash ] && is_no "$BOOT_SPLASH" && echo "0" > /proc/splash
+	is_no "$BOOT_SPLASH" && [ -e /proc/splash ] && echo "0" > /proc/splash
 
 	# Check SELinux status
 	selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts 2> /dev/null)
