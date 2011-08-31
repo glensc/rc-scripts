@@ -6,9 +6,10 @@ sbin_SCRIPTS = \
 	tnldown \
 	tnlup
 
-networkscriptsdir = @networkscriptsdir@
+#scriptsdir = @networkscriptsdir@
+scriptsdir = @exec_prefix@/lib/$(PACKAGE)
 
-networkscripts_SCRIPTS = \
+scripts_SCRIPTS = \
 	ifdown-br \
 	ifdown-irda \
 	ifdown-ppp \
@@ -29,18 +30,12 @@ networkscripts_SCRIPTS = \
 	ifup-sl \
 	ifup-vlan
 
-networkscripts_DATA = \
+scripts_DATA = \
+	functions \
 	functions.network
 
-#SUBDIRS = data
-
-interfacesdir = @sysconfigdir@/interfaces
-
-interfaces_DATA =
-
 EXTRA_DIST = \
-	$(interfaces_DATA) \
 	$(sbin_SCRIPTS) \
-	$(networkscripts_SCRIPTS) \
-	$(networkscripts_DATA)
+	$(scripts_SCRIPTS) \
+	$(scripts_DATA)
 
