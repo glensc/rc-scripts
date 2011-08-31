@@ -1224,7 +1224,11 @@ is_upstart_running() {
 }
 upstart_start() {
 	local service=$1
-	is_upstart_running "${service}" && return 0
+	if is_upstart_running "${service}"; then
+		msg_already_running "$service"
+		return 0
+	fi
+
 	msg_starting "${service}"
 	if errors=$(/sbin/initctl start ${service} 2>&1) ; then
 		ok
@@ -1237,7 +1241,8 @@ upstart_start() {
 }
 upstart_stop() {
 	local service=$1
-	if ! is_upstart_running "${service}" && ! is_upstart_task "${service}" ; then
+	if ! is_upstart_running "${service}"; then
+		msg_not_running "$name"
 		return 0
 	fi
 	msg_stopping "${service}"
