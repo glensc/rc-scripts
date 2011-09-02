@@ -24,6 +24,8 @@ esac
 # Source function library.
 . /etc/rc.d/init.d/functions
 
+upstart_controlled
+
 start() {
 	if is_yes "$DELAY_LOGIN" && [ -f /etc/nologin.boot ]; then
 		run_cmd "Allowing users to login" rm -f /etc/nologin /etc/nologin.boot

@@ -28,6 +28,8 @@ export runlevel previous
 # Source function library.
 . /etc/rc.d/init.d/functions
 
+upstart_controlled
+
 start() {
 	if [ "$previous" = "N" ]; then
 		runlevel=5
