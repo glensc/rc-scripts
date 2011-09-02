@@ -88,6 +88,10 @@ EVMS_AIX=no
 # EVMS OS/2 LVM volumes
 EVMS_OS2=no
 
+# LVM2
+# disable if your only LVM volume is rootfs started on initrd and want faster startup
+LVM2=yes
+
 # Set to anything other than 'no' to allow hotkey interactive startup...
 RC_PROMPT=yes
 
