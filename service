@@ -35,7 +35,7 @@ status_all() {
 			fi
 			if ! grep -qs "\Wstatus)" "$SERVICE"; then
 				#printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
-				echo " [ ? ]{$TYPE} $SERVICE" 1>&2
+				echo " [ ? ]{$TYPE} $SERVICE"
 				continue
 			else
 				out=$(env -i USE_UPSTART=$USE_UPSTART LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
