@@ -137,7 +137,7 @@ init_crypto() {
 }
 
 halt_crypto() {
-    fnval=0
+    local fnval=0 dst src key
     while read dst src key; do
 	[ -z "$dst" -o "${dst#\#}" != "$dst" ] && continue
         if [ -b "/dev/mapper/$dst" ]; then
