@@ -152,6 +152,10 @@ check_root_fs() {
 	fi
 }
 
+if [ -d /run ]; then
+	mount -n -t tmpfs run /run
+fi
+
 # boot logging to /var/log/boot.log. install showconsole package to get it.
 if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
 	RC_BOOTLOG=1
