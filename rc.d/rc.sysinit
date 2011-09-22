@@ -152,10 +152,6 @@ check_root_fs() {
 	fi
 }
 
-if [ -d /run ]; then
-	mount -n -t tmpfs run /run
-fi
-
 # boot logging to /var/log/boot.log. install showconsole package to get it.
 if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
 	RC_BOOTLOG=1
@@ -164,6 +160,10 @@ else
 fi
 
 if ! is_yes "$VSERVER" ; then
+	if [ -d /run ]; then
+		is_fsmounted tmpfs /run || mount -n -t tmpfs run /run
+	fi
+
 	# we need /proc mounted before everything
 	is_fsmounted proc /proc || mount -n -o gid=17 -t proc /proc /proc
 
@@ -458,6 +458,10 @@ if ! is_yes "$VSERVER"; then
 	# Enter root, /proc, /sys and other into mtab.
 	mount -f /
 	mount -f /proc
+	if is_fsmounted tmpfs /run; then
+		mount -f -t tmpfs run /run
+	fi
+
 	if is_fsmounted usbfs /proc/bus/usb; then
 		mount -f -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb
 	fi
