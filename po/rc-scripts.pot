@@ -25,11 +25,11 @@ msgstr ""
 msgid "Stopping LVM volume groups"
 msgstr ""
 
-#: .././lib/ifdown:23
-#: .././lib/ifup:27
-#: .././lib/ifup-ipx:13
 #: .././lib/tnldown:29
+#: .././lib/ifdown:23
+#: .././lib/ifup-ipx:13
 #: .././lib/tnlup:29
+#: .././lib/ifup:27
 msgid "Usage: %s <device name>"
 msgstr ""
 
@@ -37,12 +37,12 @@ msgstr ""
 msgid "Reloading interface %s"
 msgstr ""
 
-#: .././rc.d/rc.shutdown:82
 #: .././rc.d/rc.sysinit:133
 #: .././rc.d/rc.sysinit:146
-#: .././rc.d/rc.sysinit:704
-#: .././rc.d/rc.sysinit:747
-#: .././rc.d/rc.sysinit:810
+#: .././rc.d/rc.sysinit:716
+#: .././rc.d/rc.sysinit:759
+#: .././rc.d/rc.sysinit:822
+#: .././rc.d/rc.shutdown:82
 msgid "Unmounting file systems"
 msgstr ""
 
@@ -58,10 +58,10 @@ msgstr ""
 msgid "The $_rebootwhat is halted"
 msgstr ""
 
+#: .././rc.d/rc.sysinit:717
+#: .././rc.d/rc.sysinit:760
+#: .././rc.d/rc.sysinit:823
 #: .././rc.d/rc.shutdown:113
-#: .././rc.d/rc.sysinit:705
-#: .././rc.d/rc.sysinit:748
-#: .././rc.d/rc.sysinit:811
 msgid "Remounting root filesystem in ro mode"
 msgstr ""
 
@@ -69,8 +69,8 @@ msgstr ""
 msgid "ifup-ppp for %s exiting"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:235
-#: .././rc.d/rc.sysinit:237
+#: .././rc.d/rc.sysinit:239
+#: .././rc.d/rc.sysinit:241
 msgid "Host:"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgstr ""
 msgid "dip started for %s on %s at %s"
 msgstr ""
 
-#: .././rc.d/init.d/allowlogin:50
+#: .././rc.d/init.d/allowlogin:52
 msgid "Users are allowed to login right now"
 msgstr ""
 
@@ -98,7 +98,7 @@ msgstr ""
 msgid "ERROR: CGROUP/CPUSET support not enabled in kernel"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:332
+#: .././rc.d/rc.sysinit:336
 msgid "Initializing USB keyboard"
 msgstr ""
 
@@ -110,15 +110,15 @@ msgstr ""
 msgid "%s service is not running."
 msgstr ""
 
-#: .././rc.d/init.d/network:200
-msgid "Bringing up interface %s"
-msgstr ""
-
 #: .././rc.d/init.d/netfs:150
 msgid "Configured network block devices: "
 msgstr ""
 
-#: .././rc.d/rc.sysinit:398
+#: .././rc.d/init.d/network:200
+msgid "Bringing up interface %s"
+msgstr ""
+
+#: .././rc.d/rc.sysinit:402
 msgid "Remounting root filesystem in rw mode"
 msgstr ""
 
@@ -170,8 +170,8 @@ msgstr ""
 msgid "Enabling proxy ARP on %s"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:538
-#: .././rc.d/rc.sysinit:543
+#: .././rc.d/rc.sysinit:546
+#: .././rc.d/rc.sysinit:551
 msgid "Loading sound module"
 msgstr ""
 
@@ -187,42 +187,42 @@ msgstr ""
 msgid "Mounting NFS filesystems"
 msgstr ""
 
-#: .././rc.d/init.d/network:13
-#: .././rc.d/init.d/network:42
-#: .././lib/ifdown:124
-#: .././lib/ifdown-br:35
-#: .././lib/ifup:91
-#: .././lib/ifup-br:35
-#: .././lib/ifup-ipx:22
-#: .././lib/ifup-irda:36
-#: .././lib/ifup-sl:83
-#: .././lib/ifup-vlan:43
-msgid "%s is missing. Can't continue."
-msgstr ""
-
 #: .././rc.d/init.d/netfs:114
 msgid "Unmounting network block filesystems"
+msgstr ""
+
+#: .././rc.d/init.d/network:13
+#: .././rc.d/init.d/network:42
+#: .././lib/ifup-sl:83
+#: .././lib/ifup-irda:36
+#: .././lib/ifdown:124
+#: .././lib/ifdown-br:35
+#: .././lib/ifup-vlan:43
+#: .././lib/ifup-ipx:22
+#: .././lib/ifup:91
+#: .././lib/ifup-br:35
+msgid "%s is missing. Can't continue."
 msgstr ""
 
 #: .././lib/functions:994
 msgid "Loading %s kernel module(s)"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:561
+#: .././rc.d/rc.sysinit:569
 msgid "Activating ATARAID devices"
 msgstr ""
 
-#: .././rc.d/init.d/single:27
-#: .././rc.d/rc.shutdown:49
-msgid "Sending all processes the KILL signal"
+#: .././rc.d/init.d/netfs:158
+msgid "Active CIFS mountpoints: "
 msgstr ""
 
 #: .././rc.d/init.d/network:344
 msgid "Configured devices:"
 msgstr ""
 
-#: .././rc.d/init.d/netfs:158
-msgid "Active CIFS mountpoints: "
+#: .././rc.d/init.d/single:27
+#: .././rc.d/rc.shutdown:49
+msgid "Sending all processes the KILL signal"
 msgstr ""
 
 #: .././lib/ifup-vlan:56
@@ -233,16 +233,16 @@ msgstr ""
 msgid "Bringing up bridge interface %s"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:414
+#: .././rc.d/rc.sysinit:418
 msgid "Starting disk encryption using the RNG"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:278
-#: .././rc.d/rc.sysinit:859
+#: .././rc.d/rc.sysinit:282
+#: .././rc.d/rc.sysinit:871
 msgid "Setting clock"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:556
+#: .././rc.d/rc.sysinit:564
 msgid "Activating dm-multipath"
 msgstr ""
 
@@ -251,13 +251,13 @@ msgstr ""
 msgid "$(nls -n "
 msgstr ""
 
+#: .././lib/ifup-sl:44
 #: .././lib/ifup-ppp:35
 #: .././lib/ifup-ppp:67
-#: .././lib/ifup-sl:44
 msgid "%s for %s exiting"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:711
+#: .././rc.d/rc.sysinit:723
 msgid "Scanning for LVM volume groups (on RAID)"
 msgstr ""
 
@@ -269,12 +269,12 @@ msgstr ""
 msgid "*** rebooted before mounting it."
 msgstr ""
 
-#: .././rc.d/init.d/netfs:50
-msgid "Mounting CIFS filesystems"
-msgstr ""
-
 #: .././rc.d/init.d/network:234
 msgid "Shutting down bridge interface %s"
+msgstr ""
+
+#: .././rc.d/init.d/netfs:50
+msgid "Mounting CIFS filesystems"
 msgstr ""
 
 #: .././rc.d/init.d/netfs:115
@@ -285,11 +285,11 @@ msgstr ""
 msgid "Active NCP mountpoints: "
 msgstr ""
 
-#: .././rc.d/rc.sysinit:870
+#: .././rc.d/rc.sysinit:882
 msgid "Setting %s seconds for kernel reboot after panic"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:335
+#: .././rc.d/rc.sysinit:339
 msgid "Initializing USB mouse"
 msgstr ""
 
@@ -303,12 +303,12 @@ msgstr ""
 
 #: .././rc.d/init.d/netfs:87
 #: .././rc.d/rc.sysinit:125
-#: .././rc.d/rc.sysinit:739
-#: .././rc.d/rc.sysinit:802
+#: .././rc.d/rc.sysinit:751
+#: .././rc.d/rc.sysinit:814
 msgid "(Repair filesystem)# "
 msgstr ""
 
-#: .././rc.d/rc.sysinit:691
+#: .././rc.d/rc.sysinit:703
 msgid "*** An error occurred during the RAID startup."
 msgstr ""
 
@@ -324,7 +324,7 @@ msgstr ""
 msgid "Can't find a DHCP client."
 msgstr ""
 
-#: .././rc.d/init.d/allowlogin:45
+#: .././rc.d/init.d/allowlogin:47
 msgid "Delay login is not enabled"
 msgstr ""
 
@@ -352,7 +352,7 @@ msgstr ""
 msgid "Disabling IPv6 autoconfiguration"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:608
+#: .././rc.d/rc.sysinit:620
 msgid "Activating LVM volume groups"
 msgstr ""
 
@@ -377,7 +377,7 @@ msgstr ""
 msgid "Configured NCP mountpoints: "
 msgstr ""
 
-#: .././rc.d/rc.sysinit:607
+#: .././rc.d/rc.sysinit:619
 msgid "Scanning for LVM volume groups"
 msgstr ""
 
@@ -385,13 +385,13 @@ msgstr ""
 msgid "Start service %s (Y)es/(N)o/(C)ontinue? [Y] "
 msgstr ""
 
+#: .././lib/functions.network:175
+msgid "Setting static RARP entries"
+msgstr ""
+
 #: .././lib/ifdown-vlan:46
 #: .././lib/ifup-vlan:77
 msgid "/sbin/vconfig or iproute2 with vlan support is missing. Can't continue."
-msgstr ""
-
-#: .././lib/functions.network:175
-msgid "Setting static RARP entries"
 msgstr ""
 
 #: .././rc.d/init.d/network:230
@@ -426,27 +426,27 @@ msgstr ""
 msgid "%s does not exist"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:321
+#: .././rc.d/rc.sysinit:325
 msgid "Mounting USB filesystem"
 msgstr ""
 
 #: .././rc.d/init.d/netfs:85
 #: .././rc.d/rc.sysinit:122
-#: .././rc.d/rc.sysinit:693
-#: .././rc.d/rc.sysinit:736
-#: .././rc.d/rc.sysinit:799
+#: .././rc.d/rc.sysinit:705
+#: .././rc.d/rc.sysinit:748
+#: .././rc.d/rc.sysinit:811
 msgid "*** when you leave the shell."
 msgstr ""
 
-#: .././rc.d/rc.sysinit:328
+#: .././rc.d/rc.sysinit:332
 msgid "Initializing USB HID interface"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:696
+#: .././rc.d/rc.sysinit:708
 msgid "(RAID Repair)# "
 msgstr ""
 
-#: .././rc.d/rc.sysinit:229
+#: .././rc.d/rc.sysinit:233
 msgid "\t\t  Press %sI%s to enter interactive startup"
 msgstr ""
 
@@ -454,7 +454,7 @@ msgstr ""
 msgid " in cpuset %s..."
 msgstr ""
 
-#: .././rc.d/rc.sysinit:227
+#: .././rc.d/rc.sysinit:231
 msgid "\t\t\t%sPowered by %sPLD Linux Distribution%s"
 msgstr ""
 
@@ -466,21 +466,21 @@ msgstr ""
 msgid "Warning: Default gateway already set proably via other interface. Do you need to setup GATEWAYDEV?"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:774
-msgid "Checking encrypted filesystems"
-msgstr ""
-
 #: .././rc.d/rc:149
 #: .././lib/functions:1156
 msgid "DONE"
+msgstr ""
+
+#: .././rc.d/rc.sysinit:786
+msgid "Checking encrypted filesystems"
 msgstr ""
 
 #: .././lib/functions:487
 msgid "username"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:499
-#: .././rc.d/rc.sysinit:501
+#: .././rc.d/rc.sysinit:507
+#: .././rc.d/rc.sysinit:509
 msgid "Finding module dependencies"
 msgstr ""
 
@@ -498,26 +498,26 @@ msgstr ""
 
 #: .././rc.d/init.d/netfs:84
 #: .././rc.d/rc.sysinit:121
-#: .././rc.d/rc.sysinit:692
-#: .././rc.d/rc.sysinit:735
-#: .././rc.d/rc.sysinit:798
+#: .././rc.d/rc.sysinit:704
+#: .././rc.d/rc.sysinit:747
+#: .././rc.d/rc.sysinit:810
 msgid "*** Dropping you to a shell; the system will reboot"
-msgstr ""
-
-#: .././rc.d/rc.sysinit:760
-msgid "Mounting local filesystems"
 msgstr ""
 
 #: .././rc.d/rc.sysinit:135
 #: .././rc.d/rc.sysinit:148
-#: .././rc.d/rc.sysinit:706
-#: .././rc.d/rc.sysinit:749
-#: .././rc.d/rc.sysinit:812
+#: .././rc.d/rc.sysinit:718
+#: .././rc.d/rc.sysinit:761
+#: .././rc.d/rc.sysinit:824
 msgid "Automatic reboot in progress"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:838
-msgid "Checking filesystem quotas"
+#: .././rc.d/rc.sysinit:772
+msgid "Mounting local filesystems"
+msgstr ""
+
+#: .././rc.d/rc.shutdown:194
+msgid "Will now restart with kexec"
 msgstr ""
 
 #: .././rc.d/rc.shutdown:171
@@ -525,11 +525,11 @@ msgstr ""
 msgid "On the next boot fsck will be skipped."
 msgstr ""
 
-#: .././rc.d/rc.shutdown:194
-msgid "Will now restart with kexec"
+#: .././rc.d/rc.sysinit:850
+msgid "Checking filesystem quotas"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:311
+#: .././rc.d/rc.sysinit:315
 msgid "Initializing USB controller"
 msgstr ""
 
@@ -537,7 +537,7 @@ msgstr ""
 msgid "$3"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:653
+#: .././rc.d/rc.sysinit:665
 msgid "Starting up RAID device %s"
 msgstr ""
 
@@ -558,9 +558,9 @@ msgstr ""
 msgid "Unmounting NFS filesystems"
 msgstr ""
 
-#: .././lib/ifup-ppp:37
 #: .././lib/ifup-sl:46
 #: .././lib/ifup-sl:86
+#: .././lib/ifup-ppp:37
 msgid "%s does not exist or is not executable for %s"
 msgstr ""
 
@@ -572,11 +572,11 @@ msgstr ""
 msgid "Stopping %s service"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:384
+#: .././rc.d/rc.sysinit:388
 msgid "Setting up ISA PNP devices (userspace pnp)"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:582
+#: .././rc.d/rc.sysinit:590
 msgid "Discovering EVMS volumes"
 msgstr ""
 
@@ -586,8 +586,8 @@ msgstr ""
 
 #: .././rc.d/init.d/netfs:83
 #: .././rc.d/rc.sysinit:120
-#: .././rc.d/rc.sysinit:734
-#: .././rc.d/rc.sysinit:797
+#: .././rc.d/rc.sysinit:746
+#: .././rc.d/rc.sysinit:809
 msgid "*** An error occurred during the file system check."
 msgstr ""
 
@@ -595,7 +595,7 @@ msgstr ""
 msgid "$4"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:817
+#: .././rc.d/rc.sysinit:829
 msgid "Remounting encrypted filesystems back in rw mode"
 msgstr ""
 
@@ -615,7 +615,7 @@ msgstr ""
 msgid "Shutting down tunnel interface %s"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:301
+#: .././rc.d/rc.sysinit:305
 msgid "Activating swap partitions"
 msgstr ""
 
@@ -623,7 +623,7 @@ msgstr ""
 msgid "Enslaving %s to %s"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:843
+#: .././rc.d/rc.sysinit:855
 msgid "Turning on quotas for local filesystems"
 msgstr ""
 
@@ -631,7 +631,7 @@ msgstr ""
 msgid "ERROR: CGROUP/CPUSET mounted in a way I can't recognize"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:527
+#: .././rc.d/rc.sysinit:535
 msgid "Initializing firewire controller"
 msgstr ""
 
@@ -643,7 +643,7 @@ msgstr ""
 msgid "Setting up a new %s config file"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:724
+#: .././rc.d/rc.sysinit:736
 msgid "Checking filesystems"
 msgstr ""
 
@@ -656,8 +656,8 @@ msgid "Mounting other filesystems"
 msgstr ""
 
 #: .././rc.d/init.d/cryptsetup:164
-#: .././rc.d/rc.sysinit:294
-#: .././rc.d/rc.sysinit:617
+#: .././rc.d/rc.sysinit:298
+#: .././rc.d/rc.sysinit:629
 msgid "Starting disk encryption"
 msgstr ""
 
@@ -677,7 +677,7 @@ msgstr ""
 msgid "dm-crypt module is loaded"
 msgstr ""
 
-#: .././rc.d/init.d/allowlogin:28
+#: .././rc.d/init.d/allowlogin:30
 msgid "Allowing users to login"
 msgstr ""
 
@@ -685,14 +685,18 @@ msgstr ""
 msgid "Checking root filesystem"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:435
+#: .././rc.d/rc.sysinit:439
 msgid "System bootup in progress - please wait"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:632
-#: .././rc.d/rc.sysinit:688
-#: .././rc.d/rc.sysinit:716
+#: .././rc.d/rc.sysinit:644
+#: .././rc.d/rc.sysinit:700
+#: .././rc.d/rc.sysinit:728
 msgid "Starting up RAID devices"
+msgstr ""
+
+#: .././rc.d/init.d/cpusets:168
+msgid "Configured cpusets:"
 msgstr ""
 
 #: .././rc.d/init.d/cpusets:105
@@ -700,19 +704,15 @@ msgstr ""
 msgid "$("
 msgstr ""
 
-#: .././rc.d/init.d/cpusets:168
-msgid "Configured cpusets:"
-msgstr ""
-
 #: .././lib/functions:386
 msgid "$@"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:948
+#: .././rc.d/rc.sysinit:960
 msgid "Enabling swap space"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:389
+#: .././rc.d/rc.sysinit:393
 msgid "Setting up ISA PNP devices (kernelspace pnp)"
 msgstr ""
 
@@ -733,7 +733,7 @@ msgstr ""
 msgid "Telling INIT to go to single user mode"
 msgstr ""
 
-#: .././lib/functions:1382
+#: .././lib/functions:1387
 msgid "$command not implemented for $name"
 msgstr ""
 
@@ -745,15 +745,15 @@ msgstr ""
 msgid "Unmounting NCP filesystems"
 msgstr ""
 
-#: .././rc.d/init.d/allowlogin:35
-msgid "System shutdown in progress\n"
-msgstr ""
-
 #: .././rc.d/init.d/local:29
 msgid "rc.local has not been started"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:433
+#: .././rc.d/init.d/allowlogin:37
+msgid "System shutdown in progress\n"
+msgstr ""
+
+#: .././rc.d/rc.sysinit:437
 msgid "Enabling Delay Login"
 msgstr ""
 
@@ -773,13 +773,13 @@ msgstr ""
 msgid "%s: LUKS requires non-random key, skipping"
 msgstr ""
 
-#: .././lib/ifup-ppp:113
 #: .././lib/ifup-sl:58
+#: .././lib/ifup-ppp:113
 msgid "%s does not exist for %s"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:279
-#: .././rc.d/rc.sysinit:860
+#: .././rc.d/rc.sysinit:283
+#: .././rc.d/rc.sysinit:872
 msgid "Today`s date:"
 msgstr ""
 
@@ -787,7 +787,7 @@ msgstr ""
 msgid "Setting tunnel %s"
 msgstr ""
 
-#: .././rc.d/init.d/allowlogin:43
+#: .././rc.d/init.d/allowlogin:45
 msgid "Delay login is enabled"
 msgstr ""
 
@@ -795,9 +795,9 @@ msgstr ""
 msgid "Currently inactive devices and tunnels:"
 msgstr ""
 
+#: .././lib/ifup-sl:43
 #: .././lib/ifup-ppp:34
 #: .././lib/ifup-ppp:66
-#: .././lib/ifup-sl:43
 msgid "%s does not exist or is not executable"
 msgstr ""
 
@@ -831,20 +831,20 @@ msgstr ""
 msgid "Setting static ARP entries"
 msgstr ""
 
-#: .././rc.d/init.d/allowlogin:48
+#: .././rc.d/init.d/allowlogin:50
 msgid "Users are not allowed to login right now"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:242
+#: .././rc.d/rc.sysinit:246
 msgid "NIS Domain:"
-msgstr ""
-
-#: .././rc.d/rc.sysinit:712
-msgid "Activating LVM volume groups (on RAID)"
 msgstr ""
 
 #: .././rc.d/init.d/cryptsetup:32
 msgid "INSECURE MODE FOR %s"
+msgstr ""
+
+#: .././rc.d/rc.sysinit:724
+msgid "Activating LVM volume groups (on RAID)"
 msgstr ""
 
 #: .././lib/ifup:180
@@ -864,7 +864,7 @@ msgstr ""
 msgid "Setting interfaces names (nameif)"
 msgstr ""
 
-#: .././rc.d/rc.sysinit:403
+#: .././rc.d/rc.sysinit:407
 msgid "Checking root filesystem quotas"
 msgstr ""
 
