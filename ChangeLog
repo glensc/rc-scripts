@@ -1,3 +1,234 @@
+2011-09-25 09:57 +0000 [r12351-12352]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* po/Makefile.am: just in case C locale
+
+	* po/rc-scripts.pot: updated
+
+2011-09-22 15:45 +0000 [r12350]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - properly mount /run and put it into mtab
+
+2011-09-18 20:34 +0000 [r12349]  Artur Frysiak <wiget/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Mount /run ASAP
+
+2011-09-11 20:08 +0000 [r12347]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* init/cryptsetup.conf (added), init/Makefile.am: Add cryptsetup
+
+2011-09-11 20:00 +0000 [r12344]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/cryptsetup: local vars
+
+2011-09-11 19:53 +0000 [r12342-12343]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* init/Makefile.am: Add allowlogin, sys-chroots, cpusets
+
+	* init/cpusets.conf (added): Add cpusets
+
+2011-09-11 11:29 +0000 [r12341]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* service: print unknown state to stdout as well
+
+2011-09-02 06:18 +0000 [r12339-12340]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* init/sys-chroots.conf (added), rc.d/init.d/sys-chroots,
+	  init/allowlogin.conf (added), rc.d/init.d/allowlogin: add
+	  allowlogin and sys-chroots upstart parts, altho no stop for them
+
+	* sysconfig/system, rc.d/rc.sysinit: add $LVM2 allows you to
+	  disable LVM2 if your only LVM volume is rootfs started on initrd
+	  and want faster startup
+
+2011-09-02 06:08 +0000 [r12338]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/interfaces/Makefile.am: Add ifcfg-ppp0.pppoe
+
+2011-08-31 18:44 +0000 [r12337]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions: upstart: behave like current initscripts: print
+	  running/not running instead of silence
+
+2011-08-31 16:24 +0000 [r12336]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/Makefile.am, po/rc-scripts.pot, lib/functions
+	  (added), lib/Makefile.am, rc.d/init.d/functions (removed): move
+	  also functions to /lib/rc-scripts (symlink preserved)
+
+2011-08-19 19:56 +0000 [r12331]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: formatting
+
+2011-08-19 19:44 +0000 [r12328-12330]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/local: add starting line
+
+	* rc.d/rc.sysinit: prefer local code over io checks (boot splash
+	  unlikely enabled anyway)
+
+	* rc.d/init.d/functions: avoid shift() error when program called
+	  with no actions in _upstart_controlled; tabs
+
+2011-08-14 19:45 +0000 [r12323]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* init/rc.conf: register pld.sysinit-done to satisfy initctl
+	  check-config
+
+2011-08-14 12:03 +0000 [r12321-12322]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.init, sysconfig/interfaces/ifcfg-ppp0.kou, changelog.sh:
+	  add missing keyword expansion
+
+	* sysconfig, doc, sysconfig/interfaces/up.d/all,
+	  sysconfig/interfaces/up.d/ip, lib, rc.d/init.d,
+	  sysconfig/interfaces/down.d/tnl, sysconfig/interfaces/down.d/ppp,
+	  sysconfig/interfaces/down.d/ipx, sysconfig/interfaces/down.d,
+	  rc.d, src, sysconfig/interfaces/down.d/all,
+	  sysconfig/interfaces/down.d/ip, sysconfig/interfaces/up.d/tnl,
+	  isapnp, sysconfig/interfaces/up.d/ppp,
+	  sysconfig/interfaces/up.d/ipx, sysconfig/interfaces/up.d, ppp, /:
+	  svn:ignore fixups
+
+2011-08-14 11:56 +0000 [r12319-12320]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/Makefile.am, rc.d/init.d/template.init (removed),
+	  po/rc-scripts.pot, doc/Makefile.am, doc/template.init (added):
+	  move template.init to doc
+
+	* sysconfig/interfaces/.cvsignore (removed),
+	  sysconfig/interfaces/down.d/ip/.cvsignore (removed), doc,
+	  sysconfig/interfaces/up.d/all, sysconfig/interfaces/up.d/ip, lib,
+	  sysconfig/interfaces/up.d/ipx/.cvsignore (removed),
+	  ppp/ip-down.d/.cvsignore (removed),
+	  sysconfig/interfaces/data/.cvsignore (removed),
+	  sysconfig/interfaces/down.d, lib/.cvsignore (removed),
+	  sysconfig/interfaces/down.d/all, rc.d/init.d/.cvsignore
+	  (removed), ppp/ip-up.d/.cvsignore (removed), isapnp,
+	  sysconfig/interfaces/down.d/tnl/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/tnl, sysconfig/interfaces/up.d/ppp,
+	  sysconfig/interfaces/down.d/ppp/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/ipx,
+	  sysconfig/interfaces/down.d/.cvsignore (removed), /, sysconfig,
+	  src/.cvsignore (removed),
+	  sysconfig/interfaces/down.d/all/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/tnl/.cvsignore (removed),
+	  isapnp/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/ppp/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/.cvsignore (removed), ppp/ip-up.d,
+	  rc.d/init.d, ppp/.cvsignore (removed), .cvsignore (removed),
+	  sysconfig/interfaces/down.d/tnl, po,
+	  sysconfig/interfaces/down.d/ppp, sysconfig/interfaces/down.d/ipx,
+	  sysconfig/.cvsignore (removed), doc/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/all/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/ip/.cvsignore (removed), rc.d, src,
+	  sysconfig/interfaces/down.d/ip, po/.cvsignore (removed),
+	  sysconfig/interfaces/down.d/ipx/.cvsignore (removed),
+	  sysconfig/interfaces/up.d, ppp/ip-down.d, ppp,
+	  sysconfig/hwprofiles/.cvsignore (removed), rc.d/.cvsignore
+	  (removed): convert .cvsignore to svn:ignore
+
+2011-08-14 11:48 +0000 [r12318]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* TODO: privilege check is done with unix file permissions: scripts
+	  just not executable for regular user
+
+2011-08-14 11:42 +0000 [r12310-12317]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* po/Makefile.am, po/rc-scripts.pot: add makepot.pl to EXTRA_DIST
+
+	* po/Makefile.am, po/makepot.pl (added), makepot.pl (removed): move
+	  makepot to po/ dir with rest of it's files
+
+	* po/pl.po, po/rc-scripts.pot, rc.d/init.d/random, po/de.po: - fix
+	  bad nls usage
+
+	* po/pl.po, po/de.po: utf8 to rule the world
+
+	* po/pl.po, po/de.po: - updated
+
+	* po/rc-scripts.pot: - updated
+
+	* po/rc-scripts.pot (added): track to see new strings to appear or
+	  not
+
+	* ppp/ipx-down, rc.d/init.d/network, lib/ifup-ppp, lib (added),
+	  lib/ifup-ipx, lib/ifup-vlan, man/usernetctl.8, lib/ifup-br,
+	  lib/ifup-plip, src/ppp-watch.c, lib/ifdown-post, lib/Makefile.am,
+	  ppp/auth-up, sysconfig/network-scripts (removed), ppp/ip-up,
+	  lib/ifdown-ppp, lib/ifup-post, doc/net-scripts.txt, configure.ac,
+	  ppp/auth-down, lib/tnlup, lib/ifdown-sl, lib/ifdown-irda,
+	  lib/ifup, Makefile.am, ppp/ip-down, sysconfig/Makefile.am,
+	  lib/ifup-iucv, ppp/ipx-up, lib/ifup-sl, lib/ifup-irda,
+	  lib/ifdown-vlan, lib/tnldown, lib/ifdown, lib/ifup-plusb,
+	  lib/ifdown-br: - move network scripts to /lib, as none of them
+	  are config files - version 0.4.5 for such major change
+
+2011-08-14 11:11 +0000 [r12308-12309]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: fatal out when required tools missing, some ac fix
+
+	* src/setuidgid.c: PLD Linux
+
+2011-08-14 09:56 +0000 [r12307]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* init/random.conf, init/rc.conf, init/rcS-sulogin.conf,
+	  init/rcS.conf: our vim-syntax-upstart recognizes the filetype
+	  itself
+
+2011-08-13 13:51 +0000 [r12305]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* po/Makefile.am: Do not ignore errors
+
+2011-08-13 13:42 +0000 [r12304]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/functions.network: emit net-device-up
+	  events, so upstart-socket-bridge could function
+
+2011-08-13 06:04 +0000 [r12303]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: allow $USE_UPSTART from env to preceed
+	  USE_UPSTART from sysconfig/system
+
+2011-07-25 06:10 +0000 [r12270-12271]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/network-scripts/ifup, doc/net-scripts.txt: - add
+	  $ETHTOOL_OPTS
+
+	* TODO: - todo from arekm
+
+2011-07-21 10:28 +0000 [r12264]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* service: - include service type in --status-all
+
+2011-07-18 13:11 +0000 [r12260]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - fuser is in /bin since psmisc-22.5-2
+
+2011-06-28 19:51 +0000 [r12254]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysconfig/system: Explain what VSERVER is.
+
+2011-06-27 10:18 +0000 [r12252-12253]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - fix local variable
+
+	* rc.d/init.d/functions: - fix kernelver* functions
+
+2011-06-26 10:48 +0000 [r12250]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Mount securityfs based on it's availability
+	  only.
+
+2011-06-20 15:04 +0000 [r12247]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/functions: - compat mode for old kernels, where
+	  network lock was not touched
+
+2011-06-16 12:32 +0000 [r12246]  Jacek Konieczny <jajcus/at/pld-linux.org>
+
+	* init/Makefile.am, configure.ac: - the missing init/udev.conf
+	  added to dist
+
 2011-06-15 13:12 +0000 [r12245]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
 	* configure.ac: - Version: 0.4.4.2
