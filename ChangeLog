@@ -1,3 +1,12 @@
+2011-09-27 07:15 +0000 [r12356-12357]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: - 0.4.5.1
+
+	* rc.d/rc.sysinit: - fix $LVM2 variable fuckup (use is_no instead
+	  of is_yes) (glen, you moron, have you considered a possibility
+	  that $LVM2 will land in sysconfig.rpmsave, thus making lvm
+	  dependant system non-bootable?)
+
 2011-09-25 09:57 +0000 [r12351-12352]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* po/Makefile.am: just in case C locale
@@ -545,7 +554,7 @@
 
 	* rc.d/rc.sysinit: Make sysctl quiet.
 
-2010-09-03 09:07 +0000 [r11801]  Bartosz Świątek <shadzik/at/pld-linux.org>
+2010-09-03 09:07 +0000 [r11801]  Removed <shadzik/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - don't check the fs on aufs and squashfs
 	  systems
@@ -1062,7 +1071,7 @@
 	* firmware-loader.sh (added), rc.d/rc.sysinit: - added
 	  firmware-loader.sh for autoload firmware on systems w/o udev
 
-2009-07-17 07:40 +0000 [r10421]  Bartosz Świątek <shadzik/at/pld-linux.org>
+2009-07-17 07:40 +0000 [r10421]  Removed <shadzik/at/pld-linux.org>
 
 	* sysconfig/i18n: - add en_US.UTF-8/UTF-8 de_DE.UTF-8/UTF-8
 	  en_GB.UTF-8/UTF-8 to supported langs
@@ -1685,7 +1694,7 @@
 
 	* sysconfig/i18n: - proper encoding for de_DE
 
-2008-07-17 20:42 +0000 [r9846]  Bartosz Świątek <shadzik/at/pld-linux.org>
+2008-07-17 20:42 +0000 [r9846]  Removed <shadzik/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - wpa_supplicant 0.6.3 doesn't
 	  have a "-w" option!!
