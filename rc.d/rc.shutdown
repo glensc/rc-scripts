@@ -116,11 +116,11 @@ if ! is_yes "$VSERVER"; then
 	if [ -x /sbin/vgchange ]; then
 		lvmversion=$(LC_ALL=C /sbin/vgchange --version 2>/dev/null | awk '/LVM version:/{if ($3 >= 2) print "2"}')
 		if [ "$lvmversion" = "2" ]; then
-			lvmignorelock="--ignorelockingfailure"
+			lvmsysinit="--sysinit"
 		else
-			lvmignorelock=""
+			lvmsysinit=""
 		fi
-		run_cmd "Stopping LVM volume groups" /sbin/vgchange -a n $lvmignorelock
+		/sbin/vgchange -a n $lvmsysinit > /dev/null 2>&1
 	fi
 
 	goraidtab=1

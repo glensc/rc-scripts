@@ -606,23 +606,23 @@ if ! is_yes "$VSERVER"; then
 		fi
 		if [ "$lvmversion" = "1" ] ; then
 			modprobe -s lvm-mod >/dev/null 2>&1
-			lvmignorelock=""
+			lvmsysinit=""
 		elif [ "$lvmversion" = "2" ] ; then
 			modprobe -s dm-mod >/dev/null 2>&1
-			lvmignorelock="--ignorelockingfailure"
+			lvmsysinit="--sysinit"
 		else
 			modprobe -s lvm-mod >/dev/null 2>&1
 			# device mapper (2.5+ and patched 2.4)
 			modprobe -s dm-mod >/dev/null 2>&1
-			lvmignorelock=""
+			lvmsysinit=""
 		fi
 
-		run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelock
-		run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmignorelock
+		run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmsysinit
+		run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmsysinit
 		if [ "$lvmversion" = "2" ]; then
-			/sbin/vgmknodes $lvmignorelock
+			/sbin/vgmknodes $lvmsysinit
 			# display VG statistics
-			/sbin/vgdisplay -s $lvmignorelock
+			/sbin/vgdisplay -s $lvmsysinit
 		fi
 	fi
 
@@ -721,8 +721,8 @@ if ! is_yes "$VSERVER"; then
 			# LVM on RAID (keep in sync with LVM setting few lines above)
 			if [ "$golvm" -eq "1" ]; then
 				if [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-					run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelock
-					run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmignorelock
+					run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmsysinit
+					run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmsysinit
 					[ "$lvmversion" = "2" ] && /sbin/vgmknodes
 				fi
 			fi
