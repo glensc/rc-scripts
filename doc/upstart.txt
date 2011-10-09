@@ -13,7 +13,7 @@ by using a ``pld.no-upstart`` kernel command-line option.
 
 An init script may be called with ``USE_UPSTART=no`` environment variable
 to disable special upstart-related processing – this way one may use
-``/etc/rc.d/init.d/$service start`` to start a service even if upstart job 
+``/etc/rc.d/init.d/$service start`` to start a service even if upstart job
 for that service is present. The ``/sbin/service`` script has two new options
 ``--upstart`` and ``--no-upstart`` to force new- or old-style service control.
 
@@ -91,12 +91,12 @@ setting.
 Writing Upstart job descriptions
 --------------------------------
 
-Job description files in ``/etc/init`` are not only the recipes to start 
+Job description files in ``/etc/init`` are not only the recipes to start
 a service, but also configuration files for that service. Keep that in mind
-when writing the ``*.conf`` files. No complicated logic, that can change from 
+when writing the ``*.conf`` files. No complicated logic, that can change from
 a release to a release, should be implemented there, the script should be
 readable, basic configuration settings easy to find and no upstart-controlled
-settings (like resource limit)  reimplemented in the script or started daemon 
+settings (like resource limit)  reimplemented in the script or started daemon
 arguments.
 
 The syntax of the ``/etc/init/*.conf`` files is described in the init(5) man
@@ -110,14 +110,14 @@ Simple example, the job description for syslog-ng::
 
   start on pld.network-started
   stop on pld.shutdown-started
-  
+
   env SERVICE=syslog
   export SERVICE
-  
+
   respawn
-  
+
   console output
-  
+
   exec /usr/sbin/syslog-ng -F -f /etc/syslog-ng/syslog-ng.conf
 
 Checking upstart configuration
@@ -127,7 +127,7 @@ Since Upstart 1.3 one can check current configuration with::
 
   initctl check-config
 
-Also, with an 'initctl2dot' tool the configuration may be visualised in 
+Also, with an 'initctl2dot' tool the configuration may be visualised in
 a graphical diagram.
 
 Tracking startup progress
@@ -136,8 +136,8 @@ Tracking startup progress
 The easiest way to run a program from an upstart job is to ``exec`` it
 the way it will stay in foreground (that is what is the ``-F`` option in the
 example above for). However, when process is started this way Upstart cannot
-differentiate before the ``program starting failed`` and ``program has 
-terminated`` cases. It will also assumed the job has started as soon as the 
+differentiate before the ``program starting failed`` and ``program has
+terminated`` cases. It will also assumed the job has started as soon as the
 command has been executed and that may be not what other jobs wait for.
 
 A 'proper daemon' first checks command line arguments and configuration, then
@@ -213,7 +213,7 @@ Updating init scripts
 Parts of the system will still expect ``service $name`` or even, directly,
 ``/etc/rc.d/init.d/$name`` scripts working. Also, LSB expects compatible
 init scripts in /etc/init.d. For this still to work, an upstart-controlled
-service is expected to have its ``/etc/rc.d/init.d/$name`` script also present. 
+service is expected to have its ``/etc/rc.d/init.d/$name`` script also present.
 It must also be named exactly as the main upstart job for the service.
 
 The script must be a bit modified (in comparison to the traditional init
@@ -221,7 +221,7 @@ scripts) to make use of the upstart features.
 
 For the start/stop/status/reload commands to work the script should include a
 ``upstart_controlled`` command placed before commands are handled (and after
-``/etc/rc.d/init.d/function`` was included). This command (shell alias actually) 
+``/etc/rc.d/init.d/function`` was included). This command (shell alias actually)
 will be ignored when upstart boot control is disabled or no upstart job is
 available for the service. Otherwise it will implement the basic LSB commands
 and exit.
@@ -244,16 +244,16 @@ The minimal init script, for a service which will be controlled by upstart
 only would be::
 
   #!/bin/sh
-  
+
   . /etc/rc.d/init.d/functions
-  
+
   upstart_controlled
-  
+
   echo "Service available only via upstart boot"
   exit 3
 
 Minimal change to an existing PLD script to handle upstart control is to add::
-  
+
   upstart_controlled
 
 before the usual::
