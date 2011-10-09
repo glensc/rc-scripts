@@ -83,13 +83,18 @@ clean_vserver_mtab() {
 
 # Loads modules from /etc/modules, /etc/modules.X.Y and /etc/modules.X.Y.Z
 load_kernel_modules() {
+	local _x _y _z v v1 old_IFS kernel kerneleq
 	{
-		local _x _y v _z
-		read  _x _y v _z
+		read _x _y v _z
 		old_IFS=$IFS
-		IFS='.'
+		# strip _* or -* from versions like: "2.6.25_vanilla-1", "2.6.25-1"
+		IFS='_-'
 		set -- $v
+		v1=${1}
+		IFS='.'
+		set -- $v1
 		IFS=$old_IFS
+
 		kernel="$1.$2"
 		kerneleq="$1.$2.$3"
 	} < /proc/version
