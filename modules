@@ -11,3 +11,6 @@
 # The modules files are processed in exactly that order too.
 
 #loop
+
+# modules can take params as well:
+#loop max_loop=256
