@@ -21,6 +21,8 @@ trap "echo" INT SEGV QUIT TERM
 set +e
 
 emit pld.shutdown-started
+emit starting JOB=shutdown
+emit started JOB=shutdown
 
 rc_splash "reboot"
 
