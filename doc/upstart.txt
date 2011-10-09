@@ -53,15 +53,19 @@ pld.shutdown-started
         when rc.shutdown starts
 
 pld.network-starting
+starting network
         just before network initialization is started
 
 pld.network-started
+started network
         when network is initialized
 
 pld.network-stopping
+stopping network
         just before network shutdown is started
 
 pld.network-stopped
+stopped network
         when network configuration is shut down
 
 Jobs
@@ -206,6 +210,8 @@ Common problem that may appear in pstree output:
   2. Init has multiple children processes for one job instance. It may happen
      when previously running job was not properly killed, when bad 'expect' was
      used or when the daemon does weird forking on startup.
+
+See also http://upstart.ubuntu.com/wiki/Debugging
 
 Updating init scripts
 ---------------------

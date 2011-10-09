@@ -194,6 +194,8 @@ find_boot_interfaces() {
 
 start() {
 	emit pld.network-starting
+	emit starting JOB=network
+
 	rc_splash "bootnetwork start"
 	network_init
 
@@ -214,10 +216,12 @@ start() {
 
 	touch /var/lock/subsys/network
 	emit --no-wait pld.network-started
+	emit --no-wait started JOB=network
 }
 
 stop() {
 	emit pld.network-stopping
+	emit stopping JOB=network
 	# If we go to runlevel 0, 1 or 6 then umount all network fs
 	if [ "$RUNLEVEL" = "6" -o "$RUNLEVEL" = "0" -o "$RUNLEVEL" = "1" ]; then
 		if [ -x /etc/rc.d/init.d/netfs -a -f /var/lock/subsys/netfs ];
@@ -243,6 +247,7 @@ stop() {
 
 	rm -f /var/lock/subsys/network >/dev/null 2>&1
 	emit --no-wait pld.network-stopped
+	emit --no-wait stopped JOB=network
 }
 
 # Reload all active interfaces
@@ -324,8 +329,10 @@ case "$1" in
   start)
 	if is_yes "$VSERVER_ISOLATION_NET"; then
 		emit pld.network-starting
+		emit starting JOB=network
 		touch /var/lock/subsys/network
 		emit pld.network-started
+		emit --no-wait started JOB=network
 		exit 0
 	fi
   	start
@@ -334,8 +341,10 @@ case "$1" in
   stop)
 	if is_yes "$VSERVER_ISOLATION_NET"; then
 		emit pld.network-stopping
+		emit stopping JOB=network
 		rm -f /var/lock/subsys/network >/dev/null 2>&1
 		emit pld.network-stopped
+		emit --no-wait stopped JOB=network
 		exit 0
 	fi
 	stop
