@@ -21,3 +21,17 @@ Other:
 - maybe merge ATM rc scripts
 
 We are waiting for suggestions.
+
+upstart:
++upstart_controlled --except reload
++
++# return true if service is considered "up"
++# with upstart, upstart is consulted
++# otherwise lockfile in subsys must exist
++is_service_up() {
++	use_upstart && is_upstart_running "$1" || [ -f /var/lock/subsys/"$1" ]
++}
++
+
+from nscd.init
+
