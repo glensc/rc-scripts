@@ -50,6 +50,8 @@ pld.sysinit-done
         when rc.sysinit finished its job
 
 pld.shutdown-started
+starting shutdown
+started shutdown
         when rc.shutdown starts
 
 pld.network-starting
