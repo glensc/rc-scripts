@@ -560,7 +560,9 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Load modules
-	load_kernel_modules
+	if ! use_upstart; then
+		load_kernel_modules
+	fi
 
 	if [ -x /sbin/multipath ]; then
 		# first make nodes that were discarded due (possible) new /dev mount
