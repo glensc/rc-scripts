@@ -193,6 +193,10 @@ else
 	   	show "On the next boot fsck will be skipped."; ok
 	fi
 
+	# not really sure where thse events should go
+	emit stopped JOB=shutdown
+	emit stopping JOB=shutdown
+
 	if [ -x /sbin/kexec ] && [ "$kexec_loaded" = "1" ]; then
 	   	show "Will now restart with kexec"
 		/sbin/kexec -e
