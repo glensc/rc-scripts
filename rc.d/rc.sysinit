@@ -83,6 +83,7 @@ clean_vserver_mtab() {
 
 # Loads modules from /etc/modules, /etc/modules.X.Y and /etc/modules.X.Y.Z
 load_kernel_modules() {
+	local modules_file=$1
 	local _x _y _z v v1 old_IFS kernel kerneleq
 	{
 		read _x _y v _z
@@ -102,7 +103,7 @@ load_kernel_modules() {
 	local module args
 	# Loop over every line in modules file
 	( \
-		grep -hvE '^(#|[[:blank:]]*$)' /etc/modules /etc/modules.$kernel /etc/modules.$kerneleq 2>/dev/null
+		grep -hvE '^(#|[[:blank:]]*$)' /etc/$modules_file /etc/$modules_file.$kernel /etc/$modules_file.$kerneleq 2>/dev/null
 		echo '' # make sure there is a LF at the end
 	) | while read module args; do
 		[ -z "$module" ] && continue
@@ -261,6 +262,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	if ! is_no "$START_UDEV" && [ -x /sbin/start_udev ]; then
+		load_kernel_modules modules.preudev
 		/sbin/start_udev
 		[ -x /sbin/initctl ] && /sbin/initctl -q start udev
 	elif [ -x /lib/firmware/firmware-loader.sh ]; then
@@ -561,7 +563,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Load modules
 	if ! use_upstart; then
-		load_kernel_modules
+		load_kernel_modules modules
 	fi
 
 	if [ -x /sbin/multipath ] && ! is_no "$DM_MULTIPATH"; then
