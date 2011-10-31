@@ -564,7 +564,7 @@ if ! is_yes "$VSERVER"; then
 		load_kernel_modules
 	fi
 
-	if [ -x /sbin/multipath ]; then
+	if [ -x /sbin/multipath ] && ! is_no "$DM_MULTIPATH"; then
 		# first make nodes that were discarded due (possible) new /dev mount
 		modprobe -s dm-mod
 		/sbin/dmsetup mknodes

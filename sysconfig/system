@@ -92,6 +92,10 @@ EVMS_OS2=no
 # disable if your only LVM volume is rootfs started on initrd and want faster startup
 LVM2=yes
 
+# Disable dm-multipath and friends here if you plan to use
+# non startdard drivers (ex. DELL MPP RDAC driver)
+DM_MULTIPATH=yes
+
 # Set to anything other than 'no' to allow hotkey interactive startup...
 RC_PROMPT=yes
 
