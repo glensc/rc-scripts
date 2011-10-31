@@ -37,7 +37,7 @@ fi
 CONSOLE_LOGLEVEL=1
 
 # Read functions
-. /etc/rc.d/init.d/functions
+. /lib/rc-scripts/functions
 
 disable_selinux() {
 	local _d selinuxfs _t _r
