@@ -109,7 +109,9 @@ load_kernel_modules() {
 		[ -z "$module" ] && continue
 		# strip comments
 		args=${args%%#*}
-		modprobe -s $module -- $args
+		show "Loading %s kernel module(s)" "$module"
+		busy
+		modprobe -s $module -- $args && ok || fail
 	done
 }
 
