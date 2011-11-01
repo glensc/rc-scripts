@@ -609,7 +609,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# LVM (keep in sync with LVM starting after RAID run!)
-	if is_no "$LVM2" || [ -x /sbin/vgscan -a -x /sbin/vgchange ] || is_yes "$EVMS_LVM"; then
+	if ! is_no "$LVM2" && [ -x /sbin/vgscan -a -x /sbin/vgchange ] || is_yes "$EVMS_LVM"; then
 		if is_no "$LVM2"; then
 			lvmversion=$(LC_ALL=C /sbin/vgchange --version 2>/dev/null | awk '/LVM version:/{if ($3 >= 2) print "2"}')
 		else
