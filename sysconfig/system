@@ -93,7 +93,7 @@ EVMS_OS2=no
 LVM2=yes
 
 # Disable dm-multipath and friends here if you plan to use
-# non startdard drivers (ex. DELL MPP RDAC driver)
+# non standard drivers (ex. DELL MPP RDAC driver)
 DM_MULTIPATH=yes
 
 # Set to anything other than 'no' to allow hotkey interactive startup...
