@@ -465,25 +465,25 @@ if ! is_yes "$VSERVER"; then
 	[ -f /etc/cryptomtab ] && :>/etc/cryptomtab
 
 	# Enter root, /proc, /sys and other into mtab.
-	mount -f /
-	mount -f /proc
+	mount -f / 2> /dev/null
+	mount -f /proc 2> /dev/null
 	if is_fsmounted tmpfs /run; then
-		mount -f -t tmpfs run /run
+		mount -f -t tmpfs run /run 2> /dev/null
 	fi
 
 	if is_fsmounted usbfs /proc/bus/usb; then
-		mount -f -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb
+		mount -f -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb 2> /dev/null
 	fi
 
 	if is_fsmounted sysfs /sys; then
-		mount -f -t sysfs sysfs /sys
+		mount -f -t sysfs sysfs /sys 2> /dev/null
 		if is_fsmounted securityfs /sys/kernel/security ; then
-			mount -f -t securityfs securityfs /sys/kernel/security
+			mount -f -t securityfs securityfs /sys/kernel/security 2> /dev/null
 		fi
 	fi
 
 	if is_fsmounted selinuxfs /selinux; then
-		mount -f -t selinuxfs selinuxfs /selinux
+		mount -f -t selinuxfs selinuxfs /selinux 2> /dev/null
 	fi
 
 	emit --no-wait root-filesystem
