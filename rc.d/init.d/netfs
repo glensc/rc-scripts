@@ -96,7 +96,7 @@ start() {
 		fi
 	}
 
-	run_cmd "Mounting other filesystems" mount -a -t nonfs,nfs4,cifs,ncpfs,gfs
+	run_cmd "Mounting other filesystems" mount -a -t nonfs,nfs4,cifs,ncpfs,gfs,devpts
 
 	touch /var/lock/subsys/netfs
 }
