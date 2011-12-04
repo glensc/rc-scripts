@@ -13,7 +13,6 @@ man_MANS = \
 	ppp-watch.8 \
 	usernetctl.8 \
 	usleep.1 \
-	fstab-decode.8 \
 	crypttab.5 \
 	start-stop-daemon.8
 
