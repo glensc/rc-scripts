@@ -21,7 +21,6 @@ sbin_PROGRAMS =	\
 	netreport \
 	ppp-watch \
 	start-stop-daemon \
-	fstab-decode \
 	setuidgid \
 	usernetctl
 	
@@ -65,5 +64,3 @@ start_stop_daemon_SOURCES = start-stop-daemon.c
 start_stop_daemon_LDADD = -lcap
 
 setuidgid_SOURCES = setuidgid.c
-
-fstab_decode_SOURCES = fstab-decode.c
