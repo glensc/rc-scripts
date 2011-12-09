@@ -335,9 +335,19 @@ case "$1" in
 		emit --no-wait started JOB=network
 		exit 0
 	fi
-  	start
+	start
 	;;
-
+  start_init)
+	network_init
+	;;
+  start_postinit)
+	network_postinit
+	touch /var/lock/subsys/network
+	;;
+  stop_deinit)
+	network_deinit
+	rm -f /var/lock/subsys/network
+	;;
   stop)
 	if is_yes "$VSERVER_ISOLATION_NET"; then
 		emit pld.network-stopping
