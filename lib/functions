@@ -638,8 +638,12 @@ daemon() {
 	if errors=$(
 		umask ${SERVICE_UMASK:-$DEFAULT_SERVICE_UMASK};
 		export USER=root HOME=/tmp TMPDIR=/tmp
+
 		nice=${nice:-$DEFAULT_SERVICE_RUN_NICE_LEVEL}
 		nice=${nice:-0}
+
+		# make nice level absolute, not to be dependant of nice level of shell where service started
+		nice=$((nice-$(nice)))
 
 		if [ "$closefds" = 1 ]; then
 			exec 1>&-
