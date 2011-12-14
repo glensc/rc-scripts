@@ -23,6 +23,12 @@ if [ -z "$users" ]; then
 	exit 1
 fi
 
+# be sure users file is up to date
+(
+	cd $(dirname "$users")
+	cvs up users
+)
+
 awk -F":" ' { login=$1; if ($3 != "") { name=$3 } else { name=$1 }; email=$2; printf "%s\t%s <%s@pld-linux.org>\n", login, name, login } ' $users > $tmp
 
 branch=$(svn info | awk '/URL:/{print $NF}' | sed -e 's,^.*svn.pld-linux.org/svn,,')
