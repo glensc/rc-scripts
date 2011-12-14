@@ -1,3 +1,127 @@
+2011-12-14 11:26 +0000 [r12449]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* changelog.sh: - be sure users file is up to date
+
+2011-12-14 07:59 +0000 [r12448]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* init/local.conf: doc bits
+
+2011-12-12 10:38 +0000 [r12447]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions: daemon(): make nice level absolute, not to be
+	  dependant of nice level of shell where service started.
+
+2011-12-09 21:25 +0000 [r12446]  Tomasz Pala <gotar/at/pld-linux.org>
+
+	* rc.d/init.d/network: - systemd support: export partial jobs,
+	  leave ifup/ifdown to separate services
+
+2011-12-04 14:36 +0000 [r12437]  Artur Frysiak <wiget/at/pld-linux.org>
+
+	* man/Makefile.am, man/fstab-decode.8 (removed): Drop fstab-decode
+	  man page
+
+2011-12-04 02:42 +0000 [r12436]  Artur Frysiak <wiget/at/pld-linux.org>
+
+	* src/fstab-decode.c (removed), src/Makefile.am: fstab-decode is
+	  part of SysVinit-tools
+
+2011-11-29 18:05 +0000 [r12421]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/init.d/netfs: Don't mount devpts again.
+
+2011-11-28 19:47 +0000 [r12420]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: Make forced mounts quiet in case /etc/mtab is
+	  symlink to /proc/self/mounts.
+
+2011-11-15 21:38 +0000 [r12414]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system: spelling typo
+
+2011-11-01 14:01 +0000 [r12405]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* modules.preudev: - typo
+
+2011-11-01 13:39 +0000 [r12404]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - fix LVM2 check logic
+
+2011-10-31 19:52 +0000 [r12403]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* modules.preudev: - set props
+
+2011-10-31 19:30 +0000 [r12402]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - give some info what's going on when loading
+	  modules
+
+2011-10-31 19:26 +0000 [r12401]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* modules.preudev (added): - example file
+
+2011-10-31 19:19 +0000 [r12400]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - give admin the ability to load some kernel
+	  modules before udev kicks in
+
+2011-10-31 19:12 +0000 [r12399]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* sysconfig/system, rc.d/rc.sysinit: - give user ability to disable
+	  linux multipath drivers and daemons
+
+2011-10-31 18:53 +0000 [r12398]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - functions are in /lib/rc-scripts
+
+2011-10-23 19:26 +0000 [r12388-12389]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit, init/Makefile.am, init/modules.conf (added):
+	  load /etc/modules in upstart
+
+	* rc.d/rc.shutdown: emit shutdown events
+
+2011-10-23 11:21 +0000 [r12387]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* init/rcS-sulogin.conf: respect RUN_SULOGIN_ON_ERR from
+	  /etc/sysconfig/system
+
+2011-10-10 07:49 +0000 [r12369-12370]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* TODO: upstart compatible is service up todo
+
+	* doc/upstart.txt: shutdown started/starting upstart event doc
+
+2011-10-09 22:58 +0000 [r12368]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* modules: point out the parameters use fact
+
+2011-10-09 18:57 +0000 [r12367]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: emit shutdown starting/started event
+
+2011-10-09 18:14 +0000 [r12366]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network, doc/upstart.txt, init/rc.conf: let "network"
+	  emit network starting/stopping/started/stopped events as well
+
+2011-10-09 17:35 +0000 [r12364-12365]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* doc/upstart.txt: chop trailing spaces
+
+	* rc.d/rc.sysinit: fix handling 3.x.y kernels
+
+2011-10-05 14:47 +0000 [r12363]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/local, init/Makefile.am, init/local.conf (added):
+	  upstart for rc.local
+
+2011-09-30 10:54 +0000 [r12360]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc.sysinit: Use --sysinit for lvm. When
+	  stopping hide error messages (normal for many cases like lvm on
+	  rootfs).
+
 2011-09-27 07:15 +0000 [r12356-12357]  Jan Rękorajski <baggins/at/pld-linux.org>
 
 	* configure.ac: - 0.4.5.1
@@ -554,7 +678,7 @@
 
 	* rc.d/rc.sysinit: Make sysctl quiet.
 
-2010-09-03 09:07 +0000 [r11801]  Removed <shadzik/at/pld-linux.org>
+2010-09-03 09:07 +0000 [r11801]  shadzik <shadzik/at/pld-linux.org>
 
 	* rc.d/rc.sysinit: - don't check the fs on aufs and squashfs
 	  systems
@@ -1071,7 +1195,7 @@
 	* firmware-loader.sh (added), rc.d/rc.sysinit: - added
 	  firmware-loader.sh for autoload firmware on systems w/o udev
 
-2009-07-17 07:40 +0000 [r10421]  Removed <shadzik/at/pld-linux.org>
+2009-07-17 07:40 +0000 [r10421]  shadzik <shadzik/at/pld-linux.org>
 
 	* sysconfig/i18n: - add en_US.UTF-8/UTF-8 de_DE.UTF-8/UTF-8
 	  en_GB.UTF-8/UTF-8 to supported langs
@@ -1694,7 +1818,7 @@
 
 	* sysconfig/i18n: - proper encoding for de_DE
 
-2008-07-17 20:42 +0000 [r9846]  Removed <shadzik/at/pld-linux.org>
+2008-07-17 20:42 +0000 [r9846]  shadzik <shadzik/at/pld-linux.org>
 
 	* sysconfig/network-scripts/ifup: - wpa_supplicant 0.6.3 doesn't
 	  have a "-w" option!!
