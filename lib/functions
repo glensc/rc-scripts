@@ -643,7 +643,7 @@ daemon() {
 		nice=${nice:-0}
 
 		# make nice level absolute, not to be dependant of nice level of shell where service started
-		nice=$((nice-$(nice)))
+		nice=$(($nice - $(nice)))
 
 		if [ "$closefds" = 1 ]; then
 			exec 1>&-
