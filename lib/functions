@@ -573,12 +573,10 @@ daemon() {
 			;;
 		--user)
 			shift
-			[ "$1" != "root" ] && prog="/bin/su $1 -s /bin/sh -c \""
 			user=$1
 			;;
 		--fork)
 			fork=1
-			prog="/usr/bin/setsid sh -c \""
 			end='&'
 			;;
 		--chdir)
@@ -618,6 +616,12 @@ daemon() {
 		esac
 		shift
 	done
+	if [ -n "$user" -a "$user" != "root" ]; then
+		prog="/bin/su $user -s /bin/sh -c \""
+	fi
+	if [ "$fork" == "1" ]; then
+		prog="/usr/bin/setsid ${prog:-sh -c \"}"
+	fi
 	# If command to execute ends with quotation mark, add remaining
 	# arguments and close quotation.
 	if [ "$prog" != "${prog%\"}" ]; then
