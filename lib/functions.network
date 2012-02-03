@@ -469,12 +469,19 @@ get_ppp_device_and_pid ()
 # Olgierd Pieczul <wojrus@pld-linux.org>
 setup_ip_rules ()
 {
-	local args prio from src
+	local args prio from src i prio
 
 	if [ -f /etc/sysconfig/static-routes ]; then
 		if is_yes "$1"; then
+			i=20000
 			grep -E "^(from|to|iif|tos|fwmark|dev|pref|priority|prio)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
-				/sbin/ip rule add $args
+				prio=""
+				if [ "${args##* prio }" = "$args" ]; then
+					# no "prio" used in rule, use own prio
+					prio="prio $i"
+					i=$((i - 10))
+				fi
+				/sbin/ip rule add $args $prio
 			done
 		elif is_no "$1"; then
 			LC_ALL=C /sbin/ip rule show | grep -vE -e "from all lookup (main|default|local|253|254|255) \$" -e " map-to " | while read prio from src args; do
@@ -485,8 +492,15 @@ setup_ip_rules ()
 	is_no "$IPV6_NETWORKING" && return
 	if [ -f /etc/sysconfig/static-routes6 ]; then
 		if is_yes "$1"; then
+			i=20000
 			grep -E "^(from|to|iif|tos|fwmark|dev|pref|priority|prio)[[:blank:]]" /etc/sysconfig/static-routes6 | while read args; do
-				/sbin/ip -6 rule add $args
+				prio=""
+				if [ "${args##* prio }" = "$args" ]; then
+					# no "prio" used in rule, use own prio
+					prio="prio $i"
+					i=$((i - 10))
+				fi
+				/sbin/ip -6 rule add $args $prio
 			done
 		elif is_no "$1"; then
 			LC_ALL=C /sbin/ip -6 rule show | grep -vE -e "from all lookup (main|default|local|253|254|255) \$" -e " map-to " | while read prio from src args; do
