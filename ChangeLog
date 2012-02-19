@@ -1,3 +1,55 @@
+2012-02-19 18:23 +0000 [r12478]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* configure.ac: - 0.4.5.3
+
+2012-02-19 18:11 +0000 [r12477]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: - devtmpfs is madatory for udev >= 176
+
+2012-02-03 19:23 +0000 [r12474]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* lib/functions.network: Adding rule by rule causes reverse order
+	  to be applied by kernel. We want rules from
+	  sysconfig/static-rules to be working in the same order as these
+	  were added in that file. The one solution is to use '/usr/bin/tac
+	  static-routes' or to use own priorities. We use prio 20000 with
+	  step 10 down, to get holes for other, manually added rules.
+
+2012-01-25 14:40 +0000 [r12468]  Kacper Kornet <draenog/at/pld-linux.org>
+
+	* lib/functions: - fix bashism in previous commit
+
+2012-01-25 14:28 +0000 [r12467]  Kacper Kornet <draenog/at/pld-linux.org>
+
+	* lib/functions: - fix daemon --user --fork as they conflicted with
+	  each other
+
+2012-01-13 13:32 +0000 [r12466]  Jan Rękorajski <baggins/at/pld-linux.org>
+
+	* rc.d/init.d/network: - stable sort for BOOTPRIO= devices, so vlan
+	  ifaces will be after their NIC eth counterparts - treat macvlan
+	  and macvtap interfaces specially - they may be created on almost
+	  enything
+
+2011-12-16 08:47 +0000 [r12455]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: vgscan/vgmknodes/vgdisplay don't support
+	  --sysinit option. Back to ignorelocking for these.
+
+2011-12-15 18:17 +0000 [r12454]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* init/sys-chroots.conf, init/cpusets.conf, init/allowlogin.conf:
+	  nicely stop, without error
+
+2011-12-14 17:15 +0000 [r12453]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions: - ksh did not like doble minus ("+5--10"), needs
+	  spaces ("+5 - -10") to process correctly
+
+2011-12-14 11:33 +0000 [r12451]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: - 0.4.5.2
+
 2011-12-14 11:26 +0000 [r12449]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* changelog.sh: - be sure users file is up to date
@@ -18,7 +70,7 @@
 
 2011-12-04 14:36 +0000 [r12437]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* man/Makefile.am, man/fstab-decode.8 (removed): Drop fstab-decode
+	* man/fstab-decode.8 (removed), man/Makefile.am: Drop fstab-decode
 	  man page
 
 2011-12-04 02:42 +0000 [r12436]  Artur Frysiak <wiget/at/pld-linux.org>
@@ -76,7 +128,7 @@
 
 2011-10-23 19:26 +0000 [r12388-12389]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/rc.sysinit, init/Makefile.am, init/modules.conf (added):
+	* init/Makefile.am, init/modules.conf (added), rc.d/rc.sysinit:
 	  load /etc/modules in upstart
 
 	* rc.d/rc.shutdown: emit shutdown events
@@ -113,7 +165,7 @@
 
 2011-10-05 14:47 +0000 [r12363]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/init.d/local, init/Makefile.am, init/local.conf (added):
+	* init/Makefile.am, init/local.conf (added), rc.d/init.d/local:
 	  upstart for rc.local
 
 2011-09-30 10:54 +0000 [r12360]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -165,8 +217,8 @@
 
 2011-09-02 06:18 +0000 [r12339-12340]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* init/sys-chroots.conf (added), rc.d/init.d/sys-chroots,
-	  init/allowlogin.conf (added), rc.d/init.d/allowlogin: add
+	* rc.d/init.d/sys-chroots, init/allowlogin.conf (added),
+	  rc.d/init.d/allowlogin, init/sys-chroots.conf (added): add
 	  allowlogin and sys-chroots upstart parts, altho no stop for them
 
 	* sysconfig/system, rc.d/rc.sysinit: add $LVM2 allows you to
@@ -184,9 +236,9 @@
 
 2011-08-31 16:24 +0000 [r12336]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/init.d/Makefile.am, po/rc-scripts.pot, lib/functions
-	  (added), lib/Makefile.am, rc.d/init.d/functions (removed): move
-	  also functions to /lib/rc-scripts (symlink preserved)
+	* lib/functions (added), lib/Makefile.am, rc.d/init.d/functions
+	  (removed), rc.d/init.d/Makefile.am, po/rc-scripts.pot: move also
+	  functions to /lib/rc-scripts (symlink preserved)
 
 2011-08-19 19:56 +0000 [r12331]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -224,40 +276,40 @@
 
 2011-08-14 11:56 +0000 [r12319-12320]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/init.d/Makefile.am, rc.d/init.d/template.init (removed),
-	  po/rc-scripts.pot, doc/Makefile.am, doc/template.init (added):
-	  move template.init to doc
+	* doc/template.init (added), rc.d/init.d/Makefile.am,
+	  rc.d/init.d/template.init (removed), po/rc-scripts.pot,
+	  doc/Makefile.am: move template.init to doc
 
-	* sysconfig/interfaces/.cvsignore (removed),
-	  sysconfig/interfaces/down.d/ip/.cvsignore (removed), doc,
-	  sysconfig/interfaces/up.d/all, sysconfig/interfaces/up.d/ip, lib,
-	  sysconfig/interfaces/up.d/ipx/.cvsignore (removed),
-	  ppp/ip-down.d/.cvsignore (removed),
-	  sysconfig/interfaces/data/.cvsignore (removed),
-	  sysconfig/interfaces/down.d, lib/.cvsignore (removed),
-	  sysconfig/interfaces/down.d/all, rc.d/init.d/.cvsignore
-	  (removed), ppp/ip-up.d/.cvsignore (removed), isapnp,
-	  sysconfig/interfaces/down.d/tnl/.cvsignore (removed),
-	  sysconfig/interfaces/up.d/tnl, sysconfig/interfaces/up.d/ppp,
-	  sysconfig/interfaces/down.d/ppp/.cvsignore (removed),
-	  sysconfig/interfaces/up.d/ipx,
-	  sysconfig/interfaces/down.d/.cvsignore (removed), /, sysconfig,
-	  src/.cvsignore (removed),
-	  sysconfig/interfaces/down.d/all/.cvsignore (removed),
-	  sysconfig/interfaces/up.d/tnl/.cvsignore (removed),
-	  isapnp/.cvsignore (removed),
-	  sysconfig/interfaces/up.d/ppp/.cvsignore (removed),
-	  sysconfig/interfaces/up.d/.cvsignore (removed), ppp/ip-up.d,
-	  rc.d/init.d, ppp/.cvsignore (removed), .cvsignore (removed),
-	  sysconfig/interfaces/down.d/tnl, po,
-	  sysconfig/interfaces/down.d/ppp, sysconfig/interfaces/down.d/ipx,
+	* .cvsignore (removed), po, sysconfig/interfaces/down.d,
 	  sysconfig/.cvsignore (removed), doc/.cvsignore (removed),
-	  sysconfig/interfaces/up.d/all/.cvsignore (removed),
-	  sysconfig/interfaces/up.d/ip/.cvsignore (removed), rc.d, src,
-	  sysconfig/interfaces/down.d/ip, po/.cvsignore (removed),
-	  sysconfig/interfaces/down.d/ipx/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/all/.cvsignore (removed), rc.d,
+	  sysconfig/interfaces/down.d/all, sysconfig/interfaces/down.d/ip,
+	  sysconfig/interfaces/up.d/tnl, sysconfig/interfaces/up.d/ppp,
+	  sysconfig/interfaces/up.d/ipx,
+	  sysconfig/interfaces/down.d/ipx/.cvsignore (removed), /,
+	  sysconfig, sysconfig/interfaces/up.d/ip, isapnp/.cvsignore
+	  (removed), sysconfig/interfaces/up.d/ipx/.cvsignore (removed),
+	  ppp/ip-up.d, rc.d/init.d, ppp/ip-down.d/.cvsignore (removed),
+	  sysconfig/interfaces/data/.cvsignore (removed),
+	  sysconfig/interfaces/down.d/tnl, sysconfig/interfaces/down.d/ppp,
+	  sysconfig/interfaces/down.d/ipx,
+	  sysconfig/interfaces/up.d/ip/.cvsignore (removed), lib/.cvsignore
+	  (removed), src, rc.d/init.d/.cvsignore (removed),
+	  ppp/ip-up.d/.cvsignore (removed), isapnp,
+	  sysconfig/interfaces/down.d/tnl/.cvsignore (removed),
+	  po/.cvsignore (removed),
+	  sysconfig/interfaces/down.d/ppp/.cvsignore (removed),
+	  sysconfig/interfaces/down.d/.cvsignore (removed),
 	  sysconfig/interfaces/up.d, ppp/ip-down.d, ppp,
 	  sysconfig/hwprofiles/.cvsignore (removed), rc.d/.cvsignore
+	  (removed), src/.cvsignore (removed),
+	  sysconfig/interfaces/.cvsignore (removed),
+	  sysconfig/interfaces/down.d/all/.cvsignore (removed),
+	  sysconfig/interfaces/down.d/ip/.cvsignore (removed), doc,
+	  sysconfig/interfaces/up.d/all, lib,
+	  sysconfig/interfaces/up.d/tnl/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/ppp/.cvsignore (removed),
+	  sysconfig/interfaces/up.d/.cvsignore (removed), ppp/.cvsignore
 	  (removed): convert .cvsignore to svn:ignore
 
 2011-08-14 11:48 +0000 [r12318]  Elan Ruusamäe <glen/at/pld-linux.org>
@@ -272,28 +324,28 @@
 	* po/Makefile.am, po/makepot.pl (added), makepot.pl (removed): move
 	  makepot to po/ dir with rest of it's files
 
-	* po/pl.po, po/rc-scripts.pot, rc.d/init.d/random, po/de.po: - fix
+	* rc.d/init.d/random, po/de.po, po/pl.po, po/rc-scripts.pot: - fix
 	  bad nls usage
 
-	* po/pl.po, po/de.po: utf8 to rule the world
+	* po/de.po, po/pl.po: utf8 to rule the world
 
-	* po/pl.po, po/de.po: - updated
+	* po/de.po, po/pl.po: - updated
 
 	* po/rc-scripts.pot: - updated
 
 	* po/rc-scripts.pot (added): track to see new strings to appear or
 	  not
 
-	* ppp/ipx-down, rc.d/init.d/network, lib/ifup-ppp, lib (added),
-	  lib/ifup-ipx, lib/ifup-vlan, man/usernetctl.8, lib/ifup-br,
-	  lib/ifup-plip, src/ppp-watch.c, lib/ifdown-post, lib/Makefile.am,
-	  ppp/auth-up, sysconfig/network-scripts (removed), ppp/ip-up,
-	  lib/ifdown-ppp, lib/ifup-post, doc/net-scripts.txt, configure.ac,
-	  ppp/auth-down, lib/tnlup, lib/ifdown-sl, lib/ifdown-irda,
-	  lib/ifup, Makefile.am, ppp/ip-down, sysconfig/Makefile.am,
-	  lib/ifup-iucv, ppp/ipx-up, lib/ifup-sl, lib/ifup-irda,
-	  lib/ifdown-vlan, lib/tnldown, lib/ifdown, lib/ifup-plusb,
-	  lib/ifdown-br: - move network scripts to /lib, as none of them
+	* lib/ifdown-post, lib/Makefile.am, ppp/ipx-up, ppp/auth-up,
+	  sysconfig/network-scripts (removed), ppp/ip-up, lib/ifup-post,
+	  lib/ifdown, lib/ifup-plusb, doc/net-scripts.txt, ppp/ipx-down,
+	  ppp/auth-down, lib/ifup-ppp, lib/ifup-ipx, lib/tnlup,
+	  lib/ifdown-sl, lib/ifdown-irda, Makefile.am, man/usernetctl.8,
+	  ppp/ip-down, sysconfig/Makefile.am, lib/ifup-iucv, lib/ifup-sl,
+	  lib/ifup-irda, lib/ifdown-ppp, lib/ifdown-vlan, lib/tnldown,
+	  lib/ifdown-br, configure.ac, rc.d/init.d/network, lib (added),
+	  lib/ifup-vlan, lib/ifup, lib/ifup-br, lib/ifup-plip,
+	  src/ppp-watch.c: - move network scripts to /lib, as none of them
 	  are config files - version 0.4.5 for such major change
 
 2011-08-14 11:11 +0000 [r12308-12309]  Elan Ruusamäe <glen/at/pld-linux.org>
@@ -421,10 +473,10 @@
 
 2011-03-21 22:15 +0000 [r12211]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup-routes, doc/sysconfig.txt,
-	  sysconfig/Makefile.am, doc/sysconfig.docb,
-	  sysconfig/network-scripts/functions.network: - add static-routes6
-	  support (IPv6-only ip routes and rules)
+	* sysconfig/Makefile.am, doc/sysconfig.docb,
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-routes, doc/sysconfig.txt: - add
+	  static-routes6 support (IPv6-only ip routes and rules)
 
 2011-03-21 20:30 +0000 [r12210]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -736,13 +788,12 @@
 
 2010-07-08 10:47 +0000 [r11638-11639]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/init.d/network, rc.d/init.d/local, rc.d/init.d/random,
-	  rc.d/init.d/single, rc.d/init.d/cpusets: - ignore
-	  /var/lock/subsys remove readonly fs errors (after fsck wants to
-	  reboot system)
+	* rc.d/init.d/cpusets, rc.d/init.d/network, rc.d/init.d/local,
+	  rc.d/init.d/random, rc.d/init.d/single: - ignore /var/lock/subsys
+	  remove readonly fs errors (after fsck wants to reboot system)
 
-	* rc.d/init.d/network, rc.d/init.d/random, rc.d/init.d/single,
-	  rc.d/init.d/killall, rc.d/init.d/cpusets, rc.d/init.d/allowlogin:
+	* rc.d/init.d/single, rc.d/init.d/killall, rc.d/init.d/cpusets,
+	  rc.d/init.d/allowlogin, rc.d/init.d/network, rc.d/init.d/random:
 	  - executable initscripts
 
 2010-06-18 06:40 +0000 [r11565]  Bartłomiej Zimoń <cactus/at/pld-linux.org>
@@ -850,10 +901,10 @@
 
 2010-05-10 14:31 +0000 [r11423]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
-	* src/start-stop-daemon.c, src/Makefile.am,
-	  man/start-stop-daemon.8, configure.ac, rc.d/init.d/functions: -
-	  'dropcaps' and 'start-stop-daemon-pid-check' patches from
-	  packages/rc-scripts applied
+	* man/start-stop-daemon.8, configure.ac, rc.d/init.d/functions,
+	  src/start-stop-daemon.c, src/Makefile.am: - 'dropcaps' and
+	  'start-stop-daemon-pid-check' patches from packages/rc-scripts
+	  applied
 
 2010-05-10 12:59 +0000 [r11422]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
@@ -865,31 +916,31 @@
 
 2010-05-10 11:23 +0000 [r11419]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
-	* t/backtick-test.sh, rc.d/init.d/network, rc.d/rc.shutdown,
-	  sysconfig/interfaces/up.d/ip, sysconfig/interfaces/up.d/all, doc,
-	  init/random.conf, man, init/Makefile.am,
-	  sysconfig/interfaces/down.d, man/es, sysconfig/network-scripts,
-	  sysconfig/interfaces, sysconfig/interfaces/down.d/all,
-	  sysconfig/cpusets, isapnp, sysconfig/interfaces/up.d/tnl,
-	  rc.d/rc.sysinit, rc.d/init.d/random,
-	  sysconfig/interfaces/up.d/ppp, sysconfig/interfaces/up.d/ipx,
-	  service, /, configure.ac, man/sv, man/de, sysconfig, man/ja,
+	* service, /, configure.ac, man/sv, man/de, sysconfig, man/ja,
 	  Makefile.am, rc.d/init.d, sysconfig/interfaces/down.d/tnl, po,
 	  sysconfig/interfaces/down.d/ppp, sysconfig/interfaces/down.d/ipx,
 	  man/fr, rc.d/init.d/functions, doc/make-html, doc/upstart.txt
 	  (added), sysconfig/hwprofiles, rc.d, src,
 	  sysconfig/interfaces/down.d/ip, src/setuidgid.c (added), rc.d/rc,
 	  sysconfig/interfaces/up.d, ppp, sysconfig/interfaces/data,
-	  src/Makefile.am, man/ru, init (added): - upstart_native branch
-	  merged
+	  src/Makefile.am, man/ru, init (added), t/backtick-test.sh,
+	  rc.d/init.d/network, rc.d/rc.shutdown,
+	  sysconfig/interfaces/up.d/ip, sysconfig/interfaces/up.d/all, doc,
+	  init/random.conf, man, init/Makefile.am,
+	  sysconfig/interfaces/down.d, man/es, sysconfig/network-scripts,
+	  sysconfig/interfaces, sysconfig/interfaces/down.d/all,
+	  sysconfig/cpusets, isapnp, sysconfig/interfaces/up.d/tnl,
+	  rc.d/rc.sysinit, rc.d/init.d/random,
+	  sysconfig/interfaces/up.d/ppp, sysconfig/interfaces/up.d/ipx: -
+	  upstart_native branch merged
 
 2010-05-02 12:16 +0000 [r11364]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup-routes,
-	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
-	  sysconfig/network, doc/net-scripts.txt,
-	  sysconfig/network-scripts/functions.network: - support for
-	  zeroconf networking (based on information from
+	* sysconfig/network, doc/net-scripts.txt,
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-routes,
+	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
+	  - support for zeroconf networking (based on information from
 	  http://avahi.org/wiki/AvahiAutoipd#Routes)
 
 2010-04-21 20:24 +0000 [r11340]  Elan Ruusamäe <glen/at/pld-linux.org>
@@ -937,7 +988,7 @@
 
 2010-02-08 16:51 +0000 [r11134]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* t/backtick-test.sh (added), backtick-test.sh (removed), t
+	* backtick-test.sh (removed), t (added), t/backtick-test.sh
 	  (added): - move tests to t/
 
 2010-01-15 13:56 +0000 [r11113]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -965,7 +1016,7 @@
 
 2009-11-24 11:07 +0000 [r11001]  Tomasz Pala <gotar/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, rc.d/rc.sysinit: - having EVMS_LVM=yes without
+	* rc.d/rc.sysinit, rc.d/rc.shutdown: - having EVMS_LVM=yes without
 	  the tools doesn't make them work - having EVMS_LVM=no mustn't
 	  prevent plain LVM from bringing up - conclusion: these parts of
 	  code are EVMS_LVM independant
@@ -1037,8 +1088,8 @@
 
 2009-11-17 07:10 +0000 [r10976]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/init.d/sys-chroots, rc.d/rc, rc.d/rc.sysinit,
-	  rc.d/init.d/cryptsetup, rc.d/init.d/functions: - partial merge of
+	* rc.d/init.d/functions, rc.d/init.d/sys-chroots, rc.d/rc,
+	  rc.d/rc.sysinit, rc.d/init.d/cryptsetup: - partial merge of
 	  baggin's busybox branch changes
 
 2009-11-17 06:22 +0000 [r10975]  Elan Ruusamäe <glen/at/pld-linux.org>
@@ -1103,9 +1154,9 @@
 
 2009-10-15 09:32 +0000 [r10788]  Paweł Zuzelski <pawelz/at/pld-linux.org>
 
-	* sysconfig/interfaces/ifcfg-ppp0.gprs-playmobile (added),
-	  sysconfig/interfaces/data/chat-ppp0.gprs-playmobile (added): -
-	  ppp configuration for PLAY MOBILE (tested on HUAWEI E169 and E220
+	* sysconfig/interfaces/data/chat-ppp0.gprs-playmobile (added),
+	  sysconfig/interfaces/ifcfg-ppp0.gprs-playmobile (added): - ppp
+	  configuration for PLAY MOBILE (tested on HUAWEI E169 and E220
 	  modems)
 
 2009-10-14 07:35 +0000 [r10784]  Elan Ruusamäe <glen/at/pld-linux.org>
@@ -1146,7 +1197,7 @@
 
 2009-08-17 20:34 +0000 [r10490]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* rc.d/rc.sysinit, src/getkey.c: New getkey handling (from fc).
+	* src/getkey.c, rc.d/rc.sysinit: New getkey handling (from fc).
 
 2009-08-16 20:53 +0000 [r10487]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
@@ -1164,13 +1215,13 @@
 
 2009-08-07 17:42 +0000 [r10460]  Marcin Król <hawk/at/pld-linux.org>
 
-	* sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/ifup-br, rc.d/rc.sysinit,
-	  sysconfig/network-scripts/ifup-sl,
+	* sysconfig/network-scripts/ifup-sl,
 	  sysconfig/network-scripts/functions.network,
 	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-vlan: - '-k' is no longer valid
-	  modprobe switch
+	  sysconfig/network-scripts/ifup-vlan,
+	  sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/ifup-br, rc.d/rc.sysinit: - '-k' is no
+	  longer valid modprobe switch
 
 2009-07-25 19:44 +0000 [r10427]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -1305,10 +1356,9 @@
 
 2009-03-19 00:15 +0000 [r10218]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/rc, rc.d/rc.sysinit, DEVELOPMENT,
-	  sysconfig/network-scripts/functions.network,
-	  rc.d/init.d/functions: - use "local" not "typeset" (compatible
-	  with: pdksh/bash/dash)
+	* DEVELOPMENT, sysconfig/network-scripts/functions.network,
+	  rc.d/init.d/functions, rc.d/rc, rc.d/rc.sysinit: - use "local"
+	  not "typeset" (compatible with: pdksh/bash/dash)
 
 2009-03-16 11:34 +0000 [r10214]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -1339,9 +1389,8 @@
 
 2009-03-10 11:39 +0000 [r10197-10198]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/functions.network: - addlabel is IPv6
-	  only
+	* sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup: - addlabel is IPv6 only
 
 	* sysconfig/network-scripts/ifup-aliases: - added addrlabel support
 
@@ -1382,15 +1431,15 @@
 
 2009-03-09 21:12 +0000 [r10185]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/ifup-aliases,
+	* rc.d/rc.sysinit, rc.d/init.d/cryptsetup,
+	  sysconfig/network-scripts/ifup-neigh,
+	  sysconfig/network-scripts/functions.network,
+	  rc.d/init.d/functions, sysconfig/network-scripts/ifup-vlan,
+	  rc.d/init.d/network, sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/ifup-routes,
 	  sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/tnldown, rc.d/rc.sysinit,
-	  rc.d/init.d/cryptsetup, sysconfig/network-scripts/ifup-neigh,
-	  sysconfig/network-scripts/functions.network,
-	  rc.d/init.d/functions, sysconfig/network-scripts/ifup-vlan: - man
-	  grep, "Direct invocation as either egrep or fgrep is deprecated",
-	  use grep -F or grep -E
+	  sysconfig/network-scripts/tnldown: - man grep, "Direct invocation
+	  as either egrep or fgrep is deprecated", use grep -F or grep -E
 
 2009-03-09 21:04 +0000 [r10183-10184]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -1469,7 +1518,7 @@
 
 2009-02-21 12:43 +0000 [r10135]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* rc.d/rc, sysconfig/network-scripts/functions.network: Comparsion
+	* sysconfig/network-scripts/functions.network, rc.d/rc: Comparsion
 	  correction.
 
 2009-02-20 09:05 +0000 [r10133]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -1539,7 +1588,13 @@
 
 2009-01-23 13:39 +0000 [r10092]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup-routes, rc.d/rc.shutdown,
+	* sysconfig/network-scripts/ifup-br,
+	  sysconfig/network-scripts/ifup-plip, sysconfig/system,
+	  sysconfig/network-scripts/ifup-iucv, rc.d/rc,
+	  sysconfig/network-scripts/ifdown-post, rc.d/rc.init, lang.csh,
+	  hwprofile, service, sysconfig/network-scripts/ifup-sl,
+	  sysconfig/network-scripts/ifup-irda,
+	  sysconfig/network-scripts/ifup-routes, rc.d/rc.shutdown,
 	  sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/ifdown-ppp,
 	  sysconfig/network-scripts/tnldown,
@@ -1554,26 +1609,21 @@
 	  sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/ifdown-sl,
 	  sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifdown-irda,
-	  sysconfig/network-scripts/ifup-br,
-	  sysconfig/network-scripts/ifup-plip, sysconfig/system,
-	  sysconfig/network-scripts/ifup-iucv, rc.d/rc,
-	  sysconfig/network-scripts/ifdown-post, rc.d/rc.init, lang.csh,
-	  hwprofile, service, sysconfig/network-scripts/ifup-sl,
-	  sysconfig/network-scripts/ifup-irda: - cleanup vi:syntax, not
+	  sysconfig/network-scripts/ifdown-irda: - cleanup vi:syntax, not
 	  needed and doesn't work anyway (should be vim:ft if any)
 
 2009-01-23 13:34 +0000 [r10091]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup-aliases,
+	* rc.d/init.d/cryptsetup,
+	  sysconfig/network-scripts/functions.network, configure.ac,
+	  sysconfig/network-scripts/ifup-vlan,
+	  sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/ifdown-vlan,
 	  sysconfig/network-scripts/ifup-br,
 	  sysconfig/network-scripts/tnldown,
 	  sysconfig/network-scripts/ifdown, Makefile.am,
-	  sysconfig/network-scripts/ifdown-br, rc.d/init.d/cryptsetup,
-	  sysconfig/network-scripts/functions.network, configure.ac,
-	  sysconfig/network-scripts/ifup-vlan: - force LC_ALL=C when
+	  sysconfig/network-scripts/ifdown-br: - force LC_ALL=C when
 	  grepping data from possibly localized program outputs
 
 2009-01-22 09:06 +0000 [r10090]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -1641,8 +1691,8 @@
 
 2008-12-09 14:35 +0000 [r10030]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, po/pl.po, sysconfig/system, rc.d/rc.sysinit,
-	  sysconfig/network-scripts/ifup-ppp: - removed DevFS support
+	* sysconfig/network-scripts/ifup-ppp, rc.d/rc.shutdown, po/pl.po,
+	  sysconfig/system, rc.d/rc.sysinit: - removed DevFS support
 
 2008-12-09 14:31 +0000 [r10029]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -1671,9 +1721,9 @@
 
 2008-11-28 16:09 +0000 [r10010]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup,
-	  sysconfig/interfaces/ifcfg-description,
-	  sysconfig/interfaces/ifcfg-eth0.1: macvlan support.
+	* sysconfig/interfaces/ifcfg-eth0.1,
+	  sysconfig/network-scripts/ifup,
+	  sysconfig/interfaces/ifcfg-description: macvlan support.
 
 2008-11-27 14:47 +0000 [r10007]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -1764,20 +1814,20 @@
 
 	* sysconfig/interfaces/ifcfg-eth0.1: - typo
 
-	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
-	  doc/net-scripts.txt, sysconfig/interfaces/ifcfg-eth0: - support
+	* sysconfig/interfaces/ifcfg-eth0, sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/ifdown, doc/net-scripts.txt: - support
 	  for automatic 6to4 tunnels
 
 2008-10-13 13:21 +0000 [r9909]  Tomasz Pala <gotar/at/pld-linux.org>
 
-	* rc.d/init.d/network, backtick-test.sh (added): - restored some
+	* backtick-test.sh (added), rc.d/init.d/network: - restored some
 	  backticks - pdksh has broken $(...) closing paren detection, -
 	  added backtick-test.sh to test whenever this would be valid some
 	  day
 
 2008-10-13 01:04 +0000 [r9908]  Tomasz Pala <gotar/at/pld-linux.org>
 
-	* rc.d/init.d/network, rc.d/init.d/cpusets, rc.d/init.d/functions:
+	* rc.d/init.d/cpusets, rc.d/init.d/functions, rc.d/init.d/network:
 	  - unified function definitions (line-saving way), - use
 	  unambiguous $(...) instead of backticks.
 
@@ -1863,23 +1913,23 @@
 
 	* sysconfig/interfaces/tnlcfg-description: - utf8
 
-	* doc/rc-scripts.docb, doc/polski.dsl, doc/sysconfig.docb: - utf8
+	* doc/sysconfig.docb, doc/rc-scripts.docb, doc/polski.dsl: - utf8
 
 2008-04-27 01:29 +0000 [r9730]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc-scripts.spec.in (removed), Makefile.am, configure.ac: -
+	* configure.ac, rc-scripts.spec.in (removed), Makefile.am: -
 	  outdated, use spec from cvs
 
 2008-04-27 01:24 +0000 [r9729]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/ifdown-irda,
-	  sysconfig/network-scripts/ifdown-vlan,
-	  sysconfig/network-scripts/ifup-br,
-	  sysconfig/network-scripts/tnldown,
+	* sysconfig/network-scripts/tnldown,
 	  sysconfig/network-scripts/ifdown-br, hwprofile,
 	  sysconfig/network-scripts/ifup-irda, rc.d/init.d/functions,
-	  sysconfig/network-scripts/ifup-vlan: - utf8
+	  sysconfig/network-scripts/ifup-vlan,
+	  sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/ifdown-irda,
+	  sysconfig/network-scripts/ifdown-vlan,
+	  sysconfig/network-scripts/ifup-br: - utf8
 
 2008-04-27 01:20 +0000 [r9728]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -2238,7 +2288,7 @@
 
 2007-11-09 01:10 +0000 [r9027]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, rc.d/rc.sysinit: - bugfixes for crypttab
+	* rc.d/rc.sysinit, rc.d/rc.shutdown: - bugfixes for crypttab
 
 2007-11-09 00:49 +0000 [r9025-9026]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -2267,11 +2317,11 @@
 
 2007-11-09 00:00 +0000 [r9019]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, rc.d/rc.sysinit: - blogd updates
+	* rc.d/rc.sysinit, rc.d/rc.shutdown: - blogd updates
 
 2007-11-08 00:42 +0000 [r9016]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* src/usleep.c, man/usleep.1, src/Makefile.am: - update with suse
+	* src/Makefile.am, src/usleep.c, man/usleep.1: - update with suse
 	  variant from killproc-2.12 (and who's oot?
 	  http://lists.rpath.com/pipermail/initscripts-commits/2006-December/000573.html)
 
@@ -2319,7 +2369,7 @@
 
 2007-11-01 03:00 +0000 [r8941-8942]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* man/Makefile.am, src/Makefile.am: - add fstab-decode from rh
+	* src/Makefile.am, man/Makefile.am: - add fstab-decode from rh
 
 	* rc.d/rc.sysinit: - don't get tempted to kill blogd
 
@@ -2357,7 +2407,7 @@
 
 2007-11-01 01:23 +0000 [r8930-8931]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/rc.sysinit, rc.d/init.d/functions: - disable_selinux(),
+	* rc.d/init.d/functions, rc.d/rc.sysinit: - disable_selinux(),
 	  relabel_selinux(), clean_vserver_mtab() used only in rc.sysinit,
 	  moved there
 
@@ -2561,10 +2611,10 @@
 
 2007-06-05 10:39 +0000 [r8636]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/bondup (added),
+	* sysconfig/network-scripts/bondup (added),
 	  sysconfig/network-scripts/Makefile.am,
-	  sysconfig/network-scripts/bonddown (added): - bonding support by
-	  Justas Vilimas
+	  sysconfig/network-scripts/bonddown (added), rc.d/init.d/network:
+	  - bonding support by Justas Vilimas
 
 2007-06-05 10:27 +0000 [r8635]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -2572,7 +2622,7 @@
 
 2007-05-30 11:51 +0000 [r8631]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, rc.d/rc, rc.d/rc.sysinit, rc.d/init.d/single: -
+	* rc.d/rc, rc.d/rc.sysinit, rc.d/init.d/single, rc.d/rc.shutdown: -
 	  see ChangeLog for Changes
 
 2007-05-09 20:40 +0000 [r8500]  Elan Ruusamäe <glen/at/pld-linux.org>
@@ -2592,7 +2642,7 @@
 
 2007-05-01 00:53 +0000 [r8487]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/init.d/network, rc.d/rc.sysinit: - reverted some command
+	* rc.d/rc.sysinit, rc.d/init.d/network: - reverted some command
 	  substitution changes due to conflicting parenthesis
 
 2007-04-28 18:34 +0000 [r8484-8485]  Jakub Bogusz <qboosh/at/pld-linux.org>
@@ -2639,13 +2689,13 @@
 
 2007-04-26 15:56 +0000 [r8473]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifdown, ppp/ip-up.d/logger,
-	  rc.d/rc.sysinit, run-parts, sysconfig/interfaces/up.d/ppp/logger,
-	  ppp/ip-down.d/logger, sysconfig/interfaces/down.d/ppp/logger,
-	  sysconfig/hwprofiles/Makefile.am, service, rc.d/init.d/cpusets,
-	  sysconfig/network-scripts/functions.network,
-	  sysconfig/network-scripts/ifup-ipx: - use $() for command
+	* rc.d/init.d/cpusets, sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-ipx, rc.d/init.d/network,
+	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
+	  ppp/ip-up.d/logger, rc.d/rc.sysinit, run-parts,
+	  sysconfig/interfaces/up.d/ppp/logger, ppp/ip-down.d/logger,
+	  sysconfig/interfaces/down.d/ppp/logger,
+	  sysconfig/hwprofiles/Makefile.am, service: - use $() for command
 	  substitution
 
 2007-04-26 15:30 +0000 [r8472]  Jan Rękorajski <baggins/at/pld-linux.org>
@@ -2728,22 +2778,23 @@
 
 	* rc.d/init.d/random: - comment says do not, so won't!
 
-	* rc.d/init.d/network, rc.d/init.d/local, rc.d/init.d/random,
-	  rc.d/init.d/cpusets, rc.d/init.d/allowlogin: - well, PLDIZE!
+	* rc.d/init.d/random, rc.d/init.d/cpusets, rc.d/init.d/allowlogin,
+	  rc.d/init.d/network, rc.d/init.d/local: - well, PLDIZE!
 
-	* rc.d/init.d/Makefile.am, rc.d/init.d/network, rc.d/init.d/local,
-	  rc.d/init.d/sys-chroots, rc.d/init.d/template.init,
+	* rc.d/init.d/sys-chroots, rc.d/init.d/template.init,
 	  rc.d/init.d/random, rc.d/init.d/single, rc.d/init.d/killall,
 	  rc.d/init.d/cpusets, rc.d/init.d/allowlogin,
-	  rc.d/init.d/functions: - vim autodetects syntax from shebang
+	  rc.d/init.d/functions, rc.d/init.d/Makefile.am,
+	  rc.d/init.d/network, rc.d/init.d/local: - vim autodetects syntax
+	  from shebang
 
 2007-02-25 00:59 +0000 [r8290-8293]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* configure.ac: - Release 0.4.1.4
 
-	* rc.d/init.d/Makefile.am, rc.d/init.d/timezone (removed),
-	  sysconfig/Makefile.am, sysconfig/timezone (removed): - timezone
-	  moved to tzdata.spec
+	* sysconfig/Makefile.am, sysconfig/timezone (removed),
+	  rc.d/init.d/Makefile.am, rc.d/init.d/timezone (removed): -
+	  timezone moved to tzdata.spec
 
 	* DEVELOPMENT: - sync order
 
@@ -2766,7 +2817,7 @@
 
 2007-01-28 14:25 +0000 [r8209-8210]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/rc.sysinit, rc.d/init.d/functions: - $CONSOLETYPE used only
+	* rc.d/init.d/functions, rc.d/rc.sysinit: - $CONSOLETYPE used only
 	  in rc.sysinit
 
 	* rc.d/init.d/functions: - termput() cannot cache in shell vars as
@@ -2787,9 +2838,9 @@
 
 	* sysconfig/network-scripts/ifdown: - reuase $DHCP_CLIENT
 
-	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
-	  sysconfig/network-scripts/functions.network: - be sure that dhcp
-	  client detection is same for ifup and ifdown
+	* sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
+	  - be sure that dhcp client detection is same for ifup and ifdown
 
 2007-01-22 18:47 +0000 [r8189-8191]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -2937,15 +2988,15 @@
 
 2006-11-26 10:05 +0000 [r7998]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* AUTHORS, src/Makefile.am: Fix resolvesymlink_SOURCE typo. Updated
+	* src/Makefile.am, AUTHORS: Fix resolvesymlink_SOURCE typo. Updated
 	  Paweł Wilk email address.
 
 2006-11-26 10:02 +0000 [r7997]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, AUTHORS, po/pl.po, src/pci-config.c (removed),
-	  rc-scripts.spec.in, src/Makefile.am, rc.d/init.d/functions:
-	  Revert nVidia madness. rc-scripts is not a place for such
-	  workaround.
+	* src/Makefile.am, rc.d/init.d/functions, rc.d/rc.shutdown,
+	  AUTHORS, po/pl.po, src/pci-config.c (removed),
+	  rc-scripts.spec.in: Revert nVidia madness. rc-scripts is not a
+	  place for such workaround.
 
 2006-11-26 08:06 +0000 [r7993]  Paweł Wilk <siefca/at/pld-linux.org>
 
@@ -2963,9 +3014,9 @@
 
 2006-11-25 12:09 +0000 [r7989]  Paweł Wilk <siefca/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, AUTHORS, src/pci-config.c (added),
-	  rc-scripts.spec.in, src/Makefile.am, rc.d/init.d/functions: -
-	  added Wake-On-Lan work-around for nForce ethernet drivers - added
+	* src/Makefile.am, rc.d/init.d/functions, rc.d/rc.shutdown,
+	  AUTHORS, src/pci-config.c (added), rc-scripts.spec.in: - added
+	  Wake-On-Lan work-around for nForce ethernet drivers - added
 	  pci-config utility which allows power state manipulation and
 	  devices listing
 
@@ -3034,7 +3085,7 @@
 
 	* man/Makefile.am: Add getkey.1
 
-	* src/getkey.c, man/getkey.1 (added): Updated.
+	* man/getkey.1 (added), src/getkey.c: Updated.
 
 2006-10-12 21:07 +0000 [r7849-7850]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -3044,8 +3095,7 @@
 	  sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada,
 	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada: Propset Id
 
-	* sysconfig/interfaces/ifcfg-ppp0.callback,
-	  sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm,
+	* sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm,
 	  sysconfig/interfaces/ifcfg-br0,
 	  sysconfig/interfaces/ifcfg-description,
 	  sysconfig/interfaces/ifcfg-irlan0,
@@ -3059,8 +3109,8 @@
 	  sysconfig/interfaces/ifcfg-irda0,
 	  sysconfig/interfaces/ifcfg-ppp0.speedtouch-neostrada,
 	  sysconfig/interfaces/ifcfg-eth0,
-	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada: Unify file
-	  header.
+	  sysconfig/interfaces/ifcfg-ppp0.eagle-usb-neostrada,
+	  sysconfig/interfaces/ifcfg-ppp0.callback: Unify file header.
 
 2006-10-12 19:49 +0000 [r7848]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -3141,8 +3191,8 @@
 
 2006-09-18 18:58 +0000 [r7791]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc.d/init.d/sys-chroots, rc.d/rc, rc.d/rc.sysinit,
-	  rc.d/init.d/allowlogin: /etc/sysconfig/system already loaded by
+	* rc.d/init.d/allowlogin, rc.d/init.d/sys-chroots, rc.d/rc,
+	  rc.d/rc.sysinit: /etc/sysconfig/system already loaded by
 	  init.d/functions. Adjust defaults if no sysconfig/system is
 	  present (so the checks stay same after these changes).
 
@@ -3221,7 +3271,7 @@
 
 	* rc.d/init.d/local: Update chkconfig description.
 
-	* rc.d/init.d/local, rc.d/init.d/cpusets: LSB compliance.
+	* rc.d/init.d/cpusets, rc.d/init.d/local: LSB compliance.
 
 2006-09-17 15:57 +0000 [r7770]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -3261,19 +3311,20 @@
 
 	* rc.d/init.d/cpusets: Cosmetics for vim
 
-	* rc.d/init.d/network, rc.d/init.d/timezone, rc.d/init.d/random,
-	  rc.d/init.d/allowlogin: LSB compliance
+	* rc.d/init.d/allowlogin, rc.d/init.d/network,
+	  rc.d/init.d/timezone, rc.d/init.d/random: LSB compliance
 
 2006-09-17 13:26 +0000 [r7758-7760]  Elan Ruusamäe <glen/at/pld-linux.org>
 
 	* rc.d/init.d/single: Adjust indent.
 
-	* rc.d/init.d/network, rc.d/init.d/single, rc.d/init.d/cpusets:
+	* rc.d/init.d/single, rc.d/init.d/cpusets, rc.d/init.d/network:
 	  Sane $PATH is initialized in init.d/functions.
 
-	* rc.d/init.d/network, rc.d/init.d/timezone, rc.d/init.d/random,
-	  rc.d/init.d/single, rc.d/init.d/cpusets, rc.d/init.d/allowlogin:
-	  NLS_DOMAIN="rc-scripts" is the default setting, remove.
+	* rc.d/init.d/allowlogin, rc.d/init.d/network,
+	  rc.d/init.d/timezone, rc.d/init.d/random, rc.d/init.d/single,
+	  rc.d/init.d/cpusets: NLS_DOMAIN="rc-scripts" is the default
+	  setting, remove.
 
 2006-09-09 19:13 +0000 [r7745]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
@@ -3300,9 +3351,9 @@
 
 2006-08-31 07:26 +0000 [r7692]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/functions.network: Detect if wireless
-	  interface is turned on.
+	* sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup: Detect if wireless interface is
+	  turned on.
 
 2006-08-10 12:14 +0000 [r7656]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -3490,9 +3541,9 @@
 
 2006-02-23 10:38 +0000 [r7002]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* rc-scripts.spec.in, inittab, rc.d/rc.sysinit, run-parts,
-	  doc/net-scripts.txt, doc/sysvinitfiles, rc.d/init.d/functions: We
-	  are PLD Linux (not just PLD).
+	* rc.d/init.d/functions, rc-scripts.spec.in, inittab,
+	  rc.d/rc.sysinit, run-parts, doc/net-scripts.txt,
+	  doc/sysvinitfiles: We are PLD Linux (not just PLD).
 
 2006-02-23 10:35 +0000 [r6999-7001]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -3507,7 +3558,7 @@
 
 2006-02-14 00:24 +0000 [r6972]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* sysconfig/cpusets/cpuset-test, rc.d/init.d/cpusets: - cpuset
+	* rc.d/init.d/cpusets, sysconfig/cpusets/cpuset-test: - cpuset
 	  virtualization support
 
 2006-02-10 22:21 +0000 [r6965]  Elan Ruusamäe <glen/at/pld-linux.org>
@@ -3579,9 +3630,8 @@
 
 2006-01-19 08:52 +0000 [r6864]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/interfaces/Makefile.am,
-	  sysconfig/interfaces/ifcfg-ppp0.ueagle-neostrada (added): Add
-	  ueagle example (abram).
+	* sysconfig/interfaces/ifcfg-ppp0.ueagle-neostrada (added),
+	  sysconfig/interfaces/Makefile.am: Add ueagle example (abram).
 
 2006-01-18 08:18 +0000 [r6844]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
@@ -3589,7 +3639,7 @@
 
 2006-01-15 12:01 +0000 [r6809]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* rc.d/init.d/sys-chroots, rc.d/rc.sysinit: Use correct chown
+	* rc.d/rc.sysinit, rc.d/init.d/sys-chroots: Use correct chown
 	  user:group notation.
 
 2006-01-13 18:07 +0000 [r6803]  Jan Rękorajski <baggins/at/pld-linux.org>
@@ -3643,7 +3693,7 @@
 
 2006-01-05 22:52 +0000 [r6747]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* rc.d/rc.sysinit, setsysfont: Fix console detection by not running
+	* setsysfont, rc.d/rc.sysinit: Fix console detection by not running
 	  setsysfont trough run_cmd (fixes utf8 font handling, too).
 
 2006-01-04 12:16 +0000 [r6734]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -3743,15 +3793,7 @@
 
 2005-10-26 16:33 +0000 [r6491]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, ppp/ipx-down, rc.d/init.d/network,
-	  rc.d/init.d/timezone, sysconfig/network-scripts/ifdown-vlan,
-	  sysconfig/network-scripts/tnldown,
-	  sysconfig/network-scripts/ifdown,
-	  sysconfig/network-scripts/ifup-plusb,
-	  sysconfig/network-scripts/ifdown-br,
-	  sysconfig/interfaces/tnlcfg-icm,
-	  sysconfig/network-scripts/ifup-neigh,
-	  sysconfig/network-scripts/functions.network, ppp/auth-up,
+	* sysconfig/network-scripts/functions.network, ppp/auth-up,
 	  sysconfig/network-scripts/ifup-ppp,
 	  sysconfig/network-scripts/ifup-ipx,
 	  sysconfig/network-scripts/ifup-vlan,
@@ -3775,7 +3817,15 @@
 	  sysconfig/network-scripts/ifup-iucv, rc.d/rc, sysconfig/network,
 	  rc.d/init.d/killall, rc.d/rc.modules,
 	  sysconfig/network-scripts/ifup-sl,
-	  sysconfig/network-scripts/ifup-irda: - more vim setting removed
+	  sysconfig/network-scripts/ifup-irda, rc.d/rc.shutdown,
+	  ppp/ipx-down, rc.d/init.d/network, rc.d/init.d/timezone,
+	  sysconfig/network-scripts/ifdown-vlan,
+	  sysconfig/network-scripts/tnldown,
+	  sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/ifup-plusb,
+	  sysconfig/network-scripts/ifdown-br,
+	  sysconfig/interfaces/tnlcfg-icm,
+	  sysconfig/network-scripts/ifup-neigh: - more vim setting removed
 	  (don't convert tabs to spaces) - white space cleanup - convert
 	  spaces to tabs - unify formatting for all scripts
 
@@ -3812,7 +3862,7 @@
 
 2005-10-25 14:17 +0000 [r6479]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, rc.d/rc, rc.d/rc.sysinit, rc.d/rc.modules: -
+	* rc.d/rc.modules, rc.d/rc.shutdown, rc.d/rc, rc.d/rc.sysinit: -
 	  grep: all your stderr are belong to /dev/null
 
 2005-10-25 11:58 +0000 [r6477]  Jan Rękorajski <baggins/at/pld-linux.org>
@@ -3839,49 +3889,50 @@
 
 2005-10-17 14:52 +0000 [r6452]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, sysconfig/system, rc.d/init.d/functions: -
+	* rc.d/init.d/functions, rc.d/rc.shutdown, sysconfig/system: -
 	  clean solution for initlog/minilogd: RC_LOGGING setting, and
 	  don't log while shutting down
 
 2005-10-17 13:49 +0000 [r6451]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* src/minilogd.c (added), src/initlog.c, src/Makefile.am: -
+	* src/Makefile.am, src/minilogd.c (added), src/initlog.c: -
 	  reverted last commit
 
 2005-10-17 13:20 +0000 [r6450]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* src/minilogd.c (removed), src/initlog.c, src/Makefile.am: -
+	* src/Makefile.am, src/minilogd.c (removed), src/initlog.c: -
 	  removed minilogd and its calls (more pain than gain)
 
 2005-10-16 19:26 +0000 [r6447]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/init.d/network, rc.d/rc.shutdown, rc.d/init.d/timezone,
-	  sysconfig/network-scripts/ifdown-vlan,
-	  sysconfig/network-scripts/tnldown,
+	* rc.d/init.d/cpusets, sysconfig/network-scripts/ifup-routes,
+	  rc.d/rc.shutdown, rc.d/init.d/timezone,
+	  sysconfig/network-scripts/ifup-post,
 	  sysconfig/network-scripts/ifup-plusb,
 	  sysconfig/network-scripts/ifdown,
-	  sysconfig/network-scripts/ifdown-br,
 	  sysconfig/network-scripts/ifup-neigh,
-	  sysconfig/network-scripts/functions.network,
-	  sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/ifup-ppp, rc.d/rc.local,
 	  sysconfig/network-scripts/ifup-ipx,
-	  sysconfig/network-scripts/ifup-vlan,
-	  sysconfig/network-scripts/ifup-br,
-	  sysconfig/network-scripts/ifup-plip, sysconfig/system,
-	  rc.d/init.d/template.init, rc.d/rc.sysinit, rc.d/init.d/random,
-	  sysconfig/network-scripts/ifdown-post, rc.d/rc.init,
-	  rc.d/init.d/single, sysconfig/timezone, hwprofile,
-	  rc.d/init.d/cpusets, sysconfig/network-scripts/ifup-routes,
-	  sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifdown-sl,
+	  sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/ifdown-irda, sysconfig/system,
+	  sysconfig/network-scripts/ifup-iucv, rc.d/rc, rc.d/init.d/random,
+	  rc.d/rc.init, rc.d/init.d/single, sysconfig/network,
+	  sysconfig/timezone, rc.d/init.d/killall,
+	  sysconfig/network-scripts/ifup-sl,
+	  sysconfig/network-scripts/ifup-irda,
+	  sysconfig/network-scripts/ifup-aliases, rc.d/init.d/network,
 	  sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/network-scripts/ifup-post, rc.d/init.d/allowlogin,
-	  rc.d/rc.local, sysconfig/network-scripts/ifdown-sl,
-	  sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifdown-irda,
-	  sysconfig/network-scripts/ifup-iucv, rc.d/rc, sysconfig/network,
-	  rc.d/init.d/killall, sysconfig/network-scripts/ifup-sl,
-	  sysconfig/network-scripts/ifup-irda: - removed dumb tw=78 vim
-	  setting
+	  sysconfig/network-scripts/ifdown-vlan,
+	  sysconfig/network-scripts/tnldown,
+	  sysconfig/network-scripts/ifdown-br, rc.d/init.d/allowlogin,
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-vlan,
+	  sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/ifup-br,
+	  sysconfig/network-scripts/ifup-plip, rc.d/init.d/template.init,
+	  rc.d/rc.sysinit, sysconfig/network-scripts/ifdown-post,
+	  hwprofile: - removed dumb tw=78 vim setting
 
 2005-10-06 16:08 +0000 [r6429]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -3889,16 +3940,15 @@
 
 2005-10-04 18:09 +0000 [r6425]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
+	* sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifup:
 	  Use pidfile for wpa_supplicant.
 
 2005-10-02 17:13 +0000 [r6420]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup,
-	  sysconfig/interfaces/ifcfg-description,
-	  sysconfig/network-scripts/ifdown: Simple support for WPA. Note
-	  that killing wpa_supplicant daemon is supported only for single
-	  daemon/interface (TODO: multiple daemons support).
+	* sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifup,
+	  sysconfig/interfaces/ifcfg-description: Simple support for WPA.
+	  Note that killing wpa_supplicant daemon is supported only for
+	  single daemon/interface (TODO: multiple daemons support).
 
 2005-09-05 17:12 +0000 [r6352]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
@@ -3998,10 +4048,9 @@
 
 2005-08-10 20:10 +0000 [r6290]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* sysconfig/system, sysconfig/cpusets/cpuset-test (added),
-	  sysconfig/Makefile.am, rc.d/init.d/cpusets (added),
-	  sysconfig/cpusets/Makefile.am (added): - CPUSETS support (work in
-	  progress)
+	* rc.d/init.d/cpusets (added), sysconfig/cpusets/Makefile.am
+	  (added), sysconfig/system, sysconfig/cpusets/cpuset-test (added),
+	  sysconfig/Makefile.am: - CPUSETS support (work in progress)
 
 2005-08-10 19:49 +0000 [r6289]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -4089,10 +4138,11 @@
 
 2005-03-05 23:46 +0000 [r5569]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* man/Makefile.am, man/ru/Makefile.am (added), man/es/Makefile.am
-	  (added), man/fr/Makefile.am (added), man/de/Makefile.am (added),
+	* man/ru/Makefile.am (added), man/es/Makefile.am (added),
+	  man/fr/Makefile.am (added), man/de/Makefile.am (added),
 	  man/sv/Makefile.am (added), man/ja/Makefile.am (added),
-	  configure.ac: - Finished manuals to subdirs. (Thanks arekm).
+	  configure.ac, man/Makefile.am: - Finished manuals to subdirs.
+	  (Thanks arekm).
 
 2005-01-24 14:15 +0000 [r5479]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -4105,11 +4155,11 @@
 
 2005-01-24 13:47 +0000 [r5477]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* acinclude.m4 (added), src/config.h.in (added),
-	  src/start-stop-daemon.c (added), src/Makefile.am, configure.ac:
-	  added start-stop-daemon from dpkg-1.10.23 includes config.h
-	  support now (as such conditional defines impossible on
-	  commandline) and m4 macros needed for start-stop-daemon.c
+	* configure.ac, acinclude.m4 (added), src/config.h.in (added),
+	  src/start-stop-daemon.c (added), src/Makefile.am: added
+	  start-stop-daemon from dpkg-1.10.23 includes config.h support now
+	  (as such conditional defines impossible on commandline) and m4
+	  macros needed for start-stop-daemon.c
 
 2005-01-24 13:38 +0000 [r5476]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -4126,14 +4176,14 @@
 
 2005-01-24 13:32 +0000 [r5475]  Elan Ruusamäe <glen/at/pld-linux.org>
 
-	* man/Makefile.am (added), man/ja (added),
+	* man/ja/start-stop-daemon.8 (added), man/ru (added), man/es
+	  (added), man/fr (added), man/start-stop-daemon.8 (added), man/de
+	  (added), man/sv (added), man/Makefile.am (added), man/ja (added),
 	  man/ru/start-stop-daemon.8 (added), man/es/start-stop-daemon.8
 	  (added), man/fr/start-stop-daemon.8 (added),
 	  man/de/start-stop-daemon.8 (added), man/sv/start-stop-daemon.8
-	  (added), man (added), man/ja/start-stop-daemon.8 (added), man/ru
-	  (added), man/es (added), man/fr (added), man/start-stop-daemon.8
-	  (added), man/de (added), man/sv (added): - created tree for
-	  manuals - imported start-stop-daemon manuals from dpkg-1.10.23
+	  (added), man (added): - created tree for manuals - imported
+	  start-stop-daemon manuals from dpkg-1.10.23
 
 2005-01-24 00:33 +0000 [r5474]  Elan Ruusamäe <glen/at/pld-linux.org>
 
@@ -4154,7 +4204,14 @@
 
 2005-01-02 22:53 +0000 [r5418]  Radosław Zieliński <radek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup-routes,
+	* sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/ifdown-irda,
+	  sysconfig/network-scripts/ifup-br,
+	  sysconfig/network-scripts/ifup-plip,
+	  sysconfig/network-scripts/ifup-iucv,
+	  sysconfig/network-scripts/ifup-sl,
+	  sysconfig/network-scripts/ifup-irda,
+	  sysconfig/network-scripts/ifup-routes,
 	  sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/ifdown-ppp,
 	  sysconfig/network-scripts/ifdown-vlan,
@@ -4169,14 +4226,7 @@
 	  sysconfig/network-scripts/ifup-vlan,
 	  sysconfig/network-scripts/ifup-ipx,
 	  sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/ifdown-sl,
-	  sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifdown-irda,
-	  sysconfig/network-scripts/ifup-br,
-	  sysconfig/network-scripts/ifup-plip,
-	  sysconfig/network-scripts/ifup-iucv,
-	  sysconfig/network-scripts/ifup-sl,
-	  sysconfig/network-scripts/ifup-irda: - unified indentation (ts=8
+	  sysconfig/network-scripts/ifdown-sl: - unified indentation (ts=8
 	  sw=4, as vi modeline says)
 
 2005-01-02 21:49 +0000 [r5417]  Radosław Zieliński <radek/at/pld-linux.org>
@@ -4187,15 +4237,15 @@
 
 2004-12-13 22:31 +0000 [r5382-5383]  Paweł Sakowski <saq/at/pld-linux.org>
 
-	* po/pl.po, po/de.po: - updated for current source tree
+	* po/de.po, po/pl.po: - updated for current source tree
 
 	* rc.d/init.d/network: - missed one
 
 2004-12-13 22:01 +0000 [r5379-5380]  Paweł Sakowski <saq/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifup-sl: - make nls invocations
-	  actually translatable
+	* sysconfig/network-scripts/ifup-sl, rc.d/init.d/network,
+	  sysconfig/network-scripts/ifup: - make nls invocations actually
+	  translatable
 
 	* po/de.po: - fixed remaining fuzzy entries
 
@@ -4216,9 +4266,9 @@
 
 2004-11-29 20:10 +0000 [r5357]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/interfaces/data/chat-ppp0.gprs-idea (added),
-	  sysconfig/interfaces/ifcfg-ppp0.gprs-idea (added): Add IDEA GPRS
-	  examples.
+	* sysconfig/interfaces/ifcfg-ppp0.gprs-idea (added),
+	  sysconfig/interfaces/data/chat-ppp0.gprs-idea (added): Add IDEA
+	  GPRS examples.
 
 2004-11-26 22:49 +0000 [r5351]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
@@ -4235,9 +4285,9 @@
 
 2004-11-13 21:31 +0000 [r5318]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/functions.network: Link status checking
-	  for ifup dhcp iface (from FC3).
+	* sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup: Link status checking for ifup
+	  dhcp iface (from FC3).
 
 2004-11-13 20:31 +0000 [r5315]  Adam Gołębiowski <adamg/at/pld-linux.org>
 
@@ -4279,7 +4329,7 @@
 
 2004-09-22 16:32 +0000 [r4636]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/interfaces/ifcfg-description:
+	* sysconfig/interfaces/ifcfg-description, rc.d/init.d/network:
 	  BOOTPRIO for changing interfaces starting order.
 
 2004-09-22 15:38 +0000 [r4635]  Witek Kręcicki <adasi/at/pld-linux.org>
@@ -4292,7 +4342,7 @@
 
 2004-08-25 20:58 +0000 [r4436]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/ip-rules (removed), sysconfig/Makefile.am: Drop
+	* sysconfig/Makefile.am, sysconfig/ip-rules (removed): Drop
 	  sysconfig/ip-rules, it's not used.
 
 2004-08-25 20:36 +0000 [r4434]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -4321,7 +4371,7 @@
 
 2004-08-20 10:16 +0000 [r4429]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* rc.d/init.d/network, rc.d/rc.sysinit: Set sysctl parameters
+	* rc.d/rc.sysinit, rc.d/init.d/network: Set sysctl parameters
 	  quietly (needed to avoid bunch of errors when grsec_lock is
 	  turned on).
 
@@ -4347,7 +4397,7 @@
 
 	* rc.d/init.d/sys-chroots: chroot: umount all when stopping.
 
-	* rc.d/init.d/sys-chroots, rc.d/rc: chroot: Process stopping
+	* rc.d/rc, rc.d/init.d/sys-chroots: chroot: Process stopping
 	  properly.
 
 2004-07-23 22:56 +0000 [r4386]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -4499,7 +4549,7 @@
 
 2004-06-28 21:23 +0000 [r4264]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* po/pl.po, po/Makefile.am, po/de.po: Fix fields spoted by msgfmt
+	* po/de.po, po/pl.po, po/Makefile.am: Fix fields spoted by msgfmt
 	  -c and print translation statistics.
 
 2004-06-28 21:19 +0000 [r4263]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -4576,9 +4626,9 @@
 
 2004-05-18 22:58 +0000 [r4086]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* src/usleep.c, src/process.c, src/minilogd.c, src/testd.c,
-	  src/initlog.c, src/doexec.c, src/usernetctl.c, src/ipcalc.c:
-	  Update helpers from Fedora initscripts.
+	* src/initlog.c, src/doexec.c, src/usernetctl.c, src/ipcalc.c,
+	  src/usleep.c, src/process.c, src/minilogd.c, src/testd.c: Update
+	  helpers from Fedora initscripts.
 
 2004-05-18 22:46 +0000 [r4084]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
@@ -4738,7 +4788,7 @@
 
 2004-01-10 13:42 +0000 [r3149]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/system, rc.d/init.d/functions: Support for handling
+	* rc.d/init.d/functions, sysconfig/system: Support for handling
 	  processes inside and outside of chrooted systems based on
 	  rc-scripts-chroot_safe.patch.
 
@@ -4858,7 +4908,7 @@
 
 2003-12-21 17:30 +0000 [r3054]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/network-scripts/Makefile.am, configure.ac: Don't set
+	* configure.ac, sysconfig/network-scripts/Makefile.am: Don't set
 	  libdir - use value from configure script.
 
 2003-12-21 17:05 +0000 [r3053]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -4960,13 +5010,12 @@
 
 2003-12-05 20:30 +0000 [r1721]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifup-br,
-	  sysconfig/network-scripts/functions.network: Move setting
-	  wireless specific settings into separate wireless_param()
-	  function and use it in ifup. Set wireless parameters for each
-	  wireless device being part of bridge. (patch by Radosław Kintzi
-	  <radek/at/pop.e-wro.pl>)
+	* sysconfig/network-scripts/ifup-br,
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup: Move setting wireless specific
+	  settings into separate wireless_param() function and use it in
+	  ifup. Set wireless parameters for each wireless device being part
+	  of bridge. (patch by Radosław Kintzi <radek/at/pop.e-wro.pl>)
 
 2003-11-15 14:38 +0000 [r1698]  Marcin Krzyżanowski <krzak/at/pld-linux.org>
 
@@ -5194,7 +5243,7 @@
 
 2003-10-04 11:08 +0000 [r1407]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/system, rc.d/init.d/functions: Fast boot support
+	* rc.d/init.d/functions, sysconfig/system: Fast boot support
 	  (disables NLS, fancy logging and thus is much faster). Useful on
 	  workstations. Based on idea and patch by Wojtek Kaniewski
 	  <wojtekka/at/bydg.pdi.net>.
@@ -5210,11 +5259,11 @@
 
 2003-10-04 09:46 +0000 [r1404]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/hwprofiles/files (added), sysconfig/hwprof, hwprofile,
-	  sysconfig/hwprofiles/Makefile.am: Merged patch by Tomasz Witek
-	  <tiwek/at/manta.univ.gda.pl>: - ignore Latency in /proc/pci -
-	  ability to choose profile while booting - example profile file -
-	  misc fixes and cleanups
+	* hwprofile, sysconfig/hwprofiles/Makefile.am,
+	  sysconfig/hwprofiles/files (added), sysconfig/hwprof: Merged
+	  patch by Tomasz Witek <tiwek/at/manta.univ.gda.pl>: - ignore Latency
+	  in /proc/pci - ability to choose profile while booting - example
+	  profile file - misc fixes and cleanups
 
 2003-10-02 18:43 +0000 [r1399-1400]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
@@ -5272,59 +5321,58 @@
 
 2003-09-22 01:28 +0000 [r1364]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* rc.d/init.d/network, rc.d/init.d/timezone,
-	  sysconfig/network-scripts/ifdown-vlan,
+	* sysconfig/network-scripts/ifdown-vlan,
 	  sysconfig/network-scripts/tnldown,
-	  sysconfig/network-scripts/ifup-neigh, doc/sysvinitfiles,
-	  sysconfig/network-scripts/functions.network,
-	  sysconfig/network-scripts/ifup-ipx,
-	  sysconfig/network-scripts/ifup-plip, rc-scripts.spec.in,
-	  doc/sysconfig.txt, rc.d/init.d/template.init, ppp/ip-up,
-	  rc.d/rc.init, hwprofile, doc/ipcalc.1, configure.ac,
-	  sysconfig/network-scripts/ifup-routes,
-	  sysconfig/network-scripts/ifdown-ppp, po/pl.po,
-	  sysconfig/network-scripts/ifup-post,
-	  sysconfig/interfaces/data/chat-ppp0.leased1, DEVELOPMENT,
-	  sysconfig/i18n, rc.d/init.d/functions, AUTHORS,
-	  sysconfig/interfaces/data/chat-ppp0.callback, ppp/ip-up.d/logger,
-	  sysconfig/network, README, rc.d/init.d/killall,
-	  sysconfig/network-scripts/ifup-irda, src/ipcalc.c, ppp/ipx-down,
-	  rc.d/rc.shutdown, sysconfig/network-scripts/ifup-plusb,
-	  sysconfig/network-scripts/ifdown,
-	  sysconfig/network-scripts/ifdown-br, makepot.pl,
+	  sysconfig/network-scripts/ifup-plusb,
+	  sysconfig/network-scripts/ifdown, makepot.pl,
 	  sysconfig/interfaces/up.d/ppp/logger,
-	  sysconfig/interfaces/ifcfg-ppp0.callback,
-	  sysconfig/network-scripts/ifup-ppp, ppp/auth-up,
-	  sysconfig/network-scripts/ifup-vlan,
-	  sysconfig/interfaces/tnlcfg-description,
-	  sysconfig/network-scripts/ifup-br, sysconfig/system,
-	  sysconfig/interfaces/ifcfg-irlan0, rc.d/init.d/random,
-	  rc.d/rc.sysinit, sysconfig/network-scripts/ifdown-post,
-	  rc.d/init.d/single, doc/net-scripts.txt, sysconfig/clock,
+	  sysconfig/interfaces/ifcfg-ppp0.callback, doc/sysvinitfiles,
+	  sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-plip, doc/sysconfig.txt,
+	  sysconfig/system, rc.d/init.d/template.init, ppp/ip-up,
+	  rc.d/init.d/random, rc.d/init.d/single, hwprofile,
 	  sysconfig/interfaces/data/chat-ppp0.tpsa,
 	  sysconfig/interfaces/ifcfg-irda0, isapnp/Makefile.am,
-	  sysconfig/network-scripts/ifup-aliases, ppp/auth-down,
-	  ppp/ip-down, ppp/ip-down.d/logger, ppp/ipx-up,
-	  rc.d/init.d/allowlogin, rc.d/rc.local, po/de.po,
+	  sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifup-routes,
+	  sysconfig/network-scripts/ifup-post,
+	  sysconfig/interfaces/data/chat-ppp0.leased1,
+	  ppp/ip-down.d/logger, ppp/ipx-up, rc.d/init.d/allowlogin,
+	  DEVELOPMENT, rc.d/init.d/functions, po/de.po, AUTHORS,
+	  sysconfig/network-scripts/ifup, sysconfig/interfaces/ifcfg-br0,
+	  sysconfig/network, sysconfig/interfaces/down.d/ppp/logger,
+	  rc.d/init.d/killall, sysconfig/hwprofiles/Makefile.am,
+	  sysconfig/interfaces/ifcfg-sl0,
+	  sysconfig/network-scripts/ifup-irda, rc.d/init.d/timezone,
+	  sysconfig/network-scripts/ifdown-br,
+	  sysconfig/network-scripts/ifup-neigh, ppp/auth-up,
+	  sysconfig/network-scripts/ifup-vlan,
+	  sysconfig/network-scripts/ifup-ipx,
+	  sysconfig/interfaces/tnlcfg-description,
+	  sysconfig/network-scripts/ifup-br, rc-scripts.spec.in,
+	  sysconfig/interfaces/ifcfg-irlan0, rc.d/rc.sysinit,
+	  sysconfig/network-scripts/ifdown-post, rc.d/rc.init,
+	  doc/net-scripts.txt, sysconfig/clock, doc/ipcalc.1, configure.ac,
+	  ppp/auth-down, sysconfig/network-scripts/ifdown-ppp, po/pl.po,
+	  ppp/ip-down, sysconfig/i18n, rc.d/rc.local,
 	  sysconfig/network-scripts/ifdown-sl,
 	  sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/ifdown-irda,
-	  sysconfig/network-scripts/ifup, sysconfig/interfaces/ifcfg-br0,
-	  isapnp/isapnp-kernel.conf, sysconfig/network-scripts/ifup-iucv,
-	  rc.d/rc, run-parts, sysconfig/interfaces/down.d/ppp/logger,
-	  sysconfig/interfaces/ifcfg-ppp0.leased1,
-	  sysconfig/hwprofiles/Makefile.am,
-	  sysconfig/interfaces/ifcfg-ppp0.leased2,
-	  sysconfig/interfaces/ifcfg-sl0, rc.d/rc.modules,
-	  sysconfig/network-scripts/ifup-sl: - preparation for upcoming
+	  sysconfig/network-scripts/ifdown-irda, isapnp/isapnp-kernel.conf,
+	  sysconfig/interfaces/data/chat-ppp0.callback,
+	  sysconfig/network-scripts/ifup-iucv, ppp/ip-up.d/logger, rc.d/rc,
+	  run-parts, README, sysconfig/interfaces/ifcfg-ppp0.leased1,
+	  sysconfig/interfaces/ifcfg-ppp0.leased2, rc.d/rc.modules,
+	  sysconfig/network-scripts/ifup-sl, src/ipcalc.c, ppp/ipx-down,
+	  rc.d/rc.shutdown, rc.d/init.d/network: - preparation for upcoming
 	  0.4.0.1 release - updated all email addresses to current domain
 	  (pld-linux.org) - added missing files (networking scripts mainly)
 	  - updated spec file - updated changelog
 
 2003-09-22 00:55 +0000 [r1363]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/network-scripts/Makefile.am,
-	  sysconfig/interfaces/Makefile.am: - added missing files
+	* sysconfig/interfaces/Makefile.am,
+	  sysconfig/network-scripts/Makefile.am: - added missing files
 
 2003-09-19 20:29 +0000 [r1361]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
@@ -5333,99 +5381,104 @@
 
 2003-09-14 11:47 +0000 [r1331]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
-	* sysconfig/ip-rules, TODO, sysconfig/interfaces/up.d/Makefile.am,
-	  ppp/ip-down.d/Makefile.am, sysconfig/hwprof, doc/initlog.1,
-	  sysconfig/interfaces/up.d/ipx/.cvsignore,
-	  ppp/ip-down.d/.cvsignore, sysconfig/interfaces/data/.cvsignore,
-	  sysconfig/network-scripts/ifup-neigh, src/initlog.conf,
-	  sysconfig/network-scripts/functions.network,
-	  sysconfig/network-scripts/ifup-ipx,
-	  sysconfig/network-scripts/ifup-plip,
-	  sysconfig/interfaces/up.d/all/thetouch, rc.d/init.d/.cvsignore,
-	  rc.d/init.d/template.init, ppp/ip-up,
-	  sysconfig/interfaces/down.d/Makefile.am, rc.d/rc.init,
-	  sysconfig/network-scripts/.cvsignore, doc/ipcalc.1, dumb.sh,
-	  configure.ac, sysconfig/interfaces/up.d/ppp/Makefile.am,
-	  po/pl.po, sysconfig/network-scripts/ifup-post, Makefile.am,
-	  sysconfig/interfaces/up.d/.cvsignore, autogen.sh, doc/doexec.1,
-	  doc/ppp-watch.8, DEVELOPMENT, rc.d/init.d/functions, AUTHORS,
-	  sysconfig/interfaces/down.d/ipx/.cvsignore, README,
-	  rc.d/init.d/killall, doc/usleep.1,
-	  sysconfig/network-scripts/ifup-irda, doc/usernetctl.8,
-	  sysconfig/interfaces/ifcfg-eth0, sysconfig/interfaces/.cvsignore,
-	  ppp/ipx-down, sysconfig/interfaces/down.d/ip/.cvsignore, COPYING,
-	  sysconfig/network-scripts/ifdown,
-	  sysconfig/network-scripts/ifup-plusb,
-	  sysconfig/interfaces/data/Makefile.am,
-	  sysconfig/network-scripts/ifdown-br, src/consoletype.c,
-	  sysconfig/interfaces/up.d/all/Makefile.am,
-	  sysconfig/interfaces/up.d/ip/Makefile.am, src/loglevel.c,
-	  sysconfig/network-scripts/ifup-vlan,
-	  sysconfig/interfaces/tnlcfg-description, src/process.c,
-	  sysconfig/system, src/netreport.c, src/process.h,
-	  rc.d/rc.sysinit, sysconfig/network-scripts/ifdown-post, service,
-	  src/getkey.c, sysconfig/interfaces/Makefile.am,
-	  doc/rc-scripts.docb, ppp/auth-down,
-	  sysconfig/interfaces/up.d/tnl/.cvsignore, isapnp/.cvsignore,
-	  doc/consoletype.1, sysconfig/interfaces/up.d/ppp/.cvsignore,
-	  sysconfig/static-routes, ppp/ip-down, ppp/ip-down.d/logger,
-	  sysconfig/Makefile.am, sysconfig/interfaces/up.d/ip/.cvsignore,
-	  sysconfig/interfaces/up.d/all/.cvsignore, rc.d/init.d/allowlogin,
-	  po/de.po, rc.d/rc.local, sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/ifdown-sl, ppp/ip-up.d/Makefile.am,
-	  sysconfig/network-scripts/ifdown-irda,
-	  sysconfig/interfaces/down.d/tnl/Makefile.am, po/Makefile.am,
-	  sysconfig/interfaces/down.d/ipx/Makefile.am, rc.d/rc,
-	  po/.cvsignore, lang.csh, sysconfig/interfaces/down.d/ppp/logger,
-	  sysconfig/hwprofiles/Makefile.am, sysconfig/interfaces/ifcfg-sl0,
-	  rc.d/rc.modules, sysconfig/interfaces/down.d/ip/Makefile.am,
-	  sysconfig/hwprofiles/.cvsignore, rc.d/init.d/network,
-	  rc.d/init.d/timezone, sysconfig/network-scripts/ifdown-vlan,
-	  INSTALL, sysconfig/network-scripts/tnldown,
-	  sysconfig/interfaces/tnlcfg-icm, src/ppp-watch.c,
-	  sysconfig/interfaces/down.d/all/thetouch, doc/Makefile.am,
-	  doc/sysvinitfiles, rc-scripts.spec.in, doc/sysconfig.txt,
-	  sysconfig/interfaces/down.d/tnl/.cvsignore,
-	  sysconfig/network-scripts/Makefile.am,
-	  sysconfig/interfaces/down.d/ppp/.cvsignore, hwprofile,
-	  sysconfig/network-scripts/ifup-routes, src/.cvsignore,
-	  sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/interfaces/down.d/all/.cvsignore,
-	  sysconfig/interfaces/data/chat-ppp0.leased1, ppp/.cvsignore,
-	  NEWS, adjtime, setsysfont, sysconfig/.cvsignore, doc/.cvsignore,
-	  sysconfig/i18n, rc.d/init.d/Makefile.am,
-	  sysconfig/interfaces/data/chat-ppp0.callback,
-	  sysconfig/interfaces/down.d/ppp/Makefile.am, inittab,
-	  ppp/ip-up.d/logger, sysconfig/network,
-	  sysconfig/interfaces/data/chat-ppp0.gprs-plusgsm, src/testdinit,
-	  src/Makefile.am, src/ipcalc.c, rc.d/rc.shutdown, sysctl.conf,
-	  modules, ppp/Makefile.am, sysconfig/interfaces/up.d/ppp/logger,
-	  sysconfig/static-arp, sysconfig/interfaces/ifcfg-ppp0.callback,
-	  src/doexec.c, doc/sysconfig.docb, ppp/auth-up,
-	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm,
-	  sysconfig/interfaces/ifcfg-description,
-	  sysconfig/network-scripts/ifup-br, doc/polski.dsl,
-	  ppp/ip-up.d/.cvsignore, sysconfig/interfaces/ifcfg-irlan0,
-	  src/testd.c, src/shvar.c, rc.d/init.d/random, rc.d/init.d/single,
-	  sysconfig/interfaces/down.d/.cvsignore, doc/net-scripts.txt,
-	  sysconfig/timezone, sysconfig/clock, src/usernetctl.c,
-	  src/shvar.h, sysconfig/interfaces/down.d/all/Makefile.am,
-	  sysconfig/interfaces/data/chat-ppp0.tpsa,
-	  sysconfig/interfaces/ifcfg-irda0, isapnp/Makefile.am,
-	  sysconfig/interfaces/up.d/tnl/Makefile.am,
-	  sysconfig/network-scripts/ifup-aliases, src/usleep.c,
-	  sysconfig/interfaces/up.d/ipx/Makefile.am, src/minilogd.c,
-	  sysconfig/static-nat, src/initlog.c, .cvsignore, ppp/ipx-up,
-	  src/initlog.h, doc/make-html, sysconfig/network-scripts/ifup,
-	  doc/netreport.1, isapnp/isapnp-kernel.conf,
-	  sysconfig/interfaces/ifcfg-br0,
-	  sysconfig/interfaces/ifcfg-ppp0.tpsa,
-	  sysconfig/network-scripts/ifup-iucv, lang.sh, run-parts,
-	  src/resolvesymlink.c, rc.d/Makefile.am,
+	* sysconfig/network-scripts/ifup-routes, doc/rc-scripts.docb,
+	  sysconfig/interfaces/up.d/ppp/Makefile.am, TODO,
+	  sysconfig/interfaces/down.d/all/thetouch, ppp/ip-down,
+	  sysconfig/interfaces/data/.cvsignore,
+	  sysconfig/network-scripts/ifup-neigh, doc/sysconfig.docb,
+	  src/loglevel.c, sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/ifdown-sl,
+	  sysconfig/interfaces/down.d/tnl/Makefile.am, doc/netreport.1,
+	  sysconfig/interfaces/down.d/ipx/Makefile.am, lang.sh,
+	  rc.d/init.d/random, rc.d/rc.init, rc.d/init.d/single,
+	  src/testdinit, sysconfig/timezone,
+	  sysconfig/network-scripts/.cvsignore, doc/ipcalc.1,
 	  sysconfig/interfaces/ifcfg-ppp0.leased1,
-	  sysconfig/interfaces/ifcfg-ppp0.leased2,
-	  sysconfig/network-scripts/ifup-sl, rc.d/.cvsignore: - propset Id
+	  sysconfig/interfaces/ifcfg-ppp0.leased2, configure.ac,
+	  isapnp/Makefile.am, rc.d/.cvsignore, rc.d/init.d/network,
+	  sysconfig/interfaces/down.d/ip/.cvsignore,
+	  sysconfig/interfaces/up.d/.cvsignore, doc/doexec.1,
+	  src/consoletype.c, .cvsignore,
+	  sysconfig/interfaces/up.d/all/Makefile.am, ppp/ipx-up,
+	  rc.d/init.d/allowlogin, po/Makefile.am,
+	  sysconfig/interfaces/down.d/Makefile.am,
+	  sysconfig/interfaces/down.d/ppp/logger,
+	  sysconfig/interfaces/data/chat-ppp0.gprs-plusgsm, dumb.sh,
+	  sysconfig/interfaces/ifcfg-sl0, doc/usleep.1, sysconfig/ip-rules,
+	  ppp/ipx-down, rc.d/rc.shutdown, isapnp/.cvsignore,
+	  doc/consoletype.1, sysconfig/network-scripts/ifup-plusb,
+	  sysconfig/interfaces/data/chat-ppp0.leased1,
+	  sysconfig/interfaces/ifcfg-ppp0.callback, src/initlog.c,
+	  doc/ppp-watch.8, src/initlog.h,
+	  sysconfig/network-scripts/ifup-ipx, doc/make-html, AUTHORS,
+	  sysconfig/interfaces/down.d/ppp/Makefile.am, src/getkey.c,
+	  src/usernetctl.c, sysconfig/interfaces/data/chat-ppp0.tpsa,
+	  sysconfig/interfaces/ifcfg-irda0,
+	  sysconfig/interfaces/ifcfg-eth0, src/.cvsignore,
+	  sysconfig/interfaces/.cvsignore, sysctl.conf,
+	  sysconfig/interfaces/up.d/Makefile.am,
+	  sysconfig/network-scripts/tnldown, COPYING, doc/initlog.1,
+	  autogen.sh, ppp/.cvsignore, ppp/ip-down.d/logger,
+	  doc/sysvinitfiles, doc/.cvsignore, ppp/auth-up, sysconfig/i18n,
+	  sysconfig/interfaces/tnlcfg-description, doc/sysconfig.txt,
+	  src/netreport.c, rc.d/rc.sysinit, src/testd.c, src/shvar.c,
+	  sysconfig/interfaces/down.d/ipx/.cvsignore, doc/net-scripts.txt,
+	  hwprofile, rc.d/Makefile.am, service, src/shvar.h,
+	  sysconfig/interfaces/down.d/all/Makefile.am,
+	  rc.d/init.d/timezone, sysconfig/hwprof, sysconfig/static-routes,
+	  sysconfig/interfaces/up.d/ipx/.cvsignore,
+	  ppp/ip-down.d/.cvsignore, src/initlog.conf,
+	  sysconfig/interfaces/up.d/ip/.cvsignore, rc.d/init.d/functions,
+	  sysconfig/network-scripts/tnlup, ppp/ip-up.d/Makefile.am,
+	  sysconfig/interfaces/ifcfg-description, doc/polski.dsl,
+	  ppp/ip-up.d/.cvsignore, sysconfig/network-scripts/ifup-iucv,
+	  rc.d/rc, sysconfig/network,
+	  sysconfig/interfaces/down.d/.cvsignore, rc.d/rc.modules,
+	  sysconfig/hwprofiles/.cvsignore,
+	  sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifdown-ppp, INSTALL, po/pl.po,
+	  sysconfig/interfaces/data/Makefile.am,
+	  sysconfig/interfaces/tnlcfg-icm, src/minilogd.c, src/ppp-watch.c,
+	  NEWS, doc/Makefile.am, sysconfig/.cvsignore,
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup, src/process.c,
+	  sysconfig/network-scripts/ifup-br,
+	  sysconfig/interfaces/ifcfg-br0,
+	  sysconfig/interfaces/data/chat-ppp0.callback,
+	  sysconfig/network-scripts/ifup-plip,
+	  sysconfig/interfaces/ifcfg-irlan0, src/process.h,
+	  sysconfig/network-scripts/ifdown-post,
+	  sysconfig/interfaces/down.d/ip/Makefile.am, doc/usernetctl.8,
+	  src/ipcalc.c, sysconfig/interfaces/up.d/tnl/Makefile.am,
+	  ppp/auth-down, sysconfig/interfaces/up.d/ipx/Makefile.am,
+	  sysconfig/network-scripts/ifup-post,
+	  sysconfig/network-scripts/ifdown, Makefile.am,
+	  sysconfig/interfaces/up.d/ppp/logger, sysconfig/static-arp,
+	  adjtime, sysconfig/Makefile.am,
+	  sysconfig/interfaces/up.d/ip/Makefile.am, src/doexec.c,
+	  DEVELOPMENT, rc.d/rc.local, rc.d/init.d/Makefile.am,
+	  sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm,
+	  sysconfig/network-scripts/ifdown-irda, isapnp/isapnp-kernel.conf,
+	  rc-scripts.spec.in, sysconfig/interfaces/up.d/all/thetouch,
+	  rc.d/init.d/.cvsignore, sysconfig/system,
+	  sysconfig/interfaces/down.d/tnl/.cvsignore, inittab,
+	  po/.cvsignore, run-parts,
+	  sysconfig/interfaces/down.d/ppp/.cvsignore, rc.d/init.d/killall,
+	  sysconfig/interfaces/Makefile.am, src/Makefile.am,
+	  sysconfig/network-scripts/ifup-sl,
+	  sysconfig/network-scripts/ifup-irda,
+	  sysconfig/interfaces/down.d/all/.cvsignore, src/usleep.c,
+	  sysconfig/network-scripts/ifdown-vlan,
+	  sysconfig/interfaces/up.d/tnl/.cvsignore,
+	  ppp/ip-down.d/Makefile.am, modules, ppp/Makefile.am,
+	  sysconfig/interfaces/up.d/ppp/.cvsignore,
+	  sysconfig/network-scripts/ifdown-br, sysconfig/static-nat,
+	  setsysfont, sysconfig/interfaces/up.d/all/.cvsignore, po/de.po,
+	  sysconfig/network-scripts/ifup-vlan, rc.d/init.d/template.init,
+	  sysconfig/interfaces/ifcfg-ppp0.tpsa, ppp/ip-up,
+	  ppp/ip-up.d/logger, sysconfig/network-scripts/Makefile.am,
+	  lang.csh, README, src/resolvesymlink.c,
+	  sysconfig/hwprofiles/Makefile.am, sysconfig/clock: - propset Id
 	  everywhere
 
 2003-09-14 10:48 +0000 [r1328]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
@@ -5526,8 +5579,9 @@
 	* sysconfig/interfaces/ifcfg-ppp0.gprs-plusgsm: - added note about
 	  bluez
 
-	* sysconfig/interfaces/data/Makefile.am,
-	  sysconfig/interfaces/Makefile.am: - added *-ppp0.gprs-plusgsm
+	* sysconfig/interfaces/Makefile.am,
+	  sysconfig/interfaces/data/Makefile.am: - added
+	  *-ppp0.gprs-plusgsm
 
 2003-06-24 10:26 +0000 [r1091]  Jakub Bogusz <qboosh/at/pld-linux.org>
 
@@ -5586,7 +5640,7 @@
 
 2003-05-15 21:37 +0000 [r1077]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
-	* rc.d/init.d/template.init, rc.d/init.d/functions: - LSB
+	* rc.d/init.d/functions, rc.d/init.d/template.init: - LSB
 	  conformance changes
 
 2003-05-11 21:09 +0000 [r1076]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
@@ -5623,7 +5677,7 @@
 
 2003-05-05 00:07 +0000 [r1068]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
-	* rc.d/init.d/template.init, dumb.sh: updated
+	* dumb.sh, rc.d/init.d/template.init: updated
 
 2003-05-04 19:48 +0000 [r1067]  Andrzej M. Krzysztofowicz <ankry/at/pld-linux.org>
 
@@ -5689,9 +5743,9 @@
 
 2002-12-17 14:01 +0000 [r1053]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/init.d/network, po/pl.po, doc/sysconfig.txt,
-	  doc/sysconfig.docb, sysconfig/network-scripts/functions.network:
-	  - removed references to IPV*_FORWARDING
+	* doc/sysconfig.docb, sysconfig/network-scripts/functions.network,
+	  rc.d/init.d/network, po/pl.po, doc/sysconfig.txt: - removed
+	  references to IPV*_FORWARDING
 
 2002-12-17 13:54 +0000 [r1052]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -5781,12 +5835,12 @@
 
 2002-08-11 17:05 +0000 [r1036]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup-routes,
+	* sysconfig/Makefile.am, sysconfig/network-scripts/ifup-neigh
+	  (added), sysconfig/network-scripts/ifup-routes,
 	  sysconfig/network-scripts/ifup-post,
 	  sysconfig/network-scripts/Makefile.am, sysconfig/static-arp
-	  (added), sysconfig/Makefile.am,
-	  sysconfig/network-scripts/ifup-neigh (added): - static arp per
-	  interface support - any device support is back
+	  (added): - static arp per interface support - any device support
+	  is back
 
 2002-08-09 06:30 +0000 [r1035]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
@@ -5804,20 +5858,20 @@
 
 2002-07-13 16:25 +0000 [r1032]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/network-scripts/ifdown-vlan (added),
-	  sysconfig/network-scripts/ifup-plusb (added),
-	  sysconfig/network-scripts/functions.network,
-	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-vlan (added),
-	  sysconfig/network-scripts/ifdown-irda (added),
+	* sysconfig/network-scripts/ifdown-irda (added),
 	  sysconfig/network-scripts/ifup,
 	  sysconfig/interfaces/ifcfg-description,
 	  sysconfig/interfaces/ifcfg-irlan0 (added),
 	  sysconfig/network-scripts/ifup-iucv (added), rc.d/rc.sysinit,
 	  service, rc.d/rc.modules, sysconfig/interfaces/ifcfg-irda0
-	  (added), sysconfig/network-scripts/ifup-irda (added): - more
-	  TOTALNEW merge (ppp, irda, other vlan, wireless). ALPHA
+	  (added), sysconfig/network-scripts/ifup-irda (added),
+	  sysconfig/network-scripts/ifdown-ppp,
+	  sysconfig/network-scripts/ifdown-vlan (added),
+	  sysconfig/network-scripts/ifup-plusb (added),
+	  sysconfig/network-scripts/functions.network,
+	  sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/ifup-vlan (added): - more TOTALNEW
+	  merge (ppp, irda, other vlan, wireless). ALPHA
 
 2002-07-06 12:22 +0000 [r1031]  Olgierd Pieczul <wojrus/at/pld-linux.org>
 
@@ -5834,7 +5888,7 @@
 
 2002-06-18 22:06 +0000 [r1028]  Rafał Kleger-Rudomin <klakier/at/pld-linux.org>
 
-	* doc/sysconfig.txt, sysconfig/network: - more clear explanation of
+	* sysconfig/network, doc/sysconfig.txt: - more clear explanation of
 	  HOSTNAME and NISDOMAIN
 
 2002-06-13 13:06 +0000 [r1027]  Robert Grabowski <grabba/at/pld-linux.org>
@@ -5857,7 +5911,12 @@
 
 2002-05-11 09:50 +0000 [r1023]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup-routes, rc.d/init.d/network,
+	* sysconfig/network-scripts/ifup-br,
+	  sysconfig/network-scripts/ifup-plip, rc-scripts.spec.in,
+	  sysconfig/network-scripts/ifdown-post,
+	  sysconfig/network-scripts/Makefile.am,
+	  sysconfig/network-scripts/ifup-sl,
+	  sysconfig/network-scripts/ifup-routes, rc.d/init.d/network,
 	  sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/ifdown-ppp,
 	  sysconfig/network-scripts/tnldown,
@@ -5870,13 +5929,8 @@
 	  sysconfig/network-scripts/ifup-ipx,
 	  sysconfig/network-scripts/tnlup, rc.d/init.d/Makefile.am,
 	  sysconfig/network-scripts/ifdown-sl,
-	  sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifup-br,
-	  sysconfig/network-scripts/ifup-plip, rc-scripts.spec.in,
-	  sysconfig/network-scripts/ifdown-post,
-	  sysconfig/network-scripts/Makefile.am,
-	  sysconfig/network-scripts/ifup-sl: - functions.network back in
-	  old place
+	  sysconfig/network-scripts/ifup: - functions.network back in old
+	  place
 
 2002-05-11 09:44 +0000 [r1022]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
@@ -5886,12 +5940,12 @@
 
 	* autogen.sh: - configure.in -> configure.ac
 
-	* po/pl.po, configure.ac: - fix iso charset name - add de to
+	* configure.ac, po/pl.po: - fix iso charset name - add de to
 	  supported languages
 
 2002-05-11 09:30 +0000 [r1019]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* configure.in (removed), configure.ac (added): - renamed + updated
+	* configure.ac (added), configure.in (removed): - renamed + updated
 
 2002-05-11 08:48 +0000 [r1018]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
@@ -5923,7 +5977,7 @@
 
 2002-04-09 11:10 +0000 [r1009-1013]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
-	* rc.d/init.d/network, AUTHORS, sysconfig/network: - more LDAP
+	* sysconfig/network, rc.d/init.d/network, AUTHORS: - more LDAP
 	  garbage removed
 
 	* po/pl.po: - LDAP strings removed
@@ -5948,9 +6002,9 @@
 
 	* sysconfig/ip-rules (added): - example config file
 
-	* rc.d/init.d/network, rc-scripts.spec.in,
-	  rc.d/init.d/functions.network, sysconfig/Makefile.am: - policy
-	  routing support
+	* rc-scripts.spec.in, rc.d/init.d/functions.network,
+	  sysconfig/Makefile.am, rc.d/init.d/network: - policy routing
+	  support
 
 2002-03-24 03:59 +0000 [r1004]  Paweł Gołaszewski <blues/at/pld-linux.org>
 
@@ -5963,15 +6017,15 @@
 
 2002-03-19 18:19 +0000 [r1002]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* ppp/ipx-down (added), ppp/auth-down (added), isapnp/.cvsignore
-	  (added), ppp/Makefile.am, sysconfig/hwprof (added), Makefile.am,
+	* hwprofile (added), sysconfig/hwprofiles/Makefile.am (added),
+	  service (added), isapnp/Makefile.am (added),
+	  sysconfig/hwprofiles/.cvsignore (added), ppp/ipx-down (added),
+	  ppp/auth-down (added), isapnp/.cvsignore (added),
+	  ppp/Makefile.am, sysconfig/hwprof (added), Makefile.am,
 	  autogen.sh, ppp/ip-down, sysconfig/Makefile.am, ppp/ipx-up
 	  (added), ppp/auth-up (added), sysconfig/hwprofiles (added),
 	  configure.in, isapnp/isapnp-kernel.conf (added), ppp/ip-up,
-	  isapnp (added), README, hwprofile (added),
-	  sysconfig/hwprofiles/Makefile.am (added), service (added),
-	  isapnp/Makefile.am (added), sysconfig/hwprofiles/.cvsignore
-	  (added): - started merging TOTALNEW
+	  isapnp (added), README: - started merging TOTALNEW
 
 2002-03-19 17:46 +0000 [r1001]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
@@ -5984,7 +6038,7 @@
 
 2002-03-07 11:16 +0000 [r999]  Paweł Gołaszewski <blues/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/ifup-ipx: - ipx
+	* sysconfig/network-scripts/ifup-ipx, rc.d/init.d/network: - ipx
 	  paths fixed (ipx is usable now...)
 
 2002-03-07 09:48 +0000 [r998]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
@@ -5997,16 +6051,16 @@
 
 2002-02-21 00:08 +0000 [r996]  Tomasz Pala <gotar/at/pld-linux.org>
 
-	* po/pl.po, rc.d/rc.sysinit: - typos
+	* rc.d/rc.sysinit, po/pl.po: - typos
 
 2002-02-20 23:43 +0000 [r995]  Tomasz Pala <gotar/at/pld-linux.org>
 
-	* po/pl.po, rc.d/rc.sysinit, sysconfig/network-scripts/ifup-sl: -
+	* rc.d/rc.sysinit, sysconfig/network-scripts/ifup-sl, po/pl.po: -
 	  updated.
 
 2002-02-18 13:24 +0000 [r994]  Tomasz Pala <gotar/at/pld-linux.org>
 
-	* doc/sysconfig.txt, doc/sysconfig.docb: - hostname != FQDN
+	* doc/sysconfig.docb, doc/sysconfig.txt: - hostname != FQDN
 
 2002-02-03 16:40 +0000 [r993]  Witek Kręcicki <adasi/at/pld-linux.org>
 
@@ -6019,9 +6073,8 @@
 
 2002-02-03 16:17 +0000 [r991]  Witek Kręcicki <adasi/at/pld-linux.org>
 
-	* rc.d/init.d/network, doc/sysconfig.txt,
-	  rc.d/init.d/functions.network, doc/sysconfig.docb: - reverted
-	  last change
+	* doc/sysconfig.docb, rc.d/init.d/network, doc/sysconfig.txt,
+	  rc.d/init.d/functions.network: - reverted last change
 
 2002-02-02 17:30 +0000 [r990]  Witek Kręcicki <adasi/at/pld-linux.org>
 
@@ -6048,7 +6101,7 @@
 
 	* po/pl.po: - more fixes
 
-	* TODO, DEVELOPMENT: - typos
+	* DEVELOPMENT, TODO: - typos
 
 2002-01-17 21:14 +0000 [r983]  Tomasz Pala <gotar/at/pld-linux.org>
 
@@ -6261,7 +6314,7 @@
 
 2001-07-17 18:21 +0000 [r931]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup, rc.d/init.d/functions: - merge
+	* rc.d/init.d/functions, sysconfig/network-scripts/ifup: - merge
 	  from TOTALNEW branch: - set MTU - don't use tput if we are not on
 	  a proper terminal
 
@@ -6356,14 +6409,14 @@
 
 	* po/pl.po: - cleaned up, updated and translated
 
-	* sysconfig/network-scripts/ifup-aliases,
+	* sysconfig/network-scripts/ifup-ipx,
+	  sysconfig/network-scripts/ifup-aliases,
 	  sysconfig/network-scripts/ifup-routes,
 	  sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/tnldown,
 	  sysconfig/network-scripts/ifdown,
 	  sysconfig/network-scripts/ifup-sl,
-	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-ipx: - nls cleanups
+	  sysconfig/network-scripts/ifup-ppp: - nls cleanups
 
 2001-05-16 02:14 +0000 [r898]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -6411,39 +6464,38 @@
 
 2001-05-15 16:05 +0000 [r888]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/init.d/network, TODO, sysconfig/network-scripts/tnldown,
-	  doc/initlog.1, sysconfig/interfaces/tnlcfg-icm, src/ppp-watch.c,
-	  sysconfig/network-scripts/ifup-ipx, rc-scripts.spec.in,
-	  doc/sysconfig.txt, sysconfig/network-scripts/ifup-plip,
-	  rc.d/init.d/template.init, sysconfig/network-scripts/Makefile.am,
-	  sysconfig/network-scripts/ifup-routes,
-	  sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/network-scripts/ifup-post, Makefile.am, autogen.sh,
-	  NEWS, setsysfont, DEVELOPMENT (added), rc.d/init.d/functions,
-	  AUTHORS, configure.in, inittab, sysconfig/network, README,
-	  src/Makefile.am, rc.d/rc.shutdown, sysctl.conf (added),
-	  sysconfig/network-scripts/ifdown, modules (added), COPYING,
-	  sysconfig/network-scripts/ifdown-br (added), makepot.pl,
-	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/interfaces/tnlcfg-description, src/process.c,
-	  sysconfig/interfaces/ifcfg-description,
-	  sysconfig/network-scripts/ifup-br (added), sysconfig/system,
-	  src/netreport.c, rc.d/rc.sysinit, src/shvar.c,
-	  sysconfig/network-scripts/ifdown-post, rc.d/init.d/single,
-	  sysconfig/timezone, doc/net-scripts.txt, sysconfig/clock,
-	  src/getkey.c, src/shvar.h, src/usernetctl.c,
-	  sysconfig/interfaces/Makefile.am,
-	  sysconfig/network-scripts/ifup-aliases, src/minilogd.c,
-	  rc.d/init.d/functions.network, src/initlog.c,
-	  sysconfig/Makefile.am, sysconfig/network-scripts/tnlup,
+	* setsysfont, sysconfig/interfaces/tnlcfg-description,
+	  doc/sysconfig.txt, rc.d/init.d/template.init, src/netreport.c,
+	  rc.d/rc.sysinit, src/shvar.c,
+	  sysconfig/network-scripts/Makefile.am, lang.csh, README,
+	  doc/net-scripts.txt, sysconfig/clock, rc.d/Makefile.am,
+	  src/shvar.h, sysconfig/network-scripts/ifup-routes, TODO,
+	  makepot.pl, sysconfig/network-scripts/ifup-ppp,
+	  rc.d/init.d/functions, sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/ifdown-sl,
+	  sysconfig/interfaces/ifcfg-description, rc.d/rc,
+	  rc.d/init.d/single, sysconfig/network, sysconfig/timezone,
+	  sysconfig/interfaces/ifcfg-ppp0.leased1,
+	  sysconfig/interfaces/ifcfg-ppp0.leased2, rc.d/rc.modules (added),
+	  sysconfig/network-scripts/ifup-aliases, rc.d/init.d/network,
+	  sysconfig/network-scripts/ifdown-ppp, src/minilogd.c,
+	  sysconfig/interfaces/tnlcfg-icm, src/ppp-watch.c, NEWS,
 	  sysconfig/network-scripts/ifup, sysconfig/interfaces/ifcfg-br0
-	  (added), rc.d/rc, lang.csh,
-	  sysconfig/interfaces/ifcfg-ppp0.leased1, rc.d/Makefile.am,
-	  sysconfig/interfaces/ifcfg-ppp0.leased2,
-	  sysconfig/network-scripts/ifup-sl,
-	  sysconfig/interfaces/ifcfg-sl0, rc.d/rc.modules (added): - merge
-	  from TOTALNEW branch (see NEWS for more info)
+	  (added), src/process.c, sysconfig/network-scripts/ifup-br
+	  (added), configure.in, sysconfig/network-scripts/ifup-plip,
+	  sysconfig/network-scripts/ifdown-post,
+	  sysconfig/interfaces/ifcfg-sl0, rc.d/rc.shutdown,
+	  sysconfig/network-scripts/ifup-post,
+	  sysconfig/network-scripts/ifdown, Makefile.am,
+	  rc.d/init.d/functions.network, src/initlog.c,
+	  sysconfig/Makefile.am, DEVELOPMENT (added),
+	  sysconfig/network-scripts/ifup-ipx, AUTHORS, rc-scripts.spec.in,
+	  sysconfig/system, inittab, src/getkey.c, src/usernetctl.c,
+	  sysconfig/interfaces/Makefile.am, src/Makefile.am,
+	  sysconfig/network-scripts/ifup-sl, sysctl.conf (added),
+	  sysconfig/network-scripts/tnldown, modules (added), COPYING,
+	  sysconfig/network-scripts/ifdown-br (added), doc/initlog.1,
+	  autogen.sh: - merge from TOTALNEW branch (see NEWS for more info)
 
 2001-05-13 18:39 +0000 [r886]  kloczek <kloczek/at/pld-linux.org>
 
@@ -6461,12 +6513,11 @@
 
 2001-05-13 17:10 +0000 [r883]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, rc.d/init.d/timezone,
-	  sysconfig/network-scripts/ifup, configure.in, rc.d/rc,
-	  rc.d/init.d/functions.network, rc.d/rc.sysinit,
-	  rc.d/init.d/functions: - version 0.2.11 - true ksh support/fixes:
-	  - fixed numerous instances of incorrect quoting ("" inside
-	  itself) - s/local/typeset/
+	* configure.in, rc.d/rc, rc.d/init.d/functions.network,
+	  rc.d/rc.sysinit, rc.d/init.d/functions, rc.d/rc.shutdown,
+	  rc.d/init.d/timezone, sysconfig/network-scripts/ifup: - version
+	  0.2.11 - true ksh support/fixes: - fixed numerous instances of
+	  incorrect quoting ("" inside itself) - s/local/typeset/
 
 2001-04-20 23:28 +0000 [r878]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
@@ -6589,15 +6640,15 @@
 	* rc.d/rc.init: - set/unset more (all?) locale variables (backport
 	  from TOTALNEW)
 
-	* rc.d/rc.shutdown, rc.d/init.d/template.init, rc.d/rc,
-	  rc.d/init.d/random, rc.d/init.d/single, rc.d/init.d/killall,
-	  rc.d/init.d/allowlogin, rc.d/rc.local: - added setting for vi ;)
+	* rc.d/init.d/single, rc.d/init.d/killall, rc.d/init.d/allowlogin,
+	  rc.d/rc.local, rc.d/rc.shutdown, rc.d/init.d/template.init,
+	  rc.d/rc, rc.d/init.d/random: - added setting for vi ;)
 
-	* rc.d/init.d/network, sysconfig/network-scripts/ifup,
-	  po/Makefile.am, sysconfig/network-scripts/ifdown,
-	  sysconfig/network-scripts/ifup-post,
-	  rc.d/init.d/functions.network, rc.d/rc.sysinit,
-	  sysconfig/network-scripts/ifdown-post: - replaced sed with awk
+	* rc.d/init.d/functions.network, rc.d/rc.sysinit,
+	  sysconfig/network-scripts/ifdown-post, rc.d/init.d/network,
+	  sysconfig/network-scripts/ifup, po/Makefile.am,
+	  sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/ifup-post: - replaced sed with awk
 	  (backport from TOTALNEW branch)
 
 	* rc-scripts.spec.in: - synced with SPECS version
@@ -6667,7 +6718,7 @@
 
 2000-09-23 20:43 +0000 [r800]  Paweł Sakowski <saq/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown:
+	* sysconfig/network-scripts/ifdown, sysconfig/network-scripts/ifup:
 	  - fixed DEVICETYPE determination for aliased devices
 
 2000-09-21 13:53 +0000 [r799]  Paweł Sakowski <saq/at/pld-linux.org>
@@ -6686,10 +6737,10 @@
 
 2000-09-19 12:46 +0000 [r795]  Paweł Sakowski <saq/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup, po/pl.po,
-	  sysconfig/network-scripts/ifup-sl, po/de.po,
-	  rc.d/init.d/functions: - merged some %s into nls invocations -
-	  German translation finetuning
+	* sysconfig/network-scripts/ifup-sl, po/de.po,
+	  rc.d/init.d/functions, sysconfig/network-scripts/ifup, po/pl.po:
+	  - merged some %s into nls invocations - German translation
+	  finetuning
 
 2000-09-18 22:32 +0000 [r794]  Paweł Sakowski <saq/at/pld-linux.org>
 
@@ -6815,9 +6866,9 @@
 
 2000-06-25 14:40 +0000 [r766]  Bartosz Waszak <waszi/at/pld-linux.org>
 
-	* rc.d/rc.shutdown, sysconfig/interfaces/ifcfg-description,
-	  sysconfig/interfaces/ifcfg-ppp0.tpsa, makepot.pl,
-	  rc.d/rc.sysinit: - typos - cleanups
+	* makepot.pl, rc.d/rc.sysinit, rc.d/rc.shutdown,
+	  sysconfig/interfaces/ifcfg-description,
+	  sysconfig/interfaces/ifcfg-ppp0.tpsa: - typos - cleanups
 
 2000-06-23 09:11 +0000 [r765]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -6945,49 +6996,50 @@
 
 2000-05-07 19:00 +0000 [r738]  Paweł Wilk <siefca/at/pld-linux.org>
 
-	* sysconfig/interfaces/up.d/all (added),
+	* sysconfig/interfaces/down.d/.cvsignore (added),
+	  sysconfig/interfaces/up.d (added),
+	  sysconfig/interfaces/Makefile.am,
+	  sysconfig/interfaces/down.d/all/.cvsignore (added),
+	  sysconfig/interfaces/up.d/all (added),
 	  sysconfig/interfaces/down.d/ip/.cvsignore (added),
-	  sysconfig/interfaces/up.d/ip (added),
-	  sysconfig/interfaces/up.d/Makefile.am (added), ppp/Makefile.am,
-	  sysconfig/interfaces/up.d/ipx/.cvsignore (added),
-	  sysconfig/interfaces/down.d/all/thetouch (added),
-	  sysconfig/interfaces/up.d/ppp/logger (added),
+	  sysconfig/interfaces/up.d/Makefile.am (added),
+	  sysconfig/interfaces/up.d/tnl/.cvsignore (added),
+	  ppp/Makefile.am, sysconfig/interfaces/up.d/ppp/.cvsignore
+	  (added), sysconfig/interfaces/up.d/.cvsignore (added),
 	  sysconfig/interfaces/up.d/all/Makefile.am (added),
-	  sysconfig/interfaces/up.d/ip/Makefile.am (added),
-	  sysconfig/interfaces/down.d (added), rc-scripts.spec.in,
+	  sysconfig/interfaces/down.d (added),
+	  sysconfig/interfaces/up.d/all/.cvsignore (added), configure.in,
 	  sysconfig/interfaces/down.d/all (added),
-	  sysconfig/interfaces/up.d/all/thetouch (added), ppp/ip-up,
+	  sysconfig/interfaces/down.d/ip (added), ppp/ip-up,
 	  sysconfig/interfaces/down.d/Makefile.am (added),
 	  sysconfig/interfaces/up.d/tnl (added),
-	  sysconfig/interfaces/down.d/tnl/.cvsignore (added),
 	  sysconfig/interfaces/up.d/ppp (added),
-	  sysconfig/interfaces/down.d/ppp/.cvsignore (added),
 	  sysconfig/interfaces/up.d/ipx (added),
-	  sysconfig/interfaces/down.d/.cvsignore (added),
-	  sysconfig/interfaces/Makefile.am,
-	  sysconfig/interfaces/down.d/all/Makefile.am (added),
-	  sysconfig/interfaces/up.d/tnl/Makefile.am (added),
-	  sysconfig/interfaces/up.d/ppp/Makefile.am (added),
-	  sysconfig/interfaces/down.d/all/.cvsignore (added),
-	  sysconfig/interfaces/up.d/ipx/Makefile.am (added),
-	  sysconfig/interfaces/up.d/tnl/.cvsignore (added),
-	  sysconfig/interfaces/up.d/ppp/.cvsignore (added), Makefile.am,
-	  sysconfig/interfaces/up.d/.cvsignore (added), ppp/ip-down,
-	  sysconfig/interfaces/down.d/tnl (added),
-	  sysconfig/interfaces/down.d/ppp (added),
-	  sysconfig/interfaces/down.d/ipx (added),
-	  sysconfig/interfaces/up.d/all/.cvsignore (added),
-	  sysconfig/interfaces/up.d/ip/.cvsignore (added),
-	  sysconfig/interfaces/down.d/tnl/Makefile.am (added),
-	  configure.in, sysconfig/interfaces/down.d/ppp/Makefile.am
-	  (added), sysconfig/interfaces/down.d/ip (added),
-	  sysconfig/interfaces/down.d/ipx/Makefile.am (added), run-parts
-	  (added), sysconfig/interfaces/up.d (added),
 	  sysconfig/interfaces/down.d/ipx/.cvsignore (added),
 	  sysconfig/interfaces/down.d/ppp/logger (added),
-	  sysconfig/interfaces/down.d/ip/Makefile.am (added): - scripts now
-	  ready to exec run-parts for each of interfaces going up/down, -
-	  run-parts is now by rc-scripts provided (as /bin/run-parts).
+	  sysconfig/interfaces/down.d/all/Makefile.am (added),
+	  sysconfig/interfaces/down.d/ip/Makefile.am (added),
+	  sysconfig/interfaces/up.d/tnl/Makefile.am (added),
+	  sysconfig/interfaces/up.d/ppp/Makefile.am (added),
+	  sysconfig/interfaces/up.d/ip (added),
+	  sysconfig/interfaces/up.d/ipx/Makefile.am (added), Makefile.am,
+	  sysconfig/interfaces/up.d/ipx/.cvsignore (added),
+	  sysconfig/interfaces/down.d/all/thetouch (added),
+	  sysconfig/interfaces/up.d/ppp/logger (added), ppp/ip-down,
+	  sysconfig/interfaces/down.d/tnl (added),
+	  sysconfig/interfaces/up.d/ip/Makefile.am (added),
+	  sysconfig/interfaces/down.d/ppp (added),
+	  sysconfig/interfaces/down.d/ipx (added),
+	  sysconfig/interfaces/up.d/ip/.cvsignore (added),
+	  sysconfig/interfaces/down.d/tnl/Makefile.am (added),
+	  rc-scripts.spec.in, sysconfig/interfaces/up.d/all/thetouch
+	  (added), sysconfig/interfaces/down.d/ppp/Makefile.am (added),
+	  sysconfig/interfaces/down.d/ipx/Makefile.am (added),
+	  sysconfig/interfaces/down.d/tnl/.cvsignore (added), run-parts
+	  (added), sysconfig/interfaces/down.d/ppp/.cvsignore (added): -
+	  scripts now ready to exec run-parts for each of interfaces going
+	  up/down, - run-parts is now by rc-scripts provided (as
+	  /bin/run-parts).
 
 2000-05-07 15:43 +0000 [r737]  Paweł Wilk <siefca/at/pld-linux.org>
 
@@ -7046,9 +7098,9 @@
 
 2000-04-23 11:46 +0000 [r727]  Marcin Bohosiewicz <marcus/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifup-ppp: * In ifup file added suppoer
-	  for Point-to-Point IPv4 Ethernet (REMIP variable). * In ifup-ppp
+	* sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/ifup: * In ifup file added suppoer for
+	  Point-to-Point IPv4 Ethernet (REMIP variable). * In ifup-ppp
 	  deleted some hashed lines.
 
 2000-04-21 17:47 +0000 [r716-726]  Jacek Konieczny <jajcus/at/pld-linux.org>
@@ -7152,15 +7204,16 @@
 
 2000-04-03 14:50 +0000 [r700-702]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/ifup-routes,
+	* sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/ifup-ipx, rc.d/init.d/network,
+	  sysconfig/network-scripts/ifup-routes,
 	  sysconfig/network-scripts/ifup,
 	  sysconfig/interfaces/ifcfg-description,
-	  sysconfig/network-scripts/ifdown, rc.d/rc.sysinit,
-	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-ipx: - cleaned up ifup/ifdown
-	  mess, /sbin/ifup ethX.something works now - IPX fixes, works now
-	  - run hdparm from rc.sysinit BEFORE anything is mounted RW -
-	  fixed setting VFS_{FILE,INODE}_MAX - updated ifcfg-description
+	  sysconfig/network-scripts/ifdown, rc.d/rc.sysinit: - cleaned up
+	  ifup/ifdown mess, /sbin/ifup ethX.something works now - IPX
+	  fixes, works now - run hdparm from rc.sysinit BEFORE anything is
+	  mounted RW - fixed setting VFS_{FILE,INODE}_MAX - updated
+	  ifcfg-description
 
 	* configure.in: - version 0.2.1
 
@@ -7172,25 +7225,25 @@
 
 2000-03-31 13:10 +0000 [r698]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/tnldown,
-	  sysconfig/network-scripts/ifup-ppp: - support for maxfail option
+	* sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/tnldown: - support for maxfail option
 	  in pppd - cleanups in tunnel scripts
 
 2000-03-27 16:07 +0000 [r697]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* INSTALL, po/pl.po, sysconfig/interfaces/ifcfg-description,
-	  rc-scripts.spec.in, sysconfig/network-scripts/ifup-post, rc.d/rc,
+	* sysconfig/network-scripts/ifup-post, rc.d/rc,
 	  rc.d/init.d/functions.network, rc.d/rc.sysinit,
-	  sysconfig/network-scripts/ifdown-post, NEWS, src/Makefile.am: -
-	  removed "scripts" method of executing external programs after
-	  uping or downing device (almost nobody didn't know about it 8-) -
-	  added new method which is using run_up() and run_down() functions
-	  defined in device configuration file (ifcfg*) - fixed problem
-	  with displaing garbage instead of formated output - removed
-	  execution of random start (this should be started in standard
-	  init.d way) - set ld.so.cache if doesn't exist, too - use new
-	  (rh) style for date variables
+	  sysconfig/network-scripts/ifdown-post, NEWS, src/Makefile.am,
+	  INSTALL, po/pl.po, sysconfig/interfaces/ifcfg-description,
+	  rc-scripts.spec.in: - removed "scripts" method of executing
+	  external programs after uping or downing device (almost nobody
+	  didn't know about it 8-) - added new method which is using
+	  run_up() and run_down() functions defined in device configuration
+	  file (ifcfg*) - fixed problem with displaing garbage instead of
+	  formated output - removed execution of random start (this should
+	  be started in standard init.d way) - set ld.so.cache if doesn't
+	  exist, too - use new (rh) style for date variables
 
 2000-03-26 06:51 +0000 [r696]  kloczek <kloczek/at/pld-linux.org>
 
@@ -7198,7 +7251,7 @@
 
 2000-03-24 08:48 +0000 [r695]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* po/pl.po, rc.d/rc: - fixed problem with Runlevel messages and
+	* rc.d/rc, po/pl.po: - fixed problem with Runlevel messages and
 	  INIT_COL variable
 
 2000-03-24 08:39 +0000 [r694]  Bartosz Waszak <waszi/at/pld-linux.org>
@@ -7211,9 +7264,9 @@
 
 2000-03-22 21:55 +0000 [r692]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* rc.d/init.d/Makefile.am, rc.d/init.d/template.init (added),
-	  rc.d/init.d/<template>.init (removed): please don't use stupid
-	  names for files
+	* rc.d/init.d/<template>.init (removed), rc.d/init.d/Makefile.am,
+	  rc.d/init.d/template.init (added): please don't use stupid names
+	  for files
 
 2000-03-22 21:44 +0000 [r691]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -7331,8 +7384,8 @@
 	  scripts after interface is upped or downed
 	  (/etc/sysconfig/interfaces/scripts/ifname/somename.{up,down}
 
-	* po/pl.po, sysconfig/system, rc.d/rc, rc.d/rc.sysinit,
-	  rc.d/init.d/functions: - support for interactive starting
+	* rc.d/init.d/functions, po/pl.po, sysconfig/system, rc.d/rc,
+	  rc.d/rc.sysinit: - support for interactive starting
 
 2000-03-08 15:43 +0000 [r663]  Sebastian Zagrodzki <zagrodzki/at/pld-linux.org>
 
@@ -7393,14 +7446,14 @@
 
 2000-03-04 22:40 +0000 [r652]  Paweł Wilk <siefca/at/pld-linux.org>
 
-	* rc.d/init.d/timezone, rc-scripts.spec.in, src/resolvesymlink.c
-	  (added), src/Makefile.am: Time zone information will be updated
-	  only when needed.
+	* src/resolvesymlink.c (added), src/Makefile.am,
+	  rc.d/init.d/timezone, rc-scripts.spec.in: Time zone information
+	  will be updated only when needed.
 
 2000-03-04 13:59 +0000 [r651]  Paweł Wilk <siefca/at/pld-linux.org>
 
-	* rc.d/init.d/Makefile.am, configure.in, rc-scripts.spec.in,
-	  sysconfig/Makefile.am: added time zone setting
+	* sysconfig/Makefile.am, rc.d/init.d/Makefile.am, configure.in,
+	  rc-scripts.spec.in: added time zone setting
 
 2000-03-04 13:41 +0000 [r648-650]  Paweł Wilk <siefca/at/pld-linux.org>
 
@@ -7469,8 +7522,8 @@
 
 	* rc.d/init.d/single: - cleanups
 
-	* rc.d/init.d/network, rc.d/init.d/functions.network,
-	  sysconfig/network: - router discovery daemon support
+	* rc.d/init.d/functions.network, sysconfig/network,
+	  rc.d/init.d/network: - router discovery daemon support
 
 	* rc.d/init.d/functions: - functions run_cmd() and daemon() are
 	  returning proper values now
@@ -7480,12 +7533,12 @@
 
 2000-01-31 14:30 +0000 [r628-631]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* rc-scripts.spec.in, autogen.sh, rc.d/init.d/functions: - fixes
+	* autogen.sh, rc.d/init.d/functions, rc-scripts.spec.in: - fixes
 	  and updates
 
 	* NEWS: - translate to english (update)
 
-	* po/pl.po, rc.d/rc.sysinit: - nls cant handle special characters
+	* rc.d/rc.sysinit, po/pl.po: - nls cant handle special characters
 	  such as '\n' - workaround this
 
 	* rc.d/init.d/functions.network: - avoid errors when lo interface
@@ -7574,22 +7627,22 @@
 
 	* src/consoletype.c (added): - one more source file
 
-	* rc.d/init.d/network, src/usleep.c,
-	  sysconfig/network-scripts/tnldown,
-	  sysconfig/network-scripts/ifdown, doc/consoletype.1 (added),
-	  src/ppp-watch.c (added), rc.d/init.d/functions.network,
-	  src/initlog.c, doc/ppp-watch.8 (added), src/doexec.c,
-	  src/initlog.conf (added), rc.d/init.d/allowlogin,
+	* src/doexec.c, src/initlog.conf (added), rc.d/init.d/allowlogin,
 	  rc.d/init.d/functions, sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/ifup, src/process.c,
 	  rc-scripts.spec.in, lang.sh, rc.d/rc.sysinit, src/shvar.c
 	  (added), src/testd.c, doc/usernetctl.1 (removed), lang.csh,
 	  src/getkey.c (added), src/Makefile.am, src/shvar.h (added),
-	  src/usernetctl.c, doc/usleep.1, doc/usernetctl.8 (added): - fixed
-	  lang.csh - we use -a instead && - updated few programs in src
-	  directory - fixed starting network when none of ifcfg-* file
-	  exist - write nice logo at startup - fixed problem with
-	  translated deltext() function
+	  src/usernetctl.c, doc/usleep.1, doc/usernetctl.8 (added),
+	  rc.d/init.d/network, src/usleep.c,
+	  sysconfig/network-scripts/tnldown,
+	  sysconfig/network-scripts/ifdown, doc/consoletype.1 (added),
+	  src/ppp-watch.c (added), rc.d/init.d/functions.network,
+	  src/initlog.c, doc/ppp-watch.8 (added): - fixed lang.csh - we use
+	  -a instead && - updated few programs in src directory - fixed
+	  starting network when none of ifcfg-* file exist - write nice
+	  logo at startup - fixed problem with translated deltext()
+	  function
 
 1999-12-11 12:45 +0000 [r607]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
@@ -7657,14 +7710,14 @@
 
 1999-11-06 00:25 +0000 [r591-592]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/tnldown,
-	  sysconfig/network-scripts/ifdown: - small fixes
+	* sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/tnldown: - small fixes
 
-	* sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
+	* sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/tnldown,
-	  sysconfig/network-scripts/ifdown, rc.d/init.d/functions.network:
-	  - now realy handle ifup <dev>
+	  sysconfig/network-scripts/ifdown, rc.d/init.d/functions.network,
+	  sysconfig/network-scripts/tnlup: - now realy handle ifup <dev>
 
 1999-10-27 12:09 +0000 [r590]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -7722,19 +7775,19 @@
 
 1999-10-13 21:28 +0000 [r578]  kloczek <kloczek/at/pld-linux.org>
 
-	* rc.d/init.d/Makefile.am, sysconfig/network-scripts/ifdown-sl,
-	  sysconfig/network-scripts/ifup-aliases,
-	  sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/network-scripts/ifup, rc-scripts.spec.in,
-	  sysconfig/network-scripts/ifup-plip,
+	* rc-scripts.spec.in, sysconfig/network-scripts/ifup-plip,
 	  sysconfig/network-scripts/tnldown,
 	  sysconfig/network-scripts/ifdown,
 	  sysconfig/network-scripts/ifup-post,
 	  sysconfig/network-scripts/ifdown-post,
 	  sysconfig/network-scripts/ifup-sl,
 	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-ipx: -
+	  sysconfig/network-scripts/ifup-ipx, rc.d/init.d/Makefile.am,
+	  sysconfig/network-scripts/ifdown-sl,
+	  sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/tnlup,
+	  sysconfig/network-scripts/ifdown-ppp,
+	  sysconfig/network-scripts/ifup: -
 	  /etc/rc.d/init.d//network.functions moved to
 	  /etc/sysconfig/network-scripts/.functions.
 
@@ -7768,10 +7821,11 @@
 
 1999-10-13 16:11 +0000 [r571]  Jan Rękorajski <baggins/at/pld-linux.org>
 
-	* rc.d/init.d/Makefile.am, rc.d/init.d/network, rc.d/init.d/reboot
-	  (removed), rc.d/init.d/shutdwn (removed), rc.d/init.d/random,
-	  rc.d/init.d/single, rc.d/init.d/killall, rc.d/init.d/allowlogin,
-	  rc.d/init.d/halt (removed): - removed usage of chkconfig
+	* rc.d/init.d/single, rc.d/init.d/killall, rc.d/init.d/allowlogin,
+	  rc.d/init.d/halt (removed), rc.d/init.d/Makefile.am,
+	  rc.d/init.d/network, rc.d/init.d/reboot (removed),
+	  rc.d/init.d/shutdwn (removed), rc.d/init.d/random: - removed
+	  usage of chkconfig
 
 1999-10-13 16:04 +0000 [r570]  Jan Rękorajski <baggins/at/pld-linux.org>
 
@@ -7798,27 +7852,28 @@
 
 1999-10-06 16:52 +0000 [r565]  kloczek <kloczek/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/ifdown-sl,
+	* sysconfig/network-scripts/ifup-sl, rc.d/init.d/allowlogin,
+	  rc.d/init.d/functions, rc.d/init.d/network,
+	  sysconfig/network-scripts/ifdown-sl,
 	  sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/tnldown,
 	  sysconfig/network-scripts/ifdown,
 	  sysconfig/network-scripts/ifup-post, rc.d/rc,
-	  rc.d/init.d/functions.network, rc.d/rc.sysinit,
-	  sysconfig/network-scripts/ifup-sl, rc.d/init.d/allowlogin,
-	  rc.d/init.d/functions: - remove bashizm in using test ("="
-	  instead "==").
+	  rc.d/init.d/functions.network, rc.d/rc.sysinit: - remove bashizm
+	  in using test ("=" instead "==").
 
 1999-09-28 16:17 +0000 [r562-564]  Jacek Konieczny <jajcus/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifdown-sl,
-	  sysconfig/network-scripts/ifup-aliases,
-	  sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
+	* sysconfig/network-scripts/ifdown,
 	  sysconfig/network-scripts/ifup-post,
 	  sysconfig/network-scripts/ifdown-post,
 	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-ipx: - support for getting
-	  interface configuration from LDAP
+	  sysconfig/network-scripts/ifup-ipx,
+	  sysconfig/network-scripts/ifdown-sl,
+	  sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifdown-ppp,
+	  sysconfig/network-scripts/ifup: - support for getting interface
+	  configuration from LDAP
 
 	* rc.d/init.d/network: - support for loading interface
 	  configuration from LDAP
@@ -7888,7 +7943,7 @@
 
 	* po/pl.po: - sync
 
-	* rc.d/init.d/shutdwn, rc.d/rc.sysinit: - nls fixes
+	* rc.d/rc.sysinit, rc.d/init.d/shutdwn: - nls fixes
 
 1999-09-27 15:00 +0000 [r544]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -7909,9 +7964,9 @@
 
 	* sysconfig/network: - cleanups
 
-	* sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/tnldown: - nopmtudisc isn't specified
-	  by default - cleanups
+	* sysconfig/network-scripts/tnldown,
+	  sysconfig/network-scripts/tnlup: - nopmtudisc isn't specified by
+	  default - cleanups
 
 	* sysconfig/network-scripts/ifup: - checking for interface via
 	  MULTICAST setting instead of ARP setting - we are using
@@ -8025,8 +8080,8 @@
 
 1999-09-02 12:38 +0000 [r508]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* TODO, rc-scripts.spec.in, autogen.sh, NEWS, README,
-	  rc.d/initscript (removed), rc.d/Makefile.am: - updated
+	* autogen.sh, NEWS, README, rc.d/initscript (removed),
+	  rc.d/Makefile.am, TODO, rc-scripts.spec.in: - updated
 
 1999-09-02 12:38 +0000 [r507]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -8038,11 +8093,11 @@
 	  - another way do check if IPv4/6 is specified on interface -
 	  fixed few typo
 
-	* rc.d/init.d/Makefile.am, rc.d/init.d/ipchains (removed),
-	  rc.d/init.d/functions.network, rc.d/init.d/functions: - added
-	  function to setup NAT rules - modprobing ipv6.o is now done in
-	  autoclean mode - removed ipchains (this script should be in
-	  ipchains package) - better errors handling in run_cmd()
+	* rc.d/init.d/ipchains (removed), rc.d/init.d/functions.network,
+	  rc.d/init.d/functions, rc.d/init.d/Makefile.am: - added function
+	  to setup NAT rules - modprobing ipv6.o is now done in autoclean
+	  mode - removed ipchains (this script should be in ipchains
+	  package) - better errors handling in run_cmd()
 
 	* sysconfig/network-scripts/tnlup: - modprobe modules in autoclean
 	  mode and report errors via syslog - added check for
@@ -8062,8 +8117,8 @@
 
 	* doc/ipcalc.1: - fixed typos
 
-	* src/usleep.c, src/process.c, src/netreport.c, src/initlog.c,
-	  src/usernetctl.c, src/ipcalc.c: - added casts to proper types and
+	* src/process.c, src/netreport.c, src/initlog.c, src/usernetctl.c,
+	  src/ipcalc.c, src/usleep.c: - added casts to proper types and
 	  started NLSing
 
 1999-08-31 23:51 +0000 [r497]  Artur Frysiak <wiget/at/pld-linux.org>
@@ -8076,13 +8131,12 @@
 
 1999-08-31 23:12 +0000 [r495]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* configure.in, rc-scripts.spec.in, rc.d/rc,
-	  rc.d/init.d/functions.network, rc.d/rc.sysinit,
-	  rc.d/init.d/functions: - version up to 0.0.9 - added printf_()
-	  equwalent to bash built-in printf() or /usr/bin/printf - changed
-	  nls() to work like printf - tput() -> termput() - changed all
-	  show bla bla; to show "bla bla"; - added symlinks to
-	  /etc/rc.d/rc.local
+	* rc.d/init.d/functions, configure.in, rc-scripts.spec.in, rc.d/rc,
+	  rc.d/init.d/functions.network, rc.d/rc.sysinit: - version up to
+	  0.0.9 - added printf_() equwalent to bash built-in printf() or
+	  /usr/bin/printf - changed nls() to work like printf - tput() ->
+	  termput() - changed all show bla bla; to show "bla bla"; - added
+	  symlinks to /etc/rc.d/rc.local
 
 1999-08-31 13:59 +0000 [r494]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
@@ -8110,7 +8164,7 @@
 
 1999-08-16 09:38 +0000 [r488]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* TODO, rc-scripts.spec.in, rc.d/init.d/killall: killall is now
+	* rc.d/init.d/killall, TODO, rc-scripts.spec.in: killall is now
 	  chkconfig ready. updated TODO list.
 
 1999-08-14 13:18 +0000 [r485-487]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
@@ -8135,7 +8189,7 @@
 
 1999-08-14 12:01 +0000 [r482]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/tnlup, rc.d/init.d/functions.network:
+	* rc.d/init.d/functions.network, sysconfig/network-scripts/tnlup:
 	  modprobing ipip ip_gre modules moved temporary to tnlup
 
 1999-08-14 11:56 +0000 [r481]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
@@ -8163,7 +8217,7 @@
 
 1999-08-14 10:56 +0000 [r476]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/system, rc.d/rc.sysinit: added new variable SET_SLINKS.
+	* rc.d/rc.sysinit, sysconfig/system: added new variable SET_SLINKS.
 	  If it set to "yes" then rc.sysinit is setting symlinks in /boot
 	  dependent on kernel version.
 
@@ -8181,7 +8235,7 @@
 
 1999-08-09 21:05 +0000 [r472]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* rc.d/rc, rc.d/init.d/functions: - changed ptintf to awk
+	* rc.d/init.d/functions, rc.d/rc: - changed ptintf to awk
 
 1999-08-09 20:44 +0000 [r470-471]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -8199,7 +8253,7 @@
 
 1999-08-09 20:00 +0000 [r467]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* configure.in, rc.d/init.d/functions: - more locale strings - fix
+	* rc.d/init.d/functions, configure.in: - more locale strings - fix
 	  locale support in configure.in
 
 1999-08-09 19:58 +0000 [r466]  kloczek <kloczek/at/pld-linux.org>
@@ -8213,10 +8267,10 @@
 
 1999-08-07 10:16 +0000 [r464]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* configure.in, po/Makefile.am (added), rc-scripts.spec.in,
-	  po/rc-scripts.pot, Makefile.am, rc.d/init.d/ipchains,
-	  rc.d/init.d/functions.network, sysconfig/interfaces/Makefile.am,
-	  rc.d/init.d/functions: - expr -> $(( )) - wstęp automake/autoconf
+	* rc.d/init.d/functions.network, sysconfig/interfaces/Makefile.am,
+	  rc.d/init.d/functions, configure.in, po/Makefile.am (added),
+	  rc-scripts.spec.in, po/rc-scripts.pot, Makefile.am,
+	  rc.d/init.d/ipchains: - expr -> $(( )) - wstęp automake/autoconf
 	  do locale
 
 1999-08-06 13:06 +0000 [r463]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
@@ -8268,14 +8322,7 @@
 	* po/pl.po (added), po/rc-scripts.pot (added), po (added): - pot +
 	  pl tłumaczenie
 
-	* rc.d/init.d/network, TODO, INSTALL,
-	  sysconfig/network-scripts/tnldown,
-	  sysconfig/network-scripts/ifdown, COPYING,
-	  sysconfig/interfaces/ifcfg-lo (removed), rc-scripts.spec.in,
-	  sysconfig/network-scripts/ifup-plip, sysconfig/system,
-	  rc.d/init.d/nfsfs, rc.d/rc.sysinit, rc.d/init.d/random,
-	  rc.d/init.d/single, doc-devel (removed), rc.d/init.d/halt,
-	  rc.d/init.d/reboot, rc.d/init.d/shutdwn,
+	* rc.d/init.d/reboot, rc.d/init.d/shutdwn,
 	  sysconfig/network-scripts/ifup-post, rc.d/init.d/ipchains,
 	  rc.d/init.d/functions.network, autogen.sh, NEWS,
 	  ppp/ip-down.d/logger, setsysfont, rc.d/init.d/allowlogin,
@@ -8283,9 +8330,16 @@
 	  sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
 	  AUTHORS, configure.in, rc.d/rc, rc.d/init.d/netfs, inittab,
 	  ppp/ip-up.d/logger, sysconfig/network, rc.d/init.d/killall,
-	  sysconfig/network-scripts/ifup-sl, sysconfig/ipchains: - dodana
-	  obsługa statycznej tablicy ARP - interfejs lo nie wymaga pliku
-	  konfiguracyjnego - dodane wsparcie dla innych języków niż
+	  sysconfig/network-scripts/ifup-sl, sysconfig/ipchains,
+	  rc.d/init.d/network, TODO, INSTALL,
+	  sysconfig/network-scripts/tnldown,
+	  sysconfig/network-scripts/ifdown, COPYING,
+	  sysconfig/interfaces/ifcfg-lo (removed), rc-scripts.spec.in,
+	  sysconfig/network-scripts/ifup-plip, sysconfig/system,
+	  rc.d/init.d/nfsfs, rc.d/rc.sysinit, rc.d/init.d/random,
+	  rc.d/init.d/single, doc-devel (removed), rc.d/init.d/halt: -
+	  dodana obsługa statycznej tablicy ARP - interfejs lo nie wymaga
+	  pliku konfiguracyjnego - dodane wsparcie dla innych języków niż
 	  angielski (NLS) - rc.sysinit && rc ustawia odpowiednie zmienne
 	  potrzebne do obsługi NLS - ustawianie fontów, map już w skryptcie
 	  setsysfont - ifup && ifdown: wreszcie poprawnie działają dla
@@ -8385,10 +8439,10 @@
 
 1999-07-22 10:23 +0000 [r434]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* sysconfig/interfaces/tnlcfg-description (added),
+	* sysconfig/interfaces/ifcfg-eth0.wiget (removed),
+	  sysconfig/interfaces/tnlcfg-description (added),
 	  sysconfig/interfaces/ifcfg-description (added),
-	  sysconfig/interfaces/tnlcfg-icm,
-	  sysconfig/interfaces/ifcfg-eth0.wiget (removed): cleanup
+	  sysconfig/interfaces/tnlcfg-icm: cleanup
 
 1999-07-22 10:19 +0000 [r433]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -8421,10 +8475,10 @@
 
 1999-07-15 13:29 +0000 [r426]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* rc.d/init.d/network, rc.d/init.d/functions.network,
-	  rc.d/rc.sysinit, rc.d/init.d/functions: - we are using better
-	  pidofproc() from RH initscripts - removed unnecesary check in
-	  rc.sysinit - removed all obsolete functions from
+	* rc.d/init.d/functions, rc.d/init.d/network,
+	  rc.d/init.d/functions.network, rc.d/rc.sysinit: - we are using
+	  better pidofproc() from RH initscripts - removed unnecesary check
+	  in rc.sysinit - removed all obsolete functions from
 	  functions.network - finished proc_net() function (interface to
 	  /proc/sys/net)
 
@@ -8446,40 +8500,40 @@
 
 1999-07-13 12:52 +0000 [r421]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* rc.d/rc.sysinit, rc.d/init.d/functions: - /proc is mounted before
+	* rc.d/init.d/functions, rc.d/rc.sysinit: - /proc is mounted before
 	  starting fsck (needed for working LABEL support is fsck) - fixed
 	  bug in show()
 
 1999-07-13 12:49 +0000 [r420]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* INSTALL, sysconfig/network-scripts/tnldown,
-	  sysconfig/network-scripts/ifdown,
-	  sysconfig/interfaces/tnlcfg-icm,
-	  sysconfig/interfaces/ifcfg-ppp0.callback,
-	  sysconfig/interfaces/ifcfg-lo, doc/ipchains-setup.txt,
-	  doc/sysvinitfiles, sysconfig/interfaces/ifcfg-eth0.wiget,
-	  sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-ipx, doc/sysconfig.txt,
-	  rc-scripts.spec.in, sysconfig/network-scripts/ifup-plip,
-	  ppp/ip-up, sysconfig/network-scripts/ifdown-post,
-	  rc.d/rc.sysinit, doc-devel/ogolnie, doc/net-scripts.txt,
-	  sysconfig/interfaces/data/chat-ppp0.tpsa,
+	* sysconfig/network-scripts/ifdown-post, rc.d/rc.sysinit, README,
+	  lang.csh, doc-devel/ogolnie, doc/net-scripts.txt,
+	  sysconfig/interfaces/ifcfg-sl0,
 	  sysconfig/network-scripts/ifup-routes,
-	  sysconfig/network-scripts/ifup-aliases,
-	  sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/network-scripts/ifup-post, rc.d/rc.serial, Makefile.am,
+	  sysconfig/network-scripts/ifup-post,
+	  sysconfig/network-scripts/ifdown, Makefile.am,
 	  sysconfig/interfaces/data/chat-ppp0.leased1,
-	  rc.d/init.d/functions.network, ppp/ip-down, NEWS, setsysfont,
-	  rc.d/rc.local, rc.d/init.d/functions,
+	  rc.d/init.d/functions.network, ppp/ip-down,
+	  sysconfig/interfaces/ifcfg-ppp0.callback, doc/ipchains-setup.txt,
+	  sysconfig/network-scripts/ifup-ppp, rc.d/rc.local,
+	  sysconfig/network-scripts/ifup-ipx, rc.d/init.d/functions,
 	  sysconfig/network-scripts/ifdown-sl,
-	  sysconfig/network-scripts/tnlup, AUTHORS,
-	  sysconfig/network-scripts/ifup,
-	  sysconfig/interfaces/data/chat-ppp0.callback, rc.d/rc, inittab,
-	  lang.sh, README, lang.csh,
+	  sysconfig/network-scripts/tnlup, AUTHORS, rc-scripts.spec.in,
+	  rc.d/rc, inittab, lang.sh,
 	  sysconfig/interfaces/ifcfg-ppp0.leased1,
 	  sysconfig/interfaces/ifcfg-ppp0.leased2,
-	  sysconfig/interfaces/ifcfg-sl0,
-	  sysconfig/network-scripts/ifup-sl: massive :$
+	  sysconfig/network-scripts/ifup-sl,
+	  sysconfig/interfaces/data/chat-ppp0.tpsa,
+	  sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifdown-ppp, INSTALL,
+	  sysconfig/network-scripts/tnldown, rc.d/rc.serial,
+	  sysconfig/interfaces/tnlcfg-icm, NEWS,
+	  sysconfig/interfaces/ifcfg-lo, doc/sysvinitfiles, setsysfont,
+	  sysconfig/interfaces/ifcfg-eth0.wiget,
+	  sysconfig/network-scripts/ifup, doc/sysconfig.txt,
+	  sysconfig/network-scripts/ifup-plip,
+	  sysconfig/interfaces/data/chat-ppp0.callback, ppp/ip-up: massive
+	  :$
 
 1999-07-05 10:27 +0000 [r419]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -8511,7 +8565,7 @@
 
 1999-07-05 08:08 +0000 [r413]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup, rc.d/rc, rc.d/init.d/functions: -
+	* rc.d/init.d/functions, sysconfig/network-scripts/ifup, rc.d/rc: -
 	  przesunięte inormacje `ok`, `busy` itp w nieco w prawo (więcej
 	  miejsca na komunikaty) - dodajemy takze routing IPv6 na okreslone
 	  interfejsy
@@ -8534,7 +8588,7 @@
 
 1999-07-02 11:31 +0000 [r407]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* rc-scripts.spec.in, src/Makefile.am: added missing files
+	* src/Makefile.am, rc-scripts.spec.in: added missing files
 
 1999-07-02 11:14 +0000 [r404-406]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -8542,26 +8596,26 @@
 
 	* doc/Makefile.am: added initlog.1
 
-	* src/netreport.1 (removed), src/initlog.1 (removed), src/doexec.1
-	  (removed), src/usernetctl.1 (removed), src/Makefile.am,
-	  src/ipcalc.1 (removed), src/usleep.1 (removed): manuals in doc
+	* src/initlog.1 (removed), src/doexec.1 (removed), src/usernetctl.1
+	  (removed), src/Makefile.am, src/ipcalc.1 (removed), src/usleep.1
+	  (removed), src/netreport.1 (removed): manuals in doc
 
 1999-07-02 09:32 +0000 [r402-403]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
 	* rc.d/init.d/Makefile.am, sysconfig/network-scripts/ifup: -
 	  ARPable by default
 
-	* rc.d/init.d/network, sysconfig/network-scripts/tnlup,
+	* doc-devel/ogolnie, sysconfig/interfaces/ifcfg-eth0.wiget,
+	  rc.d/init.d/allowlogin (added), rc.d/init.d/network-ip6.init
+	  (removed), rc.d/init.d/network, sysconfig/network-scripts/tnlup,
 	  sysconfig/network-scripts/ifup,
 	  sysconfig/network-scripts/ifup-plip,
 	  sysconfig/network-scripts/tnldown, sysconfig/network-ip6
 	  (removed), rc.d/rc, rc.d/rc.sysinit, sysconfig/network,
-	  sysconfig/network-ip6.conf (removed), doc-devel/ogolnie,
-	  sysconfig/interfaces/ifcfg-eth0.wiget, rc.d/init.d/allowlogin
-	  (added), rc.d/init.d/network-ip6.init (removed): - obsługa
-	  multicast, arp, src - poprawka w "Delay Login" - poprawki w
-	  template ifcfg-eth0.wiget - tnlup && tnldown uwzględniają
-	  konfigurację w network - ustawianie defaulowo PROTOCOL=
+	  sysconfig/network-ip6.conf (removed): - obsługa multicast, arp,
+	  src - poprawka w "Delay Login" - poprawki w template
+	  ifcfg-eth0.wiget - tnlup && tnldown uwzględniają konfigurację w
+	  network - ustawianie defaulowo PROTOCOL=
 
 1999-07-01 21:10 +0000 [r401]  Artur Frysiak <wiget/at/pld-linux.org>
 
@@ -8578,12 +8632,12 @@
 
 1999-06-29 16:38 +0000 [r399]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/tnlup,
-	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
-	  rc.d/init.d/functions.network, rc.d/init.d/functions: - poprawki
-	  w calcnetmask - net-tools (prawie) > /dev/null. Używamy iproute -
-	  poprawki w obsłudze aliasów (nie testowałem ale powinno być
-	  możliwe używanie aliasów typu eth0:PLD_JEST_SUPER)
+	* rc.d/init.d/functions, rc.d/init.d/network,
+	  sysconfig/network-scripts/tnlup, sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/ifdown, rc.d/init.d/functions.network:
+	  - poprawki w calcnetmask - net-tools (prawie) > /dev/null.
+	  Używamy iproute - poprawki w obsłudze aliasów (nie testowałem ale
+	  powinno być możliwe używanie aliasów typu eth0:PLD_JEST_SUPER)
 
 1999-06-28 20:05 +0000 [r397-398]  kloczek <kloczek/at/pld-linux.org>
 
@@ -8603,13 +8657,14 @@
 
 1999-06-28 14:30 +0000 [r394]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/chat-ppp0.tpsa (removed),
+	* sysconfig/interfaces/data (added),
+	  sysconfig/interfaces/data/chat-ppp0.tpsa (added),
+	  sysconfig/network-scripts/chat-ppp0.tpsa (removed),
 	  sysconfig/interfaces/data/chat-ppp0.callback (added),
 	  sysconfig/interfaces/data/chat-ppp0.leased1 (added),
 	  sysconfig/network-scripts/chat-ppp0.callback (removed),
-	  sysconfig/network-scripts/chat-ppp0.leased1 (removed),
-	  sysconfig/interfaces/data (added),
-	  sysconfig/interfaces/data/chat-ppp0.tpsa (added): moved chat*
+	  sysconfig/network-scripts/chat-ppp0.leased1 (removed): moved
+	  chat*
 
 1999-06-28 13:12 +0000 [r393]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
@@ -8617,18 +8672,18 @@
 
 1999-06-28 13:07 +0000 [r392]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/ifup-routes,
-	  sysconfig/network-scripts/tnlup (added),
-	  sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifdhcpc-done (removed),
-	  doc/sysconfig.txt, sysconfig/network-scripts/tnldown (added),
+	* doc/sysconfig.txt, sysconfig/network-scripts/tnldown (added),
 	  rc.d/init.d/functions.network, sysconfig/static-nat (added),
 	  sysconfig/network-scripts/ifup-tnl (removed),
 	  rc.d/init.d/tunnels-ip6.init (removed), src/ipcalc.c,
-	  sysconfig/network-scripts/ifdown-tnl (removed): - zmiana syntaxy
-	  dla routingu statycznego - if{up,down}-tnl -> tnl{up,down} -
-	  poprawki dotyczące PREFIX - tunnels-ip6.init, ifdhcpc-done -
-	  zbędne (zastąpione przez inne narzędzia)
+	  sysconfig/network-scripts/ifdown-tnl (removed),
+	  rc.d/init.d/network, sysconfig/network-scripts/ifup-routes,
+	  sysconfig/network-scripts/tnlup (added),
+	  sysconfig/network-scripts/ifup,
+	  sysconfig/network-scripts/ifdhcpc-done (removed): - zmiana
+	  syntaxy dla routingu statycznego - if{up,down}-tnl ->
+	  tnl{up,down} - poprawki dotyczące PREFIX - tunnels-ip6.init,
+	  ifdhcpc-done - zbędne (zastąpione przez inne narzędzia)
 
 1999-06-27 18:48 +0000 [r391]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
@@ -8643,13 +8698,13 @@
 
 	* rc.d/init.d/network: tunnels
 
-	* sysconfig/network-scripts/ifup,
-	  sysconfig/network-scripts/ifup-plip,
+	* sysconfig/network-scripts/ifup-plip,
 	  sysconfig/interfaces/ifcfg-lo, doc/net-scripts.txt,
 	  sysconfig/interfaces/ifcfg-ppp0.leased1,
 	  sysconfig/interfaces/ifcfg-ppp0.leased2,
-	  sysconfig/interfaces/ifcfg-eth0.wiget: NETMASK= is obsoletes
-	  (instead we use PREFIX=)
+	  sysconfig/interfaces/ifcfg-eth0.wiget,
+	  sysconfig/network-scripts/ifup: NETMASK= is obsoletes (instead we
+	  use PREFIX=)
 
 1999-06-27 17:34 +0000 [r387]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
@@ -8688,16 +8743,16 @@
 
 1999-06-27 14:27 +0000 [r378]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
-	  sysconfig/network-scripts/ifup-post,
-	  sysconfig/interfaces/tnlcfg-icm, rc.d/rc.sysinit,
+	* sysconfig/interfaces/tnlcfg-icm, rc.d/rc.sysinit,
 	  sysconfig/network-scripts/ifdown-post, sysconfig/tunnels-ip6.conf
 	  (removed), sysconfig/network-scripts/ifup-tnl (added),
 	  sysconfig/network-scripts/ifup-sl,
 	  sysconfig/network-scripts/ifup-ppp,
 	  sysconfig/network-scripts/ifdown-tnl (added),
-	  sysconfig/network-scripts/ifup-ipx: - używamy pumpa do
+	  sysconfig/network-scripts/ifup-ipx,
+	  sysconfig/network-scripts/ifdown-ppp,
+	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/ifup-post: - używamy pumpa do
 	  bootp/dhcpd - dodano ifup-tnl && ifdown-tnl - obsługa tuneli
 	  ipip, sit, gre (ipxip niezrobiona jeszcze) - tunnels-ip6.conf -
 	  zbędne (tunele są konfigurowane w stylu SySV) - drobne poprawki
@@ -8712,29 +8767,32 @@
 
 1999-06-19 11:29 +0000 [r375]  kloczek <kloczek/at/pld-linux.org>
 
-	* inputrc (removed), rc.d/init.d/shutdwn, Makefile.am, autogen.sh,
-	  rc.d/rc.sysinit, rc.d/init.d/single, rc.d/init.d/killall,
-	  rc.d/init.d/functions: - removed inputrc (it must be in
-	  readline), - reformatings, - removed processing doc in
-	  Makefile.am and autogen.sh.
+	* rc.d/init.d/killall, rc.d/init.d/functions, inputrc (removed),
+	  rc.d/init.d/shutdwn, Makefile.am, autogen.sh, rc.d/rc.sysinit,
+	  rc.d/init.d/single: - removed inputrc (it must be in readline), -
+	  reformatings, - removed processing doc in Makefile.am and
+	  autogen.sh.
 
 1999-06-18 19:23 +0000 [r374]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* rc.d/init.d/network, src/Makefile (added),
-	  sysconfig/network-scripts/tnlcfg-icm (removed),
-	  rc.d/init.d/shutdwn, rc.d/rc.serial, doc/initlog.1 (added),
-	  sysconfig/interfaces/tnlcfg-icm (added), src/minilogd.c (added),
+	* sysconfig/interfaces/tnlcfg-icm (added), src/minilogd.c (added),
 	  src/initlog.c (added), src/loglevel.c (added), src/initlog.h
 	  (added), rc.d/init.d/functions, src/process.c (added),
 	  sysconfig/system, rc.d/init.d/netfs (added), src/initlog.1
 	  (added), rc.d/rc.sysinit, src/process.h (added),
 	  rc.d/init.d/single, doc-devel/ogolnie (added),
-	  sysconfig/interfaces/ifcfg-sl0 (added), doc-devel (added): pare
+	  sysconfig/interfaces/ifcfg-sl0 (added), doc-devel (added),
+	  rc.d/init.d/network, src/Makefile (added),
+	  sysconfig/network-scripts/tnlcfg-icm (removed),
+	  rc.d/init.d/shutdwn, rc.d/rc.serial, doc/initlog.1 (added): pare
 	  zmian
 
 1999-06-18 19:14 +0000 [r373]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifdown-sl,
+	* sysconfig/network-scripts/ifup-sl,
+	  sysconfig/network-scripts/network-functions (removed),
+	  sysconfig/network-scripts/ifcfg-ppp0.tpsa (removed),
+	  sysconfig/network-scripts/ifdown-sl,
 	  sysconfig/network-scripts/ifup, sysconfig/network-scripts/ifdown,
 	  sysconfig/network-scripts/ifup-post,
 	  sysconfig/network-scripts/ifcfg-ppp0.callback (removed),
@@ -8742,11 +8800,8 @@
 	  sysconfig/network-scripts/ifdown-post,
 	  sysconfig/network-scripts/ifcfg-ppp0.leased2 (removed),
 	  sysconfig/network-scripts/ifcfg-eth0.wiget (removed),
-	  sysconfig/network-scripts/ifcfg-eth0 (removed),
-	  sysconfig/network-scripts/ifup-sl,
-	  sysconfig/network-scripts/network-functions (removed),
-	  sysconfig/network-scripts/ifcfg-ppp0.tpsa (removed): *** empty
-	  log message ***
+	  sysconfig/network-scripts/ifcfg-eth0 (removed): *** empty log
+	  message ***
 
 1999-06-16 17:29 +0000 [r372]  Arkadiusz Miśkiewicz (alias) <misiek/at/pld-linux.org>
 
@@ -8762,24 +8817,12 @@
 
 1999-06-14 21:17 +0000 [r369]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
-	* rc.d/init.d/network, INSTALL (added), ppp/ip-down.d/Makefile.am
-	  (added), doc/Makefile.am (added), doc/ipchains-setup.txt (added),
-	  doc/sysvinitfiles (added), rc-scripts.spec.in (added),
-	  doc/sysconfig.txt (added), sysconfig/interfaces (added),
-	  sysconfig/network-scripts/ifup-plip,
-	  sysconfig/network-scripts/Makefile.am (added), doc/ipcalc.1
-	  (added), rc.d/init.d/reboot,
-	  sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/network-scripts/ifup-post, Makefile.am (added),
-	  doc/doexec.1 (added), autogen.sh (added), NEWS (added), Makefile
-	  (removed), rc-scripts.spec (removed), doc/.cvsignore (added),
-	  rc.d/init.d/functions, rc.d/init.d/Makefile.am (added), AUTHORS
-	  (added), configure.in (added), doc/usernetctl.1 (added),
-	  sysconfig/network, README (added), src/Makefile.am (added),
-	  doc/usleep.1 (added), doc (added), ppp/Makefile.am (added),
-	  COPYING (added), sysconfig/network-scripts/ifdown,
-	  ipchains-setup.txt (removed), sysconfig/interfaces/ifcfg-lo
-	  (added), sysconfig/interfaces/ifcfg-ppp0.callback (added),
+	* doc/usernetctl.1 (added), sysconfig/network, README (added),
+	  src/Makefile.am (added), doc/usleep.1 (added), doc (added),
+	  ppp/Makefile.am (added), COPYING (added),
+	  sysconfig/network-scripts/ifdown, ipchains-setup.txt (removed),
+	  sysconfig/interfaces/ifcfg-lo (added),
+	  sysconfig/interfaces/ifcfg-ppp0.callback (added),
 	  sysconfig/network-scripts/ifup-ppp, sysconfig/system,
 	  rc.d/rc.sysinit, rc.d/init.d/single, doc/net-scripts.txt (added),
 	  rc.d/init.d/halt, sysconfig/network-scripts/ifup-aliases,
@@ -8793,25 +8836,36 @@
 	  (removed), lang.sh, rc.d/rc, lang.csh (added), rc.d/Makefile.am
 	  (added), sysconfig/interfaces/ifcfg-ppp0.leased1 (added),
 	  sysconfig/interfaces/ifcfg-ppp0.leased2 (added),
-	  sysconfig/network-scripts/ifup-sl: Synced with latest from old
-	  repo
+	  sysconfig/network-scripts/ifup-sl, rc.d/init.d/network, INSTALL
+	  (added), ppp/ip-down.d/Makefile.am (added), doc/Makefile.am
+	  (added), doc/ipchains-setup.txt (added), doc/sysvinitfiles
+	  (added), rc-scripts.spec.in (added), doc/sysconfig.txt (added),
+	  sysconfig/interfaces (added),
+	  sysconfig/network-scripts/ifup-plip,
+	  sysconfig/network-scripts/Makefile.am (added), doc/ipcalc.1
+	  (added), rc.d/init.d/reboot,
+	  sysconfig/network-scripts/ifdown-ppp,
+	  sysconfig/network-scripts/ifup-post, Makefile.am (added),
+	  doc/doexec.1 (added), autogen.sh (added), NEWS (added), Makefile
+	  (removed), rc-scripts.spec (removed), doc/.cvsignore (added),
+	  rc.d/init.d/functions, rc.d/init.d/Makefile.am (added), AUTHORS
+	  (added), configure.in (added): Synced with latest from old repo
 
 1999-06-14 21:06 +0000 [r367-368]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
 	* ipchains-setup.txt (added): now synced. (one file was missed)
 
-	* rc.d/init.d/network, rc.d/rc.media (added), sysconfig/system,
-	  net-scripts.txt (added), rc.d/init.d/ipchains (added),
-	  sysconfig/static-routes (added), rc.d/rc.sysinit,
-	  sysconfig/network-scripts/ifcfg-eth0.wiget (added), Makefile,
-	  rc-scripts.spec, sysconfig/ipchains (added),
-	  rc.d/init.d/functions: synced with 0.0.5
+	* rc.d/rc.media (added), sysconfig/system, net-scripts.txt (added),
+	  rc.d/init.d/ipchains (added), sysconfig/static-routes (added),
+	  rc.d/rc.sysinit, sysconfig/network-scripts/ifcfg-eth0.wiget
+	  (added), Makefile, rc-scripts.spec, sysconfig/ipchains (added),
+	  rc.d/init.d/functions, rc.d/init.d/network: synced with 0.0.5
 
 1999-06-14 20:53 +0000 [r366]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
-	* sysconfig/network-scripts/ifup, lang.sh, Makefile,
-	  sysconfig/network, src/testdinit, setsysfont, rc-scripts.spec,
-	  sysconfig.txt: Synced with 0.0.4
+	* src/testdinit, setsysfont, rc-scripts.spec, sysconfig.txt,
+	  sysconfig/network-scripts/ifup, lang.sh, Makefile,
+	  sysconfig/network: Synced with 0.0.4
 
 1999-06-14 20:50 +0000 [r365]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
@@ -8820,12 +8874,7 @@
 
 1999-06-14 20:44 +0000 [r364]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
-	* rc.d/init.d/network, sysconfig/network-scripts/ifup-aliases,
-	  sysconfig/network-scripts/ifdhcpc-done,
-	  sysconfig/network-scripts/ifdown-ppp,
-	  sysconfig/network-scripts/ifdown,
-	  sysconfig/network-scripts/ifup-post,
-	  sysconfig/network-scripts/ifcfg-ppp0 (removed),
+	* sysconfig/network-scripts/ifcfg-ppp0 (removed),
 	  ppp/ip-down.d/logger, sysconfig/network-scripts/chat-ppp0
 	  (removed), sysconfig/network-scripts/network-functions,
 	  sysconfig.txt, sysconfig/network-scripts/ifup-ppp,
@@ -8835,25 +8884,24 @@
 	  sysconfig/network-scripts/ifup, tunnels-ip6.init (removed),
 	  sysconfig/network-scripts/ifup-plip, ppp/ip-up.d/logger,
 	  sysconfig/network-scripts/ifdown-post,
-	  sysconfig/network-scripts/ifup-sl, radvd.init (removed): Synced
-	  with rc-scripts-0.0.3 from old repo.
+	  sysconfig/network-scripts/ifup-sl, radvd.init (removed),
+	  rc.d/init.d/network, sysconfig/network-scripts/ifup-aliases,
+	  sysconfig/network-scripts/ifdhcpc-done,
+	  sysconfig/network-scripts/ifdown-ppp,
+	  sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/ifup-post: Synced with rc-scripts-0.0.3
+	  from old repo.
 
 1999-06-14 20:12 +0000 [r363]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
-	* rc.d/init.d/network, src/Makefile, sysconfig/system,
-	  ppp/ip-up.d/logger, rc.d/rc.sysinit, .cvsignore, Makefile,
-	  ppp/ip-down.d/logger, rc-scripts.spec, rc.d/init.d/functions:
-	  Synced with rc-scripts-0.0.2 from old repo.
+	* ppp/ip-up.d/logger, rc.d/rc.sysinit, .cvsignore, Makefile,
+	  ppp/ip-down.d/logger, rc-scripts.spec, rc.d/init.d/functions,
+	  rc.d/init.d/network, src/Makefile, sysconfig/system: Synced with
+	  rc-scripts-0.0.2 from old repo.
 
 1999-06-14 20:08 +0000 [r362]  Grzegorz Stanislawski <stangrze/at/pld-linux.org>
 
-	* rc.d/init.d/network,
-	  sysconfig/network-scripts/ifcfg-ppp0.callback (added),
-	  sysconfig/network-scripts/ifdown,
-	  sysconfig/network-scripts/chat-ppp0.callback (added),
-	  rc.d/init.d/functions-ip6, sysconfig/network-scripts/ifup-ppp,
-	  sysconfig/network-scripts/ifup-ipx, inputrc (added),
-	  sysconfig/network-scripts/ifup-plip, sysconfig/network-ip6,
+	* sysconfig/network-scripts/ifup-plip, sysconfig/network-ip6,
 	  sysconfig/network-scripts/ifcfg-ppp0.leased1 (added),
 	  rc.d/init.d/nfsfs, sysconfig/network-scripts/ifcfg-ppp0.leased2
 	  (added), rc.d/rc.sysinit, rc.d/init.d/random,
@@ -8874,7 +8922,13 @@
 	  sysconfig/network-scripts/chat-ppp0.leased1 (added),
 	  rc.d/init.d/killall, rc.d/init.d/tunnels-ip6.init (added),
 	  sysconfig/network-scripts/ifup-sl, rc.d/init.d/network-ip6.init
-	  (added): Synced with rc-scripts-0.0.1 from old repo.
+	  (added), rc.d/init.d/network,
+	  sysconfig/network-scripts/ifcfg-ppp0.callback (added),
+	  sysconfig/network-scripts/ifdown,
+	  sysconfig/network-scripts/chat-ppp0.callback (added),
+	  rc.d/init.d/functions-ip6, sysconfig/network-scripts/ifup-ppp,
+	  sysconfig/network-scripts/ifup-ipx, inputrc (added): Synced with
+	  rc-scripts-0.0.1 from old repo.
 
 1999-06-14 19:55 +0000 [r361]  kloczek <kloczek/at/pld-linux.org>
 
@@ -8890,48 +8944,45 @@
 
 1999-06-14 19:25 +0000 [r359]  kloczek <kloczek/at/pld-linux.org>
 
-	* src/.cvsignore (added), ppp/ip-up.d/.cvsignore (added),
-	  rc.d/init.d/.cvsignore (added), ppp/ip-down.d/.cvsignore (added),
-	  ppp/.cvsignore (added), .cvsignore (added),
-	  sysconfig/network-scripts/.cvsignore (added),
-	  sysconfig/.cvsignore (added), rc.d/.cvsignore (added): - added
-	  template .cvsignore.
+	* ppp/ip-down.d/.cvsignore (added), ppp/.cvsignore (added),
+	  .cvsignore (added), sysconfig/network-scripts/.cvsignore (added),
+	  sysconfig/.cvsignore (added), rc.d/.cvsignore (added),
+	  src/.cvsignore (added), ppp/ip-up.d/.cvsignore (added),
+	  rc.d/init.d/.cvsignore (added): - added template .cvsignore.
 
 1999-06-14 19:22 +0000 [r357]  Artur Frysiak <wiget/at/pld-linux.org>
 
-	* rc.d/init.d/network (added), rc.d/init.d/functions-ip6 (added),
-	  src/ipcalc.1 (added), sysconfig/network-scripts/ifup-ipx (added),
-	  tunnels-ip6.init (added), sysconfig/network-scripts/ifup-plip
-	  (added), ppp/ip-up (added), sysconfig/network-ip6 (added),
-	  rc.d/init.d/nfsfs (added), src/doexec.1 (added), src/Makefile
-	  (added), sysconfig (added), sysconfig/network-scripts/ifup-routes
+	* rc.d/init.d (added), ppp/ip-down (added),
+	  sysconfig/network-scripts/ifcfg-ppp0 (added),
+	  sysconfig/network-scripts/chat-ppp0 (added), src/doexec.c
+	  (added), sysconfig/network-scripts/network-functions (added),
+	  sysconfig/network-scripts/ifup-ipx (added), rc.d/init.d/functions
+	  (added), sysconfig/network-scripts/ifdown-sl (added), src
+	  (added), rc.d/rc (added), lang.sh (added), src/testdinit (added),
+	  ppp/ip-down.d (added), ppp (added), src/usernetctl.c (added),
+	  rc.d/init.d/halt (added), rc.d/init.d/network (added),
+	  src/usleep.c (added), ppp/ip-down.d/logger (added),
+	  sysconfig/network-ip6.conf (added), setsysfont (added),
+	  sysconfig/network-scripts (added),
+	  sysconfig/network-scripts/ifup-plip (added), ppp/ip-up.d/logger
+	  (added), sysconfig/network-scripts/ifdown-post (added),
+	  sysconfig/network-scripts/ifdhcpc-done (added), src/netreport.1
+	  (added), sysconfig/network-scripts/ifup-post (added), ppp/ip-up.d
+	  (added), adjtime (added), src/ipcalc.1 (added), sysconfig.txt
+	  (added), sysconfig/network-scripts/ifup-ppp (added),
+	  rc.d/rc.local (added), tunnels-ip6.init (added), inittab (added),
+	  rc.d/init.d/random (added), rc.d/init.d/single (added),
+	  src/doexec.1 (added), rc.d/init.d/killall (added),
+	  sysconfig/network-scripts/ifup-sl (added),
+	  sysconfig/network-scripts/ifup-aliases (added), src/Makefile
 	  (added), sysconfig/network-scripts/ifdown-ppp (added),
-	  src/netreport.1 (added), sysconfig/network-scripts/ifup-post
-	  (added), ppp/ip-up.d (added), sysconfig/network-ip6.conf (added),
-	  adjtime (added), Makefile (added), src/usernetctl.1 (added),
-	  setsysfont (added), src/usleep.1 (added), rc.d/init.d/functions
-	  (added), rc.d (added), ppp/ip-up.d/logger (added), inittab
-	  (added), src/testdinit (added), ppp/ip-down.d (added),
-	  rc.d/init.d/killall (added), src/ipcalc.c (added),
-	  sysconfig/network-scripts/ifdhcpc-done (added),
-	  sysconfig/network-scripts/ifdown (added),
-	  sysconfig/network-scripts/ifcfg-ppp0 (added), src/doexec.c
-	  (added), sysconfig/network-scripts (added),
-	  sysconfig/network-scripts/ifup-ppp (added), src/netreport.c
-	  (added), rc.d/rc.sysinit (added), rc.d/init.d/random (added),
-	  src/testd.c (added), sysconfig/network-scripts/ifdown-post
-	  (added), rc.d/init.d/single (added), / (added), src/usernetctl.c
-	  (added), rc.d/init.d/halt (added),
-	  sysconfig/network-scripts/ifup-aliases (added), src/usleep.c
-	  (added), rc.d/rc.serial (added),
-	  sysconfig/network-scripts/ifcfg-lo (added), rc.d/init.d (added),
-	  ppp/ip-down (added), ppp/ip-down.d/logger (added),
-	  sysconfig/network-scripts/chat-ppp0 (added),
-	  sysconfig/network-scripts/network-functions (added),
-	  sysconfig.txt (added), rc.d/rc.local (added),
-	  sysconfig/network-scripts/ifdown-sl (added),
-	  sysconfig/network-scripts/ifup (added), src (added), rc.d/rc
-	  (added), lang.sh (added), ppp (added),
-	  sysconfig/network-scripts/ifup-sl (added), radvd.init (added):
-	  Initial revision
+	  rc.d/rc.serial (added), sysconfig/network-scripts/ifcfg-lo
+	  (added), Makefile (added), src/usernetctl.1 (added),
+	  rc.d/init.d/functions-ip6 (added), src/usleep.1 (added),
+	  sysconfig/network-scripts/ifup (added), rc.d (added), ppp/ip-up
+	  (added), sysconfig/network-ip6 (added), src/netreport.c (added),
+	  rc.d/init.d/nfsfs (added), rc.d/rc.sysinit (added), src/testd.c
+	  (added), / (added), radvd.init (added), src/ipcalc.c (added),
+	  sysconfig (added), sysconfig/network-scripts/ifup-routes (added),
+	  sysconfig/network-scripts/ifdown (added): Initial revision
 
