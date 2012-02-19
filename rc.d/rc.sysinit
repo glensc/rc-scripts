@@ -264,6 +264,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	if ! is_no "$START_UDEV" && [ -x /sbin/start_udev ]; then
+		is_fsmounted devtmpfs /dev || mount -n -t devtmpfs devtmpfs /dev
 		load_kernel_modules modules.preudev
 		/sbin/start_udev
 		[ -x /sbin/initctl ] && /sbin/initctl -q start udev
@@ -467,6 +468,9 @@ if ! is_yes "$VSERVER"; then
 	# Enter root, /proc, /sys and other into mtab.
 	mount -f / 2> /dev/null
 	mount -f /proc 2> /dev/null
+	if is_fsmounted devtmpfs /dev; then
+		mount -f -t devtmpfs devtmpfs /dev 2> /dev/null
+	fi
 	if is_fsmounted tmpfs /run; then
 		mount -f -t tmpfs run /run 2> /dev/null
 	fi
