@@ -135,7 +135,8 @@ find_boot_interfaces() {
 				case $i in
 					*ifcfg-lo) continue ;;
 				esac
-				ONBOOT=""; . "$i" 2>/dev/null
+				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
@@ -145,7 +146,8 @@ find_boot_interfaces() {
 				case ${i##*/} in
 					ifcfg-lo|ifcfg-sit*|ifcfg-atm*|ifcfg-lec*|ifcfg-nas*|ifcfg-br*|ifcfg-macvlan*|ifcfg-macvtap*|ifcfg-*.*) continue ;;
 				esac
-				ONBOOT=""; . "$i" 2>/dev/null
+				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
@@ -156,7 +158,8 @@ find_boot_interfaces() {
 					ifcfg-*.*) ;;
 					*) continue ;;
 				esac
-				ONBOOT=""; . "$i" 2>/dev/null
+				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
@@ -167,7 +170,8 @@ find_boot_interfaces() {
 					ifcfg-br*) ;;
 					*) continue ;;
 				esac
-				ONBOOT=""; . "$i" 2>/dev/null
+				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
@@ -178,7 +182,8 @@ find_boot_interfaces() {
 					ifcfg-macvtap*|ifcfg-macvlan*) ;;
 					*) continue ;;
 				esac
-				ONBOOT=""; . "$i" 2>/dev/null
+				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
@@ -189,7 +194,8 @@ find_boot_interfaces() {
 					ifcfg-sit*) ;;
 					*) continue ;;
 				esac
-				ONBOOT=""; . "$i" 2>/dev/null
+				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
@@ -197,7 +203,8 @@ find_boot_interfaces() {
 
 	tunnels=$(
 		for i in $(network_interface_configs 'tnlcfg-*'); do
-			ONBOOT=""; . "$i" 2>/dev/null
+			ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+			[ ${USERS:-no} != no ] && continue
 			[ ${ONBOOT:-no} = yes ] && echo "${i##*/tnlcfg-}"
 		done
 	)
