@@ -85,6 +85,14 @@ while [ $# -gt 0 ]; do
 		echo "${VERSION}" >&2
 		exit 0
 		;;
+    --ignore-dependencies)
+       export SYSTEMCTL_IGNORE_DEPENDENCIES=1
+       shift
+       ;;
+    --skip-redirect)
+       export SYSTEMCTL_SKIP_REDIRECT=1
+       shift
+       ;;
 	--upstart)
 		USE_UPSTART=yes
 		shift
@@ -118,6 +126,9 @@ done
 
 if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
 	exec env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${ACTION} ${OPTIONS}
+elif [ -x /bin/systemd_booted ] && systemd_booted; then
+	echo >&2 "Redirecting to /bin/systemctl ${OPTIONS} ${SERVICE}.service"
+	exec /bin/systemctl ${OPTIONS} ${SERVICE}.service
 else
 	echo "${SERVICE}: unrecognized service" >&2
 	exit 1
