@@ -124,8 +124,8 @@ while [ $# -gt 0 ]; do
 	esac
 done
 
-if [ -x /bin/systemd_booted ] && /bin/systemd_booted && /bin/systemctl status ${SERVICE}.service > /dev/null 2>&1; then
-	echo >&2 "Redirecting to /bin/systemctl ${OPTIONS} ${SERVICE}.service"
+if [ -x /bin/systemd_booted ] && /bin/systemd_booted; then
+	echo >&2 "Redirecting to /bin/systemctl ${ACTION} ${SERVICE}.service ${OPTIONS}"
 	exec /bin/systemctl ${ACTION} ${SERVICE}.service ${OPTIONS}
 elif [ -x "${SERVICEDIR}/${SERVICE}" ]; then
 	exec env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${ACTION} ${OPTIONS}
