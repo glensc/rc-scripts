@@ -85,14 +85,14 @@ while [ $# -gt 0 ]; do
 		echo "${VERSION}" >&2
 		exit 0
 		;;
-    --ignore-dependencies)
-       export SYSTEMCTL_IGNORE_DEPENDENCIES=1
-       shift
-       ;;
-    --skip-redirect)
-       export SYSTEMCTL_SKIP_REDIRECT=1
-       shift
-       ;;
+	--ignore-dependencies)
+		export SYSTEMCTL_IGNORE_DEPENDENCIES=1
+		shift
+		;;
+	--skip-redirect)
+		export SYSTEMCTL_SKIP_REDIRECT=1
+		shift
+		;;
 	--upstart)
 		USE_UPSTART=yes
 		shift
