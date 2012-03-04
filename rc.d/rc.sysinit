@@ -570,6 +570,10 @@ if ! is_yes "$VSERVER"; then
 	# Load modules
 	if ! use_upstart; then
 		load_kernel_modules modules
+		for f in /etc/modules-load.d/*.conf ; do
+			[ -r $f ] || continue
+			load_kernel_modules ${f##/etc/}
+		done
 	fi
 
 	if [ -x /sbin/multipath ] && ! is_no "$DM_MULTIPATH"; then
