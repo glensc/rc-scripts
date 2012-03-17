@@ -16,12 +16,47 @@ is_ignored_file() {
 	return 1
 }
 
-# check if SERVICE is present in systemd
+# check if SERVICE is present in systemd and ACTION is valid systemctl command
 # returns false if systemd is disabled or not active
 is_systemd_service() {
-	local SERVICE=$1
+	local SERVICE=$1 ACTION=$2
 
 	[ "$USE_SYSTEMD" = "no" ] && return 1
+
+	case "$ACTION" in
+	# list obtained as: man systemctl | grep N.*A.*M.*E
+	start | \
+	stop | \
+	reload | \
+	restart | \
+	try-restart | \
+	reload-or-restart | \
+	reload-or-try-restart | \
+	isolate | \
+	kill | \
+	is-active | \
+	status | \
+	show | \
+	reset-failed | \
+	enable | \
+	disable | \
+	is-enabled | \
+	reenable | \
+	preset | \
+	mask | \
+	unmask | \
+	link | \
+	load | \
+	snapshot | \
+	delete | \
+	set-environment | \
+	unset-environment )
+		;;
+	*)
+		#echo "Not valid systemd command"
+		return 1
+	esac
+
 	[ -x /bin/systemd_booted ] || return 1
 	/bin/systemd_booted || return 1
 
@@ -141,7 +176,7 @@ while [ $# -gt 0 ]; do
 	esac
 done
 
-if is_systemd_service "${SERVICE}"; then
+if is_systemd_service "${SERVICE}" "${ACTION}"; then
 	echo >&2 "Redirecting to /bin/systemctl ${ACTION} ${SERVICE}.service ${OPTIONS}"
 	exec /bin/systemctl ${ACTION} ${SERVICE}.service ${OPTIONS}
 elif [ -x "${SERVICEDIR}/${SERVICE}" ]; then
