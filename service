@@ -23,6 +23,14 @@ is_systemd_service() {
 
 	[ "$USE_SYSTEMD" = "no" ] && return 1
 
+	# if we are called from systemd itself, because some .service specified
+	# invocation via /sbin/service. this avoids loops
+	# detect this via CMDLINE var, which has leaked from geninitrd
+	if [ -n "$CMDLINE" ]; then
+		echo >&2  "Warning: CMDLINE env set, likely you are defining .service to use /sbin/service, please use /etc/rc.d/init.d/<SERVICE> instead"
+		return 1
+	fi
+
 	case "$ACTION" in
 	# list obtained as: man systemctl | grep N.*A.*M.*E
 	start | \
