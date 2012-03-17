@@ -16,6 +16,18 @@ is_ignored_file() {
 	return 1
 }
 
+# check if SERVICE is present in systemd
+# returns false if systemd is disabled or not active
+is_systemd_service() {
+	local SERVICE=$1
+
+	[ "$USE_SYSTEMD" = "no" ] && return 1
+	[ -x /bin/systemd_booted ] || return 1
+	/bin/systemd_booted || return 1
+
+	/bin/systemctl show "$SERVICE".service | grep -q LoadError= && return 1 || return 0
+}
+
 status_all() {
 	local SERVICE TYPE
 	cd ${SERVICEDIR}
@@ -62,6 +74,7 @@ USAGE="Usage: $(basename $0) < option > | --status-all | \
 
 SERVICE=
 USE_UPSTART=
+USE_SYSTEMD=
 
 if [ -d /etc/rc.d/init.d ]; then
 	SERVICEDIR="/etc/rc.d/init.d"
@@ -101,6 +114,10 @@ while [ $# -gt 0 ]; do
 		USE_UPSTART=no
 		shift
 		;;
+	--no-systemd)
+		USE_SYSTEMD=no
+		shift
+		;;
 	  *)
 		if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
 			status_all
@@ -124,7 +141,7 @@ while [ $# -gt 0 ]; do
 	esac
 done
 
-if [ -x /bin/systemd_booted ] && /bin/systemd_booted; then
+if is_systemd_service "${SERVICE}"; then
 	echo >&2 "Redirecting to /bin/systemctl ${ACTION} ${SERVICE}.service ${OPTIONS}"
 	exec /bin/systemctl ${ACTION} ${SERVICE}.service ${OPTIONS}
 elif [ -x "${SERVICEDIR}/${SERVICE}" ]; then
