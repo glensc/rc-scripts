@@ -1,5 +1,8 @@
 # $Id$
 
+# NOTE: Do not use expressions here, systemd does not expand them:
+# LANG="${LANG:-en_US.UTF-8}"
+#
 #LANG=en_US.UTF-8
 #LANG=pl_PL.UTF-8
 
