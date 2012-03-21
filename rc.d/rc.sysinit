@@ -173,7 +173,7 @@ if ! is_yes "$VSERVER" ; then
 	fi
 
 	# we need /proc mounted before everything
-	is_fsmounted proc /proc || mount -n -o gid=17 -t proc /proc /proc
+	is_fsmounted proc /proc || mount -n /proc || mount -n -o gid=17,hidepid=2 -t proc /proc /proc
 
 	# Only read this once.
 	cmdline=$(cat /proc/cmdline)
