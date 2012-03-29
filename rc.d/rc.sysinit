@@ -969,9 +969,8 @@ else
 fi
 
 # Clean /tmp
-if is_yes "$CLEAN_TMP"; then
-	# XXX LC_ALL needed here
-	rm -rf /tmp/* /tmp/.[a-zA-Z0-9]*
+if is_yes "$CLEAN_TMP" && ! is_fsmounted tmpfs /tmp; then
+	LC_ALL=C rm -rf /tmp/* /tmp/.[a-zA-Z0-9]*
 fi
 
 # System protected dirs
