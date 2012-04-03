@@ -687,7 +687,7 @@ daemon() {
 				--exec "$prog" \
 				-- ${1:+"$@"}
 		else
-			nice -n $nice initlog -c "$prog" 2>&1
+			nice -n $nice initlog -c "$prog" 2>&1 </dev/null
 		fi
 		); then
 
