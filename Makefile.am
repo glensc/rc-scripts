@@ -37,6 +37,9 @@ install-data-hook:
 	install -d $(DESTDIR)$(localstatedir)/cache/$(PACKAGE)
 	[ -f $(DESTDIR)$(localstatedir)/cache/$(PACKAGE)/msg.cache ] || touch $(DESTDIR)$(localstatedir)/cache/$(PACKAGE)/msg.cache
 
+uninstall-hook:
+	[ -f $(DESTDIR)$(localstatedir)/cache/$(PACKAGE)/msg.cache ] && rm -f $(DESTDIR)$(localstatedir)/cache/$(PACKAGE)/msg.cache
+
 # make rpms
 rpm: $(PACKAGE).spec
 	$(MAKE) dist
