@@ -1,0 +1,24 @@
+# $Id$
+# bonding setup
+
+# filename: ifcfg-bond0
+DEVICE=bond0
+IPADDR=192.168.0.1/24
+IPADDR1=10.10.0.1/21
+BOOTPROTO=none
+ONBOOT=yes
+
+# additionally create ifcfg-eth0 and ifcfg-eth1 as:
+# filename: ifcfg-eth0
+#DEVICE=eth0
+#SLAVE=yes
+#MASTER=bond0
+#BOOTPROTO=none
+#ONBOOT=yes
+
+# filename: ifcfg-eth1
+#DEVICE=eth1
+#SLAVE=yes
+#MASTER=bond0
+#BOOTPROTO=none
+#ONBOOT=yes
