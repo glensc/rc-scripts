@@ -473,13 +473,13 @@ setup_ip_rules ()
 
 	if [ -f /etc/sysconfig/static-routes ]; then
 		if is_yes "$1"; then
-			i=20000
+			i=10000
 			grep -E "^(from|to|iif|tos|fwmark|dev|pref|priority|prio)[[:blank:]]" /etc/sysconfig/static-routes | while read args; do
 				prio=""
 				if [ "${args##* prio }" = "$args" ]; then
 					# no "prio" used in rule, use own prio
 					prio="prio $i"
-					i=$((i - 10))
+					i=$((i + 5))
 				fi
 				/sbin/ip rule add $args $prio
 			done
@@ -492,13 +492,13 @@ setup_ip_rules ()
 	is_no "$IPV6_NETWORKING" && return
 	if [ -f /etc/sysconfig/static-routes6 ]; then
 		if is_yes "$1"; then
-			i=20000
+			i=10000
 			grep -E "^(from|to|iif|tos|fwmark|dev|pref|priority|prio)[[:blank:]]" /etc/sysconfig/static-routes6 | while read args; do
 				prio=""
 				if [ "${args##* prio }" = "$args" ]; then
 					# no "prio" used in rule, use own prio
 					prio="prio $i"
-					i=$((i - 10))
+					i=$((i + 5))
 				fi
 				/sbin/ip -6 rule add $args $prio
 			done
