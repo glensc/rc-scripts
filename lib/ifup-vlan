@@ -46,9 +46,7 @@ if [ ! -f /etc/sysconfig/interfaces/ifcfg-${VLAN_DEV} ]; then
 fi
 
 if ! grep -qlE "ONBOOT=[^n][^o]" /etc/sysconfig/interfaces/ifcfg-${VLAN_DEV}; then
-	# XXX: maybe display some message? Right now disabling VLAN_DEV means disabling
-	# VLANs, too. --misiek
-	exit 1
+	nls "Warning: ${VLAN_DEV} is disabled on boot."
 fi
 
 modprobe -s 8021q
