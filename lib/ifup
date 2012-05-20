@@ -24,6 +24,8 @@ need_hostname
 # device name must be ifcfg-somename
 DEV=$1
 
+SYSCTLDEVICE=$(echo ${DEVICE} | sed 's/\./\//g')
+
 [ -z "$DEV" ] && {
 	nls "Usage: %s <device name>" "ifup" >&2
 	exit 1
@@ -118,7 +120,7 @@ if [ -n "$MTU" ]; then
 fi
 
 if is_yes "${IPV6_NETWORKING}" && is_yes "${IPV6_DISABLE_AUTOCONF}"; then
-	run_cmd "Disabling IPv6 autoconfiguration" sysctl -w net.ipv6.conf.${DEVICE}.autoconf=0
+	run_cmd "Disabling IPv6 autoconfiguration" sysctl -w net.ipv6.conf.${SYSCTLDEVICE}.autoconf=0
 fi
 
 if is_wireless_device "${DEVICE}"; then
@@ -232,7 +234,7 @@ fi
 
 # device have to have ip address set before
 if is_yes "$PROXYARP"; then
-	run_cmd "$(nls 'Enabling proxy ARP on %s' "${DEVICE}")" sysctl -w net.ipv4.conf.${DEVICE}.proxy_arp=1
+	run_cmd "$(nls 'Enabling proxy ARP on %s' "${DEVICE}")" sysctl -w net.ipv4.conf.${SYSCTLDEVICE}.proxy_arp=1
 fi
 
 if [ "$HANDLING" = "3" ]; then
