@@ -175,6 +175,9 @@ if ! is_yes "$VSERVER" ; then
 	# we need /proc mounted before everything
 	is_fsmounted proc /proc || mount -n /proc || mount -n -o gid=17,hidepid=2 -t proc /proc /proc
 
+	# Early sysctls
+	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
+
 	# Only read this once.
 	cmdline=$(cat /proc/cmdline)
 	if strstr "$cmdline" "pld.no-upstart" ; then
