@@ -185,8 +185,8 @@ while [ $# -gt 0 ]; do
 done
 
 if is_systemd_service "${SERVICE}" "${ACTION}"; then
-	echo >&2 "Redirecting to /bin/systemctl ${ACTION} ${SERVICE}.service ${OPTIONS}"
-	exec /bin/systemctl ${ACTION} ${SERVICE}.service ${OPTIONS}
+	echo >&2 "Redirecting to /bin/systemctl --output=cat ${ACTION} ${SERVICE}.service ${OPTIONS}"
+	exec /bin/systemctl --output=cat ${ACTION} ${SERVICE}.service ${OPTIONS}
 elif [ -x "${SERVICEDIR}/${SERVICE}" ]; then
 	exec env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${ACTION} ${OPTIONS}
 else
