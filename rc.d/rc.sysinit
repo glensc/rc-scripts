@@ -666,9 +666,9 @@ if ! is_yes "$VSERVER"; then
 			golvm=0
 			rc=0
 			if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
-				if (grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null); then
+				if grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null; then
 					show "Starting up RAID devices"; busy
-				       	/sbin/mdadm --assemble --scan --auto=yes
+					/sbin/mdadm --assemble --scan --auto=yes
 					rc=$?
 					if [ "$rc" -eq 0 -o "$rc" -eq 2 ]; then
 						# rc is used later, too so set sane value
