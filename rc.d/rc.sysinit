@@ -810,7 +810,7 @@ if ! is_yes "$VSERVER"; then
 	# option is removed from /etc/mtab
 	if [ -z "$fastboot" ] && grep "^[^#].*encryption=" /etc/fstab 2>/dev/null | grep -v -q "noauto" 2>/dev/null; then
 		show "Checking encrypted filesystems"; started
-		LOOPLIST="$(awk '
+		LOOPLIST="$(LC_ALL=C awk '
 		FILENAME=="/proc/mounts" {
 			TAB[$2]=$1;
 		}
@@ -853,7 +853,7 @@ if ! is_yes "$VSERVER"; then
 		fi
 
 		show "Remounting encrypted filesystems back in rw mode"; busy
-		awk '
+		LC_ALL=C awk '
 		FILENAME=="/proc/mounts" {
 			TAB[$2]=$1;
 		}
