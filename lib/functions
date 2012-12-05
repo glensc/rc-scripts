@@ -754,9 +754,17 @@ killproc() {
 	# experimental start-stop-daemon based killing.
 	# works only with pidfile
 	if is_no "$RC_LOGGING" && [ "$pidfile" ]; then
-		local sig=${killlevel:--TERM}
+		local sig=${killlevel:--TERM} retry
+		# retry only if signal is not specified,
+	   	# as otherwise impossible to send HUP if process pid stays in pidfile.
+		if [ "${killlevel+set}" = "set" ]; then
+			# if we send HUP it's ok if process does not die
+			retry="--oknodo"
+		else
+			retry="--retry ${sig#-}/10/${sig#-}/60/KILL/10"
+		fi
 		/sbin/start-stop-daemon -q --stop \
-			--retry ${sig#-}/10/${sig#-}/60/KILL/10 \
+			$retry \
 			-s ${sig#-} \
 			${pidfile:+--pidfile $pidfile}
 		result=$?
