@@ -24,8 +24,6 @@ need_hostname
 # device name must be ifcfg-somename
 DEV=$1
 
-SYSCTLDEVICE=$(echo ${DEVICE} | sed 's/\./\//g')
-
 [ -z "$DEV" ] && {
 	nls "Usage: %s <device name>" "ifup" >&2
 	exit 1
@@ -65,6 +63,8 @@ IPSETUP=no
 
 # set all major variables
 setup_ip_param
+
+SYSCTLDEVICE=$(echo ${DEVICE} | sed 's/\./\//g')
 
 OTHERSCRIPT="/lib/rc-scripts/ifup-${DEVICETYPE}"
 
