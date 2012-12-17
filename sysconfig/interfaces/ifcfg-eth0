@@ -36,3 +36,6 @@ QDISC=sfq
 
 # configure a 6to4 tunnel?
 #ENABLE_6TO4=yes
+
+# ethtool options like WoL
+#ETHTOOL_OPTS="wol g"
