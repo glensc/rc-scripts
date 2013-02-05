@@ -135,8 +135,9 @@ find_boot_interfaces() {
 				case $i in
 					*ifcfg-lo) continue ;;
 				esac
-				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				DEVICE=""; ONBOOT=""; USERS=""; . "$i" 2>/dev/null
 				[ ${USERS:-no} != no ] && continue
+				[ "${DEVICE:+set}" != "set" ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
@@ -146,8 +147,9 @@ find_boot_interfaces() {
 				case ${i##*/} in
 					ifcfg-lo|ifcfg-sit*|ifcfg-atm*|ifcfg-lec*|ifcfg-nas*|ifcfg-br*|ifcfg-macvlan*|ifcfg-macvtap*|ifcfg-*.*) continue ;;
 				esac
-				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				DEVICE=""; ONBOOT=""; USERS=""; . "$i" 2>/dev/null
 				[ ${USERS:-no} != no ] && continue
+				[ "${DEVICE:+set}" != "set" ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
