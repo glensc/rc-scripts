@@ -163,12 +163,17 @@ Files in /etc/sysconfig
 
 /etc/sysconfig/i18n
 
-  LANG= can be any ISO 638-1 language code
-  LC_ALL= is the setting of the localedata configuration (eg fr_CA, fr_CA.UTF-8)
-  LINGUAS= can be a : separated list of language codes
+  LANG= is the default setting of localedata configuration
+    (ISO-639-1 language code with ISO-3166-1 country code and optional
+     variant and/or encoding, eg. fr_CA, fr_CA.UTF-8);
+  LC_CTYPE=, LC_COLLATE=, LC_MESSAGES=, LC_NUMERIC=, LC_MONETARY=, LC_TIME=
+    are the individual category settings
+  LC_ALL= overrides all of the above LC_*
+  LANGUAGE= can be a : separated list of language codes
+    see locale(7) for details
   SYSTERM= use to set default TERM environment variable
 
-  The above three variables are used in rc.sysinit.
+  The above variables are used in rc.sysinit.
 
   SYSFONT= any font that is legal when used as
 	/usr/sbin/setfont $SYSFONT ...
