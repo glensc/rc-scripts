@@ -136,8 +136,8 @@ find_boot_interfaces() {
 					*ifcfg-lo) continue ;;
 				esac
 				DEVICE=""; ONBOOT=""; USERS=""; . "$i" 2>/dev/null
-				[ ${USERS:-no} != no ] && continue
 				[ "${DEVICE:+set}" != "set" ] && continue
+				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
@@ -148,8 +148,8 @@ find_boot_interfaces() {
 					ifcfg-lo|ifcfg-sit*|ifcfg-atm*|ifcfg-lec*|ifcfg-nas*|ifcfg-br*|ifcfg-macvlan*|ifcfg-macvtap*|ifcfg-*.*) continue ;;
 				esac
 				DEVICE=""; ONBOOT=""; USERS=""; . "$i" 2>/dev/null
-				[ ${USERS:-no} != no ] && continue
 				[ "${DEVICE:+set}" != "set" ] && continue
+				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
 		`
@@ -160,7 +160,8 @@ find_boot_interfaces() {
 					ifcfg-*.*) ;;
 					*) continue ;;
 				esac
-				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				DEVICE=""; ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ "${DEVICE:+set}" != "set" ] && continue
 				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
@@ -172,7 +173,8 @@ find_boot_interfaces() {
 					ifcfg-br*) ;;
 					*) continue ;;
 				esac
-				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				DEVICE=""; ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ "${DEVICE:+set}" != "set" ] && continue
 				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
@@ -184,7 +186,8 @@ find_boot_interfaces() {
 					ifcfg-macvtap*|ifcfg-macvlan*) ;;
 					*) continue ;;
 				esac
-				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				DEVICE=""; ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ "${DEVICE:+set}" != "set" ] && continue
 				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
@@ -196,7 +199,8 @@ find_boot_interfaces() {
 					ifcfg-sit*) ;;
 					*) continue ;;
 				esac
-				ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				DEVICE=""; ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+				[ "${DEVICE:+set}" != "set" ] && continue
 				[ ${USERS:-no} != no ] && continue
 				[ ${ONBOOT:-no} = yes ] && echo "${i##*/ifcfg-}"
 			done
@@ -205,7 +209,8 @@ find_boot_interfaces() {
 
 	tunnels=$(
 		for i in $(network_interface_configs 'tnlcfg-*'); do
-			ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+			DEVICE=""; ONBOOT=""; USERS=""; . "$i" 2>/dev/null
+			[ "${DEVICE:+set}" != "set" ] && continue
 			[ ${USERS:-no} != no ] && continue
 			[ ${ONBOOT:-no} = yes ] && echo "${i##*/tnlcfg-}"
 		done
