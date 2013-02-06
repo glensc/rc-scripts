@@ -2,6 +2,9 @@
 #
 # $Id$
 #
+# FIXME: this file is broken, as you can see it does nothing (does not actually load i18n file)
+# TODO: sync with lang.sh
+#
 
 test -f /etc/sysconfig/i18n
 if ($status == 0) then
