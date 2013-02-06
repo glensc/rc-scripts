@@ -163,8 +163,8 @@ Files in /etc/sysconfig
 
 /etc/sysconfig/i18n
 
-  LANG= can be any two letter ISO language code
-  LC_ALL= is the setting of the localedata configuration (eg fr_CA)
+  LANG= can be any ISO 638-1 language code
+  LC_ALL= is the setting of the localedata configuration (eg fr_CA, fr_CA.UTF-8)
   LINGUAS= can be a : separated list of language codes
   SYSTERM= use to set default TERM environment variable
 
