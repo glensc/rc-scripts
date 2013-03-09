@@ -335,7 +335,7 @@ if ! is_yes "$VSERVER"; then
 		fi
 	fi
 
-	if [ "$usb" = "1" ] && ! is_fsmounted usbfs /proc/bus/usb ; then
+	if [ "$usb" = "1" -a -d /proc/bus/usb ] && ! is_fsmounted usbfs /proc/bus/usb ; then
 		run_cmd "Mounting USB filesystem" mount -n -t usbfs -o devgid=78,devmode=664 usbfs /proc/bus/usb
 	fi
 
