@@ -192,7 +192,7 @@ AH_BOTTOM([
 #endif
 ])
 
-AM_CONFIG_HEADER(src/config.h)
+AC_CONFIG_HEADERS(src/config.h)
 AC_CONFIG_FILES([Makefile \
 	src/Makefile \
 	lib/Makefile \
