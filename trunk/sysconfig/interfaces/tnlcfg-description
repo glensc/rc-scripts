@@ -1,0 +1,42 @@
+#	$Id$
+#
+# In this file you can also put all configuration data instead
+# of using second file named ifcfg-tunnel_name.
+
+MODE={ipip|gre|sit|ipxip}
+ONBOOT=yes|no
+DEVICE=<device name>
+if	MODE=ipxip ; then
+	?
+elif	MODE=ipip || MODE=gre || MODE=sit ; then
+
+	REMOTEADDR=<IPv4 addres>
+	[ LOCALADDR=<IPv4 addres> ]
+	[ BIND_DEV= ] do jakiego device przybindować (ma związek z routingiem itp)
+
+	[ TTL= ]
+	[ TOS= ]
+	[ PMTUDISC={no|yes} ]
+
+	if	MODE=gre ; then
+
+		[ KEY= ]
+		[ IKEY= ]
+		[ OKEY= ]
+		[ ISEQ={no|yes} ]
+		[ ISEQ={no|yes} ]
+		[ OSEQ={no|yes} ]
+		[ CSUM={no|yes} ]
+		[ ICSUM={no|yes} ]
+		[ OCSUM={no|yes} ]
+	fi
+
+else	MODE=four ; then
+
+	REMOTEADDR=<IPv6 addres>
+	LOCALADDR=<IPv6 addres>
+
+	[ PRIORITY= ]
+	[ HOPLIMIT= ]
+	[ ENCAPLIMIT= ]
+fi

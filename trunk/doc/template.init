@@ -1,0 +1,172 @@
+#!/bin/sh
+#
+# <service>	<service> short service description
+#
+# chkconfig:	345 <start_level> <stop_level>
+#
+# description:	<service> long service description
+#
+# processname:	<procname>
+# config:
+# pidfile:
+#
+# $Id$
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down "<service_name>"
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+# Set defaults
+OPTION1=""	# Strings
+OPTION2="-q"	#
+OPTION3=	# Values
+OPTION4=5	#
+
+# Get service config - may override defaults
+[ -f /etc/sysconfig/<service> ] && . /etc/sysconfig/<service>
+
+pidfile="/var/run/<service>.pid"
+
+# configtest itself
+# must return non-zero if check failed
+# output is discarded if checkconfig is ran without details
+configtest() {
+	/usr/sbin/<service> -t
+	return $?
+}
+
+# wrapper for configtest
+checkconfig() {
+	local details=${1:-0}
+
+	if [ $details = 1 ]; then
+		# run config test and display report (status action)
+		show "Checking %s configuration" "<service_name>"; busy
+		local out
+		out=$(configtest 2>&1)
+		RETVAL=$?
+		if [ $RETVAL = 0 ]; then
+			ok
+		else
+			fail
+		fi
+		[ "$out" ] && echo >&2 "$out"
+	else
+		# run config test and abort with nice message if failed
+		# (for actions checking status before action).
+		configtest >/dev/null 2>&1
+		RETVAL=$?
+		if [ $RETVAL != 0 ]; then
+			show "Checking %s configuration" "<service_name>"; fail
+			nls 'Configuration test failed. See details with %s "checkconfig"' $0
+			exit $RETVAL
+		fi
+	fi
+}
+
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/<service> ]; then
+		msg_already_running "<service_name>"
+		return
+	fi
+
+	checkconfig
+	msg_starting "<service_name>"
+	daemon /usr/sbin/<service>
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/<service>
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/<service> ]; then
+		msg_not_running "<service_name>"
+		return
+	fi
+
+	# Stop daemons.
+	msg_stopping "<service_name>"
+	killproc <procname>
+	killproc --pidfile $pidfile <procname> -TERM
+	rm -f /var/lock/subsys/<service>
+}
+
+reload() {
+	if [ ! -f /var/lock/subsys/<service> ]; then
+		msg_not_running "<service_name>"
+		RETVAL=7
+		return
+	fi
+
+	checkconfig
+	msg_reloading "<service_name>"
+	killproc <procname> -HUP
+	killproc --pidfile $pidfile <procname> -HUP
+	RETVAL=$?
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/<service> ]; then
+		msg_not_running "<service_name>"
+		RETVAL=$1
+		return
+	fi
+
+	checkconfig
+	stop
+	start
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart)
+	checkconfig
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+# include force-reload here if program allows reloading without restart
+# otherwise remove reload action and support force-reload as restart if running
+  reload|force-reload)
+	reload
+	;;
+# use this one if program doesn't support reloading without restart
+  force-reload)
+	condrestart 7
+	;;
+  checkconfig|configtest)
+	checkconfig 1
+	;;
+  status)
+	status <service>
+	status --pidfile $pidfile <service>
+	status --pidfile $pidfile <service> <procname>
+	RETVAL=$?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|checkconfig|status}"
+	exit 3
+esac
+
+exit $RETVAL

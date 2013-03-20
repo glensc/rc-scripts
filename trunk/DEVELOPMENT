@@ -1,0 +1,58 @@
+	   READ THIS BEFORE CHANGEING SOMETHING IN RC-SCRIPTS PACKAGE
+		    Arkadiusz Miskiewicz <misiek@pld-linux.org>
+	    $Id$
+
+1)
+	consult all major changes with people on pld-rc-scripts@pld-linux.org
+mailing list. This is very important.
+
+2)
+	use 'local' for local variables in functions for example:
+
+function_ble ()
+{
+local qw er=0
+qw=$(tty)
+er=/dev/console
+echo "$qw $er"
+}
+
+3)
+	use $() instead `` for command execution for example
+
+something=$(whoami)
+instead of
+something="`whoami`"
+
+Warning! The following snippet will not work, use `` in such cases:
+There is one ')' too many there.
+
+interfaces_boot=$(
+	case $i in
+		*ifcfg-lo) continue ;;
+	esac
+)
+
+4)	don't use sed ! It only causes one more Requires.
+	Use awk ' { gsub(/pattern/,"replaced"); print $0; } ' for that.
+	Also try to replace grep calls with awk calls.
+	
+5)
+	(PL) Tlumaczac komunikaty na PL nalezy uzywac formy bezosobowej np:
+
+uruchamianie uslugi
+zamiast
+uruchamiam usluge
+
+
+
+HOW TO MAKE A RELEASE
+
+- svn up
+- ./autogen.sh
+- make distcheck
+- update configure.ac release and commit it
+- svn up && ./changelog.sh && svn ci ChangeLog
+- make dist
+- ./make-tag.sh
+- upload tarball to distfiles, update rc-scripts.spec:HEAD

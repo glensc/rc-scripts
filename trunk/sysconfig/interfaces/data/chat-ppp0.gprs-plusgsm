@@ -1,0 +1,10 @@
+ABORT "BUSY"
+ABORT "ERROR"
+ABORT "NO CARRIER"
+ABORT "NO DIALTONE"
+ABORT "NO ANSWER"
+ABORT "Username/Password Incorrect"
+"" ATZ
+OK AT+CGDCONT=1,"IP","www.plusgsm.pl","",0,0
+OK "ATD*99***1#"
+CONNECT ''

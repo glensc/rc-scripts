@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# local	Invoke custom scripts at startup
+# chkconfig:	2345 99 01
+#
+# description:	This script will be executed *after* all the other init \
+# scripts. You can put your own initialization stuff in here if you don't \
+# want to do the full Sys V style init stuff.
+#
+# $Id$
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+upstart_controlled
+
+# See how we were called.
+case "$1" in
+  start)
+	msg_starting "rc.local"
+	. /etc/rc.d/rc.local
+	ok
+	touch /var/lock/subsys/local
+	;;
+  stop)
+	rm -f /var/lock/subsys/local >/dev/null 2>&1
+	;;
+  status)
+	if [ -f /var/lock/subsys/local ]; then
+		nls 'rc.local has been started'
+	else
+		nls 'rc.local has not been started'
+	fi
+	;;
+  *)
+	msg_usage "$0 {start|stop|status}"
+	exit 3
+esac
+
+exit 0

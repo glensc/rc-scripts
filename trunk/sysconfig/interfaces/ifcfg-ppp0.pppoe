@@ -1,0 +1,29 @@
+# name of the device
+DEVICE=ppp0
+
+# add the password in /etc/ppp/chap-secrets
+PAPNAME=adslusername
+
+AUTH=no
+IPV6_PPP=no
+PPPOE_DEV=eth1
+PPPOE_KERNEL=yes
+#PPPOE_OPTS="persist"
+HARDFLOWCTL=yes
+DEBUG=no
+PERSIST=no
+HOLDOFF=10
+DEMAND=no
+DEFROUTE=yes
+PEERDNS=yes
+
+# you may select which of the above addresses
+# is primary for this interface (it'd be IPADDR1 in the example below)
+#IP4_PRIM_IF="1"
+
+# activate on boot? yes|no
+# you must set it to 'yes' if you want to have this up after bootup
+ONBOOT=yes
+
+# dhcp|pump|none
+BOOTPROTO=none

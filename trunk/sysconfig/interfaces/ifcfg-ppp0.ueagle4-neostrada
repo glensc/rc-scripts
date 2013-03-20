@@ -1,0 +1,24 @@
+#
+DEVICE="ppp0"
+ONBOOT="no"
+
+PAPNAME="xxxxxxx@neostrada.pl"
+
+HARDFLOWCTL=no
+DEFROUTE=yes
+USEPEERDNS=yes
+AUTH=no
+#MTU=1452
+SYNC=yes
+
+PPPOA=yes
+PPPOA_VPI=0
+PPPOA_VCI=35
+
+PERSIST=yes
+MAXFAIL=0
+HOLDOFF=4
+
+PPPOPTIONS="noipdefault noaccomp nopcomp noccp"
+
+DEBUG=yes

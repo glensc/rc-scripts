@@ -1,0 +1,55 @@
+#!/bin/sh
+#
+#	$Id$
+#
+# Adds static routes which go through device $DEVICE
+# Called from ifup-post.
+
+if [ ! -f /etc/sysconfig/static-routes -a ! -f /etc/sysconfig/static-routes6 ]; then
+	return
+fi
+
+# note the trailing white space character in the grep gets rid of aliases
+grep -E "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-routes | while read device args; do
+	if [[ "$args" = *:* ]]; then
+		if is_no "$IPV6_NETWORKING"; then
+			continue
+		fi
+	else
+		if is_no "$IPV4_NETWORKING"; then
+			continue
+		fi
+	fi
+	/sbin/ip route add $args dev $REALDEVICE
+done
+
+if ! is_no "$IPV6_NETWORKING"; then
+	grep -E "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-routes6 | while read device args; do
+		/sbin/ip -6 route add $args dev $REALDEVICE
+	done
+fi
+
+# based on information from http://avahi.org/wiki/AvahiAutoipd#Routes
+if is_yes "$ZEROCONF" && ! /sbin/ip link show dev $REALDEVICE | grep -q POINTOPOINT ; then
+	# metric based on device ifindex, so the same route may be added to
+	# multiple devices. Big, so it won't conflict with anything else.
+	if [ -f /sys/class/net/$REALDEVICE/ifindex ] ; then
+		metric="$(cat /sys/class/net/$REALDEVICE/ifindex)"
+		metric=$(($metric + 1000))
+	else
+		metric=1000
+	fi
+
+	# default route in default table, so it won't override default
+	# route set by other means
+	/sbin/ip route add default metric $metric dev $REALDEVICE table default
+
+	# add 169.254.0.0/16 route if not already present on the device
+	current=$(/sbin/ip route show 169.254.0.0/16 dev $REALDEVICE)
+	if [ -z "$current" ] ; then
+		/sbin/ip route add 169.254.0.0/16 metric $metric dev $REALDEVICE
+	fi
+
+	unset metric
+	unset current
+fi

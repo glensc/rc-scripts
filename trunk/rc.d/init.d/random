@@ -1,0 +1,95 @@
+#!/bin/sh
+#
+# random	Script to snapshot random state and reload it at boot time.
+#
+# chkconfig:	12345 20 80
+#
+# description:	Saves and restores system entropy pool for higher quality \
+#		random number generation.
+#
+# $Id$
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# do nothing in vserver
+if is_yes "$VSERVER"; then
+	return
+fi
+
+upstart_controlled start stop
+
+random_seed=/var/run/random-seed
+
+poolfile=/proc/sys/kernel/random/poolsize
+[ -r $poolfile ] && bytes="$(cat $poolfile)" || bytes=512
+
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/random ]; then
+		return
+	fi
+
+	emit starting JOB=random
+	show "Initializing random number generator"
+	busy
+	# Carry a random seed from start-up to start-up
+	if [ -f $random_seed ]; then
+		cat $random_seed >/dev/urandom
+	else
+		touch $random_seed
+	fi
+	chmod 600 $random_seed
+	dd if=/dev/urandom of=$random_seed count=1 bs=$bytes 2>/dev/null
+	touch /var/lock/subsys/random
+	deltext
+	ok
+	emit --nowait started JOB=random
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/random ]; then
+		return
+	fi
+
+	# Carry a random seed from shut-down to start-up
+	emit stopping JOB=random
+	show "Saving random seed"
+	busy
+	touch $random_seed
+	chmod 600 $random_seed
+	dd if=/dev/urandom of=$random_seed count=1 bs=$bytes 2>/dev/null
+
+	rm -f /var/lock/subsys/random >/dev/null 2>&1
+	deltext
+	ok
+	emit --no-wait stopped JOB=random
+}
+
+status() {
+	entropy_avail="$(cat /proc/sys/kernel/random/entropy_avail)"
+	if [ "$entropy_avail" -eq 0 -o ! -c /dev/random ] ; then
+		nls "The random data source is missing"
+		RETVAL=1
+	else
+		nls "%d bytes of entropy available" $entropy_avail
+	fi
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status
+	;;
+  *)
+	msg_usage "$0 {start|stop|status}"
+	exit 3
+esac
+
+exit 0

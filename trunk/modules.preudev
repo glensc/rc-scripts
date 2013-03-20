@@ -1,0 +1,22 @@
+# /etc/modules.preudev: kernel modules to load before udev at boot time.
+# $Id$
+#
+# This file should contain the names of kernel modules that are
+# to be loaded before udev starts doing its magick at boot time,
+# one per line with extra args treated as modprobe options.
+#
+# Comments begin with a `#', and everything on the line after them are ignored.
+#
+# You can also have /etc/modules.preudev.X.Y and /etc/modules.preudev.X.Y.Z,
+# where X.Y.Z are kernel version numbers
+# The modules files are processed in exactly that order too.
+
+# example set for DELL MD3000 array driver
+#sd_mod
+#sg
+#mppUpper
+#mptsas
+#mppVhba
+
+# modules can take params as well:
+#loop max_loop=256

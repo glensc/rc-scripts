@@ -1,0 +1,195 @@
+#!/bin/sh
+
+# Set up a default search path.
+PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+export PATH
+
+is_ignored_file() {
+	case "$1" in
+	skeleton | README | *.dpkg-dist | *.dpkg-old | rc | rcS | single | reboot | bootclean.sh)
+		return 0
+		;;
+	*rpmorig | *rpmnew | *rpmsave | *~ | *.orig)
+		return 0
+		;;
+	esac
+	return 1
+}
+
+# check if SERVICE is present in systemd and ACTION is valid systemctl command
+# returns false if systemd is disabled or not active
+is_systemd_service() {
+	local SERVICE=$1 ACTION=$2
+
+	[ "$USE_SYSTEMD" = "no" ] && return 1
+
+	# if we are called from systemd itself, because some .service specified
+	# invocation via /sbin/service. this avoids loops
+	# detect this via CMDLINE var, which has leaked from geninitrd
+	if [ -n "$CMDLINE" ]; then
+		echo >&2  "Warning: CMDLINE env set, likely you are defining .service to use /sbin/service, please use /etc/rc.d/init.d/<SERVICE> instead"
+		return 1
+	fi
+
+	case "$ACTION" in
+	# list obtained as: man systemctl | grep N.*A.*M.*E
+	start | \
+	stop | \
+	reload | \
+	restart | \
+	try-restart | \
+	reload-or-restart | \
+	reload-or-try-restart | \
+	isolate | \
+	kill | \
+	is-active | \
+	status | \
+	show | \
+	reset-failed | \
+	enable | \
+	disable | \
+	is-enabled | \
+	reenable | \
+	preset | \
+	mask | \
+	unmask | \
+	link | \
+	load | \
+	snapshot | \
+	delete | \
+	set-environment | \
+	unset-environment )
+		;;
+	*)
+		#echo "Not valid systemd command"
+		return 1
+	esac
+
+	[ -x /bin/systemd_booted ] || return 1
+	/bin/systemd_booted || return 1
+
+	/bin/systemctl show "$SERVICE".service | grep -q LoadError= && return 1 || return 0
+}
+
+status_all() {
+	local SERVICE TYPE
+	cd ${SERVICEDIR}
+	for SERVICE in *; do
+		case "${SERVICE}" in
+		functions | halt | killall | single| linuxconf| kudzu)
+			;;
+		*)
+		if ! is_ignored_file "${SERVICE}" \
+				&& [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+			if [ -f /etc/init/${SERVICE}.conf ]; then
+				# U for upstart
+				TYPE='U'
+			else
+				# S for SysVinit
+				TYPE='S'
+			fi
+			if ! grep -qs "\Wstatus)" "$SERVICE"; then
+				#printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
+				echo " [ ? ]{$TYPE} $SERVICE"
+				continue
+			else
+				out=$(env -i USE_UPSTART=$USE_UPSTART LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
+				if [ "$?" = "0" -a -n "$out" ]; then
+					#printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
+					echo " [ + ]{$TYPE} $SERVICE"
+					continue
+				else
+					#printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
+					echo " [ - ]{$TYPE} $SERVICE"
+					continue
+				fi
+			fi
+			#env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
+		fi
+		;;
+		esac
+	done
+}
+
+VERSION="$(basename $0) ver. 0.91-pld"
+USAGE="Usage: $(basename $0) < option > | --status-all | \
+[ service_name [ command | --full-restart ] ]"
+
+SERVICE=
+USE_UPSTART=
+USE_SYSTEMD=
+
+if [ -d /etc/rc.d/init.d ]; then
+	SERVICEDIR="/etc/rc.d/init.d"
+else
+	SERVICEDIR="/etc/init.d"
+fi
+
+if [ $# -eq 0 ]; then
+	echo "${USAGE}" >&2
+	exit 1
+fi
+
+cd /
+while [ $# -gt 0 ]; do
+	case "${1}" in
+	--help | -h | --h* )
+		echo "${USAGE}" >&2
+		exit 0
+		;;
+	--version | -V )
+		echo "${VERSION}" >&2
+		exit 0
+		;;
+	--ignore-dependencies)
+		export SYSTEMCTL_IGNORE_DEPENDENCIES=1
+		shift
+		;;
+	--skip-redirect)
+		export SYSTEMCTL_SKIP_REDIRECT=1
+		shift
+		;;
+	--upstart)
+		USE_UPSTART=yes
+		shift
+		;;
+	--no-upstart)
+		USE_UPSTART=no
+		shift
+		;;
+	--no-systemd)
+		USE_SYSTEMD=no
+		shift
+		;;
+	  *)
+		if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
+			status_all
+			exit 0
+		elif [ $# -eq 2 -a "${2}" = "--full-restart" ]; then
+			SERVICE="${1}"
+			if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+				env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" stop
+				env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" start
+				exit $?
+			fi
+		elif [ -z "${SERVICE}" ]; then
+			SERVICE="${1}"
+		elif [ -z "${ACTION}" ]; then
+			ACTION="${1}"
+		else
+			OPTIONS="${OPTIONS} ${1}"
+		fi
+		shift
+		;;
+	esac
+done
+
+if is_systemd_service "${SERVICE}" "${ACTION}"; then
+	echo >&2 "Redirecting to /bin/systemctl --output=cat ${ACTION} ${SERVICE}.service ${OPTIONS}"
+	exec /bin/systemctl --output=cat ${ACTION} ${SERVICE}.service ${OPTIONS}
+elif [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+	exec env -i USE_UPSTART=$USE_UPSTART LANG=$LANG PATH=$PATH TERM=$TERM "${SERVICEDIR}/${SERVICE}" ${ACTION} ${OPTIONS}
+else
+	echo "${SERVICE}: unrecognized service" >&2
+	exit 1
+fi

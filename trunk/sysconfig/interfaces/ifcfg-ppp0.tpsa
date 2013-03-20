@@ -1,0 +1,24 @@
+# $Id$
+#
+DEVICE=ppp0
+CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.tpsa
+ONBOOT=no
+HARDFLOWCTL=yes
+MODEMPORT=/dev/ttyS1
+LINESPEED=115200
+AUTH=no
+QDISC="sfq quantum 1500b perturb 5"
+DEBUG=yes
+PERSIST=no
+HOLDOFF=10
+#demand option not finished yet ;-(
+DEMAND=no
+#ACTIVEFILTER=
+#IDLE=
+PHONE=0w202122
+USER=ppp
+PASSWORD=ppp
+INITSTRING=ATe0s2=255
+DATAFORCHAT="USER PASSWORD INITSTRING PHONE"
+
+REPORTFILE=/var/log/ppp0.log

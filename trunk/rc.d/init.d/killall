@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# killall	Script for system downing
+#
+# description:	kill em all
+#
+# $Id$
+
+# Bring down all services that are still running (there shouldn't be any, so
+# this is just a sanity check)
+
+# First set up a default search path.
+export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+
+case "$1" in
+  start*)
+	exit 0
+	;;
+  stop*)
+	for i in /var/lock/subsys/*; do
+		# Check if the script is there.
+		[ ! -f $i ] && continue
+
+		# Get the subsystem name.
+		subsys=${i#/var/lock/subsys/}
+
+		# Bring the subsystem down.
+		if [ -x /etc/rc.d/init.d/$subsys ]; then
+			/etc/rc.d/init.d/$subsys stop
+		elif [ -x /etc/rc.d/init.d/$subsys.init ]; then
+			/etc/rc.d/init.d/$subsys.init stop
+		fi
+	done
+	;;
+esac
+
+exit 0

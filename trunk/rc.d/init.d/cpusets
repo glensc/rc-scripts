@@ -1,0 +1,197 @@
+#!/bin/sh
+#
+# cpusets	Create/remove cpusets
+#
+# chkconfig:	12345 01 99
+# description:	Creates/Removes all cpu sets configured to \
+#		start at boot time.
+#
+# probe:	true
+
+# $Id$
+
+. /etc/sysconfig/system
+
+if [ "${CPUSETS:-no}" = "no" ]; then
+   	case "$1" in
+	start|stop|restart)
+		exit 0
+		;;
+	esac
+fi
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+CGDIR=
+CSUBSYS=
+if grep -q "/dev/cgroup" /proc/mounts ; then
+	CGDIR="/dev/cgroup"
+elif grep -q "/dev/cpuset" /proc/mounts ; then
+	CGDIR="/dev/cpuset"
+fi
+
+if [ -n "${CGDIR}" ]; then
+	if [ -e ${CGDIR}/cpuset.cpus ]; then
+		CSUBSYS="cpuset."
+	elif [ ! -e ${CGDIR}/cpus ]; then
+		nls "ERROR: CGROUP/CPUSET mounted in a way I can't recognize" >&2
+		exit 1
+	fi
+fi
+
+cpuset_mount() {
+	[ -n "${CGDIR}" ] && return
+
+	if grep -q cgroup /proc/filesystems 2>/dev/null ; then
+		mkdir -p /dev/cpuset 2>/dev/null
+		mount -t cgroup none /dev/cpuset -ocpuset
+		CSUBSYS="cpuset."
+	elif grep -q cpuset /proc/filesystems 2>/dev/null ; then
+		mkdir -p /dev/cpuset 2>/dev/null
+		mount -t cpuset none /dev/cpuset
+		CSUBSYS=""
+	else
+		nls "ERROR: CGROUP/CPUSET support not enabled in kernel" >&2
+		exit 1
+	fi
+	CGDIR="/dev/cpuset"
+}
+
+cpuset_create() {
+	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
+
+	. /etc/sysconfig/cpusets/cpuset-$i
+
+	if mkdir "${CGDIR}/${NAME}" >/dev/null 2>&1 ; then
+		[ -n "$CPUS" ] && echo "$CPUS" >"${CGDIR}/${NAME}/${CSUBSYS}cpus"
+		[ -n "$MEMS" ] && echo "$MEMS" >"${CGDIR}/${NAME}/${CSUBSYS}mems"
+		[ -n "$CPU_EXCLUSIVE" ] && echo "$CPU_EXCLUSIVE" >"${CGDIR}/${NAME}/${CSUBSYS}cpu_exclusive"
+		[ -n "$MEM_EXCLUSIVE" ] && echo "$MEM_EXCLUSIVE" >"${CGDIR}/${NAME}/${CSUBSYS}mem_exclusive"
+		[ -n "$VIRTUALIZE" ] && echo "$VIRTUALIZE" >"${CGDIR}/${NAME}/${CSUBSYS}virtualize"
+		[ -n "$NOTIFY_ON_RELEASE" ] && echo "$NOTIFY_ON_RELEASE" >"${CGDIR}/${NAME}/${CSUBSYS}notify_on_release"
+		[ -n "$TASKS" ] && echo "$TASKS" >"${CGDIR}/${NAME}/tasks"
+		return 0
+	fi
+	return 1
+}
+
+cpuset_remove() {
+	local CPUS MEMS CPU_EXCLUSIVE MEM_EXCLUSIVE NOTIFY_ON_RELEASE TASKS
+
+	. /etc/sysconfig/cpusets/cpuset-$i
+
+	# This MUST be rmdir (not rm -rf)
+	if rmdir "${CGDIR}/${NAME}" >/dev/null 2>&1 ; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+cpuset_empty() {
+	if [ $(cat "${CGDIR}/$1/tasks" 2>/dev/null | wc -c) -eq 0 ] ; then
+		# true returns zero
+		return 0
+	else
+		# false returns one
+		return 1
+	fi
+}
+
+start() {
+  	rc_splash "bootcpusets start"
+
+	for i in $cpusets_boot; do
+		show "$(nls -n "Creating cpuset %s" "$i")"
+		if cpuset_create $i ; then
+			ok
+		else
+			fail
+		fi
+	done
+
+	touch /var/lock/subsys/cpusets
+}
+
+stop() {
+	for i in $cpusets_boot; do
+		show "$(nls -n "Removing cpuset %s" "$i")"
+		busy
+		if cpuset_empty $i; then
+			if cpuset_remove $i; then
+				ok
+			else
+				fail
+			fi
+		else
+			fail
+		fi
+	done
+
+	rm -f /var/lock/subsys/cpusets >/dev/null 2>&1
+}
+
+# Get list of config files
+# ignores editor backup files and rpm blackups
+cpuset_configs() {
+	local match="$1"
+	for a in /etc/sysconfig/cpusets/$match; do
+		case "$a" in
+		*rpmorig|*rpmnew|*rpmsave|*~|*.orig)
+			continue
+			;;
+		*)
+			echo $a
+		;;
+		esac
+	done
+}
+
+cpuset_files="$(cpuset_configs 'cpuset-*')"
+cpusets_boot=$(
+	for i in $cpuset_files; do
+		ONBOOT=""; . "$i" 2>/dev/null
+		is_yes "$ONBOOT" && echo "${i##*/cpuset-}"
+	done
+)
+
+# See how we were called.
+case "$1" in
+  start)
+	cpuset_mount
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  status)
+	nls "Configured cpusets:"
+	echo "$cpusets_boot"
+	echo
+	nls "Currently empty cpusets:"
+	for i in $(ls /dev/cpuset 2>/dev/null); do
+		if [ -d ${CGDIR}/$i ]; then
+			cpuset_empty $i && echo $i
+		fi
+	done
+	echo
+	nls "Currently active cpusets:"
+	for i in $(ls /dev/cpuset 2>/dev/null); do
+		if [ -d ${CGDIR}/$i ]; then
+			cpuset_empty $i || echo $i
+		fi
+	done
+	echo
+	;;
+  restart)
+	stop
+	cpuset_mount
+	start
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|status}"
+	exit 3
+esac
+
+exit 0

@@ -1,0 +1,208 @@
+$Id$
+
+rc-scripts files:
+========================================
+
+/sbin/ifup:
+/sbin/ifdown:
+
+  These are the only two scripts "in" this directory that should
+  be called directly; these two scripts call all the other
+  scripts as needed.
+
+  These scripts take one argument normally: the name of the device
+  (e.g. eth0).  They are called with a second argument of "boot"
+  during the boot sequence so that devices that are not meant to
+  be brought up on boot (ONBOOT=no, see below) can be ignored at
+  that time.
+
+/sbin/network-scripts/network-functions:
+
+  Not really a public file.  Contains functions which the scripts use
+  for bringing interfaces up and down.  In particular, it contains
+  most of the code for handling alternative interface configurations
+  and interface change notification through netreport.
+
+/lib/rc-scripts/ifup-post
+
+  Called when any network device EXCEPT a SLIP (with dip) device comes
+  up.  Calls /lib/rc-scripts/ifup-routes to
+  bring up static routes that depend on that device.  Calls
+  /sbin/network-scripts/ifup-aliases to bring up
+  aliases for that device.  Sets the hostname if it is not
+  already set and a hostname can be found for the IP for that
+  device.  Sends SIGIO to any programs that have requested
+  notification of network events.
+
+  Could be extended to fix up nameservice configuration, call
+  arbitrary scripts, etc, as needed.
+
+/lib/rc-scripts/ifup-routes
+
+  Set up static routes for a device.
+
+/lib/rc-scripts/ifup-aliases
+
+  Bring up aliases for a device.
+
+/lib/rc-scripts/ifdhcpc-done
+
+  Called by dhcpcd once dhcp configuration is complete; sets
+  up /etc/resolv.conf from the version dhcpcd dropped in
+  /etc/dhcpc/resolv.conf
+  
+Files in /etc/sysconfig/interfaces/
+========================================
+
+/etc/sysconfig/interfaces/ifcfg-<interface-name> and
+/etc/sysconfig/interfaces/ifcfg-<interface-name>-<clone-name>:
+
+  The first defines an interface, and the second contains
+  only the parts of the definition that are different in a
+  "clone" (or alternative) interface.  For example, the
+  network numbers might be different, but everything else
+  might be the same, so only the network numbers would be
+  in the clone file, but all the device information would
+  be in the base ifcfg file.
+
+  The items that can be defined in an ifcfg file depend on the
+  interface type.  The really obvious ones I'm not going to
+  bother to define; you can figure out what "IPADDR" is, I
+  think...  :-)
+
+  Base items:
+    DEVICE=<name of physical device (except dynamically-allocated PPP
+      devices where it is the "logical name")
+    IPADDR=		IP_AOPTS=	IP_ROPTS=	IP_LABEL=
+    IPADDR1=		IP_AOPTS1=	IP_ROPTS1=	IP_LABEL1=
+    IP_ADDRx=		IP_AOPTSx=	IP_ROPTSx=	IP_LABELx=
+    IP4_PRIM_IF=	IP4_SRC_IF=
+    IP6_PRIM_IF=
+    GATEWAY=
+    ONBOOT=yes|no
+    USERCTL=yes|no
+    BOOTPROTO=none|bootp|dhcp|pump|zeroconf|auto
+    ETHTOOL_OPTS=
+
+  If BOOTPROTO is not "none", then the only other item that
+  must be set is the DEVICE item; all the rest will be determined
+  by the boot protocol.  No "dummy" entries need to be created.
+
+  Ethernet-only items:
+    {IPXNETNUM,IPXPRIMARY,IPXACTIVE}_{802_2,802_3,ETHERII,SNAP}
+    configuration matrix for IPX.  Only used if IPX is active.
+    Managed from /lib/rc-scripts/ifup-ipx
+
+  Deprecated, but supported:
+    ETHTOOL_OPTS=...
+      Any device-specific options supported by ethtool. For example,
+      if you wanted to force 100Mb full duplex:
+        ETHTOOL_OPTS="speed 100 duplex full autoneg off"
+      Note that changing speed or duplex settings almost always
+      requires disabling autonegotiation with 'autoneg off'.
+
+      Long term, this should be done by sysadmin-written udev rules.
+
+  PPP/SLIP items:
+    PERSIST=yes|no
+    MODEMPORT=<device, say /dev/modem>
+    LINESPEED=<speed, say 115200>
+    DEFABORT=yes|no (tells netcfg whether or not to put default
+      abort strings in when creating/editing the chat script and/or
+      dip script for this interface)
+ 
+  PPP-specific items
+    DEFROUTE=yes|no (set this interface as default route?)
+    ESCAPECHARS=yes|no (simplified interface here doesn't let people
+      specify which characters to escape; almost everyone can use
+      asyncmap 00000000 anyway, and they can set PPPOPTIONS to
+      asyncmap foobar if they want to set options perfectly)
+    HARDFLOWCTL=yes|no (yes imples "modem crtscts" options)
+    PPPOPTIONS=<arbitrary option string; is placed last on the
+      command line, so it can override other options like asyncmap
+      that were specified differently>
+    PAPNAME=<"name $PAPNAME" on pppd command line> (note that
+      the "remotename" option is always specified as the logical
+      ppp device name, like "ppp0" (which might perhaps be the
+      physical device ppp1 if some other ppp device was brought
+      up earlier...), which makes it easy to manage pap/chap
+      files -- name/password pairs are associated with the
+      logical ppp device name so that they can be managed
+      together.
+
+      In principal, I'm not aware of anything that would keep
+      the logical PPP device names from being "worldnet" or
+      "myISP" instead of ppp0-pppN)
+    REMIP=<remote ip4 address, normally unspecified>
+    REMIP6=<remote ip6 address, normally unspecified>
+    MTU=
+    MRU=
+    DISCONNECTTIMEOUT=<number of seconds, default currently 5>
+      (time to wait before re-establishing the connection after
+      a successfully-connected session terminates before attempting
+      to establish a new connection.)
+    RETRYTIMEOUT=<number of seconds, default currently 60>
+      (time to wait before re-attempting to establish a connection
+      after a previous attempt fails.)
+    INITSCRIPT=<modem command>
+      string which initialises your modem. Usualy something like 
+      AT&F0&C1&D2
+      (PLD Linux rc-scripts specific option)
+    DATAFORCHAT=<list of variables>
+      List of variables which should be exported to chat script.
+      Used mostly for passing USERNAME and PASSWORD into it. (see below)
+      (PLD Linux rc-scripts specific option)
+    PEERDNS=yes|no
+    IPV6_PPP=yes|no
+      use IPv6 for ppp
+       IPV6_CP_USEV4=yes|no
+         use local IPv4 mapped addresses as IPv6 addresses
+       IPV6_CP_PERSISTENT=yes|no
+         use EUI-48 addresses as IPv6 addresses
+       or by default use address specified by IP6_PRIM_IF and REMIP6
+    ENABLE_6TO4=yes|no
+      configure a 6to4 tunnel, if the interface has a public
+      (non-RFC1918) IPv4 address
+    <anything>=<anything>
+      Variable name and it's value for use by chat script.
+      Note: You don't have to define variables here, if they are defined 
+      in parent process enviroment they will be used.
+      in.ex. USERNAME usualy is. 
+  
+  IPIP/GRE/SIT tunnel-specific items
+    REMOTEIP=<ip_addres>
+      address of the remote end of tunnel
+    LOCALIP=<ip_addres>
+      address of the local end of tunnel
+      
+
+
+/etc/sysconfig/interfaces/ifcfg-<interface-name>-<anything>!:
+
+  Template or backup file. This will not be interpreted
+  by net-scripts.
+
+/etc/sysconfig/interfaces/data/chat-<interface-name>:
+
+  chat script for PPP or SLIP connection intended to establish
+  the connection.  For SLIP devices, a DIP script is written
+  from the chat script; for PPP devices, the chat script is used
+  directly.
+  In PLD Linux version of rc-scripts, this file is parsed by shell
+  (actually by grep in firstplace to get rid of comments) before it
+  is passed to chat.
+  This allows you to substitute shell variables with their values 
+  defined in <interface name> or more generally in current env.
+  If You wonder about purbose, imagine one chat-script for all links 
+  at ISP's border router or computer in home where all users have own IPS's
+  accounts and want to pay only for themselfes.
+  Unfortunetly this parsing have impact on chat script syntax.
+  All characters that have special meaning for shell have to be escaped.
+  
+  
+/etc/sysconfig/interfaces/data/dip-<interface-name>
+
+  A write-only script created from the chat script by netcfg.
+  Do not modify this.  In the future, this file may disappear
+  by default and created on-the-fly from the chat script if
+  it does not exist.

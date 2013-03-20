@@ -1,0 +1,8 @@
+ABORT	BUSY
+ABORT	ERROR
+ABORT   'NO CARRIER'
+ABORT	'NO DIALTONE'
+SAY		"\nSending interruption to CDMA modem\n"
+""		"\K"
+""		"+++ATH"
+SAY		"\nCDMA connection interrupted\n"

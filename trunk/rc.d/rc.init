@@ -1,0 +1,27 @@
+#!/bin/sh
+# $Id$
+#
+# If this script is intalled as /etc/rc.d/rc.init,
+# it is executed by init(8) for every program it
+# wants to spawn like this:
+#
+# /bin/sh /etc/rc.d/rc.init <id> <level> <action> <process>
+#
+# It can be used to set the default umask and ulimit
+# of all processes. See initscript(5) for more details.
+
+[ -r /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
+
+[ -n "$LANG" ] && export LANG || unset LANG
+[ -n "$LC_CTYPE" ] && export LC_CTYPE || unset LC_CTYPE
+[ -n "$LC_COLLATE" ] && export LC_COLLATE || unset LC_COLLATE
+[ -n "$LC_MESSAGES" ] && export LC_MESSAGES || unset LC_MESSAGES
+[ -n "$LC_NUMERIC" ] && export LC_NUMERIC || unset LC_NUMERIC
+[ -n "$LC_MONETARY" ] && export LC_MONETARY || unset LC_MONETARY
+[ -n "$LC_TIME" ] && export LC_TIME || unset LC_TIME
+[ -n "$LC_ALL" ] && export LC_ALL || unset LC_ALL
+[ -n "$LANGUAGE" ] && export LANGUAGE || unset LANGUAGE
+[ -n "$LINGUAS" ] && export LINGUAS || unset LINGUAS
+
+# Execute the program.
+eval exec "$4"

@@ -1,0 +1,37 @@
+$Id$
+
+Important:
+- don't set any flags automatically; always follow user
+  suggestion (multicast, arp)
+- merge baggins changes in atm-rc (added support for RFC1483/2684 Bridged
+  protocol)
+- killproc() sucks and has no consistency, error reporting
+  you'll never know which side of PROCNAME you should add the --waitforname or -SIGNAL args
+  because if you put -SIGNAL at wrong side of PROGNAME it will enter infinitive loop:
+    killproc -TERM --waitforname slapd --waitfortime 300 slapd
+  if you put --waitforname at wrong side, it will just ignore them:
+    killproc slapd -TERM --waitforname slapd --waitfortime 300
+  while correct would be:
+    killproc --waitforname slapd --waitfortime 300 slapd -TERM
+- switch to use __umount_*loop instead of own umount loop when stopping system
+- rc-scripts won't work if /dev/console is invalid (for example I made typo when configuring serial
+  console, console=ttys1,... instead of console=ttyS1) - rc.d/rc uses /dev/console a lot
+
+Other:
+- maybe merge ATM rc scripts
+
+We are waiting for suggestions.
+
+upstart:
++upstart_controlled --except reload
++
++# return true if service is considered "up"
++# with upstart, upstart is consulted
++# otherwise lockfile in subsys must exist
++is_service_up() {
++	use_upstart && is_upstart_running "$1" || [ -f /var/lock/subsys/"$1" ]
++}
++
+
+from nscd.init
+

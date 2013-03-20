@@ -1,0 +1,5 @@
+#!/bin/sh
+
+jade -t sgml -d polski.dsl rc-scripts.docb
+#jade -t sgml -d polski.dsl test-ogonki.docb
+rst2html upstart.txt upstart.html

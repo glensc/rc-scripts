@@ -1,0 +1,7 @@
+# See crypttab(5) for this file format.
+#
+# NOTE: No options can be specified for LUKS encrypted partitions.
+
+# NAME	DEVICE	PASSWORD	OPTIONS
+#hda1	/dev/hda1	none	verify
+#hda1	/dev/hda1

@@ -1,0 +1,273 @@
+#!/bin/sh
+#
+# rc		This file is responsible for starting/stopping
+#		services when the runlevel changes. It is also
+#		responsible for the very first setup of basic
+#		things, such as setting the hostname.
+#
+# $Id$
+#
+# Original Author:
+#		Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+#
+
+# avoid being interrupted by child or keyboard
+trap ":" INT QUIT TSTP
+
+# Save argument
+argv1="$1"
+argv2="$2"
+
+# Get terminal size of standard input of the system console
+[ -z "$CONSOLE" ] && CONSOLE=/dev/console
+if [ -c $CONSOLE ]; then
+	set -- $(stty size < $CONSOLE 2>/dev/null)
+	LINES=$1
+	COLUMNS=$2
+else
+	LINES=
+	COLUMNS=
+fi
+export LINES COLUMNS CONSOLE
+
+# NLS
+if [ -f /etc/sysconfig/i18n ]; then
+	. /etc/sysconfig/i18n
+	[ -n "$LANG" ] && export LANG || unset LANG
+	[ -n "$LC_CTYPE" ] && export LC_CTYPE || unset LC_CTYPE
+	[ -n "$LC_COLLATE" ] && export LC_COLLATE || unset LC_COLLATE
+	[ -n "$LC_MESSAGES" ] && export LC_MESSAGES || unset LC_MESSAGES
+	[ -n "$LC_NUMERIC" ] && export LC_NUMERIC || unset LC_NUMERIC
+	[ -n "$LC_MONETARY" ] && export LC_MONETARY || unset LC_MONETARY
+	[ -n "$LC_TIME" ] && export LC_TIME || unset LC_TIME
+	[ -n "$LC_ALL" ] && export LC_ALL || unset LC_ALL
+	[ -n "$LANGUAGE" ] && export LANGUAGE || unset LANGUAGE
+	[ -n "$LINGUAS" ] && export LINGUAS || unset LINGUAS
+fi
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+if [ "$argv2" != "chroot" ]; then
+	# Now find out what the current and what the previous runlevel are.
+	set $(runlevel)
+	runlevel=$2
+	previous=$1
+	export runlevel previous
+fi
+
+# Get first argument. Set new runlevel to this argument.
+[ -n "$argv1" ] && runlevel="$argv1"
+
+# if previous runlevel = current runlevel do nothing
+[ "$runlevel" = "$previous" ] && exit 0
+
+# Tell linuxconf what runlevel we are in
+[ -d /var/run -a -w /var/run ] && echo "/etc/rc.d/rc$runlevel.d" > /var/run/runlevel.dir
+
+# if runlevel is 0 (halt) or 6 (reboot) change to first
+# virtual console, and send messages to /dev/console
+# (it can be serial console too)
+if [ "$COLUMNS" -gt 0 ]; then
+	if [ "$argv2" != "chroot" ] && ! is_yes "$VSERVER" && \
+		[ "$runlevel" = "0" -o "$runlevel" = "6" ]; then
+		CONSOLE=/dev/tty1
+		[ -x /usr/bin/chvt ] && /usr/bin/chvt 1 && echo > $CONSOLE
+		exec 0<> /dev/console 1>&0 2>&0
+	fi
+else
+	# Serial: columns and lines are not defined
+	  LINES=24
+	COLUMNS=80
+fi
+
+# See if we want to be in user confirmation mode
+if [ "$previous" = "N" ]; then
+	if ! is_yes "$VSERVER" && grep -qi confirm /proc/cmdline >/dev/null 2>/dev/null \
+		|| [ -f /var/run/confirm ]; then
+		rm -f /var/run/confirm
+		CONFIRM="yes"
+		nls "Entering interactive startup"
+	else
+		CONFIRM=
+		nls "Entering non-interactive startup"
+	fi
+fi
+
+# calculate bootsplash variables
+sscripts=0
+for i in /etc/rc.d/rc$runlevel.d/S*; do
+	[ ! -f $i ] && continue
+	[ "${1%.rpmsave}" != "${1}" ] && continue
+	[ "${1%.rpmorig}" != "${1}" ] && continue
+	[ "${1%.rpmnew}" != "${1}" ] && continue
+	subsys=${i#/etc/rc.d/rc$runlevel.d/S??}
+	[ -f /var/lock/subsys/$subsys ] && \
+		[ ! -f /var/lock/subsys/${subsys}.init ] && continue
+	sscripts=$(( sscripts + 1 ))
+done
+export sscripts
+
+if test "$previous" != "N" ; then
+	kscripts=0
+	for i in /etc/rc.d/rc$runlevel.d/K*; do
+		[ ! -f $i ] && continue
+		[ "${1%.rpmsave}" != "${1}" ] && continue
+		[ "${1%.rpmorig}" != "${1}" ] && continue
+		[ "${1%.rpmnew}" != "${1}" ] && continue
+		subsys=${i#/etc/rc.d/rc$runlevel.d/K??}
+		[ ! -f /var/lock/subsys/$subsys ] && \
+		[ ! -f /var/lock/subsys/${subsys}.init ] && continue
+		kscripts=$(( kscripts + 1 ))
+	done
+	export kscripts
+fi
+
+if test "$previous" = "N" -a "$runlevel" = "5" ; then
+	export progress=16
+	sscripts=$(( $sscripts + 15 ))
+else
+	export progress=0
+fi
+
+if is_yes "$VSERVER"; then
+	# if runlevel is not 0 (halt) or 6 (reboot) run rc.sysinit
+	# BUT only if rc is run standalone (not run by init, as init will run rc.sysinit)
+	if [ "$previous" != "N" -a "$runlevel" != "0" -a "$runlevel" != "6" ]; then
+		/etc/rc.d/rc.sysinit $runlevel
+	fi
+fi
+
+# set onlcr to avoid staircase effect and do not lock scrolling
+stty onlcr -ixon 0>&1 2>/dev/null
+
+# Say something ;)
+af2=$(termput setaf $CRESMAN)
+af6=$(termput setaf $CBRACKETS)
+af7=$(termput op)
+text="$(termput op)$(nls '%sResource Manager: %sEntering runlevel number' "$af2" "$af7")"
+text_size="$(nls '%sResource Manager: %sEntering runlevel number' "" "")"
+resp_size="$(nls 'DONE')"
+{
+	local _len=${#text_size}
+	local _last_col=$(($INIT_COL+${#resp_size}-${#runlevel}))
+	while [ $((_len++)) -lt $_last_col ]; do
+		text="$text."
+	done
+	echo -n "$text"
+}
+echo "${af6}[${af2} $runlevel ${af6}]${af7}"
+
+# Is there an rc directory for this new runlevel?
+if [ -d /etc/rc.d/rc$runlevel.d ]; then
+	# First, run the KILL scripts.
+	for i in /etc/rc.d/rc$runlevel.d/K*; do
+		# Check if the script is there.
+		[ ! -f $i ] && continue
+
+		# Don't run [KS]??foo.{rpmsave,rpmorig,rpmnew} scripts
+		[ "${1%.rpmsave}" != "${1}" ] && continue
+		[ "${1%.rpmorig}" != "${1}" ] && continue
+		[ "${1%.rpmnew}" != "${1}" ] && continue
+
+		# Check if the subsystem is already up.
+		subsys=${i#/etc/rc.d/rc$runlevel.d/K??}
+		[ ! -f /var/lock/subsys/$subsys ] && \
+		[ ! -f /var/lock/subsys/${subsys}.init ] && continue
+
+		rc_splash "$i stop"
+
+		# Bring the subsystem down.
+		$i stop
+	done
+
+	# Now run the START scripts.
+	for i in /etc/rc.d/rc$runlevel.d/S*; do
+		# Check if the script is there.
+		[ ! -f $i ] && continue
+
+		# Don't run [KS]??foo.{rpmsave,rpmorig} scripts
+		[ "${1%.rpmsave}" != "${1}" ] && continue
+		[ "${1%.rpmorig}" != "${1}" ] && continue
+		[ "${1%.rpmnew}" != "${1}" ] && continue
+
+		# Check if the subsystem is already up.
+		subsys=${i#/etc/rc.d/rc$runlevel.d/S??}
+		[ -f /var/lock/subsys/$subsys ] || \
+		[ -f /var/lock/subsys/${subsys}.init ] && continue
+
+		# Check if it is managed by upstart
+		use_upstart && [ -f /etc/init/${subsys}.conf ] && continue
+
+		# If we're in confirmation mode, get user confirmation
+		[ -n "$CONFIRM" ] &&
+		{
+			confirm $subsys
+			case $? in
+			  0)
+				:
+				;;
+			  2)
+				CONFIRM=
+				;;
+			  *)
+				continue
+				;;
+			esac
+		}
+
+		rc_splash "$i start"
+		# Bring the subsystem up.
+		$i start
+	done
+fi
+
+# if runlevel is 0 (halt) or 6 (reboot) run rc.shutdown
+if [ "$runlevel" = "0" ] || [ "$runlevel" = "6" ]; then
+	unset LANG
+	unset LC_CTYPE
+	unset LC_NUMERIC
+	unset LC_TIME
+	unset LC_COLLATE
+	unset LC_MONETARY
+	unset LC_MESSAGES
+	unset LC_PAPER
+	unset LC_NAME
+	unset LC_ADDRESS
+	unset LC_TELEPHONE
+	unset LC_MEASUREMENT
+	unset LC_IDENTIFICATION
+	unset LC_ALL
+	TMPDIR=/dev/null
+	export TMPDIR
+	if [ "$argv2" != "chroot" ]; then
+		exec /etc/rc.d/rc.shutdown $runlevel $previous
+	else
+		exit 0
+	fi
+else
+	if is_yes "$RUN_LDCONFIG" || [ ! -f /etc/ld.so.cache ] ; then
+		if [ -x /sbin/ldconfig ]; then
+			run_cmd "Setting up /etc/ld.so.cache" /sbin/ldconfig -X
+		fi
+	fi
+fi
+
+rc_splash "master"
+
+# Say something ;)
+text="$(nls '%sResource Manager: %sRunlevel has been reached' "$af2" "$af7")"
+text_size="$(nls '%sResource Manager: %sRunlevel has been reached' "" "")"
+
+_len=${#text_size}
+_last_col=$(($INIT_COL+${#resp_size}-${#runlevel}))
+while [ $((_len++)) -lt $_last_col ]; do
+	text="$text."
+done
+echo -n "$text"
+unset _len _last_col
+
+echo "${af6}[${af2} $runlevel ${af6}]${af7}"
+unset af2 af6 af7
+
+exit 0

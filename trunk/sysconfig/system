@@ -1,0 +1,124 @@
+# $Id$
+
+# Do you want colorized starting scripts ?
+COLOR_INIT=yes
+
+# Print status at which column
+#INIT_COL=67
+
+# Do you want fast boot? (without NLS, excessive logging and fancy
+# terminals support)
+FASTRC=no
+
+# Messages with a higher priority than this will be printed
+# to the console (default 1)
+CONSOLE_LOGLEVEL=1
+
+# On errors (when system is starting) run sulogin instead of shell ?
+RUN_SULOGIN_ON_ERR=yes
+
+# Default run nice level for all services if $SERVICE_RUN_NICE_LEVEL is not
+# defined in /etc/sysconfig/<service>.
+DEFAULT_SERVICE_RUN_NICE_LEVEL=+0
+
+# Default limits set before running daemons (hard and soft) if
+# $SERVICE_LIMITS are not defined in /etc/sysconfig/<service>
+#
+# Use "-u" for process limits (automatically translated to "-p" for ksh).
+# Use "-Sx" or "-Hx" to set only soft or hard "x" limit.
+#
+# Advised limits are:
+# "-u unlimited" to make sure daemons will be able to fork;
+# "-c 0" to make sure it doesn't core dump anywhere; while this could mask
+# problems with the daemon, it also closes some security problems;
+# users' limits are set via pam_limits.
+DEFAULT_SERVICE_LIMITS="-u unlimited -c 0"
+
+# Default umask for all services if $SERVICE_UMASK is not defined in
+# /etc/sysconfig/<service>.
+DEFAULT_SERVICE_UMASK=022
+
+# Setup PNP using userspace tools?
+RUN_USERPNP=yes
+# Setup kernel space PNP (2.4.x)
+RUN_KERNELPNP=yes
+
+# After how many seconds reboot system after kernel panic ?
+# 0 - never reboot system (suggested 60)
+PANIC_REBOOT_TIME=0
+
+# Do not allow users to login when system is starting
+# (but allow when it end "starting" process) ?
+DELAY_LOGIN=yes
+
+# Clean /tmp at startup ?
+CLEAN_TMP=yes
+
+# We want utmpx/wtmpx
+NEED_XFILES=yes
+
+# Try to setup proper symlinks in /boot (based on kernel version) ?
+SET_SLINKS=yes
+
+# Run depmod at startup ?
+# Values:
+# yes/no	- as usually
+# ifmissing	- if modules.dep is missing
+RUN_DEPMOD=ifmissing
+
+# Run /sbin/ldconfig at startup ?
+RUN_LDCONFIG=no
+
+# Start udev (udev-core required)?
+START_UDEV=yes
+
+# EVMS/LVM options
+# Extensible Firmware Interface GUID Partition Table segment manager
+EVMS_GUID_PTABLE=no
+
+# Use EVMS for Linux LVM volumes
+EVMS_LVM=no
+
+# Create symlinks for LVM volumes (/dev/evms/lvm/* -> /dev/*)
+EVMS_LVM_COMPAT_NODES=yes
+
+# EVMS AIX LVM volumes
+EVMS_AIX=no
+
+# EVMS OS/2 LVM volumes
+EVMS_OS2=no
+
+# LVM2
+# disable if your only LVM volume is rootfs started on initrd and want faster startup
+LVM2=yes
+
+# Disable dm-multipath and friends here if you plan to use
+# non standard drivers (ex. DELL MPP RDAC driver)
+DM_MULTIPATH=yes
+
+# Set to anything other than 'no' to allow hotkey interactive startup...
+RC_PROMPT=yes
+
+# List of chroots separated by space (to handle processes inside/outside
+# chroot properly)
+#SYSTEM_CHROOTS=
+
+# List (space separated) of special mount points that must not be unmounted
+# on system shutdown.
+# May contain regular expressions (eg. "/dev/rootunion/.*")
+#UMOUNT_IGNORE=
+
+# Enable cpusets support?
+CPUSETS=no
+
+# Enable this system as vserver guest (yes/no/detect)
+VSERVER=detect
+
+# Vserver isolation only networking inside of guest (yes/no/detect)
+VSERVER_ISOLATION_NET=detect
+
+# Enable syslogging for rc-scripts
+RC_LOGGING=yes
+
+# Disable console logging by blogd
+RC_BOOTLOG=yes

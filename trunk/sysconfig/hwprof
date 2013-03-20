@@ -1,0 +1,7 @@
+# Hardware Profiles configuration
+
+# Enable HWPROFILES support?
+HWPROFILES=no
+
+# Ask for profile if not found
+ASKFORPROFILE=no

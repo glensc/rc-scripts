@@ -1,0 +1,20 @@
+# $Id$
+
+DEVICE=ppp0
+
+MODEMPORT=/dev/tts/USB0
+LINESPEED=460800
+
+# Your ESN of the device.
+# You should also add to chap secrets a line:
+# ESN * "cdma" *
+PAPNAME=#ESN
+
+ONBOOT=yes
+AUTH=no
+PERSIST=yes
+DEFROUTE=yes
+USEPEERDNS=yes
+DEBUG=no
+
+CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-ppp0.kou

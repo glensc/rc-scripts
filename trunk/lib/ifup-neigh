@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+#	$Id$
+#
+# Adds static arps for device $DEVICE
+# Called from ifup-post.
+
+if is_no "$IPV4_NETWORKING"; then
+	return
+fi
+
+if [ ! -f /etc/sysconfig/static-arp ]; then
+	return
+fi
+
+# note the trailing white space character in the grep gets rid of aliases
+grep -E "^($DEVICE|any)[[:blank:]]" /etc/sysconfig/static-arp | while read iface mac ip state args; do
+	[ -z "$state" ] && state="stale"
+	/sbin/ip neigh replace $ip lladdr $mac nud $state dev $DEVICE
+done

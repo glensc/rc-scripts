@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+#	$Id$
+#
+# This should be called whenever an interface goes down, not just when
+# it is brought down explicitly.
+
+run_down() { :; }
+
+CONFIG=$1
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /lib/rc-scripts/functions.network
+
+source_config
+
+# set all major variables
+setup_ip_param
+
+# set REALDEVICE
+get_ppp_device_and_pid
+
+# (QoS) Delete root queueing discipline
+if [ -n "${BANDWIDTH_OUT}" ]; then
+	if [ "${QDISC_CLASS}" = "htb" -o "${QDISC_CLASS}" = "cbq" ]; then
+		tc qdisc del dev ${REALDEVICE} root
+	elif [ -z "${QDISC}" -o "${QDISC}" = "tbf" ]; then
+		tc qdisc del dev ${REALDEVICE} root
+	elif [ -n "${QDISC}" ]; then
+		tc qdisc del dev ${REALDEVICE} root
+	fi
+else
+	if [ -n "${QDISC}" ]; then
+		tc qdisc del dev ${REALDEVICE} root
+	fi
+fi
+
+if [ -n "${BANDWIDTH_IN}" ]; then
+	tc qdisc del dev ${REALDEVICE} ingress
+fi
+
+# execute run_down() function (if available in device configuration file)
+run_down
+
+# Notify programs that have requested notification
+do_netreport
+
+exit 0

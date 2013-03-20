@@ -1,0 +1,14 @@
+# IPv6 specific rules and routes
+
+# Entry format for ip rule:
+# <rule>
+# Entry format for static route:
+# <device>	<network_ip>/<network_mask_length>	<other arguments>
+#
+# Combined example:
+
+#from fec0:2::/32 table 10
+#eth0 default via fec0:2::1 table 10
+#
+# route fec0:12::34 via fec0:2::3 via any interface
+#any fec0:12::34 via fec0:2::3

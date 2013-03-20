@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+#    ifup-vlan - Virtual LAN configuration script
+#    Copyright (C) 2001 Arkadiusz Miśkiewicz <misiek@pld-linux.org>
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#    $Id$
+#
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+cd /lib/rc-scripts
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /lib/rc-scripts/functions.network
+
+CONFIG=$1
+source_config
+
+if is_no "${VLAN_NETWORKING}"; then
+	exit 0
+fi
+
+if [ "foo$2" = "fooboot" ] && is_no "${ONBOOT}"; then
+	exit 0
+fi
+
+VLAN_DEV=$(echo ${DEVICE} | awk ' { gsub(/\..*$/,NUL); print $0 } ')
+VLAN_ID=$(echo ${DEVICE} | awk " { gsub(/${VLAN_DEV}\./,NUL); print \$0 } ")
+
+if [ ! -f /etc/sysconfig/interfaces/ifcfg-${VLAN_DEV} ]; then
+	nls "%s is missing. Can't continue." "ifcfg-${VLAN_DEV}"
+	exit 1
+fi
+
+if ! grep -qlE "ONBOOT=[^n][^o]" /etc/sysconfig/interfaces/ifcfg-${VLAN_DEV}; then
+	nls "Warning: ${VLAN_DEV} is disabled on boot."
+fi
+
+modprobe -s 8021q
+
+if [ ! -e /proc/net/vlan/config ]; then
+	nls "VLAN kernel support is missing. Can't continue."
+	exit 1
+fi
+
+# set all major variables
+setup_ip_param
+
+if (LC_ALL=C ip link add type vlan help 2>&1 | grep -q "VLANID :="); then
+	/sbin/ip link set ${VLAN_DEV} up
+	/sbin/ip link add link ${VLAN_DEV} name ${DEVICE} type vlan id ${VLAN_ID}
+	# default yes
+	is_no "${VLAN_REORDER_HDR}" && VLAN_REORDER_HDR=off || VLAN_REORDER_HDR=on
+	# default yes
+	is_no "$VLAN_GVRP" && VLAN_GVRP=off || VLAN_GVRP=on
+	/sbin/ip link set ${DEVICE} type vlan reorder_hdr ${VLAN_REORDER_HDR} gvrp ${VLAN_GVRP}
+elif [ -x /sbin/vconfig ]; then
+	/sbin/vconfig set_name_type DEV_PLUS_VID_NO_PAD
+	/sbin/ip link set ${VLAN_DEV} up
+	/sbin/vconfig add ${VLAN_DEV} ${VLAN_ID}
+	/sbin/vconfig set_flag ${DEVICE} 1 ${VLAN_REORDER_HDR:-1}
+else
+	nls "/sbin/vconfig or iproute2 with vlan support is missing. Can't continue."
+	exit 1
+fi
+RESULT=$?
+
+# XXX: more VLAN specific options support
+
+exit $RESULT

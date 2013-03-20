@@ -1,0 +1,267 @@
+#!/bin/sh
+#
+#	$Id$
+#
+# ifup-ppp script for pppd-2.3.5 (with persist & demand options) ver 0.2
+# Grzegorz Stanislawski <stangrze@open.net.pl>
+# Features:
+#  - since persist option is included to pppd it's no need to do werid loops
+#    ifup-ppp script. This also makes your logfile grow slower when Your link
+#    is down.
+#  - chat-ppp? file with script for chat is now parsed by shell, so You can
+#    include in it shell variables (for example $PHONE, $USERNAME)
+#    You can define any variable in ifcfg-ppp? file and use it in chat-ppp?
+#    You only have to add it's name into DATAFORCHAT variable
+#    Note, that chat-ppp file is now parsed by shell, so you have to escape
+#    with "\" all shell special characters like \$;:)(& etc.
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+# ifup-post for PPP is handled through /etc/ppp/ip-up
+
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /lib/rc-scripts/functions.network
+
+CONFIG=$1
+source_config
+# set all major variables
+setup_ip_param
+
+if [ "$2" = "boot" ] && is_no "${ONBOOT}"; then
+	exit
+fi
+if [ ! -x /usr/sbin/pppd ]; then
+	nls "%s does not exist or is not executable" "/usr/sbin/pppd"
+	nls "%s for %s exiting" "ifup-ppp" "$DEVICE"
+	logger -p daemon.info -t ifup-ppp \
+		"$(nls '%s does not exist or is not executable for %s' \
+		"/usr/sbin/pppd" "$DEVICE")"
+	exit 1
+fi
+
+# modprobe ppp modules (udev case)
+[ ! -e /dev/ppp ] && modprobe -s char-major-108
+
+opts="lock"
+
+if [ -z "${REPORTFILE}" ] ; then
+	REPORTFILE=/dev/null
+fi
+
+if [ -n "${PPPOE_DEV}" ]; then
+	if is_yes "${PPPOE_KERNEL}"; then
+		modprobe -s pppoe
+		MODEMMODE="plugin rp-pppoe.so"
+		MODEMPORT="${PPPOE_DEV}"
+	else
+		MODEMMODE="pty"
+		MODEMPORT="pppoe -I ${PPPOE_DEV} ${PPPOE_OPT}"
+	fi
+elif is_yes "${PPPOA_EAGLE}"; then
+	EAGLECTRL="/usr/sbin/adictrl"
+	if [ ! -x $EAGLECTRL ]; then
+		EAGLECTRL="/usr/sbin/eaglectrl"
+	fi
+	if [ ! -x $EAGLECTRL ]; then
+		nls "%s does not exist or is not executable" "$EAGLECTRL"
+		nls "%s for %s exiting" "ifup-ppp" "$DEVICE"
+		exit 1
+	fi
+	$EAGLECTRL -w
+	PPPOA_IFACE=$( $EAGLECTRL -i 2>/dev/null)
+	if [ -z "$PPPOA_IFACE" ]; then
+		PPPOA_IFACE="(unknown)"
+	else
+		ip link set "$PPPOA_IFACE" up
+	fi
+	MODEMMODE="pty"
+	MODEMPORT="pppoa -I ${PPPOA_IFACE} ${PPPOA_OPT}"
+elif is_yes "${PPPOA_SPEEDTOUCH}"; then
+	if is_yes "${PPPOA_KERNEL}"; then
+		modprobe -s speedtch
+		modprobe -s pppoatm
+		if [ -n "${PPPOA_FIRMWARE}" ]; then
+			modem_run -k -s -f "${PPPOA_FIRMWARE}"
+		fi
+		MODEMMODE="plugin pppoatm.so"
+		MODEMPORT="${PPPOA_VPI}.${PPPOA_VCI}"
+	else
+		modem_run -s -f "${PPPOA_FIRMWARE}"
+		MODEMMODE="pty"
+		MODEMPORT="pppoa3 -v1 -c -vpi ${PPPOA_VPI} -vci ${PPPOA_VCI} ${PPPOA_OPT}"
+	fi
+elif is_yes "${PPPOA}"; then
+	MODEMMODE="plugin pppoatm.so"
+	MODEMPORT="${PPPOA_VPI}.${PPPOA_VCI}"
+else
+
+	if [ -n "$MODEMPORT" -a ! -c "$MODEMPORT" ]; then
+		echo >&2 "MODEMPORT=$MODEMPORT is not a character device!"
+		exit 1
+	fi
+
+	if is_no "${DIRECT_CONNECT}" || [ -z "${DIRECT_CONNECT}" ]; then
+		PEERCONF=/etc/ppp/peers/${DEVNAME}
+		if [ ! -f ${PEERCONF} ]; then
+			if [ -z "${WVDIALSECT}" ]; then
+				# XXX: REPORTFILE support is problematic here --misiek
+				[ -f "${CHATSCRIPT}" ] || CHATSCRIPT=/etc/sysconfig/interfaces/data/chat-${PARENTDEVNAME}
+				if [ ! -f "${CHATSCRIPT}" ]; then
+					nls '%s does not exist, perhaps set $CHATSCRIPT' "${CHATSCRIPT}"
+					nls 'ifup-ppp for %s exiting' "${DEVNAME}"
+					logger -p daemon.info -t ifup-ppp \
+						"$(nls '%s does not exist for %s' "${CHATSCRIPT}" "${DEVICE}")"
+					exit 1
+				fi
+			fi
+			logger -s -p daemon.notice -t ifup-ppp "$(nls 'Setting up a new %s config file' "${PEERCONF}")"
+			if [ -f /etc/ppp/peers/${DEVICE} ]; then
+				cp -f /etc/ppp/peers/${DEVICE} ${PEERCONF}
+			else
+				touch ${PEERCONF}
+			fi
+			if [ "${WVDIALSECT}" ]; then
+				echo "connect \"/usr/bin/wvdial --chat ${WVDIALSECT} --config /etc/wvdial.conf >> ${REPORTFILE} 2>&1 \"" >> ${PEERCONF}
+			else
+				if is_yes "${DEBUG}"; then
+					chatdbg="-v"
+				fi
+				if [ -n "${DATAFORCHAT}" ]; then
+					chatreadenv=-E
+				fi
+				echo "connect \"/usr/sbin/chat $chatreadenv -f ${CHATSCRIPT} -r ${REPORTFILE} ${chatdbg}\"" >> ${PEERCONF}
+			fi
+		fi
+		opts="$opts call ${DEVNAME}"
+	fi
+fi
+
+if [ -z "$MODEMPORT" ]; then
+	# Last try:
+	if [ "${PPPOA_VPI}" -a "${PPPOA_VCI}" ]; then
+		MODEMPORT=${PPPOA_VPI}.${PPPOA_VCI}
+	else
+		echo >&2 "Missing modemport!"
+		exit 1
+	fi
+fi
+
+if [ -z "$HOLDOFF" ]; then
+	HOLDOFF=30
+fi
+if is_yes "${PERSIST}"; then
+	if [ -z "${MAXFAIL}" ]; then
+		MAXFAIL="0"
+	fi
+	opts="$opts persist holdoff $HOLDOFF maxfail $MAXFAIL"
+fi
+if is_yes "${DEMAND}"; then
+	if [ -z "${IDLE}" ]; then
+		IDLE="0"
+	fi
+	opts="$opts demand ktune idle ${IDLE}"
+fi
+if ! is_no "${HARDFLOWCTL}"; then
+	opts="$opts crtscts"
+fi
+if is_yes "${MODEMCTL}"; then
+	opts="$opts modem"
+fi
+if is_yes "${SYNC}"; then
+	opts="$opts sync"
+fi
+if is_yes "${ESCAPECHARS}"; then
+	opts="$opts asyncmap FFFFFFFF"
+else
+	opts="$opts asyncmap 00000000"
+fi
+if is_yes "${DEFROUTE}"; then
+	# pppd will no longer delete an existing default route
+	# so we have to help it out a little here.
+	ip route del 0/0 > /dev/null 2>&1
+	opts="$opts defaultroute"
+elif ! is_no "${DEFROUTE}"; then
+	opts="$opts defaultroute"
+fi
+if ! is_no "${PEERDNS}"; then
+	opts="$opts usepeerdns"
+fi
+if [ -n "${MRU}" ] ; then
+	opts="$opts mru ${MRU}"
+fi
+if [ -n "${MTU}" ] ; then
+	opts="$opts mtu ${MTU}"
+fi
+if is_yes "$IPV4_NETWORKING" && [ -n "${IP4ADDR}${REMIP}" ] ; then
+	# if either IP address is set, the following will work.
+	opts="$opts ${IP4ADDR}:${REMIP}"
+fi
+if is_yes "$IPV6_NETWORKING"; then
+	if is_yes "$IPV6_PPP"; then
+		if [ -n "${IP6ADDR}${REMIP6}" ] ; then
+			opts="$opts ipv6 ${IP6ADDR},${REMIP6}"
+		elif is_yes "$IPV6_CP_USEV4"; then
+			opts="$opts ipv6cp-use-ipaddr"
+		elif is_yes "$IPV6_CP_PERSISTENT"; then
+			opts="$opts ipv6cp-use-persistent"
+		fi
+	elif is_no "$IPV6_PPP"; then
+		opts="$opts noipv6"
+	fi
+elif is_no "$IPV6_NETWORKING"; then
+	opts="$opts noipv6"
+fi
+if is_yes "${IPX_PPP}"; then
+	opts="$opts ipx"
+	if [ -n "${IPX_PPP_NETWORK}" ]; then
+		opts="$opts ipx-network ${IPX_PPP_NETWORK}"
+	fi
+	if [ -n "${IPX_PPP_NODE}" ]; then
+		opts="$opts ipx-node ${IPX_PPP_NODE}"
+	fi
+	if [ -n "${IPX_PPP_ROUTING}" ]; then
+		opts="$opts ipx-routing ${IPX_PPP_ROUTING}"
+	fi
+fi
+
+if [ -n "${PAPNAME}" ] ; then
+	opts="$opts user ${PAPNAME}"
+fi
+if [ -n "${REMOTENAME}" ] ; then
+	opts="$opts remotename ${REMOTENAME}"
+fi
+if is_yes "${DEBUG}"; then
+	opts="$opts debug"
+fi
+if is_yes "${AUTH}"; then
+	opts="$opts auth"
+elif is_no "${AUTH}"; then
+	opts="$opts noauth"
+fi
+if is_yes "$PLUGIN_IFCFG_PASSWORD" && [ -n "$PASSWORD" ]; then
+	if [ -f "$CONFIG" ]; then
+		ifcfg_password_config="$CONFIG"
+	else
+		ifcfg_password_config="/etc/sysconfig/interfaces/$CONFIG"
+	fi
+	opts="$opts plugin ifcfg-password.so ifcfg $ifcfg_password_config"
+fi
+
+if ! is_no "${UNIT}"; then
+	UNIT=$(echo "${DEVICE}" | awk ' { gsub(/ppp/,NUL); print $0} ')
+	opts="$opts unit ${UNIT}"
+fi
+
+MODEM="${MODEMPORT}"; export MODEM
+
+(logger -p daemon.info -t ifup-ppp \
+	"$(nls 'pppd started for %s on device %s at speed %s' "$DEVICE" \
+	"$MODEMPORT" "${LINESPEED:-(unspecified)} on unit ${UNIT}")" &)&
+
+if [ -n "${DATAFORCHAT}" ]; then
+	export $DATAFORCHAT
+fi
+/usr/sbin/pppd $opts ${MODEMMODE} "${MODEMPORT}" ${LINESPEED} \
+	ipparam ${DEVNAME} linkname ${DEVNAME} \
+	${PPPOPTIONS}

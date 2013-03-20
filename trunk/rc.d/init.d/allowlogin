@@ -1,0 +1,73 @@
+#!/bin/sh
+#
+# allowlogin	Allow users to login
+#
+# description: Allow users to login.
+#
+# $Id$
+
+[ -f /etc/sysconfig/system ] && . /etc/sysconfig/system
+
+# exit early without loading big init.d functions
+case "$1" in
+start|restart|try-restart|reload|force-reload)
+	# Check value
+	case "$DELAY_LOGIN" in
+		yes|Yes|YES|true|True|TRUE|on|On|ON|Y|y|1)
+		;;
+	*)
+		exit 0
+		;;
+	esac
+esac
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+upstart_controlled
+
+start() {
+	if is_yes "$DELAY_LOGIN" && [ -f /etc/nologin.boot ]; then
+		run_cmd "Allowing users to login" rm -f /etc/nologin /etc/nologin.boot
+	fi
+}
+
+stop() {
+	# /etc/nologin when shutting down system
+	if is_yes "$DELAY_LOGIN" && [ ! -f /etc/nologin ]; then
+		nls "System shutdown in progress\n" > /etc/nologin
+		chmod 644 /etc/nologin
+		cp -fp /etc/nologin /etc/nologin.boot
+	fi
+}
+
+status() {
+	if is_yes "$DELAY_LOGIN"; then
+		nls "Delay login is enabled"
+	else
+		nls "Delay login is not enabled"
+	fi
+	if [ -f /etc/nologin ]; then
+		nls "Users are not allowed to login right now"
+	else
+		nls "Users are allowed to login right now"
+	fi
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status
+	;;
+  *)
+	msg_usage "$0 {start|stop|status}"
+	exit 3
+esac
+
+exit 0

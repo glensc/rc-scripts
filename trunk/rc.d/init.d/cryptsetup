@@ -1,0 +1,185 @@
+#!/bin/sh
+# cryptsetup functions for rc-scripts
+# if invoked standalone, processes /etc/cryptab like on boot/shutdown
+
+key_is_random() {
+	[ "$1" = "/dev/urandom" -o "$1" = "/dev/hw_random" -o "$1" = "/dev/random" ]
+}
+
+# Because of a chicken/egg problem, init_crypto must be run twice.  /var may be
+# encrypted but /var/lib/random-seed is needed to initialize swap.
+init_crypto() {
+	local have_random dst src key opt mode owner params makeswap skip arg
+	local param value rc ret mke2fs mdir
+
+	# call mknodes as the dm node could be missing if device was opened from
+	# initrd.
+	# XXX: shouldn't udev handle the nodes creation here?
+	/sbin/dmsetup mknodes
+
+	ret=0
+	have_random=$1
+	while read dst src key opt; do
+		[ -z "$dst" -o "${dst#\#}" != "$dst" ] && continue
+		[ -b "/dev/mapper/$dst" ] && continue;
+		if [ "$have_random" = 0 ] && key_is_random "$key"; then
+			continue
+		fi
+		if [ -n "$key" -a "x$key" != "xnone" ]; then
+			if test -e "$key" ; then
+				mode=$(ls -l "$key" | cut -c 5-10)
+				owner=$(ls -l $key | awk '{ print $3 }')
+				if [ "$mode" != "------" ] && ! key_is_random "$key"; then
+					nls "INSECURE MODE FOR %s" "$key"
+					ret=1
+				fi
+				if [ "$owner" != root ]; then
+					nls "INSECURE OWNER FOR %s" "$key"
+					ret=1
+				fi
+			else
+				nls "Key file for %s not found, skipping" "$dst"
+				continue
+			fi
+		else
+			key=""
+		fi
+		params=""
+		makeswap=""
+		mke2fs=""
+		skip=""
+		# Parse the options field, convert to cryptsetup parameters
+		# and contruct the command line
+		while [ -n "$opt" ]; do
+			arg=${opt%%,*}
+			opt=${opt##$arg}
+			opt=${opt##,}
+			param=${arg%%=*}
+			value=${arg##$param=}
+
+			case "$param" in
+			cipher)
+				params="$params -c $value"
+				if [ -z "$value" ]; then
+					nls "%s: no value for cipher option, skipping" "$dst"
+					skip="yes"
+				fi
+			;;
+			size)
+				params="$params -s $value"
+				if [ -z "$value" ]; then
+					nls "%s: no value for size option, skipping" "$dst"
+					skip="yes"
+				fi
+			;;
+			hash)
+				params="$params -h $value"
+				if [ -z "$value" ]; then
+					nls "%s: no value for hash option, skipping" "$dst"
+					skip="yes"
+				fi
+			;;
+			verify)
+				params="$params -y"
+			;;
+			swap)
+				makeswap=yes
+			;;
+			tmp)
+				mke2fs=yes
+			esac
+		done
+
+		if [ "$skip" = "yes" ]; then
+			ret=1
+			continue
+		fi
+
+		if [ ! -b "$src"  ]; then
+			nls "$src: No such device"
+			ret=1
+			continue
+		fi
+
+		if /sbin/cryptsetup isLuks "$src" 2>/dev/null; then
+			if key_is_random "$key"; then
+				nls "%s: LUKS requires non-random key, skipping" "$dst"
+				ret=1
+				continue
+			fi
+			if [ -n "$params" ]; then
+				nls "%s: options are invalid for LUKS partitions, ignoring them" "$dst"
+			fi
+			/sbin/cryptsetup ${key:+-d $key} luksOpen "$src" "$dst" <&1
+		else
+			/sbin/cryptsetup $params ${key:+-d $key} create "$dst" "$src" <&1 2>/dev/null
+		fi
+		rc=$?
+		if [ $rc -ne 0 ]; then
+			ret=1
+			continue
+		fi
+		if [ -b "/dev/mapper/$dst" ]; then
+			if [ "$makeswap" = "yes" ]; then
+				mkswap "/dev/mapper/$dst" 2>/dev/null >/dev/null
+			fi
+			if [ "$mke2fs" = "yes" ]; then
+				if mke2fs "/dev/mapper/$dst" 2>/dev/null >/dev/null \
+					&& mdir=$(mktemp -d /tmp/mountXXXXXX); then
+					mount "/dev/mapper/$dst" "$mdir" && chmod 1777 "$mdir"
+					umount "$mdir"
+					rmdir "$mdir"
+				fi
+			fi
+		fi
+	done < /etc/crypttab
+	return $ret
+}
+
+halt_crypto() {
+    local fnval=0 dst src key
+    while read dst src key; do
+	[ -z "$dst" -o "${dst#\#}" != "$dst" ] && continue
+        if [ -b "/dev/mapper/$dst" ]; then
+            if LC_ALL=C /sbin/dmsetup info "$dst" | grep -q '^Open count: *0$'; then
+                /sbin/cryptsetup remove "$dst"
+            else
+                fnval=1
+            fi
+        fi
+    done < /etc/crypttab
+    return $fnval
+}
+
+[ -f /etc/crypttab ] || return
+
+# if not invoked directly, return to caller
+case "$0" in *cryptsetup);; *) return;; esac
+
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	show "Starting disk encryption"; started
+	init_crypto 1 && deltext; ok
+	;;
+  stop)
+	show "Stopping disk encryption"; started
+	halt_crypto && deltext; ok
+	;;
+  status)
+	# this is way overkill, but at least we have some status output...
+	if grep -qF dm_crypt /proc/modules; then
+		nls "dm-crypt module is loaded"
+	else
+		nls "dm-crypt module is not loaded"
+	fi
+	;;
+  *)
+	msg_usage "$0 {start|stop|status}"
+	exit 3
+esac
+
+exit $RETVAL

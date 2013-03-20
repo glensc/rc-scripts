@@ -1,0 +1,154 @@
+#!/bin/sh
+#
+#	$Id$
+#
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+. /etc/sysconfig/network
+. /etc/rc.d/init.d/functions
+. /lib/rc-scripts/functions.network
+
+# Will be removed in the future
+if is_yes "$NETWORKING" ; then
+	if [ -z "$IPV4_NETWORKING" ] ; then
+		echo "NETWORKING is set to YES, but IPV4_NETWORKING is empty!"
+		echo "Please upgrade your config"
+		echo "Assuming you want IPv4 networking"
+		IPV4_NETWORKING=yes
+	fi
+fi
+
+DEV=$1
+
+[ -z "$DEV" ] && {
+	nls "Usage: %s <device name>" "ifdown" >&2
+	exit 1
+}
+
+if [ -f "/etc/sysconfig/interfaces/ifcfg-$DEV" ] ; then
+	CONFIG="/etc/sysconfig/interfaces/ifcfg-$DEV"
+else
+	CONFIG="$DEV"
+fi
+
+if [ "$(id -u)" != "0" ]; then
+	if [ -x /sbin/usernetctl ]; then
+		exec /sbin/usernetctl $CONFIG down
+	fi
+	echo "Users cannot control this device." >&2
+	exit 1
+fi
+
+source_config
+
+# set all major variables
+setup_ip_param
+
+OTHERSCRIPT="/lib/rc-scripts/ifdown-${DEVICETYPE}"
+
+# shutdown tleds software
+if [ "$TLEDS_DEV" = "$DEVICE" -a -x /usr/bin/tleds ]; then
+	/usr/bin/tleds -qk "$DEVICE"
+fi
+
+if [ -x $OTHERSCRIPT ]; then
+	if [ "$HANDLING" = "0" ]; then
+		exec $OTHERSCRIPT $CONFIG $2
+	elif [ "$HANDLING" = "1" ]; then
+		$OTHERSCRIPT $CONFIG $2
+	fi
+fi
+
+if is_yes "$ENABLE_6TO4"; then
+	tun6to4=tun6to4_$DEVICE 
+	/sbin/ip -6 route flush dev $tun6to4 2>/dev/null
+	if [ $? = 0 ]; then   # the tunnel has been set up in ifup
+		/sbin/ip link set dev $tun6to4 down
+		/sbin/ip tunnel del $tun6to4
+	fi
+fi
+
+if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; then
+	if is_yes "$IPV4_NETWORKING"; then
+		set_dhcpclient
+
+		case ${DHCP_CLIENT##*/} in
+		  pump)
+			$DHCP_CLIENT -r -i ${DEVICE}
+			RESULT=$?
+			;;
+		  dhcpcd)
+			$DHCP_CLIENT -k ${DEVICE}
+			RESULT=$?
+			sleep 1
+			;;
+		  dhcpxd)
+			$DHCP_CLIENT -k ${DEVICE}
+			RESULT=$?
+			;;
+		  dhclient)
+		  	if [ -f "/var/run/dhclient.$DEVICE.pid" ] ; then
+				$DHCP_CLIENT -r -pf /var/run/dhclient.$DEVICE.pid -lf /var/lib/dhclient/dhclient.$DEVICE.leases 2>/dev/null
+				RESULT=$?
+			elif [ -f /var/run/dhclient.pid ]; then
+				# may be left by older rc-scripts
+				PID=$(cat /var/run/dhclient.pid)
+				if kill -0 $PID 2>/dev/null; then
+					kill $PID
+					RESULT=$?
+				fi
+			fi
+			;;
+		  avahi-autoipd)
+			$DHCP_CLIENT -k ${DEVICE}
+			RESULT=$?
+			;;
+		esac
+	fi
+fi
+
+if is_yes "${WLAN_WPA}"; then
+	killproc --pidfile "wpa_supplicant-${DEVICE}.pid" wpa_supplicant > /dev/null 2>&1
+	rm -f "/var/run/wpa_supplicant-${DEVICE}.pid"
+fi
+
+# Check to make sure the device is actually up
+check_device_down && exit 0
+
+if [ -n "${SUBDEVICE}" ]; then
+	ip addr del ${IP4ADDR} label ${SUBDEVICE} dev ${DEVICE}
+else
+	LC_ALL=C ip addr flush dev ${DEVICE} 2>&1 | grep -v "Nothing to flush"
+
+	if [ ${DEVICETYPE} = "bond" ]; then
+		if [ ! -x /sbin/ifenslave ]; then
+			nls "%s is missing. Can't continue." "/sbin/ifenslave"
+			exit 1
+		fi
+
+		# get up the bonding device before enslaving
+		if ! check_device_down "${DEVICE}"; then
+			ip link set ${DEVICE} up
+		fi
+
+		for BSVAR in $(awk '/Slave Interface:/{ print $3}' /proc/net/bonding/${DEVICE}); do
+			if [ "${BSVAR}" ]; then
+				ifenslave -d ${DEVICE} $BSVAR
+			fi
+		done
+	fi
+
+	ip link set ${DEVICE} down
+fi
+
+if [ "$HANDLING" = "4" ]; then
+	exit 0
+fi
+
+if [ -n "$RESULT" ] ; then
+	if [ "$RESULT" -ne "0" ]; then
+		exit $RESULT
+	fi
+fi
+
+exec /lib/rc-scripts/ifdown-post $CONFIG
