@@ -597,6 +597,10 @@ daemon() {
 			shift
 			waittime="$1"
 			;;
+		--pidfile=?*)
+			pidfile="${1#--pidfile=}"
+			case "$pidfile" in /*);; *) pidfile="/var/run/$pidfile";; esac
+			;;
 		--pidfile)
 			shift
 			pidfile="$1"
@@ -716,15 +720,19 @@ daemon() {
 
 # A function to stop a program.
 killproc() {
-	local notset killlevel base pid pidfile result
+	local notset killlevel base pid pidfile result delay=3 try
 	# Test syntax.
 	if [ $# = 0 ]; then
-		msg_usage " killproc [--pidfile PIDFILE] {program} [-SIGNAME]"
+		msg_usage " killproc [--pidfile|-p PIDFILE] [-d DELAY] {program} [-SIGNAME]"
 		return 2
 	fi
 
 	while [ "$1" != "${1##-}" ]; do
 		case $1 in
+		-d)
+			delay="$2"
+			shift 2
+			;;
 		--pidfile|-p)
 			pidfile="$2"
 			case "$pidfile" in /*);; *) pidfile="/var/run/$pidfile";; esac
@@ -756,7 +764,7 @@ killproc() {
 	if is_no "$RC_LOGGING" && [ "$pidfile" ]; then
 		local sig=${killlevel:--TERM} retry
 		# retry only if signal is not specified,
-	   	# as otherwise impossible to send HUP if process pid stays in pidfile.
+		# as otherwise impossible to send HUP if process pid stays in pidfile.
 		if [ "${killlevel+set}" = "set" ]; then
 			# if we send HUP it's ok if process does not die
 			retry="--oknodo"
@@ -790,14 +798,19 @@ killproc() {
 			if checkpid $pid 2>&1; then
 				# TERM first, then KILL if not dead
 				kill -TERM $pid
-				usleep 100000
-				if checkpid $pid && sleep 1 &&
-					checkpid $pid && sleep 3 &&
-					checkpid $pid; then
+				usleep 50000
+
+				try=0
+				while [ $try -lt $delay ]; do
+					checkpid $pid || break
+					sleep 1
+					try=$((try+1))
+				done
+				if checkpid $pid; then
 					# XXX: SIGKILL is sent already on 4th second!
 					# HARMFUL for example to mysqld (which is already workarounded)
 					kill -KILL $pid
-					usleep 100000
+					usleep 50000
 				fi
 			fi
 			checkpid $pid
