@@ -63,9 +63,14 @@ env_upstart=$USE_UPSTART
 [ -r /etc/sysconfig/bootsplash ] && . /etc/sysconfig/bootsplash
 
 # if initscript is invoked via bash, enable RedHat/Fedora compatibility
+# RC_FEDORA is "set" if enabled and "unset" when not, but it's "value" is always empty
+# this is useful for inline constructs
 if [ "${BASH_VERSION+set}" = "set" ]; then
 	RC_LOGGING=yes
 	FASTRC=no
+	RC_FEDORA=
+else
+	unset RC_FEDORA || :
 fi
 
 [ "$env_upstart" ] && USE_UPSTART=$env_upstart
@@ -430,7 +435,7 @@ busy() {
 }
 
 ok() {
-	echo "$_ok"
+	echo -ne "$_ok${RC_FEDORA+\r}${RC_FEDORA-\n}"
 }
 
 started() {
@@ -438,7 +443,7 @@ started() {
 }
 
 fail() {
-	echo "$_fail"
+	echo -ne "$_fail${RC_FEDORA+\r}${RC_FEDORA-\n}"
 	return 1
 }
 
