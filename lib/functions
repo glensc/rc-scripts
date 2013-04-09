@@ -62,6 +62,12 @@ env_upstart=$USE_UPSTART
 [ -r /etc/sysconfig/system ] && . /etc/sysconfig/system
 [ -r /etc/sysconfig/bootsplash ] && . /etc/sysconfig/bootsplash
 
+# if initscript is invoked via bash, enable RedHat/Fedora compatibility
+if [ "${BASH_VERSION+set}" = "set" ]; then
+	RC_LOGGING=yes
+	FASTRC=no
+fi
+
 [ "$env_upstart" ] && USE_UPSTART=$env_upstart
 
 if [ -z "$VSERVER" -o "$VSERVER" = "detect" ]; then
