@@ -1,3 +1,31 @@
+2013-05-15 21:04 +0000 [r12658]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* po/de.po, po/pl.po: make update-po
+
+2013-04-09 22:07 +0000 [r12650]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions: Fedora compat: fix echo_success and echo_failure
+	  formatting
+
+2013-04-09 21:48 +0000 [r12648-12649]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions: RedHat/Fedora compatibility turn daemon() and
+	  friends into syntax their scripts understand (shell syntax) if
+	  initscript interpreter is set to bash
+
+	* lib/functions: revert [12647] it was correct before that
+
+2013-04-09 21:41 +0000 [r12647]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions: do not reset RC_LOGGING when IN_SHUTDOWN is not
+	  set refs [6452] and [9733]
+
+2013-04-03 08:51 +0000 [r12643]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions: improve fedora compatibility: add: - daemon
+	  --pidfile=FOO - killproc -d DELAY use usleep 50000 instead of
+	  100000, computers are bit faster now :)
+
 2013-03-18 08:25 +0000 [r12632]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
 
 	* configure.ac: Release 0.4.5.5.
