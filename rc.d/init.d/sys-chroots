@@ -53,8 +53,8 @@ start() {
 		chroot $dir sh -c '
 		. /etc/rc.d/init.d/functions
 		# Clear mtab
-		:>/etc/mtab
-		[ -f /etc/cryptomtab ] && :>/etc/cryptomtab
+		> /etc/mtab
+		[ -f /etc/cryptomtab ] && > /etc/cryptomtab
 
 		# Remove stale backups
 		rm -f /etc/mtab~ /etc/mtab~~ /etc/cryptomtab~ /etc/cryptomtab~~
@@ -78,12 +78,12 @@ start() {
 
 		# Clean up utmp/wtmp
 		if ! is_no "$NEED_XFILES" ; then
-			:>/var/run/utmpx
+			> /var/run/utmpx
 			touch /var/log/wtmpx
 			chown root:utmp /var/run/utmpx /var/log/wtmpx
 			chmod 0664 /var/run/utmpx /var/log/wtmpx
 		else
-			:>/var/run/utmp
+			> /var/run/utmp
 			touch /var/log/wtmp
 			chown root:utmp /var/run/utmp /var/log/wtmp
 			chmod 0664 /var/run/utmp /var/log/wtmp

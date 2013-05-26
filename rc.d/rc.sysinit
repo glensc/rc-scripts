@@ -72,7 +72,7 @@ relabel_selinux() {
 
 # Remove duplicate entries from mtab (for vserver guest use only)
 clean_vserver_mtab() {
-	:>/etc/mtab.clean
+	> /etc/mtab.clean
 	while read device mountpoint line; do
 		grep -qs "$mountpoint" /etc/mtab.clean || \
 			echo "$device $mountpoint $line" >> /etc/mtab.clean
@@ -465,8 +465,8 @@ fi
 
 if ! is_yes "$VSERVER"; then
 	# Clear mtab
-	:>/etc/mtab
-	[ -f /etc/cryptomtab ] && :>/etc/cryptomtab
+	> /etc/mtab
+	[ -f /etc/cryptomtab ] && > /etc/cryptomtab
 
 	# Enter root, /proc, /sys and other into mtab.
 	mount -f / 2> /dev/null
@@ -963,12 +963,12 @@ rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
 {
 # Clean up utmp/wtmp
 if ! is_no "$NEED_XFILES"; then
-	:>/var/run/utmpx
+	> /var/run/utmpx
 	touch /var/log/wtmpx
 	chown root:utmp /var/run/utmpx /var/log/wtmpx
 	chmod 0664 /var/run/utmpx /var/log/wtmpx
 else
-	:>/var/run/utmp
+	> /var/run/utmp
 	touch /var/log/wtmp
 	chown root:utmp /var/run/utmp /var/log/wtmp
 	chmod 0664 /var/run/utmp /var/log/wtmp
