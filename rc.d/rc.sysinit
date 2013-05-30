@@ -944,7 +944,7 @@ if ! is_yes "$VSERVER"; then
 		. /etc/rc.d/rc.serial
 	fi
 
-	if [ -f /proc/sys/kernel/panic -a -n "$PANIC_REBOOT_TIME" -a "$PANIC_REBOOT_TIME" -gt "0" ]; then
+	if [ -n "$PANIC_REBOOT_TIME" -a "$PANIC_REBOOT_TIME" -gt "0" -a -f /proc/sys/kernel/panic ]; then
 		show 'Setting %s seconds for kernel reboot after panic' "$PANIC_REBOOT_TIME"; busy
 		# NOTE: you should use /etc/sysctl.conf instead
 		if sysctl -w kernel.panic=$PANIC_REBOOT_TIME >/dev/null 2>&1; then ok; else fail; fi
