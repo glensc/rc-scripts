@@ -43,10 +43,6 @@ RUN_USERPNP=no
 # Setup kernel space PNP (2.4.x)
 RUN_KERNELPNP=no
 
-# After how many seconds reboot system after kernel panic ?
-# 0 - never reboot system (suggested 60)
-PANIC_REBOOT_TIME=0
-
 # Do not allow users to login when system is starting
 # (but allow when it end "starting" process) ?
 DELAY_LOGIN=yes
