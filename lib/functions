@@ -392,12 +392,16 @@ msg_usage() {
 
 # Some functions to handle PLD Linux-style messages
 show() {
-	local text len
+	local text len time
+
+	if is_yes "$RC_BOOTTIME"; then
+		time=$(awk '{printf("[%8.2f] ", $1)}' /proc/uptime)
+	fi
 
 	if is_no "$FASTRC" && is_yes "$GETTEXT"; then
-		text=$(nls -n "$@")
+		text=$time$(nls -n "$@")
 	else
-		text=$(printf "$@")
+		text=$time$(printf "$@")
 	fi
 	len=${#text}
 	while [ $((len++)) -lt $INIT_COL ]; do
