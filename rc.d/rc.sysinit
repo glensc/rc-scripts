@@ -169,6 +169,31 @@ load_kernel_modules() {
 	done
 }
 
+# launch repair shell
+# which after exiting will reboot
+repair_shell() {
+	local reason="$2"
+
+	# don't use '\n' in nls macro !
+	echo
+	echo
+	echo "$reason"
+	nls "*** Dropping you to a shell; the system will reboot"
+	nls "*** when you leave the shell."
+	echo
+
+	[ "$SELINUX" = "1" ] && disable_selinux
+	if ! is_no "$RUN_SULOGIN_ON_ERR"; then
+		/sbin/sulogin
+	else
+		/bin/sh
+	fi
+
+	run_cmd "Unmounting file systems" umount -a
+	run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
+	run_cmd "Automatic reboot in progress" reboot
+}
+
 check_root_fs() {
 	show "Checking root filesystem"; started
 	initlog -c "fsck -C -T -a $fsckoptions /"
@@ -177,25 +202,10 @@ check_root_fs() {
 	# A return of 4 or higher means there were serious problems.
 	if [ $rc -gt 3 ]; then
 		[ -e /proc/splash ] && echo "verbose" > /proc/splash
-		# don't use '\n' in nls macro !
-		echo
-		echo
-		nls "*** An error occurred during the file system check."
-		nls "*** Dropping you to a shell; the system will reboot"
-		nls "*** when you leave the shell."
-		echo
 
 		PS1="$(nls '(Repair filesystem)# ')"; export PS1
-		[ "$SELINUX" = "1" ] && disable_selinux
-		if ! is_no "$RUN_SULOGIN_ON_ERR"; then
-			/sbin/sulogin
-		else
-			/bin/sh
-		fi
+		repair_shell "$(nls '*** An error occurred during the file system check.')"
 
-		run_cmd "Unmounting file systems" umount -a
-		mount -n -o remount,ro /
-		run_cmd "Automatic reboot in progress" reboot
 	# A return of 2 or 3 means that filesystem was repaired but we need
 	# to reboot.
 	elif [ "$rc" = "2" -o "$rc" = "3" ]; then
@@ -768,24 +778,9 @@ if ! is_yes "$VSERVER"; then
 			if [ $rc -gt 0 ]; then
 				[ -e /proc/splash ] && echo "verbose" > /proc/splash
 				show "Starting up RAID devices"; fail
-				echo
-				echo
-				nls "*** An error occurred during the RAID startup."
-				nls "*** Dropping you to a shell; the system will reboot"
-				nls "*** when you leave the shell."
-				echo
 
 				PS1="$(nls '(RAID Repair)# ')"; export PS1
-				[ "$SELINUX" = "1" ] && disable_selinux
-				if ! is_no "$RUN_SULOGIN_ON_ERR"; then
-					/sbin/sulogin
-				else
-					/bin/sh
-				fi
-
-				run_cmd "Unmounting file systems" umount -a
-				run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
-				run_cmd "Automatic reboot in progress" reboot
+				repair_shell "$(nls '*** An error occurred during the RAID startup.')"
 			fi
 			# LVM on RAID (keep in sync with LVM setting few lines above)
 			if [ "$golvm" -eq "1" ]; then
@@ -811,24 +806,10 @@ if ! is_yes "$VSERVER"; then
 		# A return of 2 or higher means there were serious problems
 		if [ $rc -gt 1 ]; then
 			[ -e /proc/splash ] && echo "verbose" > /proc/splash
-			echo
-			echo
-			nls "*** An error occurred during the file system check."
-			nls "*** Dropping you to a shell; the system will reboot"
-			nls "*** when you leave the shell."
-			echo
 
 			PS1="$(nls '(Repair filesystem)# ')"; export PS1
-			[ "$SELINUX" = "1" ] && disable_selinux
-			if ! is_no "$RUN_SULOGIN_ON_ERR"; then
-				/sbin/sulogin
-			else
-				/bin/sh
-			fi
+			repair_shell "$(nls '*** An error occurred during the file system check.')"
 
-			run_cmd "Unmounting file systems" umount -a
-			run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
-			run_cmd "Automatic reboot in progress" reboot
 		elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
 			_RUN_QUOTACHECK=1
 		fi
@@ -874,24 +855,10 @@ if ! is_yes "$VSERVER"; then
 		# A return of 2 or higher means there were serious problems.
 		if [ $rc -gt 1 ]; then
 			[ -e /proc/splash ] && echo "verbose" > /proc/splash
-			echo
-			echo
-			nls "*** An error occurred during the file system check."
-			nls "*** Dropping you to a shell; the system will reboot"
-			nls "*** when you leave the shell."
-			echo
 
 			PS1="$(nls '(Repair filesystem)# ')"; export PS1
-			[ "$SELINUX" = "1" ] && disable_selinux
-			if ! is_no "$RUN_SULOGIN_ON_ERR"; then
-				/sbin/sulogin
-			else
-				/bin/sh
-			fi
+			repair_shell "$(nls '*** An error occurred during the file system check.')"
 
-			run_cmd "Unmounting file systems" umount -a
-			run_cmd "Remounting root filesystem in ro mode" mount -n -o remount,ro /
-			run_cmd "Automatic reboot in progress" reboot
 		elif [ "$rc" = "1" -a -x /sbin/quotacheck ]; then
 			_RUN_QUOTACHECK=1
 		fi
