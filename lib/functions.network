@@ -73,7 +73,7 @@ set_hostname()
 	if [ "$domain" ]; then
 		# XXX umask and possible /etc/resolv.conf symlink breakage
 		> /etc/resolv.conf.new
-		if ! grep -q "search $domain" /etc/resolv.conf; then
+		if ! grep -Fq "search $domain" /etc/resolv.conf; then
 			echo "search $domain" >> /etc/resolv.conf.new
 		fi
 		echo "domain $domain" >> /etc/resolv.conf.new
@@ -257,7 +257,7 @@ setup_ip_param ()
 
 check_device_down ()
 {
-	if LC_ALL=C ip link show dev ${DEVICE} 2> /dev/null | grep -q UP; then
+	if LC_ALL=C ip link show dev ${DEVICE} 2> /dev/null | grep -Fq UP; then
 		return 1
 	else
 		return 0
@@ -513,7 +513,7 @@ setup_ip_rules ()
 is_wireless_device ()
 {
 	if [ -x /sbin/iwconfig ]; then
-		LC_ALL=C iwconfig "${1}" 2>&1 | grep -q "no wireless extensions" || return 0
+		LC_ALL=C iwconfig "${1}" 2>&1 | grep -Fq "no wireless extensions" || return 0
 	fi
 	return 1
 }
@@ -606,8 +606,8 @@ check_mii_tool ()
 {
 	[ -x /sbin/mii-tool ] || return 2
 	local output=$(LC_ALL=C mii-tool $1 2>&1)
-	echo $output | grep -q "link ok" && return 1
-	echo $output | grep -q "no link" && return 0
+	echo $output | grep -Fq "link ok" && return 1
+	echo $output | grep -Fq "no link" && return 0
 	return 2
 }
 
@@ -619,8 +619,8 @@ check_ethtool ()
 {
 	[ -x /sbin/ethtool ] || return 2
 	local output=$(LC_ALL=C ethtool $1 2>&1)
-	echo $output | grep -q "Link detected: yes" && return 1
-	echo $output | grep -q "Link detected: no" && return 0
+	echo $output | grep -Fq "Link detected: yes" && return 1
+	echo $output | grep -Fq "Link detected: no" && return 0
 	return 2
 }
 
@@ -639,7 +639,7 @@ check_iwconfig ()
 	[ -x /sbin/iwconfig ] || return 2
 	output=$(LC_ALL=C iwconfig "$1" 2>&1)
 	# "radio off" is ipwxxx only "feature" (and there is no "radio on")
-	echo "$output" | grep -q "radio off" && return 0
+	echo "$output" | grep -Fq "radio off" && return 0
 	# XXX: need more generic checks for wifi
 	return 2
 }
@@ -660,7 +660,7 @@ check_link_down ()
 
 	[ -z "$max_timeout" ] && max_timeout=6
 
-	if ! LC_ALL=C ip link show dev $device 2>/dev/null | grep -q UP; then
+	if ! LC_ALL=C ip link show dev $device 2>/dev/null | grep -Fq UP; then
 		ip link set dev $device up >/dev/null 2>&1
 		emit net-device-up IFACE=$device
 	fi
