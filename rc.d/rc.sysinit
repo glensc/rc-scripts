@@ -108,7 +108,7 @@ init_selinux() {
 		return
 	fi
 
-	if ! grep -q selinuxfs /proc/filesystems; then
+	if ! grep -Fq selinuxfs /proc/filesystems; then
 		# no support in kernel, no chance
 		SELINUX=no
 	fi
@@ -367,11 +367,11 @@ if ! is_yes "$VSERVER"; then
 	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
 
 	# sysfs is also needed before any other things (under kernel > 2.5)
-	if grep -q sysfs /proc/filesystems 2>/dev/null; then
-		is_fsmounted sysfs /sys || mount -n -o gid=17 -t sysfs sysfs /sys
-		if grep -q securityfs /proc/filesystems 2>/dev/null; then
-			mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
-		fi
+	if ! is_fsmounted sysfs /sys; then
+		grep -Fq sysfs /proc/filesystems && mount -n -o gid=17 -t sysfs sysfs /sys
+	fi
+	if grep -Fq securityfs /proc/filesystems; then
+		mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
 	fi
 
 	init_selinux
