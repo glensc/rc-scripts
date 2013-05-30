@@ -330,7 +330,7 @@ if ! is_yes "$VSERVER"; then
 		is_fsmounted devtmpfs /dev || mount -n -t devtmpfs devtmpfs /dev
 		load_kernel_modules modules.preudev
 		/sbin/start_udev
-		[ -x /sbin/initctl ] && /sbin/initctl -q start udev
+		use_upstart && [ -x /sbin/initctl ] && /sbin/initctl -q start udev
 	elif [ -x /lib/firmware/firmware-loader.sh ]; then
 		/sbin/sysctl -e -w kernel.hotplug=/lib/firmware/firmware-loader.sh > /dev/null 2>&1
 	fi
