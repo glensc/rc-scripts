@@ -740,7 +740,7 @@ if ! is_yes "$VSERVER"; then
 		done
 	fi
 
-	if ! is_no "$DM_MULTIPATH" [ -x /sbin/multipath ]; then
+	if ! is_no "$DM_MULTIPATH" && [ -x /sbin/multipath ]; then
 		# first make nodes that were discarded due (possible) new /dev mount
 		modprobe -s dm-mod
 		/sbin/dmsetup mknodes
