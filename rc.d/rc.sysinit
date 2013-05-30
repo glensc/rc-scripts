@@ -382,7 +382,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Choose Hardware profile
-	if [ -f /etc/sysconfig/hwprof ]; then
+	if ! is_no "$HWPROFILES" && [ -f /etc/sysconfig/hwprof ]; then
 		. /etc/sysconfig/hwprof
 		if is_yes "${HWPROFILES}" && [ -x /sbin/hwprofile -a -d /etc/sysconfig/hwprofiles/data ]; then
 			mount -n / -o rw,remount

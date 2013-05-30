@@ -129,6 +129,9 @@ VSERVER_ISOLATION_NET=detect
 # 'yes' behaves as 'detect'
 SELINUX=detect
 
+# Enable HWPROFILES support?
+HWPROFILES=no
+
 # Enable syslogging for rc-scripts
 RC_LOGGING=yes
 
