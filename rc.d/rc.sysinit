@@ -176,13 +176,13 @@ else
 	RC_BOOTLOG=
 fi
 
-if ! is_yes "$VSERVER" ; then
+if ! is_yes "$VSERVER"; then
+	# we need /proc mounted before everything
+	is_fsmounted proc /proc || mount -n /proc || mount -n -o gid=17,hidepid=2 -t proc /proc /proc
+
 	if [ -d /run ]; then
 		is_fsmounted tmpfs /run || mount -n -t tmpfs run /run
 	fi
-
-	# we need /proc mounted before everything
-	is_fsmounted proc /proc || mount -n /proc || mount -n -o gid=17,hidepid=2 -t proc /proc /proc
 
 	# Early sysctls
 	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
