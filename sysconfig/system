@@ -39,9 +39,9 @@ DEFAULT_SERVICE_LIMITS="-u unlimited -c 0"
 DEFAULT_SERVICE_UMASK=022
 
 # Setup PNP using userspace tools?
-RUN_USERPNP=yes
+RUN_USERPNP=no
 # Setup kernel space PNP (2.4.x)
-RUN_KERNELPNP=yes
+RUN_KERNELPNP=no
 
 # After how many seconds reboot system after kernel panic ?
 # 0 - never reboot system (suggested 60)

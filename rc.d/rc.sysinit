@@ -434,11 +434,11 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# set up pnp and kernel pnp
-	if [ -z "$nopnp" ]; then
-		if ! is_no "$RUN_USERPNP" && [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
+	if is_yes "$RUN_USERPNP" || is_yes "$RUN_KERNELPNP"; then
+		if [ -z "$nopnp" ] && is_yes "$RUN_USERPNP" && [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
 			run_cmd "Setting up ISA PNP devices (userspace pnp)" /sbin/isapnp /etc/isapnp/isapnp.conf
 		fi
-		if ! is_no "$RUN_KERNELPNP"; then
+		if [ -z "$nopnp" ] && is_yes "$RUN_KERNELPNP"; then
 			modprobe -s isa-pnp
 			if [ -e /proc/isapnp -a -f /etc/isapnp/isapnp-kernel.conf ]; then
 				show "Setting up ISA PNP devices (kernelspace pnp)"; busy
