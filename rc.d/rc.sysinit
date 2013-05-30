@@ -48,6 +48,47 @@ modprobe_c() {
 	modprobe_c_cache=$(modprobe -c)
 }
 
+# parse kernel cmdline
+# needs /proc mounted
+parse_cmdline() {
+	read cmdline < /proc/cmdline
+	local arg
+
+	for arg in $cmdline; do
+		case "$arg" in
+		pld.no-upstart)
+			# default is set in /etc/sysconfig/system or detected in init.d/functions
+			USE_UPSTART=no
+		;;
+		noudev)
+			# default is set in /etc/sysconfig/system
+			START_UDEV=no
+		;;
+		nousb)
+			nousb=1
+		;;
+		nohdparm)
+			nohdparm=1
+		;;
+		fastboot)
+			fastboot=1
+		;;
+		nopnp)
+			nopnp=1
+		;;
+		nomodules)
+			nomodules=1
+		;;
+		nofirewire)
+			nofirewire=1
+		;;
+		nofsck)
+			nofsck=1
+		;;
+		esac
+	done
+}
+
 disable_selinux() {
 	local _d selinuxfs _t _r
 
@@ -180,18 +221,14 @@ if ! is_yes "$VSERVER"; then
 	# we need /proc mounted before everything
 	is_fsmounted proc /proc || mount -n /proc || mount -n -o gid=17,hidepid=2 -t proc /proc /proc
 
+	parse_cmdline
+
 	if [ -d /run ]; then
 		is_fsmounted tmpfs /run || mount -n -t tmpfs run /run
 	fi
 
 	# Early sysctls
 	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
-
-	# Only read this once.
-	cmdline=$(cat /proc/cmdline)
-	if strstr "$cmdline" "pld.no-upstart" ; then
-		USE_UPSTART="no"
-	fi
 
 	# sysfs is also needed before any other things (under kernel > 2.5)
 	if grep -q sysfs /proc/filesystems 2>/dev/null; then
@@ -329,7 +366,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Initialize USB controllers
 	usb=0
-	if ! strstr "$cmdline" "nousb" && ! is_fsmounted usbfs /proc/bus/usb; then
+	if [ -z "$nousb" ] && ! is_fsmounted usbfs /proc/bus/usb; then
 		aliases=$(modprobe_c | awk '/^alias[\t ]+usb-controller/ { print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			modprobe -s usbcore
@@ -365,14 +402,12 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Setup hdparm thing (if exists and is needed)
-	if ! strstr "$cmdline" nohdparm; then
+	if [ -z "$nohdparm" ]; then
 		[ -x /etc/rc.d/rc.hdparm ] && /etc/rc.d/rc.hdparm
 	fi
 
-	if [ -f /fastboot ] || strstr "$cmdline" "fastboot"; then
-		fastboot=yes
-	else
-		fastboot=
+	if [ -z "$fastboot" ] && [ -f /fastboot ]; then
+		fastboot=1
 	fi
 
 	if [ -f /fsckoptions ]; then
@@ -398,15 +433,8 @@ if ! is_yes "$VSERVER"; then
 		check_root_fs
 	fi
 
-	# Check for arguments
-	if strstr "$cmdline" nopnp; then
-		PNP=
-	else
-		PNP=yes
-	fi
-
 	# set up pnp and kernel pnp
-	if [ -n "$PNP" ]; then
+	if [ -z "$nopnp" ]; then
 		if ! is_no "$RUN_USERPNP" && [ -x /sbin/isapnp -a -f /etc/isapnp/isapnp.conf ]; then
 			run_cmd "Setting up ISA PNP devices (userspace pnp)" /sbin/isapnp /etc/isapnp/isapnp.conf
 		fi
@@ -507,7 +535,7 @@ if ! is_yes "$VSERVER"; then
 
 	if [ ! -f /proc/modules ]; then
 		USEMODULES=
-	elif ! strstr "$cmdline" nomodules; then
+	elif [ -z "$nomodules" ]; then
 		USEMODULES=y
 	else
 		USEMODULES=
@@ -553,7 +581,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Load firewire devices
-	if ! strstr "$cmdline" nofirewire; then
+	if [ -z "$nofirewire" ]; then
 		aliases=$(modprobe_c | awk '/^alias ieee1394-controller/ { print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			for alias in $aliases ; do
@@ -769,7 +797,7 @@ if ! is_yes "$VSERVER"; then
 
 	_RUN_QUOTACHECK=0
 	# Check filesystems
-	if [ -z "$fastboot" ] && ! strstr "$cmdline" nofsck; then
+	if [ -z "$fastboot" ] && [ -z "$nofsck" ]; then
 		rc_splash "fsck start"
 		show "Checking filesystems"; started
 		initlog -c "fsck -C -T -R -A -a -P $fsckoptions"
