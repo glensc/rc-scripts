@@ -96,6 +96,10 @@ LVM2=yes
 # disable if do not want DMRAID being initalized by rc.sysinit
 DMRAID=yes
 
+# mdadm
+# disable if do not want mdadm being initalized by rc.sysinit
+MDADM=yes
+
 # Disable dm-multipath and friends here if you plan to use
 # non standard drivers (ex. DELL MPP RDAC driver)
 DM_MULTIPATH=yes

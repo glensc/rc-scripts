@@ -64,6 +64,10 @@ parse_cmdline() {
 			# default is set in /etc/sysconfig/system
 			START_UDEV=no
 		;;
+		nomdadm)
+			# default is set in /etc/sysconfig/system
+			MDADM=no
+		;;
 		nomultipath)
 			# default is set in /etc/sysconfig/system
 			DM_MULTIPATH=no
@@ -221,6 +225,91 @@ check_root_fs() {
 		run_cmd "Automatic reboot in progress" reboot
 	elif [ "$rc" = "1" ]; then
 		_RUN_QUOTACHECK=1
+	fi
+}
+
+# Add raid devices
+init_mdadm() {
+	if [ ! -x /sbin/mdadm -o ! -f /etc/mdadm.conf ]; then
+		return
+	fi
+
+	modprobe -s md
+	local rc=0
+	if [ -f /proc/mdstat ]; then
+		golvm=0
+
+		if grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf; then
+			show "Starting up RAID devices"; busy
+			/sbin/mdadm --assemble --scan --auto=yes
+			rc=$?
+			if [ "$rc" -eq 0 -o "$rc" -eq 2 ]; then
+				# rc is used later, too so set sane value
+				rc=0
+				deltext; ok
+				golvm=1
+			else
+				deltext; fail
+			fi
+
+		fi
+
+		# A non-zero return means there were problems
+		if [ $rc -gt 0 ]; then
+			[ -e /proc/splash ] && echo "verbose" > /proc/splash
+			show "Starting up RAID devices"; fail
+
+			PS1="$(nls '(RAID Repair)# ')"; export PS1
+			repair_shell "$(nls '*** An error occurred during the RAID startup.')"
+		fi
+
+		# LVM on RAID (keep in sync with LVM init)
+		if [ "$golvm" -eq "1" ]; then
+			if [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
+				run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelocking
+				run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmsysinit
+				[ "$lvmversion" = "2" ] && /sbin/vgmknodes
+			fi
+		fi
+		show "Starting up RAID devices"; ok
+	fi
+	return $rc
+}
+
+# Init LVM
+init_lvm() {
+	if [ ! -x /sbin/vgscan -o ! -x /sbin/vgchange ] && ! is_yes "$EVMS_LVM"; then
+		return
+	fi
+
+	if is_no "$LVM2"; then
+		lvmversion=$(LC_ALL=C /sbin/vgchange --version 2>/dev/null | awk '/LVM version:/{if ($3 >= 2) print "2"}')
+	else
+		lvmversion=2
+	fi
+
+	if [ "$lvmversion" = "1" ] ; then
+		modprobe -s lvm-mod
+		lvmignorelocking=""
+		lvmsysinit=""
+	elif [ "$lvmversion" = "2" ] ; then
+		modprobe -s dm-mod
+		lvmignorelocking="--ignorelockingfailure"
+		lvmsysinit="--sysinit"
+	else
+		modprobe -s lvm-mod
+		# device mapper (2.5+ and patched 2.4)
+		modprobe -s dm-mod
+		lvmignorelocking=""
+		lvmsysinit=""
+	fi
+
+	run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelocking
+	run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmsysinit
+	if [ "$lvmversion" = "2" ]; then
+		/sbin/vgmknodes $lvmignorelocking
+		# display VG statistics
+		/sbin/vgdisplay -s $lvmignorelocking
 	fi
 }
 
@@ -673,36 +762,9 @@ if ! is_yes "$VSERVER"; then
 		fi
 	fi
 
-	# LVM (keep in sync with LVM starting after RAID run!)
-	if ! is_no "$LVM2" && [ -x /sbin/vgscan -a -x /sbin/vgchange ] || is_yes "$EVMS_LVM"; then
-		if is_no "$LVM2"; then
-			lvmversion=$(LC_ALL=C /sbin/vgchange --version 2>/dev/null | awk '/LVM version:/{if ($3 >= 2) print "2"}')
-		else
-			lvmversion=2
-		fi
-		if [ "$lvmversion" = "1" ] ; then
-			modprobe -s lvm-mod
-			lvmignorelocking=""
-			lvmsysinit=""
-		elif [ "$lvmversion" = "2" ] ; then
-			modprobe -s dm-mod
-			lvmignorelocking="--ignorelockingfailure"
-			lvmsysinit="--sysinit"
-		else
-			modprobe -s lvm-mod
-			# device mapper (2.5+ and patched 2.4)
-			modprobe -s dm-mod
-			lvmignorelocking=""
-			lvmsysinit=""
-		fi
-
-		run_cmd "Scanning for LVM volume groups" /sbin/vgscan $lvmignorelocking
-		run_cmd "Activating LVM volume groups" /sbin/vgchange -a y $lvmsysinit
-		if [ "$lvmversion" = "2" ]; then
-			/sbin/vgmknodes $lvmignorelocking
-			# display VG statistics
-			/sbin/vgdisplay -s $lvmignorelocking
-		fi
+	# Init LVM
+	if ! is_no "$LVM2"; then
+		init_lvm
 	fi
 
 	if [ "$delay_cryptsetup" != 0 ]; then
@@ -712,47 +774,8 @@ if ! is_yes "$VSERVER"; then
 		[ $delay_cryptsetup = 0 ] && ok || fail
 	fi
 
-	# Add raid devices
-	if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
-		modprobe -s md
-		if [ -f /proc/mdstat ]; then
-			golvm=0
-			rc=0
-			if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ]; then
-				if grep -qE "^([[:blank:]]|)ARRAY[[:blank:]]" /etc/mdadm.conf 2>/dev/null; then
-					show "Starting up RAID devices"; busy
-					/sbin/mdadm --assemble --scan --auto=yes
-					rc=$?
-					if [ "$rc" -eq 0 -o "$rc" -eq 2 ]; then
-						# rc is used later, too so set sane value
-						rc=0
-						deltext; ok
-						golvm=1
-					else
-						deltext; fail
-					fi
-
-				fi
-			fi
-
-			# A non-zero return means there were problems
-			if [ $rc -gt 0 ]; then
-				[ -e /proc/splash ] && echo "verbose" > /proc/splash
-				show "Starting up RAID devices"; fail
-
-				PS1="$(nls '(RAID Repair)# ')"; export PS1
-				repair_shell "$(nls '*** An error occurred during the RAID startup.')"
-			fi
-			# LVM on RAID (keep in sync with LVM setting few lines above)
-			if [ "$golvm" -eq "1" ]; then
-				if [ -x /sbin/vgscan -a -x /sbin/vgchange ]; then
-					run_cmd "Scanning for LVM volume groups (on RAID)" /sbin/vgscan $lvmignorelocking
-					run_cmd "Activating LVM volume groups (on RAID)" /sbin/vgchange -a y $lvmsysinit
-					[ "$lvmversion" = "2" ] && /sbin/vgmknodes
-				fi
-			fi
-			show "Starting up RAID devices"; ok
-		fi
+	if ! is_no "$MDADM"; then
+		init_mdadm
 	fi
 
 	_RUN_QUOTACHECK=0
@@ -780,7 +803,6 @@ if ! is_yes "$VSERVER"; then
 	# Mount all other filesystems (except for NFS and /proc, which is already
 	# mounted). Contrary to standard usage,
 	# filesystems are NOT unmounted in single user mode.
-
 	run_cmd "Mounting local filesystems" mount -a -t nonfs,nfs4,smbfs,ncpfs,proc,cifs -O no_netdev
 
 	# now we have /usr mounted, recheck if we have gettext and tput available.
