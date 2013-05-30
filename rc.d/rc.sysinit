@@ -161,7 +161,7 @@ check_root_fs() {
 }
 
 # boot logging to /var/log/boot.log. install showconsole package to get it.
-if [ -x /sbin/blogd ] && ! is_no "$RC_BOOTLOG"; then
+if ! is_no "$RC_BOOTLOG" && [ -x /sbin/blogd ]; then
 	RC_BOOTLOG=1
 else
 	RC_BOOTLOG=
@@ -343,7 +343,7 @@ if ! is_yes "$VSERVER"; then
 	if [ "$usb" = "1" ]; then
 		needusbstorage=$(cat /proc/bus/usb/devices 2>/dev/null | grep -e "^I.*Cls=08" 2>/dev/null)
 		if [ "$(kernelverser)" -lt "002006" ]; then
-			grep -q 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
+			grep -Fq 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
 			mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02" 2>/dev/null)
 			kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01" 2>/dev/null)
 			if [ -n "$kbdoutput" ]; then
