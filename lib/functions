@@ -394,7 +394,7 @@ msg_usage() {
 show() {
 	local text len time
 
-	if is_yes "$RC_BOOTTIME"; then
+	if is_yes "$RC_UPTIME"; then
 		time=$(awk '{printf("[%8.2f] ", $1)}' /proc/uptime)
 	fi
 

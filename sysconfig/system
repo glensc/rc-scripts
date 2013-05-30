@@ -124,5 +124,8 @@ VSERVER_ISOLATION_NET=detect
 # Enable syslogging for rc-scripts
 RC_LOGGING=yes
 
+# Include machine uptime counter in all show messages
+RC_UPTIME=no
+
 # Disable console logging by blogd
 RC_BOOTLOG=yes
