@@ -39,6 +39,15 @@ CONSOLE_LOGLEVEL=1
 # Read functions
 . /lib/rc-scripts/functions
 
+modprobe_c_cache=""
+modprobe_c() {
+	if [ "$modprobe_c_cache" ]; then
+		echo "$modprobe_c_cache"
+		return
+	fi
+	modprobe_c_cache=$(modprobe -c)
+}
+
 disable_selinux() {
 	local _d selinuxfs _t _r
 
@@ -320,8 +329,8 @@ if ! is_yes "$VSERVER"; then
 
 	# Initialize USB controllers
 	usb=0
-	if ! strstr "$cmdline" "nousb" && ! is_fsmounted usbfs /proc/bus/usb ; then
-		aliases=$(/sbin/modprobe -c | awk '/^alias[\t ]+usb-controller/ { print $3 }')
+	if ! strstr "$cmdline" "nousb" && ! is_fsmounted usbfs /proc/bus/usb; then
+		aliases=$(modprobe_c | awk '/^alias[\t ]+usb-controller/ { print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			/sbin/modprobe -s usbcore
 			for alias in $aliases ; do
@@ -545,7 +554,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Load firewire devices
 	if ! strstr "$cmdline" nofirewire; then
-		aliases=$(/sbin/modprobe -c | awk '/^alias ieee1394-controller/ { print	$3 }')
+		aliases=$(modprobe_c | awk '/^alias ieee1394-controller/ { print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			for alias in $aliases ; do
 				[ "$alias" = "off" ] && continue
@@ -556,14 +565,14 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Load sound modules if they need persistent DMA buffers
-	if /sbin/modprobe -c | grep -q "^options sound dmabuf=1"; then
+	if modprobe_c | grep -q "^options sound dmabuf=1"; then
 		RETURN=0
-		alias=$(/sbin/modprobe -c | grep -sE "^alias[[:space:]]+sound[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
+		alias=$(modprobe_c | grep -sE "^alias[[:space:]]+sound[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
 		if [ -n "$alias" -a "$alias" != "off" ] ; then
 			run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
 			RETURN=$?
 		fi
-		alias=$(/sbin/modprobe -c | grep -sE "^alias[[:space:]]+sound-slot-0[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
+		alias=$(modprobe_c | grep -sE "^alias[[:space:]]+sound-slot-0[[:space:]]+" 2>/dev/null | awk '{ print $3 }')
 		if [ -n "$alias" -a "$alias" != "off" ] ; then
 			run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
 			RETURN=$?
