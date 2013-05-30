@@ -72,6 +72,10 @@ parse_cmdline() {
 			# default is set in /etc/sysconfig/system
 			DM_MULTIPATH=no
 		;;
+		noselinux)
+			# default is set in /etc/sysconfig/system
+			SELINUX=no
+		;;
 		nousb)
 			nousb=1
 		;;
@@ -95,6 +99,35 @@ parse_cmdline() {
 		;;
 		esac
 	done
+}
+
+# setup SELINUX variable
+init_selinux() {
+	# user knows!
+	if is_no "$SELINUX"; then
+		return
+	fi
+
+	if ! grep -q selinuxfs /proc/filesystems; then
+		# no support in kernel, no chance
+		SELINUX=no
+	fi
+
+	if ! is_fsmounted selinuxfs /selinux; then
+		mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
+	fi
+
+	# Check SELinux status
+	local selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts 2> /dev/null)
+	SELINUX=
+	if [ -n "$selinuxfs" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
+		if [ -r $selinuxfs/enforce ] ; then
+			SELINUX=$(cat $selinuxfs/enforce)
+		else
+			# assume enforcing if you can't read it
+			SELINUX=1
+		fi
+	fi
 }
 
 disable_selinux() {
@@ -341,10 +374,7 @@ if ! is_yes "$VSERVER"; then
 		fi
 	fi
 
-	# selinux
-	if grep -q selinuxfs /proc/filesystems 2>/dev/null && ! is_fsmounted selinuxfs /selinux; then
-		mount -n -o gid=17 -t selinuxfs selinuxfs /selinux
-	fi
+	init_selinux
 
 	# PLD Linux LiveCD support
 	if [ -x /etc/rc.d/rc.live ]; then
@@ -363,18 +393,6 @@ if ! is_yes "$VSERVER"; then
 
 	# Disable splash when requested
 	is_no "$BOOT_SPLASH" && [ -e /proc/splash ] && echo "0" > /proc/splash
-
-	# Check SELinux status
-	selinuxfs=$(awk '/ selinuxfs / { print $2 }' /proc/mounts 2> /dev/null)
-	SELINUX=
-	if [ -n "$selinuxfs" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
-		if [ -r $selinuxfs/enforce ] ; then
-			SELINUX=$(cat $selinuxfs/enforce)
-		else
-			# assume enforcing if you can't read it
-			SELINUX=1
-		fi
-	fi
 
 	if [ -x /sbin/restorecon ] && is_fsmounted tmpfs /dev; then
 		/sbin/restorecon -R /dev 2>/dev/null
@@ -562,7 +580,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Clean up SELinux labels
-	if [ -n "$SELINUX" ]; then
+	if is_yes "$SELINUX"; then
 		for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache; do
 			[ -r $file ] && restorecon $file >/dev/null 2>&1
 		done
@@ -921,8 +939,7 @@ else
 	clean_vserver_mtab
 fi
 
-
-[ -n "$SELINUX" ] && [ -f /.autorelabel ] && relabel_selinux
+is_yes "$SELINUX" && [ -f /.autorelabel ] && relabel_selinux
 
 # Clean up /.
 rm -f /fastboot /fsckoptions /forcefsck /halt /poweroff >/dev/null 2>&1
@@ -973,7 +990,7 @@ fi
 # System protected dirs
 mkdir -m 1777 -p /tmp/.ICE-unix > /dev/null 2>&1
 chown root:root /tmp/.ICE-unix
-[ -n "$SELINUX" ] && restorecon /tmp/.ICE-unix >/dev/null 2>&1
+is_yes "$SELINUX" && restorecon /tmp/.ICE-unix >/dev/null 2>&1
 
 if ! is_yes "$VSERVER"; then
 	run_cmd "Enabling swap space" true

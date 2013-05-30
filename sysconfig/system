@@ -125,6 +125,10 @@ VSERVER=detect
 # Vserver isolation only networking inside of guest (yes/no/detect)
 VSERVER_ISOLATION_NET=detect
 
+# Enable selinux support (yes/no/detect)
+# 'yes' behaves as 'detect'
+SELINUX=detect
+
 # Enable syslogging for rc-scripts
 RC_LOGGING=yes
 
