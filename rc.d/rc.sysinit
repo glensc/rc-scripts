@@ -632,7 +632,7 @@ if ! is_yes "$VSERVER"; then
 		/sbin/dmsetup ls --target multipath --exec '/sbin/kpartx -a -p p'
 	fi
 
-	if [ -x /sbin/dmraid ]; then
+	if ! is_no "$DMRAID" && [ -x /sbin/dmraid ]; then
 		run_cmd "Activating ATARAID devices" /sbin/dmraid -ay
 	fi
 

@@ -92,6 +92,10 @@ EVMS_OS2=no
 # disable if your only LVM volume is rootfs started on initrd and want faster startup
 LVM2=yes
 
+# DMRAID
+# disable if do not want DMRAID being initalized by rc.sysinit
+DMRAID=yes
+
 # Disable dm-multipath and friends here if you plan to use
 # non standard drivers (ex. DELL MPP RDAC driver)
 DM_MULTIPATH=yes
