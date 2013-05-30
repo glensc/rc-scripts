@@ -364,7 +364,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Early sysctls
-	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
+	sysctl -q -e -p /etc/sysctl.conf
 
 	# sysfs is also needed before any other things (under kernel > 2.5)
 	if ! is_fsmounted sysfs /sys; then
@@ -439,7 +439,7 @@ if ! is_yes "$VSERVER"; then
 		/sbin/start_udev
 		use_upstart && [ -x /sbin/initctl ] && /sbin/initctl -q start udev
 	elif [ -x /lib/firmware/firmware-loader.sh ]; then
-		/sbin/sysctl -e -w kernel.hotplug=/lib/firmware/firmware-loader.sh > /dev/null 2>&1
+		/sbin/sysctl -q -e -w kernel.hotplug=/lib/firmware/firmware-loader.sh
 	fi
 
 	# Unmount the initrd, if necessary
@@ -456,7 +456,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Configure Linux kernel (initial configuration, some required modules still
 	# may be missing).
-	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
+	sysctl -q -e -p /etc/sysctl.conf
 
 	# Check if timezone definition is available
 	if [ -e /etc/localtime ] && [ -e /dev/rtc -o -e /dev/rtc0 ] ; then
@@ -688,11 +688,11 @@ if ! is_yes "$VSERVER"; then
 
 	if [ -f /proc/sys/kernel/modprobe ]; then
 		if [ -n "$USEMODULES" ]; then
-			sysctl -w kernel.modprobe="/sbin/modprobe" >/dev/null 2>&1
+			sysctl -q -w kernel.modprobe="/sbin/modprobe"
 		else
 			# We used to set this to NULL, but that causes
 			# 'failed to exec' messages"
-			sysctl -w kernel.modprobe="/bin/true" >/dev/null 2>&1
+			sysctl -q -w kernel.modprobe="/bin/true"
 		fi
 	fi
 
@@ -919,11 +919,11 @@ if ! is_yes "$VSERVER"; then
 	if [ -n "$PANIC_REBOOT_TIME" -a "$PANIC_REBOOT_TIME" -gt "0" -a -f /proc/sys/kernel/panic ]; then
 		show 'Setting %s seconds for kernel reboot after panic' "$PANIC_REBOOT_TIME"; busy
 		# NOTE: you should use /etc/sysctl.conf instead
-		if sysctl -w kernel.panic=$PANIC_REBOOT_TIME >/dev/null 2>&1; then ok; else fail; fi
+		if sysctl -q -w kernel.panic=$PANIC_REBOOT_TIME; then ok; else fail; fi
 	fi
 
 	# ... and here finish configuring parameters
-	sysctl -e -p /etc/sysctl.conf > /dev/null 2>&1
+	sysctl -q -e -p /etc/sysctl.conf
 else
 	emit --no-wait root-filesystem
 	emit --no-wait virtual-filesystems
