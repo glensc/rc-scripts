@@ -634,7 +634,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Find and activate volume groups:
 	# EVMS
-	if [ -x /sbin/evms_activate ]; then
+	if is_yes "$EVMS_LVM" && [ -x /sbin/evms_activate ]; then
 		if [ "$(kernelverser)" -lt "002006" ]; then
 			# Linux 2.4 core modules
 			modprobe -s evms
