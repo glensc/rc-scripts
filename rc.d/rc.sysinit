@@ -194,9 +194,9 @@ if ! is_yes "$VSERVER" ; then
 	fi
 
 	# sysfs is also needed before any other things (under kernel > 2.5)
-	if grep -q sysfs /proc/filesystems 2>/dev/null ; then
+	if grep -q sysfs /proc/filesystems 2>/dev/null; then
 		is_fsmounted sysfs /sys || mount -n -o gid=17 -t sysfs sysfs /sys
-		if grep -q securityfs /proc/filesystems 2>/dev/null ; then
+		if grep -q securityfs /proc/filesystems 2>/dev/null; then
 			mount -n -o gid=17 -t securityfs securityfs /sys/kernel/security
 		fi
 	fi
@@ -257,7 +257,7 @@ fi
 
 # Set the hostname
 if [ -z "${HOSTNAME}" ]; then
-	show "$(nls 'Host:') $(hostname)" ; ok
+	show "$(nls 'Host:') $(hostname)"; ok
 else
 	run_cmd "$(nls 'Host:') ${HOSTNAME}" hostname ${HOSTNAME}
 fi
@@ -314,7 +314,7 @@ if ! is_yes "$VSERVER"; then
 		# XXX might need modules dep
 		# Device mapper & related initialization
 		if ! grep -qF device-mapper /proc/devices; then
-			modprobe dm-mod
+			modprobe -s dm-mod
 		fi
 
 		. /etc/rc.d/init.d/cryptsetup
@@ -332,10 +332,10 @@ if ! is_yes "$VSERVER"; then
 	if ! strstr "$cmdline" "nousb" && ! is_fsmounted usbfs /proc/bus/usb; then
 		aliases=$(modprobe_c | awk '/^alias[\t ]+usb-controller/ { print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
-			/sbin/modprobe -s usbcore
+			modprobe -s usbcore
 			for alias in $aliases ; do
 				[ "$alias" = "off" ] && continue
-				run_cmd "$(nls 'Initializing USB controller') ($alias)" /sbin/modprobe -s $alias
+				run_cmd "$(nls 'Initializing USB controller') ($alias)" modprobe -s $alias
 			done
 			[ $? -eq 0 -a -n "$aliases" ] && usb=1
 		fi
@@ -352,14 +352,14 @@ if ! is_yes "$VSERVER"; then
 	if [ "$usb" = "1" ]; then
 		needusbstorage=$(cat /proc/bus/usb/devices 2>/dev/null | grep -e "^I.*Cls=08" 2>/dev/null)
 		if [ "$(kernelverser)" -lt "002006" ]; then
-			grep -Fq 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe hid 2> /dev/null
+			grep -Fq 'hid' /proc/bus/usb/drivers 2>/dev/null || run_cmd "Initializing USB HID interface" modprobe -s hid
 			mouseoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=02" 2>/dev/null)
 			kbdoutput=$(cat /proc/bus/usb/devices 2>/dev/null|grep -E "^I.*Cls=03.*Prot=01" 2>/dev/null)
 			if [ -n "$kbdoutput" ]; then
-				run_cmd "Initializing USB keyboard" modprobe keybdev
+				run_cmd "Initializing USB keyboard" modprobe -s keybdev
 			fi
 			if [ -n "$mouseoutput" ]; then
-				run_cmd "Initializing USB mouse" modprobe mousedev
+				run_cmd "Initializing USB mouse" modprobe -s mousedev
 			fi
 		fi
 	fi
@@ -411,7 +411,7 @@ if ! is_yes "$VSERVER"; then
 			run_cmd "Setting up ISA PNP devices (userspace pnp)" /sbin/isapnp /etc/isapnp/isapnp.conf
 		fi
 		if ! is_no "$RUN_KERNELPNP"; then
-			/sbin/modprobe isa-pnp 2> /dev/null
+			modprobe -s isa-pnp
 			if [ -e /proc/isapnp -a -f /etc/isapnp/isapnp-kernel.conf ]; then
 				show "Setting up ISA PNP devices (kernelspace pnp)"; busy
 				grep -v "^#" /etc/isapnp/isapnp-kernel.conf 2>/dev/null >/proc/isapnp && (deltext; ok) || (deltext; fail)
@@ -432,7 +432,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Clean up SELinux labels
 	if [ -n "$SELINUX" ]; then
-		for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache ; do
+		for file in /etc/mtab /etc/cryptomtab /etc/ld.so.cache; do
 			[ -r $file ] && restorecon $file >/dev/null 2>&1
 		done
 	fi
@@ -549,7 +549,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Load usb storage here, to match most other things
 	if [ -n "$needusbstorage" ]; then
-		modprobe usb-storage >/dev/null 2>&1
+		modprobe -s usb-storage
 	fi
 
 	# Load firewire devices
@@ -558,9 +558,9 @@ if ! is_yes "$VSERVER"; then
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			for alias in $aliases ; do
 				[ "$alias" = "off" ] && continue
-				run_cmd "$(nls 'Initializing firewire controller') ($alias)" /sbin/modprobe $alias
+				run_cmd "$(nls 'Initializing firewire controller') ($alias)" modprobe $alias
 			done
-			grep -E "SBP2" /proc/bus/ieee1394/devices 2>/dev/null && /sbin/modprobe -s sbp2 > /dev/null 2>&1
+			grep -E "SBP2" /proc/bus/ieee1394/devices 2>/dev/null && modprobe -s sbp2
 		fi
 	fi
 
@@ -609,19 +609,19 @@ if ! is_yes "$VSERVER"; then
 	if [ -x /sbin/evms_activate ]; then
 		if [ "$(kernelverser)" -lt "002006" ]; then
 			# Linux 2.4 core modules
-			modprobe -s evms > /dev/null 2>&1
-			modprobe -s evms_passthru > /dev/null 2>&1
-			modprobe -s ldev_mgr > /dev/null 2>&1
-			modprobe -s dos_part > /dev/null 2>&1
+			modprobe -s evms
+			modprobe -s evms_passthru
+			modprobe -s ldev_mgr
+			modprobe -s dos_part
 		else
 			# Linux 2.6 core module
-			modprobe -s evmscore > /dev/null 2>&1
+			modprobe -s evmscore
 		fi
 
-		is_yes "$EVMS_GUID_PTABLE" && modprobe -s gpt_part >/dev/null 2>&1
-		is_yes "$EVMS_LVM" && modprobe -s lvm_vge >/dev/null 2>&1
-		is_yes "$EVMS_AIX" && modprobe -s AIXlvm_vge >/dev/null 2>&1
-		is_yes "$EVMS_OS2" && modprobe -s os2lvm_vge >/dev/null 2>&1
+		is_yes "$EVMS_GUID_PTABLE" && modprobe -s gpt_part
+		is_yes "$EVMS_LVM" && modprobe -s lvm_vge
+		is_yes "$EVMS_AIX" && modprobe -s AIXlvm_vge
+		is_yes "$EVMS_OS2" && modprobe -s os2lvm_vge
 		run_cmd "Discovering EVMS volumes" /sbin/evms_activate
 		if is_yes "$EVMS_LVM" && is_yes "$EVMS_LVM_COMPAT_NODES" ; then
 			# Link nodes for compatibility with LVM
@@ -639,17 +639,17 @@ if ! is_yes "$VSERVER"; then
 			lvmversion=2
 		fi
 		if [ "$lvmversion" = "1" ] ; then
-			modprobe -s lvm-mod >/dev/null 2>&1
+			modprobe -s lvm-mod
 			lvmignorelocking=""
 			lvmsysinit=""
 		elif [ "$lvmversion" = "2" ] ; then
-			modprobe -s dm-mod >/dev/null 2>&1
+			modprobe -s dm-mod
 			lvmignorelocking="--ignorelockingfailure"
 			lvmsysinit="--sysinit"
 		else
-			modprobe -s lvm-mod >/dev/null 2>&1
+			modprobe -s lvm-mod
 			# device mapper (2.5+ and patched 2.4)
-			modprobe -s dm-mod >/dev/null 2>&1
+			modprobe -s dm-mod
 			lvmignorelocking=""
 			lvmsysinit=""
 		fi
@@ -672,7 +672,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Add raid devices
 	if [ -x /sbin/mdadm -a -f /etc/mdadm.conf ] || [ -f /etc/raidtab ]; then
-		modprobe -s md >/dev/null 2>&1
+		modprobe -s md
 		if [ -f /proc/mdstat ]; then
 			goraidtab=1
 			golvm=0
@@ -1005,7 +1005,7 @@ if ! is_yes "$VSERVER"; then
 		if grep -qv ' 9 st' /proc/devices 2>/dev/null; then
 			if [ -n "$USEMODULES" ] ; then
 				# Try to load the module. If it fails, ignore it...
-				insmod -p st >/dev/null 2>&1 && modprobe -s st >/dev/null 2>&1
+				insmod -p st >/dev/null 2>&1 && modprobe -s st
 			fi
 		fi
 	fi
