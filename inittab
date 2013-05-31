@@ -51,9 +51,11 @@ pr:12345:powerokwait:/sbin/shutdown -c "Power Restored; Shutdown Cancelled"
 
 # Run gettys in standard runlevels
 1:12345:respawn:/sbin/mingetty --noclear tty1
+# spawn root login on tty1 without /etc/issue
+#1:12345:respawn:/sbin/mingetty tty1 --noclear --autologin root --noissue
 2:2345:respawn:/sbin/mingetty tty2
 3:2345:respawn:/sbin/mingetty tty3
-4:2345:respawn:/sbin/mingetty tty4
+#4:2345:respawn:/sbin/mingetty tty4
 #5:2345:respawn:/sbin/mingetty tty5
 #6:2345:respawn:/sbin/mingetty tty6
 #7:2345:respawn:/sbin/mingetty tty7
