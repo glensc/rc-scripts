@@ -172,7 +172,7 @@ if [ "$runlevel" = "0" ] ; then
 		       [ -x /sbin/poweroff-ups ] && /sbin/poweroff-ups
 	       fi
 	fi
-	[ "$previous" != "unknown" ] && eval halt -d -p -f
+	[ "$previous" != "unknown" ] && halt -d -p -f
 else
 	show "Please stand by while rebooting the $_rebootwhat"; ok
 	if [ -f /fastboot ]; then
@@ -189,5 +189,5 @@ else
 		fail
 	fi
 
-	[ "$previous" != "unknown" ] && eval reboot -d -f
+	[ "$previous" != "unknown" ] && reboot -d -f
 fi
