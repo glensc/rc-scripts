@@ -488,7 +488,7 @@ if ! is_yes "$VSERVER"; then
 	# Initialize USB controllers
 	usb=0
 	if [ -z "$nousb" ] && ! is_fsmounted usbfs /proc/bus/usb; then
-		aliases=$(modprobe_c | awk '/^alias[[:space:]]+usb-controller[[:space:]]+/{ print $3 }')
+		aliases=$(modprobe_c | awk '/^alias[[:space:]]+usb[-_]controller[[:space:]]+/{ print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			modprobe -s usbcore
 			for alias in $aliases ; do
@@ -703,7 +703,7 @@ if ! is_yes "$VSERVER"; then
 
 	# Load firewire devices
 	if [ -z "$nofirewire" ]; then
-		aliases=$(modprobe_c | awk '/^alias[[:space:]]+ieee1394-controller[[:space:]]+/{ print $3 }')
+		aliases=$(modprobe_c | awk '/^alias[[:space:]]+ieee1394[-_]controller[[:space:]]+/{ print $3 }')
 		if [ -n "$aliases" -a "$aliases" != "off" ] ; then
 			for alias in $aliases ; do
 				[ "$alias" = "off" ] && continue
@@ -721,7 +721,7 @@ if ! is_yes "$VSERVER"; then
 			run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
 			RETURN=$?
 		fi
-		alias=$(modprobe_c | awk '/^alias[[:space:]]+sound-slot-0[[:space:]]+/ { print $3 }')
+		alias=$(modprobe_c | awk '/^alias[[:space:]]+sound[-_]slot[-_]0[[:space:]]+/ { print $3 }')
 		if [ -n "$alias" -a "$alias" != "off" ] ; then
 			run_cmd "$(nls 'Loading sound module') ($alias)" modprobe -s $alias
 			RETURN=$?
