@@ -45,7 +45,9 @@ modprobe_c() {
 		echo "$modprobe_c_cache"
 		return
 	fi
-	modprobe_c_cache=$(modprobe -c)
+
+	# filter only what is wanted by this script: aliases and options
+	modprobe_c_cache=$(modprobe -c | grep -E '^(alias|options)')
 }
 
 # parse kernel cmdline
