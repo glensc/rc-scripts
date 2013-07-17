@@ -169,6 +169,29 @@ strstr() {
 	return 0
 }
 
+# Apply sysctl settings, including files in /etc/sysctl.d
+apply_sysctl() {
+	if [ -x /lib/systemd/systemd-sysctl ]; then
+		/lib/systemd/systemd-sysctl
+		return
+	fi
+
+	local file
+	for file in /usr/lib/sysctl.d/*.conf; do
+		[ -f /run/sysctl.d/${file##*/} ] && continue
+		[ -f /etc/sysctl.d/${file##*/} ] && continue
+		test -f "$file" && sysctl -q -e -p "$file"
+	done
+	for file in /run/sysctl.d/*.conf; do
+		[ -f /etc/sysctl.d/${file##*/} ] && continue
+		test -f "$file" && sysctl -q -e -p "$file"
+	done
+	for file in /etc/sysctl.d/*.conf; do
+		test -f "$file" && sysctl -q -e -p "$file"
+	done
+	sysctl -q -e -p /etc/sysctl.conf
+}
+
 if is_yes "$FASTRC" || is_yes "$IN_SHUTDOWN"; then
 	RC_LOGGING=no
 fi

@@ -366,7 +366,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# Early sysctls
-	sysctl -q -e -p /etc/sysctl.conf
+	apply_sysctl
 
 	# sysfs is also needed before any other things (under kernel > 2.5)
 	if ! is_fsmounted sysfs /sys; then
@@ -456,9 +456,8 @@ if ! is_yes "$VSERVER"; then
 		/sbin/blogd
 	fi
 
-	# Configure Linux kernel (initial configuration, some required modules still
-	# may be missing).
-	sysctl -q -e -p /etc/sysctl.conf
+	# Configure Linux kernel (initial configuration, some required modules still may be missing).
+	apply_sysctl
 
 	# Check if timezone definition is available
 	if [ -e /etc/localtime ] && [ -e /dev/rtc -o -e /dev/rtc0 ] ; then
@@ -925,7 +924,7 @@ if ! is_yes "$VSERVER"; then
 	fi
 
 	# ... and here finish configuring parameters
-	sysctl -q -e -p /etc/sysctl.conf
+	apply_sysctl
 else
 	emit --no-wait root-filesystem
 	emit --no-wait virtual-filesystems

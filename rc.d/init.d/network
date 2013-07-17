@@ -47,6 +47,9 @@ network_init() {
 	# Modprobe needed devices
 	modprobe_net
 
+	# load sysctl params
+	apply_sysctl
+
 	# Setup interfaces names
 	if ! is_empty_file /etc/mactab && [ -x /sbin/nameif ]; then
 		run_cmd "Setting interfaces names (nameif)" /sbin/nameif
@@ -87,6 +90,9 @@ network_init() {
 }
 
 network_postinit() {
+	# Run this again to catch any interface-specific actions
+	apply_sysctl
+
 	# Set static RARP table
 	static_rarp
 
