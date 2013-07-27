@@ -462,7 +462,7 @@ busy() {
 }
 
 ok() {
-	echo -ne "$_ok${RC_FEDORA+\r}${RC_FEDORA-\n}"
+	echo -ne "$_ok${RC_FEDORA+\\r}${RC_FEDORA-\\n}"
 }
 
 started() {
@@ -470,7 +470,7 @@ started() {
 }
 
 fail() {
-	echo -ne "$_fail${RC_FEDORA+\r}${RC_FEDORA-\n}"
+	echo -ne "$_fail${RC_FEDORA+\\r}${RC_FEDORA-\\n}"
 	return 1
 }
 
