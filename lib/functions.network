@@ -658,7 +658,7 @@ check_link_down ()
 		return 2
 	fi
 
-	[ -z "$max_timeout" ] && max_timeout=6
+	[ -z "$max_timeout" ] && max_timeout=10
 
 	if ! LC_ALL=C ip link show dev $device 2>/dev/null | grep -Fq UP; then
 		ip link set dev $device up >/dev/null 2>&1
