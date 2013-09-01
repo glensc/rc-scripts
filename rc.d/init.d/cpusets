@@ -13,7 +13,7 @@
 . /etc/sysconfig/system
 
 if [ "${CPUSETS:-no}" = "no" ]; then
-   	case "$1" in
+	case "$1" in
 	start|stop|restart)
 		exit 0
 		;;
@@ -100,7 +100,7 @@ cpuset_empty() {
 }
 
 start() {
-  	rc_splash "bootcpusets start"
+	rc_splash "bootcpusets start"
 
 	for i in $cpusets_boot; do
 		show "$(nls -n "Creating cpuset %s" "$i")"
@@ -160,10 +160,10 @@ cpusets_boot=$(
 case "$1" in
   start)
 	cpuset_mount
-  	start
+	start
 	;;
   stop)
-  	stop
+	stop
 	;;
   status)
 	nls "Configured cpusets:"
