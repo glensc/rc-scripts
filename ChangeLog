@@ -1,6 +1,174 @@
-2013-05-15 21:04 +0000 [r12658]  Elan Ruusamäe <glen/at/pld-linux.org>
+2013-08-19 11:13 +0000 [r12715]  Kacper Kornet <draenog/at/pld-linux.org>
 
-	* po/de.po, po/pl.po: make update-po
+	* lib/functions.network: increase timeout for link up
+
+2013-07-27 10:55 +0000 [r12712]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions: fix pdksh incompatibility of ok/fail printing
+
+2013-07-17 20:52 +0000 [r12700]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/network, sysctl.conf, rc.d/rc.sysinit, lib/functions:
+	  add apply_sysctl() to load sysctl parameters uses
+	  systemd-sysctl(8) to load, if present, otherwise loads files in
+	  same way as systemd-sysctl(8): /usr/lib/sysctl.d, /run/sysctl.d,
+	  /etc/sysctl.d, /etc/sysctl.conf where matching files from .d
+	  files are not loaded see sysctl.d(5) for description
+
+2013-06-11 22:19 +0000 [r12693-12695]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: modprobe cache: cache only wanted params
+
+	* rc.d/rc.sysinit: handle kmod translating `-` to `_`
+
+	* rc.d/rc.sysinit: unify modprobe alias lookups
+
+2013-06-01 08:09 +0000 [r12692]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: update comment to match code for stuffed
+	  statements in meanwhile
+
+2013-06-01 07:59 +0000 [r12691]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown: eval halt makes no sense, added in r574 doesn't
+	  give any clue either
+
+2013-05-31 13:11 +0000 [r12690]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* inittab: add autologin sample
+
+2013-05-30 23:48 +0000 [r12689]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions.network: grep fixed strings where appropriate
+
+2013-05-30 23:30 +0000 [r12688]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysctl.conf, sysconfig/system, rc.d/rc.sysinit: move kernel.panic
+	  to sysconfig, deprecating PANIC_REBOOT_TIME
+
+2013-05-30 23:26 +0000 [r12687]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: use sysctl -q instead of /dev/null redirections
+
+2013-05-30 23:16 +0000 [r12686]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: /sys is likely already mounted, fgrep
+	  /proc/filesystems
+
+2013-05-30 23:01 +0000 [r12684]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system, sysconfig/hwprof, rc.d/rc.sysinit: move
+	  hwprofiles enable/disable option to sysconfig/system old config
+	  location still supported (overrides if present)
+
+2013-05-30 22:55 +0000 [r12683]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: fix typo
+
+2013-05-30 22:48 +0000 [r12682]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system, rc.d/rc.sysinit: move $SELINUX variable setup
+	  to function
+
+2013-05-30 21:55 +0000 [r12681]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions.network: revert r12677 arekm says it would break
+	  existing configs
+
+2013-05-30 21:49 +0000 [r12680]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system, rc.d/rc.sysinit: move mdadm and lvm init to
+	  functions for better maintainability
+
+2013-05-30 20:44 +0000 [r12679]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.shutdown, rc.d/rc.sysinit: drop raidutils (raidstart,
+	  /etc/raidtab) support. our geninitrd doesn't support it for long
+	  time already
+
+2013-05-30 20:40 +0000 [r12678]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system, lib/functions: rename option to RC_UPTIME and
+	  add to default config
+
+2013-05-30 20:31 +0000 [r12676-12677]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* lib/functions.network: dhclient seems to be faster than dhcpcd,
+	  so prefer it if both present
+
+	* rc.d/rc.shutdown: syncing hardware clock to system time on
+	  shutdown
+
+2013-05-30 20:05 +0000 [r12674-12675]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: rc.sysinit: check upstart var before binary
+	  check
+
+	* lib/functions: add RC_BOOTTIME option to include uptime counter
+	  to all show messages
+
+2013-05-30 19:52 +0000 [r12673]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: rc.sysinit: add repair_shell moving common code
+	  to single place instead of copycat
+
+2013-05-30 19:31 +0000 [r12671-12672]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system, rc.d/rc.sysinit: rc.sysinit: allow disabling
+	  dmraid
+
+	* rc.d/rc.sysinit: rc.sysinit: check vars first, allow disable
+	  multipath from kernel cmdline
+
+2013-05-30 19:23 +0000 [r12669-12670]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: rc.sysinit: do not run evms code if not enabled
+
+	* rc.d/rc.sysinit: check vars first before checking fs objects
+
+2013-05-30 18:23 +0000 [r12668]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* sysconfig/system, rc.d/rc.sysinit: turn off by default
+	  RUN_USERPNP and RUN_KERNELPNP
+
+2013-05-30 18:09 +0000 [r12667]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: rc.sysinit: move /proc/cmdline parsing to single
+	  function
+
+2013-05-30 17:56 +0000 [r12666]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: rc.sysinit: make sure /proc is mounted first
+
+2013-05-30 17:41 +0000 [r12665]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: rc.sysinit: unify modprobe calls
+
+2013-05-30 17:36 +0000 [r12664]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: rc.sysinit: cache multiple modprobe -c calls
+
+2013-05-30 17:33 +0000 [r12663]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/rc.sysinit: check things first that do not involve fs; use
+	  grep -F where regexp match not needed
+
+2013-05-26 19:20 +0000 [r12662]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* rc.d/init.d/sys-chroots, rc.d/rc.sysinit: do not use `:>` which
+	  aborts whole script on error special builtins like `:>` abort
+	  whole script on error while `>` doesn't and that is so by POSIX:
+	  http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_08_01
+
+2013-05-22 18:51 +0000 [r12661]  Arkadiusz Miśkiewicz <arekm/at/pld-linux.org>
+
+	* sysctl.conf: Protect hardlinks and symlinks.
+
+2013-05-15 21:07 +0000 [r12658-12659]  Elan Ruusamäe <glen/at/pld-linux.org>
+
+	* configure.ac: up to 0.4.6 adds better fedora initscripts compat
+
+	* po/pl.po, po/de.po: make update-po
 
 2013-04-09 22:07 +0000 [r12650]  Elan Ruusamäe <glen/at/pld-linux.org>
 
