@@ -12,7 +12,7 @@ lib=$(dirname "$0")/..
 tmp=$(mktemp -d)
 
 # TODO: rc_cache_init should be able to use tmp dir, not real root
-. $lib/rc.d/init.d/functions
+. $lib/lib/functions
 
 # first unused pid
 pid=9999999 # may not exist
