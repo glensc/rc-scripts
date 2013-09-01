@@ -53,8 +53,8 @@ modprobe_c() {
 # parse kernel cmdline
 # needs /proc mounted
 parse_cmdline() {
+	local arg cmdline
 	read cmdline < /proc/cmdline
-	local arg
 
 	for arg in $cmdline; do
 		case "$arg" in
