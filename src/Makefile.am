@@ -57,7 +57,7 @@ getkey_LDADD = -lpopt
 
 ppp_watch_SOURCES = ppp-watch.c shvar.c shvar.h
 ppp_watch_LDADD = $(GLIB_LIBS)
-INCLUDES = $(GLIB_CFLAGS)
+AM_CPPFLAGS = $(GLIB_CFLAGS)
 
 consoletype_SOURCES = consoletype.c
 
