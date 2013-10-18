@@ -20,7 +20,7 @@ profile_DATA = \
 	lang.sh	\
 	lang.csh
 
-bin_SCRIPTS = run-parts
+bin_SCRIPTS = run-parts.sh
 sbin_SCRIPTS = \
 	setsysfont \
 	hwprofile \

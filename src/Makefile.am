@@ -9,6 +9,7 @@ bin_PROGRAMS = \
 	doexec \
 	ipcalc \
 	usleep \
+	run-parts \
 	resolvesymlink
 	
 sbin_PROGRAMS =	\
@@ -64,3 +65,5 @@ start_stop_daemon_SOURCES = start-stop-daemon.c
 start_stop_daemon_LDADD = -lcap
 
 setuidgid_SOURCES = setuidgid.c
+
+run_parts_CPPFLAGS = -include config.h

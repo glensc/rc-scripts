@@ -92,7 +92,7 @@ DPKG_C_GCC_ATTRIBUTE([,,],supported,[int x],[,,],ATTRIB,[Define if function attr
   DPKG_C_GCC_ATTRIBUTE(format...,format,[char *y, ...],[format(printf,1,2)],PRINTFFORMAT,[Define if printf-format argument lists a la GCC are available.]))
 
 AC_CHECK_TYPE(ptrdiff_t,int)
-AC_CHECK_HEADERS([stddef.h sys/capability.h])
+AC_CHECK_HEADERS([stddef.h sys/capability.h getopt.h])
 
 dnl Output
 AC_SUBST(BASHSCRIPTS)

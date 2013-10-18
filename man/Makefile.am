@@ -12,6 +12,7 @@ man_MANS = \
 	netreport.1 \
 	ppp-watch.8 \
 	usernetctl.8 \
+	run-parts.8 \
 	usleep.1 \
 	crypttab.5 \
 	start-stop-daemon.8
