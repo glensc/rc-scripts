@@ -146,7 +146,8 @@ if [ -n "$BOOTPROTO" -a "$BOOTPROTO" != "none" -a "$BOOTPROTO" != "static" ]; th
 		DHCP_ARGS=
 		if [ -n "$DHCP_CLIENT" ]; then
 			if [ -z "$DHCP_HOSTNAME" ]; then
-				DHCP_HOSTNAME="$HOSTNAME"
+				# set DHCP_HOSTNAME only basename
+				DHCP_HOSTNAME=${HOSTNAME%%.*}
 			fi
 			case ${DHCP_CLIENT##*/} in
 			  pump)
