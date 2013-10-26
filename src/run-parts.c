@@ -157,8 +157,11 @@ int valid_name(const struct dirent *d)
 	else
             retval = !regexec(&tradre, s, 0, NULL, 0);
 
-    } else
-        retval = !regexec(&classicalre, s, 0, NULL, 0);
+    } else {
+        if (!regexec(&classicalre, s, 0, NULL, 0)) {
+            retval = regexec(&excsre, s, 0, NULL, 0);
+		}
+	}
 
     return retval;
 }
@@ -579,7 +582,7 @@ regex_compile_pattern (void)
                     REG_EXTENDED | REG_NOSUB)) != 0)
             pt_regex = &hierre;
 
-        else if ( (err = regcomp(&excsre, "^[a-z0-9-].*dpkg-(old|dist|new|tmp)$",
+        else if ( (err = regcomp(&excsre, "^[a-z0-9-].*(\.rpm(save|new|orig)|~|,v)$",
                     REG_EXTENDED | REG_NOSUB)) != 0)
             pt_regex = &excsre;
 
@@ -587,9 +590,12 @@ regex_compile_pattern (void)
                     != 0)
             pt_regex = &tradre;
 
-    } else if ( (err = regcomp(&classicalre, "^[a-zA-Z0-9_-]+$",
+    } else if ( (err = regcomp(&classicalre, "^.+$",
                     REG_EXTENDED | REG_NOSUB)) != 0)
-        pt_regex = &classicalre;
+			pt_regex = &classicalre;
+        else if ( (err = regcomp(&excsre, "^[.]|(\.rpm(save|new|orig)|~|,v)$",
+                    REG_EXTENDED | REG_NOSUB)) != 0)
+            pt_regex = &excsre;
 
     if (err != 0) {
         fprintf(stderr, "Unable to build regexp: %s", \
@@ -642,6 +648,8 @@ regex_clean(void)
         regfree(&excsre);
         regfree(&tradre);
 
-    } else
+    } else {
         regfree(&classicalre);
+        regfree(&excsre);
+	}
 }
